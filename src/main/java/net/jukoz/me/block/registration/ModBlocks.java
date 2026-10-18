@@ -25,7 +25,6 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.util.ColorCode;
 import net.minecraft.util.Identifier;
 import net.jukoz.me.registries.RegistryAliasesME;
 
@@ -46,15 +45,15 @@ public class ModBlocks {
             PointedGalonnBlock::new,AbstractBlock.Settings.copy(Blocks.POINTED_DRIPSTONE).ticksRandomly().strength(1.5F, 3.0F).dynamicBounds().offset(AbstractBlock.OffsetType.XZ).pistonBehavior(PistonBehavior.DESTROY).solidBlock(Blocks::never), false);
 
     public static final Block BLACK_WATTLE_TRAPDOOR = registerWoodBlock("black_wattle_trapdoor",
-            (settings) -> new TrapdoorBlock(BlockSetType.OAK, settings), AbstractBlock.Settings.copy(Blocks.OAK_TRAPDOOR), true);
+            (settings) -> new TrapdoorBlock(settings, BlockSetType.OAK), AbstractBlock.Settings.copy(Blocks.OAK_TRAPDOOR), true);
     public static final Block DARK_WATTLE_TRAPDOOR = registerWoodBlock("dark_wattle_trapdoor",
-            (settings) -> new TrapdoorBlock(BlockSetType.OAK, settings), AbstractBlock.Settings.copy(Blocks.OAK_TRAPDOOR), true);
+            (settings) -> new TrapdoorBlock(settings, BlockSetType.OAK), AbstractBlock.Settings.copy(Blocks.OAK_TRAPDOOR), true);
     public static final Block GREEN_WATTLE_TRAPDOOR = registerWoodBlock("green_wattle_trapdoor",
-            (settings) -> new TrapdoorBlock(BlockSetType.OAK, settings), AbstractBlock.Settings.copy(Blocks.OAK_TRAPDOOR), true);
+            (settings) -> new TrapdoorBlock(settings, BlockSetType.OAK), AbstractBlock.Settings.copy(Blocks.OAK_TRAPDOOR), true);
     public static final Block RED_WATTLE_TRAPDOOR = registerWoodBlock("red_wattle_trapdoor",
-            (settings) -> new TrapdoorBlock(BlockSetType.OAK, settings), AbstractBlock.Settings.copy(Blocks.OAK_TRAPDOOR), true);
+            (settings) -> new TrapdoorBlock(settings, BlockSetType.OAK), AbstractBlock.Settings.copy(Blocks.OAK_TRAPDOOR), true);
     public static final Block WATTLE_TRAPDOOR = registerWoodBlock("wattle_trapdoor",
-            (settings) -> new TrapdoorBlock(BlockSetType.OAK, settings), AbstractBlock.Settings.copy(Blocks.OAK_TRAPDOOR), true);
+            (settings) -> new TrapdoorBlock(settings, BlockSetType.OAK), AbstractBlock.Settings.copy(Blocks.OAK_TRAPDOOR), true);
 
     public static final Block TREATED_WOOD_ROPE_FENCE = registerWoodBlock("treated_wood_rope_fence",
             FenceBlock::new, AbstractBlock.Settings.copy(Blocks.OAK_FENCE), true);
@@ -258,12 +257,12 @@ public class ModBlocks {
             (settings) -> new StairsBlock(COBBLY_ASHEN_DIRT.getDefaultState(), settings), AbstractBlock.Settings.copy(ASHEN_DIRT),true);
 
     public static final Block ASHEN_SAND = registerMiscBlock("ashen_sand",
-            (settings) -> new ColoredFallingBlock(new ColorCode(14406560), settings), AbstractBlock.Settings.copy(Blocks.SAND).strength(DIRT_STRENGTH).sounds(BlockSoundGroup.GRAVEL),true);
+            (settings) -> new ColoredFallingBlock(14406560, settings), AbstractBlock.Settings.copy(Blocks.SAND).strength(DIRT_STRENGTH).sounds(BlockSoundGroup.GRAVEL),true);
     public static final Block ASHEN_SAND_LAYER = registerMiscBlock("ashen_sand_layer",
             (settings) -> new LayersBlock(settings, ASHEN_SAND),AbstractBlock.Settings.copy(ASHEN_SAND), false);
 
     public static final Block ASHEN_GRAVEL = registerMiscBlock("ashen_gravel",
-            (settings) -> new ColoredFallingBlock(new ColorCode(14406560), settings), AbstractBlock.Settings.copy(Blocks.GRAVEL).strength(DIRT_STRENGTH).sounds(BlockSoundGroup.GRAVEL),true);
+            (settings) -> new ColoredFallingBlock(14406560, settings), AbstractBlock.Settings.copy(Blocks.GRAVEL).strength(DIRT_STRENGTH).sounds(BlockSoundGroup.GRAVEL),true);
     public static final Block ASHEN_GRAVEL_LAYER = registerMiscBlock("ashen_gravel_layer",
             (settings) -> new LayersBlock(settings, ASHEN_GRAVEL), AbstractBlock.Settings.copy(ASHEN_GRAVEL), false);
 
@@ -495,38 +494,38 @@ public class ModBlocks {
             PaneBlock::new, AbstractBlock.Settings.copy(Blocks.IRON_BARS).sounds(BlockSoundGroup.COPPER), true);
 
     public static final Block AGED_WOOD_DOOR = registerMiscBlock("aged_wood_door",
-            (settings) -> new DoorBlock(BlockSetType.DARK_OAK, settings), AbstractBlock.Settings.copy(Blocks.DARK_OAK_DOOR), true);
+            (settings) -> new DoorBlock(settings, BlockSetType.DARK_OAK), AbstractBlock.Settings.copy(Blocks.DARK_OAK_DOOR), true);
     public static final Block BRONZE_DOOR = registerMiscBlock("bronze_door",
-            (settings) -> new DoorBlock(BlockSetType.COPPER, settings), AbstractBlock.Settings.copy(Blocks.IRON_DOOR), true);
+            (settings) -> new DoorBlock(settings, BlockSetType.IRON), AbstractBlock.Settings.copy(Blocks.IRON_DOOR), true);
     public static final Block CRUDE_DOOR = registerMiscBlock("crude_door",
-            (settings) -> new DoorBlock(BlockSetType.COPPER, settings), AbstractBlock.Settings.copy(Blocks.IRON_DOOR), true);
+            (settings) -> new DoorBlock(settings, BlockSetType.IRON), AbstractBlock.Settings.copy(Blocks.IRON_DOOR), true);
     public static final Block TREATED_STEEL_DOOR = registerMiscBlock("treated_steel_door",
-            (settings) -> new DoorBlock(BlockSetType.COPPER, settings), AbstractBlock.Settings.copy(Blocks.IRON_DOOR), true);
+            (settings) -> new DoorBlock(settings, BlockSetType.IRON), AbstractBlock.Settings.copy(Blocks.IRON_DOOR), true);
     public static final Block AGED_WOOD_TRAPDOOR = registerMiscBlock("aged_wood_trapdoor",
-            (settings) -> new TrapdoorBlock(BlockSetType.DARK_OAK, settings), AbstractBlock.Settings.copy(Blocks.DARK_OAK_TRAPDOOR), true);
+            (settings) -> new TrapdoorBlock(settings, BlockSetType.DARK_OAK), AbstractBlock.Settings.copy(Blocks.DARK_OAK_TRAPDOOR), true);
     public static final Block BRONZE_TRAPDOOR = registerMiscBlock("bronze_trapdoor",
-            (settings) -> new TrapdoorBlock(BlockSetType.COPPER, settings), AbstractBlock.Settings.copy(Blocks.IRON_TRAPDOOR), true);
+            (settings) -> new TrapdoorBlock(settings, BlockSetType.IRON), AbstractBlock.Settings.copy(Blocks.IRON_TRAPDOOR), true);
     public static final Block CRUDE_TRAPDOOR = registerMiscBlock("crude_trapdoor",
-            (settings) -> new TrapdoorBlock(BlockSetType.COPPER, settings), AbstractBlock.Settings.copy(Blocks.IRON_TRAPDOOR), true);
+            (settings) -> new TrapdoorBlock(settings, BlockSetType.IRON), AbstractBlock.Settings.copy(Blocks.IRON_TRAPDOOR), true);
     public static final Block TREATED_STEEL_TRAPDOOR = registerMiscBlock("treated_steel_trapdoor",
-            (settings) -> new TrapdoorBlock(BlockSetType.COPPER, settings), AbstractBlock.Settings.copy(Blocks.IRON_TRAPDOOR), true);
+            (settings) -> new TrapdoorBlock(settings, BlockSetType.IRON), AbstractBlock.Settings.copy(Blocks.IRON_TRAPDOOR), true);
 
     public static final Block BURZUM_SPIKES = registerMiscBlock("burzum_spikes",
             SpikesBlock::new, AbstractBlock.Settings.copy(Blocks.IRON_BLOCK).nonOpaque(), true);
     //endregion
 
     public static final Block RIVER_SAND = registerMiscBlock("river_sand",
-            (settings) -> new ColoredFallingBlock(new ColorCode(-8356741), settings), AbstractBlock.Settings.copy(Blocks.SAND).sounds(BlockSoundGroup.SAND), true);
+            (settings) -> new ColoredFallingBlock(-8356741, settings), AbstractBlock.Settings.copy(Blocks.SAND).sounds(BlockSoundGroup.SAND), true);
     public static final Block BLACK_SAND = registerMiscBlock("black_sand",
-            (settings) -> new ColoredFallingBlock(new ColorCode(-8356741), settings), AbstractBlock.Settings.copy(Blocks.SAND).sounds(BlockSoundGroup.SAND), true);
+            (settings) -> new ColoredFallingBlock(-8356741, settings), AbstractBlock.Settings.copy(Blocks.SAND).sounds(BlockSoundGroup.SAND), true);
     public static final Block WHITE_SAND = registerMiscBlock("white_sand",
-            (settings) -> new ColoredFallingBlock(new ColorCode(14406560), settings), AbstractBlock.Settings.copy(Blocks.SAND).sounds(BlockSoundGroup.SAND), true);
+            (settings) -> new ColoredFallingBlock(14406560, settings), AbstractBlock.Settings.copy(Blocks.SAND).sounds(BlockSoundGroup.SAND), true);
 
     public static final Block STONE_MYCELIUM = registerMiscBlock("stone_mycelium",
             StoneMyceliumBlock::new, AbstractBlock.Settings.copy(Blocks.STONE).ticksRandomly(), false);
 
     public static final Block ASH_BLOCK = registerMiscBlock("ash_block",
-            (settings) -> new ColoredFallingBlock(new ColorCode(-8356741), settings), AbstractBlock.Settings.copy(Blocks.SAND).strength(DIRT_STRENGTH).sounds(BlockSoundGroup.SAND), true);
+            (settings) -> new ColoredFallingBlock(-8356741, settings), AbstractBlock.Settings.copy(Blocks.SAND).strength(DIRT_STRENGTH).sounds(BlockSoundGroup.SAND), true);
 
     //region VANILLA SLABS
     public static final Block DIRT_SLAB = registerMiscBlock("dirt_slab",
@@ -817,6 +816,24 @@ public class ModBlocks {
         return registerBlock(name, factory, settings, drop, ItemGroupsME.MISC_BLOCKS_CONTENTS);
     }
 
+    // Legacy (String, Block, boolean) overloads used by tree-local set classes (MushroomBlockSets,
+    // RoofBlockSets) that pre-build blocks with their own settings; the factory ignores the passed settings.
+    public static Block registerBlock(String name, Block block, boolean drop) {
+        return registerBlock(name, (settings) -> block, AbstractBlock.Settings.create(), drop, ItemGroupsME.MISC_BLOCKS_CONTENTS);
+    }
+
+    public static Block registerStoneBlock(String name, Block block, boolean drop) {
+        return registerBlock(name, (settings) -> block, AbstractBlock.Settings.create(), drop, ItemGroupsME.STONE_BLOCKS_CONTENTS);
+    }
+
+    public static Block registerWoodBlock(String name, Block block, boolean drop) {
+        return registerBlock(name, (settings) -> block, AbstractBlock.Settings.create(), drop, ItemGroupsME.WOOD_BLOCKS_CONTENTS);
+    }
+
+    public static Block registerMiscBlock(String name, Block block, boolean drop) {
+        return registerBlock(name, (settings) -> block, AbstractBlock.Settings.create(), drop, ItemGroupsME.MISC_BLOCKS_CONTENTS);
+    }
+
     static void registerBlockItem(String name, Block block) {
         var item = Registry.register(Registries.ITEM, new Identifier(MiddleEarth.MOD_ID, name),
                 new BlockItem(block, new MESettings()));
@@ -835,4 +852,20 @@ public class ModBlocks {
     public static void registerModBlocks() {
         MiddleEarth.LOGGER.logDebugMsg("Registering ModBlocks for " + MiddleEarth.MOD_ID);
     }
+
+    /** 1.20.1 replacement for donor ColoredFallingBlock/ColorCode (1.21.x vanilla). */
+    private static class ColoredFallingBlock extends FallingBlock {
+        private final int dustColor;
+
+        public ColoredFallingBlock(int dustColor, AbstractBlock.Settings settings) {
+            super(settings);
+            this.dustColor = dustColor;
+        }
+
+        @Override
+        public int getColor(BlockState state, BlockView world, BlockPos pos) {
+            return dustColor;
+        }
+    }
+
 }

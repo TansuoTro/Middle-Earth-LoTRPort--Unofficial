@@ -1,8 +1,8 @@
 package net.jukoz.me.datageneration.content.loot_tables;
 
-import net.jukoz.me.block.ModBlocks;
-import net.jukoz.me.block.ModDecorativeBlocks;
-import net.jukoz.me.block.ModNatureBlocks;
+import net.jukoz.me.block.registration.ModBlocks;
+import net.jukoz.me.block.registration.ModDecorativeBlocks;
+import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.jukoz.me.datageneration.content.models.SimpleVerticalSlabModel;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;

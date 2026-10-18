@@ -19,7 +19,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
-import net.minecraft.world.block.WireOrientation;
+
 
 public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements Fertilizable, Waterloggable {
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
@@ -37,7 +37,7 @@ public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         if (state.get(HALF) == DoubleBlockHalf.LOWER && state.get(WATERLOGGED)) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
@@ -51,7 +51,7 @@ public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements
     }
 
     @Override
-    protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, WireOrientation orientation, boolean notify) {
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos fromPos, boolean notify) {
         if (!world.isClient && state.get(HALF) == DoubleBlockHalf.UPPER && (
                 world.getBlockState(pos.up()).getFluidState().isOf(Fluids.WATER)
                         || world.getBlockState(pos.north()).getFluidState().isOf(Fluids.WATER)
@@ -61,7 +61,7 @@ public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements
             this.breakUpperFromWater(world, pos, Blocks.AIR.getDefaultState());
             return;
         }
-        super.neighborUpdate(state, world, pos, sourceBlock, orientation, notify);
+        super.neighborUpdate(state, world, pos, sourceBlock, fromPos, notify);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements
         BlockPos blockPos = ctx.getBlockPos();
         BlockState blockState = ctx.getWorld().getBlockState(ctx.getBlockPos());
         World world = ctx.getWorld();
-        if(blockPos.getY() < world.getTopYInclusive() - 1 && world.getBlockState(blockPos.up()).canReplace(ctx)){
+        if(blockPos.getY() < world.getTopY() - 2 && world.getBlockState(blockPos.up()).canReplace(ctx)){
             if(blockState.isOf(Blocks.WATER)){
                 return this.getDefaultState().with(WATERLOGGED, true);
             } else{
@@ -126,7 +126,7 @@ public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements
     }
 
     @Override
-    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state) {
+    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean isClient) {
         return true;
     }
 

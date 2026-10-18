@@ -2,9 +2,9 @@ package net.jukoz.me.world.features.tree;
 
 import com.google.common.collect.ImmutableList;
 import net.jukoz.me.MiddleEarth;
-import net.jukoz.me.block.ModBlocks;
-import net.jukoz.me.block.ModNatureBlocks;
-import net.jukoz.me.block.WoodBlockSets;
+import net.jukoz.me.block.registration.ModBlocks;
+import net.jukoz.me.block.registration.ModNatureBlocks;
+import net.jukoz.me.block.registration.WoodBlockSets;
 import net.jukoz.me.world.features.tree.foliages.OvalFoliagePlacer;
 import net.jukoz.me.world.features.tree.foliages.PalmFoliagePlacer;
 import net.jukoz.me.world.features.tree.trunks.ArcTrunkPlacer;

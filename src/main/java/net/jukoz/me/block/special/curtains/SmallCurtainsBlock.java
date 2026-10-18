@@ -1,6 +1,6 @@
 package net.jukoz.me.block.special.curtains;
 
-import com.mojang.serialization.MapCodec;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.util.Hand;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -23,9 +23,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class SmallCurtainsBlock extends HorizontalFacingBlock {
     public static final BooleanProperty OPEN;
-    public static final MapCodec<SmallCurtainsBlock> CODEC = createCodec(SmallCurtainsBlock::new);
 
-    public SmallCurtainsBlock(Settings settings) {
+    public SmallCurtainsBlock(AbstractBlock.Settings settings) {
         super(settings);
     }
 
@@ -37,7 +36,7 @@ public class SmallCurtainsBlock extends HorizontalFacingBlock {
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient && player.getAbilities().allowModifyWorld) {
             world.setBlockState(pos, state.cycle(OPEN));
         }

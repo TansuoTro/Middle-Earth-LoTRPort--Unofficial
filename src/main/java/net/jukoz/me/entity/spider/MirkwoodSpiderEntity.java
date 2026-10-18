@@ -1,6 +1,6 @@
 package net.jukoz.me.entity.spider;
 
-import net.jukoz.me.block.ModNatureBlocks;
+import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.jukoz.me.entity.dwarves.longbeards.LongbeardDwarfEntity;
 import net.jukoz.me.entity.elves.galadhrim.GaladhrimElfEntity;
 import net.jukoz.me.entity.goals.FastPonceAtTargetGoal;

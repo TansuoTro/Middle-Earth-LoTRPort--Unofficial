@@ -2,7 +2,7 @@ package net.jukoz.me.world.chunkgen;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.jukoz.me.block.StoneBlockSets;
+import net.jukoz.me.block.registration.StoneBlockSets;
 import net.jukoz.me.utils.noises.BlendedNoise;
 import net.jukoz.me.utils.noises.SimplexNoise;
 import net.jukoz.me.world.map.MiddleEarthMapRuntime;

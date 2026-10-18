@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.jukoz.me.MiddleEarth;
-import net.jukoz.me.block.ModBlockEntities;
+import net.jukoz.me.block.registration.ModBlockEntities;
 import net.jukoz.me.gui.alloyfurnace.AlloyFurnaceScreenHandler;
 import net.jukoz.me.network.ModNetworks;
 import net.jukoz.me.recipe.AlloyRecipe;

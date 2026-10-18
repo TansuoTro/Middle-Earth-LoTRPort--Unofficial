@@ -353,6 +353,11 @@ REWRITES = [
     ("mecomponents-contains", r"([A-Za-z_][A-Za-z0-9_]*)[.]contains[(](MEComponents[.][A-Z_]+[A-Za-z0-9_]*)[)]", "MEComponents.contains(\\1, \\2)"),
     ("recipe-remainder-item", r"([A-Za-z_][A-Za-z0-9_]*)[.]getItem[(][)][.]getRecipeRemainder[(][)]", "\\1.getRecipeRemainder()"),
     ("import-dct", r"import net[.]minecraft[.]component[.]DataComponentTypes;", ""),
+    ("retarget-blockreg", r"import net[.]jukoz[.]me[.]block[.](ModBlockEntities|ModBlocks|ModDecorativeBlocks|ModNatureBlocks|WoodBlockSets|StoneBlockSets|OreRockSets);", "import net.jukoz.me.block.registration.\\1;"),
+    ("retarget-blockreg-fix", r"import net[.]jukoz[.]me[.]block[.]registration[.](ModBlockEntities|ModBlocks|ModDecorativeBlocks|ModNatureBlocks|WoodBlockSets|StoneBlockSets|OreRockSets)[\n]", "import net.jukoz.me.block.registration.\\1;\\n"),
+    ("retarget-blockreg-fqn", r"net[.]jukoz[.]me[.]block[.](ModBlockEntities|ModBlocks|ModDecorativeBlocks|ModNatureBlocks|WoodBlockSets|StoneBlockSets|OreRockSets)[.]", "net.jukoz.me.block.registration.\\1."),
+    ("retarget-block-wildcard", r"import net[.]jukoz[.]me[.]block[.][*];", "import net.jukoz.me.block.registration.*;"),
+    ("roof-wood-planks", r"WoodBlockSets[.]([A-Z_]+)[.]planks[(][)]", "WoodBlockSets.\\1_SET.planksBlocks.base()"),
     # --- render layer R1: mechanical rules + shims (report: build/agents/render-r1-report.md) ---
     # R2: extends XRenderState adapters
     # R3: handheld registry re-base

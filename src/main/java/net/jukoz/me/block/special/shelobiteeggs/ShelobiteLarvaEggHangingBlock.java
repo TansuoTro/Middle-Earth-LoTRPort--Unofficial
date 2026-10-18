@@ -8,7 +8,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.enums.BlockHalf;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCollisionHandler;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -39,11 +38,11 @@ public class ShelobiteLarvaEggHangingBlock extends AbstractShelobiteLarvaEgg {
 
 
 
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         return direction == Direction.UP && !this.canPlaceAt(state, world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
-    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         if (Objects.requireNonNull(state.get(BLOCK_HALF)) == BlockHalf.BOTTOM) {
             return !world.isWater(pos) && world.getBlockState(pos.down()).isAir();
         }
@@ -80,7 +79,7 @@ public class ShelobiteLarvaEggHangingBlock extends AbstractShelobiteLarvaEgg {
     }
 
     @Override
-    protected VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return switch (state.get(BLOCK_HALF)) {
             case BOTTOM -> Block.createCuboidShape(4, 4, 4, 12, 16, 12);
             case TOP -> {
@@ -94,15 +93,15 @@ public class ShelobiteLarvaEggHangingBlock extends AbstractShelobiteLarvaEgg {
     }
 
     @Override
-    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler) {
-        super.onEntityCollision(state, world, pos, entity, handler);
+    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+        super.onEntityCollision(state, world, pos, entity);
         if (entity.getType() != EntitiesME.SHELOBITE_SCUTTLER && state.get(BLOCK_HALF) == BlockHalf.BOTTOM){
             breakEgg(world, pos, state);
         }
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return switch (state.get(BLOCK_HALF)) {
             case BOTTOM -> Block.createCuboidShape(4, 4, 4, 12, 16, 12);
             case TOP -> VoxelShapes.combineAndSimplify(Block.createCuboidShape(0, 14, 0, 16, 16, 16), Block.createCuboidShape(5, 0, 5, 11, 14, 11), BooleanBiFunction.OR);

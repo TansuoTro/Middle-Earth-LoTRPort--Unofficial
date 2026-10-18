@@ -2,7 +2,7 @@ package net.jukoz.me.block.special.artisantable;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.util.Hand;
-import net.jukoz.me.block.ModBlockEntities;
+import net.jukoz.me.block.registration.ModBlockEntities;
 import net.jukoz.me.block.special.alloyfurnace.AlloyFurnaceEntity;
 import net.jukoz.me.gui.artisantable.ArtisanTableScreenHandler;
 import net.minecraft.block.*;

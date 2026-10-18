@@ -2,9 +2,9 @@ package net.jukoz.me.datageneration;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
-import net.jukoz.me.block.ModBlocks;
-import net.jukoz.me.block.OreRockSets;
-import net.jukoz.me.block.StoneBlockSets;
+import net.jukoz.me.block.registration.ModBlocks;
+import net.jukoz.me.block.registration.OreRockSets;
+import net.jukoz.me.block.registration.StoneBlockSets;
 import net.jukoz.me.datageneration.content.loot_tables.BlockDrops;
 import net.jukoz.me.datageneration.content.loot_tables.CropDrops;
 import net.jukoz.me.datageneration.content.loot_tables.LeavesDrops;

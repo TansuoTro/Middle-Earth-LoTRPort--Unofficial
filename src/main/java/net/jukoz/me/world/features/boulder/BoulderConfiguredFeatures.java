@@ -1,8 +1,8 @@
 package net.jukoz.me.world.features.boulder;
 
 import net.jukoz.me.MiddleEarth;
-import net.jukoz.me.block.ModNatureBlocks;
-import net.jukoz.me.block.StoneBlockSets;
+import net.jukoz.me.block.registration.ModNatureBlocks;
+import net.jukoz.me.block.registration.StoneBlockSets;
 import net.jukoz.me.datageneration.content.models.SimpleSlabModel;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.SlabType;

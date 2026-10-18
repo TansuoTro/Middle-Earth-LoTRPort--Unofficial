@@ -1,6 +1,8 @@
 package net.jukoz.me.datageneration;
 
-import net.jukoz.me.block.*;
+import net.jukoz.me.block.MushroomBlockSets;
+import net.jukoz.me.block.RoofBlockSets;
+import net.jukoz.me.block.registration.*;
 import net.jukoz.me.datageneration.content.loot_tables.BlockDrops;
 import net.jukoz.me.datageneration.content.loot_tables.LeavesDrops;
 import net.jukoz.me.datageneration.content.models.*;

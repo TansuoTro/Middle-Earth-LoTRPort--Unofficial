@@ -1,10 +1,10 @@
 package net.jukoz.me.world.features.underground;
 
 import net.jukoz.me.MiddleEarth;
-import net.jukoz.me.block.ModBlocks;
-import net.jukoz.me.block.ModNatureBlocks;
-import net.jukoz.me.block.OreRockSets;
-import net.jukoz.me.block.StoneBlockSets;
+import net.jukoz.me.block.registration.ModBlocks;
+import net.jukoz.me.block.registration.ModNatureBlocks;
+import net.jukoz.me.block.registration.OreRockSets;
+import net.jukoz.me.block.registration.StoneBlockSets;
 import net.jukoz.me.world.features.ores.SurfaceOreFeatureConfig;
 import net.jukoz.me.world.features.pillar.PillarFeatureConfig;
 import net.jukoz.me.world.gen.ModFeatures;

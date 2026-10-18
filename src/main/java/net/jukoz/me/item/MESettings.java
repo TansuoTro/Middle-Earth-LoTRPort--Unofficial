@@ -39,6 +39,23 @@ public class MESettings extends Item.Settings {
 
     private boolean unbreakable;
 
+    private int enchantability = -1;
+
+    /**
+     * 1.21's {@code enchantable(int)} settings method. 1.20.1 reports enchantability from
+     * the item, not the settings, so the value is captured here and handed to
+     * {@link ItemExtras} by {@code ItemMixin}, which serves it from
+     * {@code Item#getEnchantability()}.
+     */
+    public MESettings enchantable(int value) {
+        this.enchantability = value;
+        return this;
+    }
+
+    public int enchantability() {
+        return this.enchantability;
+    }
+
     /**
      * 1.21's {@code UNBREAKABLE} component. 1.20.1 has no settings-level equivalent, so the
      * flag is carried to {@link UnbreakableItems} once the item is constructed.

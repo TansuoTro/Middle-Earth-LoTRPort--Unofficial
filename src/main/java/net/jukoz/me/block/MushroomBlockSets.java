@@ -2,6 +2,8 @@ package net.jukoz.me.block;
 
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.jukoz.me.MiddleEarth;
+import net.jukoz.me.block.registration.ModBlocks;
+import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.jukoz.me.block.special.WoodChairBlock;
 import net.jukoz.me.block.special.StoolBlock;
 import net.jukoz.me.block.special.TableBlock;

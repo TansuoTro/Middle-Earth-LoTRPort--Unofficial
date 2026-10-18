@@ -5,7 +5,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.particle.SimpleParticleType;
+import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -25,13 +25,13 @@ public class TorchOfOrthancBlock extends TorchBlock {
     protected static final VoxelShape SHAPE = Block.createCuboidShape(5.0, 0.0, 5.0, 11.0, 18.0, 11.0);
     public static final BooleanProperty LIT = Properties.LIT;
 
-    public TorchOfOrthancBlock(Settings settings, SimpleParticleType particleEffect) {
-        super(particleEffect, settings);
+    public TorchOfOrthancBlock(AbstractBlock.Settings settings, DefaultParticleType particleEffect) {
+        super(settings, particleEffect);
         this.setDefaultState((((this.stateManager.getDefaultState().with(LIT, true)))));
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if(world.isClient){
             return ActionResult.SUCCESS;
         } else {
@@ -51,7 +51,7 @@ public class TorchOfOrthancBlock extends TorchBlock {
         builder.add(new Property[]{LIT});
     }
 
-    protected BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
     }
 
@@ -65,7 +65,7 @@ public class TorchOfOrthancBlock extends TorchBlock {
         }
     }
 
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return SHAPE;
     }
 }

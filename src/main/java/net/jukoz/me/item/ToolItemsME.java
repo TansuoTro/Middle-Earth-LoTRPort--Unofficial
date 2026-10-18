@@ -83,7 +83,7 @@ public class ToolItemsME {
     public static final Item BRONZE_SHOVEL = registerItemHandheld("bronze_shovel",
             (settings) -> new ShovelItem(ToolMaterialsME.BRONZE, 1.5f, -3.0f, settings), new MESettings());
     public static final Item BRONZE_HOE = registerItemHandheld("bronze_hoe",
-            (settings) -> new HoeItem(ToolMaterialsME.BRONZE, -2.0f, -1.0f, settings), new MESettings());
+            (settings) -> new HoeItem(ToolMaterialsME.BRONZE, -2, -1.0f, settings), new MESettings());
 
     public static final Item CRUDE_PICKAXE = registerItemHandheld("crude_pickaxe",
             (settings) -> new PickaxeItem(ToolMaterialsME.CRUDE, 0, -2.8f, settings), new MESettings());
@@ -92,7 +92,7 @@ public class ToolItemsME {
     public static final Item CRUDE_SHOVEL = registerItemHandheld("crude_shovel",
             (settings) -> new ShovelItem(ToolMaterialsME.CRUDE, 1.5f, -3.0f, settings), new MESettings());
     public static final Item CRUDE_HOE = registerItemHandheld("crude_hoe",
-            (settings) -> new HoeItem(ToolMaterialsME.CRUDE, -2.0f, -1.0f, settings), new MESettings());
+            (settings) -> new HoeItem(ToolMaterialsME.CRUDE, -2, -1.0f, settings), new MESettings());
 
     public static final Item STEEL_PICKAXE = registerItemHandheld("steel_pickaxe",
             (settings) -> new PickaxeItem(ToolMaterialsME.STEEL, 1, -2.8f, settings), new MESettings());
@@ -101,7 +101,7 @@ public class ToolItemsME {
     public static final Item STEEL_SHOVEL = registerItemHandheld("steel_shovel",
             (settings) -> new ShovelItem(ToolMaterialsME.STEEL, 1.5f, -3.0f, settings), new MESettings());
     public static final Item STEEL_HOE = registerItemHandheld("steel_hoe",
-            (settings) -> new HoeItem(ToolMaterialsME.STEEL, -2.0f, -1.0f, settings), new MESettings());
+            (settings) -> new HoeItem(ToolMaterialsME.STEEL, -2, -1.0f, settings), new MESettings());
 
     public static final Item BURZUM_STEEL_PICKAXE = registerItemHandheld("burzum_steel_pickaxe",
             (settings) -> new PickaxeItem(ToolMaterialsME.BURZUM_STEEL, 1, -2.8f, settings), new MESettings());
@@ -110,7 +110,7 @@ public class ToolItemsME {
     public static final Item BURZUM_STEEL_SHOVEL = registerItemHandheld("burzum_steel_shovel",
             (settings) -> new ShovelItem(ToolMaterialsME.BURZUM_STEEL, 1.5f, -3.0f, settings), new MESettings());
     public static final Item BURZUM_STEEL_HOE = registerItemHandheld("burzum_steel_hoe",
-            (settings) -> new HoeItem(ToolMaterialsME.BURZUM_STEEL, -2.0f, -1.0f, settings), new MESettings());
+            (settings) -> new HoeItem(ToolMaterialsME.BURZUM_STEEL, -2, -1.0f, settings), new MESettings());
 
     public static final Item EDHEL_STEEL_PICKAXE = registerItemHandheld("edhel_steel_pickaxe",
             (settings) -> new PickaxeItem(ToolMaterialsME.EDHEL_STEEL, 1, -2.8f, settings), new MESettings());
@@ -119,7 +119,7 @@ public class ToolItemsME {
     public static final Item EDHEL_STEEL_SHOVEL = registerItemHandheld("edhel_steel_shovel",
             (settings) -> new ShovelItem(ToolMaterialsME.EDHEL_STEEL, 1.5f, -3.0f, settings), new MESettings());
     public static final Item EDHEL_STEEL_HOE = registerItemHandheld("edhel_steel_hoe",
-            (settings) -> new HoeItem(ToolMaterialsME.EDHEL_STEEL, -2.0f, -1.0f, settings), new MESettings());
+            (settings) -> new HoeItem(ToolMaterialsME.EDHEL_STEEL, -2, -1.0f, settings), new MESettings());
     
     public static final Item KHAZAD_STEEL_PICKAXE = registerItemHandheld("khazad_steel_pickaxe",
             (settings) -> new PickaxeItem(ToolMaterialsME.KHAZAD_STEEL, 1, -2.8f, settings), new MESettings());
@@ -128,7 +128,7 @@ public class ToolItemsME {
     public static final Item KHAZAD_STEEL_SHOVEL = registerItemHandheld("khazad_steel_shovel",
             (settings) -> new ShovelItem(ToolMaterialsME.KHAZAD_STEEL, 1.5f, -3.0f, settings), new MESettings());
     public static final Item KHAZAD_STEEL_HOE = registerItemHandheld("khazad_steel_hoe",
-            (settings) -> new HoeItem(ToolMaterialsME.KHAZAD_STEEL, -2.0f, -1.0f, settings), new MESettings());
+            (settings) -> new HoeItem(ToolMaterialsME.KHAZAD_STEEL, -2, -1.0f, settings), new MESettings());
 
     public static final Item MITHRIL_PICKAXE = registerItemHandheld("mithril_pickaxe",
             (settings) -> new PickaxeItem(ToolMaterialsME.MITHRIL, 1, -2.7f, settings), new MESettings().fireproof()
@@ -140,7 +140,7 @@ public class ToolItemsME {
             (settings) -> new ShovelItem(ToolMaterialsME.MITHRIL, 1.5f, -3.0f, settings), new MESettings().fireproof()
                     .unbreakable());
     public static final Item MITHRIL_HOE = registerItemHandheld("mithril_hoe",
-            (settings) -> new HoeItem(ToolMaterialsME.MITHRIL, -2.0f, 1.0f, settings), new MESettings().fireproof()
+            (settings) -> new HoeItem(ToolMaterialsME.MITHRIL, -2, 1.0f, settings), new MESettings().fireproof()
                     .unbreakable());
 
     public static final Item PIPE = registerItem2dGUI3dPerson("pipe",

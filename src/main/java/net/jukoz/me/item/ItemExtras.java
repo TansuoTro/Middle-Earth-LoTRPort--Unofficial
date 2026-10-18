@@ -44,4 +44,16 @@ public final class ItemExtras {
     public static String bannerPatternTag(Item item) {
         return BANNER_PATTERN_TAGS.get(item);
     }
+
+    private static final Map<Item, Integer> ENCHANTABILITY =
+            Collections.synchronizedMap(new IdentityHashMap<>());
+
+    public static void enchantability(Item item, int value) {
+        ENCHANTABILITY.put(item, value);
+    }
+
+    /** Donor's {@code enchantable(int)} settings value; null when not declared. */
+    public static Integer enchantability(Item item) {
+        return ENCHANTABILITY.get(item);
+    }
 }

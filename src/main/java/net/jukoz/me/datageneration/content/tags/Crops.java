@@ -1,6 +1,6 @@
 package net.jukoz.me.datageneration.content.tags;
 
-import net.jukoz.me.block.ModNatureBlocks;
+import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.minecraft.block.Block;
 
 import java.util.ArrayList;

@@ -86,29 +86,12 @@ public class ModBlockEntities {
             ModDecorativeBlocks.STRAW_BED);
 
     public static void registerBlockEntities() {
-        BlockEntityType.BARREL.addSupportedBlock(ModDecorativeBlocks.SMALL_CRATE);
-        BlockEntityType.BARREL.addSupportedBlock(ModDecorativeBlocks.THIN_BARREL);
-        BlockEntityType.DECORATED_POT.addSupportedBlock(ModDecorativeBlocks.AMPHORA);
-        BlockEntityType.DECORATED_POT.addSupportedBlock(ModDecorativeBlocks.BROWN_AMPHORA);
-        BlockEntityType.DECORATED_POT.addSupportedBlock(ModDecorativeBlocks.BROWN_JUG);
-        BlockEntityType.DECORATED_POT.addSupportedBlock(ModDecorativeBlocks.GRAY_POT);
-        BlockEntityType.DECORATED_POT.addSupportedBlock(ModDecorativeBlocks.LARGE_JUG);
-        BlockEntityType.DECORATED_POT.addSupportedBlock(ModDecorativeBlocks.GRAY_VASE);
-        BlockEntityType.DECORATED_POT.addSupportedBlock(ModDecorativeBlocks.BROWN_JAR);
-        BlockEntityType.DECORATED_POT.addSupportedBlock(ModDecorativeBlocks.CLAY_JAR);
-        BlockEntityType.DECORATED_POT.addSupportedBlock(ModDecorativeBlocks.GRAY_JAR);
-        BlockEntityType.DECORATED_POT.addSupportedBlock(ModDecorativeBlocks.BROWN_FAT_POT);
-        BlockEntityType.DECORATED_POT.addSupportedBlock(ModDecorativeBlocks.FAT_POT);
-        BlockEntityType.DECORATED_POT.addSupportedBlock(ModDecorativeBlocks.GRAY_FAT_POT);
-        BlockEntityType.DECORATED_POT.addSupportedBlock(ModDecorativeBlocks.POT_OF_GOLD);
-
-        BlockEntityType.TRIAL_SPAWNER.addSupportedBlock(ModDecorativeBlocks.BRIGAND_TRIAL_SPAWNER);
-        BlockEntityType.TRIAL_SPAWNER.addSupportedBlock(ModDecorativeBlocks.SPIDER_TRIAL_SPAWNER);
-        BlockEntityType.VAULT.addSupportedBlock(ModDecorativeBlocks.BRIGAND_VAULT);
-        BlockEntityType.VAULT.addSupportedBlock(ModDecorativeBlocks.SPIDER_VAULT);
+        MiddleEarth.LOGGER.logDebugMsg("Registering block entities for 1.20.1");
+        // NOTE: vanilla BarrelBlockEntity/DecoratedPotBlockEntity supported-block sets are not mutable in 1.20.1;
+        // mod crates, amphorae and pots use their own registered BlockEntityTypes instead.
     }
 
-    private static <T extends BlockEntity> BlockEntityType<T> register(String name,
+private static <T extends BlockEntity> BlockEntityType<T> register(String name,
                                                                        FabricBlockEntityTypeBuilder.Factory<? extends T> entityFactory,
                                                                        Block... blocks) {
         Identifier id = new Identifier(MiddleEarth.MOD_ID, name);

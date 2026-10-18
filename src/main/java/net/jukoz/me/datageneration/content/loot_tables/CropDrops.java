@@ -1,6 +1,6 @@
 package net.jukoz.me.datageneration.content.loot_tables;
 
-import net.jukoz.me.block.ModNatureBlocks;
+import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.jukoz.me.block.crop.*;
 import net.jukoz.me.item.ModFoodItems;
 import net.jukoz.me.item.ModResourceItems;

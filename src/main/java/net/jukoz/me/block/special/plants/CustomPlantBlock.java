@@ -1,8 +1,6 @@
 package net.jukoz.me.block.special.plants;
 
-import com.mojang.serialization.MapCodec;
-import net.minecraft.block.*;
-import net.minecraft.particle.ParticleTypes;
+import net.minecraft.block.*;import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -17,7 +15,6 @@ import net.jukoz.me.particles.ModParticleTypes;
 import net.jukoz.me.utils.BlockTagsME;
 
 public class CustomPlantBlock extends PlantBlock {
-    public static final MapCodec<CustomPlantBlock> CODEC = CustomPlantBlock.createCodec(CustomPlantBlock::new);
     protected static final VoxelShape SHAPE = Block.createCuboidShape(2.0, 0.0, 2.0, 14.0, 13.0, 14.0);
 
     public CustomPlantBlock(Settings settings) {

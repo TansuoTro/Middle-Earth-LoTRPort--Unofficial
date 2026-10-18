@@ -1,6 +1,6 @@
 package net.jukoz.me.block.special;
 
-import net.jukoz.me.block.ModNatureBlocks;
+import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.minecraft.block.*;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;

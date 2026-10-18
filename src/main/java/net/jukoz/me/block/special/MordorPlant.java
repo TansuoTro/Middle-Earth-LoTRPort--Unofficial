@@ -1,6 +1,6 @@
 package net.jukoz.me.block.special;
 
-import net.jukoz.me.block.StoneBlockSets;
+import net.jukoz.me.block.registration.StoneBlockSets;
 import net.minecraft.block.*;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;

@@ -1,7 +1,7 @@
 package net.jukoz.me.datageneration.content.models;
 
-import net.jukoz.me.block.ModBlocks;
-import net.jukoz.me.block.ModDecorativeBlocks;
+import net.jukoz.me.block.registration.ModBlocks;
+import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 

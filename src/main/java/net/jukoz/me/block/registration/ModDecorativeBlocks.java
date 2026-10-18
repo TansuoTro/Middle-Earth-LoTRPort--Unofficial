@@ -124,13 +124,13 @@ public class ModDecorativeBlocks {
             StructureNestBlock::new, AbstractBlock.Settings.create().strength(-1.0F, 3600000.8F).noCollision().dropsNothing().nonOpaque().allowsSpawning(Blocks::never).noBlockBreakParticles().pistonBehavior(PistonBehavior.BLOCK));
 
     public static final Block BRIGAND_TRIAL_SPAWNER = registerBlock("brigand_trial_spawner",
-            TrialSpawnerBlock::new, AbstractBlock.Settings.copy(Blocks.TRIAL_SPAWNER));
+            SpawnerBlock::new, AbstractBlock.Settings.copy(Blocks.SPAWNER));
     public static final Block BRIGAND_VAULT = registerBlock("brigand_vault",
-            VaultBlock::new, AbstractBlock.Settings.copy(Blocks.VAULT).nonOpaque());
+            SpawnerBlock::new, AbstractBlock.Settings.copy(Blocks.SPAWNER).nonOpaque());
     public static final Block SPIDER_TRIAL_SPAWNER = registerBlock("spider_trial_spawner",
-            TrialSpawnerBlock::new, AbstractBlock.Settings.copy(Blocks.TRIAL_SPAWNER));
+            SpawnerBlock::new, AbstractBlock.Settings.copy(Blocks.SPAWNER));
     public static final Block SPIDER_VAULT = registerBlock("spider_vault",
-            VaultBlock::new, AbstractBlock.Settings.copy(Blocks.VAULT).nonOpaque());
+            SpawnerBlock::new, AbstractBlock.Settings.copy(Blocks.SPAWNER).nonOpaque());
 
     public static final Block SMALL_CRATE = registerBlock("small_crate",
             CrateBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(Instrument.BASS).strength(2.0F, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());

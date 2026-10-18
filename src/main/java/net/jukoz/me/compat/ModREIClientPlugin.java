@@ -6,7 +6,7 @@ import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry;
 import me.shedaniel.rei.api.common.util.EntryStacks;
-import net.jukoz.me.block.ModDecorativeBlocks;
+import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.compat.alloyFurnace.AlloyFurnaceCategory;
 import net.jukoz.me.compat.alloyFurnace.AlloyFurnaceDisplay;
 import net.jukoz.me.compat.artisanTable.ArtisanTableCategory;

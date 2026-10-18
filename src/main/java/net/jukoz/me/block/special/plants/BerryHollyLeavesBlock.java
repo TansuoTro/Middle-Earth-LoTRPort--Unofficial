@@ -1,7 +1,8 @@
 package net.jukoz.me.block.special.plants;
 
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.TintedParticleLeavesBlock;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -14,7 +15,7 @@ import net.jukoz.me.block.registration.ModNatureBlocks;
 
 public class BerryHollyLeavesBlock extends TintedParticleLeavesBlock {
 
-    public BerryHollyLeavesBlock(float f, Settings settings) {
+    public BerryHollyLeavesBlock(float f, AbstractBlock.Settings settings) {
         super(f, settings);
     }
 

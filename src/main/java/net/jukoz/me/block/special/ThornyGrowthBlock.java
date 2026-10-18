@@ -3,7 +3,6 @@ package net.jukoz.me.block.special;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.GlowLichenBlock;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCollisionHandler;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -18,9 +17,9 @@ public class ThornyGrowthBlock extends GlowLichenBlock {
     }
 
     @Override
-    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler) {
+    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         if (entity instanceof LivingEntity livingEntity && world instanceof ServerWorld serverWorld) {
-            Vec3d movement = livingEntity.isControlledByPlayer() ? livingEntity.getMovement() : livingEntity.getLastRenderPos().subtract(livingEntity.getPos());
+            Vec3d movement = new Vec3d(livingEntity.getX() - livingEntity.lastRenderX, 0.0, livingEntity.getZ() - livingEntity.lastRenderZ);
             if (movement.horizontalLengthSquared() > 0.0) {
                 double d = Math.abs(movement.getX());
                 double e = Math.abs(movement.getZ());

@@ -1,7 +1,7 @@
 package net.jukoz.me.gui.artisantable;
 
 import com.google.common.collect.Lists;
-import net.jukoz.me.block.ModDecorativeBlocks;
+import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.gui.ModScreenHandlers;
 import net.jukoz.me.recipe.ArtisanRecipe;
 import net.jukoz.me.recipe.ModRecipes;

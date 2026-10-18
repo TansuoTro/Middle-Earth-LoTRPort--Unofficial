@@ -3,7 +3,7 @@ package net.jukoz.me.block.special.saplings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SaplingBlock;
-import net.minecraft.block.SaplingGenerator;
+import net.minecraft.block.sapling.SaplingGenerator;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -14,7 +14,7 @@ public class VariantSaplingBlock extends SaplingBlock {
     private final List<SaplingGenerator> trees;
 
     public VariantSaplingBlock(Settings settings, List<SaplingGenerator> trees) {
-        super(trees.getFirst(), settings);
+        super(trees.get(0), settings);
         this.trees = trees;
     }
 

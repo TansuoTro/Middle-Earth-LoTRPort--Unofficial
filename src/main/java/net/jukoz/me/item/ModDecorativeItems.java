@@ -2,7 +2,7 @@ package net.jukoz.me.item;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.jukoz.me.MiddleEarth;
-import net.jukoz.me.block.ModDecorativeBlocks;
+import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.entity.ModEntities;
 import net.jukoz.me.item.items.CustomSpawnEggItem;
 import net.jukoz.me.item.utils.ModItemGroups;

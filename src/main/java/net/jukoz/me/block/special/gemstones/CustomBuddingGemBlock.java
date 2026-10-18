@@ -1,6 +1,6 @@
 package net.jukoz.me.block.special.gemstones;
 
-import net.jukoz.me.block.ModBlocks;
+import net.jukoz.me.block.registration.ModBlocks;
 import net.minecraft.block.AmethystClusterBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

@@ -1,7 +1,7 @@
 package net.jukoz.me.world.biomes.surface;
 
-import net.jukoz.me.block.StoneBlockSets;
-import net.jukoz.me.block.ModBlocks;
+import net.jukoz.me.block.registration.StoneBlockSets;
+import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.world.biomes.MEBiomeKeys;
 import net.jukoz.me.world.biomes.caves.CaveType;
 import net.minecraft.block.Blocks;

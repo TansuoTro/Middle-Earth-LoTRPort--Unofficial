@@ -2,7 +2,7 @@ package net.jukoz.me.recipe;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.jukoz.me.block.ModDecorativeBlocks;
+import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;

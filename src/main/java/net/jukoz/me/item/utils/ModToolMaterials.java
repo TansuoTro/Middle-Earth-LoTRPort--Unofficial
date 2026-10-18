@@ -1,7 +1,7 @@
 package net.jukoz.me.item.utils;
 
 import net.fabricmc.yarn.constants.MiningLevels;
-import net.jukoz.me.block.StoneBlockSets;
+import net.jukoz.me.block.registration.StoneBlockSets;
 import net.jukoz.me.item.ModResourceItems;
 import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterial;

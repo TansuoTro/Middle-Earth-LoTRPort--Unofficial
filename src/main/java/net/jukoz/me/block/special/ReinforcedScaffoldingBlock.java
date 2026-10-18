@@ -1,6 +1,5 @@
 package net.jukoz.me.block.special;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -18,6 +17,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import net.jukoz.me.item.DecorativeItemsME;
 import java.util.ArrayDeque;
@@ -28,7 +28,6 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
     public static final int MAX_SUPPORT_DISTANCE = 14;
     private static final int MAX_STORED_DISTANCE = 7;
     public static final IntProperty SUPPORT_DISTANCE = IntProperty.of("support_distance", 0, MAX_SUPPORT_DISTANCE);
-    public static final MapCodec<ScaffoldingBlock> CODEC = createCodec(ReinforcedScaffoldingBlock::new);
 
     public ReinforcedScaffoldingBlock(AbstractBlock.Settings settings) {
         super(settings);
@@ -50,12 +49,12 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
     }
 
     @Override
-    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state, boolean includeData) {
+    public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
         return DecorativeItemsME.REINFORCED_SCAFFOLDING.getDefaultStack();
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         if (state.get(WATERLOGGED)) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
@@ -68,7 +67,7 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
     }
 
     @Override
-    protected void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         int distance = calculateDistance(world, pos, this);
         BlockState updatedState = state.with(DISTANCE, toStoredDistance(distance))
                 .with(SUPPORT_DISTANCE, distance)
@@ -85,12 +84,12 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
     }
 
     @Override
-    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         return calculateDistance(world, pos, this) < MAX_SUPPORT_DISTANCE;
     }
 
     @Override
-    protected boolean canReplace(BlockState state, ItemPlacementContext context) {
+    public boolean canReplace(BlockState state, ItemPlacementContext context) {
         return context.getStack().getItem() instanceof BlockItem blockItem
                 && blockItem.getBlock() == this;
     }

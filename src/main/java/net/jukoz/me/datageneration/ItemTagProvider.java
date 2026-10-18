@@ -3,7 +3,7 @@ package net.jukoz.me.datageneration;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.jukoz.me.MiddleEarth;
-import net.jukoz.me.block.OreRockSets;
+import net.jukoz.me.block.registration.OreRockSets;
 import net.jukoz.me.datageneration.content.tags.*;
 import net.jukoz.me.item.ModEquipmentItems;
 import net.jukoz.me.item.ModResourceItems;

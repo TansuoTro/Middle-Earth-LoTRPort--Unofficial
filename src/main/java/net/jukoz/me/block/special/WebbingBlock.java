@@ -3,7 +3,6 @@ package net.jukoz.me.block.special;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCollisionHandler;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.server.world.ServerWorld;
@@ -16,13 +15,12 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.minecraft.world.block.WireOrientation;
 import org.jetbrains.annotations.Nullable;
 
 public class WebbingBlock extends MultifaceGrowthBlock {
     public static final BooleanProperty PERSISTENT = Properties.PERSISTENT;
     public static final MapCodec<WebbingBlock> CODEC = createCodec(WebbingBlock::new);
-    private final MultifaceGrower grower = new MultifaceGrower(this);
+    private final LichenGrower grower = new LichenGrower(this);
 
     public WebbingBlock(Settings settings) {
         super(settings);
@@ -32,7 +30,7 @@ public class WebbingBlock extends MultifaceGrowthBlock {
 
 
     @Override
-    public MultifaceGrower getGrower() {
+    public LichenGrower getGrower() {
         return this.grower;
     }
 
@@ -42,7 +40,7 @@ public class WebbingBlock extends MultifaceGrowthBlock {
         super.appendProperties(builder);
     }
 
-    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler) {
+    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         Vec3d vec3d = new Vec3d(0.75, 0.50, 0.75);
         if (entity instanceof LivingEntity livingEntity) {
             if (livingEntity.hasStatusEffect(StatusEffects.WEAVING)) {
@@ -54,7 +52,7 @@ public class WebbingBlock extends MultifaceGrowthBlock {
     }
 
     @Override
-    protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, @Nullable WireOrientation wireOrientation, boolean notify) {
+    protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos fromPos, boolean notify) {
         if (!world.isClient) {
             for (Direction direction : Direction.values()) {
                 if (world.getFluidState(pos.offset(direction)).isIn(net.minecraft.registry.tag.FluidTags.WATER)) {
@@ -63,7 +61,7 @@ public class WebbingBlock extends MultifaceGrowthBlock {
                 }
             }
         }
-        super.neighborUpdate(state, world, pos, sourceBlock, wireOrientation, notify);
+        super.neighborUpdate(state, world, pos, sourceBlock, fromPos, notify);
     }
 
     protected boolean hasRandomTicks(BlockState state) {

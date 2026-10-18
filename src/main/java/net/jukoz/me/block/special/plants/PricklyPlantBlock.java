@@ -3,7 +3,6 @@ package net.jukoz.me.block.special.plants;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCollisionHandler;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -17,9 +16,9 @@ public class PricklyPlantBlock extends CustomPlantBlock {
     }
 
     @Override
-    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler) {
+    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         if (entity instanceof LivingEntity livingEntity && world instanceof ServerWorld serverWorld) {
-            Vec3d vec3d = entity.isControlledByPlayer() ? entity.getMovement() : entity.getLastRenderPos().subtract(entity.getPos());
+            Vec3d vec3d = new Vec3d(entity.getX() - entity.lastRenderX, 0.0, entity.getZ() - entity.lastRenderZ);
             if (vec3d.horizontalLengthSquared() > 0.0) {
                 double d = Math.abs(vec3d.getX());
                 double e = Math.abs(vec3d.getZ());

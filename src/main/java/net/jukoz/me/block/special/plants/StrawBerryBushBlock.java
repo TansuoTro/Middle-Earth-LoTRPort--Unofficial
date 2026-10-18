@@ -1,7 +1,6 @@
 package net.jukoz.me.block.special.plants;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.entity.EntityCollisionHandler;
 import net.jukoz.me.item.FoodItemsME;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
@@ -42,7 +41,7 @@ public class StrawBerryBushBlock extends CustomPlantBlock
     }
 
     @Override
-    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state, boolean includeData) {
+    public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
         return new ItemStack(FoodItemsME.STRAWBERRIES);
     }
 
@@ -73,7 +72,7 @@ public class StrawBerryBushBlock extends CustomPlantBlock
     }
 
     @Override
-    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler) {
+    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         if (!(entity instanceof LivingEntity) || entity.getType() == EntityType.BEE || entity.getType() == EntityType.FOX || entity.getType() == EntityType.BAT) {
             return;
         }
@@ -82,7 +81,6 @@ public class StrawBerryBushBlock extends CustomPlantBlock
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        Hand hand = player.getActiveHand();
         boolean bl;
         int i = state.get(AGE);
         boolean bl2 = bl = i == MAX_AGE;
@@ -107,7 +105,7 @@ public class StrawBerryBushBlock extends CustomPlantBlock
     }
 
     @Override
-    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state) {
+    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean isClient) {
         return state.get(AGE) < MAX_AGE;
     }
 

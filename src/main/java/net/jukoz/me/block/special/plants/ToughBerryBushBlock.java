@@ -1,7 +1,6 @@
 package net.jukoz.me.block.special.plants;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.entity.EntityCollisionHandler;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.item.FoodItemsME;
 import net.minecraft.block.Block;
@@ -47,12 +46,12 @@ public class ToughBerryBushBlock extends CustomPlantBlock
     }
 
     @Override
-    protected boolean canPathfindThrough(BlockState state, NavigationType type) {
+    public boolean canPathfindThrough(BlockState state, BlockView world, BlockPos pos, NavigationType type) {
         return false;
     }
 
     @Override
-    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state, boolean includeData) {
+    public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
         return new ItemStack(FoodItemsME.TOUGH_BERRIES);
     }
 
@@ -83,18 +82,18 @@ public class ToughBerryBushBlock extends CustomPlantBlock
     }
 
     @Override
-    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler) {
+    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         if (entity instanceof LivingEntity && entity.getType() != EntitiesME.WARG || entity.getType() == EntityType.FOX || entity.getType() == EntityType.BAT) {
             entity.slowMovement(state, new Vec3d(0.800000011920929, 0.75, 0.800000011920929));
             if (world instanceof ServerWorld) {
                 ServerWorld serverWorld = (ServerWorld)world;
                 if ((Integer)state.get(AGE) != 0) {
-                    Vec3d vec3d = entity.isControlledByPlayer() ? entity.getMovement() : entity.getLastRenderPos().subtract(entity.getPos());
+                    Vec3d vec3d = new Vec3d(entity.getX() - entity.lastRenderX, 0.0, entity.getZ() - entity.lastRenderZ);
                     if (vec3d.horizontalLengthSquared() > 0.0) {
                         double d = Math.abs(vec3d.getX());
                         double e = Math.abs(vec3d.getZ());
                         if (d >= 0.003000000026077032 || e >= 0.003000000026077032) {
-                            entity.damage(serverWorld, world.getDamageSources().sweetBerryBush(), 1.0F);
+                            entity.damage(world.getDamageSources().sweetBerryBush(), 1.0F);
                         }
                     }
                 }
@@ -104,7 +103,6 @@ public class ToughBerryBushBlock extends CustomPlantBlock
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        Hand hand = player.getActiveHand();
         boolean bl;
         int i = state.get(AGE);
         boolean bl2 = bl = i == MAX_AGE;
@@ -129,7 +127,7 @@ public class ToughBerryBushBlock extends CustomPlantBlock
     }
 
     @Override
-    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state) {
+    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean isClient) {
         return state.get(AGE) < MAX_AGE;
     }
 

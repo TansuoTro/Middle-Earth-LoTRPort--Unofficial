@@ -1,6 +1,5 @@
 package net.jukoz.me.block.special.fire_of_orthanc;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.util.ActionResult;
 import net.jukoz.me.item.DecorativeItemsME;
 import net.minecraft.block.Block;
@@ -26,7 +25,6 @@ import net.minecraft.world.explosion.Explosion;
 import org.jetbrains.annotations.Nullable;
 
 public class FireOfOrthancBlock extends Block {
-    public static final MapCodec<FireOfOrthancBlock> CODEC = createCodec(FireOfOrthancBlock::new);
     public static final VoxelShape OUTLINE_SHAPE = Block.createCuboidShape(2, 0, 2, 14, 12, 14);
 
     public FireOfOrthancBlock(Settings settings) {

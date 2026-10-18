@@ -1,6 +1,5 @@
 package net.jukoz.me.block.special.plants;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Fertilizable;
@@ -8,7 +7,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.particle.ParticleUtil;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -21,13 +19,12 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.world.WorldEvents;
+import net.minecraft.world.WorldView;import net.minecraft.world.event.GameEvent;
 import net.jukoz.me.particles.ModParticleTypes;
 import org.jetbrains.annotations.Nullable;
 
 public class MistweedPlantBlock extends CustomPlantBlock implements Fertilizable {
-    public static final MapCodec<CustomPlantBlock> CODEC = createCodec(MistweedPlantBlock::new);
     public static final BooleanProperty ACTIVE = BooleanProperty.of("active");
 
     public MistweedPlantBlock(Settings settings) {
@@ -54,8 +51,7 @@ public class MistweedPlantBlock extends CustomPlantBlock implements Fertilizable
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        Hand hand = player.getActiveHand();
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient && player.getAbilities().allowModifyWorld) {
             ItemStack itemStack = player.getStackInHand(hand);
             if (!state.get(ACTIVE) && itemStack.isIn(ItemTags.AXES)) {
@@ -71,18 +67,18 @@ public class MistweedPlantBlock extends CustomPlantBlock implements Fertilizable
         world.setBlockState(pos, state.with(ACTIVE, true), 11);
         world.playSound(null, pos, SoundEvents.ITEM_AXE_WAX_OFF, SoundCategory.BLOCKS, 1.0F, 1.0F);
         world.emitGameEvent(player, GameEvent.BLOCK_CHANGE, pos);
-        ParticleUtil.spawnParticlesAround(world, pos, 3, 3.0, 1.0, true, ParticleTypes.WAX_OFF);
+        world.syncWorldEvent(WorldEvents.WAX_REMOVED, pos);
     }
 
     protected static void deactivateState(@Nullable PlayerEntity player, BlockState state, World world, BlockPos pos) {
         world.setBlockState(pos, state.with(ACTIVE, false), 11);
         world.playSound(null, pos, SoundEvents.ITEM_HONEYCOMB_WAX_ON, SoundCategory.BLOCKS, 1.0F, 1.0F);
         world.emitGameEvent(player, GameEvent.BLOCK_CHANGE, pos);
-        ParticleUtil.spawnParticlesAround(world, pos, 3, 3.0, 1.0, true, ParticleTypes.WAX_ON);
+        world.syncWorldEvent(WorldEvents.BLOCK_WAXED, pos);
     }
 
-    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state) {
-        return Fertilizable.canSpread(world, pos, state);
+    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean isClient) {
+        return true;
     }
 
     public boolean canGrow(World world, Random random, BlockPos pos, BlockState state) {
@@ -90,8 +86,17 @@ public class MistweedPlantBlock extends CustomPlantBlock implements Fertilizable
     }
 
     public void grow(ServerWorld world, Random random, BlockPos pos, BlockState state) {
-        Fertilizable.findPosToSpreadTo(world, pos, state).ifPresent((blockPos) -> {
-            world.setBlockState(blockPos, this.getDefaultState());
-        });
+        // 1.20.1 Fertilizable has no findPosToSpreadTo helper; do a small random spread search.
+        for (int i = 0; i < 8; i++) {
+            int dx = random.nextInt(5) - 2;
+            int dz = random.nextInt(5) - 2;
+            if (dx == 0 && dz == 0) continue;
+            BlockPos spreadPos = pos.add(dx, 0, dz);
+            BlockState spreadFloor = world.getBlockState(spreadPos.down());
+            if (world.isAir(spreadPos) && this.canPlantOnTop(spreadFloor, world, spreadPos.down())) {
+                world.setBlockState(spreadPos, this.getDefaultState());
+                return;
+            }
+        }
     }
 }

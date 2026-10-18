@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.MapColor;
-import net.minecraft.block.TintedParticleLeavesBlock;
+import net.jukoz.me.block.special.plants.TintedParticleLeavesBlock;
 import net.minecraft.block.enums.Instrument;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.BlockSoundGroup;

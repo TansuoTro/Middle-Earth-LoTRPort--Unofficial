@@ -2,7 +2,6 @@ package net.jukoz.me.block.special.bellows;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.util.Hand;
-import net.minecraft.entity.EntityCollisionHandler;
 import net.minecraft.state.property.EnumProperty;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import net.minecraft.block.*;
@@ -56,29 +55,29 @@ public class BellowsBlock extends BlockWithEntity {
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return Block.createCuboidShape(3, 0, 3, 13, 7, 13);
     }
 
     @Override
-    protected BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         player.swingHand(player.getActiveHand());
         return this.pump(world, pos, state, player) ? ActionResult.SUCCESS : ActionResult.CONSUME;
     }
 
     @Override
-    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler) {
+    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         if(!world.isClient){
             if (entity.getVelocity().y < -0.1f && entity instanceof LivingEntity) {
                 this.pump(world, pos, state, entity);
             }
         }
-        super.onEntityCollision(state, world, pos, entity, handler);
+        super.onEntityCollision(state, world, pos, entity);
     }
 
     public void onEntityLand(BlockView world, Entity entity) {

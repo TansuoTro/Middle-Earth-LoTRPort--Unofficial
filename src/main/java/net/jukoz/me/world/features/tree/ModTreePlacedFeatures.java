@@ -1,7 +1,7 @@
 package net.jukoz.me.world.features.tree;
 
 import net.jukoz.me.MiddleEarth;
-import net.jukoz.me.block.ModNatureBlocks;
+import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.minecraft.block.Blocks;
 import net.minecraft.registry.Registerable;
 import net.minecraft.registry.RegistryKey;

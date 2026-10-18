@@ -2,7 +2,7 @@ package net.jukoz.me.item;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.jukoz.me.MiddleEarth;
-import net.jukoz.me.block.ModNatureBlocks;
+import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.jukoz.me.datageneration.content.models.SimpleItemModel;
 import net.jukoz.me.item.items.SkewerItem;
 import net.jukoz.me.item.utils.ModItemGroups;

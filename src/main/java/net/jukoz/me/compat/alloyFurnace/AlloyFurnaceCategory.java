@@ -10,7 +10,7 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.jukoz.me.MiddleEarth;
-import net.jukoz.me.block.ModDecorativeBlocks;
+import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import java.util.LinkedList;

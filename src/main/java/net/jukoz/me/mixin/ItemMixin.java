@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * Hands the components declared on an {@link MESettings} to {@link MEComponents} once the
@@ -30,6 +31,17 @@ public class ItemMixin {
             if (meSettings.bannerPatternTag() != null) {
                 net.jukoz.me.item.ItemExtras.bannerPatternTag((Item) (Object) this, meSettings.bannerPatternTag());
             }
+            if (meSettings.enchantability() >= 0) {
+                net.jukoz.me.item.ItemExtras.enchantability((Item) (Object) this, meSettings.enchantability());
+            }
+        }
+    }
+
+    @Inject(method = "getEnchantability()I", at = @At("HEAD"), cancellable = true)
+    private void me$captureEnchantability(CallbackInfoReturnable<Integer> cir) {
+        Integer value = net.jukoz.me.item.ItemExtras.enchantability((Item) (Object) this);
+        if (value != null) {
+            cir.setReturnValue(value);
         }
     }
 }

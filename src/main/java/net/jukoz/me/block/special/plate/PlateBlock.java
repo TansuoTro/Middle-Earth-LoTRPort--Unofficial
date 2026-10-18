@@ -13,6 +13,7 @@ import net.minecraft.component.type.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.FoodComponent;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
@@ -202,7 +203,7 @@ public class PlateBlock extends BlockWithEntity {
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(FACING, UTENSILS);
+        builder.add(FACING);
         super.appendProperties(builder);
     }
 
@@ -214,7 +215,7 @@ public class PlateBlock extends BlockWithEntity {
         for(int var5 = 0; var5 < var4; ++var5) {
             Direction direction = var3[var5];
             if (direction.getAxis() == Direction.Axis.Y) {
-                BlockState blockState = this.getDefaultState().with(Properties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(UTENSILS, false);
+                BlockState blockState = this.getDefaultState().with(Properties.HORIZONTAL_FACING, direction.getOpposite()).with(UTENSILS, false);
                 if (blockState.canPlaceAt(ctx.getWorld(), ctx.getBlockPos())) {
                     return blockState;
                 }

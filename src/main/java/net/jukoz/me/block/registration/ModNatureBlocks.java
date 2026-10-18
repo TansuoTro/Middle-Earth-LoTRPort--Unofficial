@@ -25,6 +25,7 @@ import net.jukoz.me.registries.RegistryAliasesME;
 import net.jukoz.me.world.features.tree.ModTreeConfiguredFeatures;
 import net.jukoz.me.world.features.tree.MushroomTreeConfiguredFeatures;
 import net.minecraft.block.*;
+import net.minecraft.block.sapling.SaplingGenerator;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -401,31 +402,31 @@ public class ModNatureBlocks {
                     .mapColor(DyeColor.GREEN), true);
 
     public static final Block BROWN_BOLETE = registerBlock("brown_bolete",
-            (settings) -> new MushroomPlantBlock(MushroomTreeConfiguredFeatures.BROWN_BOLETTE_TREE_KEY, settings), AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM), true);
+            (settings) -> new MushroomPlantBlock(settings, MushroomTreeConfiguredFeatures.BROWN_BOLETTE_TREE_KEY), AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM), true);
     public static final Block CAVE_AMANITA = registerBlock("cave_amanita",
-            (settings) -> new MushroomPlantBlock(MushroomTreeConfiguredFeatures.CAVE_AMANITA_TREE_KEY, settings), AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM), true);
+            (settings) -> new MushroomPlantBlock(settings, MushroomTreeConfiguredFeatures.CAVE_AMANITA_TREE_KEY), AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM), true);
     public static final Block DEEP_FIRECAP = registerBlock("deep_firecap",
-            (settings) -> new MushroomPlantBlock(MushroomTreeConfiguredFeatures.DEEP_FIRECAP_TREE_KEY, settings), AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM), true);
+            (settings) -> new MushroomPlantBlock(settings, MushroomTreeConfiguredFeatures.DEEP_FIRECAP_TREE_KEY), AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM), true);
     public static final Block GHOSTSHROOM = registerBlock("ghostshroom",
-            (settings) -> new MushroomPlantBlock(null, settings), AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM).luminance(state -> 4), true);
+            (settings) -> new MushroomPlantBlock(settings, null), AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM).luminance(state -> 4), true);
     public static final Block MORSEL = registerBlock("morsel",
-            (settings) -> new MushroomPlantBlock(null, settings), AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM), true);
+            (settings) -> new MushroomPlantBlock(settings, null), AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM), true);
     public static final Block SKY_FIRECAP = registerBlock("sky_firecap",
-            (settings) -> new MushroomPlantBlock(MushroomTreeConfiguredFeatures.SKY_FIRECAP_TREE_KEY, settings), AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM), true);
+            (settings) -> new MushroomPlantBlock(settings, MushroomTreeConfiguredFeatures.SKY_FIRECAP_TREE_KEY), AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM), true);
     public static final Block TRUMPET_SHROOM = registerBlock("trumpet_shroom",
-            (settings) -> new MushroomPlantBlock(null, settings), AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM), true);
+            (settings) -> new MushroomPlantBlock(settings, null), AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM), true);
     public static final Block TALL_TRUMPET_SHROOM = registerBlock("tall_trumpet_shroom",
             TallMushroomBlock::new, AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM), true);
     public static final Block TUBESHRROM = registerBlock("tubeshroom",
-            (settings) -> new MushroomPlantBlock(null, settings), AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM).luminance(state -> 4), true);
+            (settings) -> new MushroomPlantBlock(settings, null), AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM).luminance(state -> 4), true);
     public static final Block TALL_TUBESHROOM = registerBlock("tall_tubeshroom",
             TallMushroomBlock::new, AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM).luminance(state -> 5), true);
     public static final Block VIOLET_CAPS = registerBlock("violet_caps",
-            (settings) -> new MushroomPlantBlock(null, settings),AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM), true);
+            (settings) -> new MushroomPlantBlock(settings, null),AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM), true);
     public static final Block WHITE_MUSHROOM = registerBlock("white_mushroom",
-            (settings) -> new MushroomPlantBlock(null, settings),AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM), true);
+            (settings) -> new MushroomPlantBlock(settings, null),AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM), true);
     public static final Block YELLOW_AMANITA = registerBlock("yellow_amanita",
-            (settings) -> new MushroomPlantBlock(MushroomTreeConfiguredFeatures.YELLOW_AMANITA_TREE_KEY,settings), AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM), true);
+            (settings) -> new MushroomPlantBlock(settings, MushroomTreeConfiguredFeatures.YELLOW_AMANITA_TREE_KEY), AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM), true);
 
     public static final Block BROWN_BOLETE_TILLER = registerBlock("brown_bolete_tiller",
             FlowerbedMushroomBlock::new, AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM), true);
@@ -478,8 +479,8 @@ public class ModNatureBlocks {
                     new WeightedSaplingBlock.WeightedTree(ModTreeConfiguredFeatures.PALM_TREE_KEY, 14, "palm_sapling")));
     public static final Block WHITE_PALM_SAPLING = registerSimpleSapling("white_palm_sapling", ModTreeConfiguredFeatures.WHITE_PALM_TREE_KEY);
     public static final Block PINE_SAPLING = registerSimpleSapling("pine_sapling", ModTreeConfiguredFeatures.PINE_TREE_KEY);
-    public static final Block BLACK_PINE_SAPLING = registerSimpleSapling("black_pine_sapling", ModTreeConfiguredFeatures.BLACK_PINE_TREE_KEY);
-    public static final Block WHITE_SPRUCE_SAPLING = registerSimpleSapling("white_spruce_sapling", ModTreeConfiguredFeatures.WHITE_SPRUCE_TREE_KEY);
+    public static final Block BLACK_PINE_SAPLING = registerSimpleSapling("black_pine_sapling", ModTreeConfiguredFeatures.PINE_TREE_KEY);
+    public static final Block WHITE_SPRUCE_SAPLING = registerSimpleSapling("white_spruce_sapling", ModTreeConfiguredFeatures.SPRUCE_TREE_KEY);
     public static final Block WILLOW_SAPLING = registerSimpleSapling("willow_sapling", ModTreeConfiguredFeatures.WILLOW_TREE_KEY);
 
     public static final Block LEBETHRON_LEAVES = registerBlock("lebethron_leaves",
@@ -522,7 +523,7 @@ public class ModNatureBlocks {
                     .sounds(BlockSoundGroup.MOSS_CARPET).nonOpaque().replaceable().noCollision(), true);
 
     public static final Block WILLOW_VINES = registerBlock("willow_vines",
-            CustomHangingBlock::new, AbstractBlock.Settings.copy(Blocks.PALE_HANGING_MOSS), true);
+            CustomHangingBlock::new, AbstractBlock.Settings.copy(Blocks.WEEPING_VINES_PLANT), true);
 
     public static final Block TOUGH_BERRY_BUSH = registerBlock("tough_berry_bush",
             ToughBerryBushBlock::new, AbstractBlock.Settings.copy(Blocks.SWEET_BERRY_BUSH).ticksRandomly().noCollision().breakInstantly()
@@ -584,7 +585,7 @@ public class ModNatureBlocks {
             HangingRootsBlock::new, AbstractBlock.Settings.copy(Blocks.HANGING_ROOTS), true);
 
     public static final Block MIRKWOOD_VINES = registerBlock("mirkwood_vines",
-            CustomHangingBlock::new, AbstractBlock.Settings.copy(Blocks.PALE_HANGING_MOSS), true);
+            CustomHangingBlock::new, AbstractBlock.Settings.copy(Blocks.WEEPING_VINES_PLANT), true);
 
     public static final Block HANGING_WEBS = registerBlock("hanging_webs",
             HangingCobwebBlock::new, AbstractBlock.Settings.copy(Blocks.COBWEB), true);
@@ -594,7 +595,7 @@ public class ModNatureBlocks {
 
     public static final Block WEBBING = registerBlock("webbing",
             WebbingBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.WHITE).replaceable().noCollision().strength(0.2f)
-                    .pistonBehavior(PistonBehavior.DESTROY).sounds(BlockSoundGroup.COBWEB).burnable().ticksRandomly(), true);
+                    .pistonBehavior(PistonBehavior.DESTROY).sounds(BlockSoundGroup.WOOL).burnable().ticksRandomly(), true);
 
     public static final Block SHELOBITE_LARVA_EGG = registerBlock("shelobite_larva_egg",
             ShelobiteLarvaEggBlock::new, AbstractBlock.Settings.copy(Blocks.TURTLE_EGG), true);

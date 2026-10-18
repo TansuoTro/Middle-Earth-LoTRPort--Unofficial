@@ -1,9 +1,9 @@
 package net.jukoz.me.world.features.ores;
 
 import net.jukoz.me.MiddleEarth;
-import net.jukoz.me.block.ModBlocks;
-import net.jukoz.me.block.ModNatureBlocks;
-import net.jukoz.me.block.StoneBlockSets;
+import net.jukoz.me.block.registration.ModBlocks;
+import net.jukoz.me.block.registration.ModNatureBlocks;
+import net.jukoz.me.block.registration.StoneBlockSets;
 import net.jukoz.me.world.biomes.surface.ModBiomeFeatures;
 import net.jukoz.me.world.gen.ModFeatures;
 import net.minecraft.block.Blocks;

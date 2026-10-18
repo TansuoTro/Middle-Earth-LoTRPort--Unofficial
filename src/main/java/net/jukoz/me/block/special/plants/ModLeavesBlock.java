@@ -2,8 +2,8 @@ package net.jukoz.me.block.special.plants;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.TintedParticleLeavesBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
@@ -26,7 +26,7 @@ import net.jukoz.me.block.registration.WoodBlockSets;
 public class ModLeavesBlock extends TintedParticleLeavesBlock {
     final protected boolean castShadow;
 
-    public ModLeavesBlock(float f, Settings settings, boolean castShadow) {
+    public ModLeavesBlock(float f, AbstractBlock.Settings settings, boolean castShadow) {
         super(f, settings);
         this.castShadow = castShadow;
     }
@@ -70,8 +70,8 @@ public class ModLeavesBlock extends TintedParticleLeavesBlock {
     }
 
     @Override
-    protected int getOpacity(BlockState state) {
-        if(castShadow) return super.getOpacity(state);
+    protected int getOpacity(BlockState state, BlockView world, BlockPos pos) {
+        if(castShadow) return super.getOpacity(state, world, pos);
         return 0;
     }
 

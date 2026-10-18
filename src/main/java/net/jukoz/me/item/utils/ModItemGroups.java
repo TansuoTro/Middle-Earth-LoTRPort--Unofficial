@@ -2,10 +2,10 @@ package net.jukoz.me.item.utils;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.jukoz.me.MiddleEarth;
-import net.jukoz.me.block.ModBlocks;
-import net.jukoz.me.block.StoneBlockSets;
-import net.jukoz.me.block.ModNatureBlocks;
-import net.jukoz.me.block.WoodBlockSets;
+import net.jukoz.me.block.registration.ModBlocks;
+import net.jukoz.me.block.registration.StoneBlockSets;
+import net.jukoz.me.block.registration.ModNatureBlocks;
+import net.jukoz.me.block.registration.WoodBlockSets;
 import net.jukoz.me.item.*;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;

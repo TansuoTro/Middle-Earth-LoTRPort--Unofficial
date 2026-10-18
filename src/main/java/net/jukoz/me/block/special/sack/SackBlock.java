@@ -1,6 +1,5 @@
 package net.jukoz.me.block.special.sack;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.util.Hand;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -10,7 +9,7 @@ import net.minecraft.entity.mob.PiglinBrain;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.loot.context.LootWorldContext;
+import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
@@ -33,7 +32,6 @@ import java.util.List;
 
 public class SackBlock extends BlockWithEntity {
     public static final Identifier CONTENTS_DYNAMIC_DROP_ID;
-    public static final MapCodec<BarrelBlock> CODEC = createCodec(BarrelBlock::new);
     public static final BooleanProperty OPEN;
 
     public SackBlock(Settings settings) {
@@ -50,11 +48,11 @@ public class SackBlock extends BlockWithEntity {
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return Block.createCuboidShape(4, 0, 4, 12, 9, 12);
     }
 
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world instanceof ServerWorld serverWorld) {
             NamedScreenHandlerFactory namedScreenHandlerFactory = this.createScreenHandlerFactory(state, world, pos);
             if (namedScreenHandlerFactory != null) {
@@ -68,9 +66,10 @@ public class SackBlock extends BlockWithEntity {
     public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof SackBlockEntity sackBlockEntity) {
-            if (!world.isClient && player.shouldSkipBlockDrops() && !sackBlockEntity.isEmpty()) {
+            if (!world.isClient && player.isCreative() && !sackBlockEntity.isEmpty()) {
+                // 1.20.1 has no data components; carry the contents in BlockEntityTag instead.
                 ItemStack itemStack = new ItemStack(DecorativeItemsME.SACK);
-                itemStack.applyComponentsFrom(blockEntity.createComponentMap());
+                blockEntity.setStackNbt(itemStack);
                 ItemEntity itemEntity = new ItemEntity(world, (double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5, itemStack);
                 itemEntity.setToDefaultPickupDelay();
                 world.spawnEntity(itemEntity);
@@ -83,7 +82,7 @@ public class SackBlock extends BlockWithEntity {
     }
 
     @Override
-    protected List<ItemStack> getDroppedStacks(BlockState state, LootWorldContext.Builder builder) {
+    public List<ItemStack> getDroppedStacks(BlockState state, LootContextParameterSet.Builder builder) {
         BlockEntity blockEntity = builder.getOptional(LootContextParameters.BLOCK_ENTITY);
         if (blockEntity instanceof SackBlockEntity sackBlockEntity) {
             builder = builder.addDynamicDrop(CONTENTS_DYNAMIC_DROP_ID, (lootConsumer) -> {
@@ -96,8 +95,15 @@ public class SackBlock extends BlockWithEntity {
     }
 
     @Override
-    protected void onStateReplaced(BlockState state, ServerWorld world, BlockPos pos, boolean moved) {
-        ItemScatterer.onStateReplaced(state, world, pos);
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+        if (!state.isOf(newState.getBlock())) {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof SackBlockEntity) {
+                ItemScatterer.spawn(world, pos, (SackBlockEntity) blockEntity);
+                world.updateComparators(pos, this);
+            }
+        }
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
