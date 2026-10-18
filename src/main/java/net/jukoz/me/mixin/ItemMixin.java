@@ -17,8 +17,13 @@ public class ItemMixin {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void me$captureComponentDefaults(Item.Settings settings, CallbackInfo ci) {
-        if (settings instanceof MESettings meSettings && !meSettings.components().isEmpty()) {
-            MEComponents.captureDefaults((Item) (Object) this, meSettings.components());
+        if (settings instanceof MESettings meSettings) {
+            if (!meSettings.components().isEmpty()) {
+                MEComponents.captureDefaults((Item) (Object) this, meSettings.components());
+            }
+            if (meSettings.isUnbreakable()) {
+                net.jukoz.me.item.UnbreakableItems.add((Item) (Object) this);
+            }
         }
     }
 }

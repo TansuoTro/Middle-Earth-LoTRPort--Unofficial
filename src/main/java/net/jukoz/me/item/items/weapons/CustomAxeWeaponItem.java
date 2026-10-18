@@ -14,8 +14,8 @@ import net.jukoz.me.item.utils.WeaponTypesME;
 public class CustomAxeWeaponItem extends AxeItem {
 
     public CustomAxeWeaponItem(ToolMaterial toolMaterial, Item.Settings settings) {
-        super(toolMaterial, WeaponTypesME.AXE.attack, WeaponTypesME.AXE.attackSpeed, settings.axe(toolMaterial, WeaponTypesME.AXE.attack, WeaponTypesME.AXE.attackSpeed)
-                .component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(WeaponTypesME.AXE.name)));
+        super(toolMaterial, WeaponTypesME.AXE.attack, WeaponTypesME.AXE.attackSpeed,
+                settings.component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(WeaponTypesME.AXE.name)));
     }
 
     @Override

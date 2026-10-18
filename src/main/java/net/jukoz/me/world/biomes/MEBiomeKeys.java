@@ -1,6 +1,7 @@
 package net.jukoz.me.world.biomes;
 
 import net.jukoz.me.MiddleEarth;
+import net.jukoz.me.datageneration.content.TranslationEntries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
@@ -290,8 +291,7 @@ public class MEBiomeKeys extends BiomeKeys {
     // endregion
 
     private static RegistryKey<Biome> register(String name) {
-        // TODO(datagen): the donor records every biome name in TranslationEntries for
-        // the language provider. Datagen is deferred, so the list is not built here yet.
+        TranslationEntries.biomeEntries.add(name);
         Identifier biomeId = MiddleEarth.of(name);
         RegistryKey<Biome> biome = RegistryKey.of(RegistryKeys.BIOME, biomeId);
         BiomeEventRegistryUtil.addBiomeEntry(biome);

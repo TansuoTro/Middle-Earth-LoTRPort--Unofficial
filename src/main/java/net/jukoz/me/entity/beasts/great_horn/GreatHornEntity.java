@@ -3,7 +3,7 @@ import net.jukoz.me.entity.EntityAttributesME;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.FoodComponent;
+import net.minecraft.item.FoodComponent;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;

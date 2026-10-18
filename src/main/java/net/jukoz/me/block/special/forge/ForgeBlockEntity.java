@@ -4,7 +4,7 @@ import net.jukoz.me.item.MEComponents;
 
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.component.type.ConsumableComponents;
-import net.minecraft.component.type.FoodComponent;
+import net.minecraft.item.FoodComponent;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.item.trim.ArmorTrim;
 import net.minecraft.item.trim.ArmorTrimMaterial;

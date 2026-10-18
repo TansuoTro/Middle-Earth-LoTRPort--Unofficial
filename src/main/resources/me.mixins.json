@@ -11,6 +11,8 @@
     "EntitySpawnMixin",
     "FoliagePlacerTypeInvoker",
     "ItemMixin",
+    "ItemStackAttributeMixin",
+    "ItemStackUnbreakableMixin",
     "PigEntityMixin",
     "PlayerEntityMixin",
     "PlayerMixin",

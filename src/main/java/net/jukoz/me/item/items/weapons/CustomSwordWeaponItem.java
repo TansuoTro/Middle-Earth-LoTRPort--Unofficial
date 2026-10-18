@@ -3,6 +3,7 @@ import net.jukoz.me.item.MEComponents;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
@@ -10,11 +11,11 @@ import net.minecraft.util.Formatting;
 import net.jukoz.me.item.dataComponents.WeaponTypeDataComponent;
 import net.jukoz.me.item.utils.WeaponTypesME;
 
-public class CustomSwordWeaponItem extends Item {
+public class CustomSwordWeaponItem extends SwordItem {
 
     public CustomSwordWeaponItem(ToolMaterial toolMaterial, Item.Settings settings) {
-        super(settings.sword(toolMaterial, WeaponTypesME.SWORD.attack, WeaponTypesME.SWORD.attackSpeed)
-                .component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(WeaponTypesME.SWORD.name)));
+        super(toolMaterial, (int) WeaponTypesME.SWORD.attack, WeaponTypesME.SWORD.attackSpeed,
+                settings.component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(WeaponTypesME.SWORD.name)));
     }
 
     @Override

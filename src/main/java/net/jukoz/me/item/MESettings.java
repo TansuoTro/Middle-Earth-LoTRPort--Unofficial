@@ -37,6 +37,21 @@ public class MESettings extends Item.Settings {
         return Collections.unmodifiableMap(this.components);
     }
 
+    private boolean unbreakable;
+
+    /**
+     * 1.21's {@code UNBREAKABLE} component. 1.20.1 has no settings-level equivalent, so the
+     * flag is carried to {@link UnbreakableItems} once the item is constructed.
+     */
+    public MESettings unbreakable() {
+        this.unbreakable = true;
+        return this;
+    }
+
+    public boolean isUnbreakable() {
+        return this.unbreakable;
+    }
+
     // --- covariant re-declarations so the chain keeps returning MESettings ---
 
     @Override

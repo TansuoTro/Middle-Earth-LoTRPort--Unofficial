@@ -16,7 +16,7 @@ import net.jukoz.me.item.utils.ItemGroupsME;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.component.type.FoodComponent;
+import net.minecraft.item.FoodComponent;
 import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;

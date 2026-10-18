@@ -65,7 +65,7 @@ public class ToolItemsME {
 
     public static final Item MITHRIL_SMITHING_HAMMER = registerSmithingHammerItem("mithril_smithing_hammer",
             (settings) -> new SmithingHammerItem(settings, ToolMaterialsME.MITHRIL_HAMMER, -2.5f), new MESettings().enchantable(20)
-                    .component(DataComponentTypes.UNBREAKABLE, Unit.INSTANCE));
+                    .unbreakable());
 
     public static final Item IRON_CHISEL = registerItemHandheld("iron_chisel",
             Item::new, new MESettings().maxCount(1)
@@ -77,7 +77,7 @@ public class ToolItemsME {
             Item::new, new MESettings().maxCount(1));
 
     public static final Item BRONZE_PICKAXE = registerItemHandheld("bronze_pickaxe",
-            Item::new, new MESettings().pickaxe(ToolMaterialsME.BRONZE, 0.5f, -2.8f));
+            (settings) -> new PickaxeItem(ToolMaterialsME.BRONZE, 0, -2.8f, settings), new MESettings());
     public static final Item BRONZE_AXE = registerItemHandheld("bronze_axe",
             (settings) -> new CustomAxeWeaponItem(ToolMaterialsME.BRONZE, settings), new MESettings());
     public static final Item BRONZE_SHOVEL = registerItemHandheld("bronze_shovel",
@@ -86,7 +86,7 @@ public class ToolItemsME {
             (settings) -> new HoeItem(ToolMaterialsME.BRONZE, -2.0f, -1.0f, settings), new MESettings());
 
     public static final Item CRUDE_PICKAXE = registerItemHandheld("crude_pickaxe",
-            Item::new, new MESettings().pickaxe(ToolMaterialsME.CRUDE, 0.5f, -2.8f));
+            (settings) -> new PickaxeItem(ToolMaterialsME.CRUDE, 0, -2.8f, settings), new MESettings());
     public static final Item CRUDE_AXE = registerItemDualModel("crude_axe",
             (settings) -> new AxeItem(ToolMaterialsME.CRUDE, 6.0f, -3.0f, settings), new MESettings());
     public static final Item CRUDE_SHOVEL = registerItemHandheld("crude_shovel",
@@ -95,7 +95,7 @@ public class ToolItemsME {
             (settings) -> new HoeItem(ToolMaterialsME.CRUDE, -2.0f, -1.0f, settings), new MESettings());
 
     public static final Item STEEL_PICKAXE = registerItemHandheld("steel_pickaxe",
-            Item::new, new MESettings().pickaxe(ToolMaterialsME.STEEL, 1.0f, -2.8f));
+            (settings) -> new PickaxeItem(ToolMaterialsME.STEEL, 1, -2.8f, settings), new MESettings());
     public static final Item STEEL_AXE = registerItemDualModel("steel_axe",
             (settings) -> new CustomAxeWeaponItem(ToolMaterialsME.STEEL, settings), new MESettings());
     public static final Item STEEL_SHOVEL = registerItemHandheld("steel_shovel",
@@ -104,7 +104,7 @@ public class ToolItemsME {
             (settings) -> new HoeItem(ToolMaterialsME.STEEL, -2.0f, -1.0f, settings), new MESettings());
 
     public static final Item BURZUM_STEEL_PICKAXE = registerItemHandheld("burzum_steel_pickaxe",
-            Item::new, new MESettings().pickaxe(ToolMaterialsME.BURZUM_STEEL, 1.0f, -2.8f));
+            (settings) -> new PickaxeItem(ToolMaterialsME.BURZUM_STEEL, 1, -2.8f, settings), new MESettings());
     public static final Item BURZUM_STEEL_AXE = registerItemDualModel("burzum_steel_axe",
             (settings) -> new CustomAxeWeaponItem(ToolMaterialsME.BURZUM_STEEL, settings), new MESettings());
     public static final Item BURZUM_STEEL_SHOVEL = registerItemHandheld("burzum_steel_shovel",
@@ -113,7 +113,7 @@ public class ToolItemsME {
             (settings) -> new HoeItem(ToolMaterialsME.BURZUM_STEEL, -2.0f, -1.0f, settings), new MESettings());
 
     public static final Item EDHEL_STEEL_PICKAXE = registerItemHandheld("edhel_steel_pickaxe",
-            Item::new, new MESettings().pickaxe(ToolMaterialsME.EDHEL_STEEL, 1.0f, -2.8f));
+            (settings) -> new PickaxeItem(ToolMaterialsME.EDHEL_STEEL, 1, -2.8f, settings), new MESettings());
     public static final Item EDHEL_STEEL_AXE = registerItemDualModel("edhel_steel_axe",
             (settings) -> new AxeItem(ToolMaterialsME.EDHEL_STEEL, 6.0f, -3.0f, settings), new MESettings());
     public static final Item EDHEL_STEEL_SHOVEL = registerItemHandheld("edhel_steel_shovel",
@@ -122,7 +122,7 @@ public class ToolItemsME {
             (settings) -> new HoeItem(ToolMaterialsME.EDHEL_STEEL, -2.0f, -1.0f, settings), new MESettings());
     
     public static final Item KHAZAD_STEEL_PICKAXE = registerItemHandheld("khazad_steel_pickaxe",
-            Item::new, new MESettings().pickaxe(ToolMaterialsME.KHAZAD_STEEL, 1.0f, -2.8f));
+            (settings) -> new PickaxeItem(ToolMaterialsME.KHAZAD_STEEL, 1, -2.8f, settings), new MESettings());
     public static final Item KHAZAD_STEEL_AXE = registerItemHandheld("khazad_steel_axe",
             (settings) -> new AxeItem(ToolMaterialsME.KHAZAD_STEEL, 6.0f, -3.0f, settings), new MESettings());
     public static final Item KHAZAD_STEEL_SHOVEL = registerItemHandheld("khazad_steel_shovel",
@@ -131,7 +131,7 @@ public class ToolItemsME {
             (settings) -> new HoeItem(ToolMaterialsME.KHAZAD_STEEL, -2.0f, -1.0f, settings), new MESettings());
 
     public static final Item MITHRIL_PICKAXE = registerItemHandheld("mithril_pickaxe",
-            Item::new, new MESettings().fireproof().pickaxe(ToolMaterialsME.MITHRIL, 1.0f, -2.7f)
+            (settings) -> new PickaxeItem(ToolMaterialsME.MITHRIL, 1, -2.7f, settings), new MESettings().fireproof()
                     .component(DataComponentTypes.UNBREAKABLE, Unit.INSTANCE));
     public static final Item MITHRIL_AXE = registerItemDualModel("mithril_axe",
             (settings) -> new CustomAxeWeaponItem(ToolMaterialsME.MITHRIL, settings), new MESettings().fireproof()

@@ -259,6 +259,9 @@ REWRITES = [
     # 1.21 helpers with a direct 1.20.1 equivalent.
     ("of-vanilla", r"(?<![A-Za-z0-9_$])Identifier[.]ofVanilla[(]", 'new Identifier("minecraft", '),
     # 1.21 moved the trim classes; 1.20.1 keeps them in net.minecraft.item.trim.
+    # 1.21 moved the food classes into the component package.
+    ("food-components", r"net[.]minecraft[.]component[.]type[.]FoodComponents", "net.minecraft.item.FoodComponents"),
+    ("food-component", r"net[.]minecraft[.]component[.]type[.]FoodComponent", "net.minecraft.item.FoodComponent"),
     ("trim-package", r"net[.]minecraft[.]item[.]equipment[.]trim[.]", "net.minecraft.item.trim."),
     # 1.21.2 renames on PlayerEntity / World.
     ("is-in-creative", r"(?<![A-Za-z0-9_$])isInCreativeMode[(]", "isCreative("),
