@@ -292,6 +292,8 @@ def rewrite(text: str):
     stats.update(extra)
     text, extra = rewrite_nbt(text)
     stats.update(extra)
+    text, extra = rewrite_nbt_two_arg(text)
+    stats.update(extra)
 
 
     # 1.21 items declare their components on Item.Settings; MESettings keeps that chain
@@ -433,7 +435,24 @@ def _rewrite_chain(text, method, on_get, on_present, on_if):
     return text, changed
 
 
-def _rewrite_to_static(text, method, helper):
+def _split_args(text):
+    parts, depth, cur = [], 0, ""
+    for c in text:
+        if c in "([{":
+            depth += 1
+        elif c in ")]}":
+            depth -= 1
+        if c == "," and depth == 0:
+            parts.append(cur)
+            cur = ""
+            continue
+        cur += c
+    if cur.strip():
+        parts.append(cur)
+    return parts
+
+
+def _rewrite_to_static(text, method, helper, arity=None):
     """Turn RECV.method(ARGS) into helper(RECV, ARGS)."""
     changed = 0
     needle = '.' + method + '('
@@ -446,6 +465,9 @@ def _rewrite_to_static(text, method, helper):
         close = _matching_paren(text, pos + len(needle) - 1)
         recv = text[start:pos]
         args = text[pos + len(needle):close]
+        if arity is not None and len(_split_args(args)) != arity:
+            pos -= 1
+            continue
         tail = ', ' + args if args.strip() else ''
         repl = '{}({}{})'.format(helper, recv, tail)
         text = text[:start] + repl + text[close + 1:]
@@ -460,6 +482,16 @@ def rewrite_text_calls(text):
     if n:
         stats['text-withcolor'] = n
         text = ensure_import(text, 'net.jukoz.me.compat.METext')
+    return text, stats
+
+
+def rewrite_nbt_two_arg(text):
+    """1.21.5 added getString(key, fallback); 1.20.1 only has getString(key)."""
+    stats = collections.Counter()
+    text, n = _rewrite_to_static(text, 'getString', 'NbtCompat.getString', arity=2)
+    if n:
+        stats['nbt-getstring'] = n
+        text = ensure_import(text, 'net.jukoz.me.compat.NbtCompat')
     return text, stats
 
 

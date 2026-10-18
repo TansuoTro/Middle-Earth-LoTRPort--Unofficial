@@ -1,7 +1,6 @@
 package net.jukoz.me.gui.return_confirmation;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -66,9 +65,7 @@ public class ReturnConfirmationScreen extends Screen {
         int startX = (width / 2) - (panelSizeX / 2);
         int startY = (height / 2) - (panelSizeY / 2);
         if(returnToOverworldButton.active){
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, BUTTON_WIDGET,
-                    startX, startY,0, returnToOverworldButton.isFocused() || isMouseOver(startX, panelSizeX, startY, panelSizeY) ? 19 : 0,
-                    panelSizeX, panelSizeY, 256, 256);
+            context.drawTexture(BUTTON_WIDGET, startX, startY, 0, returnToOverworldButton.isFocused() || isMouseOver(startX, panelSizeX, startY, panelSizeY) ? 19 : 0, panelSizeX, panelSizeY, 256, 256);
 
             Text continueText = Text.translatable("ui.%s.return_confirmation.continue_character.content".formatted(MiddleEarth.MOD_ID));
             context.drawText(textRenderer, continueText,
@@ -78,14 +75,10 @@ public class ReturnConfirmationScreen extends Screen {
 
             returnToOverworldButton.setDimensionsAndPosition(panelSizeX, panelSizeY, startX, startY);
             if(ModWidget.getFocusEnabled() && returnToOverworldButton.isFocused()){
-                context.drawTexture(RenderPipelines.GUI_TEXTURED, BUTTON_WIDGET,
-                        startX, startY,103, 0,
-                        panelSizeX, panelSizeY, 256, 256);
+                context.drawTexture(BUTTON_WIDGET, startX, startY, 103, 0, panelSizeX, panelSizeY, 256, 256);
             }
         } else {
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, BUTTON_WIDGET,
-                    startX, startY,0, 38,
-                    panelSizeX, panelSizeY, 256, 256);
+            context.drawTexture(BUTTON_WIDGET, startX, startY, 0, 38, panelSizeX, panelSizeY, 256, 256);
 
             Text delayText = Text.literal(String.valueOf((Math.round(this.currentDelay * 10f) /10f)));
             context.drawText(textRenderer, delayText,

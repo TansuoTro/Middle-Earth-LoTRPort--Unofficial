@@ -1,6 +1,5 @@
 package net.jukoz.me.gui.utils.widgets.map;
 
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.render.RenderLayer;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.utils.widgets.ModWidget;
@@ -145,21 +144,13 @@ public class MapWidget extends ModWidget {
     protected void drawMapTexture(DrawContext context, int startX, int startY) {
         int size = Math.max(getCurrentWidth(), getCurrentHeight());
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, getMapTexture(),
-                startX, startY, uvX.floatValue(), uvY.floatValue(),
-                getWidth(), getHeight(),
-                size, size
-        );
+        context.drawTexture(getMapTexture(), startX, startY, uvX.floatValue(), uvY.floatValue(), getWidth(), getHeight(), size, size);
     }
 
     protected void drawOverlayMapTexture(DrawContext context, int startX, int startY) {
         int size = Math.max(getCurrentWidth(), getCurrentHeight());
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, getOverlayMapTexture(),
-                startX, startY, uvX.floatValue(), uvY.floatValue(),
-                getWidth(), getHeight(),
-                size, size
-        );
+        context.drawTexture(getOverlayMapTexture(), startX, startY, uvX.floatValue(), uvY.floatValue(), getWidth(), getHeight(), size, size);
     }
 
     protected int getCurrentWidth() {

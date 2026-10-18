@@ -4,7 +4,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.CyclingSlotIcon;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -149,34 +148,22 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight, 512, 256);
+        context.drawTexture(TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight, 512, 256);
 
         if (this.selectedWords.isEmpty()){
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, i + 104, j + 7, 347, 1, 164, 16, 512, 256);
+            context.drawTexture(TEXTURE, i + 104, j + 7, 347, 1, 164, 16, 512, 256);
         } else {
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, i + 104, j + 7, 347, 19, 164, 16, 512, 256);
+            context.drawTexture(TEXTURE, i + 104, j + 7, 347, 19, 164, 16, 512, 256);
         }
 
         if (!(enchant == null || enchant.isEmpty())){
             int m = 19;
             if (this.maxLevel == 1) m = 21;
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE,
-                    i + 188 - m * this.maxLevel /2, j + 81,
-                    282, 33 * (this.maxLevel - 1) + 1,
-                    m * this.maxLevel, 12,
-                    512, 256);
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE,
-                    i + 188 - m * this.maxLevel /2, j + 81,
-                    282, 33 * (this.maxLevel - 1) + 21,
-                    m * this.level, 12,
-                    512, 256);
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE,
-                    i + 188 + (m * (this.level - 1)) - m * this.maxLevel /2, j + 81,
-                    282 + (m * (this.level  - 1)), 33 * (this.maxLevel - 1) + 14,
-                    m, 6,
-                    512, 256);
+            context.drawTexture(TEXTURE, i + 188 - m * this.maxLevel /2, j + 81, 282, 33 * (this.maxLevel - 1) + 1, m * this.maxLevel, 12, 512, 256);
+            context.drawTexture(TEXTURE, i + 188 - m * this.maxLevel /2, j + 81, 282, 33 * (this.maxLevel - 1) + 21, m * this.level, 12, 512, 256);
+            context.drawTexture(TEXTURE, i + 188 + (m * (this.level - 1)) - m * this.maxLevel /2, j + 81, 282 + (m * (this.level  - 1)), 33 * (this.maxLevel - 1) + 14, m, 6, 512, 256);
 
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, i + 123, j + 25, 347, 39, 130, 16, 512, 256);
+            context.drawTexture(TEXTURE, i + 123, j + 25, 347, 39, 130, 16, 512, 256);
             context.drawText(this.textRenderer, enchant, i + 188 - textRenderer.getWidth(enchant) / 2, j + 29, ColorHelper.fullAlpha(0xad6b3f), false);
 
             int k = this.handler.getLevelCost();
@@ -200,14 +187,14 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
         } else {
             this.confirmationButton.active = false;
             if(!this.selectedWords.isEmpty()){
-                context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, i + 123, j + 25, 347, 39, 130, 16, 512, 256);
+                context.drawTexture(TEXTURE, i + 123, j + 25, 347, 39, 130, 16, 512, 256);
                 StringVisitable stringVisitable = textRenderer.getTextHandler().trimToWidth(this.enchantText, 159, Style.EMPTY);
                 context.drawWrappedText(this.textRenderer, stringVisitable, i + 188 - textRenderer.getWidth(stringVisitable.getString()) / 2, j + 29, 159, ColorHelper.fullAlpha(0xad6b3f),false);
             }
         }
 
         if (this.handler.hasGem()){
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, i + 130, j + 43, 282, 166, 26, 26, 512, 256);
+            context.drawTexture(TEXTURE, i + 130, j + 43, 282, 166, 26, 26, 512, 256);
         }
 
         this.catalystSlotIcon.render(this.handler, context, delta, this.x, this.y);
@@ -286,9 +273,9 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
             if (this.indexStartOffset == i - 1) {
                 m = 127;
             }
-            context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, SCROLLER_TEXTURE, x + 94, y + 22 + m, 6, 27);
+            context.drawTexture(SCROLLER_TEXTURE, x + 94, y + 22 + m, 0, 0, 6, 27);
         } else {
-            context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, SCROLLER_DISABLED_TEXTURE, x + 94, y + 22, 6, 27);
+            context.drawTexture(SCROLLER_DISABLED_TEXTURE, x + 94, y + 22, 0, 0, 6, 27);
         }
     }
 
@@ -372,18 +359,17 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
             final int width = getWidth();
             final int height = getHeight();
             if (this.hidden){
-                context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, DISABLED_BUTTON_TEXTURE, x, y, width, height, ColorHelper.getWhite(this.alpha));
+                context.drawTexture(DISABLED_BUTTON_TEXTURE, x, y, 0, 0, width, height, ColorHelper.getWhite(this.alpha));
             } else if (this.selected){
-                context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, SELECTED_BUTTON_TEXTURE, x, y, width, height, ColorHelper.getWhite(this.alpha));
+                context.drawTexture(SELECTED_BUTTON_TEXTURE, x, y, 0, 0, width, height, ColorHelper.getWhite(this.alpha));
             } else if (this.isHovered()) {
-                context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, HIGHLIGHTED_BUTTON_TEXTURE, x, y, width, height, ColorHelper.getWhite(this.alpha));
+                context.drawTexture(HIGHLIGHTED_BUTTON_TEXTURE, x, y, 0, 0, width, height, ColorHelper.getWhite(this.alpha));
             } else {
-                context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, BUTTON_TEXTURE, x, y, width, height, ColorHelper.getWhite(this.alpha));
+                context.drawTexture(BUTTON_TEXTURE, x, y, 0, 0, width, height, ColorHelper.getWhite(this.alpha));
             }
 
             if(selectedIndex >= 0 && selectedIndex < 3) {
-                context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, BUTTON_MARKERS, 16, 4,
-                        4 * selectedIndex, 0, x + width - 8, y + 5, 4, 4, ColorHelper.getWhite(this.alpha));
+                context.drawTexture(BUTTON_MARKERS, 16, 4, 0, 0, 4 * selectedIndex, 0, x + width - 8, y + 5, 4, 4, ColorHelper.getWhite(this.alpha));
             }
 
             int i = ColorHelper.withAlpha(this.alpha, this.active ? -1 : -6250336);
@@ -410,11 +396,11 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
         protected void renderWidget(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
             MinecraftClient minecraftClient = MinecraftClient.getInstance();
             if (this.isHovered() && this.active){
-                context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, HIGHLIGHTED_BUTTON_TEXTURE, this.getX(), this.getY(), this.getWidth(), this.getHeight(), ColorHelper.getWhite(this.alpha));
+                context.drawTexture(HIGHLIGHTED_BUTTON_TEXTURE, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight(), ColorHelper.getWhite(this.alpha));
             } else if (this.active) {
-                context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, BUTTON_TEXTURE, this.getX(), this.getY(), this.getWidth(), this.getHeight(), ColorHelper.getWhite(this.alpha));
+                context.drawTexture(BUTTON_TEXTURE, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight(), ColorHelper.getWhite(this.alpha));
             } else {
-                context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, BUTTON_UNAVAILABLE, this.getX(), this.getY(), this.getWidth(), this.getHeight(), ColorHelper.getWhite(this.alpha));
+                context.drawTexture(BUTTON_UNAVAILABLE, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight(), ColorHelper.getWhite(this.alpha));
             }
             int i = ColorHelper.withAlpha(this.alpha, this.active ? -1 : -6250336);
             this.drawMessage(context, minecraftClient.textRenderer, i);

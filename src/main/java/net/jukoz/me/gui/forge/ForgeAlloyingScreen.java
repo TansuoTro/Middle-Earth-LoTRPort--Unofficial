@@ -3,7 +3,6 @@ import net.jukoz.me.compat.METext;
 
 import com.google.common.collect.Lists;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -222,9 +221,9 @@ public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandle
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight + 6, TEXTURE_SIZE, TEXTURE_SIZE);
+        context.drawTexture(TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight + 6, TEXTURE_SIZE, TEXTURE_SIZE);
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, this.x + 26, this.y + 61, 209, 116, 4, 16, TEXTURE_SIZE, TEXTURE_SIZE);
+        context.drawTexture(TEXTURE, this.x + 26, this.y + 61, 209, 116, 4, 16, TEXTURE_SIZE, TEXTURE_SIZE);
 
         renderProgressArrow(context, x, y);
         renderLiquidStorage(context, x, y);
@@ -232,27 +231,27 @@ public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandle
 
     private void renderProgressArrow(DrawContext context, int x, int y) {
         if(heatingMode) {
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, x + 36, y + 45, 202, 0, COOKING_FIRE_SIZE, COOKING_FIRE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
+            context.drawTexture(TEXTURE, x + 36, y + 45, 202, 0, COOKING_FIRE_SIZE, COOKING_FIRE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
             if(handler.isCooking()) {
                 int cookingTime = (int) (handler.getScaledCooking() * COOKING_FIRE_SIZE);
-                context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, x + 36, y + COOKING_FIRE_SIZE + 46 - cookingTime, 202, 15 + COOKING_FIRE_SIZE - cookingTime, COOKING_FIRE_SIZE, cookingTime, TEXTURE_SIZE, TEXTURE_SIZE);
+                context.drawTexture(TEXTURE, x + 36, y + COOKING_FIRE_SIZE + 46 - cookingTime, 202, 15 + COOKING_FIRE_SIZE - cookingTime, COOKING_FIRE_SIZE, cookingTime, TEXTURE_SIZE, TEXTURE_SIZE);
             }
         } else {
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, x + 33, y + 45, 218, 0, 20, 13, TEXTURE_SIZE, TEXTURE_SIZE);
+            context.drawTexture(TEXTURE, x + 33, y + 45, 218, 0, 20, 13, TEXTURE_SIZE, TEXTURE_SIZE);
             if(handler.isCooking()) {
                 int cookingTime = (int) (handler.getScaledCooking() * 15);
-                context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, x + 33, y + 59 - cookingTime, 218, 15 + 14 - cookingTime, 20, cookingTime, TEXTURE_SIZE, TEXTURE_SIZE);
+                context.drawTexture(TEXTURE, x + 33, y + 59 - cookingTime, 218, 15 + 14 - cookingTime, 20, cookingTime, TEXTURE_SIZE, TEXTURE_SIZE);
             }
         }
 
         if(handler.isCrafting()) {
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, x + 90, y + 16, 212, 83, 7, (int) (handler.getScaledProgress() * PROGRESS_ARROW_SIZE), TEXTURE_SIZE, TEXTURE_SIZE);
+            context.drawTexture(TEXTURE, x + 90, y + 16, 212, 83, 7, (int) (handler.getScaledProgress() * PROGRESS_ARROW_SIZE), TEXTURE_SIZE, TEXTURE_SIZE);
         }
     }
 
     private void renderLiquidStorage(DrawContext context, int x, int y) {
         int storedLiquid = (int) (handler.getScaledStoredLiquid() * LIQUID_HEIGHT);
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, x + 73, y + 77 - storedLiquid, 211, 76 - storedLiquid, 20, storedLiquid, TEXTURE_SIZE ,TEXTURE_SIZE);
+        context.drawTexture(TEXTURE, x + 73, y + 77 - storedLiquid, 211, 76 - storedLiquid, 20, storedLiquid, TEXTURE_SIZE, TEXTURE_SIZE);
     }
 
     private void renderLiquidStorageTooltip(DrawContext context, int mouseX, int mouseY) {
@@ -294,17 +293,14 @@ public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandle
             case 5 -> 59;
             default -> -1;
         };
-        if(v >= 0) context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, x + EXTRACT_BUTTON_ITEM_X, y + EXTRACT_BUTTON_ITEM_Y,
-                EXTRACT_BUTTON_ITEM_U, v,18, 24, TEXTURE_SIZE ,TEXTURE_SIZE);
+        if(v >= 0) context.drawTexture(TEXTURE, x + EXTRACT_BUTTON_ITEM_X, y + EXTRACT_BUTTON_ITEM_Y, EXTRACT_BUTTON_ITEM_U, v, 18, 24, TEXTURE_SIZE, TEXTURE_SIZE);
         else {
             int u = 0;
             if (handler.checkMaxOutput() > 0) {
                 u = 16;
             }
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, x + EXTRACT_BUTTON_ITEM_X + 2, y + EXTRACT_BUTTON_ITEM_Y + 4,
-                    204 + u, 30,14, 16, TEXTURE_SIZE ,TEXTURE_SIZE);
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, x + 102, y + 57,
-                    178, 21,22, 15, TEXTURE_SIZE ,TEXTURE_SIZE);
+            context.drawTexture(TEXTURE, x + EXTRACT_BUTTON_ITEM_X + 2, y + EXTRACT_BUTTON_ITEM_Y + 4, 204 + u, 30, 14, 16, TEXTURE_SIZE, TEXTURE_SIZE);
+            context.drawTexture(TEXTURE, x + 102, y + 57, 178, 21, 22, 15, TEXTURE_SIZE, TEXTURE_SIZE);
         }
     }
 }

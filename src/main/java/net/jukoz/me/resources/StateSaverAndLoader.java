@@ -38,7 +38,7 @@ public class StateSaverAndLoader extends PersistentState {
     }
     public StateSaverAndLoader(NbtCompound nbt){
         this.players = new HashMap<>();
-        var listOpt = nbt.getList("list");
+        var listOpt = nbt.getList("list", 9);
         if(listOpt.isPresent()){
             var list = listOpt.get();
             for(int i = 0; i < list.size(); i++){

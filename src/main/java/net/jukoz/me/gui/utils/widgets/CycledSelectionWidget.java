@@ -1,7 +1,6 @@
 package net.jukoz.me.gui.utils.widgets;
 
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.MutableText;
@@ -117,28 +116,20 @@ public class CycledSelectionWidget extends ModWidget{
         if(buttonLeft.active){
             buttonLeft.setPosition(x, y + arrowStartOffsetY);
             buttonIsHovered = buttonLeft.isFocused() || isMouseOver(ARROW_SIZE_X, ARROW_SIZE_Y, x, y + arrowStartOffsetY);
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE,
-                    x, y + arrowStartOffsetY, 206, buttonIsHovered ? 11 : 0,
-                    ARROW_SIZE_X, ARROW_SIZE_Y, 256, 256);
+            context.drawTexture(TEXTURE, x, y + arrowStartOffsetY, 206, buttonIsHovered ? 11 : 0, ARROW_SIZE_X, ARROW_SIZE_Y, 256, 256);
 
             if(buttonLeft.isFocused() && getFocusEnabled())
-                context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE,
-                        x, y + arrowStartOffsetY, 206, 33,
-                        ARROW_SIZE_X, ARROW_SIZE_Y, 256, 256);
+                context.drawTexture(TEXTURE, x, y + arrowStartOffsetY, 206, 33, ARROW_SIZE_X, ARROW_SIZE_Y, 256, 256);
         }
 
         // Center Button
         x += ARROW_SIZE_X + MARGIN;
         selectionButton.setPosition(x, y + buttonStartOffsetY);
         buttonIsHovered = selectionButton.active && (selectionButton.isFocused() || isMouseOver(PANEL_SIZE_X, PANEL_SIZE_Y, x, y + buttonStartOffsetY));
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE,
-                x, y + buttonStartOffsetY, buttonIsHovered ? buttonType.hoveredUvX : buttonType.uvX, buttonIsHovered ? buttonType.hoveredUvY : buttonType.uvY,
-                PANEL_SIZE_X, PANEL_SIZE_Y, 256, 256);
+        context.drawTexture(TEXTURE, x, y + buttonStartOffsetY, buttonIsHovered ? buttonType.hoveredUvX : buttonType.uvX, buttonIsHovered ? buttonType.hoveredUvY : buttonType.uvY, PANEL_SIZE_X, PANEL_SIZE_Y, 256, 256);
 
         if(selectionButton.isFocused() && getFocusEnabled())
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE,
-                    x, y + buttonStartOffsetY, CycledSelectionButtonType.FOCUS_UV_X, CycledSelectionButtonType.FOCUS_UV_Y,
-                    PANEL_SIZE_X, PANEL_SIZE_Y, 256, 256);
+            context.drawTexture(TEXTURE, x, y + buttonStartOffsetY, CycledSelectionButtonType.FOCUS_UV_X, CycledSelectionButtonType.FOCUS_UV_Y, PANEL_SIZE_X, PANEL_SIZE_Y, 256, 256);
 
         if(text == null)
             text = Text.translatable("me.ui.selection.none");
@@ -154,14 +145,10 @@ public class CycledSelectionWidget extends ModWidget{
             buttonRight.setPosition(x, y + arrowStartOffsetY);
             buttonIsHovered = buttonRight.isFocused() || isMouseOver(ARROW_SIZE_X, ARROW_SIZE_Y, x, y + arrowStartOffsetY);
 
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE,
-                    x, y + arrowStartOffsetY, 215, buttonIsHovered ? 11 : 0,
-                    ARROW_SIZE_X, ARROW_SIZE_Y, 256, 256);
+            context.drawTexture(TEXTURE, x, y + arrowStartOffsetY, 215, buttonIsHovered ? 11 : 0, ARROW_SIZE_X, ARROW_SIZE_Y, 256, 256);
 
             if(buttonRight.isFocused() && getFocusEnabled())
-                context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE,
-                        x, y + arrowStartOffsetY, 215, 33,
-                        ARROW_SIZE_X, ARROW_SIZE_Y, 256, 256);
+                context.drawTexture(TEXTURE, x, y + arrowStartOffsetY, 215, 33, ARROW_SIZE_X, ARROW_SIZE_Y, 256, 256);
         }
 
         return PANEL_SIZE_Y;

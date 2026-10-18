@@ -3,7 +3,6 @@ package net.jukoz.me.gui.shapinganvil;
 import com.google.common.collect.Lists;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -95,7 +94,7 @@ public class ShapingAnvilScreen extends HandledScreen<ShapingAnvilScreenHandler>
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight, 256, 256);
+        context.drawTexture(TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight, 256, 256);
     }
 
     @Override
@@ -113,7 +112,7 @@ public class ShapingAnvilScreen extends HandledScreen<ShapingAnvilScreenHandler>
         int y = (height - backgroundHeight) / 2;
 
         int k = (int)(41.0F * this.scrollAmount);
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, x + 87, y + 15 + k, 176 + (this.shouldScroll() ? 0 : 12), 20, 12, 15, 256, 256);
+        context.drawTexture(TEXTURE, x + 87, y + 15 + k, 176 + (this.shouldScroll() ? 0 : 12), 20, 12, 15, 256, 256);
 
         int l = this.x + 19;
         int m = this.y + 14;
@@ -156,7 +155,7 @@ public class ShapingAnvilScreen extends HandledScreen<ShapingAnvilScreenHandler>
                 n += 32;
             }
 
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, k, m - 1, 176 + n, 1, 16, 18, 256,256);
+            context.drawTexture(TEXTURE, k, m - 1, 176 + n, 1, 16, 18, 256, 256);
         }
     }
 

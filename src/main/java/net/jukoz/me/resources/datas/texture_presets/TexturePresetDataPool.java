@@ -26,7 +26,7 @@ public class TexturePresetDataPool {
         presetsByCategory = new HashMap<>();
 
         for(EntityCategories category : EntityCategories.values()){
-            var optList = categories.getList(category.name());
+            var optList = categories.getList(category.name(), 9);
             if(optList.isEmpty()) continue;;
             NbtList nbtListPresets = optList.get();
             WeightedPool<WeightedTexturePresetHolder> dataPresetList = new WeightedPool<>();

@@ -2,7 +2,6 @@ package net.jukoz.me.gui.structuremanager.structurenest;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -173,10 +172,7 @@ public class StructureNestScreen extends HandledScreen<StructureNestScreenHandle
                 isEnabledToggleButtonUvY = isEnabledToggleButtonFocused ? 52 : 35;
             else if(isEnabledToggleButtonFocused)
                 isEnabledToggleButtonUvY = 18;
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE,
-                    isEnabledToggleButton.getX(), isEnabledToggleButton.getY(),
-                    18, isEnabledToggleButtonUvY,
-                    isEnabledToggleButton.getWidth(), isEnabledToggleButton.getHeight(), 256, 256);
+            context.drawTexture(TEXTURE, isEnabledToggleButton.getX(), isEnabledToggleButton.getY(), 18, isEnabledToggleButtonUvY, isEnabledToggleButton.getWidth(), isEnabledToggleButton.getHeight(), 256, 256);
             if(isEnabledToggleButton.isMouseOver(mouseX, mouseY))
                 context.drawTooltip(Text.of("[SET TO TRUE] To ready up the structure manager subscription."), isEnabledToggleButton.getX(), isEnabledToggleButton.getY());
         }

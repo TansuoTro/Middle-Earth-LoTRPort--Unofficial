@@ -5,7 +5,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
@@ -70,9 +69,7 @@ public class PlayerBookScreen extends Screen {
         int startX = 5 + centerX - (WIDTH / 2);
         int startY = (context.getScaledWindowHeight() / 2) - (HEIGHT / 2);
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE,
-                startX, startY, 0, 0,
-                WIDTH, HEIGHT, 384, 384);
+        context.drawTexture(TEXTURE, startX, startY, 0, 0, WIDTH, HEIGHT, 384, 384);
 
         if(currentPage == 0) {
             drawScaledText(textRenderer, context, Text.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.title").formatted(Formatting.UNDERLINE).formatted(Formatting.BOLD),
@@ -105,9 +102,7 @@ public class PlayerBookScreen extends Screen {
                         startX + (int)(WIDTH * 0.3), startY + (int)(HEIGHT * 0.11f), 1.25f, Colors.BLACK, true);
 
                 if(pageData.image != null) {
-                    context.drawTexture(RenderPipelines.GUI_TEXTURED, pageData.image,
-                            startX, startY, 0, 0,
-                            WIDTH, HEIGHT, 320, 320);
+                    context.drawTexture(pageData.image, startX, startY, 0, 0, WIDTH, HEIGHT, 320, 320);
                 }
 
                 context.drawWrappedText(textRenderer, Text.translatable("screen." + MiddleEarth.MOD_ID + "." + pageData.leftPageDescription),

@@ -61,7 +61,7 @@ public class NpcType {
         this.factionId = factionId;
         this.npcTextureKey = npcTextureKey;
 
-        NbtList npcGears = gearDatas.getList("pool");
+        NbtList npcGears = gearDatas.getList("pool", 9);
         List<WeightedGearData> weightedGearData = new ArrayList<>();
         for(int j = 0; j < npcGears.size(); j++) {
             NbtCompound compound = npcGears.getCompound(j);

@@ -1,4 +1,5 @@
 package net.jukoz.me.block.special.forge;
+import net.jukoz.me.compat.NbtCompat;
 import net.jukoz.me.item.MEComponents;
 
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
@@ -219,7 +220,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
         this.maxFuelTime = view.getInt(ID + ".max-fuel-time", 0);
         this.mode = view.getInt(ID + ".mode", 0);
         this.storage = view.getInt(ID + ".storage", 0);
-        this.currentMetal = MetalTypes.fromValue(view.getString(ID + ".current-metal", "bronze").toLowerCase());
+        this.currentMetal = MetalTypes.fromValue(NbtCompat.getString(view, ID + ".current-metal", "bronze").toLowerCase());
     }
 
     public void update() {

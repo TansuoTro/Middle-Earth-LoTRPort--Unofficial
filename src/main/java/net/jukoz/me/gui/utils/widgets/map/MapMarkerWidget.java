@@ -1,7 +1,6 @@
 package net.jukoz.me.gui.utils.widgets.map;
 import net.jukoz.me.compat.METext;
 
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.render.RenderLayer;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.utils.widgets.ModWidget;
@@ -179,16 +178,12 @@ public class MapMarkerWidget extends ModWidget {
 
         // draw marker or arrow
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, (isArrow) ? MAP_ARROWS : MAP_MARKERS,
-                drawStart.x, drawStart.y, drawUvs.x, drawUvs.y,
-                drawSize.x, drawSize.y,256, 256);
+        context.drawTexture((isArrow) ? MAP_ARROWS : MAP_MARKERS, drawStart.x, drawStart.y, drawUvs.x, drawUvs.y, drawSize.x, drawSize.y, 256, 256);
 
 
         // draw marker or arrow (FOCUSED)
         if(isFocused || ((isSelected || forceSelectedVisual) && getFocusEnabled())){
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, (isArrow) ? MAP_ARROWS : MAP_MARKERS,
-                    focusedStart.x, focusedStart.y, focusedUvs.x, focusedUvs.y,
-                    focusedSize.x, focusedSize.y,256, 256);
+            context.drawTexture((isArrow) ? MAP_ARROWS : MAP_MARKERS, focusedStart.x, focusedStart.y, focusedUvs.x, focusedUvs.y, focusedSize.x, focusedSize.y, 256, 256);
         }
     }
 

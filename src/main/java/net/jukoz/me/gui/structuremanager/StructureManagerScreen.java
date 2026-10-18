@@ -2,7 +2,6 @@ package net.jukoz.me.gui.structuremanager;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -141,10 +140,7 @@ public class StructureManagerScreen extends HandledScreen<StructureManagerScreen
             respawnAllButton.active = true;
         }
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE,
-                toInitializeToggleButton.getX(), toInitializeToggleButton.getY(),
-                1, toInitializeToggleButtonUvY,
-                toInitializeToggleButton.getWidth(), toInitializeToggleButton.getHeight(), 256, 256);
+        context.drawTexture(TEXTURE, toInitializeToggleButton.getX(), toInitializeToggleButton.getY(), 1, toInitializeToggleButtonUvY, toInitializeToggleButton.getWidth(), toInitializeToggleButton.getHeight(), 256, 256);
         if(toInitializeToggleButton.isMouseOver(mouseX, mouseY))
             context.drawTooltip(Text.of("[SET TO TRUE] Before saving a structure."), toInitializeToggleButton.getX(), toInitializeToggleButton.getY());
 
@@ -155,29 +151,20 @@ public class StructureManagerScreen extends HandledScreen<StructureManagerScreen
             isEnabledToggleButtonUvY = isEnabledToggleButtonFocused ? 52 : 35;
         else if(isEnabledToggleButtonFocused)
             isEnabledToggleButtonUvY = 18;
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE,
-                isEnabledToggleButton.getX(), isEnabledToggleButton.getY(),
-                18, isEnabledToggleButtonUvY,
-                isEnabledToggleButton.getWidth(), isEnabledToggleButton.getHeight(), 256, 256);
+        context.drawTexture(TEXTURE, isEnabledToggleButton.getX(), isEnabledToggleButton.getY(), 18, isEnabledToggleButtonUvY, isEnabledToggleButton.getWidth(), isEnabledToggleButton.getHeight(), 256, 256);
         if(isEnabledToggleButton.isMouseOver(mouseX, mouseY))
             context.drawTooltip(Text.of("[SET TO FALSE] Before saving a structure."), isEnabledToggleButton.getX(), isEnabledToggleButton.getY());
 
         startY += 15;
         showAllButton.setPosition(centerX + 5, startY);
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE,
-                showAllButton.getX(), showAllButton.getY(),
-                35, showAllButton.isMouseOver(mouseX, mouseY) ? 23 : 1,
-                showAllButton.getWidth(), showAllButton.getHeight(), 256, 256);
+        context.drawTexture(TEXTURE, showAllButton.getX(), showAllButton.getY(), 35, showAllButton.isMouseOver(mouseX, mouseY) ? 23 : 1, showAllButton.getWidth(), showAllButton.getHeight(), 256, 256);
         Text showAllText = Text.translatable("Show all");
         int showAllStartX = showAllButton.getX() + (showAllButton.getWidth() / 2) - (textRenderer.getWidth(showAllText) / 2);
         context.drawText(textRenderer, showAllText,showAllStartX,showAllButton.getY() + 6, Color.BLACK.getRGB(), false);
 
         startY += showAllButton.getHeight() + 4;
         respawnAllButton.setPosition(centerX + 5, startY);
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE,
-                respawnAllButton.getX(), respawnAllButton.getY(),
-                35, respawnAllButton.isMouseOver(mouseX, mouseY) ? 23 : 1,
-                respawnAllButton.getWidth(), respawnAllButton.getHeight(), 256, 256);
+        context.drawTexture(TEXTURE, respawnAllButton.getX(), respawnAllButton.getY(), 35, respawnAllButton.isMouseOver(mouseX, mouseY) ? 23 : 1, respawnAllButton.getWidth(), respawnAllButton.getHeight(), 256, 256);
         Text respawnAllText = Text.translatable("Respawn all");
         int respawnAllStartX = respawnAllButton.getX() + (respawnAllButton.getWidth() / 2) - (textRenderer.getWidth(respawnAllText) / 2);
         context.drawText(textRenderer, respawnAllText, respawnAllStartX,respawnAllButton.getY() + 6, Color.BLACK.getRGB(), false);

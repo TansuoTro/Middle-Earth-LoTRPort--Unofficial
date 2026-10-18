@@ -76,7 +76,7 @@ public class BannerData {
 
         baseBannerColor = DyeColor.byId(compound.getString("base_color"), DEFAULT_DYE);
 
-        NbtList patterns = compound.getList("patterns");
+        NbtList patterns = compound.getList("patterns", 9);
         this.bannerPatternWithColors = new ArrayList<>();
 
         JsonParser jsonParser = new JsonParser();
@@ -85,7 +85,7 @@ public class BannerData {
             try{
                 NbtCompound elementCompound = NbtCompat.compound(element);
                 Identifier id = new Identifier(elementCompound.getString("id"));
-                DyeColor color = DyeColor.byId(elementCompound.getString("dye_color", DEFAULT_DYE.asString()), DEFAULT_DYE);
+                DyeColor color = DyeColor.byId(NbtCompat.getString(elementCompound, "dye_color", DEFAULT_DYE.asString()), DEFAULT_DYE);
 
                 BannerPatternWithColor bannerPatternWithColor = new BannerPatternWithColor(id, color);
                 bannerPatternWithColors.add(bannerPatternWithColor);

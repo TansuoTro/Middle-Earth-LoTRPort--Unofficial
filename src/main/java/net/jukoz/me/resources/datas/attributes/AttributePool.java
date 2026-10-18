@@ -31,7 +31,7 @@ public class AttributePool {
         if(compound == null) return;
         if(compound.contains("pool")){
             pool = new ArrayList<>();
-            var list =  compound.getList("pool");
+            var list =  compound.getList("pool", 9);
             for(int i = 0; i < list.get().size(); i++){
                 pool.add(AttributePoolElement.createFromNbt(list.get().getCompound(i)));
             }

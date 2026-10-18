@@ -1,4 +1,5 @@
 package net.jukoz.me.entity.npcs.data;
+import net.jukoz.me.compat.NbtCompat;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -46,35 +47,35 @@ public class NpcTextureData {
 
     public NpcTextureData(NbtCompound dynamic, NbtCompound simplified)
     {
-        this.simplifiedSkin = MiddleEarth.fetchId(simplified.getString("skin", null));
-        this.simplifiedEar = MiddleEarth.fetchId(simplified.getString("ear", null));
-        this.simplifiedFeet = MiddleEarth.fetchId(simplified.getString("feet", null));
-        this.simplifiedHair = MiddleEarth.fetchId(simplified.getString("hair", null));
-        this.simplifiedNose = MiddleEarth.fetchId(simplified.getString("nose", null));
+        this.simplifiedSkin = MiddleEarth.fetchId(NbtCompat.getString(simplified, "skin", null));
+        this.simplifiedEar = MiddleEarth.fetchId(NbtCompat.getString(simplified, "ear", null));
+        this.simplifiedFeet = MiddleEarth.fetchId(NbtCompat.getString(simplified, "feet", null));
+        this.simplifiedHair = MiddleEarth.fetchId(NbtCompat.getString(simplified, "hair", null));
+        this.simplifiedNose = MiddleEarth.fetchId(NbtCompat.getString(simplified, "nose", null));
 
-        this.bodyTexture = MiddleEarth.fetchId(dynamic.getString(NpcRenderedPart.BODY.getField(), null));
-        this.headTexture = MiddleEarth.fetchId(dynamic.getString(NpcRenderedPart.HEAD.getField(), null));
-        this.feetTexture = MiddleEarth.fetchId(dynamic.getString(NpcRenderedPart.FEET.getField(), null));
+        this.bodyTexture = MiddleEarth.fetchId(NbtCompat.getString(dynamic, NpcRenderedPart.BODY.getField(), null));
+        this.headTexture = MiddleEarth.fetchId(NbtCompat.getString(dynamic, NpcRenderedPart.HEAD.getField(), null));
+        this.feetTexture = MiddleEarth.fetchId(NbtCompat.getString(dynamic, NpcRenderedPart.FEET.getField(), null));
 
-        this.earTexture = MiddleEarth.fetchId(dynamic.getString(NpcRenderedPart.EAR.getField(), null));
-        this.noseTexture = MiddleEarth.fetchId(dynamic.getString(NpcRenderedPart.NOSE.getField(), null));
+        this.earTexture = MiddleEarth.fetchId(NbtCompat.getString(dynamic, NpcRenderedPart.EAR.getField(), null));
+        this.noseTexture = MiddleEarth.fetchId(NbtCompat.getString(dynamic, NpcRenderedPart.NOSE.getField(), null));
 
-        this.scarTexture = MiddleEarth.fetchId(dynamic.getString(NpcRenderedPart.SCAR.getField(), null));
-        this.eyeTexture = MiddleEarth.fetchId(dynamic.getString(NpcRenderedPart.EYE.getField(), null));
-        this.eyeEmissiveTexture = MiddleEarth.fetchId(dynamic.getString(NpcRenderedPart.EYE_EMISSIVE.getField(), null));
+        this.scarTexture = MiddleEarth.fetchId(NbtCompat.getString(dynamic, NpcRenderedPart.SCAR.getField(), null));
+        this.eyeTexture = MiddleEarth.fetchId(NbtCompat.getString(dynamic, NpcRenderedPart.EYE.getField(), null));
+        this.eyeEmissiveTexture = MiddleEarth.fetchId(NbtCompat.getString(dynamic, NpcRenderedPart.EYE_EMISSIVE.getField(), null));
         this.eyeIsEmissive = dynamic.getBoolean(NpcRenderedPart.EYE_EMISSIVE_TOGGLE.getField(), false);
 
-        this.hairTexture = MiddleEarth.fetchId(dynamic.getString(NpcRenderedPart.HAIR.getField(), null));
-        this.hairAddonTexture = MiddleEarth.fetchId(dynamic.getString(NpcRenderedPart.HAIR_ADDON.getField(), null));
+        this.hairTexture = MiddleEarth.fetchId(NbtCompat.getString(dynamic, NpcRenderedPart.HAIR.getField(), null));
+        this.hairAddonTexture = MiddleEarth.fetchId(NbtCompat.getString(dynamic, NpcRenderedPart.HAIR_ADDON.getField(), null));
 
-        this.eyebrowTexture = MiddleEarth.fetchId(dynamic.getString(NpcRenderedPart.EYEBROW.getField(), null));
+        this.eyebrowTexture = MiddleEarth.fetchId(NbtCompat.getString(dynamic, NpcRenderedPart.EYEBROW.getField(), null));
 
-        this.beardTexture = MiddleEarth.fetchId(dynamic.getString(NpcRenderedPart.BEARD.getField(), null));
-        this.beardAddonTexture = MiddleEarth.fetchId(dynamic.getString(NpcRenderedPart.BEARD_ADDON.getField(), null));
+        this.beardTexture = MiddleEarth.fetchId(NbtCompat.getString(dynamic, NpcRenderedPart.BEARD.getField(), null));
+        this.beardAddonTexture = MiddleEarth.fetchId(NbtCompat.getString(dynamic, NpcRenderedPart.BEARD_ADDON.getField(), null));
 
-        this.clothingBaseTexture = MiddleEarth.fetchId(dynamic.getString(NpcRenderedPart.CLOTHING_BASE.getField(), null));
-        this.clothingOverTexture = MiddleEarth.fetchId(dynamic.getString(NpcRenderedPart.CLOTHING_OVER.getField(), null));
-        this.clothingExtraTexture = MiddleEarth.fetchId(dynamic.getString(NpcRenderedPart.CLOTHING_EXTRA.getField(), null));
+        this.clothingBaseTexture = MiddleEarth.fetchId(NbtCompat.getString(dynamic, NpcRenderedPart.CLOTHING_BASE.getField(), null));
+        this.clothingOverTexture = MiddleEarth.fetchId(NbtCompat.getString(dynamic, NpcRenderedPart.CLOTHING_OVER.getField(), null));
+        this.clothingExtraTexture = MiddleEarth.fetchId(NbtCompat.getString(dynamic, NpcRenderedPart.CLOTHING_EXTRA.getField(), null));
     }
 
     private NbtCompound writeSimplified() {

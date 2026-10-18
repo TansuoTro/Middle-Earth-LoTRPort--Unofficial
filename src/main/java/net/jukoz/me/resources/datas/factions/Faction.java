@@ -107,13 +107,13 @@ public class Faction {
 
         this.npcDatasByRank = new HashMap<>();
         if(npcs.isPresent()){
-            NbtList list = npcs.get().getList("ranks");
+            NbtList list = npcs.get().getList("ranks", 9);
             for(int i = 0; i < list.size(); i++){
                 NbtCompound rankCompound = list.getCompound(i);
                 String rankName = rankCompound.getString("rank").toUpperCase();
                 try{
                     NpcRank rank = NpcRank.valueOf(rankName);
-                    NbtList npcDataList = rankCompound.getList("pool");
+                    NbtList npcDataList = rankCompound.getList("pool", 9);
                     List<Identifier> dataList = new ArrayList<>();
                     for(int j = 0; j < npcDataList.size(); j++){
                         dataList.add(MiddleEarth.fetchId(npcDataList.getString(j)));

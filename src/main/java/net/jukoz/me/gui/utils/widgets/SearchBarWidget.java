@@ -2,7 +2,6 @@ package net.jukoz.me.gui.utils.widgets;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -109,9 +108,7 @@ public class SearchBarWidget extends ModWidget {
         int magnifyingGlassSizeY = 14;
 
         // Search bar button
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, SEARCH_WIDGET,
-                startX, startY, 0, searchBarToggleButton.isFocused() || isMouseOver(panelSizeX, panelSizeY, startX, startY) ? 19 : 0,
-                panelSizeX, panelSizeY, 256, 256);
+        context.drawTexture(SEARCH_WIDGET, startX, startY, 0, searchBarToggleButton.isFocused() || isMouseOver(panelSizeX, panelSizeY, startX, startY) ? 19 : 0, panelSizeX, panelSizeY, 256, 256);
 
         searchBarToggleButton.setDimensionsAndPosition(desiredWidth, panelSizeY, startX, startY);
         drawSearchBarBackground(context, SEARCH_WIDGET, startX, startY);
@@ -124,9 +121,7 @@ public class SearchBarWidget extends ModWidget {
 
 
         // Search bar magnifying
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, SEARCH_WIDGET,
-                startX + sideMargins, startY + 2, 102, 0,
-                magnifyingGlassSizeX, magnifyingGlassSizeY, 256, 256);
+        context.drawTexture(SEARCH_WIDGET, startX + sideMargins, startY + 2, 102, 0, magnifyingGlassSizeX, magnifyingGlassSizeY, 256, 256);
 
         return panelSizeY + MINIMAL_MARGIN;
     }
@@ -193,9 +188,7 @@ public class SearchBarWidget extends ModWidget {
             searchScrollbarButtonOffset = Math.min(currentSearchResultHeight, searchScrollbarButtonOffset - 1);
             searchScrollbarButtonOffset = Math.max(0, searchScrollbarButtonOffset);
 
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, SEARCH_WIDGET,
-                    startX + desiredWidth - 5, searchScrollbarButtonOffset + (startY + 1), 31, 39,
-                    4, 9, 256, 256);
+            context.drawTexture(SEARCH_WIDGET, startX + desiredWidth - 5, searchScrollbarButtonOffset + (startY + 1), 31, 39, 4, 9, 256, 256);
 
             int valuePanelSizeX = SearchBarResultType.WIDTH;
             int valuePanelSizeY = SearchBarResultType.HEIGHT;
@@ -234,76 +227,58 @@ public class SearchBarWidget extends ModWidget {
     private int drawSearchBarBackground(DrawContext context, Identifier searchWidget, int startX, int startY) {
         int uvY = (getFocusEnabled() && searchBarToggleButton.isFocused()) ? 19 : 0;
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, searchWidget,
-                startX, startY, 0, uvY,10, 18, 256, 256);
+        context.drawTexture(searchWidget, startX, startY, 0, uvY, 10, 18, 256, 256);
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, searchWidget,
-                startX + 10, startY, 11, uvY,desiredWidth - 10 - 13, 18, 5, 18, 256, 256);
+        context.drawTexture(searchWidget, startX + 10, startY, 11, uvY, desiredWidth - 10 - 13, 18, 5, 18, 256, 256);
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, searchWidget,
-                startX + desiredWidth - 13, startY, 17, uvY,13, 18, 256, 256);
+        context.drawTexture(searchWidget, startX + desiredWidth - 13, startY, 17, uvY, 13, 18, 256, 256);
         return startY + 4;
     }
 
     private int drawTop(DrawContext context, Identifier searchWidget, int startX, int startY) {
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, searchWidget,
-                startX, startY, 0, 38,10, 4, 256, 256);
+        context.drawTexture(searchWidget, startX, startY, 0, 38, 10, 4, 256, 256);
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, searchWidget,
-                startX + 10, startY, 11, 38,desiredWidth - 10 - 13, 4, 5, 4, 256, 256);
+        context.drawTexture(searchWidget, startX + 10, startY, 11, 38, desiredWidth - 10 - 13, 4, 5, 4, 256, 256);
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, searchWidget,
-                startX + desiredWidth - 13, startY, 17, 38,13, 4, 256, 256);
+        context.drawTexture(searchWidget, startX + desiredWidth - 13, startY, 17, 38, 13, 4, 256, 256);
         return startY + 4;
     }
 
     private int drawFooter(DrawContext context, Identifier searchWidget, int startX, int startY) {
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, searchWidget,
-                startX, startY, 0, 58,10, 10, 256, 256);
+        context.drawTexture(searchWidget, startX, startY, 0, 58, 10, 10, 256, 256);
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, searchWidget,
-                startX + 10, startY, 11, 58,desiredWidth - 10 - 13, 10, 5, 10, 256, 256);
+        context.drawTexture(searchWidget, startX + 10, startY, 11, 58, desiredWidth - 10 - 13, 10, 5, 10, 256, 256);
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, searchWidget,
-                startX + desiredWidth - 13, startY, 17, 58,13, 10, 256, 256);
+        context.drawTexture(searchWidget, startX + desiredWidth - 13, startY, 17, 58, 13, 10, 256, 256);
         return startY + 10;
     }
 
     private int drawBottom(DrawContext context, Identifier searchWidget, int startX, int startY) {
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, searchWidget,
-                startX, startY, 0, 69,10, 4, 256, 256);
+        context.drawTexture(searchWidget, startX, startY, 0, 69, 10, 4, 256, 256);
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, searchWidget,
-                startX + 10, startY, 11, 69,desiredWidth - 10 - 13, 4, 5, 4, 256, 256);
+        context.drawTexture(searchWidget, startX + 10, startY, 11, 69, desiredWidth - 10 - 13, 4, 5, 4, 256, 256);
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, searchWidget,
-                startX + desiredWidth - 13, startY, 17, 69,13, 4, 256, 256);
+        context.drawTexture(searchWidget, startX + desiredWidth - 13, startY, 17, 69, 13, 4, 256, 256);
         return startY + 4;
     }
 
     private int drawCenter(DrawContext context, Identifier searchWidget, int startX, int startY, int currentAmount) {
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, searchWidget,
-                startX, startY, 0, 43,10, 14 * currentAmount, 10, 14, 256, 256);
+        context.drawTexture(searchWidget, startX, startY, 0, 43, 10, 14 * currentAmount, 10, 14, 256, 256);
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, searchWidget,
-                startX + 10, startY, 11, 43,desiredWidth - 10 - 13, 14 * currentAmount, 5, 14, 256, 256);
+        context.drawTexture(searchWidget, startX + 10, startY, 11, 43, desiredWidth - 10 - 13, 14 * currentAmount, 5, 14, 256, 256);
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, searchWidget,
-                startX + desiredWidth - 13, startY, 17, 43,13, 14 * currentAmount, 13, 14,256, 256);
+        context.drawTexture(searchWidget, startX + desiredWidth - 13, startY, 17, 43, 13, 14 * currentAmount, 13, 14, 256, 256);
         return startY + (14 * currentAmount);
     }
 
     private int drawResultButtonBackground(DrawContext context, Identifier searchWidget, int startX, int startY, int uvX, int uvY, int size) {
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, searchWidget,
-                startX, startY, uvX, uvY,9, 14, 256, 256);
+        context.drawTexture(searchWidget, startX, startY, uvX, uvY, 9, 14, 256, 256);
         startX += 9;
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, searchWidget,
-                startX, startY, uvX+10, uvY, size - 18, 14, 5, 14, 256, 256);
+        context.drawTexture(searchWidget, startX, startY, uvX+10, uvY, size - 18, 14, 5, 14, 256, 256);
         startX += size - 18;
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, searchWidget,
-                startX, startY, uvX+16, uvY,9, 14, 256, 256);
+        context.drawTexture(searchWidget, startX, startY, uvX+16, uvY, 9, 14, 256, 256);
         return startY + 14;
     }
 

@@ -1,7 +1,6 @@
 package net.jukoz.me.gui.utils.widgets;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
@@ -170,14 +169,10 @@ public class PlayableNpcPreviewWidget extends ModWidget{
             int height = leftButton.getHeight();
             boolean isMouseOver = isMouseOver(width, height, x - width - horizontalMargin, y - MINIMAL_MARGIN);
 
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, NPC_PREVIEW,
-                    x - width - horizontalMargin, y - MINIMAL_MARGIN, 0, (currentButtonClicked != null && isLeftButton) ? 18 : (leftButton.isFocused() || isMouseOver) ? 9 : 0,
-                    width, height, 256, 256);
+            context.drawTexture(NPC_PREVIEW, x - width - horizontalMargin, y - MINIMAL_MARGIN, 0, (currentButtonClicked != null && isLeftButton) ? 18 : (leftButton.isFocused() || isMouseOver) ? 9 : 0, width, height, 256, 256);
 
             if(leftButton.isFocused() && getFocusEnabled()){
-                context.drawTexture(RenderPipelines.GUI_TEXTURED, NPC_PREVIEW,
-                        x - width - horizontalMargin, y - MINIMAL_MARGIN, 0, 27,
-                        width, height, 256, 256);
+                context.drawTexture(NPC_PREVIEW, x - width - horizontalMargin, y - MINIMAL_MARGIN, 0, 27, width, height, 256, 256);
             }
 
             leftButton.setPosition(x - width - horizontalMargin, y - MINIMAL_MARGIN);
@@ -188,14 +183,10 @@ public class PlayableNpcPreviewWidget extends ModWidget{
             int height = resetButton.getHeight();
             boolean isMouseOver = isMouseOver(width, height, x - (width / 2), y - MINIMAL_MARGIN + 2);
 
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, NPC_PREVIEW,
-                    x - 3, y - MINIMAL_MARGIN + 2, 28, (resetButton.isFocused() || isMouseOver) ? 6 : 0,
-                    width, height, 256, 256);
+            context.drawTexture(NPC_PREVIEW, x - 3, y - MINIMAL_MARGIN + 2, 28, (resetButton.isFocused() || isMouseOver) ? 6 : 0, width, height, 256, 256);
 
             if(resetButton.isFocused() && getFocusEnabled()){
-                context.drawTexture(RenderPipelines.GUI_TEXTURED, NPC_PREVIEW,
-                        x - 3, y - MINIMAL_MARGIN + 2, 28, 12,
-                        width, height, 256, 256);
+                context.drawTexture(NPC_PREVIEW, x - 3, y - MINIMAL_MARGIN + 2, 28, 12, width, height, 256, 256);
             }
             resetButton.setPosition(x - (width / 2), y - 2);
         }
@@ -205,13 +196,9 @@ public class PlayableNpcPreviewWidget extends ModWidget{
             int height = rightButton.getHeight();
             boolean isMouseOver = isMouseOver(width, height, x + horizontalMargin, y - MINIMAL_MARGIN);
 
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, NPC_PREVIEW,
-                    x + horizontalMargin, y - MINIMAL_MARGIN, 14, (currentButtonClicked != null && !isLeftButton) ? 18 : (rightButton.isFocused() || isMouseOver) ? 9 : 0,
-                    width, height, 256, 256);
+            context.drawTexture(NPC_PREVIEW, x + horizontalMargin, y - MINIMAL_MARGIN, 14, (currentButtonClicked != null && !isLeftButton) ? 18 : (rightButton.isFocused() || isMouseOver) ? 9 : 0, width, height, 256, 256);
             if(rightButton.isFocused() && getFocusEnabled()){
-                context.drawTexture(RenderPipelines.GUI_TEXTURED, NPC_PREVIEW,
-                        x + horizontalMargin, y - MINIMAL_MARGIN, 14, 27,
-                        width, height, 256, 256);
+                context.drawTexture(NPC_PREVIEW, x + horizontalMargin, y - MINIMAL_MARGIN, 14, 27, width, height, 256, 256);
             }
             rightButton.setPosition(x + horizontalMargin, y - MINIMAL_MARGIN);
         }

@@ -3,7 +3,6 @@ package net.jukoz.me.gui.onboarding;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -105,9 +104,7 @@ private static final Text ONBOARDING_SELECTION_TITLE = Text.translatable("ui.%s.
         int startX = (width / 2) - (panelSizeX / 2);
         int startY = (height / 2) - (panelSizeY / 2);
         if(continueAsCharacterButton.active){
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, BUTTON_WIDGET,
-                    startX, startY, 0, continueAsCharacterButton.isFocused() || isMouseOver(startX, panelSizeX, startY, panelSizeY) ? 19 : 0,
-                    panelSizeX, panelSizeY, 256, 256);
+            context.drawTexture(BUTTON_WIDGET, startX, startY, 0, continueAsCharacterButton.isFocused() || isMouseOver(startX, panelSizeX, startY, panelSizeY) ? 19 : 0, panelSizeX, panelSizeY, 256, 256);
 
             Text continueText = Text.translatable("ui.%s.continue_character".formatted(MiddleEarth.MOD_ID));
             context.drawText(textRenderer, continueText,
@@ -117,14 +114,10 @@ private static final Text ONBOARDING_SELECTION_TITLE = Text.translatable("ui.%s.
 
             continueAsCharacterButton.setDimensionsAndPosition(panelSizeX, panelSizeY, startX, startY);
             if(focusEnabled && continueAsCharacterButton.isFocused()){
-                context.drawTexture(RenderPipelines.GUI_TEXTURED, BUTTON_WIDGET,
-                        startX, startY, 103, 0,
-                        panelSizeX, panelSizeY, 256, 256);
+                context.drawTexture(BUTTON_WIDGET, startX, startY, 103, 0, panelSizeX, panelSizeY, 256, 256);
             }
         } else {
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, BUTTON_WIDGET,
-                    startX, startY, 0, 38,
-                    panelSizeX, panelSizeY, 256, 256);
+            context.drawTexture(BUTTON_WIDGET, startX, startY, 0, 38, panelSizeX, panelSizeY, 256, 256);
             Text delayText = Text.literal(String.valueOf((Math.round(this.currentDelay * 10f) /10f)));
             context.drawText(textRenderer, delayText,
                     startX + (panelSizeX / 2) - (textRenderer.getWidth(delayText) / 2),
@@ -135,9 +128,7 @@ private static final Text ONBOARDING_SELECTION_TITLE = Text.translatable("ui.%s.
 
             startY += panelSizeY + margin;
 
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, BUTTON_WIDGET,
-                    startX, startY,0, resetCharacterButton.isFocused() || isMouseOver(startX, panelSizeX, startY, panelSizeY) ? 19 : 0,
-                    panelSizeX, panelSizeY, 256, 256);
+            context.drawTexture(BUTTON_WIDGET, startX, startY, 0, resetCharacterButton.isFocused() || isMouseOver(startX, panelSizeX, startY, panelSizeY) ? 19 : 0, panelSizeX, panelSizeY, 256, 256);
 
             Text resetText = Text.translatable("ui.%s.reset_character".formatted(MiddleEarth.MOD_ID));
             context.drawText(textRenderer, resetText,
@@ -146,9 +137,7 @@ private static final Text ONBOARDING_SELECTION_TITLE = Text.translatable("ui.%s.
                     Colors.BLACK, false);
             resetCharacterButton.setDimensionsAndPosition(panelSizeX, panelSizeY, startX, startY);
             if(focusEnabled && resetCharacterButton.isFocused()){
-                context.drawTexture(RenderPipelines.GUI_TEXTURED, BUTTON_WIDGET,
-                        startX, startY,0, 103, 0,
-                        panelSizeX, panelSizeY, 256, 256);
+                context.drawTexture(BUTTON_WIDGET, startX, startY, 0, 103, 0, panelSizeX, panelSizeY, 256, 256);
             }
         }
     }

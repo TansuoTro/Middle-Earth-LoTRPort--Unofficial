@@ -1,4 +1,5 @@
 package net.jukoz.me.commands.custom;
+import net.jukoz.me.compat.NbtCompat;
 import net.jukoz.me.compat.METext;
 
 import net.jukoz.me.item.MEComponents;
@@ -60,7 +61,7 @@ public class CommandCustomEquipment {
     }
 
     private static int setBackAttachment(CommandContext<ServerCommandSource> context) {
-        BackAttachmentsME backAttachment = BackAttachmentsME.valueOf(StringArgumentType.getString(context, BACK_ATTACHMENT_VALUE).toUpperCase());
+        BackAttachmentsME backAttachment = BackAttachmentsME.valueOf(NbtCompat.getString(StringArgumentType, context, BACK_ATTACHMENT_VALUE).toUpperCase());
 
         ItemStack handStack = Objects.requireNonNull(context.getSource().getPlayer()).getInventory().getSelectedStack();
 
@@ -83,7 +84,7 @@ public class CommandCustomEquipment {
     }
 
     private static int setHelmetAttachment(CommandContext<ServerCommandSource> context) {
-        HelmetAttachmentsME helmetAttachment = HelmetAttachmentsME.valueOf(StringArgumentType.getString(context, HELMENT_ATTACHMENT_VALUE).toUpperCase());
+        HelmetAttachmentsME helmetAttachment = HelmetAttachmentsME.valueOf(NbtCompat.getString(StringArgumentType, context, HELMENT_ATTACHMENT_VALUE).toUpperCase());
 
         ItemStack handStack = Objects.requireNonNull(context.getSource().getPlayer()).getInventory().getSelectedStack();
 

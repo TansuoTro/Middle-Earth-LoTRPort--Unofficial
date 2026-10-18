@@ -49,4 +49,14 @@ public final class NbtCompat {
             action.accept(list);
         }
     }
+
+    /** 1.21.5's two-argument getString, which returns the fallback when the key is absent. */
+    public static String getString(NbtCompound nbt, String key, String fallback) {
+        return nbt.contains(key) ? nbt.getString(key) : fallback;
+    }
+
+    /** Same, defaulting to null rather than to the empty string. */
+    public static String getString(NbtCompound nbt, String key) {
+        return nbt.contains(key) ? nbt.getString(key) : null;
+    }
 }

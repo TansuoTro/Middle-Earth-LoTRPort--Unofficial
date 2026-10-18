@@ -68,7 +68,7 @@ public class GearSlotPool {
             if(nbtCompound.get("pool") == null){
                 return GearSlotPool.create(new WeightedItemData(nbtCompound));
             }
-            NbtList list = nbtCompound.getList("pool");
+            NbtList list = nbtCompound.getList("pool", 9);
             GearSlotPool gearSlotPool = GearSlotPool.create();
             for(int i = 0; i < list.size(); i++){
                 if(!list.getString(i).isEmpty()){

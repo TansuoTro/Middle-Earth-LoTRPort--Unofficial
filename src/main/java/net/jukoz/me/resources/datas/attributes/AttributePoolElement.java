@@ -42,7 +42,7 @@ public class AttributePoolElement {
             newElement.withMinMaxValue(nbtCompound.getDouble("min").get(), nbtCompound.getDouble("max").get());
 
         if(nbtCompound.contains("modifiers")){
-            newElement.withModifiers(nbtCompound.getList("modifiers"));
+            newElement.withModifiers(nbtCompound.getList("modifiers", 9));
         }
 
         return newElement;
