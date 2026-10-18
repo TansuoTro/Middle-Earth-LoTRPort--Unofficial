@@ -237,7 +237,7 @@ public class DecorativeItemsME {
 
     public static final Item ARKENSTONE = registerItem("arkenstone",
             (settings) -> new VerticallyAttachableBlockItem(ModDecorativeBlocks.ARKENSTONE, ModDecorativeBlocks.WALL_ARKENSTONE, Direction.DOWN, settings), new MESettings().rarity(Rarity.EPIC).fireproof()
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("arkenstone")));
+                    .lore(ArtefactUtils.getArtefactLore("arkenstone")));
 
 
     private static Item registerItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {

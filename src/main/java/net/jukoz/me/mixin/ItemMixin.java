@@ -24,6 +24,12 @@ public class ItemMixin {
             if (meSettings.isUnbreakable()) {
                 net.jukoz.me.item.UnbreakableItems.add((Item) (Object) this);
             }
+            if (meSettings.lore() != null) {
+                net.jukoz.me.item.ItemExtras.lore((Item) (Object) this, meSettings.lore());
+            }
+            if (meSettings.bannerPatternTag() != null) {
+                net.jukoz.me.item.ItemExtras.bannerPatternTag((Item) (Object) this, meSettings.bannerPatternTag());
+            }
         }
     }
 }

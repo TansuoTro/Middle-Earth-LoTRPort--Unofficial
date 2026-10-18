@@ -69,10 +69,10 @@ public class ToolItemsME {
 
     public static final Item IRON_CHISEL = registerItemHandheld("iron_chisel",
             Item::new, new MESettings().maxCount(1)
-                    .component(DataComponentTypes.MAX_DAMAGE, 4));
+                    .maxDamage(4));
     public static final Item STEEL_CHISEL = registerItemHandheld("steel_chisel",
             Item::new, new MESettings().maxCount(1)
-                    .component(DataComponentTypes.MAX_DAMAGE, 16));
+                    .maxDamage(16));
     public static final Item MITHRIL_CHISEL = registerItemHandheld("mithril_chisel",
             Item::new, new MESettings().maxCount(1));
 
@@ -132,16 +132,16 @@ public class ToolItemsME {
 
     public static final Item MITHRIL_PICKAXE = registerItemHandheld("mithril_pickaxe",
             (settings) -> new PickaxeItem(ToolMaterialsME.MITHRIL, 1, -2.7f, settings), new MESettings().fireproof()
-                    .component(DataComponentTypes.UNBREAKABLE, Unit.INSTANCE));
+                    .unbreakable());
     public static final Item MITHRIL_AXE = registerItemDualModel("mithril_axe",
             (settings) -> new CustomAxeWeaponItem(ToolMaterialsME.MITHRIL, settings), new MESettings().fireproof()
-                    .component(DataComponentTypes.UNBREAKABLE, Unit.INSTANCE));
+                    .unbreakable());
     public static final Item MITHRIL_SHOVEL = registerItemHandheld("mithril_shovel",
             (settings) -> new ShovelItem(ToolMaterialsME.MITHRIL, 1.5f, -3.0f, settings), new MESettings().fireproof()
-                    .component(DataComponentTypes.UNBREAKABLE, Unit.INSTANCE));
+                    .unbreakable());
     public static final Item MITHRIL_HOE = registerItemHandheld("mithril_hoe",
             (settings) -> new HoeItem(ToolMaterialsME.MITHRIL, -2.0f, 1.0f, settings), new MESettings().fireproof()
-                    .component(DataComponentTypes.UNBREAKABLE, Unit.INSTANCE));
+                    .unbreakable());
 
     public static final Item PIPE = registerItem2dGUI3dPerson("pipe",
             (settings) -> new PipeItem(settings, 3), new MESettings().maxCount(1));

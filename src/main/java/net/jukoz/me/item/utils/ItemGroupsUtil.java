@@ -58,7 +58,7 @@ public class ItemGroupsUtil {
         compoundData.put(NpcEntity.KeyStrings.INITIALIZATION_DATA, element);
 
         randomNpcSpawnEgg.set(DataComponentTypes.ENTITY_DATA, NbtComponent.of(compoundData));
-        randomNpcSpawnEgg.set(DataComponentTypes.ITEM_NAME, Text.translatable(randomSpawnEggId.toTranslationKey("item")));
+        randomNpcSpawnEgg.setCustomName(Text.translatable(randomSpawnEggId.toTranslationKey("item")));
         randomNpcSpawnEgg.set(DataComponentTypes.CUSTOM_MODEL_DATA, new CustomModelDataComponent(
                 List.of(),
                 List.of(),

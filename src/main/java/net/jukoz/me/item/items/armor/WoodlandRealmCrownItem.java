@@ -84,7 +84,7 @@ public class WoodlandRealmCrownItem extends CustomHelmetItem {
                     itemModelName += "_" + newSeason;
                 }
                 Identifier newItemModel = new Identifier(MiddleEarth.MOD_ID, itemModelName.toLowerCase());
-                stack.set(DataComponentTypes.ITEM_MODEL, newItemModel);
+                MEComponents.set(stack, MEComponents.ITEM_MODEL, newItemModel);
                 MEComponents.set(stack, MEComponents.SEASON_DATA, new SeasonDataComponent(newSeason));
             }
             season = newSeason;

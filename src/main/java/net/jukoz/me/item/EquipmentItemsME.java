@@ -2068,7 +2068,7 @@ public class EquipmentItemsME {
     public static final Item HELMET_OF_HELM_HAMMERHAND = registerCustomModelArmorPiece("helmet_of_helm_hammerhand",
             (settings) -> new CustomArtefactHelmetItem(ArmorMaterialsME.STEEL_T5, settings), new MESettings().rarity(Rarity.EPIC)
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.ROHAN))
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("helmet_of_helm_hammerhand")));
+                    .lore(ArtefactUtils.getArtefactLore("helmet_of_helm_hammerhand")));
 
     private static Item registerHelmetAttachment(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
         Item item = (Item)factory.apply(settings);

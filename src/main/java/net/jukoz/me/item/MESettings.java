@@ -52,6 +52,29 @@ public class MESettings extends Item.Settings {
         return this.unbreakable;
     }
 
+    private java.util.List<net.minecraft.text.Text> lore;
+    private String bannerPatternTag;
+
+    /** 1.21's LORE component: lines every stack of the item shows in its tooltip. */
+    public MESettings lore(java.util.List<net.minecraft.text.Text> lines) {
+        this.lore = lines;
+        return this;
+    }
+
+    public java.util.List<net.minecraft.text.Text> lore() {
+        return this.lore;
+    }
+
+    /** 1.21's PROVIDES_BANNER_PATTERNS component; the tag id is kept for the loom integration. */
+    public MESettings providesBannerPatterns(net.minecraft.registry.tag.TagKey<?> tag) {
+        this.bannerPatternTag = tag.id().toString();
+        return this;
+    }
+
+    public String bannerPatternTag() {
+        return this.bannerPatternTag;
+    }
+
     // --- covariant re-declarations so the chain keeps returning MESettings ---
 
     @Override

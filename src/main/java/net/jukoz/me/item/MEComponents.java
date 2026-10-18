@@ -68,6 +68,14 @@ public final class MEComponents {
             register("mount_armor_addon", MountArmorAddonComponent.CODEC);
 
     /**
+     * 1.21's ITEM_MODEL override. Only the mod's own renderers read it (PlateEntityRenderer,
+     * WoodlandRealmCrownItem), so an NBT-backed Identifier is enough; 1.20.1 has no
+     * per-stack model component for the vanilla item renderer to consult.
+     */
+    public static final MEComponent<Identifier> ITEM_MODEL =
+            register("item_model", Identifier.CODEC);
+
+    /**
      * Components declared on the item itself (1.21's {@code Item.Settings#component}).
      * Keyed by identity because {@link Item} has no equals() worth using.
      */
@@ -113,6 +121,7 @@ public final class MEComponents {
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static void appendTooltips(ItemStack stack, Item.TooltipContext context, java.util.List<net.minecraft.text.Text> tooltip) {
+        tooltip.addAll(net.jukoz.me.item.ItemExtras.lore(stack.getItem()));
         for (MEComponent<?> key : ALL) {
             Object value = get(stack, (MEComponent) key);
             if (value instanceof net.jukoz.me.compat.TooltipAppender appender) {

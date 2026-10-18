@@ -61,10 +61,10 @@ public class NpcSpawnEggHelper {
                 .getOrThrow();
         compoundData.put(NpcEntity.KeyStrings.INITIALIZATION_DATA, element);
 
-        itemStack.set(DataComponentTypes.ENTITY_DATA, NbtComponent.of(compoundData));
+        itemStack.getOrCreateSubNbt("EntityTag").copyFrom(compoundData);
         MEComponents.set(itemStack, MEComponents.FACTION_DATA, new FactionDataComponent(npcType.getFactionIdentifier()));
         MEComponents.set(itemStack, MEComponents.RACE_DATA, new RaceDataComponent(npcType.getRace()));
-        itemStack.set(DataComponentTypes.ITEM_NAME, Text.translatable(itemId.toTranslationKey("item")));
+        itemStack.setCustomName(Text.translatable(itemId.toTranslationKey("item")));
         itemStack.set(DataComponentTypes.CUSTOM_MODEL_DATA, new CustomModelDataComponent(
                 List.of(),
                 List.of(),

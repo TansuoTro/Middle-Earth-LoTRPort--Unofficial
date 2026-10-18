@@ -148,7 +148,7 @@ public class ResourceItemsME {
 
     public static final Item GLOWWORM_BOTTLE = registerItem("glowworm_bottle",
             GlowwormBottle::new, new MESettings().maxCount(1)
-                    .food(new FoodComponent.Builder().getHunger(2).saturationModifier(0.3f).alwaysEdible().build()).recipeRemainder(Items.GLASS_BOTTLE));
+                    .food(new FoodComponent.Builder().hunger(2).saturationModifier(0.3f).alwaysEdible().build()).recipeRemainder(Items.GLASS_BOTTLE));
 
     public static final Item COPPER_COIN = registerItem("copper_coin", Item::new, new MESettings());
     public static final Item SILVER_COIN = registerItem("silver_coin", Item::new, new MESettings());
@@ -228,67 +228,67 @@ public class ResourceItemsME {
 
     public static final Item PIPEWEED_BANNER_PATTERN = registerItem("pipeweed_banner_pattern",
             Item::new, new MESettings().maxCount(1).rarity(Rarity.RARE)
-                    .component(DataComponentTypes.PROVIDES_BANNER_PATTERNS, BannerPatternTagsME.PIPEWEED_PATTERN_ITEM));
+                    .providesBannerPatterns(BannerPatternTagsME.PIPEWEED_PATTERN_ITEM));
     public static final Item GONDOR_BANNER_PATTERN = registerItem("gondor_banner_pattern",
             Item::new, new MESettings().maxCount(1).rarity(Rarity.RARE)
-                    .component(DataComponentTypes.PROVIDES_BANNER_PATTERNS, BannerPatternTagsME.GONDOR_PATTERN_ITEM));
+                    .providesBannerPatterns(BannerPatternTagsME.GONDOR_PATTERN_ITEM));
     public static final Item ROHAN_BANNER_PATTERN = registerItem("rohan_banner_pattern",
             Item::new, new MESettings().maxCount(1).rarity(Rarity.RARE)
-                    .component(DataComponentTypes.PROVIDES_BANNER_PATTERNS, BannerPatternTagsME.ROHAN_PATTERN_ITEM));
+                    .providesBannerPatterns(BannerPatternTagsME.ROHAN_PATTERN_ITEM));
     public static final Item LOTHLORIEN_BANNER_PATTERN = registerItem("lothlorien_banner_pattern",
             Item::new, new MESettings().maxCount(1).rarity(Rarity.RARE)
-                    .component(DataComponentTypes.PROVIDES_BANNER_PATTERNS, BannerPatternTagsME.LOTHLORIEN_PATTERN_ITEM));
+                    .providesBannerPatterns(BannerPatternTagsME.LOTHLORIEN_PATTERN_ITEM));
     public static final Item MORDOR_BANNER_PATTERN = registerItem("mordor_banner_pattern",
             Item::new, new MESettings().maxCount(1).rarity(Rarity.RARE)
-                    .component(DataComponentTypes.PROVIDES_BANNER_PATTERNS, BannerPatternTagsME.MORDOR_PATTERN_ITEM));
+                    .providesBannerPatterns(BannerPatternTagsME.MORDOR_PATTERN_ITEM));
     public static final Item MISTY_MOUNTAINS_ORCS_BANNER_PATTERN = registerItem("misty_mountains_orcs_banner_pattern",
             Item::new, new MESettings().maxCount(1).rarity(Rarity.RARE)
-                    .component(DataComponentTypes.PROVIDES_BANNER_PATTERNS, BannerPatternTagsME.MISTY_MOUNTAINS_ORCS_PATTERN_ITEM));
+                    .providesBannerPatterns(BannerPatternTagsME.MISTY_MOUNTAINS_ORCS_PATTERN_ITEM));
     public static final Item ISENGARD_BANNER_PATTERN = registerItem("isengard_banner_pattern",
             Item::new, new MESettings().maxCount(1).rarity(Rarity.RARE)
-                    .component(DataComponentTypes.PROVIDES_BANNER_PATTERNS, BannerPatternTagsME.ISENGARD_PATTERN_ITEM));
+                    .providesBannerPatterns(BannerPatternTagsME.ISENGARD_PATTERN_ITEM));
 
     public static final Item SCREECHING_SKULL_BANNER_PATTERN = registerItem("screeching_skull_banner_pattern",
             Item::new, new MESettings().maxCount(1).rarity(Rarity.RARE)
-                    .component(DataComponentTypes.PROVIDES_BANNER_PATTERNS, BannerPatternTagsME.SCREECHING_SKULL_PATTERN_ITEM));
+                    .providesBannerPatterns(BannerPatternTagsME.SCREECHING_SKULL_PATTERN_ITEM));
     public static final Item GOBLIN_SKULL_BANNER_PATTERN = registerItem("goblin_skull_banner_pattern",
             Item::new, new MESettings().maxCount(1).rarity(Rarity.RARE)
-                    .component(DataComponentTypes.PROVIDES_BANNER_PATTERNS, BannerPatternTagsME.GOBLIN_SKULL_PATTERN_ITEM));
+                    .providesBannerPatterns(BannerPatternTagsME.GOBLIN_SKULL_PATTERN_ITEM));
 
     public static final Item ANVIL_BANNER_PATTERN = registerItem("anvil_banner_pattern",
             Item::new, new MESettings().maxCount(1).rarity(Rarity.RARE)
-                    .component(DataComponentTypes.PROVIDES_BANNER_PATTERNS, BannerPatternTagsME.ANVIL_PATTERN_ITEM));
+                    .providesBannerPatterns(BannerPatternTagsME.ANVIL_PATTERN_ITEM));
     public static final Item BELL_BANNER_PATTERN = registerItem("bell_banner_pattern",
             Item::new, new MESettings().maxCount(1).rarity(Rarity.RARE)
-                    .component(DataComponentTypes.PROVIDES_BANNER_PATTERNS, BannerPatternTagsME.BELL_PATTERN_ITEM));
+                    .providesBannerPatterns(BannerPatternTagsME.BELL_PATTERN_ITEM));
     public static final Item BOW_BANNER_PATTERN = registerItem("bow_banner_pattern",
             Item::new, new MESettings().maxCount(1).rarity(Rarity.RARE)
-                    .component(DataComponentTypes.PROVIDES_BANNER_PATTERNS, BannerPatternTagsME.BOW_PATTERN_ITEM));
+                    .providesBannerPatterns(BannerPatternTagsME.BOW_PATTERN_ITEM));
 
     public static final Item DWARF_CROWN_BANNER_PATTERN = registerItem("dwarf_crown_banner_pattern",
             Item::new, new MESettings().maxCount(1).rarity(Rarity.RARE)
-                    .component(DataComponentTypes.PROVIDES_BANNER_PATTERNS, BannerPatternTagsME.DWARF_CROWN_PATTERN_ITEM));
+                    .providesBannerPatterns(BannerPatternTagsME.DWARF_CROWN_PATTERN_ITEM));
 
     public static final Item SPIDER_BANNER_PATTERN = registerItem("spider_banner_pattern",
             Item::new, new MESettings().maxCount(1).rarity(Rarity.RARE)
-                    .component(DataComponentTypes.PROVIDES_BANNER_PATTERNS, BannerPatternTagsME.SPIDER_PATTERN_ITEM));
+                    .providesBannerPatterns(BannerPatternTagsME.SPIDER_PATTERN_ITEM));
 
     public static final Item GREAT_HORN_BANNER_PATTERN = registerItem("great_horn_banner_pattern",
             Item::new, new MESettings().maxCount(1).rarity(Rarity.RARE)
-                    .component(DataComponentTypes.PROVIDES_BANNER_PATTERNS, BannerPatternTagsME.GREAT_HORN_PATTERN_ITEM));
+                    .providesBannerPatterns(BannerPatternTagsME.GREAT_HORN_PATTERN_ITEM));
     public static final Item OAK_LEAF_BANNER_PATTERN = registerItem("oak_leaf_banner_pattern",
             Item::new, new MESettings().maxCount(1).rarity(Rarity.RARE)
-                    .component(DataComponentTypes.PROVIDES_BANNER_PATTERNS, BannerPatternTagsME.OAK_LEAF_PATTERN_ITEM));
+                    .providesBannerPatterns(BannerPatternTagsME.OAK_LEAF_PATTERN_ITEM));
 
     public static final Item ANTLERS_BANNER_PATTERN = registerItem("antlers_banner_pattern",
             Item::new, new MESettings().maxCount(1).rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.PROVIDES_BANNER_PATTERNS, BannerPatternTagsME.ANTLERS_PATTERN_ITEM));
+                    .providesBannerPatterns(BannerPatternTagsME.ANTLERS_PATTERN_ITEM));
     public static final Item DRAGON_BANNER_PATTERN = registerItem("dragon_banner_pattern",
             Item::new, new MESettings().maxCount(1).rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.PROVIDES_BANNER_PATTERNS, BannerPatternTagsME.DRAGON_PATTERN_ITEM));
+                    .providesBannerPatterns(BannerPatternTagsME.DRAGON_PATTERN_ITEM));
     public static final Item SNAIL_BANNER_PATTERN = registerItem("snail_banner_pattern",
             Item::new, new MESettings().maxCount(1).rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.PROVIDES_BANNER_PATTERNS, BannerPatternTagsME.SNAIL_PATTERN_ITEM));
+                    .providesBannerPatterns(BannerPatternTagsME.SNAIL_PATTERN_ITEM));
 
     public static final Item PTEROSAUR_NUGGET = registerHiddenItem("pterosaur_nugget",
             HotChickenFoodItem::new, new MESettings());

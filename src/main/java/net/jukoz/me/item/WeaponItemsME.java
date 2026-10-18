@@ -987,56 +987,56 @@ public class WeaponItemsME {
     //region ARTEFACTS
     public static final Item DAGAMARTH = registerArtefact("dagamarth",
             (settings) -> new ArtefactCustomSwordWeaponItem(ToolMaterialsME.STEEL, settings), new MESettings().rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("dagamarth")), true);
+                    .lore(ArtefactUtils.getArtefactLore("dagamarth")), true);
     public static final Item HERUGRIM = registerArtefact("herugrim",
             (settings) -> new ArtefactCustomSwordWeaponItem(ToolMaterialsME.STEEL, settings), new MESettings().rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("herugrim")), true);
+                    .lore(ArtefactUtils.getArtefactLore("herugrim")), true);
     public static final Item NAZGUL_SWORD = registerArtefact("nazgul_sword",
             (settings) -> new ArtefactCustomSwordWeaponItem(ToolMaterialsME.STEEL, settings), new MESettings().rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("nazgul_sword")), true);
+                    .lore(ArtefactUtils.getArtefactLore("nazgul_sword")), true);
 
     public static final Item HAMMER_OF_HELM_HAMMERHAND = registerArtefact("hammer_of_helm_hammerhand",
             (settings) -> new ArtefactCustomAxeWeaponItem(ToolMaterialsME.STEEL, settings), new MESettings().rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("hammer_of_helm_hammerhand")), true);
+                    .lore(ArtefactUtils.getArtefactLore("hammer_of_helm_hammerhand")), true);
     public static final Item MACE_OF_SAURON = registerArtefact("mace_of_sauron",
             (settings) -> new ArtefactCustomAxeWeaponItem(ToolMaterialsME.STEEL, settings), new MESettings().rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("mace_of_sauron")), true);
+                    .lore(ArtefactUtils.getArtefactLore("mace_of_sauron")), true);
 
     public static final Item ANGUIREL = registerArtefact("anguirel",
             (settings) -> new ArtefactCustomLongswordWeaponItem(ToolMaterialsME.STEEL, settings), new MESettings().rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("anguirel")), true);
+                    .lore(ArtefactUtils.getArtefactLore("anguirel")), true);
     public static final Item GLAMDRING = registerArtefact("glamdring",
             (settings) ->  new ArtefactCustomGlowingLongswordWeaponItem(ToolMaterialsME.STEEL, settings), new MESettings().rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("glamdring")), true);
+                    .lore(ArtefactUtils.getArtefactLore("glamdring")), true);
     public static final Item LONG_FORGOTTEN_LONGSWORD = registerArtefact("long_forgotten_longsword",
             (settings) ->  new ArtefactCustomLongswordWeaponItem(ToolMaterialsME.STEEL, settings), new MESettings().rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("long_forgotten_longsword")), true);
+                    .lore(ArtefactUtils.getArtefactLore("long_forgotten_longsword")), true);
     public static final Item LONGSWORD_OF_ELDER_KINGS = registerArtefact("longsword_of_elder_kings",
             (settings) -> new ArtefactCustomLongswordWeaponItem(ToolMaterialsME.STEEL, settings), new MESettings().rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("longsword_of_elder_kings")), true);
+                    .lore(ArtefactUtils.getArtefactLore("longsword_of_elder_kings")), true);
     public static final Item NARSIL = registerArtefact("narsil",
             (settings) -> new ArtefactCustomLongswordWeaponItem(ToolMaterialsME.STEEL, settings), new MESettings().rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("narsil")), true);
+                    .lore(ArtefactUtils.getArtefactLore("narsil")), true);
     public static final Item NOLDORIN_LONGSWORD = registerArtefact("noldorin_longsword",
             (settings) ->  new ArtefactCustomLongswordWeaponItem(ToolMaterialsME.STEEL, settings), new MESettings().rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("noldorin_longsword")), true);
+                    .lore(ArtefactUtils.getArtefactLore("noldorin_longsword")), true);
     public static final Item ORCRIST = registerArtefact("orcrist",
             (settings) -> new ArtefactCustomGlowingLongswordWeaponItem(ToolMaterialsME.STEEL, settings), new MESettings().rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("orcrist")), true);
+                    .lore(ArtefactUtils.getArtefactLore("orcrist")), true);
 
     public static final Item BARROW_BLADE = registerArtefact("barrow_blade",
             (settings) -> new ArtefactCustomDaggerWeaponItem(ToolMaterialsME.STEEL, settings), new MESettings().rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("barrow_blade")), false);
+                    .lore(ArtefactUtils.getArtefactLore("barrow_blade")), false);
     public static final Item MORGUL_KNIFE = registerArtefact("morgul_knife",
             (settings) -> new MorgulKnifeItem(ToolMaterialsME.MORGUL_KNIFE, settings), new MESettings().rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("morgul_knife")), false);
+                    .lore(ArtefactUtils.getArtefactLore("morgul_knife")), false);
     public static final Item STING = registerArtefact("sting",
             (settings) -> new ArtefactCustomGlowingDaggerWeaponItem(ToolMaterialsME.STEEL, settings), new MESettings().rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("sting")), false);
+                    .lore(ArtefactUtils.getArtefactLore("sting")), false);
 
     public static final Item AEGLOS = registerItemWithSpearModel("aeglos",
             (settings) -> new ArtefactCustomSpearWeaponItem(ToolMaterialsME.STEEL, settings), new MESettings().rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("aeglos")));
+                    .lore(ArtefactUtils.getArtefactLore("aeglos")));
 
     public static final Item GUARDIAN_OF_THE_GREENWOOD_STAFF = registerItemWithModel("guardian_of_the_greenwood_staff",
             (settings) -> new ArtefactCustomSpearWeaponItem(ToolMaterialsME.STEEL, settings), new MESettings().rarity(Rarity.EPIC), true);
@@ -1047,16 +1047,16 @@ public class WeaponItemsME {
 
     public static final Item ANORTHANN = registerShield("anorthann",
             (settings) -> new ArtefactCustomShieldItem(ShieldTypesME.HEAVY_SHIELD, settings), new MESettings().rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("anorthann")));
+                    .lore(ArtefactUtils.getArtefactLore("anorthann")));
     public static final Item CUTHANN = registerShield("cuthann",
             (settings) -> new ArtefactCustomShieldItem(ShieldTypesME.HEAVY_SHIELD, settings), new MESettings().rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("cuthann")));
+                    .lore(ArtefactUtils.getArtefactLore("cuthann")));
     public static final Item SHIELD_OF_DURINS_GUARD = registerShield("shield_of_durins_guard",
             (settings) -> new ArtefactCustomShieldItem(ShieldTypesME.HEAVY_SHIELD, settings), new MESettings().rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("shield_of_durins_guard")));
+                    .lore(ArtefactUtils.getArtefactLore("shield_of_durins_guard")));
     public static final Item SHIELD_OF_THE_KING_UNDER_THE_MOUNTAIN = registerShield("shield_of_the_king_under_the_mountain",
             (settings) -> new ArtefactCustomShieldItem(ShieldTypesME.HEAVY_SHIELD, settings), new MESettings().rarity(Rarity.EPIC)
-                    .component(DataComponentTypes.LORE, ArtefactUtils.getArtefactLore("shield_of_the_king_under_the_mountain")));
+                    .lore(ArtefactUtils.getArtefactLore("shield_of_the_king_under_the_mountain")));
     //endregion
 
     public static final Item HELD_BANNER = registerItemNoModel("held_banner",

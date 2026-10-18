@@ -169,7 +169,7 @@ public class BannerData {
     public static ItemStack formatBanner(ItemStack itemStack, BannerPatternsComponent bannerPatternsComponent, Text translationKey) {
         itemStack.set(DataComponentTypes.BANNER_PATTERNS, bannerPatternsComponent);
         // itemStack.set(DataComponentTypes.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE); // TODO : Not existing
-        itemStack.set(DataComponentTypes.ITEM_NAME, translationKey);
+        itemStack.setCustomName(translationKey);
         return itemStack;
     }
 }

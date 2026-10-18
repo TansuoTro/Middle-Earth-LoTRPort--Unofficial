@@ -269,10 +269,23 @@ REWRITES = [
     # 1.21.2 split ActionResult.PASS into two; 1.20.1 only has PASS.
     ("pass-to-default", r"ActionResult[.]PASS_TO_DEFAULT_BLOCK_ACTION", "ActionResult.PASS"),
     # 1.21 renamed the FoodComponent accessors.
-    ("food-nutrition", r"(?<![A-Za-z0-9_$])nutrition[(]", "getHunger("),
+    ("food-nutrition-getter", r"(?<![A-Za-z0-9_$])nutrition[(][)]", "getHunger()"),
+    ("food-nutrition-builder", r"(?<![A-Za-z0-9_$])nutrition[(](?![)])", "hunger("),
+    # repairs already-retouched builder sites: getHunger(x) -> hunger(x), getHunger() stays
+    ("food-nutrition-fix", r"[.]getHunger[(](?![)])", ".hunger("),
+    ("food-saturation-fix", r"[.]getSaturationModifier[(](?![)])", ".saturationModifier("),
     ("food-saturation", r"(?<![A-Za-z0-9_$])saturation[(]", "getSaturationModifier("),
     # 1.21 DynamicRegistryManager.getOrThrow collapsed to get() in 1.20.1.
     ("registry-manager-get", r"getRegistryManager[(][)][.]getOrThrow[(]", "getRegistryManager().get("),
+    # --- DataComponentTypes batch 1: settings-side and self-contained storage ---
+    ("unbreakable-component", r"[.]component[(]DataComponentTypes[.]UNBREAKABLE, Unit[.]INSTANCE[)]", ".unbreakable()"),
+    ("max-damage-setting", r"[.]component[(]DataComponentTypes[.]MAX_DAMAGE, ", ".maxDamage("),
+    ("lore-setting", r"[.]component[(]DataComponentTypes[.]LORE, ", ".lore("),
+    ("provides-banner-patterns", r"[.]component[(]DataComponentTypes[.]PROVIDES_BANNER_PATTERNS, ", ".providesBannerPatterns("),
+    ("item-name", r"([A-Za-z_][A-Za-z0-9_]*)[.]set[(]DataComponentTypes[.]ITEM_NAME, ", "\\1.setCustomName("),
+    ("item-model-set", r"([A-Za-z_][A-Za-z0-9_]*)[.]set[(]DataComponentTypes[.]ITEM_MODEL, ", "MEComponents.set(\\1, MEComponents.ITEM_MODEL, "),
+    ("item-model-get", r"([A-Za-z_][A-Za-z0-9_]*)[.]get[(]DataComponentTypes[.]ITEM_MODEL[)]", "MEComponents.get(\\1, MEComponents.ITEM_MODEL)"),
+    ("entity-data", r"itemStack[.]set[(]DataComponentTypes[.]ENTITY_DATA, NbtComponent[.]of[(]compoundData[)][)]", "itemStack.getOrCreateSubNbt(\"EntityTag\").copyFrom(compoundData)"),
 ]
 
 # 1.21 wraps block/item ids in a RegistryKey; 1.20.1 registers by Identifier.

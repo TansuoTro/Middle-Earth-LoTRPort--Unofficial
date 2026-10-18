@@ -37,10 +37,10 @@ public class PlateEntityRenderer implements BlockEntityRenderer<PlateBlockEntity
 
         if(stack.isEmpty()) return;
 
-        Identifier oldId = stack.get(DataComponentTypes.ITEM_MODEL);
+        Identifier oldId = MEComponents.get(stack, MEComponents.ITEM_MODEL);
         Identifier modelId = PlateFoodModels.getPlateIdentifier(oldId);
         ItemStack copyStack = stack.copy();
-        copyStack.set(DataComponentTypes.ITEM_MODEL, modelId);
+        MEComponents.set(copyStack, MEComponents.ITEM_MODEL, modelId);
 
         boolean is3D = oldId != modelId;
 
