@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public class StructureManagerDataLookup {
     public static Optional<StructureManagerData> getStructureManagerData(World world, Identifier id) {
-        return world.getRegistryManager().getOrThrow(DynamicRegistriesME.STRUCTURE_MANAGER_DATA).getOptionalValue(id);
+        return world.getRegistryManager().get(DynamicRegistriesME.STRUCTURE_MANAGER_DATA).getOptionalValue(id);
     }
 }

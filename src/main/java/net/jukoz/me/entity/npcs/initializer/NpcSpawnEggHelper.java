@@ -34,7 +34,7 @@ public class NpcSpawnEggHelper {
     }
 
     public static ItemStack getSpawnEgg(World world, Identifier identifier) {
-        NpcType npcType = world.getRegistryManager().getOrThrow(DynamicRegistriesME.NPC_TYPE).get(identifier);
+        NpcType npcType = world.getRegistryManager().get(DynamicRegistriesME.NPC_TYPE).get(identifier);
         RegistryWrapper.WrapperLookup wrapperLookup = world.getRegistryManager();
         return buildItemStackBasedOnNpcData(npcType, wrapperLookup);
     }

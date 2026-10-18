@@ -268,6 +268,11 @@ REWRITES = [
     ("add-particle-client", r"(?<![A-Za-z0-9_$])addParticleClient[(]", "addParticle("),
     # 1.21.2 split ActionResult.PASS into two; 1.20.1 only has PASS.
     ("pass-to-default", r"ActionResult[.]PASS_TO_DEFAULT_BLOCK_ACTION", "ActionResult.PASS"),
+    # 1.21 renamed the FoodComponent accessors.
+    ("food-nutrition", r"(?<![A-Za-z0-9_$])nutrition[(]", "getHunger("),
+    ("food-saturation", r"(?<![A-Za-z0-9_$])saturation[(]", "getSaturationModifier("),
+    # 1.21 DynamicRegistryManager.getOrThrow collapsed to get() in 1.20.1.
+    ("registry-manager-get", r"getRegistryManager[(][)][.]getOrThrow[(]", "getRegistryManager().get("),
 ]
 
 # 1.21 wraps block/item ids in a RegistryKey; 1.20.1 registers by Identifier.

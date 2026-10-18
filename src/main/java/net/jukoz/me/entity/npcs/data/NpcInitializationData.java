@@ -76,7 +76,7 @@ public class NpcInitializationData {
             return false;
 
         if(isRandom != null && isRandom){
-            Registry<NpcType> registry = world.getRegistryManager().getOrThrow(DynamicRegistriesME.NPC_TYPE);
+            Registry<NpcType> registry = world.getRegistryManager().get(DynamicRegistriesME.NPC_TYPE);
             List<RegistryKey<NpcType>> entryList =  registry.streamKeys().toList();
             Random random = new Random();
             RegistryKey<NpcType> randomKey = entryList.get(random.nextInt(entryList.size()));
@@ -85,7 +85,7 @@ public class NpcInitializationData {
         }
 
         if(type != null){
-            Registry<NpcType> registry = world.getRegistryManager().getOrThrow(DynamicRegistriesME.NPC_TYPE);
+            Registry<NpcType> registry = world.getRegistryManager().get(DynamicRegistriesME.NPC_TYPE);
             NpcType npcType = registry.get(type);
             if(npcType == null)
                 return false;

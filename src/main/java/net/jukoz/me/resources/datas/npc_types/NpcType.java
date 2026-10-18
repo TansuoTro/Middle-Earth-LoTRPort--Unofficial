@@ -156,7 +156,7 @@ public class NpcType {
         return npcTextureKey;
     }
     public TexturePresetDataPool getNpcTextureData(World world) {
-        return world.getRegistryManager().getOrThrow(DynamicRegistriesME.TEXTURE_PRESETS).get(npcTextureKey);
+        return world.getRegistryManager().get(DynamicRegistriesME.TEXTURE_PRESETS).get(npcTextureKey);
     }
 
 

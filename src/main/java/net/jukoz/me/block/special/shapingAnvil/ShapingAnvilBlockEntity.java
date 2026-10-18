@@ -192,8 +192,8 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
             } else {
                 MEComponents.set(input, MEComponents.TEMPERATURE_DATA, new TemperatureDataComponent(input.get(MEComponents.TEMPERATURE_DATA).temperature() - value));
             }
-            RegistryWrapper.Impl<ArmorTrimMaterial>  armorTrimMaterialRegistry = entity.getWorld().getRegistryManager().getOrThrow(RegistryKeys.TRIM_MATERIAL);
-            RegistryWrapper.Impl<ArmorTrimPattern>  armorTrimPatternRegistry = entity.getWorld().getRegistryManager().getOrThrow(RegistryKeys.TRIM_PATTERN);
+            RegistryWrapper.Impl<ArmorTrimMaterial>  armorTrimMaterialRegistry = entity.getWorld().getRegistryManager().get(RegistryKeys.TRIM_MATERIAL);
+            RegistryWrapper.Impl<ArmorTrimPattern>  armorTrimPatternRegistry = entity.getWorld().getRegistryManager().get(RegistryKeys.TRIM_PATTERN);
 
 
             if (input.getDamage() == 0){

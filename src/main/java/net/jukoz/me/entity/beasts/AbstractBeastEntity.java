@@ -445,7 +445,7 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
 
                 FoodComponent component = itemStack.get(DataComponentTypes.FOOD);
                 if(component != null) {
-                    tamenessIncrease = component.nutrition();
+                    tamenessIncrease = component.getHunger();
                 }
                 else {
                     tamenessIncrease = 4;

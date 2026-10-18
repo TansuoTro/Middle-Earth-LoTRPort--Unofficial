@@ -28,17 +28,17 @@ public class BiomeEventDataLookup {
 
     public static BiomeEventData.ContextualizedBiomeData findNpcDataForBiome(World world, RegistryEntry<Biome> biome, NpcEntity entity) {
         Identifier biomeEventId = new Identifier(biome.getIdAsString());
-        BiomeEventData eventData = world.getRegistryManager().getOrThrow(DynamicRegistriesME.BIOME_EVENT).get(biomeEventId);
+        BiomeEventData eventData = world.getRegistryManager().get(DynamicRegistriesME.BIOME_EVENT).get(biomeEventId);
         if(eventData != null){
             var foundNpcData = eventData.findNpcData(world, entity);
             if(foundNpcData == null && eventData.getSpawnDefaultWhenUnmet()){
-                eventData = world.getRegistryManager().getOrThrow(DynamicRegistriesME.BIOME_EVENT).get(BiomeEventRegistry.DEFAULT);
+                eventData = world.getRegistryManager().get(DynamicRegistriesME.BIOME_EVENT).get(BiomeEventRegistry.DEFAULT);
                 foundNpcData = eventData.findNpcData(world, entity);
             }
             return foundNpcData;
         }
         else {
-            eventData = world.getRegistryManager().getOrThrow(DynamicRegistriesME.BIOME_EVENT).get(BiomeEventRegistry.DEFAULT);
+            eventData = world.getRegistryManager().get(DynamicRegistriesME.BIOME_EVENT).get(BiomeEventRegistry.DEFAULT);
             if(eventData != null)
                 return eventData.findNpcData(world, entity);
         }
@@ -46,17 +46,17 @@ public class BiomeEventDataLookup {
     }
 
     public static BiomeEventData.ContextualizedBiomeData findNpcDataForStructure(World world, Identifier structure, NpcEntity entity) {
-        BiomeEventData eventData = world.getRegistryManager().getOrThrow(DynamicRegistriesME.STRUCTURE_EVENT).get(structure);
+        BiomeEventData eventData = world.getRegistryManager().get(DynamicRegistriesME.STRUCTURE_EVENT).get(structure);
         if(eventData != null){
             var foundNpcData = eventData.findNpcData(world, entity);
             if(foundNpcData == null && eventData.getSpawnDefaultWhenUnmet()){
-                eventData = world.getRegistryManager().getOrThrow(DynamicRegistriesME.STRUCTURE_EVENT).get(BiomeEventRegistry.DEFAULT);
+                eventData = world.getRegistryManager().get(DynamicRegistriesME.STRUCTURE_EVENT).get(BiomeEventRegistry.DEFAULT);
                 foundNpcData = eventData.findNpcData(world, entity);
             }
             return foundNpcData;
         }
         else {
-            eventData = world.getRegistryManager().getOrThrow(DynamicRegistriesME.STRUCTURE_EVENT).get(BiomeEventRegistry.DEFAULT);
+            eventData = world.getRegistryManager().get(DynamicRegistriesME.STRUCTURE_EVENT).get(BiomeEventRegistry.DEFAULT);
             if(eventData != null)
                 return eventData.findNpcData(world, entity);
         }
@@ -64,7 +64,7 @@ public class BiomeEventDataLookup {
     }
 
     public static boolean canEntitySpawn(ServerWorld world, RegistryEntry<Biome> biome, BlockPos pos, EntityType<?> type, Random random) {
-        RegistryEntry.Reference<BiomeEventData> dataRef = world.getRegistryManager().getOrThrow(DynamicRegistriesME.BIOME_EVENT).getEntry(MiddleEarth.fetchId(biome.getIdAsString())).orElse(null);
+        RegistryEntry.Reference<BiomeEventData> dataRef = world.getRegistryManager().get(DynamicRegistriesME.BIOME_EVENT).getEntry(MiddleEarth.fetchId(biome.getIdAsString())).orElse(null);
         if(dataRef == null)
             return true;
         BiomeEventData data = dataRef.value();

@@ -86,7 +86,7 @@ public class ModEvents {
         PlayerBlockBreakEvents.AFTER.register((world, playerEntity, blockPos, blockState, blockEntity) -> {
             ItemStack stack = Objects.requireNonNull(playerEntity.getStackInHand(playerEntity.getActiveHand()));
             ToolComponent toolComponent = stack.get(DataComponentTypes.TOOL);
-            RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT).getOptional(EnchantmentsME.HEWING).orElseThrow();
+            RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getOptional(EnchantmentsME.HEWING).orElseThrow();
             boolean hasEnchant = stack.getEnchantments().getEnchantments().contains(enchantmentRegistryEntry);
             int level = EnchantmentHelper.getLevel(enchantmentRegistryEntry, stack);
             float hardness = blockState.getBlock().getHardness();

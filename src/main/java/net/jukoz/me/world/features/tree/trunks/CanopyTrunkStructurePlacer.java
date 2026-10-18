@@ -73,7 +73,7 @@ public class CanopyTrunkStructurePlacer extends CanopyTrunkPlacer {
     // NOTE keep it for later maybe
     /*private void generateStructurePool(ServerWorld world, BlockPos startPos, int height) {
         RegistryKey<StructurePool> pool = ModStructureKeys.LOTHLORIEN_TALAN_KEY;
-        Registry<StructurePool> registry = world.getRegistryManager().getOrThrow(RegistryKeys.TEMPLATE_POOL);
+        Registry<StructurePool> registry = world.getRegistryManager().get(RegistryKeys.TEMPLATE_POOL);
         RegistryEntry<StructurePool> registryEntry = registry.getOrThrow(pool);
         BlockPos blockPos = startPos.mutableCopy().add(new Vec3i(0, (int)(this.structureStart * height), 0));
         StructurePoolBasedGenerator.generate(world, registryEntry, ModStructureKeys.LOTHLORIEN_TALAN_KEY.getValue(), 8, blockPos, false);

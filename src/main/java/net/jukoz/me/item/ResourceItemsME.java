@@ -148,7 +148,7 @@ public class ResourceItemsME {
 
     public static final Item GLOWWORM_BOTTLE = registerItem("glowworm_bottle",
             GlowwormBottle::new, new MESettings().maxCount(1)
-                    .food(new FoodComponent.Builder().nutrition(2).saturationModifier(0.3f).alwaysEdible().build()).recipeRemainder(Items.GLASS_BOTTLE));
+                    .food(new FoodComponent.Builder().getHunger(2).saturationModifier(0.3f).alwaysEdible().build()).recipeRemainder(Items.GLASS_BOTTLE));
 
     public static final Item COPPER_COIN = registerItem("copper_coin", Item::new, new MESettings());
     public static final Item SILVER_COIN = registerItem("silver_coin", Item::new, new MESettings());

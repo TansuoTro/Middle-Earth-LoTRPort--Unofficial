@@ -151,7 +151,7 @@ public class PlateBlock extends BlockWithEntity {
         ConsumableComponent consumableComponent = food.get(DataComponentTypes.CONSUMABLE);
         if(foodComponent != null && consumableComponent != null) {
             if(!world.isClient) {
-                player.getHungerManager().add((foodComponent.nutrition() / 2), foodComponent.saturation() / 2);
+                player.getHungerManager().add((foodComponent.getHunger() / 2), foodComponent.getSaturationModifier() / 2);
             }
             foodComponent.onConsume(player.getWorld(), player, food, consumableComponent);
             world.emitGameEvent(player, GameEvent.EAT, pos);

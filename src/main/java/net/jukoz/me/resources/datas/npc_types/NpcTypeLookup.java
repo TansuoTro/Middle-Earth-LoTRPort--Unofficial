@@ -10,7 +10,7 @@ import java.util.List;
 
 public class NpcTypeLookup {
     public static List<NpcType> getAllNpcTypes(World world, List<Identifier> ids) {
-        Registry<NpcType> registry = world.getRegistryManager().getOrThrow(DynamicRegistriesME.NPC_TYPE);
+        Registry<NpcType> registry = world.getRegistryManager().get(DynamicRegistriesME.NPC_TYPE);
         List<NpcType> list = new ArrayList<>();
         for(Identifier id : ids){
             list.add(registry.get(id));
@@ -28,6 +28,6 @@ public class NpcTypeLookup {
         return list;
     }
     public static NpcType getNpcType(World world, Identifier id) {
-        return world.getRegistryManager().getOrThrow(DynamicRegistriesME.NPC_TYPE).get(id);
+        return world.getRegistryManager().get(DynamicRegistriesME.NPC_TYPE).get(id);
     }
 }

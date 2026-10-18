@@ -206,7 +206,7 @@ public class GreatHornEntity extends AbstractBeastEntity implements Evader {
                 if(this.getHealth() < this.getMaxHealth()) {
                     itemStack.decrementUnlessCreative(1, player);
                     FoodComponent foodComponent = itemStack.get(DataComponentTypes.FOOD);
-                    float f = foodComponent != null ? (float)foodComponent.nutrition() : 1.0f;
+                    float f = foodComponent != null ? (float)foodComponent.getHunger() : 1.0f;
                     this.heal(2.0f * f);
                     return ActionResult.SUCCESS;
                 }

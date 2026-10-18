@@ -192,7 +192,7 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
                             if(this.getHealth() < this.getMaxHealth()) { // Food provides health
                                 itemStack.decrementUnlessCreative(1, player);
                                 FoodComponent foodComponent = itemStack.get(DataComponentTypes.FOOD);
-                                float f = foodComponent != null ? (float)foodComponent.nutrition() : 1.0f;
+                                float f = foodComponent != null ? (float)foodComponent.getHunger() : 1.0f;
                                 this.heal(2.0f * f);
                                 return ActionResult.SUCCESS_SERVER;
                             }
@@ -435,7 +435,7 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
     public ItemStack getGoatHornStack() {
         Random random = Random.create((long)this.getUuid().hashCode());
         TagKey<Instrument> tagKey = this.random.nextBoolean() ? InstrumentTags.SCREAMING_GOAT_HORNS : InstrumentTags.REGULAR_GOAT_HORNS;
-        return (ItemStack)this.getWorld().getRegistryManager().getOrThrow(RegistryKeys.INSTRUMENT).getRandomEntry(tagKey, random).map((registryEntry) -> {
+        return (ItemStack)this.getWorld().getRegistryManager().get(RegistryKeys.INSTRUMENT).getRandomEntry(tagKey, random).map((registryEntry) -> {
             return GoatHornItem.getStackForInstrument(Items.GOAT_HORN, registryEntry);
         }).orElseGet(() -> {
             return new ItemStack(Items.GOAT_HORN);

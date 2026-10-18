@@ -148,7 +148,7 @@ public class BannerData {
 
     public ItemStack getBannerItem(RegistryWrapper.WrapperLookup wrapperLookup, Text text) {
         BannerPatternsComponent.Builder builder = new BannerPatternsComponent.Builder();
-        RegistryWrapper.Impl<BannerPattern> registry = wrapperLookup.getOrThrow(RegistryKeys.BANNER_PATTERN);
+        RegistryWrapper.Impl<BannerPattern> registry = wrapperLookup.getWrapperOrThrow(RegistryKeys.BANNER_PATTERN);
         for (BannerPatternWithColor bannerPatternWithColor : bannerPatternWithColors) {
             RegistryKey<BannerPattern> key = RegistryKey.of(
                     RegistryKeys.BANNER_PATTERN,

@@ -140,7 +140,7 @@ public abstract class LivingEntityMixin extends Entity {
 
     private static int getAilmentProtectionLevel(ItemStack itemStack, World world) {
         int level = 0;
-        RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT)
+        RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT)
                 .getOptional(EnchantmentsME.AILMENT_PROTECTION).orElseThrow();
         boolean hasEnchant = itemStack.getEnchantments().getEnchantments().contains(enchantmentRegistryEntry);
         if(hasEnchant) {

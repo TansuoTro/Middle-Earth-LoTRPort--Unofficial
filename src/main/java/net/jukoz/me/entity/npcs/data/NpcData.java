@@ -84,7 +84,7 @@ public class NpcData {
         if(npcDataIdentifier == null || world == null)
             return this;
 
-        Registry<NpcType> registry = world.getRegistryManager().getOrThrow(DynamicRegistriesME.NPC_TYPE);
+        Registry<NpcType> registry = world.getRegistryManager().get(DynamicRegistriesME.NPC_TYPE);
         NpcType npcType = registry.get(npcDataIdentifier);
         if(npcType == null)
             return this;
