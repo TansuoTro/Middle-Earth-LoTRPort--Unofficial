@@ -1,6 +1,7 @@
 package net.jukoz.me.block.special.structureManager;
 
 import com.mojang.serialization.MapCodec;
+import net.minecraft.util.Hand;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -33,10 +34,7 @@ public class StructureManagerBlock extends BlockWithEntity implements BlockEntit
         this.setDefaultState(((this.stateManager.getDefaultState()).with(FACING, Direction.NORTH)));
     }
 
-    @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return createCodec(StructureManagerBlock::new);
-    }
+
 
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
@@ -82,7 +80,7 @@ public class StructureManagerBlock extends BlockWithEntity implements BlockEntit
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.isClient) {
             return ActionResult.SUCCESS;
         } else if(player.isCreative() && player.isCreativeLevelTwoOp()) {

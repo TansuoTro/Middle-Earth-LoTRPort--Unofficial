@@ -51,7 +51,5 @@ public class DecorativeRodBlock extends RodBlock implements Waterloggable {
         builder.add(new Property[]{FACING, WATERLOGGED});
     }
 
-    protected MapCodec<? extends DecorativeRodBlock> getCodec(){
-        return CODEC;
-    };
+;
 }

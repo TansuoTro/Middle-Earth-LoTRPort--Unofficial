@@ -18,7 +18,6 @@ import net.minecraft.world.World;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.npcs.NpcEntity;
 import net.jukoz.me.entity.npcs.data.NpcInitializationData;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.EggItemsME;
 import net.jukoz.me.item.dataComponents.FactionDataComponent;
 import net.jukoz.me.item.dataComponents.RaceDataComponent;

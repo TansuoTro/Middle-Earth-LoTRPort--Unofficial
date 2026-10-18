@@ -29,10 +29,7 @@ public class WebbingBlock extends MultifaceGrowthBlock {
         this.setDefaultState(this.getDefaultState().with(PERSISTENT, true));
     }
 
-    @Override
-    public MapCodec<? extends MultifaceGrowthBlock> getCodec() {
-        return CODEC;
-    }
+
 
     @Override
     public MultifaceGrower getGrower() {

@@ -1,5 +1,6 @@
 package net.jukoz.me.block.special;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.util.Hand;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -40,7 +41,7 @@ public class SeatBlock extends Block {
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         Quaternionf quaternion = state.get(FACING).getOpposite().getRotationQuaternion().normalize();
         Vector3f eulerAngles = new Vector3f(0, 0, 0);
         eulerAngles = quaternion.getEulerAnglesXYZ(eulerAngles);

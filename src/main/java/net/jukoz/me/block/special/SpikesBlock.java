@@ -35,9 +35,7 @@ public class SpikesBlock extends Block {
         setDefaultState(getDefaultState().with(HALF, DoubleBlockHalf.LOWER));
     }
 
-    public MapCodec<SpikesBlock> getCodec() {
-        return CODEC;
-    }
+
 
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(HALF);

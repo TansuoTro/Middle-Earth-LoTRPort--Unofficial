@@ -1,6 +1,7 @@
 package net.jukoz.me.block.special.curtains;
 
 import com.mojang.serialization.MapCodec;
+import net.minecraft.util.Hand;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
@@ -28,10 +29,7 @@ public class SmallCurtainsBlock extends HorizontalFacingBlock {
         super(settings);
     }
 
-    @Override
-    protected MapCodec<? extends HorizontalFacingBlock> getCodec() {
-        return CODEC;
-    }
+
 
     @Nullable
     public BlockState getPlacementState(ItemPlacementContext ctx) {
@@ -39,7 +37,7 @@ public class SmallCurtainsBlock extends HorizontalFacingBlock {
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient && player.getAbilities().allowModifyWorld) {
             world.setBlockState(pos, state.cycle(OPEN));
         }

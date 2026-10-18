@@ -11,7 +11,6 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.commands.ModCommands;
 import net.jukoz.me.commands.suggestions.AllBackAttachmentsSuggestionProvider;
 import net.jukoz.me.commands.suggestions.AllHelmetAttachmentsSuggestionProvider;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.dataComponents.BackAttachmentDataComponent;
 import net.jukoz.me.item.dataComponents.HelmetAttachmentDataComponent;
 import net.jukoz.me.item.items.armor.BackAttachmentItem;

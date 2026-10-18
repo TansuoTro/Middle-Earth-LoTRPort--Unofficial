@@ -103,7 +103,7 @@ public class ToughBerryBushBlock extends CustomPlantBlock
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         Hand hand = player.getActiveHand();
         boolean bl;
         int i = state.get(AGE);
@@ -120,7 +120,7 @@ public class ToughBerryBushBlock extends CustomPlantBlock
             world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(player, blockState));
             return ActionResult.SUCCESS;
         }
-        return super.onUse(state, world, pos, player, hit);
+        return super.onUse(state, world, pos, player, hand, hit);
     }
 
     @Override

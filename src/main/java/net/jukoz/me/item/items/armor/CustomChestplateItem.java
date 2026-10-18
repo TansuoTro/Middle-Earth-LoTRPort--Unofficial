@@ -6,7 +6,6 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.server.world.ServerWorld;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.dataComponents.BackAttachmentDataComponent;
 import net.jukoz.me.item.utils.armor.ExtendedArmorMaterial;
 import net.jukoz.me.item.utils.armor.backAttachments.BackAttachmentsME;

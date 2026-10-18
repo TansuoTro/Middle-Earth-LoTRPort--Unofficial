@@ -91,9 +91,7 @@ public class HeldBannerModelRenderer implements SpecialModelRenderer<ComponentMa
         public Unbaked() {
         }
 
-        public MapCodec<HeldBannerModelRenderer.Unbaked> getCodec() {
-            return CODEC;
-        }
+
 
         public SpecialModelRenderer<?> bake(LoadedEntityModels entityModels) {
             return new HeldBannerModelRenderer(new HeldBannerEntityModel(entityModels.getModelPart(MiddleEarthClient.HELD_BANNER_LAYER)));

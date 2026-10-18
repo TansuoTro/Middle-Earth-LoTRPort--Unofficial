@@ -1,7 +1,6 @@
 package net.jukoz.me.recipe;
 
 import net.jukoz.me.item.MEComponents;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.dataComponents.MountArmorAddonComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;

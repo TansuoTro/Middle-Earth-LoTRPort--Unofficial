@@ -71,10 +71,7 @@ public class ElvenTreatedAnvilblock extends AbstractShapingAnvilBlock {
         }
     }
 
-    @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return createCodec(ElvenTreatedAnvilblock::new);
-    }
+
 
     @Nullable
     @Override

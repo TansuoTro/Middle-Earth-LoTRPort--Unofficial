@@ -13,7 +13,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.dataComponents.BackAttachmentDataComponent;
 import net.jukoz.me.item.utils.armor.ExtendedArmorMaterial;
 import org.jetbrains.annotations.Nullable;

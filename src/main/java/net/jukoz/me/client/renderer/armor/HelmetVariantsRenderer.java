@@ -14,7 +14,6 @@ import net.minecraft.util.Identifier;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.client.model.equipment.CustomHelmetModel;
 import net.jukoz.me.client.model.equipment.head.helmets.HelmetAddonModel;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.dataComponents.ArmorVariantDataComponent;
 import net.jukoz.me.item.dataComponents.HelmetAttachmentDataComponent;
 import net.jukoz.me.item.dataComponents.SeasonDataComponent;

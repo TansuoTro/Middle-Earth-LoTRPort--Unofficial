@@ -24,10 +24,7 @@ public class CustomPlantBlock extends PlantBlock {
         super(settings);
     }
 
-    @Override
-    protected MapCodec<CustomPlantBlock> getCodec() {
-        return CODEC;
-    }
+
 
     @Override
     protected boolean canPlantOnTop(BlockState floor, BlockView world, BlockPos pos) {

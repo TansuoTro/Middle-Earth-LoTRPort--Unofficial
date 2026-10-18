@@ -1,6 +1,7 @@
 package net.jukoz.me.item.items.weapons;
 
 import net.minecraft.item.Item;
+import net.minecraft.util.Hand;
 import net.jukoz.me.item.utils.WeaponTypesME;
 import net.minecraft.item.ToolMaterial;
 

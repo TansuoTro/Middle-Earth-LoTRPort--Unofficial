@@ -7,7 +7,6 @@ import net.minecraft.registry.tag.ItemTags;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.client.model.equipment.CustomHelmetModel;
 import net.jukoz.me.client.model.equipment.head.helmets.HelmetAddonModel;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.dataComponents.HelmetAttachmentDataComponent;
 import net.jukoz.me.item.utils.armor.ArmorModelsME;
 import net.jukoz.me.item.utils.armor.DyeablePiecesME;

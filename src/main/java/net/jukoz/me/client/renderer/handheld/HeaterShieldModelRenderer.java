@@ -92,9 +92,7 @@ public class HeaterShieldModelRenderer implements SpecialModelRenderer<Component
         public Unbaked() {
         }
 
-        public MapCodec<HeaterShieldModelRenderer.Unbaked> getCodec() {
-            return CODEC;
-        }
+
 
         public SpecialModelRenderer<?> bake(LoadedEntityModels entityModels) {
             return new HeaterShieldModelRenderer(new HeaterShieldEntityModel(entityModels.getModelPart(MiddleEarthClient.HEATER_SHIELD_LAYER)));

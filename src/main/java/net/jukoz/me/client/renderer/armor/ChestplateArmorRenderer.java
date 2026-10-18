@@ -7,7 +7,6 @@ import net.minecraft.registry.tag.ItemTags;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.client.model.equipment.CustomChestplateModel;
 import net.jukoz.me.client.model.equipment.chest.ChestplateAddonModel;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.dataComponents.BackAttachmentDataComponent;
 import net.jukoz.me.item.items.armor.CustomChestplateItem;
 import net.jukoz.me.item.utils.armor.ArmorModelsME;

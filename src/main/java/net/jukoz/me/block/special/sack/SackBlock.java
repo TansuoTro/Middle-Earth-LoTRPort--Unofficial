@@ -1,6 +1,7 @@
 package net.jukoz.me.block.special.sack;
 
 import com.mojang.serialization.MapCodec;
+import net.minecraft.util.Hand;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ShulkerBoxBlockEntity;
@@ -40,10 +41,7 @@ public class SackBlock extends BlockWithEntity {
         setDefaultState(getDefaultState().with(OPEN, false));
     }
 
-    @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return CODEC;
-    }
+
 
     @Nullable
     @Override
@@ -56,7 +54,7 @@ public class SackBlock extends BlockWithEntity {
         return Block.createCuboidShape(4, 0, 4, 12, 9, 12);
     }
 
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world instanceof ServerWorld serverWorld) {
             NamedScreenHandlerFactory namedScreenHandlerFactory = this.createScreenHandlerFactory(state, world, pos);
             if (namedScreenHandlerFactory != null) {

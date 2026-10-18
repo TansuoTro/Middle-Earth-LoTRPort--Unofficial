@@ -19,10 +19,7 @@ public class CeramicCrockpotBlock extends CrockpotBlock {
         super(settings);
     }
 
-    @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return CeramicCrockpotBlock.createCodec(CeramicCrockpotBlock::new);
-    }
+
 
     @Nullable
     @Override

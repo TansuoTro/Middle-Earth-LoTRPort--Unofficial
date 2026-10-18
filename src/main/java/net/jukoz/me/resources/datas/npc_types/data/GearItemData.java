@@ -16,7 +16,6 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.random.Random;
 import net.jukoz.me.MiddleEarth;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.dataComponents.BackAttachmentDataComponent;
 import net.jukoz.me.item.dataComponents.HelmetAttachmentDataComponent;
 import net.jukoz.me.item.utils.armor.backAttachments.BackAttachmentsME;

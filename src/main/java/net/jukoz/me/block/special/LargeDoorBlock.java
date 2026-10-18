@@ -1,6 +1,7 @@
 package net.jukoz.me.block.special;
 
 import com.mojang.serialization.MapCodec;
+import net.minecraft.util.Hand;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -54,9 +55,7 @@ public class LargeDoorBlock extends Block {
     protected static final VoxelShape EAST_SHAPE = Block.createCuboidShape(13.0, 0.0, 0.0, 16.0, 16.0, 16.0);
     protected static final VoxelShape WEST_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 3.0, 16.0, 16.0);
 
-    public MapCodec<? extends LargeDoorBlock> getCodec() {
-        return CODEC;
-    }
+
 
     public LargeDoorBlock(Settings settings) {
         super(settings.nonOpaque());
@@ -249,7 +248,7 @@ public class LargeDoorBlock extends Block {
     }
 
     //Door opening
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         BlockPos blockPos = getOrigin(pos, state);
         BlockPos blockPos1 = blockPos;
 

@@ -42,9 +42,7 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
     private static final Iterable<Vec3d> PARTICLE_OFFSETS;
     private final CandleBlock candle;
 
-    public MapCodec<CandleLayeredCakeBlock> getCodec() {
-        return CODEC;
-    }
+
 
     public CandleLayeredCakeBlock(Block candle, AbstractBlock.Settings settings) {
         super(settings);
@@ -87,7 +85,7 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
         world.setBlockState(pos, state.with(LIT, lit), 11);
     }
 
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         ActionResult actionResult = LayeredCakeBlock.tryEat(world, pos, ModBlocks.LAYERED_CAKE.getDefaultState(), player);
         if (actionResult.isAccepted()) {
             dropStacks(state, world, pos);

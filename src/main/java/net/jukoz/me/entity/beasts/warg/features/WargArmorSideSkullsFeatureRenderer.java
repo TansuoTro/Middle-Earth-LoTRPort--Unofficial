@@ -17,7 +17,6 @@ import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.dataComponents.MountArmorAddonComponent;
 
 public class WargArmorSideSkullsFeatureRenderer extends FeatureRenderer<WargEntityRenderState, WargModel> {

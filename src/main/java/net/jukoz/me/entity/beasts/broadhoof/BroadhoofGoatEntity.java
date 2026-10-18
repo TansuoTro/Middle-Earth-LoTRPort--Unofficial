@@ -50,7 +50,6 @@ import net.jukoz.me.entity.beasts.AbstractBeastEntity;
 import net.jukoz.me.entity.goals.BeastRevengeGoal;
 import net.jukoz.me.entity.goals.ChargeAttackGoal;
 import net.jukoz.me.entity.npcs.NpcEntity;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.resources.datas.common.DispositionType;
 import net.jukoz.me.resources.datas.common.RaceType;
 import net.jukoz.me.utils.PlayerUtil;

@@ -7,7 +7,6 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.sound.SoundEvents;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.dataComponents.WeaponTypeDataComponent;
 import net.jukoz.me.item.utils.ShieldTypesME;
 import net.minecraft.item.ShieldItem;

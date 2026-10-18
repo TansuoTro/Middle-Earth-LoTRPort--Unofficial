@@ -3,15 +3,15 @@ package net.jukoz.me.item.dataComponents;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.component.ComponentsAccess;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipAppender;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.text.Text;
 
-import java.util.function.Consumer;
+import java.util.List;
 
 public record ArmorVariantDataComponent(Integer id) implements TooltipAppender {
     private static final Codec<ArmorVariantDataComponent> BASE_CODEC = RecordCodecBuilder.create((instance) -> {
@@ -24,7 +24,7 @@ public record ArmorVariantDataComponent(Integer id) implements TooltipAppender {
             ArmorVariantDataComponent::new);
 
     @Override
-    public void appendTooltip(Item.TooltipContext context, Consumer<Text> textConsumer, TooltipType type, ComponentsAccess components) {
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
     }
 
     @Override

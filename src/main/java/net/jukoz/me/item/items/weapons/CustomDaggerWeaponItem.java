@@ -13,7 +13,6 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.jukoz.me.MiddleEarth;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.dataComponents.SneakAttackDataComponent;
 import net.jukoz.me.item.utils.WeaponTypesME;
 import org.jetbrains.annotations.Nullable;

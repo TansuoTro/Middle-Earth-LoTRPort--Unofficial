@@ -1,6 +1,7 @@
 package net.jukoz.me.block.special.shapingAnvil;
 
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Hand;
 import net.minecraft.state.property.EnumProperty;
 import net.jukoz.me.item.items.SmithingHammerItem;
 import net.minecraft.block.*;
@@ -69,7 +70,7 @@ public abstract class AbstractShapingAnvilBlock extends BlockWithEntity implemen
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         Inventory blockEntity = (Inventory) world.getBlockEntity(pos);
 
         if (!world.isClient) {

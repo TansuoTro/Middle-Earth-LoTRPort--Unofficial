@@ -2,7 +2,6 @@ package net.jukoz.me.recipe;
 
 import net.jukoz.me.item.MEComponents;
 import net.minecraft.component.DataComponentTypes;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.dataComponents.BackAttachmentDataComponent;
 import net.jukoz.me.item.items.armor.BackAttachmentItem;
 import net.jukoz.me.item.items.armor.CustomChestplateItem;

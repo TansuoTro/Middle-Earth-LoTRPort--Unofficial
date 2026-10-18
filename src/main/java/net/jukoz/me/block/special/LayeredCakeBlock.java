@@ -33,9 +33,7 @@ public class LayeredCakeBlock extends Block {
     public static final int DEFAULT_COMPARATOR_OUTPUT;
     private static final VoxelShape[] SHAPES_BY_BITES;
 
-    public MapCodec<net.minecraft.block.CakeBlock> getCodec() {
-        return CODEC;
-    }
+
 
     public LayeredCakeBlock(AbstractBlock.Settings settings) {
         super(settings);
@@ -64,7 +62,7 @@ public class LayeredCakeBlock extends Block {
         return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
     }
 
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.isClient) {
             if (tryEat(world, pos, state, player).isAccepted()) {
                 return ActionResult.SUCCESS;

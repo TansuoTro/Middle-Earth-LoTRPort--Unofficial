@@ -45,10 +45,7 @@ public class CrockpotBlock extends BlockWithEntity {
         setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(HANGING, false));
     }
 
-    @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return CrockpotBlock.createCodec(CrockpotBlock::new);
-    }
+
 
     @Override
     protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {

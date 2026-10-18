@@ -35,10 +35,7 @@ public class MistweedPlantBlock extends CustomPlantBlock implements Fertilizable
         this.setDefaultState(this.getDefaultState().with(ACTIVE, true));
     }
 
-    @Override
-    protected MapCodec<CustomPlantBlock> getCodec() {
-        return CODEC;
-    }
+
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
@@ -57,7 +54,7 @@ public class MistweedPlantBlock extends CustomPlantBlock implements Fertilizable
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         Hand hand = player.getActiveHand();
         if (!world.isClient && player.getAbilities().allowModifyWorld) {
             ItemStack itemStack = player.getStackInHand(hand);

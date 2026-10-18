@@ -53,10 +53,7 @@ public class OrcishTreatedAnvilblock extends AbstractShapingAnvilBlock {
         }
     }
 
-    @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return createCodec(OrcishTreatedAnvilblock::new);
-    }
+
 
     @Nullable
     @Override

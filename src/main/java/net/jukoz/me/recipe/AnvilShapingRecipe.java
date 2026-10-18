@@ -8,7 +8,6 @@ import net.minecraft.recipe.*;
 import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.registry.RegistryKeys;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;

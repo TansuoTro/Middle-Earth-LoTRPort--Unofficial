@@ -3,8 +3,8 @@ package net.jukoz.me.item.dataComponents;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.component.ComponentsAccess;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipAppender;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.network.codec.PacketCodec;
@@ -12,7 +12,7 @@ import net.minecraft.text.Text;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.utils.BlockAuthor;
 
-import java.util.function.Consumer;
+import java.util.List;
 
 public record BlockAuthorDataComponent(BlockAuthor author) implements TooltipAppender {
     private static final Codec<BlockAuthorDataComponent> BASE_CODEC = RecordCodecBuilder.create((instance) -> {
@@ -28,7 +28,7 @@ public record BlockAuthorDataComponent(BlockAuthor author) implements TooltipApp
     }
 
     @Override
-    public void appendTooltip(Item.TooltipContext context, Consumer<Text> textConsumer, TooltipType type, ComponentsAccess components) {
-        textConsumer.accept(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".author").append(this.author.getAuthorName()));
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
+        tooltip.add(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".author").append(this.author.getAuthorName()));
     }
 }

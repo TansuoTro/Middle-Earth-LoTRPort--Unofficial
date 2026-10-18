@@ -56,9 +56,7 @@ public class PointedDolomiteBlock extends Block implements Falling, Waterloggabl
     private static final float MAX_HORIZONTAL_MODEL_OFFSET;
     private static final VoxelShape DRIP_COLLISION_SHAPE;
 
-    public MapCodec<PointedDolomiteBlock> getCodec() {
-        return CODEC;
-    }
+
 
     public PointedDolomiteBlock(AbstractBlock.Settings settings) {
         super(settings);

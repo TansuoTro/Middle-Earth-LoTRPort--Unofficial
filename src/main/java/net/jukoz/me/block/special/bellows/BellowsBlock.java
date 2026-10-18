@@ -1,6 +1,7 @@
 package net.jukoz.me.block.special.bellows;
 
 import com.mojang.serialization.MapCodec;
+import net.minecraft.util.Hand;
 import net.minecraft.entity.EntityCollisionHandler;
 import net.minecraft.state.property.EnumProperty;
 import net.jukoz.me.block.registration.ModBlockEntities;
@@ -34,10 +35,7 @@ public class BellowsBlock extends BlockWithEntity {
         this.setDefaultState(((this.stateManager.getDefaultState()).with(FACING, Direction.NORTH)));
     }
 
-    @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return createCodec(BellowsBlock::new);
-    }
+
 
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
@@ -68,7 +66,7 @@ public class BellowsBlock extends BlockWithEntity {
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         player.swingHand(player.getActiveHand());
         return this.pump(world, pos, state, player) ? ActionResult.SUCCESS : ActionResult.CONSUME;
     }

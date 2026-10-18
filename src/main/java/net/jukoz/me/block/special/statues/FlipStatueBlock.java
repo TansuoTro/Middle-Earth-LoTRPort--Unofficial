@@ -42,7 +42,7 @@ public class FlipStatueBlock extends StatueBlock {
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient && player.getAbilities().allowModifyWorld) {
             world.setBlockState(pos, state.cycle(FLIP));
             BlockState updatedState = world.getBlockState(pos);

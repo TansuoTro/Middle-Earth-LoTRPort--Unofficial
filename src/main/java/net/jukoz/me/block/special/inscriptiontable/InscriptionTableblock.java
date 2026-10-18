@@ -1,6 +1,7 @@
 package net.jukoz.me.block.special.inscriptiontable;
 
 import com.mojang.serialization.MapCodec;
+import net.minecraft.util.Hand;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -26,10 +27,7 @@ public class InscriptionTableblock extends HorizontalFacingBlock {
         super(settings);
     }
 
-    @Override
-    protected MapCodec<? extends HorizontalFacingBlock> getCodec() {
-        return InscriptionTableblock.createCodec(InscriptionTableblock::new);
-    }
+
 
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         return (BlockState)((BlockState)this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite()));
@@ -43,7 +41,7 @@ public class InscriptionTableblock extends HorizontalFacingBlock {
         return BlockRenderType.MODEL;
     }
 
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient) {
             player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
         }

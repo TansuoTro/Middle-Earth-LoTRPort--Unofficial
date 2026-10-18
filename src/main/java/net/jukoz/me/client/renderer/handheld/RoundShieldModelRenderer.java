@@ -92,9 +92,7 @@ public class RoundShieldModelRenderer implements SpecialModelRenderer<ComponentM
         public Unbaked() {
         }
 
-        public MapCodec<RoundShieldModelRenderer.Unbaked> getCodec() {
-            return CODEC;
-        }
+
 
         public SpecialModelRenderer<?> bake(LoadedEntityModels entityModels) {
             return new RoundShieldModelRenderer(new RoundShieldEntityModel(entityModels.getModelPart(MiddleEarthClient.ROUND_SHIELD_LAYER)));

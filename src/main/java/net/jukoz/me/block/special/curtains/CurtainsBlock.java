@@ -35,10 +35,7 @@ public class CurtainsBlock extends MultifaceBlock {
         shapeFunction = createShapeFunction();
     }
 
-    @Override
-    public MapCodec<? extends MultifaceBlock> getCodec() {
-        return CODEC;
-    }
+
 
     @Override
     @Nullable

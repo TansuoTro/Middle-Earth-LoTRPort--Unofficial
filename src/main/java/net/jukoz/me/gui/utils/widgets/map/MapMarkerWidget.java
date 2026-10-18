@@ -192,7 +192,7 @@ public class MapMarkerWidget extends ModWidget {
             List<Text> modifiedList = new ArrayList<>();
             modifiedList.add(
                     Text.translatable("widget.%s.marker.selected_title_container.before".formatted(MiddleEarth.MOD_ID))
-                            .append(METext.withColor(METext, content.get(0).copy(), ModColors.SUCCESS.color))
+                            .append(METext.withColor( content.get(0).copy(), ModColors.SUCCESS.color))
                             .append(Text.translatable("widget.%s.marker.selected_title_container.after".formatted(MiddleEarth.MOD_ID))));
             for(int i = 1; i < content.size(); i++){
                 modifiedList.add(content.get(i));

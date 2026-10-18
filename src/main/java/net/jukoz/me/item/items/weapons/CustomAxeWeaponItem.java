@@ -8,7 +8,6 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.dataComponents.WeaponTypeDataComponent;
 import net.jukoz.me.item.utils.WeaponTypesME;
 

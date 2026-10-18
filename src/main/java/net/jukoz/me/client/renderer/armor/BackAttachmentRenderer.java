@@ -6,7 +6,6 @@ import net.minecraft.client.render.entity.state.BipedEntityRenderState;
 import net.jukoz.me.compat.DyedColorComponent;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.client.model.equipment.chest.ChestplateAddonModel;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.dataComponents.BackAttachmentDataComponent;
 import net.jukoz.me.item.utils.armor.ArmorModelsME;
 import net.jukoz.me.item.utils.armor.DyeablePiecesME;

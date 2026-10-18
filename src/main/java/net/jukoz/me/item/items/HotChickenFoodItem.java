@@ -2,7 +2,6 @@ package net.jukoz.me.item.items;
 
 import net.jukoz.me.item.MEComponents;
 import net.minecraft.component.DataComponentTypes;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.resources.datas.common.RaceType;
 import net.jukoz.me.resources.datas.races.RaceUtil;
 import net.minecraft.entity.LivingEntity;

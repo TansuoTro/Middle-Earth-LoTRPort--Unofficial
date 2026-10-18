@@ -27,10 +27,7 @@ public class DwarvenShapingAnvilBlock extends AbstractShapingAnvilBlock {
         super(settings);
     }
 
-    @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return createCodec(DwarvenShapingAnvilBlock::new);
-    }
+
 
     @Override
     protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {

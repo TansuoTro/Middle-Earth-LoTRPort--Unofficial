@@ -56,9 +56,7 @@ public class PointedIzherabanBlock extends Block implements Falling, Waterloggab
     private static final float MAX_HORIZONTAL_MODEL_OFFSET;
     private static final VoxelShape DRIP_COLLISION_SHAPE;
 
-    public MapCodec<PointedIzherabanBlock> getCodec() {
-        return CODEC;
-    }
+
 
     public PointedIzherabanBlock(AbstractBlock.Settings settings) {
         super(settings);

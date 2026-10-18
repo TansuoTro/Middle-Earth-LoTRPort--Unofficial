@@ -7,7 +7,6 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.jukoz.me.MiddleEarth;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.dataComponents.HelmetAttachmentDataComponent;
 import net.jukoz.me.item.utils.armor.ExtendedArmorMaterial;
 

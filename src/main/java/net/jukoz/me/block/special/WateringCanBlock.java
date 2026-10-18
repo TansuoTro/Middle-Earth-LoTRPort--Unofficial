@@ -1,5 +1,6 @@
 package net.jukoz.me.block.special;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.util.Hand;
 
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.util.math.random.Random;
@@ -56,14 +57,14 @@ public class WateringCanBlock extends Block implements Waterloggable {
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (player.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty() && !player.isCreative()){
             world.setBlockState(pos, Blocks.AIR.getDefaultState());
             player.equipStack(EquipmentSlot.MAINHAND,  new ItemStack(ModDecorativeBlocks.WATERING_CAN.asItem()));
             world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.BLOCKS, 0.5f, world.random.nextFloat() * 0.1f - 1.0f);
             return ActionResult.PASS;
         } else{
-            return super.onUse(state, world, pos, player, hit);
+            return super.onUse(state, world, pos, player, hand, hit);
         }
     }
 

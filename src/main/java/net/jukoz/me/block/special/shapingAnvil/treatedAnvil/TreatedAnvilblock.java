@@ -49,10 +49,7 @@ public class TreatedAnvilblock extends AbstractShapingAnvilBlock {
         }
     }
 
-    @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return createCodec(TreatedAnvilblock::new);
-    }
+
 
     @Nullable
     @Override

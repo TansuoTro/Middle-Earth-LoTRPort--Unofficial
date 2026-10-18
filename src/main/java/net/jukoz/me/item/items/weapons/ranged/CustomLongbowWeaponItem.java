@@ -14,7 +14,6 @@ import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.dataComponents.WeaponTypeDataComponent;
 import net.jukoz.me.item.utils.RangedWeaponTypesME;
 

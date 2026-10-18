@@ -21,9 +21,7 @@ public class ShortIciclesBlock extends Block {
         super(settings);
     }
 
-    public MapCodec<ShortIciclesBlock> getCodec() {
-        return CODEC;
-    }
+
 
     protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         BlockPos blockPos = pos.up();

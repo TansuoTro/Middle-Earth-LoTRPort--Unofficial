@@ -1,6 +1,7 @@
 package net.jukoz.me.block.special;
 
 import net.minecraft.block.*;
+import net.minecraft.util.Hand;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
@@ -30,7 +31,7 @@ public class TorchOfOrthancBlock extends TorchBlock {
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if(world.isClient){
             return ActionResult.SUCCESS;
         } else {
@@ -43,7 +44,7 @@ public class TorchOfOrthancBlock extends TorchBlock {
             }
         }
 
-        return super.onUse(state, world, pos, player, hit);
+        return super.onUse(state, world, pos, player, hand, hit);
     }
 
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {

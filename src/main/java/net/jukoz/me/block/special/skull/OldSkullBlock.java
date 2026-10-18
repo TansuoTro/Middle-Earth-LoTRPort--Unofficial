@@ -33,10 +33,7 @@ public class OldSkullBlock extends BlockWithEntity {
         this.setDefaultState((this.stateManager.getDefaultState()).with(ROTATION, 0));
     }
 
-    @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return createCodec(OldSkullBlock::new);
-    }
+
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {

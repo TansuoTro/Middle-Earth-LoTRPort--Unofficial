@@ -4,7 +4,6 @@ import net.jukoz.me.item.MEComponents;
 import net.minecraft.component.DataComponentTypes;
 import net.jukoz.me.compat.DyedColorComponent;
 import net.jukoz.me.MiddleEarth;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.items.armor.CustomHelmetItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;

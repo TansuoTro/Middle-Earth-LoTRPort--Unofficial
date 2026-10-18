@@ -56,9 +56,7 @@ public class PointedGalonnBlock extends Block implements Falling, Waterloggable 
     private static final float MAX_HORIZONTAL_MODEL_OFFSET;
     private static final VoxelShape DRIP_COLLISION_SHAPE;
 
-    public MapCodec<PointedGalonnBlock> getCodec() {
-        return CODEC;
-    }
+
 
     public PointedGalonnBlock(AbstractBlock.Settings settings) {
         super(settings);

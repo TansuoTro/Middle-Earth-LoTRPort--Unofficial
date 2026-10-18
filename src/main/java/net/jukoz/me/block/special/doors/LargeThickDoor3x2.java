@@ -1,6 +1,7 @@
 package net.jukoz.me.block.special.doors;
 
 import net.jukoz.me.block.special.LargeDoorBlock;
+import net.minecraft.util.Hand;
 import net.jukoz.me.item.ResourceItemsME;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -37,9 +38,9 @@ public class LargeThickDoor3x2 extends LargeDoorBlock {
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if(state.get(PART) == 4 && player.getMainHandStack().getItem() == ResourceItemsME.DWARVEN_KEY){
-            return super.onUse(state, world, pos, player, hit);
+            return super.onUse(state, world, pos, player, hand, hit);
         } else {
             return ActionResult.PASS;
         }

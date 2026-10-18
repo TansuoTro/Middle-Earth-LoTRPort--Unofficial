@@ -94,9 +94,7 @@ public class KiteShieldModelRenderer implements SpecialModelRenderer<ComponentMa
         public Unbaked() {
         }
 
-        public MapCodec<KiteShieldModelRenderer.Unbaked> getCodec() {
-            return CODEC;
-        }
+
 
         public SpecialModelRenderer<?> bake(LoadedEntityModels entityModels) {
             return new KiteShieldModelRenderer(new KiteShieldEntityModel(entityModels.getModelPart(MiddleEarthClient.KITE_SHIELD_LAYER)));

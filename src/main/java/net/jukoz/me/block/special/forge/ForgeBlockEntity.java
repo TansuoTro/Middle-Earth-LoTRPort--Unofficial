@@ -20,7 +20,6 @@ import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.block.special.bellows.BellowsBlock;
 import net.jukoz.me.datageneration.content.models.HotMetalsModel;
 import net.jukoz.me.gui.forge.ForgeAlloyingScreenHandler;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.ResourceItemsME;
 import net.jukoz.me.item.dataComponents.TemperatureDataComponent;
 import net.jukoz.me.recipe.AlloyingRecipe;

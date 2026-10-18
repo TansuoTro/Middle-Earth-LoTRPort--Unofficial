@@ -11,9 +11,7 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 
 public class TransparentVerticalSlab extends VerticalSlabBlock{
-    protected MapCodec<? extends TransparentVerticalSlab> getCodec() {
-        return createCodec(TransparentVerticalSlab::new);
-    }
+
 
     public TransparentVerticalSlab(Settings settings) {
         super(settings);

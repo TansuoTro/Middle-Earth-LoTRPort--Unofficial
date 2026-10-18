@@ -53,13 +53,10 @@ public class CandleHeapBlock extends Block {
         this.setDefaultState(this.stateManager.getDefaultState().with(LIT, false));
     }
 
-    @Override
-    protected MapCodec<? extends Block> getCodec() {
-        return CandleHeapBlock.createCodec(CandleHeapBlock::new);
-    }
+
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         Hand hand = player.getActiveHand();
         if (!world.isClient && player.getAbilities().allowModifyWorld) {
             if(player.isCreative()){

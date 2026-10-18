@@ -1,6 +1,7 @@
 package net.jukoz.me.block.special.wood_pile;
 
 import net.jukoz.me.block.special.alloyfurnace.AlloyFurnaceEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;

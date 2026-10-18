@@ -1,6 +1,7 @@
 package net.jukoz.me.block.special.alloyfurnace;
 
 import net.jukoz.me.block.ModBlockEntities;
+import net.minecraft.util.Hand;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;

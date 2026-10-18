@@ -1,5 +1,6 @@
 package net.jukoz.me.block.special.plate;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.util.Hand;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
@@ -42,10 +43,7 @@ public class PlateBlock extends BlockWithEntity {
         setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(UTENSILS, false));
     }
 
-    @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return PlateBlock.createCodec(PlateBlock::new);
-    }
+
 
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
@@ -112,7 +110,7 @@ public class PlateBlock extends BlockWithEntity {
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         ActionResult result = onEat(world, pos, player);
         if(result == ActionResult.PASS || result == ActionResult.FAIL) {
             if(world instanceof ServerWorld serverWorld) {

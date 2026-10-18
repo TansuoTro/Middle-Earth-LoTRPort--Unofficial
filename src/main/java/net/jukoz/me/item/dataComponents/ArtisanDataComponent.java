@@ -5,8 +5,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.entity.SkullBlockEntity;
-import net.minecraft.component.ComponentsAccess;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipAppender;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.network.codec.PacketCodec;
@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Consumer;
+import java.util.List;
 
 public record ArtisanDataComponent(UUID uuid) implements TooltipAppender {
     private static final Codec<ArtisanDataComponent> BASE_CODEC = RecordCodecBuilder.create((instance) -> {
@@ -36,12 +36,12 @@ public record ArtisanDataComponent(UUID uuid) implements TooltipAppender {
             ArtisanDataComponent::new);
 
     @Override
-    public void appendTooltip(Item.TooltipContext context, Consumer<Text> textConsumer, TooltipType type, ComponentsAccess components) {
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         CompletableFuture<Optional<GameProfile>> profile = SkullBlockEntity.fetchProfileByUuid(uuid);
         try {
             if (profile.get().isPresent()){
                 try {
-                    textConsumer.accept(Text.translatable("tooltip.%s.artisan".formatted(MiddleEarth.MOD_ID)).append(
+                    tooltip.add(Text.translatable("tooltip.%s.artisan".formatted(MiddleEarth.MOD_ID)).append(
                             profile.get().get().getName()).formatted(Formatting.GRAY));
                 } catch (InterruptedException | ExecutionException e) {
                     throw new RuntimeException(e);

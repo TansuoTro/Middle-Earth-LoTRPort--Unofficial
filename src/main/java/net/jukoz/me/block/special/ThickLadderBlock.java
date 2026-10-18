@@ -35,10 +35,7 @@ public class ThickLadderBlock extends WallMountedBlock implements Waterloggable 
     protected static final VoxelShape BOTTOM_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 3.0, 16.0);
     protected static final VoxelShape TOP_SHAPE = Block.createCuboidShape(0.0, 13.0, 0.0, 16.0, 16.0, 16.0);
 
-    @Override
-    protected MapCodec<? extends WallMountedBlock> getCodec() {
-        return CODEC;
-    }
+
 
     public ThickLadderBlock(Settings settings) {
         super(settings.nonOpaque());

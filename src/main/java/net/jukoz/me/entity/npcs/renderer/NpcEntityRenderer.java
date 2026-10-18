@@ -37,7 +37,6 @@ import net.jukoz.me.entity.npcs.renderer.features.ear.EarFeatureRenderer;
 import net.jukoz.me.entity.npcs.renderer.features.feet.FeetFeatureRenderer;
 import net.jukoz.me.entity.npcs.renderer.features.hair.HairFeatureRenderer;
 import net.jukoz.me.entity.npcs.renderer.features.nose.NoseFeatureRenderer;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.registries.AtlasesME;
 import net.jukoz.me.registries.CharacterClothesRegistryME;
 import net.jukoz.me.utils.ItemTagsME;

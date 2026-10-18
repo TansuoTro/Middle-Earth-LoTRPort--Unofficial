@@ -29,10 +29,7 @@ public class ChimneyBlock extends AbstractToggleableFireBlock {
         super(settings);
     }
 
-    @Override
-    protected MapCodec<? extends AbstractToggleableFireBlock> getCodec() {
-        return CODEC;
-    }
+
 
     protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return SHAPE;

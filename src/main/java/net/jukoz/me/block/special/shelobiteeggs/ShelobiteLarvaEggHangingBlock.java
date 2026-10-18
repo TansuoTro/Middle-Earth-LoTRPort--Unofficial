@@ -37,10 +37,7 @@ public class ShelobiteLarvaEggHangingBlock extends AbstractShelobiteLarvaEgg {
         this.setDefaultState(this.getDefaultState().with(BLOCK_HALF, BlockHalf.TOP));
     }
 
-    @Override
-    protected MapCodec<? extends Block> getCodec() {
-        return createCodec(ShelobiteLarvaEggHangingBlock::new);
-    }
+
 
     protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         return direction == Direction.UP && !this.canPlaceAt(state, world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);

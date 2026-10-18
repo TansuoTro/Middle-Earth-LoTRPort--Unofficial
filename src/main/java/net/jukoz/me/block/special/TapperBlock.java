@@ -47,10 +47,7 @@ public class TapperBlock extends HorizontalFacingBlock {
         return state.get(TAP_LEVEL);
     }
 
-    @Override
-    protected MapCodec<? extends HorizontalFacingBlock> getCodec() {
-        return null;
-    }
+
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {

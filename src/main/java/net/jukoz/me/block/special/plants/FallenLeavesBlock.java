@@ -22,10 +22,7 @@ public class FallenLeavesBlock extends PlantBlock {
         setDefaultState(getDefaultState().with(FACING, Direction.NORTH));
     }
 
-    @Override
-    protected MapCodec<? extends PlantBlock> getCodec() {
-        return FallenLeavesBlock.createCodec(FallenLeavesBlock::new);
-    }
+
 
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(Properties.HORIZONTAL_FACING);

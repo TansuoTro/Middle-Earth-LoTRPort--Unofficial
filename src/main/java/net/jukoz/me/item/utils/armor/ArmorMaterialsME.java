@@ -3,15 +3,10 @@ package net.jukoz.me.item.utils.armor;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.Item;
-import net.minecraft.item.equipment.ArmorMaterial;
-import net.minecraft.item.equipment.EquipmentAsset;
-import net.minecraft.item.equipment.EquipmentAssetKeys;
+import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.ArmorItem;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.sound.SoundEvent;
@@ -20,13 +15,13 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.function.ValueLists;
 import net.jukoz.me.MiddleEarth;
+import net.jukoz.me.compat.SimpleArmorMaterial;
 import net.jukoz.me.utils.ItemTagsME;
 
 import java.util.EnumMap;
 import java.util.function.IntFunction;
 
 public interface ArmorMaterialsME {
-    RegistryKey<? extends Registry<EquipmentAsset>> REGISTRY_KEY = RegistryKey.ofRegistry(new Identifier("minecraft", "equipment_asset"));
 
     ExtendedArmorMaterial STRAW_T1 = registerArmor("straw_t1", Tiers.BASIC, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, ItemTagsME.REPAIRS_STRAW_ARMOR);
     ExtendedArmorMaterial WOOD_T1 = registerArmor("wood_t1", Tiers.BASIC, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, ItemTags.PLANKS);
@@ -90,7 +85,7 @@ public interface ArmorMaterialsME {
     ExtendedArmorMaterial DALISH_HORSE_ARMOR = registerArmor("dalish_horse_armor", Tiers.HEAVY, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, ItemTagsME.REPAIRS_STEEL_ARMOR);
     ExtendedArmorMaterial LORIEN_HORSE_ARMOR = registerArmor("lorien_horse_armor", Tiers.HEAVY, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, ItemTagsME.REPAIRS_EDHEL_STEEL_ARMOR);
 
-    private static ExtendedArmorMaterial registerArmor(String name, Tiers tier, RegistryEntry<SoundEvent> equipSound, TagKey<Item> repairTag) {
+    private static ExtendedArmorMaterial registerArmor(String name, Tiers tier, SoundEvent equipSound, TagKey<Item> repairTag) {
         EnumMap<ArmorItem.Type, Integer> map = new EnumMap<>(ArmorItem.Type.class);
         float toughness;
         
@@ -177,10 +172,11 @@ public interface ArmorMaterialsME {
                                                   TagKey<Item> repairTag, Tiers tier) {
 
         EnumMap<ArmorItem.Type, Integer> enumMap = new EnumMap<>(ArmorItem.Type.class);
-        for (EquipmentType type : EquipmentType.values()) {
+        for (ArmorItem.Type type : ArmorItem.Type.values()) {
             enumMap.put(type, defense.get(type));
         }
-        ArmorMaterial material =  new ArmorMaterial(durabilityMultiplier, enumMap, enchantability, equipSound, toughness, knockbackResistance, repairTag, RegistryKey.of(REGISTRY_KEY, new Identifier(MiddleEarth.MOD_ID, name)));
+        ArmorMaterial material = new SimpleArmorMaterial(durabilityMultiplier, enumMap, enchantability,
+                equipSound, toughness, knockbackResistance, repairTag, name);
         return new ExtendedArmorMaterial(material, durabilityMultiplier, tier);
     }
 
@@ -199,7 +195,6 @@ public interface ArmorMaterialsME {
         private final int color;
 
         public static final Codec<Tiers> CODEC = StringIdentifiable.createBasicCodec(Tiers::values);
-        public static final PacketCodec<ByteBuf, Tiers> PACKET_CODEC = PacketCodecs.indexed(BY_ID, Tiers::getId);
 
         Tiers(int id, String name, int color){
             this.name = name;

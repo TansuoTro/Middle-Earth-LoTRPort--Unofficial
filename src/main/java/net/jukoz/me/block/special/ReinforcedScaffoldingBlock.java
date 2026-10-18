@@ -35,10 +35,7 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
         this.setDefaultState(this.stateManager.getDefaultState().with(SUPPORT_DISTANCE, 0));
     }
 
-    @Override
-    public MapCodec<ScaffoldingBlock> getCodec() {
-        return CODEC;
-    }
+
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {

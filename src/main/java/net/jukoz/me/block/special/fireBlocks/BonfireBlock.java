@@ -27,10 +27,7 @@ public class BonfireBlock extends AbstractToggleableFireBlock {
         super(settings);
     }
 
-    @Override
-    protected MapCodec<? extends AbstractToggleableFireBlock> getCodec() {
-        return null;
-    }
+
 
     protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return SHAPE;

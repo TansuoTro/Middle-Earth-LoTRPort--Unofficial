@@ -1,6 +1,7 @@
 package net.jukoz.me.block.special;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.Hand;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.ShapeContext;
@@ -32,7 +33,7 @@ public class DwarvenGroundBookBlock extends Block {
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if(!world.isClient && player.getAbilities().allowModifyWorld){
             world.setBlockState(pos, state.cycle(OPEN), 2 | 3);
         }

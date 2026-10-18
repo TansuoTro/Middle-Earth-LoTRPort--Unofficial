@@ -13,7 +13,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.jukoz.me.MiddleEarth;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.dataComponents.WeaponTypeDataComponent;
 import net.jukoz.me.item.utils.WeaponTypesME;
 import net.jukoz.me.item.utils.ItemSettingsME;

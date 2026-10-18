@@ -3,8 +3,8 @@ import net.jukoz.me.compat.METext;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.component.ComponentsAccess;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipAppender;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.network.RegistryByteBuf;
@@ -18,7 +18,7 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.exceptions.FactionIdentifierException;
 import net.jukoz.me.utils.ModColors;
 
-import java.util.function.Consumer;
+import java.util.List;
 
 public record SeasonDataComponent(Season season) implements TooltipAppender {
     private static final Codec<SeasonDataComponent> BASE_CODEC = RecordCodecBuilder.create((instance) -> {
@@ -31,14 +31,14 @@ public record SeasonDataComponent(Season season) implements TooltipAppender {
             PacketCodec.tuple(Season.PACKET_CODEC, SeasonDataComponent::season, SeasonDataComponent::new);
 
     @Override
-    public void appendTooltip(Item.TooltipContext context, Consumer<Text> textConsumer, TooltipType type, ComponentsAccess components) {
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         try{
             Identifier identifier = context.getRegistryLookup().getOrThrow(RegistryKeys.BIOME).getKey().getRegistry();
-            textConsumer.accept(Text.translatable("tooltip.%s.season".formatted(MiddleEarth.MOD_ID)).formatted(Formatting.GOLD)
+            tooltip.add(Text.translatable("tooltip.%s.season".formatted(MiddleEarth.MOD_ID)).formatted(Formatting.GOLD)
                     .append(Text.translatable("season.%s.".formatted(MiddleEarth.MOD_ID) + season.toString()).formatted(Formatting.WHITE)));
 
         } catch (Exception e){
-            textConsumer.accept(METext.withColor(Text.translatable(FactionIdentifierException.KEY, this.season),
+            tooltip.add(METext.withColor(Text.translatable(FactionIdentifierException.KEY, this.season),
                     ModColors.ALERT.color));
         }
     }

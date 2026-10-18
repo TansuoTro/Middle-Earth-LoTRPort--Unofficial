@@ -16,10 +16,7 @@ public class ArkenstoneWallBlock extends HorizontalFacingBlock {
         this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH));
     }
 
-    @Override
-    protected MapCodec<? extends HorizontalFacingBlock> getCodec() {
-        return ArkenstoneWallBlock.createCodec(ArkenstoneWallBlock::new);
-    }
+
 
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         return (BlockState)((BlockState)this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing()));

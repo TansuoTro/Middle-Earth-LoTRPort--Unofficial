@@ -1,10 +1,10 @@
 package net.jukoz.me.block.special.forge;
 
 import net.jukoz.me.item.MEComponents;
+import net.minecraft.util.Hand;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.server.world.ServerWorld;
 import net.jukoz.me.block.registration.ModBlockEntities;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.dataComponents.TemperatureDataComponent;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -44,10 +44,7 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
         this.setDefaultState(((this.stateManager.getDefaultState()).with(FACING, Direction.NORTH)).with(LIT, false).with(PART, ForgePart.BOTTOM));
     }
 
-    @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return createCodec(ForgeBlock::new);
-    }
+
 
     @Override
     public BlockRenderType getRenderType(BlockState state) {
@@ -134,7 +131,7 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.isClient) {
             return ActionResult.SUCCESS;
         } else {

@@ -1,6 +1,7 @@
 package net.jukoz.me.block.special;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.Hand;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -19,7 +20,7 @@ public class OrcishDrumBlock extends Block {
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.getBlockState(pos.up()).isAir()) {
             Random random = world.getRandom();
             world.addSyncedBlockEvent(pos, this, 0, 0);
@@ -28,6 +29,6 @@ public class OrcishDrumBlock extends Block {
             return ActionResult.SUCCESS;
         }
 
-        return super.onUse(state, world, pos, player, hit);
+        return super.onUse(state, world, pos, player, hand, hit);
     }
 }

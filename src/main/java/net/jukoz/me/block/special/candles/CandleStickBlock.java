@@ -1,6 +1,7 @@
 package net.jukoz.me.block.special.candles;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.minecraft.util.Hand;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.block.*;
 import net.minecraft.entity.ai.pathing.NavigationType;
@@ -98,7 +99,7 @@ public class CandleStickBlock extends Block {
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         Hand hand = player.getActiveHand();
         if (!world.isClient && player.getAbilities().allowModifyWorld) {
             ItemStack itemStack = player.getStackInHand(hand);

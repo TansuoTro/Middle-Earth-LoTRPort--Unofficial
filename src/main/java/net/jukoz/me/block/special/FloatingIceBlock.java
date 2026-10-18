@@ -28,9 +28,7 @@ public class FloatingIceBlock extends Block {
         super(settings);
     }
 
-    public MapCodec<FloatingIceBlock> getCodec() {
-        return CODEC;
-    }
+
 
     @Override
     protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler) {

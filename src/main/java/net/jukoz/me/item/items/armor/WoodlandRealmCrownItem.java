@@ -17,7 +17,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
 import net.jukoz.me.MiddleEarth;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.dataComponents.CooldownDataComponent;
 import net.jukoz.me.item.dataComponents.SeasonDataComponent;
 import net.jukoz.me.item.utils.armor.ExtendedArmorMaterial;

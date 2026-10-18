@@ -17,7 +17,6 @@ import net.jukoz.me.block.registration.ModBlockEntities;
 import net.jukoz.me.block.special.forge.MetalTypes;
 import net.jukoz.me.enchantments.EnchantmentsME;
 import net.jukoz.me.gui.shapinganvil.ShapingAnvilScreenHandler;
-import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.ResourceItemsME;
 import net.jukoz.me.item.dataComponents.TemperatureDataComponent;
 import net.jukoz.me.particles.ModParticleTypes;

@@ -1,5 +1,6 @@
 package net.jukoz.me.block.special.structureManager.nest;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.util.Hand;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
@@ -35,13 +36,10 @@ public class StructureNestBlock extends BlockWithEntity implements BlockEntityPr
         setDefaultState(getDefaultState().with(ENABLED, false));
     }
 
-    @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return createCodec(StructureNestBlock::new);
-    }
+
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.isClient) {
             return ActionResult.SUCCESS;
         } else {

@@ -1,6 +1,7 @@
 package net.jukoz.me.block.special;
 
 import com.mojang.serialization.MapCodec;
+import net.minecraft.util.Hand;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
@@ -32,13 +33,10 @@ public class RocksBlock extends HorizontalFacingBlock implements Waterloggable {
         this.setDefaultState((this.stateManager.getDefaultState()).with(FACING, Direction.NORTH).with(STAGE, 0).with(WATERLOGGED, false));
     }
 
-    @Override
-    protected MapCodec<? extends HorizontalFacingBlock> getCodec() {
-        return RocksBlock.createCodec(RocksBlock::new);
-    }
+
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient && player.getAbilities().allowModifyWorld) {
             if (player.getMainHandStack().isOf(this.asItem()) && state.get(STAGE) < 3){
                 world.setBlockState(pos, state.cycle(STAGE));
