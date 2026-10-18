@@ -2,7 +2,6 @@ package net.jukoz.me.block.special.pointedBlocks;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.world.tick.ScheduledTickView;
 import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.block.registration.StoneBlockSets;
 import net.minecraft.block.*;
@@ -74,22 +73,22 @@ public class PointedIzherabanBlock extends Block implements Falling, Waterloggab
         return canPlaceAtWithDirection(world, pos, (Direction)state.get(VERTICAL_DIRECTION));
     }
 
-    protected BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
+    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         if ((Boolean)state.get(WATERLOGGED)) {
-            tickView.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+            world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
 
         if (direction != Direction.UP && direction != Direction.DOWN) {
             return state;
         } else {
             Direction direction2 = (Direction)state.get(VERTICAL_DIRECTION);
-            if (direction2 == Direction.DOWN && tickView.getBlockTickScheduler().isQueued(pos, this)) {
+            if (direction2 == Direction.DOWN && world.getBlockTickScheduler().isQueued(pos, this)) {
                 return state;
             } else if (direction == direction2.getOpposite() && !this.canPlaceAt(state, world, pos)) {
                 if (direction2 == Direction.DOWN) {
-                    tickView.scheduleBlockTick(pos, this, 2);
+                    world.scheduleBlockTick(pos, this, 2);
                 } else {
-                    tickView.scheduleBlockTick(pos, this, 1);
+                    world.scheduleBlockTick(pos, this, 1);
                 }
 
                 return state;

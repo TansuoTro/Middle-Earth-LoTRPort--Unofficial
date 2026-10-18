@@ -1,4 +1,5 @@
 package net.jukoz.me.block.special;
+import net.minecraft.world.WorldAccess;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.Block;
@@ -22,7 +23,6 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
-import net.minecraft.world.tick.ScheduledTickView;
 
 public class DroopingIciclesBlock extends Block {
     public static final MapCodec<DroopingIciclesBlock> CODEC = createCodec(DroopingIciclesBlock::new);
@@ -50,7 +50,7 @@ public class DroopingIciclesBlock extends Block {
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
+    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         DoubleBlockHalf doubleBlockHalf = state.get(HALF);
         BlockState upState = world.getBlockState(pos.up());
 
@@ -59,7 +59,7 @@ public class DroopingIciclesBlock extends Block {
         } else if (doubleBlockHalf == DoubleBlockHalf.UPPER && world.getBlockState(pos.down()).isAir()){
             return state.with(HALF, DoubleBlockHalf.LOWER);
         } else {
-            return super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
+            return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
         }
     }
 

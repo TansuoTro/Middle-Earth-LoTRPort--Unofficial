@@ -1,4 +1,5 @@
 package net.jukoz.me.block.special.skull;
+import net.minecraft.world.WorldAccess;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
@@ -17,7 +18,6 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.WorldView;
-import net.minecraft.world.tick.ScheduledTickView;
 import net.jukoz.me.block.special.bellows.BellowsBlock;
 import net.jukoz.me.block.special.bellows.BellowsBlockEntity;
 import org.jetbrains.annotations.Nullable;
@@ -53,9 +53,9 @@ public class OldSkullBlock extends BlockWithEntity {
         return super.getPlacementState(ctx).with(ROTATION, RotationPropertyHelper.fromYaw(ctx.getPlayerYaw()));
     }
 
-    protected BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
+    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         return direction == Direction.DOWN && !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() :
-                super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
+                super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
     @Override

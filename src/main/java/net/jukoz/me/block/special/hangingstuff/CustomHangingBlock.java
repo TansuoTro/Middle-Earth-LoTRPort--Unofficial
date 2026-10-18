@@ -10,7 +10,6 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
-import net.minecraft.world.tick.ScheduledTickView;
 
 public class CustomHangingBlock extends HangingMossBlock {
 
@@ -29,9 +28,9 @@ public class CustomHangingBlock extends HangingMossBlock {
         return MultifaceBlock.canGrowOn(world, Direction.UP, blockPos, blockState) || blockState.isOf(this);
     }
 
-    protected BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
+    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         if (!this.canPlaceAt(world, pos)) {
-            tickView.scheduleBlockTick(pos, this, 1);
+            world.scheduleBlockTick(pos, this, 1);
         }
 
         return (BlockState)state.with(TIP, !world.getBlockState(pos.down()).isOf(this));

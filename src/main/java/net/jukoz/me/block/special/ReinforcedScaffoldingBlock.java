@@ -19,7 +19,6 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
-import net.minecraft.world.tick.ScheduledTickView;
 import net.jukoz.me.item.DecorativeItemsME;
 import java.util.ArrayDeque;
 import java.util.HashMap;
@@ -59,13 +58,13 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
+    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         if (state.get(WATERLOGGED)) {
-            tickView.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+            world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
 
         if (!world.isClient()) {
-            tickView.scheduleBlockTick(pos, this, 1);
+            world.scheduleBlockTick(pos, this, 1);
         }
 
         return state;

@@ -1,5 +1,6 @@
 
 package net.jukoz.me.block.special.shelobiteeggs;
+import net.minecraft.world.WorldAccess;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -23,7 +24,6 @@ import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.event.GameEvent;
-import net.minecraft.world.tick.ScheduledTickView;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.spider.larva.ShelobiteLarvaEntity;
 import org.jetbrains.annotations.Nullable;
@@ -54,8 +54,8 @@ public class ShelobiteLarvaEggBlock extends AbstractShelobiteLarvaEgg {
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, net.minecraft.util.math.random.Random random) {
-        return !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
+    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+        return !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
     @Override

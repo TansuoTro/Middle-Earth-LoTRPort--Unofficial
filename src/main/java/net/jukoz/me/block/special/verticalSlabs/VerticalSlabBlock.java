@@ -1,4 +1,5 @@
 package net.jukoz.me.block.special.verticalSlabs;
+import net.minecraft.world.WorldAccess;
 
 import net.minecraft.block.*;
 import net.minecraft.entity.ai.pathing.NavigationType;
@@ -20,7 +21,6 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.WorldView;
-import net.minecraft.world.tick.ScheduledTickView;
 import org.jetbrains.annotations.Nullable;
 
 public class VerticalSlabBlock extends Block implements Waterloggable {
@@ -63,12 +63,12 @@ public class VerticalSlabBlock extends Block implements Waterloggable {
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
+    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         if (state.get(WATERLOGGED)) {
-            tickView.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+            world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
 
-        return direction.getAxis().isHorizontal() ? (BlockState)state.with(SHAPE, getVerticalSlabShape(state, world, pos)) : super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
+        return direction.getAxis().isHorizontal() ? (BlockState)state.with(SHAPE, getVerticalSlabShape(state, world, pos)) : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 
     }
 

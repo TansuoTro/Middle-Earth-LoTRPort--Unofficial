@@ -25,7 +25,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.event.GameEvent;
-import net.minecraft.world.tick.ScheduledTickView;
 
 public class LayeredCakeBlock extends Block {
     public static final MapCodec<net.minecraft.block.CakeBlock> CODEC = createCodec(net.minecraft.block.CakeBlock::new);
@@ -98,8 +97,8 @@ public class LayeredCakeBlock extends Block {
         }
     }
 
-    protected BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
-        return direction == Direction.DOWN && !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
+    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+        return direction == Direction.DOWN && !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
     protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {

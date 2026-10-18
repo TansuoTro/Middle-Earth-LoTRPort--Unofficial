@@ -1,4 +1,5 @@
 package net.jukoz.me.block.special;
+import net.minecraft.world.WorldAccess;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.Block;
@@ -24,7 +25,6 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
-import net.minecraft.world.tick.ScheduledTickView;
 
 public class SpikesBlock extends Block {
     public static final MapCodec<SpikesBlock> CODEC = createCodec(SpikesBlock::new);
@@ -50,7 +50,7 @@ public class SpikesBlock extends Block {
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
+    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         DoubleBlockHalf doubleBlockHalf = state.get(HALF);
         BlockState downState = world.getBlockState(pos.down());
 
@@ -59,7 +59,7 @@ public class SpikesBlock extends Block {
         } else if (doubleBlockHalf == DoubleBlockHalf.LOWER && world.getBlockState(pos.up()).isAir()){
             return state.with(HALF, DoubleBlockHalf.UPPER);
         } else {
-            return super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
+            return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
         }
     }
 
