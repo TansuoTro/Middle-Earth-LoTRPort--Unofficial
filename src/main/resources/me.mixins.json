@@ -1,0 +1,34 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.jukoz.me.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "BannerPatternRegisterMixin",
+    "ChunkRegionMixin",
+    "EntityDataSaverMixin",
+    "EntitySpawnMixin",
+    "FoliagePlacerTypeInvoker",
+    "PigEntityMixin",
+    "PlayerEntityMixin",
+    "PlayerMixin",
+    "ServerWorldMixin",
+    "ShearItemMixin",
+    "SwordItemMixin",
+    "TrunkPlacerTypeInvoker"
+  ],
+  "client": [
+    "IntegratedServerLoaderMixin",
+    "client.AbstractClientPlayerEntityMixin",
+    "client.ClientPlayerInteractionManagerMixin",
+    "client.GameRendererMixin",
+    "client.InGameHudMixin",
+    "client.ItemRendererMixin",
+    "client.MouseMixin"
+  ],
+  "server": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
