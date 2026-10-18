@@ -9,9 +9,9 @@ import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.registry.RegistryKeys;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.network.PacketByteBuf;
+import net.jukoz.me.compat.net.PacketCodec;
+import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.recipe.input.SingleStackRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.World;
@@ -100,7 +100,7 @@ public class AnvilShapingRecipe implements Recipe<SingleStackRecipeInput> {
         public static final Serializer INSTANCE = new Serializer();
         public static final String ID = "anvil_shaping";
         private final MapCodec<AnvilShapingRecipe> codec;
-        private final PacketCodec<RegistryByteBuf, AnvilShapingRecipe> packetCodec;
+        private final PacketCodec<PacketByteBuf, AnvilShapingRecipe> packetCodec;
 
         protected Serializer() {
             this.codec = RecordCodecBuilder.mapCodec((instance) -> instance.group(
@@ -118,18 +118,18 @@ public class AnvilShapingRecipe implements Recipe<SingleStackRecipeInput> {
         }
 
         @Override
-        public PacketCodec<RegistryByteBuf, AnvilShapingRecipe> packetCodec() {
+        public PacketCodec<PacketByteBuf, AnvilShapingRecipe> packetCodec() {
             return this.packetCodec;
         }
 
-        private static AnvilShapingRecipe read(RegistryByteBuf buf) {
+        private static AnvilShapingRecipe read(PacketByteBuf buf) {
             Ingredient input = Ingredient.PACKET_CODEC.decode(buf);
             ItemStack output = ItemStack.PACKET_CODEC.decode(buf);
             int amount = PacketCodecs.INTEGER.decode(buf);
             return new AnvilShapingRecipe(input,output, amount);
         }
 
-        private static void write(RegistryByteBuf buf, AnvilShapingRecipe recipe) {
+        private static void write(PacketByteBuf buf, AnvilShapingRecipe recipe) {
             Ingredient.PACKET_CODEC.encode(buf, recipe.input);
             ItemStack.PACKET_CODEC.encode(buf, recipe.output);
             PacketCodecs.INTEGER.encode(buf, recipe.amount);

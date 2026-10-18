@@ -6,9 +6,9 @@ import net.minecraft.entity.VariantSelectorProvider;
 import net.minecraft.entity.spawn.SpawnCondition;
 import net.minecraft.entity.spawn.SpawnConditionSelectors;
 import net.minecraft.entity.spawn.SpawnContext;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.network.PacketByteBuf;
+import net.jukoz.me.compat.net.PacketCodec;
+import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.util.AssetInfo;
@@ -27,7 +27,7 @@ public record GreatHornVariant(GreatHornAssetInfo assetInfo, SpawnConditionSelec
 
 	public static final Codec<RegistryEntry<GreatHornVariant>> ENTRY_CODEC = RegistryFixedCodec.of(DynamicRegistriesME.GREAT_HORN_VARIANTS);
 
-	public static final PacketCodec<RegistryByteBuf, RegistryEntry<GreatHornVariant>> PACKET_CODEC = PacketCodecs.registryEntry(DynamicRegistriesME.GREAT_HORN_VARIANTS);
+	public static final PacketCodec<PacketByteBuf, RegistryEntry<GreatHornVariant>> PACKET_CODEC = PacketCodecs.registryEntry(DynamicRegistriesME.GREAT_HORN_VARIANTS);
 
 	private GreatHornVariant(GreatHornAssetInfo assetInfo) {
 		this(assetInfo, SpawnConditionSelectors.EMPTY);

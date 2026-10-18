@@ -2,9 +2,9 @@ package net.jukoz.me.resources.datas.texture_presets;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.network.PacketByteBuf;
+import net.jukoz.me.compat.net.PacketCodec;
+import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.registry.entry.RegistryElementCodec;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
@@ -21,9 +21,9 @@ public class CharacterTexturePattern {
             Codec.BOOL.optionalFieldOf("has_addon").forGetter(CharacterTexturePattern::hasAddonOptional))
             .apply(instance, CharacterTexturePattern::new));
 
-    public static final PacketCodec<RegistryByteBuf, CharacterTexturePattern> PACKET_CODEC;
+    public static final PacketCodec<PacketByteBuf, CharacterTexturePattern> PACKET_CODEC;
     public static final Codec<RegistryEntry<CharacterTexturePattern>> ENTRY_CODEC;
-    public static final PacketCodec<RegistryByteBuf, RegistryEntry<CharacterTexturePattern>> ENTRY_PACKET_CODEC;
+    public static final PacketCodec<PacketByteBuf, RegistryEntry<CharacterTexturePattern>> ENTRY_PACKET_CODEC;
 
     private final Identifier assetId;
     private final CharacterPatternTypes patternType;

@@ -97,8 +97,28 @@ public final class MEComponents {
         ITEM_DEFAULTS.clear();
     }
 
+    /** Every registered component, in declaration order; used when building tooltips. */
+    private static final java.util.List<MEComponent<?>> ALL = new java.util.ArrayList<>();
+
     private static <T> MEComponent<T> register(String path, Codec<T> codec) {
-        return new MEComponent<>(new Identifier(MiddleEarth.MOD_ID, path), codec);
+        MEComponent<T> component = new MEComponent<>(new Identifier(MiddleEarth.MOD_ID, path), codec);
+        ALL.add(component);
+        return component;
+    }
+
+    /**
+     * Appends the tooltip lines of every component on the stack that knows how to draw itself.
+     * Called from {@code client.ItemStackTooltipMixin}; 1.21 gets this for free from the
+     * component registry.
+     */
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static void appendTooltips(ItemStack stack, Item.TooltipContext context, java.util.List<net.minecraft.text.Text> tooltip) {
+        for (MEComponent<?> key : ALL) {
+            Object value = get(stack, (MEComponent) key);
+            if (value instanceof net.jukoz.me.compat.TooltipAppender appender) {
+                appender.appendTooltip(stack, context, tooltip);
+            }
+        }
     }
 
     // ------------------------------------------------------------------

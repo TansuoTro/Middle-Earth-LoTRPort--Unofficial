@@ -8,9 +8,9 @@ import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.network.PacketByteBuf;
+import net.jukoz.me.compat.net.PacketCodec;
+import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.recipe.*;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.recipe.book.RecipeBookCategory;
@@ -93,7 +93,7 @@ public class InscriptionRecipe implements Recipe<SingleStackRecipeInput> {
         public static final Serializer INSTANCE = new Serializer();
         public static final String ID = "inscription_table";
         private final MapCodec<InscriptionRecipe> codec;
-        private final PacketCodec<RegistryByteBuf, InscriptionRecipe> packetCodec;
+        private final PacketCodec<PacketByteBuf, InscriptionRecipe> packetCodec;
 
         protected Serializer() {
             this.codec = RecordCodecBuilder.mapCodec((instance) -> instance.group(
@@ -112,11 +112,11 @@ public class InscriptionRecipe implements Recipe<SingleStackRecipeInput> {
         }
 
         @Override
-        public PacketCodec<RegistryByteBuf, InscriptionRecipe> packetCodec() {
+        public PacketCodec<PacketByteBuf, InscriptionRecipe> packetCodec() {
             return this.packetCodec;
         }
 
-        private static InscriptionRecipe read(RegistryByteBuf buf) {
+        private static InscriptionRecipe read(PacketByteBuf buf) {
             RegistryEntry<Enchantment> enchantment = Enchantment.ENTRY_PACKET_CODEC.decode(buf);
             int level = PacketCodecs.INTEGER.decode(buf);
 
@@ -131,7 +131,7 @@ public class InscriptionRecipe implements Recipe<SingleStackRecipeInput> {
             return new InscriptionRecipe(enchantment, level, defaultedList, chisel, levelCost);
         }
 
-        private static void write(RegistryByteBuf buf, InscriptionRecipe recipe) {
+        private static void write(PacketByteBuf buf, InscriptionRecipe recipe) {
             Enchantment.ENTRY_PACKET_CODEC.encode(buf, recipe.enchant);
             buf.writeVarInt(buf.readVarInt());
 

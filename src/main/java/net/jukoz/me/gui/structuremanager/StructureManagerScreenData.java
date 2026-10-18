@@ -1,8 +1,8 @@
 package net.jukoz.me.gui.structuremanager;
 
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.network.PacketByteBuf;
+import net.jukoz.me.compat.net.PacketCodec;
+import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
@@ -14,7 +14,7 @@ public class StructureManagerScreenData{
     private boolean isActive;
     private boolean toInitialize;
 
-    public static final PacketCodec<? super RegistryByteBuf, StructureManagerScreenData> PACKET_CODEC;
+    public static final PacketCodec<? super PacketByteBuf, StructureManagerScreenData> PACKET_CODEC;
 
     public BlockPos getPos() {
         return this.pos;

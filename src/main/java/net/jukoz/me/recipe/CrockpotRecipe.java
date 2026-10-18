@@ -4,9 +4,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.network.PacketByteBuf;
+import net.jukoz.me.compat.net.PacketCodec;
+import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.recipe.*;
 import net.minecraft.recipe.book.RecipeBookCategories;
 import net.minecraft.recipe.book.RecipeBookCategory;
@@ -97,7 +97,7 @@ public class CrockpotRecipe implements Recipe<MultipleStackRecipeInput> {
         public static final Serializer INSTANCE = new Serializer();
         public static final String ID = "crockpot";
         private final MapCodec<CrockpotRecipe> codec;
-        private final PacketCodec<RegistryByteBuf, CrockpotRecipe> packetCodec;
+        private final PacketCodec<PacketByteBuf, CrockpotRecipe> packetCodec;
 
         protected Serializer() {
             this.codec = RecordCodecBuilder.mapCodec((instance) -> instance.group(
@@ -115,11 +115,11 @@ public class CrockpotRecipe implements Recipe<MultipleStackRecipeInput> {
         }
 
         @Override
-        public PacketCodec<RegistryByteBuf, CrockpotRecipe> packetCodec() {
+        public PacketCodec<PacketByteBuf, CrockpotRecipe> packetCodec() {
             return this.packetCodec;
         }
 
-        private static CrockpotRecipe read(RegistryByteBuf buf) {
+        private static CrockpotRecipe read(PacketByteBuf buf) {
             int ingredientsAmount = buf.readVarInt();
             DefaultedList<Ingredient> ingredients = DefaultedList.ofSize(ingredientsAmount);
             ingredients.replaceAll(empty -> Ingredient.PACKET_CODEC.decode(buf));
@@ -127,7 +127,7 @@ public class CrockpotRecipe implements Recipe<MultipleStackRecipeInput> {
             return new CrockpotRecipe(ingredientsAmount, ingredients, output);
         }
 
-        private static void write(RegistryByteBuf buf, CrockpotRecipe recipe) {
+        private static void write(PacketByteBuf buf, CrockpotRecipe recipe) {
             PacketCodecs.INTEGER.encode(buf, recipe.ingredientsAmount);
             buf.writeVarInt(recipe.inputs.size());
             for (Ingredient ingredient : recipe.inputs) {

@@ -9,9 +9,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.network.PacketByteBuf;
+import net.jukoz.me.compat.net.PacketCodec;
+import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryWrapper;
@@ -63,7 +63,7 @@ public class Faction {
 
     public static final PacketCodec<ByteBuf, Faction> PACKET_CODEC = PacketCodecs.codec(CODEC);
     public static final Codec<RegistryEntry<Faction>> ENTRY_CODEC = RegistryElementCodec.of(DynamicRegistriesME.FACTION, CODEC);
-    public static final PacketCodec<RegistryByteBuf, RegistryEntry<Faction>> ENTRY_PACKET_CODEC = PacketCodecs.registryEntry(DynamicRegistriesME.FACTION, PACKET_CODEC);
+    public static final PacketCodec<PacketByteBuf, RegistryEntry<Faction>> ENTRY_PACKET_CODEC = PacketCodecs.registryEntry(DynamicRegistriesME.FACTION, PACKET_CODEC);
 
     private final Identifier id;
     private final Integer factionSelectionOrderIndex;

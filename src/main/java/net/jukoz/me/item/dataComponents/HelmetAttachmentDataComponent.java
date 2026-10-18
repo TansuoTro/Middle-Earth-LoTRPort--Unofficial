@@ -6,16 +6,15 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.jukoz.me.compat.DyedColorComponent;
 import net.minecraft.item.Item;
-import net.minecraft.item.tooltip.TooltipAppender;
-import net.minecraft.item.tooltip.TooltipType;
+import net.jukoz.me.compat.TooltipAppender;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.item.utils.armor.DyeablePiecesME;
 import net.jukoz.me.item.utils.armor.helmetAttachments.HelmetAttachmentsME;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
+import net.jukoz.me.compat.net.PacketCodec;
+import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.util.math.ColorHelper;
 
 import java.util.List;
@@ -85,7 +84,7 @@ public record HelmetAttachmentDataComponent(boolean down, HelmetAttachmentsME he
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip) {
         tooltip.add(Text.translatable("tooltip.%s.%s".formatted(MiddleEarth.MOD_ID, this.helmetAttachment().getName())).formatted(Formatting.GRAY));
     }
 }

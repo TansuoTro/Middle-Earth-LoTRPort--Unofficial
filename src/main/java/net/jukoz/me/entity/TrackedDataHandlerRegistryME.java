@@ -1,8 +1,9 @@
 package net.jukoz.me.entity;
 
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricTrackedDataRegistry;
+import net.jukoz.me.compat.net.TrackedDataHandlerME;
 import net.minecraft.entity.data.TrackedDataHandler;
-import net.minecraft.network.codec.PacketCodecs;
+import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -45,15 +46,15 @@ public class TrackedDataHandlerRegistryME {
     }
 
     static {
-        NPC_INITIALIZATION_DATA = TrackedDataHandler.create(NpcInitializationData.PACKET_CODEC);
-        NPC_DATA = TrackedDataHandler.create(NpcData.PACKET_CODEC);
-        INITIALIZATION_TICK = TrackedDataHandler.create(PacketCodecs.LONG);
-        FACTION_ID = TrackedDataHandler.create(PacketCodecs.STRING);
-        NPC_DATA_ID = TrackedDataHandler.create(PacketCodecs.STRING);
-        CATEGORY = TrackedDataHandler.create(PacketCodecs.STRING);
-        NPC_TEXTURE_DATA = TrackedDataHandler.create(NpcTextureData.PACKET_CODEC);
-        STRUCTURE_MANAGER_HOST_POS = TrackedDataHandler.create(BlockPos.PACKET_CODEC);
-        SPIDER_VARIANT = TrackedDataHandler.create(SpiderVariant.PACKET_CODEC);
-        GREAT_HORN_VARIANT = TrackedDataHandler.create(GreatHornVariant.PACKET_CODEC);
+        NPC_INITIALIZATION_DATA = TrackedDataHandlerME.create(NpcInitializationData.PACKET_CODEC);
+        NPC_DATA = TrackedDataHandlerME.create(NpcData.PACKET_CODEC);
+        INITIALIZATION_TICK = TrackedDataHandlerME.create(PacketCodecs.LONG);
+        FACTION_ID = TrackedDataHandlerME.create(PacketCodecs.STRING);
+        NPC_DATA_ID = TrackedDataHandlerME.create(PacketCodecs.STRING);
+        CATEGORY = TrackedDataHandlerME.create(PacketCodecs.STRING);
+        NPC_TEXTURE_DATA = TrackedDataHandlerME.create(NpcTextureData.PACKET_CODEC);
+        STRUCTURE_MANAGER_HOST_POS = TrackedDataHandlerME.create(BlockPos.PACKET_CODEC);
+        SPIDER_VARIANT = TrackedDataHandlerME.create(SpiderVariant.PACKET_CODEC);
+        GREAT_HORN_VARIANT = TrackedDataHandlerME.create(GreatHornVariant.PACKET_CODEC);
     }
 }

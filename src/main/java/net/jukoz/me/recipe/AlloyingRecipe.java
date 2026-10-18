@@ -8,9 +8,9 @@ import net.minecraft.recipe.book.RecipeBookCategories;
 import net.minecraft.recipe.book.RecipeBookCategory;
 import net.jukoz.me.block.special.forge.MultipleStackRecipeInput;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.network.PacketByteBuf;
+import net.jukoz.me.compat.net.PacketCodec;
+import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.collection.DefaultedList;
@@ -128,7 +128,7 @@ public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
         public static final Serializer INSTANCE = new Serializer();
         public static final String ID = "alloying";
         private final MapCodec<AlloyingRecipe> codec;
-        private final PacketCodec<RegistryByteBuf, AlloyingRecipe> packetCodec;
+        private final PacketCodec<PacketByteBuf, AlloyingRecipe> packetCodec;
 
         protected Serializer() {
             this.codec = RecordCodecBuilder.mapCodec((instance) -> instance.group(
@@ -149,11 +149,11 @@ public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
         }
 
         @Override
-        public PacketCodec<RegistryByteBuf, AlloyingRecipe> packetCodec() {
+        public PacketCodec<PacketByteBuf, AlloyingRecipe> packetCodec() {
             return this.packetCodec;
         }
 
-        private static AlloyingRecipe read(RegistryByteBuf buf) {
+        private static AlloyingRecipe read(PacketByteBuf buf) {
             String string = buf.readString();
             CraftingRecipeCategory craftingRecipeCategory = (CraftingRecipeCategory)buf.readEnumConstant(CraftingRecipeCategory.class);
             String output = PacketCodecs.STRING.decode(buf);
@@ -165,7 +165,7 @@ public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
             return new AlloyingRecipe(string, craftingRecipeCategory, output, defaultedList, amount, xp);
         }
 
-        private static void write(RegistryByteBuf buf, AlloyingRecipe recipe) {
+        private static void write(PacketByteBuf buf, AlloyingRecipe recipe) {
             buf.writeString(recipe.group);
             buf.writeEnumConstant(recipe.category);
             PacketCodecs.STRING.encode(buf, recipe.output);

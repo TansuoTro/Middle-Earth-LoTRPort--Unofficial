@@ -5,10 +5,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipAppender;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
+import net.jukoz.me.compat.TooltipAppender;
+import net.minecraft.network.PacketByteBuf;
+import net.jukoz.me.compat.net.PacketCodec;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -27,11 +26,11 @@ public record SeasonDataComponent(Season season) implements TooltipAppender {
     });
     public static final Codec<SeasonDataComponent> CODEC = Codec.withAlternative(BASE_CODEC, Season.CODEC, SeasonDataComponent::new);
 
-    public static final PacketCodec<RegistryByteBuf, SeasonDataComponent> PACKET_CODEC =
+    public static final PacketCodec<PacketByteBuf, SeasonDataComponent> PACKET_CODEC =
             PacketCodec.tuple(Season.PACKET_CODEC, SeasonDataComponent::season, SeasonDataComponent::new);
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip) {
         try{
             Identifier identifier = context.getRegistryLookup().getOrThrow(RegistryKeys.BIOME).getKey().getRegistry();
             tooltip.add(Text.translatable("tooltip.%s.season".formatted(MiddleEarth.MOD_ID)).formatted(Formatting.GOLD)
@@ -55,7 +54,7 @@ public record SeasonDataComponent(Season season) implements TooltipAppender {
         DEAD("dead");
 
         public static final Codec<Season> CODEC = StringIdentifiable.createCodec(Season::values);
-        public static final PacketCodec<RegistryByteBuf, Season> PACKET_CODEC =
+        public static final PacketCodec<PacketByteBuf, Season> PACKET_CODEC =
                 PacketCodec.ofStatic(Season::writeToBuf, Season::readFromBuf);
         private final String name;
 
@@ -63,11 +62,11 @@ public record SeasonDataComponent(Season season) implements TooltipAppender {
             this.name = name;
         }
 
-        private static void writeToBuf(RegistryByteBuf buf, Season value) {
+        private static void writeToBuf(PacketByteBuf buf, Season value) {
             buf.writeEnumConstant(value);
         }
 
-        private static Season readFromBuf(RegistryByteBuf buf) {
+        private static Season readFromBuf(PacketByteBuf buf) {
             return buf.readEnumConstant(Season.class);
         }
 

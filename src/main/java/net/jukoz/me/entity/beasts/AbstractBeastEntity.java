@@ -600,7 +600,7 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
 
     // endregion
 
-    protected void setChildAttribute(PassiveEntity other, AbstractHorseEntity child, RegistryEntry<EntityAttribute> attribute, double min, double max) {
+    protected void setChildAttribute(PassiveEntity other, AbstractHorseEntity child, EntityAttribute attribute, double min, double max) {
         double d = this.calculateAttributeBaseValue(this.getAttributeBaseValue(attribute), other.getAttributeBaseValue(attribute), min, max, this.random);
         child.getAttributeInstance(attribute).setBaseValue(d);
     }

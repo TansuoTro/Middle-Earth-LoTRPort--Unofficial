@@ -4,9 +4,9 @@ import net.jukoz.me.compat.NbtCompat;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.network.PacketByteBuf;
+import net.jukoz.me.compat.net.PacketCodec;
+import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.util.Identifier;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.npcs.renderer.NpcRenderedPart;
@@ -43,7 +43,7 @@ public class NpcTextureData {
         NbtCompound.CODEC.fieldOf("simplified").forGetter(NpcTextureData::writeSimplified)
     ).apply(instance, NpcTextureData::new));
 
-    public static final PacketCodec<RegistryByteBuf, NpcTextureData> PACKET_CODEC;
+    public static final PacketCodec<PacketByteBuf, NpcTextureData> PACKET_CODEC;
 
     public NpcTextureData(NbtCompound dynamic, NbtCompound simplified)
     {

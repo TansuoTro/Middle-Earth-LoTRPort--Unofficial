@@ -2,9 +2,9 @@ package net.jukoz.me.resources.datas.texture_presets;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.network.PacketByteBuf;
+import net.jukoz.me.compat.net.PacketCodec;
+import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.registry.entry.RegistryElementCodec;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
@@ -13,9 +13,9 @@ import net.jukoz.me.resources.datas.common.CharacterMaterialTypes;
 
 public class CharacterTextureMaterial {
 
-    public static final PacketCodec<RegistryByteBuf, CharacterTextureMaterial> PACKET_CODEC;
+    public static final PacketCodec<PacketByteBuf, CharacterTextureMaterial> PACKET_CODEC;
     public static final Codec<RegistryEntry<CharacterTextureMaterial>> ENTRY_CODEC;
-    public static final PacketCodec<RegistryByteBuf, RegistryEntry<CharacterTextureMaterial>> ENTRY_PACKET_CODEC;
+    public static final PacketCodec<PacketByteBuf, RegistryEntry<CharacterTextureMaterial>> ENTRY_PACKET_CODEC;
 
     public static final Codec<CharacterTextureMaterial> CODEC = RecordCodecBuilder.create((instance) -> {
         return instance.group(

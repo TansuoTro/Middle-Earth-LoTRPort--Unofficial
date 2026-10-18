@@ -5,7 +5,6 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.LargeDoorBlock;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
 
 import java.util.List;

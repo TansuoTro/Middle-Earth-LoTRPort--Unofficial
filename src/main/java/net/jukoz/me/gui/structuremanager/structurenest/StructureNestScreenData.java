@@ -1,8 +1,8 @@
 package net.jukoz.me.gui.structuremanager.structurenest;
 
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.network.PacketByteBuf;
+import net.jukoz.me.compat.net.PacketCodec;
+import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
@@ -15,7 +15,7 @@ public class StructureNestScreenData {
     private int spawnRadius;
     private boolean isEnabled;
 
-    public static final PacketCodec<? super RegistryByteBuf, StructureNestScreenData> PACKET_CODEC;
+    public static final PacketCodec<? super PacketByteBuf, StructureNestScreenData> PACKET_CODEC;
 
     public BlockPos getPos() {
         return this.pos;

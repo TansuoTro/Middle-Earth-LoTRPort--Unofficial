@@ -2,9 +2,9 @@ package net.jukoz.me.entity.npcs.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.network.PacketByteBuf;
+import net.jukoz.me.compat.net.PacketCodec;
+import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -22,7 +22,7 @@ import java.util.Random;
 
 public class NpcInitializationData {
     public static final Codec<NpcInitializationData> CODEC;
-    public static final PacketCodec<RegistryByteBuf, NpcInitializationData> PACKET_CODEC;
+    public static final PacketCodec<PacketByteBuf, NpcInitializationData> PACKET_CODEC;
 
     private Identifier type;
     private Boolean isRandom;

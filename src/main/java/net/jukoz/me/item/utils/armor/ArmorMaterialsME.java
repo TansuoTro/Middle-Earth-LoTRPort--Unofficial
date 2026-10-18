@@ -168,7 +168,7 @@ public interface ArmorMaterialsME {
     }
 
     private static ExtendedArmorMaterial register(String name, EnumMap<ArmorItem.Type, Integer> defense,
-                                                  int durabilityMultiplier, int enchantability, RegistryEntry<SoundEvent> equipSound, float toughness, float knockbackResistance,
+                                                  int durabilityMultiplier, int enchantability, SoundEvent equipSound, float toughness, float knockbackResistance,
                                                   TagKey<Item> repairTag, Tiers tier) {
 
         EnumMap<ArmorItem.Type, Integer> enumMap = new EnumMap<>(ArmorItem.Type.class);

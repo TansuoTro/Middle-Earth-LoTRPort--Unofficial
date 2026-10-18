@@ -6,9 +6,9 @@ import net.minecraft.entity.VariantSelectorProvider;
 import net.minecraft.entity.spawn.SpawnCondition;
 import net.minecraft.entity.spawn.SpawnConditionSelectors;
 import net.minecraft.entity.spawn.SpawnContext;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.network.PacketByteBuf;
+import net.jukoz.me.compat.net.PacketCodec;
+import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.util.AssetInfo;
@@ -27,7 +27,7 @@ public record SpiderVariant(SpiderAssetInfo assetInfo, SpawnConditionSelectors s
 
 	public static final Codec<RegistryEntry<SpiderVariant>> ENTRY_CODEC = RegistryFixedCodec.of(DynamicRegistriesME.SPIDER_VARIANTS);
 
-	public static final PacketCodec<RegistryByteBuf, RegistryEntry<SpiderVariant>> PACKET_CODEC = PacketCodecs.registryEntry(DynamicRegistriesME.SPIDER_VARIANTS);
+	public static final PacketCodec<PacketByteBuf, RegistryEntry<SpiderVariant>> PACKET_CODEC = PacketCodecs.registryEntry(DynamicRegistriesME.SPIDER_VARIANTS);
 
 	private SpiderVariant(SpiderAssetInfo assetInfo) {
 		this(assetInfo, SpawnConditionSelectors.EMPTY);

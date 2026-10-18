@@ -9,6 +9,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.jukoz.me.MiddleEarth;
@@ -21,15 +22,23 @@ public class AttributePoolElement {
     private Double valueMax;
     private List<AttributeModifierElement> modifiers;
 
-    public static AttributePoolElement create(RegistryEntry<EntityAttribute> attributeEntry, double defineValue){
+    public static AttributePoolElement create(EntityAttribute attribute, double defineValue){
         return new AttributePoolElement()
-                .withIdentifier(new Identifier(attributeEntry.getIdAsString()))
+                .withIdentifier(Registries.ATTRIBUTE.getId(attribute))
                 .withDefineValue(defineValue);
     }
-    public static AttributePoolElement create(RegistryEntry<EntityAttribute> attributeEntry, double min, double max){
+
+    public static AttributePoolElement create(RegistryEntry<EntityAttribute> attributeEntry, double defineValue){
+        return create(attributeEntry.value(), defineValue);
+    }
+    public static AttributePoolElement create(EntityAttribute attribute, double min, double max){
         return new AttributePoolElement()
-                .withIdentifier(new Identifier(attributeEntry.getIdAsString()))
+                .withIdentifier(Registries.ATTRIBUTE.getId(attribute))
                 .withMinMaxValue(min, max);
+    }
+
+    public static AttributePoolElement create(RegistryEntry<EntityAttribute> attributeEntry, double min, double max){
+        return create(attributeEntry.value(), min, max);
     }
 
     public static AttributePoolElement createFromNbt(NbtCompound nbtCompound){
