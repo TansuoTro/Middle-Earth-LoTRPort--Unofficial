@@ -5,7 +5,7 @@ import net.jukoz.me.item.MEComponents;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import net.minecraft.component.type.DyedColorComponent;
+import net.jukoz.me.compat.DyedColorComponent;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.commands.ModCommands;
 import net.jukoz.me.commands.suggestions.AllBackAttachmentsSuggestionProvider;

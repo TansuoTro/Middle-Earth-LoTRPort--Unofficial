@@ -6,6 +6,7 @@
   "mixins": [
     "BannerPatternRegisterMixin",
     "ChunkRegionMixin",
+    "DyeableItemMixin",
     "EntityDataSaverMixin",
     "EntitySpawnMixin",
     "FoliagePlacerTypeInvoker",

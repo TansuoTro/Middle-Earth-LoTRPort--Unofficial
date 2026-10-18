@@ -1,6 +1,6 @@
 package net.jukoz.me.entity.spider.spawn;
 
-import net.minecraft.client.render.entity.animation.AnimationDefinition;
+import net.minecraft.client.render.entity.animation.Animation;
 import net.minecraft.client.render.entity.animation.AnimationHelper;
 import net.minecraft.client.render.entity.animation.Keyframe;
 import net.minecraft.client.render.entity.animation.Transformation;
@@ -8,7 +8,7 @@ import net.minecraft.client.render.entity.animation.Transformation;
 public class SpawnOfShelobAnimations {
 
     // region WALK
-    public static final AnimationDefinition SPAWN_OF_SHELOB_WALK = AnimationDefinition.Builder.create(2f).looping()
+    public static final Animation SPAWN_OF_SHELOB_WALK = Animation.Builder.create(2f).looping()
             .addBoneAnimation("rleg4",
                     new Transformation(Transformation.Targets.ROTATE,
                             new Keyframe(0f, AnimationHelper.createRotationalVector(0f, 0f, -17.5f), Transformation.Interpolations.LINEAR),
@@ -140,7 +140,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(1.875f, AnimationHelper.createRotationalVector(125f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(125f, 0f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 3f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.20833f, AnimationHelper.createTranslationalVector(0f, 0.78f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
@@ -166,7 +166,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(1.875f, AnimationHelper.createRotationalVector(0f, -36.87f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(0f, -51.76f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation1",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.20833f, AnimationHelper.createTranslationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
@@ -283,7 +283,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(1.875f, AnimationHelper.createRotationalVector(50f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(50f, 0f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation2",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 3f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.20833f, AnimationHelper.createTranslationalVector(0f, 0.78f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
@@ -426,7 +426,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(1.875f, AnimationHelper.createRotationalVector(0f, 0f, 83.88f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(0f, 0f, 97.5f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("lrotation",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.20833f, AnimationHelper.createTranslationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, 2.6f, 0f), Transformation.Interpolations.LINEAR),
@@ -491,7 +491,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(1.875f, AnimationHelper.createRotationalVector(0f, 0f, 62.5f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(0f, 0f, 62.5f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("lrotation2",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0.93f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.20833f, AnimationHelper.createTranslationalVector(0f, 3f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, 0.62f, 0f), Transformation.Interpolations.LINEAR),
@@ -569,7 +569,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(1.875f, AnimationHelper.createRotationalVector(0f, 0f, 97.5f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(0f, 0f, 97.5f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation3",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.20833f, AnimationHelper.createTranslationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, 2.6f, 0f), Transformation.Interpolations.LINEAR),
@@ -686,7 +686,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(1.875f, AnimationHelper.createRotationalVector(0f, 0f, 62.5f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(0f, 0f, 53.23f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("body",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -0.62f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.20833f, AnimationHelper.createTranslationalVector(0f, 1.49f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, -1.96f, 0f), Transformation.Interpolations.LINEAR),
@@ -714,7 +714,7 @@ public class SpawnOfShelobAnimations {
     // endregion WALK
     
     // region IDLE
-    public static final AnimationDefinition SPAWN_OF_SHELOB_IDLE = AnimationDefinition.Builder.create(4f).looping()
+    public static final Animation SPAWN_OF_SHELOB_IDLE = Animation.Builder.create(4f).looping()
             .addBoneAnimation("rleg4",
                     new Transformation(Transformation.Targets.ROTATE,
                             new Keyframe(0f, AnimationHelper.createRotationalVector(0f, 0f, -17.5f), Transformation.Interpolations.LINEAR),
@@ -846,7 +846,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(3.75f, AnimationHelper.createRotationalVector(125f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(4f, AnimationHelper.createRotationalVector(125f, 0f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0.85f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, 0.36f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.83333f, AnimationHelper.createTranslationalVector(0f, -0.28f, 0f), Transformation.Interpolations.LINEAR),
@@ -872,7 +872,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(3.75f, AnimationHelper.createRotationalVector(0f, -40f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(4f, AnimationHelper.createRotationalVector(0f, -40f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation1",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0.85f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, 0.36f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.83333f, AnimationHelper.createTranslationalVector(0f, -0.28f, 0f), Transformation.Interpolations.LINEAR),
@@ -989,7 +989,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(3.75f, AnimationHelper.createRotationalVector(50f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(4f, AnimationHelper.createRotationalVector(50f, 0f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation2",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0.85f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, 0.36f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.83333f, AnimationHelper.createTranslationalVector(0f, -0.28f, 0f), Transformation.Interpolations.LINEAR),
@@ -1067,7 +1067,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(3.75f, AnimationHelper.createRotationalVector(0f, 0f, -94.54f), Transformation.Interpolations.LINEAR),
                             new Keyframe(4f, AnimationHelper.createRotationalVector(0f, 0f, -94.94f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("lrotation3",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0.85f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, 0.36f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.83333f, AnimationHelper.createTranslationalVector(0f, -0.28f, 0f), Transformation.Interpolations.LINEAR),
@@ -1145,7 +1145,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(3.75f, AnimationHelper.createRotationalVector(0f, 0f, 94.54f), Transformation.Interpolations.LINEAR),
                             new Keyframe(4f, AnimationHelper.createRotationalVector(0f, 0f, 94.94f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("lrotation",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0.85f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, 0.36f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.83333f, AnimationHelper.createTranslationalVector(0f, -0.28f, 0f), Transformation.Interpolations.LINEAR),
@@ -1210,7 +1210,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(3.75f, AnimationHelper.createRotationalVector(0f, 0f, 64.48f), Transformation.Interpolations.LINEAR),
                             new Keyframe(4f, AnimationHelper.createRotationalVector(0f, 0f, 64.21f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("lrotation2",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0.85f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, 0.36f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.83333f, AnimationHelper.createTranslationalVector(0f, -0.28f, 0f), Transformation.Interpolations.LINEAR),
@@ -1288,7 +1288,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(3.75f, AnimationHelper.createRotationalVector(0f, 0f, 94.54f), Transformation.Interpolations.LINEAR),
                             new Keyframe(4f, AnimationHelper.createRotationalVector(0f, 0f, 94.94f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation3",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0.85f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, 0.36f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.83333f, AnimationHelper.createTranslationalVector(0f, -0.28f, 0f), Transformation.Interpolations.LINEAR),
@@ -1353,7 +1353,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(3.75f, AnimationHelper.createRotationalVector(0f, 0f, -64.48f), Transformation.Interpolations.LINEAR),
                             new Keyframe(4f, AnimationHelper.createRotationalVector(0f, 0f, -64.21f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("lrotation4",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0.85f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, 0.36f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.83333f, AnimationHelper.createTranslationalVector(0f, -0.28f, 0f), Transformation.Interpolations.LINEAR),
@@ -1418,7 +1418,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(3.75f, AnimationHelper.createRotationalVector(0f, 0f, 64.48f), Transformation.Interpolations.LINEAR),
                             new Keyframe(4f, AnimationHelper.createRotationalVector(0f, 0f, 64.21f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("body",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0.85f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, 0.36f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.83333f, AnimationHelper.createTranslationalVector(0f, -0.28f, 0f), Transformation.Interpolations.LINEAR),
@@ -1446,9 +1446,9 @@ public class SpawnOfShelobAnimations {
     // endregion 
     
     // region BITE
-    public static final AnimationDefinition SPAWN_OF_SHELOB_BITE = AnimationDefinition.Builder.create(2f)
+    public static final Animation SPAWN_OF_SHELOB_BITE = Animation.Builder.create(2f)
             .addBoneAnimation("body",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.5f, AnimationHelper.createTranslationalVector(0f, 1f, -2f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.625f, AnimationHelper.createTranslationalVector(0f, 1f, -2f), Transformation.Interpolations.LINEAR),
@@ -1476,7 +1476,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(0.75f, AnimationHelper.createRotationalVector(-32.5f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(1f, AnimationHelper.createRotationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("prosoma",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.58333f, AnimationHelper.createTranslationalVector(0f, 0f, -3.65f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.70833f, AnimationHelper.createTranslationalVector(0f, 0f, -2f), Transformation.Interpolations.LINEAR),
@@ -1492,7 +1492,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(0.83333f, AnimationHelper.createRotationalVector(27.5f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(1f, AnimationHelper.createRotationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("chelicerae",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.5f, AnimationHelper.createTranslationalVector(0f, 0f, 4f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.58333f, AnimationHelper.createTranslationalVector(0f, 0f, 4f), Transformation.Interpolations.LINEAR),
@@ -1566,7 +1566,7 @@ public class SpawnOfShelobAnimations {
     // endregion
 
     // region WALK_BLOCK
-    public static final AnimationDefinition SPAWN_OF_SHELOB_BLOCK = AnimationDefinition.Builder.create(2f).looping()
+    public static final Animation SPAWN_OF_SHELOB_BLOCK = Animation.Builder.create(2f).looping()
             .addBoneAnimation("rleg4",
                     new Transformation(Transformation.Targets.ROTATE,
                             new Keyframe(0f, AnimationHelper.createRotationalVector(0f, 0f, -17.5f), Transformation.Interpolations.LINEAR),
@@ -1678,7 +1678,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(1.875f, AnimationHelper.createRotationalVector(125f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(125f, 0f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 1f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createTranslationalVector(0f, 1f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation",
@@ -1689,7 +1689,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(1.58333f, AnimationHelper.createRotationalVector(0f, -35f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(0f, -45f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation1",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.20833f, AnimationHelper.createTranslationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
@@ -1806,7 +1806,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(1.875f, AnimationHelper.createRotationalVector(50f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(50f, 0f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation2",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 3f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.20833f, AnimationHelper.createTranslationalVector(0f, 0.78f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
@@ -1949,7 +1949,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(1.875f, AnimationHelper.createRotationalVector(0f, 0f, 83.88f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(0f, 0f, 97.5f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("lrotation",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 1f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createTranslationalVector(0f, 1f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("lrotation",
@@ -1979,7 +1979,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(1.5f, AnimationHelper.createRotationalVector(5f, 30f, 25f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(5f, 30f, 35f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("lrotation2",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0.93f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.20833f, AnimationHelper.createTranslationalVector(0f, 3f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, 0.62f, 0f), Transformation.Interpolations.LINEAR),
@@ -2057,7 +2057,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(1.875f, AnimationHelper.createRotationalVector(0f, 0f, 97.5f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(0f, 0f, 97.5f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation3",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.20833f, AnimationHelper.createTranslationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, 2.6f, 0f), Transformation.Interpolations.LINEAR),
@@ -2174,7 +2174,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(1.875f, AnimationHelper.createRotationalVector(0f, 0f, 62.5f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(0f, 0f, 53.23f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("body",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -0.62f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.20833f, AnimationHelper.createTranslationalVector(0f, 1.49f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, -1.96f, 0f), Transformation.Interpolations.LINEAR),
@@ -2203,9 +2203,9 @@ public class SpawnOfShelobAnimations {
     
     // region POUNCE
 
-    public static final AnimationDefinition SPAWN_OF_SHELOB_POUNCE = AnimationDefinition.Builder.create(1f)
+    public static final Animation SPAWN_OF_SHELOB_POUNCE = Animation.Builder.create(1f)
             .addBoneAnimation("rrotation",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR),
                             new Keyframe(0.5f, AnimationHelper.createTranslationalVector(0f, 2f, 0f),
@@ -2235,7 +2235,7 @@ public class SpawnOfShelobAnimations {
                             new Keyframe(1f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("lrotation",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR),
                             new Keyframe(0.5f, AnimationHelper.createTranslationalVector(0f, 2f, 0f),

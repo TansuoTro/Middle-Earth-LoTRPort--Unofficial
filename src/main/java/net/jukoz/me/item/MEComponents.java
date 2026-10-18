@@ -2,6 +2,8 @@ package net.jukoz.me.item;
 
 import com.mojang.serialization.Codec;
 import net.jukoz.me.MiddleEarth;
+import net.jukoz.me.compat.DyedColorComponent;
+import net.jukoz.me.item.dataComponents.*;
 import net.jukoz.me.item.dataComponents.CooldownDataComponent;
 import net.jukoz.me.item.dataComponents.FactionDataComponent;
 import net.jukoz.me.item.dataComponents.RaceDataComponent;
@@ -42,10 +44,28 @@ public final class MEComponents {
     public static final MEComponent<RaceDataComponent> RACE_DATA =
             register("race", RaceDataComponent.CODEC);
 
-    // TODO: not ported yet - they need value classes that depend on donor enums:
-    //  ARMOR_VARIANT_DATA, ARTISAN_DATA, SEASON_DATA, ARMOR_TIER_DATA,
-    //  WEAPON_TYPE_DATA, BLOCK_AUTHOR_DATA, BACK_ATTACHMENT_DATA,
-    //  HELMET_ATTACHMENT_DATA, MOUNT_ARMOR_DATA
+    /** 1.21.2's default dye colour; read by DyeableItemMixin. */
+    public static final MEComponent<DyedColorComponent> DYED_COLOR =
+            register("dyed_color", DyedColorComponent.CODEC);
+
+    public static final MEComponent<ArmorVariantDataComponent> ARMOR_VARIANT_DATA =
+            register("armor_variant", ArmorVariantDataComponent.CODEC);
+    public static final MEComponent<ArtisanDataComponent> ARTISAN_DATA =
+            register("artisan", ArtisanDataComponent.CODEC);
+    public static final MEComponent<SeasonDataComponent> SEASON_DATA =
+            register("season", SeasonDataComponent.CODEC);
+    public static final MEComponent<ArmorTierDataComponent> ARMOR_TIER_DATA =
+            register("armor_tier", ArmorTierDataComponent.CODEC);
+    public static final MEComponent<WeaponTypeDataComponent> WEAPON_TYPE_DATA =
+            register("weapon_type", WeaponTypeDataComponent.CODEC);
+    public static final MEComponent<BlockAuthorDataComponent> BLOCK_AUTHOR_DATA =
+            register("block_author", BlockAuthorDataComponent.CODEC);
+    public static final MEComponent<BackAttachmentDataComponent> BACK_ATTACHMENT_DATA =
+            register("back_attachment", BackAttachmentDataComponent.CODEC);
+    public static final MEComponent<HelmetAttachmentDataComponent> HELMET_ATTACHMENT_DATA =
+            register("helmet_attachment", HelmetAttachmentDataComponent.CODEC);
+    public static final MEComponent<MountArmorAddonComponent> MOUNT_ARMOR_DATA =
+            register("mount_armor_addon", MountArmorAddonComponent.CODEC);
 
     /**
      * Components declared on the item itself (1.21's {@code Item.Settings#component}).

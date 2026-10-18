@@ -250,6 +250,12 @@ REWRITES = [
     # 1.20.1 kept the old names for both of these.
     ("instrument", r"(?<![A-Za-z0-9_$])NoteBlockInstrument", "Instrument"),
     ("short-grass", r"(?<![A-Za-z0-9_$])Blocks[.]SHORT_GRASS", "Blocks.GRASS"),
+    # 1.21.2 component classes that do not exist in 1.20.1; the stand-ins live in compat.
+    ("dyed-color-import", r"net[.]minecraft[.]component[.]type[.]DyedColorComponent", "net.jukoz.me.compat.DyedColorComponent"),
+    ("dyed-color-key", r"(?<![A-Za-z0-9_$])DataComponentTypes[.]DYED_COLOR", "MEComponents.DYED_COLOR"),
+    # 1.21.2 renames, verified against the mapped 1.20.1 jar.
+    ("move-origin", r"Transformation[.]Targets[.]MOVE_ORIGIN", "Transformation.Targets.TRANSLATE"),
+    ("animation-definition", r"(?<![A-Za-z0-9_$])AnimationDefinition", "Animation"),
 ]
 
 # 1.21 wraps block/item ids in a RegistryKey; 1.20.1 registers by Identifier.

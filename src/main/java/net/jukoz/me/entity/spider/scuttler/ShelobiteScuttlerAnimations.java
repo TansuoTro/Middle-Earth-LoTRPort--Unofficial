@@ -1,6 +1,6 @@
 package net.jukoz.me.entity.spider.scuttler;
 
-import net.minecraft.client.render.entity.animation.AnimationDefinition;
+import net.minecraft.client.render.entity.animation.Animation;
 import net.minecraft.client.render.entity.animation.AnimationHelper;
 import net.minecraft.client.render.entity.animation.Keyframe;
 import net.minecraft.client.render.entity.animation.Transformation;
@@ -8,7 +8,7 @@ import net.minecraft.client.render.entity.animation.Transformation;
 public class ShelobiteScuttlerAnimations {
 
     // region IDLE
-    public static final AnimationDefinition SHELOBITE_SCUTTLER_IDLE = AnimationDefinition.Builder.create(4f).looping()
+    public static final Animation SHELOBITE_SCUTTLER_IDLE = Animation.Builder.create(4f).looping()
             .addBoneAnimation("abdomen",
                     new Transformation(Transformation.Targets.ROTATE,
                             new Keyframe(0f, AnimationHelper.createRotationalVector(20.93f, 0f, 0f), Transformation.Interpolations.LINEAR),
@@ -85,7 +85,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(3.676667f, AnimationHelper.createRotationalVector(3.35f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(4f, AnimationHelper.createRotationalVector(-1.55f, 0f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("body",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0.43f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, 0.24f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.6766666f, AnimationHelper.createTranslationalVector(0f, -0.01f, 0f), Transformation.Interpolations.LINEAR),
@@ -115,7 +115,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(3.676667f, AnimationHelper.createRotationalVector(2.74f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(4f, AnimationHelper.createRotationalVector(-2.43f, 0f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0.43f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, 0.24f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.6766666f, AnimationHelper.createTranslationalVector(0f, -0.01f, 0f), Transformation.Interpolations.LINEAR),
@@ -145,7 +145,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(3.676667f, AnimationHelper.createRotationalVector(0f, -40f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(4f, AnimationHelper.createRotationalVector(0f, -40f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation2",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0.43f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, 0.24f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.6766666f, AnimationHelper.createTranslationalVector(0f, -0.01f, 0f), Transformation.Interpolations.LINEAR),
@@ -175,7 +175,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(3.676667f, AnimationHelper.createRotationalVector(0f, -15f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(4f, AnimationHelper.createRotationalVector(0f, -15f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation3",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0.43f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, 0.24f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.6766666f, AnimationHelper.createTranslationalVector(0f, -0.01f, 0f), Transformation.Interpolations.LINEAR),
@@ -205,7 +205,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(3.676667f, AnimationHelper.createRotationalVector(0f, 15f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(4f, AnimationHelper.createRotationalVector(0f, 15f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation4",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0.43f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, 0.24f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.6766666f, AnimationHelper.createTranslationalVector(0f, -0.01f, 0f), Transformation.Interpolations.LINEAR),
@@ -430,7 +430,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(3.676667f, AnimationHelper.createRotationalVector(0f, 0f, -3f), Transformation.Interpolations.LINEAR),
                             new Keyframe(4f, AnimationHelper.createRotationalVector(0f, 0f, -2.56f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("fang",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.6766666f, AnimationHelper.createTranslationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR),
@@ -445,7 +445,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(3.676667f, AnimationHelper.createTranslationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR),
                             new Keyframe(4f, AnimationHelper.createTranslationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("fang2",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.6766666f, AnimationHelper.createTranslationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR),
@@ -460,7 +460,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(3.676667f, AnimationHelper.createTranslationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR),
                             new Keyframe(4f, AnimationHelper.createTranslationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation5",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0.43f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, 0.24f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.6766666f, AnimationHelper.createTranslationalVector(0f, -0.01f, 0f), Transformation.Interpolations.LINEAR),
@@ -535,7 +535,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(3.676667f, AnimationHelper.createRotationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR),
                             new Keyframe(4f, AnimationHelper.createRotationalVector(0f, 0f, 2.56f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation6",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0.43f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, 0.24f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.6766666f, AnimationHelper.createTranslationalVector(0f, -0.01f, 0f), Transformation.Interpolations.LINEAR),
@@ -610,7 +610,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(3.676667f, AnimationHelper.createRotationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR),
                             new Keyframe(4f, AnimationHelper.createRotationalVector(0f, 0f, 2.56f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation7",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0.43f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, 0.24f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.6766666f, AnimationHelper.createTranslationalVector(0f, -0.01f, 0f), Transformation.Interpolations.LINEAR),
@@ -685,7 +685,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(3.676667f, AnimationHelper.createRotationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR),
                             new Keyframe(4f, AnimationHelper.createRotationalVector(0f, 0f, 2.56f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation8",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0.43f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, 0.24f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.6766666f, AnimationHelper.createTranslationalVector(0f, -0.01f, 0f), Transformation.Interpolations.LINEAR),
@@ -762,7 +762,7 @@ public class ShelobiteScuttlerAnimations {
     // endregion
     
     // region WALK
-    public static final AnimationDefinition SHELOBITE_SCUTTLER_WALK = AnimationDefinition.Builder.create(2f).looping()
+    public static final Animation SHELOBITE_SCUTTLER_WALK = Animation.Builder.create(2f).looping()
             .addBoneAnimation("abdomen",
                     new Transformation(Transformation.Targets.ROTATE,
                             new Keyframe(0f, AnimationHelper.createRotationalVector(20.93f, 0f, 0f), Transformation.Interpolations.LINEAR),
@@ -839,7 +839,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(1.8343335f, AnimationHelper.createRotationalVector(-3.35f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(-1.55f, 0f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("body",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0.15f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.16766666f, AnimationHelper.createTranslationalVector(0f, -0.49f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, 0.33f, 0f), Transformation.Interpolations.LINEAR),
@@ -884,7 +884,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(1.8343335f, AnimationHelper.createRotationalVector(-3.35f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(-1.55f, 0f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -1f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.16766666f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, 0.5f, 0f), Transformation.Interpolations.LINEAR),
@@ -959,7 +959,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(1.8343335f, AnimationHelper.createRotationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation2",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 1f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.16766666f, AnimationHelper.createTranslationalVector(0f, 0.5f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f), Transformation.Interpolations.LINEAR),
@@ -1034,7 +1034,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(1.8343335f, AnimationHelper.createRotationalVector(0f, 0f, 27.41f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(0f, 0f, 24.27f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation3",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -1f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.16766666f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, 0.5f, 0f), Transformation.Interpolations.LINEAR),
@@ -1109,7 +1109,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(1.8343335f, AnimationHelper.createRotationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation4",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 1f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.16766666f, AnimationHelper.createTranslationalVector(0f, 0.5f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f), Transformation.Interpolations.LINEAR),
@@ -1184,7 +1184,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(1.8343335f, AnimationHelper.createRotationalVector(0f, 0f, 27.41f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(0f, 0f, 24.27f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("fang",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.16766666f, AnimationHelper.createTranslationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR),
@@ -1199,7 +1199,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(1.8343335f, AnimationHelper.createTranslationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createTranslationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("fang2",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.16766666f, AnimationHelper.createTranslationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR),
@@ -1214,7 +1214,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(1.8343335f, AnimationHelper.createTranslationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createTranslationalVector(0f, 0f, 3f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation5",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 1f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.16766666f, AnimationHelper.createTranslationalVector(0f, 0.5f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f), Transformation.Interpolations.LINEAR),
@@ -1289,7 +1289,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(1.8343335f, AnimationHelper.createRotationalVector(0f, 0f, -27.41f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(0f, 0f, -24.27f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation6",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -1f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.16766666f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, 0.5f, 0f), Transformation.Interpolations.LINEAR),
@@ -1364,7 +1364,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(1.8343335f, AnimationHelper.createRotationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation7",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 1f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.16766666f, AnimationHelper.createTranslationalVector(0f, 0.5f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f), Transformation.Interpolations.LINEAR),
@@ -1439,7 +1439,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(1.8343335f, AnimationHelper.createRotationalVector(0f, 0f, -27.41f), Transformation.Interpolations.LINEAR),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(0f, 0f, -24.27f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rrotation8",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -1f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.16766666f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.3433333f, AnimationHelper.createTranslationalVector(0f, 0.5f, 0f), Transformation.Interpolations.LINEAR),
@@ -1516,9 +1516,9 @@ public class ShelobiteScuttlerAnimations {
     // endregion
     
     // region BITE
-    public static final AnimationDefinition SHELOBITE_SCUTTLER_BITE = AnimationDefinition.Builder.create(4f)
+    public static final Animation SHELOBITE_SCUTTLER_BITE = Animation.Builder.create(4f)
             .addBoneAnimation("body",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.5f, AnimationHelper.createTranslationalVector(0f, 0f, 1f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.91667f, AnimationHelper.createTranslationalVector(0f, 0f, 2f), Transformation.Interpolations.LINEAR),
@@ -1552,7 +1552,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(0.66667f, AnimationHelper.createRotationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.875f, AnimationHelper.createRotationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("fang",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.5f, AnimationHelper.createTranslationalVector(0f, 0f, 1.43f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.875f, AnimationHelper.createTranslationalVector(0f, 0f, 1.43f), Transformation.Interpolations.LINEAR),
@@ -1571,7 +1571,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(0.66667f, AnimationHelper.createRotationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.875f, AnimationHelper.createRotationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("fang2",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.5f, AnimationHelper.createTranslationalVector(0f, 0f, 1.43f), Transformation.Interpolations.LINEAR),
                             new Keyframe(0.875f, AnimationHelper.createTranslationalVector(0f, 0f, 1.43f), Transformation.Interpolations.LINEAR),
@@ -1579,9 +1579,9 @@ public class ShelobiteScuttlerAnimations {
     // endregion
     
     // region POUNCE
-    public static final AnimationDefinition SHELOBITE_SCUTTLER_POUNCE = AnimationDefinition.Builder.create(1f)
+    public static final Animation SHELOBITE_SCUTTLER_POUNCE = Animation.Builder.create(1f)
             .addBoneAnimation("rleg",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR),
                             new Keyframe(0.5f, AnimationHelper.createTranslationalVector(0f, 1f, 0f),
@@ -1595,7 +1595,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(1f, AnimationHelper.createRotationalVector(0f, -15f, 0f),
                                     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rleg2",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR),
                             new Keyframe(0.5f, AnimationHelper.createTranslationalVector(-1f, 1f, 0f),
@@ -1609,7 +1609,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(1f, AnimationHelper.createRotationalVector(0f, 0f, 55f),
                                     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rleg3",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR),
                             new Keyframe(0.5f, AnimationHelper.createTranslationalVector(-1f, 0f, 0f),
@@ -1623,7 +1623,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(1f, AnimationHelper.createRotationalVector(0f, 0f, 60f),
                                     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rleg7",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR),
                             new Keyframe(0.5f, AnimationHelper.createTranslationalVector(0f, 1f, 0f),
@@ -1637,7 +1637,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(1f, AnimationHelper.createRotationalVector(0f, 15f, 0f),
                                     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rleg14",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR),
                             new Keyframe(0.5f, AnimationHelper.createTranslationalVector(1f, 1f, 0f),
@@ -1651,7 +1651,7 @@ public class ShelobiteScuttlerAnimations {
                             new Keyframe(1f, AnimationHelper.createRotationalVector(0f, 0f, -55f),
                                     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("rleg15",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR),
                             new Keyframe(0.5f, AnimationHelper.createTranslationalVector(1f, 0f, 0f),

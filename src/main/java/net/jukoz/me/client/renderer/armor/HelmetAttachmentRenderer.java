@@ -3,7 +3,7 @@ package net.jukoz.me.client.renderer.armor;
 import net.jukoz.me.item.MEComponents;
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.minecraft.client.render.entity.state.BipedEntityRenderState;
-import net.minecraft.component.type.DyedColorComponent;
+import net.jukoz.me.compat.DyedColorComponent;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.client.model.equipment.head.helmets.HelmetAddonModel;
 import net.jukoz.me.item.DataComponentTypesME;

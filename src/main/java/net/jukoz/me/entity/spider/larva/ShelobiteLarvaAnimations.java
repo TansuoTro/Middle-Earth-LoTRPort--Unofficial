@@ -1,6 +1,6 @@
 package net.jukoz.me.entity.spider.larva;
 
-import net.minecraft.client.render.entity.animation.AnimationDefinition;
+import net.minecraft.client.render.entity.animation.Animation;
 import net.minecraft.client.render.entity.animation.AnimationHelper;
 import net.minecraft.client.render.entity.animation.Keyframe;
 import net.minecraft.client.render.entity.animation.Transformation;
@@ -9,7 +9,7 @@ public class ShelobiteLarvaAnimations {
 
     // region WALK
 
-    public static final AnimationDefinition SHELOBITE_LARVA_WALK = AnimationDefinition.Builder.create(1f).looping()
+    public static final Animation SHELOBITE_LARVA_WALK = Animation.Builder.create(1f).looping()
             .addBoneAnimation("leg_left_front",
                     new Transformation(Transformation.Targets.ROTATE,
                             new Keyframe(0f, AnimationHelper.createRotationalVector(0f, 2.5f, 0f),
@@ -93,7 +93,7 @@ public class ShelobiteLarvaAnimations {
     // endregion
     
     // region BITE
-    public static final AnimationDefinition SHELOBITE_LARVA_BITE = AnimationDefinition.Builder.create(0.65f)
+    public static final Animation SHELOBITE_LARVA_BITE = Animation.Builder.create(0.65f)
             .addBoneAnimation("root",
                     new Transformation(Transformation.Targets.ROTATE,
                             new Keyframe(0f, AnimationHelper.createRotationalVector(0f, 0f, 0f),

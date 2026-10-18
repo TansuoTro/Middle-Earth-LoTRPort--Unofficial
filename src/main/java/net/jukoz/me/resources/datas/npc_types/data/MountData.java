@@ -3,7 +3,7 @@ package net.jukoz.me.resources.datas.npc_types.data;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.DyedColorComponent;
+import net.jukoz.me.compat.DyedColorComponent;
 import net.minecraft.entity.*;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AbstractHorseEntity;
@@ -80,7 +80,7 @@ public class MountData {
     public MountData withColor(DyedColorComponent color){
         if(this.armor == null)
             return this;
-        this.armor.set(DataComponentTypes.DYED_COLOR, color);
+        this.armor.set(MEComponents.DYED_COLOR, color);
         return this;
     }
 

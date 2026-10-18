@@ -2,7 +2,7 @@ package net.jukoz.me.recipe;
 import net.jukoz.me.item.MEComponents;
 
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.DyedColorComponent;
+import net.jukoz.me.compat.DyedColorComponent;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.items.armor.CustomHelmetItem;
@@ -39,7 +39,7 @@ public class HelmetAttachmentRemovalRecipe extends SpecialCraftingRecipe {
             }else if (MEComponents.get(itemStack, MEComponents.HELMET_ATTACHMENT_DATA) != null){
                 ItemStack helmetAttachment = new ItemStack(Registries.ITEM.get(new Identifier(MiddleEarth.MOD_ID, MEComponents.get(itemStack, MEComponents.HELMET_ATTACHMENT_DATA).helmetAttachment().getName())));
                 MEComponents.set(helmetAttachment, MEComponents.HELMET_ATTACHMENT_DATA, itemStack.get(MEComponents.HELMET_ATTACHMENT_DATA));
-                helmetAttachment.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(MEComponents.get(itemStack, MEComponents.HELMET_ATTACHMENT_DATA).helmetAttachmentColor()));
+                helmetAttachment.set(MEComponents.DYED_COLOR, new DyedColorComponent(MEComponents.get(itemStack, MEComponents.HELMET_ATTACHMENT_DATA).helmetAttachmentColor()));
                 defaultedList.set(i, helmetAttachment);
             }
         }

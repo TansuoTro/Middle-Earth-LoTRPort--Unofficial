@@ -3,9 +3,9 @@ package net.jukoz.me.entity.beasts.cave_troll;
 import net.minecraft.client.render.entity.animation.*;
 
 public class CaveTrollAnimations {
-    public static final AnimationDefinition IDLE = AnimationDefinition.Builder.create(3.5f).looping()
+    public static final Animation IDLE = Animation.Builder.create(3.5f).looping()
             .addBoneAnimation("Head",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.875f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f),
@@ -29,7 +29,7 @@ public class CaveTrollAnimations {
                             new Keyframe(3.5f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("jaw",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.875f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f),
@@ -41,7 +41,7 @@ public class CaveTrollAnimations {
                             new Keyframe(3.5f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("ArmRight",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(1.75f, AnimationHelper.createTranslationalVector(0f, 0.5f, 0f),
@@ -49,7 +49,7 @@ public class CaveTrollAnimations {
                             new Keyframe(3.5f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("ArmLeft",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(1.75f, AnimationHelper.createTranslationalVector(0f, 0.5f, 0f),
@@ -57,7 +57,7 @@ public class CaveTrollAnimations {
                             new Keyframe(3.5f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("body_no_legs",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.875f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f),
@@ -124,9 +124,9 @@ public class CaveTrollAnimations {
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(3.5f, AnimationHelper.createRotationalVector(0f, 0f, 2.5f),
                                     Transformation.Interpolations.CUBIC))).build();
-    public static final AnimationDefinition SCREAM = AnimationDefinition.Builder.create(1.75f).looping()
+    public static final Animation SCREAM = Animation.Builder.create(1.75f).looping()
 .addBoneAnimation("Head",
-                          new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                          new Transformation(Transformation.Targets.TRANSLATE,
 		new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
     Transformation.Interpolations.CUBIC),
             new Keyframe(1.5f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
@@ -150,7 +150,7 @@ public class CaveTrollAnimations {
             new Keyframe(1.5f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("jaw",
-                                      new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                                      new Transformation(Transformation.Targets.TRANSLATE,
 		new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
     Transformation.Interpolations.CUBIC),
             new Keyframe(0.375f, AnimationHelper.createTranslationalVector(0f, -2f, 0f),
@@ -247,7 +247,7 @@ public class CaveTrollAnimations {
     Transformation.Interpolations.CUBIC),
             new Keyframe(1.75f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
     Transformation.Interpolations.CUBIC))).build();
-    public static final AnimationDefinition PASSIVE_WALK = AnimationDefinition.Builder.create(1.75f).looping()
+    public static final Animation PASSIVE_WALK = Animation.Builder.create(1.75f).looping()
             .addBoneAnimation("root",
                     new Transformation(Transformation.Targets.ROTATE,
                             new Keyframe(0f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
@@ -265,7 +265,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1.75f, AnimationHelper.createScalingVector(1f, 1f, 1f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("Head",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f),
@@ -277,7 +277,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1.75f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("jaw",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.83333f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f),
@@ -291,7 +291,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1.75f, AnimationHelper.createRotationalVector(20f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("LegRight",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 3f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.41667f, AnimationHelper.createTranslationalVector(0f, 2f, 1f),
@@ -311,7 +311,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1.04167f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("LegLeft",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, -1f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.83333f, AnimationHelper.createTranslationalVector(0f, 0f, 3f),
@@ -355,7 +355,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1.75f, AnimationHelper.createRotationalVector(0f, 2.5f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("Loincloth_Front",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.79167f, AnimationHelper.createTranslationalVector(0f, 0.3f, 0f),
@@ -375,7 +375,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1.75f, AnimationHelper.createRotationalVector(-5f, 2.5f, 0f),
                                     Transformation.Interpolations.CUBIC))).build();
 
-	public static final AnimationDefinition INSPECT = AnimationDefinition.Builder.create(5.5f).looping()
+	public static final Animation INSPECT = Animation.Builder.create(5.5f).looping()
 .addBoneAnimation("body_no_legs",
 						  new Transformation(Transformation.Targets.ROTATE,
 		new Keyframe(0f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
@@ -433,9 +433,9 @@ public class CaveTrollAnimations {
 			new Keyframe(5.5f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
 	Transformation.Interpolations.CUBIC))).build();
 
-	public static final AnimationDefinition SCREAM_RUN = AnimationDefinition.Builder.create(2f).looping()
+	public static final Animation SCREAM_RUN = Animation.Builder.create(2f).looping()
 .addBoneAnimation("Head",
-                          new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                          new Transformation(Transformation.Targets.TRANSLATE,
 		new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
     Transformation.Interpolations.CUBIC),
             new Keyframe(1.08333f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
@@ -459,7 +459,7 @@ public class CaveTrollAnimations {
             new Keyframe(1.08333f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("jaw",
-                                      new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                                      new Transformation(Transformation.Targets.TRANSLATE,
 		new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
     Transformation.Interpolations.CUBIC),
             new Keyframe(0.25f, AnimationHelper.createTranslationalVector(0f, -2f, 0f),
@@ -556,9 +556,9 @@ public class CaveTrollAnimations {
     Transformation.Interpolations.CUBIC),
             new Keyframe(1.25f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
     Transformation.Interpolations.CUBIC))).build();
-    public static final AnimationDefinition RUN = AnimationDefinition.Builder.create(1.25f).looping()
+    public static final Animation RUN = Animation.Builder.create(1.25f).looping()
             .addBoneAnimation("root",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.33333f, AnimationHelper.createTranslationalVector(0f, 2f, 0f),
@@ -582,7 +582,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1.25f, AnimationHelper.createRotationalVector(0f, 5f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("body_no_legs",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.33333f, AnimationHelper.createTranslationalVector(0f, 1f, 0f),
@@ -608,7 +608,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1.25f, AnimationHelper.createScalingVector(1f, 1f, 1f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("Head",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.33333f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f),
@@ -628,7 +628,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1.25f, AnimationHelper.createRotationalVector(-10.08f, -7.39f, 1.31f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("jaw",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -2f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.29167f, AnimationHelper.createTranslationalVector(0f, -1f, 0f),
@@ -640,7 +640,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1.25f, AnimationHelper.createTranslationalVector(0f, -2f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("LegRight",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 4f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.33333f, AnimationHelper.createTranslationalVector(0f, 2f, 1f),
@@ -662,7 +662,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1.25f, AnimationHelper.createRotationalVector(17.5f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("LegLeft",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, -4f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.58333f, AnimationHelper.createTranslationalVector(0f, 0f, 4f),
@@ -684,7 +684,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1.25f, AnimationHelper.createRotationalVector(-10f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("ArmRight",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.58333f, AnimationHelper.createTranslationalVector(0f, 1f, 0f),
@@ -700,7 +700,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1.25f, AnimationHelper.createRotationalVector(-54.71f, 1.21f, 6.96f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("ArmLeft",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -1f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.58333f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
@@ -728,7 +728,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1.16667f, AnimationHelper.createRotationalVector(17.5f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("Loincloth_Front",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.58333f, AnimationHelper.createTranslationalVector(0f, 0.3f, 0f),
@@ -747,9 +747,9 @@ public class CaveTrollAnimations {
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(1.25f, AnimationHelper.createRotationalVector(-42.5f, 2.5f, 0f),
                                     Transformation.Interpolations.CUBIC))).build();
-    public static final AnimationDefinition SPRINT = AnimationDefinition.Builder.create(1f).looping()
+    public static final Animation SPRINT = Animation.Builder.create(1f).looping()
             .addBoneAnimation("root",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 3f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.25f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
@@ -773,7 +773,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1f, AnimationHelper.createRotationalVector(0f, 5f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("body_no_legs",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.25f, AnimationHelper.createTranslationalVector(0f, 1f, 0f),
@@ -799,7 +799,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1f, AnimationHelper.createScalingVector(1f, 1f, 1f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("Head",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.25f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f),
@@ -819,7 +819,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1f, AnimationHelper.createRotationalVector(-10.08f, -7.39f, 1.31f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("jaw",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -2f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.45833f, AnimationHelper.createTranslationalVector(0f, -1f, 0f),
@@ -827,7 +827,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1f, AnimationHelper.createTranslationalVector(0f, -2f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("LegRight",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 4f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.25f, AnimationHelper.createTranslationalVector(0f, 2f, 1f),
@@ -849,7 +849,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1f, AnimationHelper.createRotationalVector(17.5f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("LegLeft",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, -4f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.45833f, AnimationHelper.createTranslationalVector(0f, 0f, 4f),
@@ -871,7 +871,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1f, AnimationHelper.createRotationalVector(-10f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("ArmRight",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.45833f, AnimationHelper.createTranslationalVector(0f, 1f, 0f),
@@ -887,7 +887,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1f, AnimationHelper.createRotationalVector(-74.28f, -13.25f, 2.94f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("ArmLeft",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -1f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.45833f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
@@ -915,7 +915,7 @@ public class CaveTrollAnimations {
                             new Keyframe(0.95833f, AnimationHelper.createRotationalVector(17.5f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("Loincloth_Front",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.45833f, AnimationHelper.createTranslationalVector(0f, 0.3f, 0f),
@@ -935,7 +935,7 @@ public class CaveTrollAnimations {
                             new Keyframe(1f, AnimationHelper.createRotationalVector(-42.5f, 2.5f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("body_no_limbs",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, -1f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.25f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
@@ -946,7 +946,7 @@ public class CaveTrollAnimations {
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(1f, AnimationHelper.createTranslationalVector(0f, 0f, -1f),
                                     Transformation.Interpolations.CUBIC))).build();
-    public static final AnimationDefinition SMASH_NO_MACE = AnimationDefinition.Builder.create(2f).looping()
+    public static final Animation SMASH_NO_MACE = Animation.Builder.create(2f).looping()
             .addBoneAnimation("ArmRight",
                     new Transformation(Transformation.Targets.ROTATE,
                             new Keyframe(0f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
@@ -959,7 +959,7 @@ public class CaveTrollAnimations {
                                     Transformation.Interpolations.LINEAR),
                             new Keyframe(0.5f, AnimationHelper.createRotationalVector(32.5f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR))).build();
-    public static final AnimationDefinition OVERHAND_SMASH = AnimationDefinition.Builder.create(2f)
+    public static final Animation OVERHAND_SMASH = Animation.Builder.create(2f)
             .addBoneAnimation("body_no_legs",
                     new Transformation(Transformation.Targets.ROTATE,
                             new Keyframe(0f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
@@ -985,7 +985,7 @@ public class CaveTrollAnimations {
                             new Keyframe(2f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("ArmRight",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(1.5f, AnimationHelper.createTranslationalVector(0f, -1f, -1f),
@@ -1009,7 +1009,7 @@ public class CaveTrollAnimations {
                             new Keyframe(2f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("ArmLeft",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(1.5f, AnimationHelper.createTranslationalVector(0f, -1f, -1f),
@@ -1064,7 +1064,7 @@ public class CaveTrollAnimations {
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(2f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC))).build();
-    public static final AnimationDefinition SITTING_SLEEP = AnimationDefinition.Builder.create(3.5f).looping()
+    public static final Animation SITTING_SLEEP = Animation.Builder.create(3.5f).looping()
 .addBoneAnimation("body_no_legs",
                           new Transformation(Transformation.Targets.ROTATE,
 		new Keyframe(0f, AnimationHelper.createRotationalVector(7.5f, 0f, 0f),
@@ -1074,7 +1074,7 @@ public class CaveTrollAnimations {
             new Keyframe(3f, AnimationHelper.createRotationalVector(7.5f, 0f, 0f),
     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("jaw",
-                                      new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                                      new Transformation(Transformation.Targets.TRANSLATE,
 		new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -3f, 0f),
     Transformation.Interpolations.CUBIC),
             new Keyframe(1.75f, AnimationHelper.createTranslationalVector(0f, -2f, 0f),
@@ -1100,13 +1100,13 @@ public class CaveTrollAnimations {
             new Keyframe(3f, AnimationHelper.createRotationalVector(-25f, 0f, 0f),
     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("root",
-                                      new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                                      new Transformation(Transformation.Targets.TRANSLATE,
 		new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -9f, 0f),
     Transformation.Interpolations.CUBIC),
             new Keyframe(3f, AnimationHelper.createTranslationalVector(0f, -9f, 0f),
     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("Head",
-                                      new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                                      new Transformation(Transformation.Targets.TRANSLATE,
 		new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
     Transformation.Interpolations.CUBIC),
             new Keyframe(1.75f, AnimationHelper.createTranslationalVector(0f, -1f, 0f),
@@ -1131,7 +1131,7 @@ public class CaveTrollAnimations {
     Transformation.Interpolations.CUBIC),
             new Keyframe(3f, AnimationHelper.createRotationalVector(-90f, -35f, 0f),
     Transformation.Interpolations.CUBIC))).build();
-    public static final AnimationDefinition STANDING_FROM_SITTING = AnimationDefinition.Builder.create(3f)
+    public static final Animation STANDING_FROM_SITTING = Animation.Builder.create(3f)
             .addBoneAnimation("body_no_legs",
                     new Transformation(Transformation.Targets.ROTATE,
                             new Keyframe(0f, AnimationHelper.createRotationalVector(7.5f, 0f, 0f),
@@ -1149,7 +1149,7 @@ public class CaveTrollAnimations {
                             new Keyframe(3f, AnimationHelper.createScalingVector(1f, 1f, 1f),
                                     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("jaw",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -3f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.5f, AnimationHelper.createTranslationalVector(0f, -2f, 0f),
@@ -1183,7 +1183,7 @@ public class CaveTrollAnimations {
                             new Keyframe(3f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("root",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -9f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.5f, AnimationHelper.createTranslationalVector(0f, -9f, 0f),
@@ -1197,7 +1197,7 @@ public class CaveTrollAnimations {
                             new Keyframe(3f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("Loincloth_Front",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(3f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("Loincloth_Front",
@@ -1209,7 +1209,7 @@ public class CaveTrollAnimations {
                             new Keyframe(3f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("Head",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.5f, AnimationHelper.createTranslationalVector(0f, -1f, 0f),
@@ -1223,7 +1223,7 @@ public class CaveTrollAnimations {
                             new Keyframe(3f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("LegRight",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0.5f, AnimationHelper.createTranslationalVector(0f, 1f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(1.41667f, AnimationHelper.createTranslationalVector(0f, 5f, 0f),
@@ -1243,7 +1243,7 @@ public class CaveTrollAnimations {
                             new Keyframe(3f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("LegLeft",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0.5f, AnimationHelper.createTranslationalVector(0f, 1f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(1.91667f, AnimationHelper.createTranslationalVector(0f, 6f, 0f),
@@ -1262,7 +1262,7 @@ public class CaveTrollAnimations {
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(3f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR))).build();
-    public static final AnimationDefinition STANDING_TO_SITTING = AnimationDefinition.Builder.create(2.5f)
+    public static final Animation STANDING_TO_SITTING = Animation.Builder.create(2.5f)
             .addBoneAnimation("body_no_legs",
                     new Transformation(Transformation.Targets.ROTATE,
                             new Keyframe(0f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
@@ -1280,7 +1280,7 @@ public class CaveTrollAnimations {
                             new Keyframe(0f, AnimationHelper.createScalingVector(1f, 1f, 1f),
                                     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("jaw",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR),
                             new Keyframe(2.125f, AnimationHelper.createTranslationalVector(0f, -2f, 0f),
@@ -1314,7 +1314,7 @@ public class CaveTrollAnimations {
                             new Keyframe(2.5f, AnimationHelper.createRotationalVector(-25f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("root",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR),
                             new Keyframe(2.125f, AnimationHelper.createTranslationalVector(0f, -9f, 0f),
@@ -1328,7 +1328,7 @@ public class CaveTrollAnimations {
                             new Keyframe(2.125f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("Loincloth_Front",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("Loincloth_Front",
@@ -1340,7 +1340,7 @@ public class CaveTrollAnimations {
                             new Keyframe(0f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("Head",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR),
                             new Keyframe(2.125f, AnimationHelper.createTranslationalVector(0f, -1f, 0f),
@@ -1354,7 +1354,7 @@ public class CaveTrollAnimations {
                             new Keyframe(2.5f, AnimationHelper.createRotationalVector(30f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("LegRight",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR),
                             new Keyframe(0.83333f, AnimationHelper.createTranslationalVector(0f, 5f, 0f),
@@ -1374,7 +1374,7 @@ public class CaveTrollAnimations {
                             new Keyframe(2.5f, AnimationHelper.createRotationalVector(-90f, 35f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("LegLeft",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR),
                             new Keyframe(1.29167f, AnimationHelper.createTranslationalVector(0f, 6f, 0f),
@@ -1393,9 +1393,9 @@ public class CaveTrollAnimations {
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(2.5f, AnimationHelper.createRotationalVector(-90f, -35f, 0f),
                                     Transformation.Interpolations.CUBIC))).build();
-    public static final AnimationDefinition SITTING_TO_SLEEPING = AnimationDefinition.Builder.create(2f).looping()
+    public static final Animation SITTING_TO_SLEEPING = Animation.Builder.create(2f).looping()
             .addBoneAnimation("body_no_legs",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(2f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("body_no_legs",
@@ -1407,7 +1407,7 @@ public class CaveTrollAnimations {
                             new Keyframe(2f, AnimationHelper.createRotationalVector(-90f, 0f, -1f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("jaw",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -3f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.75f, AnimationHelper.createTranslationalVector(0f, -3f, 0f),
@@ -1423,7 +1423,7 @@ public class CaveTrollAnimations {
                             new Keyframe(2f, AnimationHelper.createRotationalVector(12.5f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("ArmRight",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(2f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("ArmRight",
@@ -1435,7 +1435,7 @@ public class CaveTrollAnimations {
                             new Keyframe(2f, AnimationHelper.createRotationalVector(4.66f, -2.25f, 17.36f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("ArmLeft",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(2f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("ArmLeft",
@@ -1447,7 +1447,7 @@ public class CaveTrollAnimations {
                             new Keyframe(2f, AnimationHelper.createRotationalVector(4.09f, 4.43f, -24.64f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("root",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -9f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.75f, AnimationHelper.createTranslationalVector(0f, -9f, 0f),
@@ -1459,7 +1459,7 @@ public class CaveTrollAnimations {
                             new Keyframe(2f, AnimationHelper.createRotationalVector(20f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("Head",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(0.75f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
@@ -1491,16 +1491,16 @@ public class CaveTrollAnimations {
                             new Keyframe(2f, AnimationHelper.createRotationalVector(-85.27f, -30.02f, 0.5f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("body",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(2f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("body",
                     new Transformation(Transformation.Targets.SCALE,
                             new Keyframe(2f, AnimationHelper.createScalingVector(1f, 1f, 1f),
                                     Transformation.Interpolations.CUBIC))).build();
-    public static final AnimationDefinition SLEEP_LAYING_DOWN = AnimationDefinition.Builder.create(7f).looping()
+    public static final Animation SLEEP_LAYING_DOWN = Animation.Builder.create(7f).looping()
             .addBoneAnimation("body_no_legs",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(1.75f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f),
@@ -1516,7 +1516,7 @@ public class CaveTrollAnimations {
                             new Keyframe(0f, AnimationHelper.createRotationalVector(-90f, 0f, -1f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("jaw",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(1.75f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f),
@@ -1532,7 +1532,7 @@ public class CaveTrollAnimations {
                             new Keyframe(0f, AnimationHelper.createRotationalVector(12.5f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("ArmRight",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(3.5f, AnimationHelper.createTranslationalVector(0f, 0.5f, 0f),
@@ -1544,7 +1544,7 @@ public class CaveTrollAnimations {
                             new Keyframe(0f, AnimationHelper.createRotationalVector(4.66f, -2.25f, 17.36f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("ArmLeft",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(3.5f, AnimationHelper.createTranslationalVector(0f, 0.5f, 0f),
@@ -1556,11 +1556,11 @@ public class CaveTrollAnimations {
                             new Keyframe(0f, AnimationHelper.createRotationalVector(4.09f, 4.43f, -24.64f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("root",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -8f, 0f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("Head",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -0.5f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(3.5f, AnimationHelper.createTranslationalVector(0f, 0f, -1f),
@@ -1584,7 +1584,7 @@ public class CaveTrollAnimations {
                             new Keyframe(0f, AnimationHelper.createRotationalVector(-85.27f, -30.02f, 0.5f),
                                     Transformation.Interpolations.CUBIC)))
             .addBoneAnimation("body",
-                    new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                    new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC),
                             new Keyframe(3.5f, AnimationHelper.createTranslationalVector(0f, 0f, -1f),
@@ -1625,7 +1625,7 @@ public class CaveTrollAnimations {
                     new Transformation(Transformation.Targets.ROTATE,
                             new Keyframe(0f, AnimationHelper.createRotationalVector(0f, 0f, 20f),
                                     Transformation.Interpolations.LINEAR))).build();
-    public static final AnimationDefinition SLEEP_LAYING_DOWN_STANDING_UP = AnimationDefinition.Builder.create(4f)
+    public static final Animation SLEEP_LAYING_DOWN_STANDING_UP = Animation.Builder.create(4f)
 .addBoneAnimation("body_no_legs",
                           new Transformation(Transformation.Targets.ROTATE,
 		new Keyframe(0f, AnimationHelper.createRotationalVector(-90f, 0f, 0f),
@@ -1645,7 +1645,7 @@ public class CaveTrollAnimations {
 		new Keyframe(4f, AnimationHelper.createScalingVector(1f, 1f, 1f),
     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("jaw",
-                                      new Transformation(Transformation.Targets.MOVE_ORIGIN, 
+                                      new Transformation(Transformation.Targets.TRANSLATE, 
 		new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -4f, 0f),
     Transformation.Interpolations.LINEAR),
             new Keyframe(1.5f, AnimationHelper.createTranslationalVector(0f, -2f, 0f),
@@ -1679,7 +1679,7 @@ public class CaveTrollAnimations {
             new Keyframe(4f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("root",
-                                      new Transformation(Transformation.Targets.MOVE_ORIGIN, 
+                                      new Transformation(Transformation.Targets.TRANSLATE, 
 		new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, -9f, 0f),
     Transformation.Interpolations.LINEAR),
             new Keyframe(1.5f, AnimationHelper.createTranslationalVector(0f, -9f, 0f),
@@ -1695,7 +1695,7 @@ public class CaveTrollAnimations {
             new Keyframe(4f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("Loincloth_Front",
-                                      new Transformation(Transformation.Targets.MOVE_ORIGIN, 
+                                      new Transformation(Transformation.Targets.TRANSLATE, 
 		new Keyframe(4f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("Loincloth_Front",
@@ -1707,7 +1707,7 @@ public class CaveTrollAnimations {
 		new Keyframe(4f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("Head",
-                                      new Transformation(Transformation.Targets.MOVE_ORIGIN, 
+                                      new Transformation(Transformation.Targets.TRANSLATE, 
 		new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),
     Transformation.Interpolations.LINEAR),
             new Keyframe(1.5f, AnimationHelper.createTranslationalVector(0f, -1f, 0f),
@@ -1721,7 +1721,7 @@ public class CaveTrollAnimations {
             new Keyframe(4f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("LegRight",
-                                      new Transformation(Transformation.Targets.MOVE_ORIGIN, 
+                                      new Transformation(Transformation.Targets.TRANSLATE, 
 		new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 1f, 0f),
     Transformation.Interpolations.LINEAR),
             new Keyframe(1.5f, AnimationHelper.createTranslationalVector(0f, 1f, 0f),
@@ -1743,7 +1743,7 @@ public class CaveTrollAnimations {
             new Keyframe(4f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
     Transformation.Interpolations.LINEAR)))
             .addBoneAnimation("LegLeft",
-                                      new Transformation(Transformation.Targets.MOVE_ORIGIN, 
+                                      new Transformation(Transformation.Targets.TRANSLATE, 
 		new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 1f, 0f),
     Transformation.Interpolations.LINEAR),
             new Keyframe(1.5f, AnimationHelper.createTranslationalVector(0f, 1f, 0f),

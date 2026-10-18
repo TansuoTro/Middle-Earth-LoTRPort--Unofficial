@@ -2,7 +2,7 @@ package net.jukoz.me.recipe;
 import net.jukoz.me.item.MEComponents;
 
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.DyedColorComponent;
+import net.jukoz.me.compat.DyedColorComponent;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.items.armor.CustomChestplateItem;
@@ -39,7 +39,7 @@ public class BackAttachmentRemovalRecipe extends SpecialCraftingRecipe {
             } else if (MEComponents.get(itemStack, MEComponents.BACK_ATTACHMENT_DATA) != null){
                 ItemStack backAttachment = new ItemStack(Registries.ITEM.get(new Identifier(MiddleEarth.MOD_ID, MEComponents.get(itemStack, MEComponents.BACK_ATTACHMENT_DATA).backAttachment().getName())));
                 MEComponents.set(backAttachment, MEComponents.BACK_ATTACHMENT_DATA, itemStack.get(MEComponents.BACK_ATTACHMENT_DATA));
-                backAttachment.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(MEComponents.get(itemStack, MEComponents.BACK_ATTACHMENT_DATA).backAttachmentColor()));
+                backAttachment.set(MEComponents.DYED_COLOR, new DyedColorComponent(MEComponents.get(itemStack, MEComponents.BACK_ATTACHMENT_DATA).backAttachmentColor()));
                 defaultedList.set(i, backAttachment);
             }
         }

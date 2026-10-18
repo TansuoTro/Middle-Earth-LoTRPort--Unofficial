@@ -72,8 +72,8 @@ public class BackAttachmentRecipe extends SpecialCraftingRecipe {
 
         if (!itemStack.isEmpty()) {
             int color;
-            if (backAttachment.get(DataComponentTypes.DYED_COLOR) != null){
-                color = backAttachment.get(DataComponentTypes.DYED_COLOR).rgb();
+            if (backAttachment.get(MEComponents.DYED_COLOR) != null){
+                color = backAttachment.get(MEComponents.DYED_COLOR).rgb();
             } else {
                 color = 0;
             }

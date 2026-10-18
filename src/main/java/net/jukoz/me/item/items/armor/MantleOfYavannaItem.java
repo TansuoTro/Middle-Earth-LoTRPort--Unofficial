@@ -2,7 +2,7 @@ package net.jukoz.me.item.items.armor;
 
 import net.jukoz.me.item.MEComponents;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.DyedColorComponent;
+import net.jukoz.me.compat.DyedColorComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
@@ -36,7 +36,7 @@ public class MantleOfYavannaItem extends BackAttachmentItem {
     @Override
     public void inventoryTick(ItemStack stack, ServerWorld world, Entity entity, @Nullable EquipmentSlot slot) {
         super.inventoryTick(stack, world, entity, slot);
-        DyedColorComponent dyedColorComponent = stack.get(DataComponentTypes.DYED_COLOR);
+        DyedColorComponent dyedColorComponent = stack.get(MEComponents.DYED_COLOR);
         if(dyedColorComponent == null) return;
 
         int targetColor = 4624722;
@@ -49,13 +49,13 @@ public class MantleOfYavannaItem extends BackAttachmentItem {
         }
 
         if(currentColor != targetColor) {
-            Color colorA = new Color(stack.get(DataComponentTypes.DYED_COLOR).rgb());
+            Color colorA = new Color(stack.get(MEComponents.DYED_COLOR).rgb());
             Color colorB = new Color(targetColor);
             Color lerpColor = new Color(MathHelper.lerp(COLOR_LERP, colorA.getRed(), colorB.getRed()),
                     MathHelper.lerp(COLOR_LERP, colorA.getGreen(), colorB.getGreen()),
                     MathHelper.lerp(COLOR_LERP, colorA.getBlue(), colorB.getBlue()));
             currentColor = lerpColor.getRGB();
-            stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(currentColor));
+            stack.set(MEComponents.DYED_COLOR, new DyedColorComponent(currentColor));
         }
     }
 

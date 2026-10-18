@@ -3,7 +3,7 @@ import net.jukoz.me.compat.NbtCompat;
 import net.jukoz.me.item.MEComponents;
 
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.DyedColorComponent;
+import net.jukoz.me.compat.DyedColorComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -158,15 +158,15 @@ public class GearItemData {
         if(this.color != null){
             List<TagKey<Item>> tags = itemStack.streamTags().toList();
             if(tags.contains(ItemTags.DYEABLE))
-                itemStack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(this.color));
+                itemStack.set(MEComponents.DYED_COLOR, new DyedColorComponent(this.color));
             else if(itemStack.isIn(ItemTags.DYEABLE))
-                itemStack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(this.color));
+                itemStack.set(MEComponents.DYED_COLOR, new DyedColorComponent(this.color));
         } else if(this.colors != null){
             List<TagKey<Item>> tags = itemStack.streamTags().toList();
             if(tags.contains(ItemTags.DYEABLE))
-                itemStack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(getRandomColor(colors)));
+                itemStack.set(MEComponents.DYED_COLOR, new DyedColorComponent(getRandomColor(colors)));
             else if(itemStack.isIn(ItemTags.DYEABLE))
-                itemStack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(getRandomColor(colors)));
+                itemStack.set(MEComponents.DYED_COLOR, new DyedColorComponent(getRandomColor(colors)));
         }
         if(this.noCape != null && this.noCape && itemStack.getComponents().contains(MEComponents.BACK_ATTACHMENT_DATA)){
             MEComponents.remove(itemStack, MEComponents.BACK_ATTACHMENT_DATA);

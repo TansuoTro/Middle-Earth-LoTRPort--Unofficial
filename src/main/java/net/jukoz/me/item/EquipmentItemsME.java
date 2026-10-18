@@ -1,7 +1,7 @@
 package net.jukoz.me.item;
 
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.DyedColorComponent;
+import net.jukoz.me.compat.DyedColorComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.equipment.EquipmentType;
 import net.minecraft.registry.Registries;
@@ -53,58 +53,58 @@ public class EquipmentItemsME {
     public static final Item HOOD = registerDyeableHelmetAttachment("hood",
             (settings) -> new HelmetAttachmentItem(settings, ArmorMaterialsME.FABRIC_T0), new MESettings()
                     .component(MEComponents.HELMET_ATTACHMENT_DATA, HelmetAttachmentDataComponent.newHelmetAttachment(HelmetAttachmentsME.HOOD))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5394247)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5394247)));
     public static final Item TALL_HOOD = registerDyeableHelmetAttachment("tall_hood",
             (settings) -> new HelmetAttachmentItem(settings, ArmorMaterialsME.FABRIC_T0), new MESettings()
                     .component(MEComponents.HELMET_ATTACHMENT_DATA, HelmetAttachmentDataComponent.newHelmetAttachment(HelmetAttachmentsME.TALL_HOOD))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5394247)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5394247)));
 
     public static final Item BLACK_FUR_HOOD = registerDyeableHelmetAttachment("black_fur_hood",
             (settings) -> new HelmetAttachmentItem(settings, ArmorMaterialsME.FUR_T0), new MESettings()
                     .component(MEComponents.HELMET_ATTACHMENT_DATA, HelmetAttachmentDataComponent.newHelmetAttachment(HelmetAttachmentsME.BLACK_FUR_HOOD))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5394247)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5394247)));
     public static final Item BROWN_FUR_HOOD = registerDyeableHelmetAttachment("brown_fur_hood",
             (settings) -> new HelmetAttachmentItem(settings, ArmorMaterialsME.FUR_T0), new MESettings()
                     .component(MEComponents.HELMET_ATTACHMENT_DATA, HelmetAttachmentDataComponent.newHelmetAttachment(HelmetAttachmentsME.BROWN_FUR_HOOD))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5394247)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5394247)));
     public static final Item GRAY_FUR_HOOD = registerDyeableHelmetAttachment("gray_fur_hood",
             (settings) -> new HelmetAttachmentItem(settings, ArmorMaterialsME.FUR_T0), new MESettings()
                     .component(MEComponents.HELMET_ATTACHMENT_DATA, HelmetAttachmentDataComponent.newHelmetAttachment(HelmetAttachmentsME.GRAY_FUR_HOOD))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5394247)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5394247)));
     public static final Item TAN_FUR_HOOD = registerDyeableHelmetAttachment("tan_fur_hood",
             (settings) -> new HelmetAttachmentItem(settings, ArmorMaterialsME.FUR_T0), new MESettings()
                     .component(MEComponents.HELMET_ATTACHMENT_DATA, HelmetAttachmentDataComponent.newHelmetAttachment(HelmetAttachmentsME.TAN_FUR_HOOD))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5394247)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5394247)));
     public static final Item WHITE_FUR_HOOD = registerDyeableHelmetAttachment("white_fur_hood",
             (settings) -> new HelmetAttachmentItem(settings, ArmorMaterialsME.FUR_T0), new MESettings()
                     .component(MEComponents.HELMET_ATTACHMENT_DATA, HelmetAttachmentDataComponent.newHelmetAttachment(HelmetAttachmentsME.WHITE_FUR_HOOD))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5394247)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5394247)));
 
     //capes
     public static final Item CAPE = registerDyeableBackAttachment("cape",
             (settings) -> new BackAttachmentItem(settings, ArmorMaterialsME.FABRIC_T0), new MESettings()
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.CAPE))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5394247)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5394247)));
     public static final Item SHOULDER_CAPE_LEFT = registerDyeableBackAttachment("shoulder_cape_left",
             (settings) -> new BackAttachmentItem(settings, ArmorMaterialsME.FABRIC_T0), new MESettings()
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.SHOULDER_CAPE_LEFT))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5394247)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5394247)));
     public static final Item SHOULDER_CAPE_RIGHT = registerDyeableBackAttachment("shoulder_cape_right",
             (settings) -> new BackAttachmentItem(settings, ArmorMaterialsME.FABRIC_T0), new MESettings()
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.SHOULDER_CAPE_RIGHT))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5394247)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5394247)));
     public static final Item SURCOAT = registerDyeableBackAttachment("surcoat",
             (settings) -> new BackAttachmentItem(settings, ArmorMaterialsME.FABRIC_T0), new MESettings()
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.SURCOAT))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5394247)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5394247)));
     public static final Item CLOAK = registerDyeableBackAttachment("cloak",
             (settings) -> new BackAttachmentItem(settings, ArmorMaterialsME.FABRIC_T0), new MESettings()
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.CLOAK))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5394247)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5394247)));
     public static final Item WANDERER_ROBES = registerDyeableBackAttachment("wanderer_robes",
             (settings) -> new BackAttachmentItem(settings, ArmorMaterialsME.FABRIC_T0), new MESettings()
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.WANDERER_ROBES))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5394247)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5394247)));
 
     public static final Item LEAF_CAPE = registerBackAttachment("leaf_cape",
             (settings) -> new BackAttachmentItem(settings, ArmorMaterialsME.FABRIC_T0), new MESettings()
@@ -126,23 +126,23 @@ public class EquipmentItemsME {
     public static final Item BLACK_FUR_CLOAK = registerDyeableBackAttachment("black_fur_cloak",
             (settings) -> new BackAttachmentItem(settings, ArmorMaterialsME.FUR_T0), new MESettings()
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.BLACK_FUR_CLOAK))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5394247)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5394247)));
     public static final Item BROWN_FUR_CLOAK = registerDyeableBackAttachment("brown_fur_cloak",
             (settings) -> new BackAttachmentItem(settings, ArmorMaterialsME.FUR_T0), new MESettings()
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.BROWN_FUR_CLOAK))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5394247)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5394247)));
     public static final Item GRAY_FUR_CLOAK = registerDyeableBackAttachment("gray_fur_cloak",
             (settings) -> new BackAttachmentItem(settings, ArmorMaterialsME.FUR_T0), new MESettings()
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.GRAY_FUR_CLOAK))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5394247)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5394247)));
     public static final Item TAN_FUR_CLOAK = registerDyeableBackAttachment("tan_fur_cloak",
             (settings) -> new BackAttachmentItem(settings, ArmorMaterialsME.FUR_T0), new MESettings()
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.TAN_FUR_CLOAK))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5394247)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5394247)));
     public static final Item WHITE_FUR_CLOAK = registerDyeableBackAttachment("white_fur_cloak",
             (settings) -> new BackAttachmentItem(settings, ArmorMaterialsME.FUR_T0), new MESettings()
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.WHITE_FUR_CLOAK))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5394247)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5394247)));
 
     public static final Item BLACK_FUR = registerBackAttachment("black_fur",
             (settings) -> new BackAttachmentItem(settings, ArmorMaterialsME.FUR_T0), new MESettings()
@@ -178,23 +178,23 @@ public class EquipmentItemsME {
 
     public static final Item BYCOCKET = registerDyeableArmorPiece("bycocket",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.WOOL_T1, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(-6265536)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(-6265536)));
 
     public static final Item BEEKEEPER_MASK = registerDyeableArmorPiece("beekeeper_mask",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.STRAW_T1, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(11246676)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(11246676)));
 
     public static final Item WANDERER_HAT = registerDyeableCustomModelArmorPiece("wanderer_hat",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.FABRIC_T1, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5394247)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5394247)));
 
     public static final Item ARMING_COAT = registerDyeableArmorPiece("arming_coat",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.FABRIC_T1, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(15256475)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(15256475)));
 
     public static final Item ARMING_SKIRT = registerDyeableArmorPiece("arming_skirt",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.FABRIC_T1, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(15256475)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(15256475)));
 
     public static final Item SHOES = registerArmorPiece("shoes",
             (settings) -> new CustomBootsItem(ArmorMaterialsME.FABRIC_T1, settings), new MESettings());
@@ -204,14 +204,14 @@ public class EquipmentItemsME {
 
     public static final Item LEATHER_SKULLCAP = registerDyeableArmorPiece("leather_skullcap",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(-6265536)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(-6265536)));
 
     public static final Item GAMBESON_CAP = registerDyeableArmorPiece("gambeson_cap",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(15256475)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(15256475)));
     public static final Item GAMBESON_COWL = registerDyeableArmorPiece("gambeson_cowl",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent( 15256475)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent( 15256475)));
     public static final Item KETTLE_HAT = registerCustomModelArmorPiece("kettle_hat",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.IRON_T2, settings), new MESettings());
 
@@ -221,15 +221,15 @@ public class EquipmentItemsME {
 
     public static final Item GAMBESON = registerDyeableArmorPiece("gambeson",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(15256475)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(15256475)));
 
     public static final Item LEATHER_VEST = registerDyeableArmorPiece("leather_vest",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(-6265536)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(-6265536)));
 
     public static final Item LEATHER_SCALE_VEST = registerDyeableArmorPiece("leather_scale_vest",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(-6265536)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(-6265536)));
 
     public static final Item STURDY_BOOTS = registerArmorPiece("sturdy_boots",
             (settings) -> new CustomBootsItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings());
@@ -271,7 +271,7 @@ public class EquipmentItemsME {
     //region HOBBITS
     public static final Item SHIRRIFF_HAT = registerDyeableCustomModelArmorPiece("shirriff_hat",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.LEATHER_T1, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(3440180)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(3440180)));
     //endregion
 
     //region MEN
@@ -292,11 +292,11 @@ public class EquipmentItemsME {
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.GONDOR)));
     public static final Item GONDORIAN_LEATHER_CUIRASS = registerDyeableArmorPiece("gondorian_leather_cuirass",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.IRON_T3, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(-6265536))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(-6265536))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.GONDOR)));
     public static final Item GONDORIAN_LEATHER_CHESTPLATE = registerDyeableArmorPiece("gondorian_leather_chestplate",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.IRON_T3, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(-6265536))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(-6265536))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.GONDOR)));
 
     public static final Item GONDORIAN_MAIL_COAT = registerArmorPiece("gondorian_mail_coat",
@@ -405,7 +405,7 @@ public class EquipmentItemsME {
     //region ROHAN
     public static final Item ROHIRRIC_REINFORCED_COAT = registerDyeableArmorPiece("rohirric_reinforced_coat",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.FABRIC_T1, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent( 15256475))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent( 15256475))
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.ROHIRRIC_CAPE))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.ROHAN)));
     
@@ -421,16 +421,16 @@ public class EquipmentItemsME {
 
     public static final Item ROHIRRIC_LEATHER_VEST = registerDyeableArmorPiece("rohirric_leather_vest",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(15256475))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(15256475))
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.ROHIRRIC_CAPE))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.ROHAN)).component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.ROHAN)));
     public static final Item ROHIRRIC_LEATHER_SCALE_VEST = registerDyeableArmorPiece("rohirric_leather_scale_vest",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(15256475))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(15256475))
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.ROHIRRIC_CAPE)).component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.ROHAN)));
     public static final Item ROHIRRIC_GAMBESON = registerDyeableArmorPiece("rohirric_gambeson",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(15256475))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(15256475))
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.ROHIRRIC_CAPE)).component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.ROHAN)));
 
     public static final Item ROHIRRIC_MILITIA_HELMET = registerArmorPiece("rohirric_militia_helmet",
@@ -444,11 +444,11 @@ public class EquipmentItemsME {
 
     public static final Item ROHIRRIC_REINFORCED_LEATHER_VEST = registerDyeableArmorPiece("rohirric_reinforced_leather_vest",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.IRON_T3, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(15256475))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(15256475))
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.ROHIRRIC_CAPE)).component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.ROHAN)));
     public static final Item ROHIRRIC_BRACED_MAIL_SHIRT = registerDyeableArmorPiece("rohirric_braced_mail_shirt",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.IRON_T3, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(15256475))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(15256475))
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.ROHIRRIC_CAPE)).component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.ROHAN)));
 
     public static final Item ROHIRRIC_REINFORCED_LEATHER_SCALE_VEST = registerArmorPiece("rohirric_reinforced_leather_scale_vest",
@@ -513,15 +513,15 @@ public class EquipmentItemsME {
     //region DALE
     public static final Item DALISH_ARMING_COAT_BLACK_FUR = registerDyeableArmorPiece("dalish_arming_coat_black_fur",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.FABRIC_T1, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(7296407))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(7296407))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.DALE)));
     public static final Item DALISH_ARMING_COAT_BROWN_FUR = registerDyeableArmorPiece("dalish_arming_coat_brown_fur",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.FABRIC_T1, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(7296407))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(7296407))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.DALE)));
     public static final Item DALISH_ARMING_COAT_TAN_FUR = registerDyeableArmorPiece("dalish_arming_coat_tan_fur",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.FABRIC_T1, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(7296407))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(7296407))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.DALE)));
     public static final Item DALISH_HEYDAY_ARMING_COAT = registerArmorPiece("dalish_heyday_arming_coat",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.FABRIC_T1, settings), new MESettings()
@@ -620,11 +620,11 @@ public class EquipmentItemsME {
     //region GENERIC
     public static final Item DWARVEN_MINER_HELMET = registerDyeableCustomModelArmorPiece("dwarven_miner_helmet",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(7098174)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(7098174)));
 
     public static final Item DWARVEN_GAMBESON = registerDyeableArmorPiece("dwarven_gambeson",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(11572859)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(11572859)));
 
     public static final Item DWARVEN_MAIL_COIF = registerArmorPiece("dwarven_mail_coif",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.IRON_T3, settings), new MESettings());
@@ -633,7 +633,7 @@ public class EquipmentItemsME {
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.IRON_T3, settings), new MESettings());
     public static final Item DWARVEN_MINER_GAMBESON = registerDyeableArmorPiece("dwarven_miner_gambeson",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.IRON_T3, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(11572859)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(11572859)));
 
     public static final Item DWARVEN_MAIL_COAT = registerArmorPiece("dwarven_mail_coat",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.IRON_T3, settings), new MESettings());
@@ -661,44 +661,44 @@ public class EquipmentItemsME {
 
     public static final Item LONGBEARD_LEATHER_HAUBERK = registerDyeableArmorPiece("longbeard_leather_hauberk",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5914168))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5914168))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.LONGBEARDS)));
     public static final Item LONGBEARD_WANDERER_COAT = registerDyeableArmorPiece("longbeard_wanderer_coat",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5914168))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5914168))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.LONGBEARDS)));
 
     public static final Item LONGBEARD_LEATHER_LEGGINGS = registerDyeableArmorPiece("longbeard_leather_leggings",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5914168))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5914168))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.LONGBEARDS)));
 
     public static final Item LONGBEARD_PARTISAN_OUTFIT = registerDyeableArmorPiece("longbeard_partisan_outfit",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.IRON_T3, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5914168))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5914168))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.LONGBEARDS)));
     public static final Item LONGBEARD_REINFORCED_LEATHER_HAUBERK = registerDyeableArmorPiece("longbeard_reinforced_leather_hauberk",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.IRON_T3, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5914168))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5914168))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.LONGBEARDS)));
 
     //region EREBOR
     public static final Item EREBOR_LEATHER_HELMET = registerDyeableArmorPiece("erebor_leather_helmet",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.IRON_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(7098174))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(7098174))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.LONGBEARDS_EREBOR)));
     public static final Item EREBOR_BRACED_LEATHER_HELMET = registerDyeableArmorPiece("erebor_braced_leather_helmet",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.IRON_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(6309430))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(6309430))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.LONGBEARDS_EREBOR)));
     public static final Item EREBOR_NASAL_LEATHER_HELMET = registerDyeableArmorPiece("erebor_nasal_leather_helmet",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.IRON_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(7098174))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(7098174))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.LONGBEARDS_EREBOR)));
 
     public static final Item EREBOR_LEATHER_LEGGINGS = registerDyeableArmorPiece("erebor_leather_leggings",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5914168))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5914168))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.LONGBEARDS_EREBOR)));
 
     public static final Item EREBOR_MAIL_COIF = registerArmorPiece("erebor_mail_coif",
@@ -716,7 +716,7 @@ public class EquipmentItemsME {
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.LONGBEARDS_EREBOR)));
     public static final Item EREBOR_PADDED_MAIL_HAUBERK = registerDyeableArmorPiece("erebor_padded_mail_hauberk",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.IRON_T3, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(3687263))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(3687263))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.LONGBEARDS_EREBOR)));
 
     public static final Item EREBOR_MAIL_COAT = registerArmorPiece("erebor_mail_coat",
@@ -746,19 +746,19 @@ public class EquipmentItemsME {
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.LONGBEARDS_EREBOR)));
     public static final Item EREBOR_LONG_COAT = registerDyeableArmorPiece("erebor_long_coat",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.DWARVEN_STEEL_T4, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5914168))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5914168))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.LONGBEARDS_EREBOR)));
     public static final Item EREBOR_BRAWLER_CHESTPLATE = registerDyeableArmorPiece("erebor_brawler_chestplate",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.DWARVEN_STEEL_T4, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(3687263))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(3687263))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.LONGBEARDS_EREBOR)));
     public static final Item EREBOR_REINFORCED_LEATHER_HAUBERK = registerDyeableArmorPiece("erebor_reinforced_leather_hauberk",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.DWARVEN_STEEL_T4, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5914168))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5914168))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.LONGBEARDS_EREBOR)));
     public static final Item EREBOR_REINFORCED_COAT = registerDyeableArmorPiece("erebor_reinforced_coat",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.DWARVEN_STEEL_T4, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(3687263))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(3687263))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.LONGBEARDS_EREBOR)));
     public static final Item RAVENHILL_REINFORCED_MAIL_HAUBERK = registerArmorPiece("ravenhill_reinforced_mail_hauberk",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.DWARVEN_STEEL_T4, settings), new MESettings()
@@ -864,14 +864,14 @@ public class EquipmentItemsME {
     //region GENERIC
     public static final Item ELVEN_ARMING_COAT = registerDyeableArmorPiece("elven_arming_coat",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.FABRIC_T1, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4805220)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4805220)));
 
     public static final Item ELVEN_ARMING_SKIRT = registerDyeableArmorPiece("elven_arming_skirt",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.FABRIC_T1, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4805220)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4805220)));
     public static final Item ELVEN_OPEN_ARMING_SKIRT = registerDyeableArmorPiece("elven_open_arming_skirt",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.FABRIC_T1, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4805220)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4805220)));
 
     public static final Item ELVEN_BOOTS = registerArmorPiece("elven_boots",
             (settings) -> new CustomBootsItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings());
@@ -907,16 +907,16 @@ public class EquipmentItemsME {
     public static final Item MANTLE_OF_YAVANNA = registerDyeableBackAttachment("mantle_of_yavanna",
             (settings) -> new MantleOfYavannaItem(settings, ArmorMaterialsME.FABRIC_T0), new MESettings().rarity(Rarity.EPIC)
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.MANTLE_OF_YAVANNA))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x375729)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(0x375729)));
     public static final Item GREAT_HORN_LIGHT_ARMOR = registerDyeableArmorPiece("great_horn_light_armor",
             Item::new, ItemSettingsME.greatHornArmor(ArmorMaterialsME.GREAT_HORN_LIGHT_ARMOR.material())
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(3879204)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(3879204)));
     public static final Item GREAT_HORN_LIGHT_GRAY_ARMOR = registerDyeableArmorPiece("great_horn_light_gray_armor",
             Item::new, ItemSettingsME.greatHornArmor(ArmorMaterialsME.GREAT_HORN_LIGHT_GRAY_ARMOR.material())
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5464949)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5464949)));
     public static final Item GREAT_HORN_LIGHT_GREEN_ARMOR = registerDyeableArmorPiece("great_horn_light_green_armor",
             Item::new, ItemSettingsME.greatHornArmor(ArmorMaterialsME.GREAT_HORN_LIGHT_GREEN_ARMOR.material())
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(3491893)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(3491893)));
     public static final Item GREAT_HORN_PLATE_ARMOR = registerGeneratedItem("great_horn_plate_armor",
             Item::new, ItemSettingsME.greatHornArmor(ArmorMaterialsME.GREAT_HORN_PLATE_ARMOR.material()));
     public static final Item GREAT_HORN_ORNAMENTED_PLATE_ARMOR = registerGeneratedItem("great_horn_ornamented_plate_armor",
@@ -989,16 +989,16 @@ public class EquipmentItemsME {
 
     public static final Item EGLADIL_SENTINEL_HELMET = registerDyeableCustomModelArmorPiece("egladil_sentinel_helmet",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.ELVEN_STEEL_T5, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x564469))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(0x564469))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.LOTHLORIEN)));
     public static final Item EGLADIL_SENTINEL_CHESTPLATE = registerDyeableArmorPiece("egladil_sentinel_chestplate",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.ELVEN_STEEL_T5, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x6171AE))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(0x6171AE))
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.EGLADIL_SENTINEL_CAPE))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.LOTHLORIEN)));
     public static final Item EGLADIL_SENTINEL_LEGGINGS = registerDyeableArmorPiece("egladil_sentinel_leggings",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.ELVEN_STEEL_T5, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x564469))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(0x564469))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.LOTHLORIEN)));
     public static final Item EGLADIL_SENTINEL_BOOTS = registerArmorPiece("egladil_sentinel_boots",
             (settings) -> new CustomBootsItem(ArmorMaterialsME.ELVEN_STEEL_T5, settings), new MESettings()
@@ -1060,16 +1060,16 @@ public class EquipmentItemsME {
     //region WOODLAND_REALM
     public static final Item WOODLAND_REALM_ARMING_COAT = registerDyeableArmorPiece("woodland_realm_arming_coat",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.FABRIC_T1, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x4a5110)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(0x4a5110)));
     public static final Item WOODLAND_REALM_LEATHER_ARMING_COAT = registerDyeableArmorPiece("woodland_realm_leather_arming_coat",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x4a5110)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(0x4a5110)));
     public static final Item WOODLAND_REALM_LEATHER_BRONZED_ARMING_COAT = registerDyeableArmorPiece("woodland_realm_leather_bronzed_arming_coat",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x4a5110)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(0x4a5110)));
     public static final Item WOODLAND_REALM_LEATHER_SILVER_ARMING_COAT = registerDyeableArmorPiece("woodland_realm_leather_silver_arming_coat",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x4a5110)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(0x4a5110)));
 
     public static final Item WOODLAND_REALM_BRONZE_TRIMMED_RANGER_HELMET = registerCustomModelArmorPiece("woodland_realm_bronze_trimmed_ranger_helmet",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
@@ -1081,7 +1081,7 @@ public class EquipmentItemsME {
     public static final Item WOODLAND_REALM_CAVALRY_HELMET = registerDyeableCustomModelArmorPiece("woodland_realm_cavalry_helmet",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.ELVEN_STEEL_T4, settings), new MESettings()
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.WOODLAND_REALM))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x515638)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(0x515638)));
     public static final Item WOODLAND_REALM_GILDED_SCALE_HAUBERK = registerArmorPiece("woodland_realm_gilded_scale_hauberk",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.ELVEN_STEEL_T4, settings), new MESettings()
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.WOODLAND_REALM)));
@@ -1092,7 +1092,7 @@ public class EquipmentItemsME {
     public static final Item WOODLAND_REALM_ROYAL_GUARD_HELMET = registerDyeableCustomModelArmorPiece("woodland_realm_royal_guard_helmet",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.ELVEN_STEEL_T4, settings), new MESettings()
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.WOODLAND_REALM))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x532e29)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(0x532e29)));
     public static final Item WOODLAND_REALM_SCALE_HAUBERK = registerArmorPiece("woodland_realm_scale_hauberk",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.ELVEN_STEEL_T4, settings), new MESettings()
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.WOODLAND_REALM)));
@@ -1117,7 +1117,7 @@ public class EquipmentItemsME {
     public static final Item WARDEN_OF_THE_GLADE_HELMET = registerDyeableCustomModelArmorPiece("warden_of_the_glade_helmet",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.ELVEN_STEEL_T5, settings), new MESettings()
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.WOODLAND_REALM))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x5c5445)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(0x5c5445)));
     public static final Item WARDEN_OF_THE_GLADE_CHESTPLATE = registerArmorPiece("warden_of_the_glade_chestplate",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.ELVEN_STEEL_T5, settings), new MESettings()
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.WARDEN_OF_THE_GLADE_CAPE))
@@ -1235,21 +1235,21 @@ public class EquipmentItemsME {
     //region GENERIC
     public static final Item ORCISH_LEATHER_STRAP = registerDyeableArmorPiece("orcish_leather_strap",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.LEATHER_T1, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4865076)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4865076)));
 
     public static final Item ORCISH_SANDALS = registerDyeableArmorPiece("orcish_sandals",
             (settings) -> new CustomBootsItem(ArmorMaterialsME.FABRIC_T1, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4865076)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4865076)));
 
     public static final Item RUSTED_ORCISH_MAIL_COIF = registerArmorPiece("rusted_orcish_mail_coif",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.IRON_T2, settings), new MESettings());
 
     public static final Item ORCISH_LEATHER_CHESTPLATE = registerDyeableArmorPiece("orcish_leather_chestplate",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4865076)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4865076)));
     public static final Item ORCISH_LEATHER_SCALE_VEST = registerDyeableArmorPiece("orcish_leather_scale_vest",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4865076)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4865076)));
     public static final Item RUSTED_ORCISH_MAIL_HAUBERK = registerArmorPiece("rusted_orcish_mail_hauberk",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.IRON_T2, settings), new MESettings());
     public static final Item RUSTED_ORCISH_MAIL_SHIRT = registerArmorPiece("rusted_orcish_mail_shirt",
@@ -1257,37 +1257,37 @@ public class EquipmentItemsME {
 
     public static final Item ORCISH_LEATHER_SKIRT = registerDyeableArmorPiece("orcish_leather_skirt",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4865076)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4865076)));
     public static final Item ORCISH_LEG_BRACER = registerDyeableArmorPiece("orcish_leg_bracer",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4865076)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4865076)));
     public static final Item RUSTED_ORCISH_MAIL_COAT = registerArmorPiece("rusted_orcish_mail_coat",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.IRON_T2, settings), new MESettings());
     public static final Item RUSTED_ORCISH_REINFORCED_LEATHER_SKIRT = registerDyeableArmorPiece("rusted_orcish_reinforced_leather_skirt",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.IRON_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4865076)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4865076)));
     public static final Item RUSTED_ORCISH_REINFORCED_STRIP_LEATHER_SKIRT = registerDyeableArmorPiece("rusted_orcish_reinforced_strip_leather_skirt",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.IRON_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4865076)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4865076)));
     public static final Item ORCISH_STRIP_LEATHER_SKIRT = registerDyeableArmorPiece("orcish_strip_leather_skirt",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4865076)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4865076)));
 
     public static final Item ORCISH_BLACK_FUR_BOOTS = registerDyeableArmorPiece("orcish_black_fur_boots",
             (settings) -> new CustomBootsItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4865076)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4865076)));
     public static final Item ORCISH_BROWN_FUR_BOOTS = registerDyeableArmorPiece("orcish_brown_fur_boots",
             (settings) -> new CustomBootsItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4865076)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4865076)));
     public static final Item ORCISH_GRAY_FUR_BOOTS = registerDyeableArmorPiece("orcish_gray_fur_boots",
             (settings) -> new CustomBootsItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4865076)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4865076)));
     public static final Item ORCISH_TAN_FUR_BOOTS = registerDyeableArmorPiece("orcish_tan_fur_boots",
             (settings) -> new CustomBootsItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4865076)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4865076)));
     public static final Item ORCISH_WHITE_FUR_BOOTS = registerDyeableArmorPiece("orcish_white_fur_boots",
             (settings) -> new CustomBootsItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4865076)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4865076)));
 
     public static final Item ORCISH_BRACED_HELMET = registerCustomModelArmorPiece("orcish_braced_helmet",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.IRON_T3, settings), new MESettings());
@@ -1305,27 +1305,27 @@ public class EquipmentItemsME {
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.IRON_T3, settings), new MESettings());
     public static final Item ORCISH_REINFORCED_LEATHER_SKIRT = registerDyeableArmorPiece("orcish_reinforced_leather_skirt",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.IRON_T3, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4865076)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4865076)));
     public static final Item ORCISH_REINFORCED_STRIP_LEATHER_SKIRT = registerDyeableArmorPiece("orcish_reinforced_strip_leather_skirt",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.IRON_T3, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4865076)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4865076)));
 
     public static final Item ORCISH_SALLET = registerCustomModelArmorPiece("orcish_sallet",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.BURZUM_STEEL_T4, settings), new MESettings());
 
     public static final Item ORCISH_BELLY_PLATE_CHESTPLATE = registerDyeableArmorPiece("orcish_belly_plate_chestplate",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.BURZUM_STEEL_T4, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4865076)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4865076)));
     public static final Item ORCISH_SCALE_VEST = registerDyeableArmorPiece("orcish_scale_vest",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.BURZUM_STEEL_T4, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4865076)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4865076)));
 
     public static final Item ORCISH_REINFORCED_LEG_BRACER = registerArmorPiece("orcish_reinforced_leg_bracer",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.BURZUM_STEEL_T4, settings), new MESettings());
 
     public static final Item ORCISH_BRACED_SANDALS = registerDyeableArmorPiece("orcish_braced_sandals",
             (settings) -> new CustomBootsItem(ArmorMaterialsME.BURZUM_STEEL_T4, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(4865076)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(4865076)));
 
     public static final Item ORCISH_CAPE = registerBackAttachment("orcish_cape",
             (settings) -> new BackAttachmentItem(settings, ArmorMaterialsME.FABRIC_T0), new MESettings()
@@ -1336,7 +1336,7 @@ public class EquipmentItemsME {
     public static final Item ORCISH_SHOULDERS = registerDyeableBackAttachment("orcish_shoulders",
             (settings) -> new BackAttachmentItem(settings, ArmorMaterialsME.FABRIC_T0), new MESettings()
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.ORCISH_SHOULDERS))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5186845)));
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5186845)));
 
     public static final Item ORCISH_BLACK_FUR_SURCOAT_WITH_BONE = registerBackAttachment("orcish_black_fur_surcoat_with_bone",
             (settings) -> new BackAttachmentItem(settings, ArmorMaterialsME.FUR_T0), new MESettings()
@@ -1377,11 +1377,11 @@ public class EquipmentItemsME {
 
     public static final Item MORDOR_LEATHER_CUIRASS = registerDyeableArmorPiece("mordor_leather_cuirass",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5186845))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5186845))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORDOR)));
     public static final Item MORDOR_PAINTED_LEATHER_CUIRASS = registerDyeableArmorPiece("mordor_painted_leather_cuirass",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5186845))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5186845))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORDOR)));
 
     public static final Item MORDOR_HELMET = registerArmorPiece("mordor_helmet",
@@ -1411,14 +1411,14 @@ public class EquipmentItemsME {
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORDOR)));
     public static final Item RUSTED_MORDOR_CUIRASS = registerDyeableArmorPiece("rusted_mordor_cuirass",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.BURZUM_STEEL_T3, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5186845))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5186845))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORDOR)));
     public static final Item RUSTED_MORDOR_GORGET_HAUBERK = registerArmorPiece("rusted_mordor_gorget_hauberk",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.BURZUM_STEEL_T3, settings), new MESettings()
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORDOR)));
     public static final Item RUSTED_MORDOR_REINFORCED_COAT = registerDyeableArmorPiece("rusted_mordor_reinforced_coat",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.BURZUM_STEEL_T3, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5186845))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5186845))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORDOR)));
 
     public static final Item RUSTED_MORDOR_PLATE_BOOTS = registerArmorPiece("rusted_mordor_plate_boots",
@@ -1446,22 +1446,22 @@ public class EquipmentItemsME {
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORDOR)));
     public static final Item MORDOR_CUIRASS = registerDyeableArmorPiece("mordor_cuirass",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.BURZUM_STEEL_T4, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5186845))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5186845))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORDOR)));
     public static final Item MORDOR_DEGRADED_GONDORIAN_CHESTPLATE = registerDyeableArmorPiece("mordor_degraded_gondorian_chestplate",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.BURZUM_STEEL_T4, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5186845))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5186845))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORDOR)));
     public static final Item MORDOR_GORGET_HAUBERK = registerArmorPiece("mordor_gorget_hauberk",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.BURZUM_STEEL_T4, settings), new MESettings()
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORDOR)));
     public static final Item MORDOR_PAINTED_CUIRASS = registerDyeableArmorPiece("mordor_painted_cuirass",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.BURZUM_STEEL_T4, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5186845))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5186845))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORDOR)));
     public static final Item MORDOR_REINFORCED_COAT = registerDyeableArmorPiece("mordor_reinforced_coat",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.BURZUM_STEEL_T4, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(5186845))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(5186845))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORDOR)));
 
     public static final Item MORDOR_SCALE_COAT = registerArmorPiece("mordor_scale_coat",
@@ -1648,12 +1648,12 @@ public class EquipmentItemsME {
 
     public static final Item DOL_GULDUR_STALKER_HELMET = registerDyeableCustomModelArmorPiece("dol_guldur_stalker_helmet",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.BURZUM_STEEL_T5, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x3D3232))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(0x3D3232))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORDOR)));
     public static final Item DOL_GULDUR_STALKER_CHESTPLATE = registerDyeableCustomModelArmorPiece("dol_guldur_stalker_chestplate",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.STEEL_T5, settings), new MESettings()
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.DOL_GULDUR_STALKER_CAPE))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x3D3232))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(0x3D3232))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORDOR)));
     public static final Item DOL_GULDUR_STALKER_LEGGINGS = registerArmorPiece("dol_guldur_stalker_leggings",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.STEEL_T5, settings), new MESettings()
@@ -1664,12 +1664,12 @@ public class EquipmentItemsME {
 
     public static final Item WEATHERED_DOL_GULDUR_STALKER_HELMET = registerDyeableCustomModelArmorPiece("weathered_dol_guldur_stalker_helmet",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.BURZUM_STEEL_T5, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x3D3232))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(0x3D3232))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORDOR)));
     public static final Item WEATHERED_DOL_GULDUR_STALKER_CHESTPLATE = registerDyeableCustomModelArmorPiece("weathered_dol_guldur_stalker_chestplate",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.STEEL_T5, settings), new MESettings()
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.DOL_GULDUR_STALKER_CAPE))
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x3D3232))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(0x3D3232))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORDOR)));
     public static final Item WEATHERED_DOL_GULDUR_STALKER_LEGGINGS = registerArmorPiece("weathered_dol_guldur_stalker_leggings",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.STEEL_T5, settings), new MESettings()
@@ -1811,32 +1811,32 @@ public class EquipmentItemsME {
     //region HOBGOB TRIBES
     public static final Item GUNDABAD_BONE_PAULDRON = registerDyeableArmorPiece("gundabad_bone_pauldron",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.LEATHER_T1, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(3944757))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(3944757))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.HOBGOBLIN_TRIBES_GUNDABAD)));
 
     public static final Item GUNDABAD_SEEKER_HELMET = registerDyeableCustomModelArmorPiece("gundabad_seeker_helmet",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.CRUDE_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(3944757))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(3944757))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.HOBGOBLIN_TRIBES_GUNDABAD)));
 
     public static final Item GUNDABAD_LEATHER_SCALE_COAT = registerDyeableArmorPiece("gundabad_leather_scale_coat",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(3944757))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(3944757))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.HOBGOBLIN_TRIBES_GUNDABAD)));
 
     public static final Item GUNDABAD_LEATHER_LEGGINGS = registerDyeableArmorPiece("gundabad_leather_leggings",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(3944757))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(3944757))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.HOBGOBLIN_TRIBES_GUNDABAD)));
 
     public static final Item GUNDABAD_LACED_BOOTS = registerDyeableArmorPiece("gundabad_laced_boots",
             (settings) -> new CustomBootsItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(3944757))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(3944757))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.HOBGOBLIN_TRIBES_GUNDABAD)));
 
     public static final Item GUNDABAD_SKULLCAP_HELMET = registerDyeableCustomModelArmorPiece("gundabad_skullcap_helmet",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.CRUDE_T3, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(3944757))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(3944757))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.HOBGOBLIN_TRIBES_GUNDABAD)));
     public static final Item GUNDABAD_MAIL_COIF = registerArmorPiece("gundabad_mail_coif",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.CRUDE_T3, settings), new MESettings()
@@ -1848,30 +1848,30 @@ public class EquipmentItemsME {
 
     public static final Item GUNDABAD_MAIL_COAT = registerDyeableArmorPiece("gundabad_mail_coat",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.CRUDE_T3, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(3944757))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(3944757))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.HOBGOBLIN_TRIBES_GUNDABAD)));
 
     public static final Item GUNDABAD_SCREECHER_HELMET = registerDyeableCustomModelArmorPiece("gundabad_screecher_helmet",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.BURZUM_STEEL_T4, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(3944757))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(3944757))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.HOBGOBLIN_TRIBES_GUNDABAD)));
     public static final Item GUNDABAD_SOLDIER_HELMET = registerDyeableCustomModelArmorPiece("gundabad_soldier_helmet",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.BURZUM_STEEL_T4, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(3944757))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(3944757))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.HOBGOBLIN_TRIBES_GUNDABAD)));
 
     public static final Item GUNDABAD_REINFORCED_LEATHER_SCALE_COAT = registerDyeableArmorPiece("gundabad_reinforced_leather_scale_coat",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.BURZUM_STEEL_T4, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(3944757))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(3944757))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.HOBGOBLIN_TRIBES_GUNDABAD)));
     public static final Item GUNDABAD_REINFORCED_LEATHER_VEST = registerDyeableArmorPiece("gundabad_reinforced_leather_vest",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.BURZUM_STEEL_T4, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(3944757))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(3944757))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.HOBGOBLIN_TRIBES_GUNDABAD)));
 
     public static final Item GUNDABAD_CAPTAIN_HELMET = registerDyeableCustomModelArmorPiece("gundabad_captain_helmet",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.BURZUM_STEEL_T5, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(3944757))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(3944757))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.HOBGOBLIN_TRIBES_GUNDABAD)));
 
     public static final Item GUNDABAD_HOBGOBLIN_PLATE_CRESTED_HELMET = registerCustomModelArmorPiece("gundabad_hobgoblin_plate_crested_helmet",
@@ -1904,11 +1904,11 @@ public class EquipmentItemsME {
     //region MORIA GOBS
     public static final Item MORIA_GOBLIN_SNAGA_NASAL_HELMET = registerDyeableCustomModelArmorPiece("moria_goblin_snaga_nasal_helmet",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.CRUDE_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x441E17))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(0x441E17))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORIA)));
     public static final Item MORIA_GOBLIN_SNAGA_HELMET = registerDyeableCustomModelArmorPiece("moria_goblin_snaga_helmet",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.CRUDE_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x441E17))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(0x441E17))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORIA)));
 
     public static final Item MORIA_GOBLIN_SNAGA_CUIRASS = registerCustomModelArmorPiece("moria_goblin_snaga_cuirass",
@@ -1920,7 +1920,7 @@ public class EquipmentItemsME {
 
     public static final Item MORIA_GOBLIN_CLOTH_COAT = registerDyeableArmorPiece("moria_goblin_cloth_coat",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.CRUDE_T2, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x441E17))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(0x441E17))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORIA)));
     public static final Item MORIA_GOBLIN_SNAGA_SKIRT = registerArmorPiece("moria_goblin_snaga_skirt",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.CRUDE_T2, settings), new MESettings()
@@ -1939,7 +1939,7 @@ public class EquipmentItemsME {
 
     public static final Item MORIA_GOBLIN_HAUBERK = registerDyeableCustomModelArmorPiece("moria_goblin_hauberk",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.CRUDE_T3, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x441E17))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(0x441E17))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORIA)));
     public static final Item MORIA_RUINED_DWARVEN_HAUBERK = registerCustomModelArmorPiece("moria_ruined_dwarven_hauberk",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.CRUDE_T3, settings), new MESettings()
@@ -1954,7 +1954,7 @@ public class EquipmentItemsME {
 
     public static final Item MORIA_GOBLIN_REINFORCED_COAT = registerDyeableCustomModelArmorPiece("moria_goblin_reinforced_coat",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.BURZUM_STEEL_T4, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x441E17))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(0x441E17))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORIA)));
 
     public static final Item MORIA_GOBLIN_SCREECHER_HELMET = registerCustomModelArmorPiece("moria_goblin_screecher_helmet",
@@ -1965,7 +1965,7 @@ public class EquipmentItemsME {
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORIA)));
     public static final Item MORIA_GOBLIN_SCREECHER_LEGGINGS = registerDyeableArmorPiece("moria_goblin_screecher_leggings",
             (settings) -> new CustomLeggingsItem(ArmorMaterialsME.BURZUM_STEEL_T5, settings), new MESettings()
-                    .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x441E17))
+                    .component(MEComponents.DYED_COLOR, new DyedColorComponent(0x441E17))
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORIA)));
     public static final Item MORIA_GOBLIN_SCREECHER_BOOTS = registerArmorPiece("moria_goblin_screecher_boots",
             (settings) -> new CustomBootsItem(ArmorMaterialsME.BURZUM_STEEL_T5, settings), new MESettings()

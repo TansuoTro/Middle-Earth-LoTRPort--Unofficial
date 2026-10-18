@@ -1,19 +1,19 @@
 package net.jukoz.me.entity.beasts.great_horn;
 
-import net.minecraft.client.render.entity.animation.AnimationDefinition;
+import net.minecraft.client.render.entity.animation.Animation;
 import net.minecraft.client.render.entity.animation.AnimationHelper;
 import net.minecraft.client.render.entity.animation.Keyframe;
 import net.minecraft.client.render.entity.animation.Transformation;
 
 public class GreatHornAnimations {
     //region WALK
-    public static final AnimationDefinition WALK = AnimationDefinition.Builder.create(2.0F).looping()
+    public static final Animation WALK = Animation.Builder.create(2.0F).looping()
             .addBoneAnimation("body", new Transformation(Transformation.Targets.ROTATE,
                     new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -2.5F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 2.5F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -2.5F), Transformation.Interpolations.CUBIC)
             ))
-            .addBoneAnimation("body", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            .addBoneAnimation("body", new Transformation(Transformation.Targets.TRANSLATE,
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -0.5F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.5417F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -0.5F), Transformation.Interpolations.CUBIC),
@@ -27,7 +27,7 @@ public class GreatHornAnimations {
                     new Keyframe(1.3333F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
-            .addBoneAnimation("back_left_leg", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            .addBoneAnimation("back_left_leg", new Transformation(Transformation.Targets.TRANSLATE,
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.5F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.4167F, AnimationHelper.createTranslationalVector(0.0F, 2.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, 0.73F, -2.94F), Transformation.Interpolations.CUBIC),
@@ -42,7 +42,7 @@ public class GreatHornAnimations {
                     new Keyframe(1.4583F, AnimationHelper.createRotationalVector(15.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.0F, AnimationHelper.createRotationalVector(-15.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
-            .addBoneAnimation("back_right_leg", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            .addBoneAnimation("back_right_leg", new Transformation(Transformation.Targets.TRANSLATE,
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.73F, -2.94F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.3333F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -2.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.625F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -57,7 +57,7 @@ public class GreatHornAnimations {
                     new Keyframe(1.7083F, AnimationHelper.createRotationalVector(-15.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 2.5F), Transformation.Interpolations.CUBIC)
             ))
-            .addBoneAnimation("front_left_leg", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            .addBoneAnimation("front_left_leg", new Transformation(Transformation.Targets.TRANSLATE,
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -1.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.5417F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 2.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 3.0F), Transformation.Interpolations.CUBIC),
@@ -71,7 +71,7 @@ public class GreatHornAnimations {
                     new Keyframe(1.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -2.5F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 2.5F), Transformation.Interpolations.CUBIC)
             ))
-            .addBoneAnimation("front_right_leg", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            .addBoneAnimation("front_right_leg", new Transformation(Transformation.Targets.TRANSLATE,
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 3.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.3333F, AnimationHelper.createTranslationalVector(0.0F, 3.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -1.0F), Transformation.Interpolations.CUBIC),
@@ -83,7 +83,7 @@ public class GreatHornAnimations {
                     new Keyframe(1.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -2.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 2.0F), Transformation.Interpolations.CUBIC)
             ))
-            .addBoneAnimation("head_neck", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            .addBoneAnimation("head_neck", new Transformation(Transformation.Targets.TRANSLATE,
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.5417F, AnimationHelper.createTranslationalVector(0.0F, -0.5F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -107,7 +107,7 @@ public class GreatHornAnimations {
                     new Keyframe(1.5F, AnimationHelper.createRotationalVector(-5.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
-            .addBoneAnimation("ear_left", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            .addBoneAnimation("ear_left", new Transformation(Transformation.Targets.TRANSLATE,
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -121,7 +121,7 @@ public class GreatHornAnimations {
                     new Keyframe(1.5F, AnimationHelper.createRotationalVector(-5.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
             ))
-            .addBoneAnimation("ear_right", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+            .addBoneAnimation("ear_right", new Transformation(Transformation.Targets.TRANSLATE,
                     new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -132,7 +132,7 @@ public class GreatHornAnimations {
     // endregion
 
     // region IDLE
-    public static final AnimationDefinition EAR_WIGGLE = AnimationDefinition.Builder.create(3.0F)
+    public static final Animation EAR_WIGGLE = Animation.Builder.create(3.0F)
             .addBoneAnimation("ear_left", new Transformation(Transformation.Targets.ROTATE,
                     new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                     new Keyframe(0.75F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -153,13 +153,13 @@ public class GreatHornAnimations {
             ))
             .build();
 
-        public static final AnimationDefinition IDLE = AnimationDefinition.Builder.create(3.0F).looping()
+        public static final Animation IDLE = Animation.Builder.create(3.0F).looping()
                 .addBoneAnimation("head_neck", new Transformation(Transformation.Targets.ROTATE,
                         new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.5F, AnimationHelper.createRotationalVector(-2.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(3.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
                 ))
-                .addBoneAnimation("front_body", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                .addBoneAnimation("front_body", new Transformation(Transformation.Targets.TRANSLATE,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(3.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
                 ))
@@ -172,14 +172,14 @@ public class GreatHornAnimations {
     // endregion
 
     // region GALLOP
-        public static final AnimationDefinition GALLOP = AnimationDefinition.Builder.create(0.75F).looping()
+        public static final Animation GALLOP = Animation.Builder.create(0.75F).looping()
                 .addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE,
                         new Keyframe(0.0F, AnimationHelper.createRotationalVector(-2.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.3333F, AnimationHelper.createRotationalVector(12.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.5F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.75F, AnimationHelper.createRotationalVector(-2.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
                 ))
-                .addBoneAnimation("root", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                .addBoneAnimation("root", new Transformation(Transformation.Targets.TRANSLATE,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 4.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.3333F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.75F, AnimationHelper.createTranslationalVector(0.0F, 4.0F, 0.0F), Transformation.Interpolations.CUBIC)
@@ -194,7 +194,7 @@ public class GreatHornAnimations {
                         new Keyframe(0.4583F, AnimationHelper.createRotationalVector(-35.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.75F, AnimationHelper.createRotationalVector(62.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
                 ))
-                .addBoneAnimation("back_left_leg", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                .addBoneAnimation("back_left_leg", new Transformation(Transformation.Targets.TRANSLATE,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, -1.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.25F, AnimationHelper.createTranslationalVector(0.0F, 2.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.4583F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -1.0F), Transformation.Interpolations.CUBIC),
@@ -205,7 +205,7 @@ public class GreatHornAnimations {
                         new Keyframe(0.4583F, AnimationHelper.createRotationalVector(-35.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.75F, AnimationHelper.createRotationalVector(62.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
                 ))
-                .addBoneAnimation("back_right_leg", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                .addBoneAnimation("back_right_leg", new Transformation(Transformation.Targets.TRANSLATE,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, -1.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.25F, AnimationHelper.createTranslationalVector(0.0F, 2.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.4583F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -1.0F), Transformation.Interpolations.CUBIC),
@@ -216,7 +216,7 @@ public class GreatHornAnimations {
                         new Keyframe(0.4583F, AnimationHelper.createRotationalVector(35.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.75F, AnimationHelper.createRotationalVector(-62.4474F, -0.0884F, 0.5044F), Transformation.Interpolations.CUBIC)
                 ))
-                .addBoneAnimation("front_left_leg", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                .addBoneAnimation("front_left_leg", new Transformation(Transformation.Targets.TRANSLATE,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, -1.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.2083F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.4583F, AnimationHelper.createTranslationalVector(0.0F, 3.0F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -227,7 +227,7 @@ public class GreatHornAnimations {
                         new Keyframe(0.4583F, AnimationHelper.createRotationalVector(35.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.75F, AnimationHelper.createRotationalVector(-62.4474F, -0.0884F, 0.5044F), Transformation.Interpolations.CUBIC)
                 ))
-                .addBoneAnimation("front_right_leg", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                .addBoneAnimation("front_right_leg", new Transformation(Transformation.Targets.TRANSLATE,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, -1.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.2083F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.4583F, AnimationHelper.createTranslationalVector(0.0F, 3.0F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -238,7 +238,7 @@ public class GreatHornAnimations {
                         new Keyframe(0.3333F, AnimationHelper.createRotationalVector(-2.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.75F, AnimationHelper.createRotationalVector(5.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
                 ))
-                .addBoneAnimation("head_neck", new Transformation(Transformation.Targets.MOVE_ORIGIN,
+                .addBoneAnimation("head_neck", new Transformation(Transformation.Targets.TRANSLATE,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.4583F, AnimationHelper.createTranslationalVector(0.0F, -0.5F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.75F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
@@ -267,14 +267,14 @@ public class GreatHornAnimations {
     // endregion
         
     // region BOW
-    public static final AnimationDefinition BOW = AnimationDefinition.Builder.create(4.0F)
+    public static final Animation BOW = Animation.Builder.create(4.0F)
 		.addBoneAnimation("back_left_leg", new Transformation(Transformation.Targets.ROTATE, 
 			new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                 new Keyframe(0.75F, AnimationHelper.createRotationalVector(12.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                 new Keyframe(1.5F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                 new Keyframe(4.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
                 ))
-                .addBoneAnimation("back_left_leg", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
+                .addBoneAnimation("back_left_leg", new Transformation(Transformation.Targets.TRANSLATE, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                 new Keyframe(0.75F, AnimationHelper.createTranslationalVector(0.0F, 2.5F, 0.5F), Transformation.Interpolations.CUBIC),
                 new Keyframe(1.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 1.0F), Transformation.Interpolations.CUBIC),
@@ -287,7 +287,7 @@ public class GreatHornAnimations {
                 new Keyframe(2.5F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                 new Keyframe(4.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
                 ))
-                .addBoneAnimation("back_right_leg", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
+                .addBoneAnimation("back_right_leg", new Transformation(Transformation.Targets.TRANSLATE, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                 new Keyframe(0.75F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, -2.0F), Transformation.Interpolations.CUBIC),
                 new Keyframe(1.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -4.0F), Transformation.Interpolations.CUBIC),
@@ -300,7 +300,7 @@ public class GreatHornAnimations {
                 new Keyframe(2.5F, AnimationHelper.createRotationalVector(-67.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                 new Keyframe(4.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
                 ))
-                .addBoneAnimation("front_left_leg", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
+                .addBoneAnimation("front_left_leg", new Transformation(Transformation.Targets.TRANSLATE, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                 new Keyframe(0.75F, AnimationHelper.createTranslationalVector(0.0F, 4.0F, 0.0F), Transformation.Interpolations.CUBIC),
                 new Keyframe(1.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -313,7 +313,7 @@ public class GreatHornAnimations {
                 new Keyframe(2.5F, AnimationHelper.createRotationalVector(-22.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                 new Keyframe(4.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
                 ))
-                .addBoneAnimation("front_right_leg", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
+                .addBoneAnimation("front_right_leg", new Transformation(Transformation.Targets.TRANSLATE, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                 new Keyframe(1.5F, AnimationHelper.createTranslationalVector(0.0F, 6.0F, 0.0F), Transformation.Interpolations.CUBIC),
                 new Keyframe(2.5F, AnimationHelper.createTranslationalVector(0.0F, 6.0F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -336,7 +336,7 @@ public class GreatHornAnimations {
                 new Keyframe(2.5F, AnimationHelper.createRotationalVector(22.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                 new Keyframe(4.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
                 ))
-                .addBoneAnimation("front_half", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
+                .addBoneAnimation("front_half", new Transformation(Transformation.Targets.TRANSLATE, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                 new Keyframe(1.5F, AnimationHelper.createTranslationalVector(0.0F, -6.0F, 0.0F), Transformation.Interpolations.CUBIC),
                 new Keyframe(2.5F, AnimationHelper.createTranslationalVector(0.0F, -6.0F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -356,7 +356,7 @@ public class GreatHornAnimations {
     // endregion
     
     // region ATTACK
-    public static final AnimationDefinition ATTACK = AnimationDefinition.Builder.create(0.8333F)
+    public static final Animation ATTACK = Animation.Builder.create(0.8333F)
 		.addBoneAnimation("head_neck", new Transformation(Transformation.Targets.ROTATE, 
 			new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
             new Keyframe(0.0833F, AnimationHelper.createRotationalVector(54.06F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),

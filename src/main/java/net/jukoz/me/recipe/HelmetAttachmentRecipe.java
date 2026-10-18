@@ -73,8 +73,8 @@ public class HelmetAttachmentRecipe extends SpecialCraftingRecipe {
 
         if (!itemStack.isEmpty()) {
             int color;
-            if (hood.get(DataComponentTypes.DYED_COLOR) != null){
-                color = hood.get(DataComponentTypes.DYED_COLOR).rgb();
+            if (hood.get(MEComponents.DYED_COLOR) != null){
+                color = hood.get(MEComponents.DYED_COLOR).rgb();
             } else {
                 color = 0;
             }
