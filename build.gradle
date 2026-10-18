@@ -13,6 +13,7 @@ base {
 repositories {
     maven { url = 'https://maven.shedaniel.me/' }
     maven { url = 'https://maven.terraformersmc.com/releases/' }
+    mavenCentral()
 }
 
 dependencies {
@@ -23,6 +24,12 @@ dependencies {
 
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"
     modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
+
+    // Rosetta remote debug bridge: compiles and runs Java inside the dev server on the
+    // server thread, over a local TCP control plane. Dev-only, never shipped.
+    modRuntimeOnly files('libs/rosetta_remote_debug_bridge-1.0.0-fabric.jar')
+
+    modImplementation "me.lucko:fabric-permissions-api:0.4.1"
 
     testImplementation platform('org.junit:junit-bom:5.10.2')
     testImplementation 'org.junit.jupiter:junit-jupiter'
@@ -45,6 +52,17 @@ processResources {
 
 loom {
     runs {
+        client {
+            // The bridge only listens once a world is joined, so automated client runs
+            // quick-play straight into one.
+            if (project.hasProperty('quickPlay')) {
+                programArgs '--quickPlaySingleplayer', project.property('quickPlay')
+            }
+            vmArg '-Drosetta.remote.port=48797'
+        }
+        server {
+            vmArg '-Drosetta.remote.port=48798'
+        }
         datagenClient {
             inherit client
             name 'Data Generation'
@@ -61,6 +79,9 @@ sourceSets.main.resources.srcDirs += ['src/main/generated']
 tasks.withType(JavaCompile).configureEach {
     options.release = 17
     options.encoding = 'UTF-8'
+    // During the 1.21 -> 1.20.1 port the tree is deliberately red; javac's default
+    // 100-error cap hides almost all of the worklist, so raise it.
+    options.compilerArgs += ['-Xmaxerrs', '10000']
 }
 
 java {

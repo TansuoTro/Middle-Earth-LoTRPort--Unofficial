@@ -1,6 +1,9 @@
 package net.jukoz.me;
 
 import net.fabricmc.api.ModInitializer;
+import net.jukoz.me.api.utils.IdentifierUtil;
+import net.jukoz.me.api.utils.ModLogger;
+import net.minecraft.util.Identifier;
 import net.jukoz.me.block.*;
 import net.jukoz.me.entity.ModEntities;
 import net.jukoz.me.gui.ModScreenHandlers;
@@ -26,6 +29,14 @@ public class MiddleEarth implements ModInitializer {
 	public static final String MOD_ID = "me";
 	public static final String MOD_VERSION = "alpha-1.4.0-1.20.1";
 	public static final boolean IS_DEBUG = true;
+
+	/**
+	 * The 1.21 tree replaced the old instance-scoped LoggerUtil with a static logger
+	 * reachable as {@code MiddleEarth.LOGGER}. Keeping both means ported files compile
+	 * against the static field while the 1.20.1 initialiser keeps using its instance.
+	 */
+	public static final ModLogger LOGGER = new ModLogger(MOD_ID, IS_DEBUG);
+
 	private LoggerUtil loggerUtil;
 	@Override
 	public void onInitialize() {
@@ -86,4 +97,51 @@ public class MiddleEarth implements ModInitializer {
 		}
 	}
 
+	// ------------------------------------------------------------------
+	// Identifier helpers introduced by the 1.21 rewrite. Ported files call
+	// MiddleEarth.of(...) in place of new Identifier(MOD_ID, ...) everywhere,
+	// so the helpers live here rather than being inlined at ~400 call sites.
+	// ------------------------------------------------------------------
+
+	public static Identifier fetchId(String stringId) {
+		return IdentifierUtil.getIdentifierFromString(stringId);
+	}
+
+	public static Identifier ofPrefix(Identifier base, Identifier prefixId) {
+		if (base == null) return null;
+		return base.withPrefixedPath(String.format("%s/", prefixId.getPath()));
+	}
+
+	public static Identifier of(String path) {
+		return IdentifierUtil.build(MOD_ID, path);
+	}
+
+	public static Identifier of(String... names) {
+		return IdentifierUtil.buildAggregate(MOD_ID, names);
+	}
+
+	public static Identifier of(char splitter, String... names) {
+		return IdentifierUtil.build(MOD_ID, createAggregate(splitter, names));
+	}
+
+	public static Identifier ofPath(String... names) {
+		return IdentifierUtil.build(MOD_ID, createAggregate('/', names));
+	}
+
+	public static Identifier ofVanillaPath(String... names) {
+		return IdentifierUtil.ofVanilla(createAggregate('/', names));
+	}
+
+	public static Identifier append(Identifier base, String suffix) {
+		return new Identifier(base.toString() + suffix);
+	}
+
+	public static String createAggregate(char splitter, String... names) {
+		return IdentifierUtil.createAggregateValue(splitter, names);
+	}
+
+	public static boolean compareId(Identifier id1, Identifier id2) {
+		return id1.compareTo(id2) == 0;
+	}
 }
+

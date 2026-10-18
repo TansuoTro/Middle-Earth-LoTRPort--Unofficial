@@ -24,3 +24,6 @@ src/main/generated/
 bin/main/*
 
 hs_err_pid*.log
+
+# regenerable donor staging tree (python tools/port.py import . --dest port-staging/java)
+port-staging/

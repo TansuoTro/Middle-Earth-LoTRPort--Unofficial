@@ -227,6 +227,7 @@ def ensure_import(text: str, fqcn: str) -> str:
 
 
 REWRITES = [
+    ("package-api", "net.sevenstars.api", "net.jukoz.me.api"),
     ("package", "net.sevenstars.middleearth", "net.jukoz.me"),
     ("identifier", "Identifier.of(", "new Identifier("),
     ("registrykey-type-block", "RegistryKey<Block>", "Identifier"),
@@ -278,21 +279,29 @@ def rewrite(text: str):
 
 def cmd_import(args) -> int:
     donor = Path(args.donor)
-    dest_root = PROJECT / "src/main/java" / TARGET_PKG
+    dest_root = (PROJECT / args.dest).resolve() / args.target_pkg
     total = collections.Counter()
     copied = 0
+    skipped = 0
 
     for rel in args.paths:
-        src = donor / DONOR_PKG / rel
+        src = donor / args.donor_pkg / rel
         if not src.exists():
             print(f"skip (missing): {rel}", file=sys.stderr)
             continue
         files = [src] if src.is_file() else list(iter_java(src))
         for path in files:
-            target_rel = path.relative_to(donor / DONOR_PKG)
+            target_rel = path.relative_to(donor / args.donor_pkg)
             dst = dest_root / target_rel
             original = path.read_text(encoding="utf-8", errors="replace")
             text, stats = rewrite(original)
+            # A file that already exists in the target tree is the 1.20.1 version of
+            # that class and is always closer to correct than the 1.21.8 donor.
+            # Overwriting it is never the right move: new 1.21 features get merged in
+            # by hand, on top of working code.
+            if dst.exists() and not args.force:
+                skipped += 1
+                continue
             if args.dry_run:
                 changed = sum(1 for a, b in zip(original.splitlines(), text.splitlines()) if a != b)
                 print(f"{str(target_rel):<70} {stats}")
@@ -310,26 +319,105 @@ def cmd_import(args) -> int:
             copied += 1
             total.update(stats)
 
-    print(f"{'would copy' if args.dry_run else 'copied'} {copied} files")
+    print(f"{'would copy' if args.dry_run else 'copied'} {copied} files, skipped {skipped} existing")
     for k, v in sorted(total.items()):
         print(f"  {k}: {v}")
     return 0
 
 
-ERR = re.compile(r"^(?P<file>[^:\n]+\.java):(?P<line>\d+): error: (?P<msg>.*)$", re.M)
+def cmd_promote(args) -> int:
+    """Move already-rewritten files from the staging tree into the compiled tree."""
+    staged = (PROJECT / "port-staging/java" / TARGET_PKG).resolve()
+    dest_root = (PROJECT / "src/main/java" / TARGET_PKG).resolve()
+    moved = collided = missing = 0
+    for rel in args.paths:
+        src = staged / rel
+        if not src.exists():
+            print(f"skip (not staged): {rel}", file=sys.stderr)
+            missing += 1
+            continue
+        files = [src] if src.is_file() else sorted(iter_java(src))
+        for path in files:
+            target_rel = path.relative_to(staged)
+            dst = dest_root / target_rel
+            if dst.exists():
+                # The target already holds the 1.20.1 version of this class; merging
+                # the new 1.21 members in is a hand job, not a file copy.
+                collided += 1
+                continue
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            dst.write_bytes(path.read_bytes())
+            path.unlink()
+            moved += 1
+    print(f"promoted {moved} files, {collided} need manual merge, {missing} not staged")
+    return 0
+
+
+# javac localises its diagnostics; the default JDK locale on this machine is zh_CN.
+# Match both spellings so the tool keeps working whichever locale wins.
+# The path prefix is absolute on Windows ("H:\...\Foo.java"), so it contains a
+# colon itself -- matching [^:] silently produced zero hits.
+ERR = re.compile(r"^(?P<file>.+?[.]java):(?P<line>[0-9]+): (?:error|错误): (?P<msg>.*)$", re.M)
+SYMBOL = re.compile(r"^\s*symbol:\s+(?P<kind>\S+)\s+(?P<name>.*)$", re.M)
+LOCATION = re.compile(r"^\s*location:\s+(?P<loc>.*)$", re.M)
+
+
+def parse_errors(blob):
+    """Split javac output into one record per diagnostic, keeping the symbol detail.
+
+    javac puts the useful part on the 'symbol:' line under the caret, not in the
+    headline, so grouping on the headline alone lumps everything into
+    'cannot find symbol' and hides the actual worklist.
+    """
+    starts = list(ERR.finditer(blob))
+    out = []
+    for i, m in enumerate(starts):
+        end = starts[i + 1].start() if i + 1 < len(starts) else len(blob)
+        block = blob[m.end():end]
+        sym = SYMBOL.search(block)
+        loc = LOCATION.search(block)
+        out.append({
+            "file": m.group("file"),
+            "line": int(m.group("line")),
+            "msg": m.group("msg").strip(),
+            "symbol": ((sym.group("kind") + " " + sym.group("name")).strip() if sym else ""),
+            "location": loc.group("loc").strip() if loc else "",
+        })
+    return out
 
 
 def cmd_errors(args) -> int:
-    gradlew = "./gradlew.bat" if sys.platform == "win32" else "./gradlew"
-    proc = subprocess.run([gradlew, "compileJava", "--console=plain", "-q"],
+    # "gradlew.bat", not "./gradlew.bat": Windows resolves it through cmd.exe,
+    # which does not accept a "./" prefix and fails with a 48-byte error message.
+    gradlew = "gradlew.bat" if sys.platform == "win32" else "./gradlew"
+    proc = subprocess.run([gradlew, "compileJava", "--console=plain"],
                           cwd=PROJECT, capture_output=True, text=True, errors="replace")
     blob = (proc.stdout or "") + (proc.stderr or "")
-    found = [m.groupdict() for m in ERR.finditer(blob)]
-    groups = collections.Counter(m["msg"] for m in found)
+    found = parse_errors(blob)
 
     print(f"{len(found)} errors in {len({m['file'] for m in found})} files\n")
-    for msg, n in groups.most_common(25):
-        print(f"{n:>4}  {msg[:150]}")
+    groups = collections.Counter(m["msg"] for m in found)
+    for msg, n in groups.most_common(15):
+        print(f"{n:>4}  {msg[:130]}")
+
+    # Anything referring to a class that is still sitting in port-staging is not a
+    # porting problem yet -- it is just a file that has not been promoted.
+    staged = PROJECT / "port-staging/java"
+    pending = {f.stem for f in staged.rglob("*.java")} if staged.exists() else set()
+
+    def is_pending(rec):
+        name = rec["symbol"].split()[-1] if rec["symbol"] else ""
+        return name.split("(")[0].split(".")[-1] in pending
+
+    real = [m for m in found if not is_pending(m)]
+    print(f"\n{len(real)} errors are not explained by an un-promoted class "
+          f"({len(found) - len(real)} are)")
+
+    symbols = collections.Counter(
+        (m["msg"], m["symbol"]) for m in real if m["symbol"])
+    print("\n-- by symbol --")
+    for (msg, sym), n in symbols.most_common(30):
+        print(f"{n:>4}  {sym[:90]:<90} ({msg[:40]})")
     if args.json:
         Path(args.json).write_text(json.dumps(found, indent=2), encoding="utf-8")
         print(f"\nwrote {args.json}")
@@ -522,7 +610,19 @@ def main() -> int:
     p = sub.add_parser("import")
     p.add_argument("paths", nargs="+", help="paths relative to the donor package")
     p.add_argument("--dry-run", action="store_true", help="report only, write nothing")
+    p.add_argument("--force", action="store_true",
+                   help="overwrite files that already exist in the target tree")
+    p.add_argument("--donor-pkg", default=DONOR_PKG,
+                   help="package root inside the donor source tree")
+    p.add_argument("--target-pkg", default=TARGET_PKG,
+                   help="package root inside the destination source tree")
+    p.add_argument("--dest", default="src/main/java",
+                   help="destination source root, relative to the project")
     p.set_defaults(func=cmd_import)
+
+    p = sub.add_parser("promote", help="move staged files into src/main/java")
+    p.add_argument("paths", nargs="+", help="paths relative to the package root")
+    p.set_defaults(func=cmd_promote)
 
     p = sub.add_parser("errors")
     p.add_argument("--json")
