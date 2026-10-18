@@ -172,7 +172,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
             }
 
             if (input.getMaxDamage() == 0 && input.getDamage() == 0){
-                input.set(DataComponentTypes.MAX_DAMAGE, match.get(entity.outputIndex).value().getAmount());
+                MEDurability.set(input, match.get(entity.outputIndex).value().getAmount());
                 input.setDamage(match.get(entity.outputIndex).value().getAmount() - (int) (Math.random() * (maxRandProgress - minRandProgress) + minRandProgress));
             } else{
                 input.setDamage(input.getDamage() - (int) (Math.random() * (maxRandProgress - minRandProgress) + minRandProgress));
@@ -204,8 +204,8 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
 
                 ItemStack output = match.get(entity.outputIndex).value().craft(new SingleStackRecipeInput(input), entity.world.getRegistryManager());
 
-                if(input.get(DataComponentTypes.TRIM) != null){
-                    output.set(DataComponentTypes.TRIM, input.get(DataComponentTypes.TRIM));
+                if(MEArmorTrim.get(input) != null){
+                    MEArmorTrim.set(output, MEArmorTrim.get(input));
                 } else{
                     MetalTypes metal = MetalTypes.EMPTY;
                     if(input.isIn(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "ingot_shaping")))) {
@@ -214,11 +214,11 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
                         metal = MetalTypes.getMetalByNugget(input.getItem());
                     }
                     if (metal.isVanilla()){
-                        output.set(DataComponentTypes.TRIM, new ArmorTrim(
+                        MEArmorTrim.set(output, new ArmorTrim(
                                 armorTrimMaterialRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_MATERIAL, new Identifier(metal.getName()))),
                                 armorTrimPatternRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_PATTERN, new Identifier(MiddleEarth.MOD_ID,"smithing_part")))));
                     } else {
-                        output.set(DataComponentTypes.TRIM, new ArmorTrim(
+                        MEArmorTrim.set(output, new ArmorTrim(
                                 armorTrimMaterialRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_MATERIAL, new Identifier(MiddleEarth.MOD_ID, metal.getName()))),
                                 armorTrimPatternRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_PATTERN, new Identifier(MiddleEarth.MOD_ID, "smithing_part")))));
                     }

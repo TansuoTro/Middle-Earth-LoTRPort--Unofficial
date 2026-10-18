@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.entity.BannerPattern;
-import net.minecraft.component.type.BannerPatternsComponent;
+import net.jukoz.me.compat.MEBannerPatterns;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -474,7 +474,7 @@ public class Faction {
         return spawnDataHandler.getSpawnList().size();
     }
 
-    public BannerPatternsComponent getBannerPatternComponents(RegistryEntryLookup<BannerPattern> bannerPatternLookup) {
+    public MEBannerPatterns getBannerPatternComponents(RegistryEntryLookup<BannerPattern> bannerPatternLookup) {
         if(bannerData == null)
             return null;
         return bannerData.getBannerPatternComponents(bannerPatternLookup);

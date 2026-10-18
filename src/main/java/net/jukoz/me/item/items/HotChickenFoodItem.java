@@ -25,8 +25,8 @@ public class HotChickenFoodItem extends Item {
             if (!stack.isEmpty() && MEComponents.get(stack, MEComponents.TEMPERATURE_DATA) != null) {
                 int temperature = MEComponents.get(stack, MEComponents.TEMPERATURE_DATA).temperature();
                 float percentage = 1;
-                if(stack.get(DataComponentTypes.FOOD) != null) {
-                    percentage = 15 + (float)stack.get(DataComponentTypes.FOOD).getHunger() / 13;
+                if(stack.getItem().getFoodComponent() != null) {
+                    percentage = 15 + (float)stack.getItem().getFoodComponent().getHunger() / 13;
                 }
                 playerEntity.setFireTicks((int) (temperature * percentage));
             }

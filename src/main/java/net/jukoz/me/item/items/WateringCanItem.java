@@ -41,7 +41,7 @@ public class WateringCanItem extends BlockItem {
     private static final int FULL_BAR_STEPS = 13;
 
     public WateringCanItem(net.minecraft.block.Block block, Settings settings) {
-        super(block, settings.maxCount(1).maxDamage(MAX_WATER_LEVEL).component(DataComponentTypes.DAMAGE, MAX_WATER_LEVEL));
+        super(block, settings.maxCount(1).maxDamage(MAX_WATER_LEVEL));
     }
 
     @Override

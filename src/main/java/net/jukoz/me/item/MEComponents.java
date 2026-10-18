@@ -75,6 +75,14 @@ public final class MEComponents {
     public static final MEComponent<Identifier> ITEM_MODEL =
             register("item_model", Identifier.CODEC);
 
+    /** 1.21's EQUIPPABLE asset id; only the mod's own renderers read it. */
+    public static final MEComponent<Identifier> EQUIPPABLE_ASSET =
+            register("equippable_asset", Identifier.CODEC);
+
+    /** Per-stack durability override; read by {@code ItemStackDurabilityMixin}. */
+    public static final MEComponent<Integer> MAX_DAMAGE =
+            register("max_damage", Codec.INT);
+
     /**
      * Components declared on the item itself (1.21's {@code Item.Settings#component}).
      * Keyed by identity because {@link Item} has no equals() worth using.

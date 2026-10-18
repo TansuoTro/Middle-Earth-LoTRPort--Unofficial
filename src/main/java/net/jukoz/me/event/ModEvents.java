@@ -8,8 +8,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ProfileComponent;
-import net.minecraft.component.type.ToolComponent;
+
+
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
@@ -74,7 +74,7 @@ public class ModEvents {
                     ItemStack drop = ItemStack.EMPTY;
                     if(killedEntity instanceof PlayerEntity killedPlayer) {
                         drop = new ItemStack(Items.PLAYER_HEAD);
-                        drop.set(DataComponentTypes.PROFILE, new ProfileComponent(killedPlayer.getGameProfile()));
+                        net.minecraft.nbt.NbtHelper.writeGameProfile(drop.getOrCreateSubNbt("SkullOwner"), killedPlayer.getGameProfile());
                     }
                     if(!drop.isEmpty()) {
                         killedEntity.dropStack(world, drop);
@@ -85,7 +85,7 @@ public class ModEvents {
 
         PlayerBlockBreakEvents.AFTER.register((world, playerEntity, blockPos, blockState, blockEntity) -> {
             ItemStack stack = Objects.requireNonNull(playerEntity.getStackInHand(playerEntity.getActiveHand()));
-            ToolComponent toolComponent = stack.get(DataComponentTypes.TOOL);
+            
             RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getOptional(EnchantmentsME.HEWING).orElseThrow();
             boolean hasEnchant = stack.getEnchantments().getEnchantments().contains(enchantmentRegistryEntry);
             int level = EnchantmentHelper.getLevel(enchantmentRegistryEntry, stack);
@@ -93,8 +93,8 @@ public class ModEvents {
 
             if (hasEnchant) {
                 if (!playerEntity.isCreative() && !playerEntity.isSneaking()) {
-                    assert toolComponent != null;
-                    if (toolComponent.isCorrectForDrops(blockState)){
+                    
+                    if (stack.isSuitableFor(blockState)){
                         if (playerEntity.getFacing() == Direction.DOWN || playerEntity.getFacing() == Direction.UP){
                             if (level == 1){
                                 level1BreakVertical(world, playerEntity, blockPos, stack, hardness);
@@ -119,7 +119,7 @@ public class ModEvents {
 
         PlayerBlockBreakEvents.AFTER.register((world, playerEntity, blockPos, blockState, blockEntity) -> {
             ItemStack stack = Objects.requireNonNull(playerEntity.getStackInHand(playerEntity.getActiveHand()));
-            ToolComponent toolComponent = stack.get(DataComponentTypes.TOOL);
+            
             RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager()
                     .getOrThrow(RegistryKeys.ENCHANTMENT).getOptional(EnchantmentsME.TREE_FELLER).orElseThrow();
             boolean hasEnchant = stack.getEnchantments().getEnchantments().contains(enchantmentRegistryEntry);
@@ -128,8 +128,8 @@ public class ModEvents {
 
             if (hasEnchant) {
                 if (!playerEntity.isCreative() && !playerEntity.isSneaking()) {
-                    assert toolComponent != null;
-                    if (toolComponent.isCorrectForDrops(blockState)){
+                    
+                    if (stack.isSuitableFor(blockState)){
                         int[] blockCount = new int[]{16};
                         if(level == 2) blockCount[0] = 64;
                         else if(level == 3) blockCount[0] = 256;
@@ -227,11 +227,11 @@ public class ModEvents {
     }
 
     private static void breakAndDamage(World world, PlayerEntity player, BlockPos blockpos, ItemStack stack, float hardness){
-        ToolComponent toolComponent = stack.get(DataComponentTypes.TOOL);
+        
         BlockState blockState = world.getBlockState(blockpos);
 
         if (!blockState.isAir() && toolComponent != null) {
-            if (toolComponent.isCorrectForDrops(blockState)) {
+            if (stack.isSuitableFor(blockState)) {
                 if (blockState.getBlock().getHardness() <= hardness) {
                     BlockEntity blockEntity = blockState.hasBlockEntity()
                             ? world.getBlockEntity(blockpos)

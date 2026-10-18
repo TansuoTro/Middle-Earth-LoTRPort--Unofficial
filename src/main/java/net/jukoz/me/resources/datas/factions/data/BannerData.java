@@ -5,7 +5,7 @@ import com.google.gson.JsonParser;
 import net.minecraft.block.entity.BannerPattern;
 import net.minecraft.block.entity.BannerPatterns;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BannerPatternsComponent;
+import net.jukoz.me.compat.MEBannerPatterns;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -135,10 +135,10 @@ public class BannerData {
      * @param bannerPatternLookup
      * @return
      */
-    public BannerPatternsComponent getBannerPatternComponents(RegistryEntryLookup<BannerPattern> bannerPatternLookup) {
-        BannerPatternsComponent.Builder bannerPatternsComponentBuilder = new BannerPatternsComponent.Builder();
+    public MEBannerPatterns getBannerPatternComponents(RegistryEntryLookup<BannerPattern> bannerPatternLookup) {
+        MEBannerPatterns.Builder bannerPatternsComponentBuilder = new MEBannerPatterns.Builder();
 
-        bannerPatternsComponentBuilder.add(new BannerPatternsComponent.Layer(bannerPatternLookup.getOrThrow(BannerPatterns.BASE), baseBannerColor));
+        bannerPatternsComponentBuilder.add(new MEBannerPatterns.Layer(BannerPattern.BASE.getEntry(), baseBannerColor));
         for(BannerPatternWithColor bannerPatternWithColor :  bannerPatternWithColors){
             bannerPatternsComponentBuilder.add(bannerPatternLookup.getOrThrow(bannerPatternWithColor.patternRegistryKey), bannerPatternWithColor.color);
         }
@@ -147,7 +147,7 @@ public class BannerData {
     }
 
     public ItemStack getBannerItem(RegistryWrapper.WrapperLookup wrapperLookup, Text text) {
-        BannerPatternsComponent.Builder builder = new BannerPatternsComponent.Builder();
+        MEBannerPatterns.Builder builder = new MEBannerPatterns.Builder();
         RegistryWrapper.Impl<BannerPattern> registry = wrapperLookup.getWrapperOrThrow(RegistryKeys.BANNER_PATTERN);
         for (BannerPatternWithColor bannerPatternWithColor : bannerPatternWithColors) {
             RegistryKey<BannerPattern> key = RegistryKey.of(
@@ -157,7 +157,7 @@ public class BannerData {
 
             RegistryEntry<BannerPattern> pattern = registry.getOrThrow(key);
 
-            builder.add(new BannerPatternsComponent.Layer(
+            builder.add(new MEBannerPatterns.Layer(
                     pattern,
                     bannerPatternWithColor.color
             ));
@@ -166,8 +166,8 @@ public class BannerData {
         return formatBanner(new ItemStack(Items.WHITE_BANNER), builder.build(), text);
     }
 
-    public static ItemStack formatBanner(ItemStack itemStack, BannerPatternsComponent bannerPatternsComponent, Text translationKey) {
-        itemStack.set(DataComponentTypes.BANNER_PATTERNS, bannerPatternsComponent);
+    public static ItemStack formatBanner(ItemStack itemStack, MEBannerPatterns bannerPatternsComponent, Text translationKey) {
+        MEBannerPatterns.set(itemStack, bannerPatternsComponent);
         // itemStack.set(DataComponentTypes.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE); // TODO : Not existing
         itemStack.setCustomName(translationKey);
         return itemStack;

@@ -5,7 +5,10 @@ import com.mojang.serialization.Dynamic;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import java.util.Map;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
@@ -534,12 +537,9 @@ public class CaveTrollEntity extends AbstractBeastEntity {
         Box box = new Box(this.getPos().subtract(5,0,5), this.getPos().add(5,1,5));
 
         double weaponDamage = 0;
-        AttributeModifiersComponent component = this.getWeaponStack().get(DataComponentTypes.ATTRIBUTE_MODIFIERS);
-        if(component != null) {
-            for(AttributeModifiersComponent.Entry modifier : component.modifiers()) {
-                if(modifier.matches(EntityAttributes.GENERIC_ATTACK_DAMAGE, new Identifier("minecraft", "base_attack_damage"))) {
-                    weaponDamage = modifier.modifier().value();
-                }
+        for (Map.Entry<EntityAttribute, EntityAttributeModifier> entry : this.getWeaponStack().getAttributeModifiers(EquipmentSlot.MAINHAND).entries()) {
+            if (entry.getKey() == EntityAttributes.GENERIC_ATTACK_DAMAGE) {
+                weaponDamage = entry.getValue().getValue();
             }
         }
 

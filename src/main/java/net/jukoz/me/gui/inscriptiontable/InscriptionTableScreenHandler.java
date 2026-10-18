@@ -292,9 +292,9 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
         ItemStack stackChisel = this.input.getStack(1);
         ItemStack stack = this.input.getStack(2);
 
-        if(stackCatalyst.get(DataComponentTypes.MAX_DAMAGE) == null){
+        if(!MEDurability.hasCustom(stackCatalyst)){
             if (stackCatalyst.isOf(Items.LAPIS_LAZULI)) this.input.setStack(0, ItemStack.EMPTY);
-            stackCatalyst.set(DataComponentTypes.MAX_DAMAGE, 2);
+            MEDurability.set(stackCatalyst, 2);
             stackCatalyst.setDamage(stackCatalyst.getDamage() + 1);
         } else {
             if (stackCatalyst.getDamage() == stackCatalyst.getMaxDamage()){

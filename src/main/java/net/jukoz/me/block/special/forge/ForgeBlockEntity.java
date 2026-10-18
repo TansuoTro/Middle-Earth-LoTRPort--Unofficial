@@ -1,4 +1,5 @@
 package net.jukoz.me.block.special.forge;
+import net.jukoz.me.compat.MEArmorTrim;
 import net.jukoz.me.compat.NbtCompat;
 import net.jukoz.me.item.MEComponents;
 
@@ -360,9 +361,6 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
                 case 16 -> {
                     if(entity.currentMetal.getIngot().equals(ResourceItemsME.THERAPOD_NUGGET)) {
                         itemstack = new ItemStack(ResourceItemsME.PTEROSAUR_NUGGET);
-                        FoodComponent foodComponent = new FoodComponent(1, 0.5f, false);
-                        itemstack.set(DataComponentTypes.FOOD, foodComponent);
-                        itemstack.set(DataComponentTypes.CONSUMABLE, ConsumableComponents.FOOD);
                         MEComponents.set(itemstack, MEComponents.TEMPERATURE_DATA, new TemperatureDataComponent(100));
                     } else if (entity.currentMetal.getNugget() != null){
                         itemstack = new ItemStack(entity.currentMetal.getNugget());
@@ -372,9 +370,6 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
                 case 144 -> {
                     if(entity.currentMetal.getIngot().equals(ResourceItemsME.THERAPOD_NUGGET)) {
                         itemstack = new ItemStack(ResourceItemsME.THERAPOD_NUGGET);
-                        FoodComponent foodComponent = new FoodComponent(7, 0.8f, false);
-                        itemstack.set(DataComponentTypes.FOOD, foodComponent);
-                        itemstack.set(DataComponentTypes.CONSUMABLE, ConsumableComponents.FOOD);
                     } else {
                         itemstack = new ItemStack(entity.currentMetal.getIngot());
                     }
@@ -387,16 +382,13 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
                     if(entity.currentMetal.getIngot().equals(ResourceItemsME.THERAPOD_NUGGET)) {
                         if(mode == 4) itemstack = new ItemStack(ResourceItemsME.THYREOPHORAN_NUGGET);
                         else itemstack = new ItemStack(ResourceItemsME.CERATOPSIAN_NUGGET);
-                        FoodComponent foodComponent = new FoodComponent(10, 0.8f, false);
-                        itemstack.set(DataComponentTypes.FOOD, foodComponent);
-                        itemstack.set(DataComponentTypes.CONSUMABLE, ConsumableComponents.FOOD);
                     }
                     else if(entity.currentMetal.isVanilla()) {
-                        itemstack.set(DataComponentTypes.TRIM, new ArmorTrim(
+                        MEArmorTrim.set(itemstack, new ArmorTrim(
                                 armorTrimMaterialRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_MATERIAL, new Identifier(entity.currentMetal.getName()))),
                                 armorTrimPatternRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_PATTERN, new Identifier(MiddleEarth.MOD_ID, "smithing_part")))));
                     } else {
-                        itemstack.set(DataComponentTypes.TRIM, new ArmorTrim(
+                        MEArmorTrim.set(itemstack, new ArmorTrim(
                                 armorTrimMaterialRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_MATERIAL, new Identifier(MiddleEarth.MOD_ID, entity.currentMetal.getName()))),
                                 armorTrimPatternRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_PATTERN, new Identifier(MiddleEarth.MOD_ID, "smithing_part")))));
 
@@ -406,16 +398,13 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
                     itemstack = new ItemStack(ResourceItemsME.LARGE_ROD);
                     if(entity.currentMetal.getIngot().equals(ResourceItemsME.THERAPOD_NUGGET)) {
                         itemstack = new ItemStack(ResourceItemsME.SAUROPOD_NUGGET);
-                        FoodComponent foodComponent = new FoodComponent(14, 0.85f, false);
-                        itemstack.set(DataComponentTypes.FOOD, foodComponent);
-                        itemstack.set(DataComponentTypes.CONSUMABLE, ConsumableComponents.FOOD);
                     } else if (entity.currentMetal.isVanilla()){
-                        itemstack.set(DataComponentTypes.TRIM, new ArmorTrim(
+                        MEArmorTrim.set(itemstack, new ArmorTrim(
                                 armorTrimMaterialRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_MATERIAL, new Identifier(entity.currentMetal.getName()))),
                                 armorTrimPatternRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_PATTERN, new Identifier(MiddleEarth.MOD_ID, "smithing_part")))));
 
                     } else {
-                        itemstack.set(DataComponentTypes.TRIM, new ArmorTrim(
+                        MEArmorTrim.set(itemstack, new ArmorTrim(
                                 armorTrimMaterialRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_MATERIAL, new Identifier(MiddleEarth.MOD_ID, entity.currentMetal.getName()))),
                                 armorTrimPatternRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_PATTERN, new Identifier(MiddleEarth.MOD_ID, "smithing_part")))));
 
@@ -425,7 +414,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
             }
 
             if (entity.getStack(OUTPUT_SLOT).isOf(itemstack.getItem()) && !itemstack.isEmpty()){
-                if (Objects.equals(entity.getStack(OUTPUT_SLOT).get(DataComponentTypes.TRIM), itemstack.get(DataComponentTypes.TRIM))) {
+                if (Objects.equals(entity.getStack(OUTPUT_SLOT).get(DataComponentTypes.TRIM), MEArmorTrim.get(itemstack))) {
                     if (amount <= entity.storage && amount > 0) {
                         itemstack.setCount(entity.getStack(OUTPUT_SLOT).getCount() + 1);
                         entity.storage = entity.storage - amount;

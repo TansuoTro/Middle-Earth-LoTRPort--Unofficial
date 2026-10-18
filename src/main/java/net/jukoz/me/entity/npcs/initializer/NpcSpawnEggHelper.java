@@ -65,11 +65,7 @@ public class NpcSpawnEggHelper {
         MEComponents.set(itemStack, MEComponents.FACTION_DATA, new FactionDataComponent(npcType.getFactionIdentifier()));
         MEComponents.set(itemStack, MEComponents.RACE_DATA, new RaceDataComponent(npcType.getRace()));
         itemStack.setCustomName(Text.translatable(itemId.toTranslationKey("item")));
-        itemStack.set(DataComponentTypes.CUSTOM_MODEL_DATA, new CustomModelDataComponent(
-                List.of(),
-                List.of(),
-                List.of(npcType.getId().getPath().replaceAll("\\.", "_") + "_spawn_egg"),
-                List.of()));
+        MEComponents.set(itemStack, MEComponents.ITEM_MODEL, new Identifier(MiddleEarth.MOD_ID, npcType.getId().getPath().replaceAll("\\.", "_") + "_spawn_egg"));
 
         return itemStack;
     }

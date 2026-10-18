@@ -443,7 +443,7 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
             if(isFoodItem(itemStack) && getOwner() == player) {
                 int tamenessIncrease;
 
-                FoodComponent component = itemStack.get(DataComponentTypes.FOOD);
+                FoodComponent component = itemStack.getItem().getFoodComponent();
                 if(component != null) {
                     tamenessIncrease = component.getHunger();
                 }

@@ -191,7 +191,7 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
                         if (this.isBreedingItem(itemStack)) { // Feed
                             if(this.getHealth() < this.getMaxHealth()) { // Food provides health
                                 itemStack.decrementUnlessCreative(1, player);
-                                FoodComponent foodComponent = itemStack.get(DataComponentTypes.FOOD);
+                                FoodComponent foodComponent = itemStack.getItem().getFoodComponent();
                                 float f = foodComponent != null ? (float)foodComponent.getHunger() : 1.0f;
                                 this.heal(2.0f * f);
                                 return ActionResult.SUCCESS_SERVER;

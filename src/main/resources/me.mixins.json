@@ -12,6 +12,7 @@
     "FoliagePlacerTypeInvoker",
     "ItemMixin",
     "ItemStackAttributeMixin",
+    "ItemStackDurabilityMixin",
     "ItemStackUnbreakableMixin",
     "PigEntityMixin",
     "PlayerEntityMixin",

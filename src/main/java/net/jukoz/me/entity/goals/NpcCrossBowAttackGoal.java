@@ -1,7 +1,7 @@
 package net.jukoz.me.entity.goals;
 
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ChargedProjectilesComponent;
+
 import net.minecraft.entity.CrossbowUser;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -71,7 +71,7 @@ public class NpcCrossBowAttackGoal<T extends NpcEntity & RangedAttackMob & Cross
         if (this.actor.isUsingItem()) {
             this.actor.clearActiveItem();
             this.actor.setCharging(false);
-            this.actor.getActiveItem().set(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT);
+            MECrossbow.clear(this.actor.getActiveItem());
         }
     }
 
@@ -133,10 +133,7 @@ public class NpcCrossBowAttackGoal<T extends NpcEntity & RangedAttackMob & Cross
                 this.actor.setCharging(false);
                 this.actor.setNpcFlag(USING_ITEM_FLAG, true);
                 if(this.chargedTicksLeft <= 1) {
-                    this.actor.getMainHandStack().set(
-                            DataComponentTypes.CHARGED_PROJECTILES,
-                            ChargedProjectilesComponent.of(new ItemStack(Items.ARROW))
-                    );
+                    MECrossbow.setCharged(this.actor.getMainHandStack(), List.of(new ItemStack(Items.ARROW)));
                 }
                 if (this.chargedTicksLeft == 0) {
                     this.stage = Stage.READY_TO_ATTACK;
@@ -144,7 +141,7 @@ public class NpcCrossBowAttackGoal<T extends NpcEntity & RangedAttackMob & Cross
             } else if (this.stage == Stage.READY_TO_ATTACK && canSee) {
                 this.actor.shootCrossbowAt(livingEntity);
                 ItemStack crossbow =  this.actor.getMainHandStack();
-                crossbow.remove(DataComponentTypes.CHARGED_PROJECTILES);
+                MECrossbow.clear(crossbow);
                 this.actor.equipStack(EquipmentSlot.MAINHAND, crossbow);
                 this.stage = Stage.UNCHARGED;
                 this.actor.setNpcFlag(USING_ITEM_FLAG, false);

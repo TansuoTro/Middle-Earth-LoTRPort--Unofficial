@@ -24,7 +24,7 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BannerPatternsComponent;
+import net.jukoz.me.compat.MEBannerPatterns;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DyeColor;
 
@@ -49,8 +49,8 @@ public class ModBuiltInModelItemRenderer {
         this.heldBannerEntityModel = new HeldBannerEntityModel(MinecraftClient.getInstance().getLoadedEntityModels().getModelPart(MiddleEarthClient.HELD_BANNER_LAYER));
 
         if (stack.getItem() instanceof CustomBannerShieldItem) {
-            BannerPatternsComponent bannerPatternsComponent = (BannerPatternsComponent)stack.getOrDefault(DataComponentTypes.BANNER_PATTERNS, BannerPatternsComponent.DEFAULT);
-            DyeColor dyeColor2 = (DyeColor)stack.get(DataComponentTypes.BASE_COLOR);
+            MEBannerPatterns bannerPatternsComponent = MEBannerPatterns.get(stack);
+            DyeColor dyeColor2 = MEBannerPatterns.getBaseColor(stack);
             boolean bl = !bannerPatternsComponent.layers().isEmpty() || dyeColor2 != null;
             matrices.push();
             matrices.scale(1.0F, -1.0F, -1.0F);
@@ -92,8 +92,8 @@ public class ModBuiltInModelItemRenderer {
         }
 
         if (stack.getItem() instanceof HeldBannerItem){
-            BannerPatternsComponent bannerPatternsComponent = (BannerPatternsComponent)stack.getOrDefault(DataComponentTypes.BANNER_PATTERNS, BannerPatternsComponent.DEFAULT);
-            DyeColor dyeColor2 = (DyeColor)stack.get(DataComponentTypes.BASE_COLOR);
+            MEBannerPatterns bannerPatternsComponent = MEBannerPatterns.get(stack);
+            DyeColor dyeColor2 = MEBannerPatterns.getBaseColor(stack);
             boolean bl = !bannerPatternsComponent.layers().isEmpty() || dyeColor2 != null;
             matrices.push();
             matrices.scale(1.0F, -1.0F, -1.0F);
@@ -113,7 +113,7 @@ public class ModBuiltInModelItemRenderer {
         }
     }
 
-    public static void renderCanvas(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, ModelPart canvas, SpriteIdentifier baseSprite, boolean isBanner, DyeColor color, BannerPatternsComponent patterns, boolean glint, ItemStack stack, boolean solid) {
+    public static void renderCanvas(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, ModelPart canvas, SpriteIdentifier baseSprite, boolean isBanner, DyeColor color, MEBannerPatterns patterns, boolean glint, ItemStack stack, boolean solid) {
         canvas.render(matrices, baseSprite.getVertexConsumer(vertexConsumers, RenderLayer::getEntitySolid, solid, glint), light, overlay);
         if (stack.isOf(WeaponItemsME.HEATER_SHIELD)){
             renderLayer(matrices, vertexConsumers, light, overlay, canvas, isBanner ? TexturedRenderLayers.BANNER_BASE : ModTexturedRenderLayers.HEATER_SHIELD_BASE, color);
@@ -125,7 +125,7 @@ public class ModBuiltInModelItemRenderer {
             renderLayer(matrices, vertexConsumers, light, overlay, canvas, TexturedRenderLayers.BANNER_BASE, color);
         }
         for(int i = 0; i < 16 && i < patterns.layers().size(); ++i) {
-            BannerPatternsComponent.Layer layer = (BannerPatternsComponent.Layer)patterns.layers().get(i);
+            MEBannerPatterns.Layer layer = (MEBannerPatterns.Layer)patterns.layers().get(i);
             SpriteIdentifier spriteIdentifier = isBanner ? TexturedRenderLayers.getBannerPatternTextureId(layer.pattern()) : ModTexturedRenderLayers.getRoundShieldPatternTextureId(layer.pattern());
             if (stack.isOf(WeaponItemsME.HEATER_SHIELD)){
                 spriteIdentifier = ModTexturedRenderLayers.getHeaterShieldPatternTextureId(layer.pattern());

@@ -21,11 +21,11 @@ public class RepairItemRecipeMixin {
                 && first.getCount() == 1
                 && second.getCount() == 1
 
-                && first.contains(DataComponentTypes.MAX_DAMAGE)
-                && second.contains(DataComponentTypes.MAX_DAMAGE)
+                && first.isDamageable()
+                && second.isDamageable()
 
-                && first.contains(DataComponentTypes.DAMAGE)
-                && second.contains(DataComponentTypes.DAMAGE)
+                && first.isDamageable()
+                && second.isDamageable()
 
                 && !first.isIn(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "anvil_items")))
                 && !second.isIn(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "anvil_items")))

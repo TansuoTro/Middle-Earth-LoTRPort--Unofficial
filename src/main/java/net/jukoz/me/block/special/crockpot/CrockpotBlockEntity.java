@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.UseRemainderComponent;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
@@ -218,9 +218,9 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
     public ItemStack fillBowl(Item remainder) {
         if(hasOutput()) {
             ItemStack outputStack = getStack(OUTPUT_SLOT);
-            UseRemainderComponent remainderComponent = outputStack.get(DataComponentTypes.USE_REMAINDER);
+            ItemStack remainderComponent = outputStack.getRecipeRemainder();
             if(remainderComponent != null) {
-                ItemStack recipeRemainder = remainderComponent.convertInto();
+                ItemStack recipeRemainder = remainderComponent;
                 if (recipeRemainder.getItem() == remainder) {
                     ItemStack result = outputStack.copy();
                     result.setCount(1);

@@ -3,6 +3,7 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.util.Hand;
 
 import com.mojang.serialization.MapCodec;
+import net.jukoz.me.compat.MELootTable;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -50,9 +51,9 @@ public class PlateBlock extends BlockWithEntity {
         super.onPlaced(world, pos, state, placer, itemStack);
         PlateBlockEntity plateBlockEntity = (PlateBlockEntity) world.getBlockEntity(pos);
         if(plateBlockEntity != null && world instanceof ServerWorld serverWorld) {
-            ContainerLootComponent containerLootComponent = itemStack.get(DataComponentTypes.CONTAINER_LOOT);
-            if(containerLootComponent != null) {
-                plateBlockEntity.setLootTable(containerLootComponent.lootTable(), containerLootComponent.seed());
+            MELootTable.Loot loot = MELootTable.get(itemStack);
+            if(loot != null) {
+                plateBlockEntity.setLootTable(loot.table(), loot.seed());
             }
         }
     }
@@ -147,18 +148,18 @@ public class PlateBlock extends BlockWithEntity {
             return ActionResult.PASS;
         }
 
-        FoodComponent foodComponent = food.get(DataComponentTypes.FOOD);
-        ConsumableComponent consumableComponent = food.get(DataComponentTypes.CONSUMABLE);
+        FoodComponent foodComponent = food.getItem().getFoodComponent();
+        
         if(foodComponent != null && consumableComponent != null) {
             if(!world.isClient) {
                 player.getHungerManager().add((foodComponent.getHunger() / 2), foodComponent.getSaturationModifier() / 2);
             }
-            foodComponent.onConsume(player.getWorld(), player, food, consumableComponent);
-            world.emitGameEvent(player, GameEvent.EAT, pos);
+            foodComponent.onConsume(player.getWorld(), player, food);
+            world.emitGameEvent(player);
 
             ItemStack remainderItem = ItemStack.EMPTY;
-            UseRemainderComponent useRemainderComponent = food.get(DataComponentTypes.USE_REMAINDER);
-            if(useRemainderComponent != null) remainderItem = useRemainderComponent.convertInto();
+            ItemStack useRemainderComponent = food.getRecipeRemainder();
+            if(useRemainderComponent != null) remainderItem = useRemainderComponent;
             plateBlockEntity.setStack(remainderItem);
         }
 
@@ -166,14 +167,14 @@ public class PlateBlock extends BlockWithEntity {
     }
 
     @Override
-    protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    protected ActionResult onUseWithItem(ItemStack stack) {
         if(stack.getItem() instanceof BlockItem blockItem) {
             if(blockItem.getBlock() instanceof PlateBlock) {
                 return ActionResult.PASS;
             }
         }
 
-        if(stack.contains(DataComponentTypes.FOOD)) {
+        if(stack.getItem().isFood()) {
             BlockEntity blockEntity = player.getWorld().getBlockEntity(pos);
             if(blockEntity instanceof PlateBlockEntity plateBlockEntity) {
                 ItemStack plateStack = plateBlockEntity.getStack();

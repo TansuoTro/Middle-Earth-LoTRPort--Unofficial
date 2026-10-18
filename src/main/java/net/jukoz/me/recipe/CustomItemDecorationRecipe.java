@@ -3,7 +3,7 @@ package net.jukoz.me.recipe;
 import net.jukoz.me.item.items.HeldBannerItem;
 import net.jukoz.me.item.items.shields.CustomBannerShieldItem;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BannerPatternsComponent;
+import net.jukoz.me.compat.MEBannerPatterns;
 import net.minecraft.item.BannerItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;
@@ -43,7 +43,7 @@ public class CustomItemDecorationRecipe extends SpecialCraftingRecipe {
                         return false;
                     }
 
-                    BannerPatternsComponent bannerPatternsComponent = (BannerPatternsComponent)itemStack3.getOrDefault(DataComponentTypes.BANNER_PATTERNS, BannerPatternsComponent.DEFAULT);
+                    MEBannerPatterns bannerPatternsComponent = MEBannerPatterns.get(itemStack3);
                     if (!bannerPatternsComponent.layers().isEmpty()) {
                         return false;
                     }
@@ -78,8 +78,8 @@ public class CustomItemDecorationRecipe extends SpecialCraftingRecipe {
         if (itemStack2.isEmpty()) {
             return itemStack2;
         } else {
-            itemStack2.set(DataComponentTypes.BANNER_PATTERNS, (BannerPatternsComponent)itemStack.get(DataComponentTypes.BANNER_PATTERNS));
-            itemStack2.set(DataComponentTypes.BASE_COLOR, ((BannerItem)itemStack.getItem()).getColor());
+            MEBannerPatterns.set(itemStack2, MEBannerPatterns.get(itemStack));
+            /* base colour is intrinsic to the banner item in 1.20.1 */;
             return itemStack2;
         }
     }

@@ -15,7 +15,7 @@ import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BannerPatternsComponent;
+import net.jukoz.me.compat.MEBannerPatterns;
 import net.minecraft.item.ItemDisplayContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DyeColor;
@@ -39,7 +39,7 @@ public class HeaterShieldModelRenderer implements SpecialModelRenderer<Component
 
     @Override
     public void render(@Nullable ComponentMap data, ItemDisplayContext displayContext, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, boolean glint) {
-        BannerPatternsComponent bannerPatternsComponent = data != null ? data.getOrDefault(DataComponentTypes.BANNER_PATTERNS, BannerPatternsComponent.DEFAULT) : BannerPatternsComponent.DEFAULT;
+        MEBannerPatterns bannerPatternsComponent = data != null ? MEBannerPatterns.get(data) : MEBannerPatterns.DEFAULT;
         DyeColor dyeColor = data != null ? data.get(DataComponentTypes.BASE_COLOR) : null;
         boolean bl2 = !bannerPatternsComponent.layers().isEmpty() || dyeColor != null;
         matrices.push();
@@ -63,11 +63,11 @@ public class HeaterShieldModelRenderer implements SpecialModelRenderer<Component
         this.model.getRootPart().collectVertices(matrixStack, vertices);
     }
 
-    public static void renderCanvas(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, ModelPart canvas, SpriteIdentifier baseSprite, boolean isBanner, DyeColor color, BannerPatternsComponent patterns, boolean glint, boolean solid) {
+    public static void renderCanvas(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, ModelPart canvas, SpriteIdentifier baseSprite, boolean isBanner, DyeColor color, MEBannerPatterns patterns, boolean glint, boolean solid) {
         canvas.render(matrices, baseSprite.getVertexConsumer(vertexConsumers, RenderLayer::getEntitySolid, solid, glint), light, overlay);
         renderLayer(matrices, vertexConsumers, light, overlay, canvas, ModTexturedRenderLayers.HEATER_SHIELD_BASE, color);
         for(int i = 0; i < 16 && i < patterns.layers().size(); ++i) {
-            BannerPatternsComponent.Layer layer = patterns.layers().get(i);
+            MEBannerPatterns.Layer layer = patterns.layers().get(i);
             SpriteIdentifier spriteIdentifier = ModTexturedRenderLayers.getHeaterShieldPatternTextureId(layer.pattern());
 
             renderLayer(matrices, vertexConsumers, light, overlay, canvas, spriteIdentifier, layer.color());

@@ -2,7 +2,7 @@ package net.jukoz.me.item.utils;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.CustomModelDataComponent;
+import net.jukoz.me.item.MEComponents;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -59,11 +59,7 @@ public class ItemGroupsUtil {
 
         randomNpcSpawnEgg.set(DataComponentTypes.ENTITY_DATA, NbtComponent.of(compoundData));
         randomNpcSpawnEgg.setCustomName(Text.translatable(randomSpawnEggId.toTranslationKey("item")));
-        randomNpcSpawnEgg.set(DataComponentTypes.CUSTOM_MODEL_DATA, new CustomModelDataComponent(
-                List.of(),
-                List.of(),
-                List.of(randomSpawnEggId.getPath().replaceAll("\\.", "_")),
-                List.of()));
+        MEComponents.set(randomNpcSpawnEgg, MEComponents.ITEM_MODEL, new Identifier(MiddleEarth.MOD_ID, randomSpawnEggId.getPath().replaceAll("\\.", "_")));
 
         entries.add(randomNpcSpawnEgg);
 
@@ -77,7 +73,7 @@ public class ItemGroupsUtil {
         ItemStack item = partItem.getDefaultStack();
         RegistryEntry.Reference<ArmorTrimMaterial> material = wrapper.getOptional(RegistryKeys.TRIM_MATERIAL).orElseThrow().getOrThrow(reference);
         RegistryEntry.Reference<ArmorTrimPattern> pattern = wrapper.getOptional(RegistryKeys.TRIM_PATTERN).orElseThrow().getOptional(RegistryKey.of(RegistryKeys.TRIM_PATTERN, MiddleEarth.of( "smithing_part"))).orElse(null);
-        item.set(DataComponentTypes.TRIM, new ArmorTrim(material , pattern));
+        MEArmorTrim.set(item, new ArmorTrim(material , pattern));
         return item;
     }
 

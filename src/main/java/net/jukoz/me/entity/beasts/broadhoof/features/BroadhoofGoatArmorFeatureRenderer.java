@@ -4,7 +4,7 @@ import net.minecraft.client.render.entity.equipment.EquipmentModel;
 import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
 import net.minecraft.client.render.entity.model.LoadedEntityModels;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.EquippableComponent;
+import net.minecraft.util.Identifier;
 import net.minecraft.registry.RegistryKey;
 import net.jukoz.me.entity.EntityModelLayersME;
 import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatEntityRenderState;
@@ -29,7 +29,7 @@ public class BroadhoofGoatArmorFeatureRenderer extends FeatureRenderer<Broadhoof
     @Override
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, BroadhoofGoatEntityRenderState state, float limbAngle, float limbDistance) {
         ItemStack itemStack = state.armor;
-        EquippableComponent equippableComponent = (EquippableComponent)itemStack.get(DataComponentTypes.EQUIPPABLE);
+        Identifier equippableComponent = MEComponents.get(itemStack, MEComponents.EQUIPPABLE_ASSET);
         if (equippableComponent != null && !equippableComponent.assetId().isEmpty()) {
             model.setAngles(state);
             this.equipmentRenderer.render(EquipmentModel.LayerType.HORSE_BODY, (RegistryKey)equippableComponent.assetId().get(), model, itemStack, matrices, vertexConsumers, light);

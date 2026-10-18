@@ -1,7 +1,7 @@
 package net.jukoz.me.item.items;
 
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BannerPatternsComponent;
+import net.jukoz.me.compat.MEBannerPatterns;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -15,11 +15,11 @@ public class HeldBannerItem extends Item {
     }
 
     public static void appendBannerTooltip(ItemStack stack, List<Text> tooltip) {
-        BannerPatternsComponent bannerPatternsComponent = (BannerPatternsComponent)stack.get(DataComponentTypes.BANNER_PATTERNS);
+        MEBannerPatterns bannerPatternsComponent = MEBannerPatterns.get(stack);
         if (bannerPatternsComponent != null) {
             for(int i = 0; i < Math.min(bannerPatternsComponent.layers().size(), 6); ++i) {
-                BannerPatternsComponent.Layer layer = (BannerPatternsComponent.Layer)bannerPatternsComponent.layers().get(i);
-                tooltip.add(layer.getTooltipText().formatted(Formatting.GRAY));
+                MEBannerPatterns.Layer layer = (MEBannerPatterns.Layer)bannerPatternsComponent.layers().get(i);
+                tooltip.add(Text.translatable("block.minecraft.banner." + layer.pattern().getHashPattern()).formatted(Formatting.GRAY));
             }
 
         }

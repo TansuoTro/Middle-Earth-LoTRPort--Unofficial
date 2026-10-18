@@ -1,7 +1,7 @@
 package net.jukoz.me.item;
 
 import net.minecraft.block.Block;
-import net.minecraft.component.type.ConsumableComponent;
+
 import net.minecraft.component.type.ConsumableComponents;
 import net.minecraft.item.FoodComponents;
 import net.minecraft.entity.effect.StatusEffects;

@@ -31,7 +31,7 @@ public class StoneAnvilBlockEntity extends ShapingAnvilBlockEntity {
     public void bonk(ShapingAnvilBlockEntity entity, ServerWorld world, ItemStack tool) {
         ItemStack input = entity.getStack(0);
 
-        ArmorTrim trim = input.get(DataComponentTypes.TRIM);
+        ArmorTrim trim = MEArmorTrim.get(input);
         if (trim != null){
             Optional<RegistryKey<ArmorTrimMaterial>> armorTrimMaterialRegistryKey = trim.material().getKey();
             if(armorTrimMaterialRegistryKey.isPresent()) {

@@ -9,7 +9,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
-import net.minecraft.component.type.BannerPatternsComponent;
+import net.jukoz.me.compat.MEBannerPatterns;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.MutableText;
@@ -288,7 +288,7 @@ public class OnboardingFactionScreen extends Screen {
         // Banner
         if(elements.bannerComponents != null && !elements.bannerComponents.isEmpty()) {
             var bannerPatternRegistry = this.client.world.getRegistryManager().getOptional(RegistryKeys.BANNER_PATTERN);
-            BannerPatternsComponent.Builder bannerBuilder = new BannerPatternsComponent.Builder();
+            MEBannerPatterns.Builder bannerBuilder = new MEBannerPatterns.Builder();
             for(BannerData.BannerPatternWithColor entry : elements.bannerComponents){
                 if(entry == null) continue;
                 RegistryEntry<BannerPattern> pattern = bannerPatternRegistry.get().getEntry(entry.pattern);

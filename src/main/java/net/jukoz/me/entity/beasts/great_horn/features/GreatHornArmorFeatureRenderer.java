@@ -13,7 +13,7 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.component.DataComponentTypes;
 import net.jukoz.me.compat.DyedColorComponent;
-import net.minecraft.component.type.EquippableComponent;
+import net.minecraft.util.Identifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.Identifier;
@@ -36,7 +36,7 @@ public class GreatHornArmorFeatureRenderer extends FeatureRenderer<GreatHornEnti
     @Override
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, GreatHornEntityRenderState state, float limbAngle, float limbDistance) {
         ItemStack itemStack = state.armor;
-        EquippableComponent equippableComponent = (EquippableComponent)itemStack.get(DataComponentTypes.EQUIPPABLE);
+        Identifier equippableComponent = MEComponents.get(itemStack, MEComponents.EQUIPPABLE_ASSET);
         if (equippableComponent != null && !equippableComponent.assetId().isEmpty()) {
             model.setAngles(state);
             String path = "textures/entities/great_horn/feature/" + equippableComponent.assetId().get().getValue().getPath() + ".png";
