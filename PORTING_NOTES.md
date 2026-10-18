@@ -43,6 +43,23 @@
 
 實測（冷 `run/data`）：biome 生成 44 秒、height 生成約 4 分鐘，之後進入主選單。快取寫在 `run/data/me/alpha-1.4.0-1.20.1/`，第二次啟動直接跳過。
 
+## 建置前提：先跑 datagen
+
+repo 沒有提交 `src/main/generated`（上游也一樣，靠 CI 生成）。少了它：
+
+- `data/me/worldgen/biome/*.json` 不存在 → 開世界時
+  `Unbound values in registry ... [me:blue_mountains]` 直接崩潰
+- blockstates / models / loot_tables / recipes 也不完整
+
+第一次建置一定要先跑：
+
+```bash
+gradlew runDatagenClient
+```
+
+實測產出 17,783 個檔案、106 個 biome。跑完 `gradlew runServer` 可以正常啟動
+（`Done (24.512s)!`），代表 registry 綁定正確。
+
 ## 識別碼（尚未變更）
 
 | 項目 | 值 |
