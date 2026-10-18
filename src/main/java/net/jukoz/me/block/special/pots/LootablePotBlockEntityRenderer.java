@@ -38,7 +38,7 @@ public class LootablePotBlockEntityRenderer implements BlockEntityRenderer<Decor
         matrices.push();
         ((net.jukoz.me.compat.MERenderManagerAccess) blockRenderManager).getModelRenderer().render(
                 matrices.peek(),
-                vertexConsumers.getBuffer(RenderLayers.getEntityBlockLayer(state)),
+                vertexConsumers.getBuffer(RenderLayers.getEntityBlockLayer(state, true)),
                 state,
                 blockRenderManager.getModel(state),
                 1.0F,

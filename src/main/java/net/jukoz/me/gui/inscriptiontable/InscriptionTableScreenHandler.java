@@ -2,7 +2,6 @@ package net.jukoz.me.gui.inscriptiontable;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
-import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,6 +16,7 @@ import net.minecraft.recipe.RecipeManager;
 import net.jukoz.me.compat.SingleStackRecipeInput;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.screen.*;
 import net.minecraft.screen.slot.Slot;
@@ -28,6 +28,7 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.gui.ModScreenHandlers;
 import net.jukoz.me.item.ToolItemsME;
+import net.jukoz.me.item.MEDurability;
 import net.jukoz.me.network.packets.S2C.InscriptionEnchantInfoPacket;
 import net.jukoz.me.recipe.RecipesME;
 import net.jukoz.me.recipe.inscription.InscriptionRecipe;
@@ -98,8 +99,8 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
                 return 1;
             }
 
-            public Identifier getBackgroundSprite() {
-                return EMPTY_SLOT_CHISEL_TEXTURE;
+            public Pair<Identifier, Identifier> getBackgroundSprite() {
+                return Pair.of(EMPTY_SLOT_CHISEL_TEXTURE, EMPTY_SLOT_CHISEL_TEXTURE);
             }
         });
 
@@ -246,7 +247,7 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
 
             InscriptionEnchantInfoPacket newPacket;
             if (foundEnchant){
-                newPacket = new InscriptionEnchantInfoPacket(resultEnchant.value().description().copy().getString(), resultLevel, resultMaxLevel, availableWords);
+                newPacket = new InscriptionEnchantInfoPacket(resultEnchant.value().getName(resultLevel).getString(), resultLevel, resultMaxLevel, availableWords);
                 this.enchant = resultEnchant;
                 this.level = resultLevel;
                 calculateCost(resultLevelCost, resultEnchant);
@@ -277,11 +278,11 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
 
     private boolean canEnchant(ItemStack stack, RegistryEntry<Enchantment> enchant, int level) {
         boolean acceptableItem = enchant.value().isAcceptableItem(stack);
-        if (acceptableItem && EnchantmentHelper.isCompatible(MEEnchants.list(stack), enchant)){
-            return stack.getEnchantments().getLevel(enchant) == level - 1;
+        if (acceptableItem && EnchantmentHelper.isCompatible(MEEnchants.list(stack), enchant.value())){
+            return EnchantmentHelper.getLevel(enchant.value(), stack) == level - 1;
         } else {
             if (MEEnchants.has(stack, enchant)){
-                return stack.getEnchantments().getLevel(enchant) == level - 1;
+                return EnchantmentHelper.getLevel(enchant.value(), stack) == level - 1;
             } else {
                 return false;
             }
@@ -317,7 +318,7 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
             }
             this.levelCost.set(0);
 
-            stack.addEnchantment(this.enchant, this.level);
+            stack.addEnchantment(this.enchant.value(), this.level);
             world.playSound(null, this.player.getBlockPos(), SoundsME.CHISEL_ENCHANT, SoundCategory.BLOCKS, 1.0F, world.random.nextFloat() * 0.1F + 0.9F);
         }
 
@@ -329,10 +330,8 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
         int k = 0;
 
         if (!itemStack.isEmpty()){
-            ItemEnchantmentsComponent.Builder builder = new ItemEnchantmentsComponent.Builder(EnchantmentHelper.getEnchantments(itemStack));
-
-            for (RegistryEntry<Enchantment> enchantEntry : builder.getEnchantments()) {
-                if (enchantEntry != enchant) {
+            for (Enchantment enchantEntry : EnchantmentHelper.get(itemStack).keySet()) {
+                if (enchantEntry != enchant.value()) {
                     k++;
                 }
             }

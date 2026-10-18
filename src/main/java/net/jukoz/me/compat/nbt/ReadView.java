@@ -51,7 +51,7 @@ public final class ReadView {
         return out;
     }
 
-    public Optional<NbtCompound> getCompound(String key) {
+    public NbtCompound getCompound(String key) {
         return this.nbt.getCompound(key);
     }
 

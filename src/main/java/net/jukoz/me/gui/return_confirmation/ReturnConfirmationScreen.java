@@ -36,7 +36,7 @@ public class ReturnConfirmationScreen extends Screen {
     }
 
     private void returnToOverworld() {
-        ClientPlayNetworking.send(new PacketTeleportToCurrentOverworldSpawn());
+        ClientPlayNetworking.send(PacketTeleportToCurrentOverworldSpawn.INSTANCE);
     }
 
     @Override

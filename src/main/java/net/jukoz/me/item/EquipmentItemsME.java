@@ -2160,7 +2160,7 @@ public class EquipmentItemsME {
 
     private static Item registerItem(Item item, String name){
         TranslationEntries.itemEntries.add(item);
-        if (item instanceof ArmorItem armorItem){
+        if (item instanceof net.jukoz.me.item.items.armor.ArmorItem armorItem){
             ArmorTags.armors.add(armorItem);
             switch (armorItem.getMaterial().tier()){
                 case BASIC -> ArmorTags.basicArmors.add(item);
@@ -2170,7 +2170,10 @@ public class EquipmentItemsME {
                 case HEAVY -> ArmorTags.heavyArmors.add(item);
             }
 
-            Map<ArmorItem.Type, Integer> defensePointsMap = armorItem.getMaterial().material().defense();
+            Map<ArmorItem.Type, Integer> defensePointsMap = new java.util.EnumMap<>(ArmorItem.Type.class);
+            for (ArmorItem.Type armorType : ArmorItem.Type.values()) {
+                defensePointsMap.put(armorType, armorItem.getMaterial().material().getProtection(armorType));
+            }
 
             // Pattern switch is Java 21; this mod targets 17.
             if (item instanceof CustomHelmetItem helmetItem) {

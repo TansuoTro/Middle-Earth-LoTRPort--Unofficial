@@ -29,7 +29,7 @@ import net.minecraft.util.Identifier;
  */
 public interface ItemSettingsME {
 
-    Identifier ENTITY_INTERACTION_RANGE_MODIFIER_ID = new Identifier(MiddleEarth.MOD_ID, "entity_interaction_range");
+    String ENTITY_INTERACTION_RANGE_MODIFIER_ID = "me.entity_interaction_range";
 
     static MESettings createWeaponSettings(ToolMaterial material, Item.Settings settings, WeaponTypesME type) {
         return settings instanceof MESettings meSettings ? meSettings.maxDamage(material.getDurability()) : new MESettings().maxDamage(material.getDurability());
@@ -39,23 +39,23 @@ public interface ItemSettingsME {
             ToolMaterial material, float attackDamage, float attackSpeed, float attackRange) {
         ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(
-                java.util.UUID.fromString("cb3f55d3-645c-4f38-a497-9c13a33db5cf"), attackDamage + material.getAttackDamage(), EntityAttributeModifier.Operation.ADDITION));
+                "me.weapon_damage", attackDamage + material.getAttackDamage(), EntityAttributeModifier.Operation.ADDITION));
         builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(
-                java.util.UUID.fromString("fa233e1c-4180-4865-b01b-bcce9785aca3"), attackSpeed, EntityAttributeModifier.Operation.ADDITION));
-        builder.put(EntityAttributesME.ENTITY_INTERACTION_RANGE, new EntityAttributeModifier(
+                "me.weapon_speed", attackSpeed, EntityAttributeModifier.Operation.ADDITION));
+        builder.put(EntityAttributesME.ENTITY_INTERACTION_RANGE.value(), new EntityAttributeModifier(
                 ENTITY_INTERACTION_RANGE_MODIFIER_ID, attackRange, EntityAttributeModifier.Operation.ADDITION));
         return builder.build();
     }
 
-    static Item.Settings goatArmor(net.minecraft.item.ArmorMaterial material) {
+    static MESettings goatArmor(net.minecraft.item.ArmorMaterial material) {
         return mountArmor();
     }
 
-    static Item.Settings wargArmor(net.minecraft.item.ArmorMaterial material) {
+    static MESettings wargArmor(net.minecraft.item.ArmorMaterial material) {
         return mountArmor();
     }
 
-    static Item.Settings greatHornArmor(net.minecraft.item.ArmorMaterial material) {
+    static MESettings greatHornArmor(net.minecraft.item.ArmorMaterial material) {
         return mountArmor();
     }
 
@@ -64,7 +64,7 @@ public interface ItemSettingsME {
      * the allowed-entity tag and the "no damage on hurt" flag. None of that exists on 1.20.1,
      * where mount armour is a HorseArmorItem with a hard-coded texture and a fixed bonus.
      */
-    private static Item.Settings mountArmor() {
+    private static MESettings mountArmor() {
         return new MESettings().maxCount(1);
     }
 }

@@ -44,13 +44,11 @@ import net.jukoz.me.compat.MEEnchants;
 public abstract class LivingEntityMixin extends Entity {
     private static boolean stackTraceLock = false;
 
-    @Shadow @Final protected EntityEquipment equipment;
-
     @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
 
     @Shadow public abstract ItemStack getStackInHand(Hand hand);
 
-    @Shadow public abstract boolean hasStatusEffect(RegistryEntry<StatusEffect> effect);
+    @Shadow public abstract boolean hasStatusEffect(StatusEffect effect);
 
     @Shadow public abstract @NotNull ItemStack getWeaponStack();
 
@@ -67,9 +65,9 @@ public abstract class LivingEntityMixin extends Entity {
             ItemStack chestplate = this.getEquippedStack(EquipmentSlot.CHEST);
             if(!chestplate.isEmpty()) {
                 RegistryEntry<Enchantment> enchantmentRegistryEntry = entity.getWorld().getRegistryManager()
-                        .getOrThrow(RegistryKeys.ENCHANTMENT).getOptional(EnchantmentsME.STEALTHY_TRAIL).orElseThrow();
+                        .get(RegistryKeys.ENCHANTMENT).getEntry(EnchantmentsME.STEALTHY_TRAIL).orElseThrow();
                 boolean hasEnchant = MEEnchants.has(chestplate, enchantmentRegistryEntry);
-                int level = EnchantmentHelper.getLevel(enchantmentRegistryEntry, chestplate);
+                int level = EnchantmentHelper.getLevel(enchantmentRegistryEntry.value(), chestplate);
                 if(hasEnchant) {
                     double original = cir.getReturnValue();
                     double viewDistance = original + Math.max(-0.9f, -0.2f * level);
@@ -114,7 +112,7 @@ public abstract class LivingEntityMixin extends Entity {
     @ModifyVariable(method = "addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z",
             at = @At("HEAD"), index = 1, argsOnly = true)
     public final StatusEffectInstance addStatusEffect(StatusEffectInstance effect) {
-        if(effect.getEffectType().value().getCategory().equals(StatusEffectCategory.HARMFUL)) {
+        if(effect.getEffectType().getCategory().equals(StatusEffectCategory.HARMFUL)) {
             float ailmentLevel = 0;
             World world = this.getWorld();
             ailmentLevel += getAilmentProtectionLevel(this.getEquippedStack(EquipmentSlot.HEAD), world);
@@ -124,7 +122,9 @@ public abstract class LivingEntityMixin extends Entity {
             if(ailmentLevel > 0) {
                 float scale = 0.08f * ailmentLevel;
                 scale = 1 - Math.min(0.8f, scale);
-                effect = effect.withScaledDuration(scale);
+                int scaledDuration = Math.max(1, Math.round(effect.getDuration() * scale));
+                effect = new StatusEffectInstance(effect.getEffectType(), scaledDuration, effect.getAmplifier(),
+                        effect.isAmbient(), effect.shouldShowParticles(), effect.shouldShowIcon());
             }
         }
         return effect;
@@ -142,10 +142,10 @@ public abstract class LivingEntityMixin extends Entity {
     private static int getAilmentProtectionLevel(ItemStack itemStack, World world) {
         int level = 0;
         RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT)
-                .getOptional(EnchantmentsME.AILMENT_PROTECTION).orElseThrow();
+                .getEntry(EnchantmentsME.AILMENT_PROTECTION).orElseThrow();
         boolean hasEnchant = MEEnchants.has(itemStack, enchantmentRegistryEntry);
         if(hasEnchant) {
-            level = EnchantmentHelper.getLevel(enchantmentRegistryEntry, itemStack);
+            level = EnchantmentHelper.getLevel(enchantmentRegistryEntry.value(), itemStack);
         }
         return level;
     }
@@ -153,7 +153,9 @@ public abstract class LivingEntityMixin extends Entity {
     @Inject(at = @At("HEAD"), method = "drop")
     protected void drop(ServerWorld world, DamageSource damageSource, CallbackInfo callbackInfo) {
         if(getControllingPassenger() != null && getControllingPassenger() instanceof NpcEntity){
-            this.equipment.clear();
+            for (EquipmentSlot equipmentSlot : EquipmentSlot.values()) {
+                this.equipStack(equipmentSlot, ItemStack.EMPTY);
+            }
         }
     }
 

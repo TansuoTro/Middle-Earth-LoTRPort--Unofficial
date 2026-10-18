@@ -25,7 +25,7 @@ public class CustomLongbowWeaponItem extends BowItem {
     public static final int RANGE = 25;
 
     public CustomLongbowWeaponItem(RangedWeaponTypesME type, Item.Settings settings) {
-        super(settings.maxDamage(type.durability)
+        super(((net.jukoz.me.item.MESettings) settings).maxDamage(type.durability)
                 .component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(type.name)));
         this.type = type;
     }

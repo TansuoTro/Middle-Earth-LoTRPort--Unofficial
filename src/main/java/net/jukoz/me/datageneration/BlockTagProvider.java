@@ -293,7 +293,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         mineablePickaxe.add(ModBlocks.DARK_PRISMARINE_VERTICAL_SLAB);
         mineablePickaxe.add(ModBlocks.NETHER_BRICK_VERTICAL_SLAB);
         mineablePickaxe.add(ModBlocks.RED_NETHER_BRICK_VERTICAL_SLAB);
-        mineablePickaxe.add(ModBlocks.BLACKSTONE_VERTICAL_SLAB);
+        mineablePickaxe.add(StoneBlockSets.BLACKSTONE_SET.baseBlocks.verticalSlab());
         mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.POLISHED_BLACKSTONE_VERTICAL_SLAB);
         mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.POLISHED_BLACKSTONE_BRICK_VERTICAL_SLAB);
         mineablePickaxe.add(ModBlocks.END_STONE_BRICK_VERTICAL_SLAB);

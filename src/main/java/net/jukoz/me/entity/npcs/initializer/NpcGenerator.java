@@ -134,7 +134,8 @@ public class NpcGenerator {
         // Beard
         Identifier beardPatternId = TexturePresetDataPool.getRawPattern(textureIdentity, CharacterPatternTypes.BEARD);
         Optional<RegistryEntry.Reference<CharacterTexturePattern>> foundBeardPattern = CharacterPatternsRegistryME.get(manager, CharacterPatternTypes.BEARD, beardPatternId);
-        if(foundBeardPattern.isPresent() && foundBeardPattern.get().value() instanceof CharacterTexturePattern pattern){
+        if(foundBeardPattern.isPresent()){
+            CharacterTexturePattern pattern = foundBeardPattern.get().value();
             npcTextureData = npcTextureData.withBeardTexture(TexturePresetDataPool.buildId(beardPatternId, globalHairMaterialId));
             if(pattern.hasAddonRawValue()){
                 npcTextureData = npcTextureData.withBeardAddonTexture(TexturePresetDataPool.buildAddonId(beardPatternId, globalHairMaterialId));

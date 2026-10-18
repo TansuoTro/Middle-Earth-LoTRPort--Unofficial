@@ -100,7 +100,11 @@ public class MESettings extends Item.Settings {
         return this;
     }
 
-    @Override
+    /** 1.21's {@code horseArmor(ArmorMaterial)}: 1.20.1 sets horse armour on the item class. */
+    public MESettings horseArmor(net.minecraft.item.ArmorMaterial material) {
+        return this;
+    }
+
     public MESettings maxCount(int maxCount) {
         super.maxCount(maxCount);
         return this;

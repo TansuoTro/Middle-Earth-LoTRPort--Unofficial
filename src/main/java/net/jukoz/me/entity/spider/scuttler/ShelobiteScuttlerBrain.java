@@ -35,17 +35,13 @@ public class ShelobiteScuttlerBrain {
 	}
 
 	protected static void setCurrentPosAsHome(ShelobiteScuttlerEntity shelobiteScuttler) {
-		GlobalPos globalPos = GlobalPos.create(shelobiteScuttler.getWorld().getRegistryKey(), shelobiteScuttler.getBlockPos());
-		shelobiteScuttler.getBrain().remember(MemoryModuleType.HOME, globalPos);
+		shelobiteScuttler.getBrain().remember(net.jukoz.me.api.entity.ai.brain.MemoryModulesAPI.SHELTER_POS, shelobiteScuttler.getBlockPos());
 	}
 
 	private static void addCoreActivities(ShelobiteScuttlerEntity shelobiteScuttler, Brain<ShelobiteScuttlerEntity> brain) {
 		brain.setTaskList(
 				Activity.CORE, 0, ImmutableList.of(
-						new UpdateLookControlTask(45, 90),
-						new MoveToTargetTask(),
-						ForgetAngryAtTargetTask.create(),
-						new TickCooldownTask(MemoryModuleType.LONG_JUMP_COOLING_DOWN)
+						ForgetAngryAtTargetTask.create()
 				)
 		);
 	}
@@ -68,7 +64,7 @@ public class ShelobiteScuttlerBrain {
 				Activity.FIGHT,
 				10,
 				ImmutableList.of(
-						ForgetAttackTargetTask.create((world, target) -> !isTarget(world, shelobiteScuttler, target)),
+						ForgetAttackTargetTask.create(),
 						RangedApproachTask.create(1.0F),
 						MeleeAttackTask.create(20)
 				),
@@ -80,9 +76,7 @@ public class ShelobiteScuttlerBrain {
 		brain.setTaskList(
 				Activity.LONG_JUMP,
 				ImmutableList.of(
-						Pair.of(0, ForgetAttackTargetTask.create(
-								(world, target) -> !isTarget(world, shelobiteScuttler, target))
-						),
+						Pair.of(0, ForgetAttackTargetTask.create()),
 						//new LeapingChargeTask(POUNCE_COOLDOWN_RANGE, SoundEvents.ENTITY_SPIDER_STEP),
 						Pair.of(1, new SpiderPounceTask<>(
 								POUNCE_COOLDOWN_RANGE, POUNCE_VERTICAL_RANGE, POUNCE_HORIZONTAL_RANGE,
@@ -131,8 +125,8 @@ public class ShelobiteScuttlerBrain {
 				ImmutableList.of(
 						Pair.of(StrollTask.create(0.6F), 2),
 						Pair.of(FindEntityTask.create(EntitiesME.SHELOBITE_SCUTTLER, 8, MemoryModuleType.INTERACTION_TARGET, 0.6F, 2), 2),
-						Pair.of(GoToPosTask.create(MemoryModuleType.HOME, 0.6F, 2, 100), 2),
-						Pair.of(GoAroundTask.create(MemoryModuleType.HOME, 0.6F, 5), 2),
+						Pair.of(GoToRememberedPositionTask.createPosBased(net.jukoz.me.api.entity.ai.brain.MemoryModulesAPI.SHELTER_POS, 0.6F, 2, true), 2),
+						
 						Pair.of(new WaitTask(30, 60), 1)
 				)
 		);
@@ -217,12 +211,12 @@ public class ShelobiteScuttlerBrain {
 	}*/
 
 	private static boolean isTarget(ServerWorld world, ShelobiteScuttlerEntity shelobiteScuttler, LivingEntity target) {
-		return getTarget(world, shelobiteScuttler).filter(targetx -> targetx == target).isPresent();
+		return getTarget(shelobiteScuttler).filter(targetx -> targetx == target).isPresent();
 	}
 
-	private static Optional<? extends LivingEntity> getTarget(ServerWorld world, ShelobiteScuttlerEntity shelobiteScuttler) {
-		Optional<LivingEntity> optional = TargetUtil.getEntity(shelobiteScuttler, MemoryModuleType.ANGRY_AT);
-		if (optional.isPresent() && Sensor.testAttackableTargetPredicateIgnoreVisibility(world, shelobiteScuttler, (LivingEntity)optional.get())) {
+	private static Optional<? extends LivingEntity> getTarget(ShelobiteScuttlerEntity shelobiteScuttler) {
+		Optional<LivingEntity> optional = net.minecraft.entity.ai.brain.task.LookTargetUtil.getEntity(shelobiteScuttler, MemoryModuleType.ANGRY_AT);
+		if (optional.isPresent() && Sensor.testAttackableTargetPredicateIgnoreVisibility(shelobiteScuttler, (LivingEntity)optional.get())) {
 			return optional;
 		} else {
 			Optional<? extends LivingEntity> optional2 = shelobiteScuttler.getBrain().getOptionalRegisteredMemory(MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER);

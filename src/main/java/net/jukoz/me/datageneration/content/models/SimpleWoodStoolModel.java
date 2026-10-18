@@ -9,7 +9,7 @@ import java.util.List;
 
 public class SimpleWoodStoolModel {
 
-    public record VanillaStool(Block base, Block planks) {}
+    public record VanillaStool(Block base, Block planks, Block origin) {}
 
     public static List<Block> stools = new ArrayList<>() {
         {

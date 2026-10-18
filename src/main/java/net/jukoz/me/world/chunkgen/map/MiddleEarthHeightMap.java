@@ -168,4 +168,10 @@ public class MiddleEarthHeightMap {
     public static float lerp(float a, float b, float interpolation) {
         return a + interpolation * (b - a);
     }
+
+    public static net.jukoz.me.world.biomes.surface.MapBasedCustomBiome getBiomeFromMap(int posX, int posZ) {
+        if (middleEarthMapRuntime == null)
+            middleEarthMapRuntime = MiddleEarthMapRuntime.getInstance();
+        return net.jukoz.me.world.biomes.surface.MapBasedBiomePool.getBiomeByKey(middleEarthMapRuntime.getBiome(posX, posZ).biome);
+    }
 }

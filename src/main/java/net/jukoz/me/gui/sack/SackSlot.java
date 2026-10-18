@@ -2,7 +2,8 @@ package net.jukoz.me.gui.sack;
 
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.block.ShulkerBoxBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraft.screen.slot.Slot;
 import net.jukoz.me.item.DecorativeItemsME;
 
@@ -13,7 +14,7 @@ public class SackSlot extends Slot {
 
     @Override
     public boolean canInsert(ItemStack stack) {
-        if(stack.isOf(DecorativeItemsME.SACK) || stack.isIn(ItemTags.SHULKER_BOXES)) return false;
+        if(stack.isOf(DecorativeItemsME.SACK) || (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof ShulkerBoxBlock)) return false;
         return super.canInsert(stack);
     }
 }

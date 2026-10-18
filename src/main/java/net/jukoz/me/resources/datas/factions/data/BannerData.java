@@ -138,7 +138,7 @@ public class BannerData {
     public MEBannerPatterns getBannerPatternComponents(RegistryEntryLookup<BannerPattern> bannerPatternLookup) {
         MEBannerPatterns.Builder bannerPatternsComponentBuilder = new MEBannerPatterns.Builder();
 
-        bannerPatternsComponentBuilder.add(new MEBannerPatterns.Layer(net.minecraft.registry.Registries.BANNER_PATTERN.getEntry(net.minecraft.block.entity.BannerPatterns.BASE), baseBannerColor));
+        bannerPatternsComponentBuilder.add(new MEBannerPatterns.Layer(net.minecraft.registry.Registries.BANNER_PATTERN.getEntry(net.minecraft.block.entity.BannerPatterns.BASE).orElseThrow(), baseBannerColor));
         for(BannerPatternWithColor bannerPatternWithColor :  bannerPatternWithColors){
             bannerPatternsComponentBuilder.add(bannerPatternLookup.getOrThrow(bannerPatternWithColor.patternRegistryKey), bannerPatternWithColor.color);
         }

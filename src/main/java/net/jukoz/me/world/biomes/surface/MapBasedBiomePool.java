@@ -46,6 +46,13 @@ public class MapBasedBiomePool {
         biomeHashMap.put(color, biome);
     }
 
+    public static MapBasedCustomBiome getBiomeByKey(RegistryKey<Biome> key) {
+        return biomeHashMap.values().stream()
+                .filter(b -> b.getBiomeKey().equals(key))
+                .findFirst()
+                .orElse(defaultBiome);
+    }
+
     public static MapBasedCustomBiome getBiomeByColor(Integer rgb){
         if(biomeHashMap.containsKey(new Color(rgb)))
             return biomeHashMap.get(new Color(rgb));

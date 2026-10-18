@@ -5,7 +5,6 @@ import net.minecraft.entity.ai.brain.EntityLookTarget;
 import net.minecraft.entity.ai.brain.LivingTargetCache;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.ai.brain.WalkTarget;
-import net.minecraft.entity.ai.brain.task.TargetUtil;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.entity.ai.brain.task.TaskTriggerer;
 import net.minecraft.entity.mob.MobEntity;
@@ -28,7 +27,7 @@ public class NpcRangedApproachTask {
                 .apply(context, (walkTarget, lookTarget, attackTarget, visibleMobs) -> (world, entity, time) -> {
                     LivingEntity livingEntity = context.getValue(attackTarget);
                     Optional<LivingTargetCache> optionalVisibleAttackTargets = context.getOptionalValue(visibleMobs);
-                    if (optionalVisibleAttackTargets.isPresent() && (optionalVisibleAttackTargets.get()).contains(livingEntity) && TargetUtil.isTargetWithinAttackRange(entity, livingEntity, 1)) {
+                    if (optionalVisibleAttackTargets.isPresent() && (optionalVisibleAttackTargets.get()).contains(livingEntity) && entity.squaredDistanceTo(livingEntity) <= 1.0) {
                         walkTarget.forget();
                     } else {
                         lookTarget.remember(new EntityLookTarget(livingEntity, true));

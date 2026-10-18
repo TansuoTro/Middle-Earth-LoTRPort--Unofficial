@@ -47,7 +47,7 @@ public class ResourceItemsME {
 
     public static final Item REINFORCED_BARREL = registerItem("reinforced_barrel",
             (settings) -> {
-                return new BoatItem(EntitiesME.REINFORCED_BARREL, settings);
+                return new BoatItem(true, net.minecraft.entity.vehicle.BoatEntity.Type.OAK, settings);
             }, new MESettings().maxCount(1));
 
     public static final Item RAW_TIN = registerItem("raw_tin",
@@ -291,15 +291,15 @@ public class ResourceItemsME {
                     .providesBannerPatterns(BannerPatternTagsME.SNAIL_PATTERN_ITEM));
 
     public static final Item PTEROSAUR_NUGGET = registerHiddenItem("pterosaur_nugget",
-            HotChickenFoodItem::new, new MESettings().food(new FoodComponent(1, 0.5f, false)));
+            HotChickenFoodItem::new, new MESettings().food(new FoodComponent.Builder().hunger(1).saturationModifier(0.5f).build()));
     public static final Item THERAPOD_NUGGET = registerHiddenItem("therapod_nugget",
-            HotChickenFoodItem::new, new MESettings().food(new FoodComponent(7, 0.8f, false)));
+            HotChickenFoodItem::new, new MESettings().food(new FoodComponent.Builder().hunger(7).saturationModifier(0.8f).build()));
     public static final Item CERATOPSIAN_NUGGET = registerHiddenItem("ceratopsian_nugget",
-            HotChickenFoodItem::new, new MESettings().food(new FoodComponent(10, 0.8f, false)));
+            HotChickenFoodItem::new, new MESettings().food(new FoodComponent.Builder().hunger(10).saturationModifier(0.8f).build()));
     public static final Item THYREOPHORAN_NUGGET = registerHiddenItem("thyreophoran_nugget",
-            HotChickenFoodItem::new, new MESettings().food(new FoodComponent(10, 0.8f, false)));
+            HotChickenFoodItem::new, new MESettings().food(new FoodComponent.Builder().hunger(10).saturationModifier(0.8f).build()));
     public static final Item SAUROPOD_NUGGET = registerHiddenItem("sauropod_nugget",
-            HotChickenFoodItem::new, new MESettings().maxCount(16).food(new FoodComponent(14, 0.85f, false)));
+            HotChickenFoodItem::new, new MESettings().maxCount(16).food(new FoodComponent.Builder().hunger(14).saturationModifier(0.85f).build()));
 
     private static Item registerItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
         Item item = factory.apply(settings);

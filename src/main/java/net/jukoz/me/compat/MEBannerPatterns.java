@@ -49,6 +49,11 @@ public record MEBannerPatterns(List<Layer> layers) {
             return this;
         }
 
+        public Builder add(Layer layer) {
+            layers.add(layer);
+            return this;
+        }
+
         public MEBannerPatterns build() {
             return new MEBannerPatterns(List.copyOf(layers));
         }

@@ -12,6 +12,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import org.joml.Vector2i;
 import org.joml.Vector2d;
 import org.joml.Vector3i;
 
@@ -120,7 +121,7 @@ public class SpawnData {
     public BlockPos getBlockPos() {
         BlockPos blockPos = new BlockPos((int) coordinates.x, (int) coordinates.y, (int) coordinates.z);
         if(isDynamic){
-            Vector2d coords = MiddleEarthMapUtils.getInstance().getWorldCoordinateFromInitialMap(coordinates.x, coordinates.z);
+            Vector2i coords = MiddleEarthMapUtils.getInstance().getWorldCoordinateFromInitialMap((int) coordinates.x, (int) coordinates.z);
             Vector3i spawnCoordinates =  ModDimensions.getDimensionHeight((int) coords.x, (int) coords.y);
             blockPos = new BlockPos(spawnCoordinates.x, spawnCoordinates.y, spawnCoordinates.z);
         }

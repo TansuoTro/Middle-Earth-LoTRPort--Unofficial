@@ -13,8 +13,10 @@ public class WeightedIdentifier extends WeightedItem<Identifier> {
         if(!element.asString().isEmpty()){
             this.item = new Identifier(element.asString());
         } else if(NbtCompat.isCompound(element)) {
-            var potentialId = NbtCompat.compound(element).getString("id");
-            potentialId.ifPresent(integer -> this.item = new Identifier(potentialId.get()));
+            String potentialId = NbtCompat.compound(element).getString("id");
+            if (!potentialId.isEmpty()) {
+                this.item = new Identifier(potentialId);
+            }
         }
     }
     public WeightedIdentifier(Identifier value) {

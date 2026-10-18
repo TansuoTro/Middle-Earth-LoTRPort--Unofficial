@@ -35,4 +35,9 @@ public class GenericBlockSetBuilder {
         this.requiresTool = requiresTool;
         this.group = group;
     }
+
+    // Legacy datagen call sites used a flat base() accessor.
+    public net.minecraft.block.Block base() {
+        return this.blockSet == null ? null : this.blockSet.base();
+    }
 }

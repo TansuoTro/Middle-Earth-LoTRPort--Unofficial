@@ -168,9 +168,18 @@ public class SpiderPounceTask<E extends MobEntity> extends MultiTickTask<E> {
 	}
 
 	protected Optional<Target> removeRandomTarget(ServerWorld world) {
-		Optional<Target> optional = Weighting.getRandom(world.random, this.potentialTargets, Target::weight);
-		optional.ifPresent(this.potentialTargets::remove);
-		return optional;
+		if (this.potentialTargets.isEmpty()) return Optional.empty();
+		int totalWeight = 0;
+		for (Target target : this.potentialTargets) totalWeight += target.weight();
+		int roll = world.random.nextInt(totalWeight);
+		for (Target target : this.potentialTargets) {
+			roll -= target.weight();
+			if (roll < 0) {
+				this.potentialTargets.remove(target);
+				return Optional.of(target);
+			}
+		}
+		return Optional.empty();
 	}
 
 	private boolean canJumpTo(ServerWorld world, E entity, BlockPos pos) {
@@ -184,10 +193,10 @@ public class SpiderPounceTask<E extends MobEntity> extends MultiTickTask<E> {
 	protected Vec3d getJumpingVelocity(MobEntity entity, Vec3d targetPos) {
 		List<Integer> list = Lists.<Integer>newArrayList(POUNCE_ANGLES);
 		Collections.shuffle(list);
-		float f = (float)(entity.getAttributeValue(EntityAttributes.GENERIC_JUMP_STRENGTH) * this.maxRange);
+		float f = 0.42F * this.maxRange;
 
 		for (int i : list) {
-			Optional<Vec3d> optional = LongJumpUtil.getJumpingVelocity(entity, targetPos, f, i, true);
+			Optional<Vec3d> optional = net.jukoz.me.compat.LongJumpUtilME.getJumpingVelocity(entity, targetPos, f, i, true);
 			if (optional.isPresent()) {
 				return (Vec3d)optional.get();
 			}

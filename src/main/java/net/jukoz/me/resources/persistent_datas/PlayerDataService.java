@@ -104,7 +104,7 @@ public class PlayerDataService {
             data.assignNewFactionInformation(faction.getId(), spawnId);
 
             if(ModDimensions.isInMiddleEarth(player.getWorld())){
-                player.setSpawnPoint(ModDimensions.ME_WORLD_KEY, getPlayerSpawnData(player, world).getBlockPos(), 0, true);
+                player.setSpawnPoint(ModDimensions.ME_WORLD_KEY, getPlayerSpawnData(player, world).getBlockPos(), 0, true, false);
                 return true;
             }
 
@@ -147,7 +147,8 @@ public class PlayerDataService {
         return new OriginAggregate(dimensionId, originPos);
     }
     public static boolean setOrigin(ServerPlayerEntity player, World world, Identifier dimensionId, BlockPos originPos) {
-        if(world.getRegistryManager().getOptional(RegistryKeys.DIMENSION_TYPE).get() instanceof Registry<DimensionType> registry){
+        Registry<DimensionType> registry = world.getRegistryManager().getOptional(RegistryKeys.DIMENSION_TYPE).orElse(null);
+        if(registry != null){
             if(registry.get(dimensionId) == null){
                 PlayerData data = getPlayerData(player);
                 data.assignNewOrigin(dimensionId, originPos);

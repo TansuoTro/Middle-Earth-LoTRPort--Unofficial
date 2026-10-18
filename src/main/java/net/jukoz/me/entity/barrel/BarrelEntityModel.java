@@ -1,12 +1,15 @@
 package net.jukoz.me.entity.barrel;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.client.render.entity.model.SinglePartEntityModel;
+import net.jukoz.me.entity.barrel.BarrelEntity;
 import net.jukoz.me.compat.client.render.state.BoatEntityRenderState;
 
-public class BarrelEntityModel extends EntityModel<BoatEntityRenderState> {
+public class BarrelEntityModel extends SinglePartEntityModel<BarrelEntity> {
+        private final ModelPart root;
+
     protected BarrelEntityModel(ModelPart root) {
-        super(root);
+        this.root = root;
     }
 
     public static TexturedModelData getTexturedModelData() {
@@ -30,5 +33,14 @@ public class BarrelEntityModel extends EntityModel<BoatEntityRenderState> {
                 ModelTransform.of(0.0F, 10.0F, 0.0F, 0F, 0.0F, 0.0F));
 
         return TexturedModelData.of(modelData, 0, 0);
+    }
+
+    @Override
+    public ModelPart getPart() {
+        return this.root;
+    }
+
+    @Override
+    public void setAngles(BarrelEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
     }
 }

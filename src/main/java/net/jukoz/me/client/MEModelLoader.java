@@ -2,22 +2,18 @@ package net.jukoz.me.client;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.item.ItemAsset;
 import net.minecraft.client.render.TexturedRenderLayers;
-import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
-import net.minecraft.client.render.model.BakedSimpleModel;
-import net.minecraft.client.render.model.BlockStateModel;
-import net.minecraft.client.render.model.ModelBaker;
-import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
 import net.jukoz.me.MiddleEarth;
 
-import java.util.Map;
-
+/**
+ * 1.20.1 stand-in for the donor's model-baker subclass. The loader itself is gone (1.20.1
+ * has no {@code ModelBaker}/{@code ItemAsset} pipeline); only the shield sprite identifiers
+ * are still referenced by the built-in item renderer.
+ */
 @Environment(EnvType.CLIENT)
-public class MEModelLoader extends ModelBaker {
+public final class MEModelLoader {
     public static final SpriteIdentifier KITE_SHIELD_BASE;
     public static final SpriteIdentifier KITE_SHIELD_BASE_NO_PATTERN;
 
@@ -27,8 +23,7 @@ public class MEModelLoader extends ModelBaker {
     public static final SpriteIdentifier ROUND_SHIELD_BASE;
     public static final SpriteIdentifier ROUND_SHIELD_BASE_NO_PATTERN;
 
-    public MEModelLoader(LoadedEntityModelsCompat entityModels, Map<BlockState, BlockStateModel.UnbakedGrouped> blockModels, Map<Identifier, ItemAsset> itemModels, Map<Identifier, BakedSimpleModel> simpleModels, BakedSimpleModel missingModel) {
-        super(entityModels, blockModels, itemModels, simpleModels, missingModel);
+    private MEModelLoader() {
     }
 
     static {
@@ -41,5 +36,4 @@ public class MEModelLoader extends ModelBaker {
         ROUND_SHIELD_BASE = new SpriteIdentifier(TexturedRenderLayers.SHIELD_PATTERNS_ATLAS_TEXTURE, new Identifier(MiddleEarth.MOD_ID, "entity/round_shield_base"));
         ROUND_SHIELD_BASE_NO_PATTERN = new SpriteIdentifier(TexturedRenderLayers.SHIELD_PATTERNS_ATLAS_TEXTURE, new Identifier(MiddleEarth.MOD_ID, "entity/round_shield_base_nopattern"));
     }
-
 }

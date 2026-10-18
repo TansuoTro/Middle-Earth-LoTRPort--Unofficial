@@ -343,15 +343,15 @@ public class RecipeProvider extends net.minecraft.data.server.recipe.RecipeProvi
         }
 
         for(SimpleWoodStoolModel.VanillaStool stool : SimpleWoodStoolModel.vanillaStools){
-            createWoodStoolRecipe(exporter, stool.planks().asItem(), stool.legs().asItem(), stool.base());
+            createWoodStoolRecipe(exporter, stool.planks().asItem(), stool.planks().asItem(), stool.base());
         }
 
         for(SimpleWoodTableModel.VanillaTable table : SimpleWoodTableModel.vanillaTables){
-            createWoodTableRecipe(exporter, table.planks().asItem(), table.legs().asItem(), table.base());
+            createWoodTableRecipe(exporter, table.planks().asItem(), table.planks().asItem(), table.base());
         }
 
         for(SimpleWoodChairModel.VanillaChair chair : SimpleWoodChairModel.vanillaChairs){
-            createWoodChairRecipe(exporter, chair.planks().asItem(), chair.legs().asItem(), chair.base());
+            createWoodChairRecipe(exporter, chair.planks().asItem(), chair.planks().asItem(), chair.base());
         }
 
         for(SimpleStoneStoolModel.VanillaStool stool : SimpleStoneStoolModel.vanillaStools){
@@ -431,29 +431,29 @@ public class RecipeProvider extends net.minecraft.data.server.recipe.RecipeProvi
         createBrickRecipe(exporter, ModResourceItems.QUARTZ_SHARD, ModBlocks.QUARTZ_BLOCK, 1);
         createBrickRecipe(exporter, ModResourceItems.RED_AGATE_SHARD, ModBlocks.RED_AGATE_BLOCK, 1);
 
-        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, Blocks.BRICKS, StoneBlockSets.OLD_BRICKS.base());
+        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, Blocks.BRICKS, GenericBlockSets.OLD_BRICKS.base());
 
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, ModDecorativeBlocks.WHITE_DAUB_HOBBIT_WINDOW, 4)
                 .pattern("WBW")
                 .pattern("BGB")
                 .pattern("WBW")
-                .input('W', StoneBlockSets.WHITE_DAUB.base())
+                .input('W', GenericBlockSets.WHITE_DAUB.base())
                 .input('G', Blocks.GLASS)
                 .input('B', Items.BRICK)
-                .criterion(FabricRecipeProvider.hasItem(StoneBlockSets.WHITE_DAUB.base()),
-                        FabricRecipeProvider.conditionsFromItem(StoneBlockSets.WHITE_DAUB.base()))
+                .criterion(FabricRecipeProvider.hasItem(GenericBlockSets.WHITE_DAUB.base()),
+                        FabricRecipeProvider.conditionsFromItem(GenericBlockSets.WHITE_DAUB.base()))
                 .offerTo(exporter);
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, ModDecorativeBlocks.YELLOW_DAUB_HOBBIT_WINDOW, 4)
                 .pattern("WBW")
                 .pattern("BGB")
                 .pattern("WBW")
-                .input('W', StoneBlockSets.YELLOW_DAUB.base())
+                .input('W', GenericBlockSets.YELLOW_DAUB.base())
                 .input('G', Blocks.GLASS)
                 .input('B', Items.BRICK)
-                .criterion(FabricRecipeProvider.hasItem(StoneBlockSets.YELLOW_DAUB.base()),
-                        FabricRecipeProvider.conditionsFromItem(StoneBlockSets.YELLOW_DAUB.base()))
+                .criterion(FabricRecipeProvider.hasItem(GenericBlockSets.YELLOW_DAUB.base()),
+                        FabricRecipeProvider.conditionsFromItem(GenericBlockSets.YELLOW_DAUB.base()))
                 .offerTo(exporter);
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, net.jukoz.me.compat.MEBlocksLegacy.EPMOSTO_CARVED_WINDOW, 2)

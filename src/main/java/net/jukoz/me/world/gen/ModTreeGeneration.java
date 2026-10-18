@@ -34,6 +34,9 @@ public class ModTreeGeneration {
     public static final TrunkPlacerType<CanopyTrunkPlacer> CANOPY_TRUNK_PLACER = RegistryUtils.register(
             trunkRegistry, "canopy_trunk", new TrunkPlacerType<>(CanopyTrunkPlacer.CODEC)
     );
+    public static final TrunkPlacerType<net.jukoz.me.world.features.tree.trunks.CanopyTrunkStructurePlacer> CANOPY_TRUNK_STRUCTURE_PLACER = RegistryUtils.register(
+            trunkRegistry, "canopy_trunk_structure", new TrunkPlacerType<>(net.jukoz.me.world.features.tree.trunks.CanopyTrunkStructurePlacer.CODEC.codec())
+    );
     public static final TrunkPlacerType<SpruceTrunkPlacer> SPRUCE_TRUNK_PLACER = RegistryUtils.register(
             trunkRegistry, "spruce_trunk", new TrunkPlacerType<>(SpruceTrunkPlacer.CODEC)
     );

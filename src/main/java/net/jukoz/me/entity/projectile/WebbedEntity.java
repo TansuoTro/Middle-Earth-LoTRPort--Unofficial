@@ -42,8 +42,8 @@ public class WebbedEntity extends AbstractProjectileEntity {
             if(!this.getWorld().isClient) {
                 if(this.getWorld() instanceof ServerWorld serverWorld) {
                     Optional<? extends RegistryEntry<ConfiguredFeature<?, ?>>> optional = serverWorld.getRegistryManager()
-                            .getOrThrow(RegistryKeys.CONFIGURED_FEATURE)
-                            .getOptional(ModVegetationConfiguredFeatures.PATCH_WEBBING);
+                            .get(RegistryKeys.CONFIGURED_FEATURE)
+                            .getEntry(ModVegetationConfiguredFeatures.PATCH_WEBBING);
                     optional.ifPresent(configuredFeatureRegistryEntry -> feature = configuredFeatureRegistryEntry.value());
                 }
             }
@@ -67,7 +67,7 @@ public class WebbedEntity extends AbstractProjectileEntity {
         super.onEntityHit(entityHitResult);
         Entity entity = entityHitResult.getEntity();
         if(this.getWorld() instanceof ServerWorld serverWorld) {
-            entity.damage(serverWorld, this.getDamageSources().thrown( this, this.getOwner()), this.damage);
+            entity.damage(this.getDamageSources().thrown(this, this.getOwner()), this.damage);
             if(entity instanceof LivingEntity livingEntity) {
                 livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 200));
                 livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 200));

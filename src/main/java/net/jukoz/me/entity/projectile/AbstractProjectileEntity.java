@@ -20,11 +20,11 @@ public abstract class AbstractProjectileEntity extends ThrownItemEntity {
     }
 
     public AbstractProjectileEntity(EntityType<? extends ThrownItemEntity> entityType, double d, double e, double f, World world, ItemStack stack) {
-        super(entityType, d, e, f, world, stack);
+        super(entityType, d, e, f, world);
     }
 
     public AbstractProjectileEntity(EntityType<? extends ThrownItemEntity> entityType, LivingEntity livingEntity, World world, ItemStack stack) {
-        super(entityType, livingEntity, world, stack);
+        super(entityType, livingEntity, world);
     }
 
     public void handleStatus(byte status) {
@@ -43,7 +43,7 @@ public abstract class AbstractProjectileEntity extends ThrownItemEntity {
         super.onEntityHit(entityHitResult);
         Entity entity = entityHitResult.getEntity();
         if(entity.getWorld() instanceof ServerWorld serverWorld) {
-            entity.damage(serverWorld, this.getDamageSources().thrown(this, this.getOwner()), this.damage);
+            entity.damage(this.getDamageSources().thrown(this, this.getOwner()), this.damage);
         }
     }
 

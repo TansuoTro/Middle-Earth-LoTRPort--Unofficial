@@ -2,12 +2,10 @@ package net.jukoz.me.registries;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.util.Identifier;
 import net.jukoz.me.MiddleEarth;
-import net.jukoz.me.datageneration.providers.dynamic.CharacterAtlasTexturesProvider;
 
 /**
  * Middle-earth mod atlases<br>
@@ -32,7 +30,4 @@ public class AtlasesME {
         return client.getBakedModelManager().getAtlas(atlasPath);
     }
 
-    public static void addProviders(FabricDataGenerator.Pack pack) {
-        pack.addProvider(CharacterAtlasTexturesProvider::new);
-    }
 }

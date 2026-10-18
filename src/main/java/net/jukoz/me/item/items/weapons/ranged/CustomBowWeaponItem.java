@@ -16,7 +16,7 @@ public class CustomBowWeaponItem extends BowItem {
     public RangedWeaponTypesME type;
 
     public CustomBowWeaponItem(RangedWeaponTypesME type, Item.Settings settings) {
-        super(settings.maxDamage(type.durability)
+        super(((net.jukoz.me.item.MESettings) settings).maxDamage(type.durability)
                 .component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(type.name)));
         this.type = type;
     }

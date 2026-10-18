@@ -20,14 +20,10 @@ import org.joml.Quaternionf;
 public class BarrelEntityRenderer extends MEEntityRenderer<BarrelEntity, BoatEntityRenderState> {
     private static final Identifier TEXTURE = new Identifier(MiddleEarth.MOD_ID, "textures/entities/reinforced_barrel/reinforced_barrel.png");
     private ModelPart modelPart;
-    private final Model waterMaskModel;
 
     public BarrelEntityRenderer(EntityRendererFactory.Context context) {
         super(context);
         modelPart = context.getPart(EntityModelLayersME.REINFORCED_BARREL);
-        this.waterMaskModel = new Model.SinglePartModel(context.getPart(EntityModelLayersME.REINFORCED_BARREL_WATER_MASK), (id) -> {
-            return RenderLayer.getWaterMask();
-        });
         this.shadowRadius = 0.6F;
     }
 
@@ -60,19 +56,19 @@ public class BarrelEntityRenderer extends MEEntityRenderer<BarrelEntity, BoatEnt
 
     public void updateRenderState(BarrelEntity barrelEntity, BoatEntityRenderState boatEntityRenderState, float f) {
         super.updateRenderState(barrelEntity, boatEntityRenderState, f);
-        boatEntityRenderState.yaw = barrelEntity.getLerpedYaw(f);
+        boatEntityRenderState.yaw = MathHelper.lerpAngleDegrees(f, barrelEntity.prevYaw, barrelEntity.getYaw());
         boatEntityRenderState.damageWobbleTicks = (float)barrelEntity.getDamageWobbleTicks() - f;
         boatEntityRenderState.damageWobbleSide = barrelEntity.getDamageWobbleSide();
         boatEntityRenderState.damageWobbleStrength = Math.max(barrelEntity.getDamageWobbleStrength() - f, 0.0F);
-        boatEntityRenderState.bubbleWobble = barrelEntity.lerpBubbleWobble(f);
+        boatEntityRenderState.bubbleWobble = barrelEntity.interpolateBubbleWobble(f);
         boatEntityRenderState.submergedInWater = barrelEntity.isSubmergedInWater();
-        boatEntityRenderState.leftPaddleAngle = barrelEntity.lerpPaddlePhase(0, f);
-        boatEntityRenderState.rightPaddleAngle = barrelEntity.lerpPaddlePhase(1, f);
+        boatEntityRenderState.leftPaddleAngle = barrelEntity.interpolatePaddlePhase(0, f);
+        boatEntityRenderState.rightPaddleAngle = barrelEntity.interpolatePaddlePhase(1, f);
     }
 
     protected void renderWaterMask(BoatEntityRenderState state, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         if (!state.submergedInWater) {
-            this.waterMaskModel.render(matrices, vertexConsumers.getBuffer(this.waterMaskModel.getLayer(TEXTURE)), light, OverlayTexture.DEFAULT_UV);
+            this.modelPart.render(matrices, vertexConsumers.getBuffer(RenderLayer.getWaterMask()), light, OverlayTexture.DEFAULT_UV);
         }
 
     }

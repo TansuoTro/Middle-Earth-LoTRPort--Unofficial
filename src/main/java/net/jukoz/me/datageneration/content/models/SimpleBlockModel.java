@@ -178,6 +178,11 @@ public class SimpleBlockModel {
         }
     };
 
+    public static List<ChiseledBlock> chiseledBlocks = new ArrayList<>() {
+        {
+        }
+    };
+
     public static List<ChiseledBlock> chiseledBlocksTopBottom = new ArrayList<>() {
         {
 

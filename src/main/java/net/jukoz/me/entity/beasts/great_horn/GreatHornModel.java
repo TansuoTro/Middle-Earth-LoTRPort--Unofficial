@@ -1,14 +1,11 @@
 package net.jukoz.me.entity.beasts.great_horn;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.BabyModelTransformer;
-import net.minecraft.client.render.entity.model.ModelTransformer;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 
 import java.util.Set;
 
 public class GreatHornModel extends SinglePartEntityModel<GreatHornEntity> {
-    public static final ModelTransformer BABY_TRANSFORMER = new BabyModelTransformer(true, 10.0F, 4.0F, Set.of("head"));
     private final ModelPart root;
     private final ModelPart body;
     private final ModelPart frontHalf;
@@ -150,7 +147,7 @@ public class GreatHornModel extends SinglePartEntityModel<GreatHornEntity> {
             leftAntler.visible = false;
             rightAntler.visible = false;
             beard.hidden = true;
-        } else if(entity.isElkebies()) {
+        } else if(entity.isSaddled()) {
             leftAntler.visible = false;
             rightAntler.visible = false;
         }

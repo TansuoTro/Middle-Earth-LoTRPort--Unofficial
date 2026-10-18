@@ -2,8 +2,8 @@ package net.jukoz.me.client;
 
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.minecraft.client.color.world.BiomeColors;
-import net.minecraft.world.biome.FoliageColors;
-import net.minecraft.world.biome.GrassColors;
+import net.minecraft.client.color.world.FoliageColors;
+import net.minecraft.client.color.world.GrassColors;
 import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.jukoz.me.block.registration.WoodBlockSets;
@@ -56,7 +56,7 @@ public class BlockColorsME {
 
         ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> {
             if (view == null || pos == null) {
-                return FoliageColors.DEFAULT;
+                return FoliageColors.getDefaultColor();
             }
             return BiomeColors.getFoliageColor(view, pos);
         }, ModNatureBlocks.FALLEN_LEAVES, WoodBlockSets.BEECH_SET.leaves);

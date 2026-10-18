@@ -104,6 +104,16 @@ public class PlateBlockEntity extends BlockEntity implements SingleStackInventor
     }
 
     @Override
+    public ItemStack getStack(int slot) {
+        return this.getStack();
+    }
+
+    @Override
+    public ItemStack removeStack(int slot, int amount) {
+        return this.removeStack(slot);
+    }
+
+    @Override
     public ItemStack getStack() {
         return food;
     }

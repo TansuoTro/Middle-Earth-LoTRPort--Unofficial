@@ -60,7 +60,6 @@ public class CaveTrollRenderer extends MEMobEntityRenderer<CaveTrollEntity, Cave
     @Override
     public void updateRenderState(CaveTrollEntity troll, CaveTrollEntityRenderState state, float f) {
         super.updateRenderState(troll, state, f);
-        CaveTrollEntityRenderState.updateRenderState(troll, state, this.itemModelResolver);
 
         state.chaseAnimationState = troll.chaseAnimationState;
         state.scavengingAnimationState = troll.scavengingAnimationState;

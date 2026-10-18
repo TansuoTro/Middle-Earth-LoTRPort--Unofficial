@@ -117,6 +117,17 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
         return this.selectedRecipe.get();
     }
 
+    public void updateIndex(int index) {
+        this.selectedRecipe.set(index);
+        this.populateResult();
+    }
+
+    public void changeTab(String shapeId) {
+    }
+
+    public void addRecipeOutput(int index, ItemStack itemStack) {
+    }
+
     public List<ArtisanRecipe> getAvailableRecipes() {
         return this.availableRecipes;
     }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleWoodChairModel {
-    public record VanillaChair(Block base, Block planks) {}
+    public record VanillaChair(Block base, Block planks, Block origin) {}
 
     public static List<Block> chairs = new ArrayList<>() {
         {

@@ -121,7 +121,7 @@ private static final Text ONBOARDING_SELECTION_TITLE = Text.translatable("ui.%s.
             Text delayText = Text.literal(String.valueOf((Math.round(this.currentDelay * 10f) /10f)));
             context.drawText(textRenderer, delayText,
                     startX + (panelSizeX / 2) - (textRenderer.getWidth(delayText) / 2),
-                    startY + 5, Colors.LIGHT_RED, true);
+                    startY + 5, Colors.RED, true);
         }
 
         if(canResetCharacter) {

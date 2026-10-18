@@ -119,7 +119,7 @@ public class OnboardingFactionScreen extends Screen {
         super.init();
         elements = new OnboardingFactionScreenElements();
 
-        elements.bannerField = this.client.getEntityModelLoader().getModelPart(EntityModelLayers.STANDING_BANNER_FLAG).getChild("flag");
+        elements.bannerField = this.client.getEntityModelLoader().getModelPart(EntityModelLayers.BANNER).getChild("flag");
 
         elements.searchBarWidget = new SearchBarWidget(9, controller.getAllSearchBarResults(), x -> controller.updateScreenInformation(), CycledSelectionWidget.TOTAL_WIDTH);
         addDrawableChild(elements.searchBarWidget.getSearchBarToggleButton());
@@ -217,9 +217,9 @@ public class OnboardingFactionScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
+    public void renderBackground(DrawContext context) {
         //DiffuseLighting.disableGuiDepthLighting();
-        super.renderBackground(context,mouseX,mouseY, deltaTicks);
+        super.renderBackground(context);
 
         // Display center panel
         int centerPanelStartX = (int) ((context.getScaledWindowWidth() / 2f) - (elements.informationPanel.width / 2f));
@@ -362,7 +362,7 @@ public class OnboardingFactionScreen extends Screen {
             Text delayText = Text.literal(String.valueOf(controller.getCurrentDelay()));
             context.drawText(textRenderer, delayText,
                     this.elements.spawnConfirmButton.getX() + (52 / 2) - (textRenderer.getWidth(delayText) / 2),
-                    this.elements.spawnConfirmButton.getY() + 5, Colors.LIGHT_RED, true);
+                    this.elements.spawnConfirmButton.getY() + 5, Colors.RED, true);
         }
 
         // Left panel
@@ -453,10 +453,10 @@ public class OnboardingFactionScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        this.elements.mapWidget.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
-        this.elements.searchBarWidget.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
-        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+    public boolean mouseScrolled(double mouseX, double mouseY, double verticalAmount) {
+        this.elements.mapWidget.mouseScrolled(mouseX, mouseY, verticalAmount);
+        this.elements.searchBarWidget.mouseScrolled(mouseX, mouseY, verticalAmount);
+        return super.mouseScrolled(mouseX, mouseY, verticalAmount);
     }
 
     @Override

@@ -7,12 +7,14 @@ import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.jukoz.me.api.SevenStarsApi;
 
 import java.util.Optional;
 
 public class MemoryModulesAPI<U> {
     public static final MemoryModuleType<Boolean> DEFENDING_HOME = register("defending_home", Codec.BOOL);
+    public static final MemoryModuleType<BlockPos> SHELTER_POS = register("shelter_pos");
 
     private final Optional<Codec<Memory<U>>> codec;
 

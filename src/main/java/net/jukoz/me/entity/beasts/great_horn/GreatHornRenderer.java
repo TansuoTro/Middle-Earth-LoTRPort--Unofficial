@@ -5,7 +5,6 @@ import net.jukoz.me.compat.client.render.MEAnimationStates;
 import net.jukoz.me.compat.client.render.MEMAgeableMobEntityRenderer;
 
 import com.google.common.collect.Maps;
-import net.minecraft.client.render.entity.AgeableMobEntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.util.Identifier;

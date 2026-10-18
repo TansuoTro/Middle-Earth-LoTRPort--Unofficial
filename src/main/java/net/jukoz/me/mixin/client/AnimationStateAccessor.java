@@ -1,6 +1,7 @@
 package net.jukoz.me.mixin.client;
 import net.jukoz.me.compat.client.render.MEAnimationStates;
 
+import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 /**
@@ -9,6 +10,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
  * {@link AnimationStateAccessorMixin}; non-mixin code (see
  * {@code net.jukoz.me.compat.client.render.MEAnimationStates}) can duck-type through it.
  */
+@Mixin(net.minecraft.entity.AnimationState.class)
 public interface AnimationStateAccessor {
 
     @Accessor("updatedAt")

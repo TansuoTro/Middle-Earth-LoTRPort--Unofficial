@@ -6,9 +6,10 @@ import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.item.ItemRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.util.Arm;
 import net.minecraft.util.math.RotationAxis;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntityModel;
@@ -27,7 +28,13 @@ public class CaveTrollHeldItemFeatureRenderer extends MEFeatureRenderer<CaveTrol
         matrices.translate(0.3f, 0, -2.6);
         matrices.scale(1.5f,1.5f,1.5f);
 
-        state.handItemState.render(matrices, vertexConsumers, light, OverlayTexture.DEFAULT_UV);
+        if (state.entity instanceof net.minecraft.entity.LivingEntity living) {
+            ItemStack held = living.getStackInHand(net.minecraft.util.Hand.MAIN_HAND);
+            if (!held.isEmpty()) {
+                MinecraftClient.getInstance().getItemRenderer().renderItem(held, ModelTransformationMode.THIRD_PERSON_RIGHT_HAND,
+                        light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, living.getWorld(), living.getId());
+            }
+        }
     }
 
 }

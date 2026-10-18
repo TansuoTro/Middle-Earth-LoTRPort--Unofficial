@@ -38,9 +38,9 @@ public class BiomeFogParticle extends SpriteBillboardParticle {
             this.markDead();
         }
 
-        this.lastX = this.x;
-        this.lastY = this.y;
-        this.lastZ = this.z;
+        this.prevPosX = this.x;
+        this.prevPosY = this.y;
+        this.prevPosZ = this.z;
 
         if (this.alpha < 0.15F){
             this.setAlpha(getFadeAmount(this.getLifetimeProgress((float)this.age), 0.3F, 0.5F));

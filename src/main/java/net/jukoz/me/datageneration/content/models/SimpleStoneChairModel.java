@@ -7,9 +7,14 @@ import java.util.List;
 
 public class SimpleStoneChairModel {
 
-    public record Chair(Block base, Block chair) {}
+    public record VanillaChair(Block base, Block origin) {}
 
-    public static List<Chair> chairs = new ArrayList<>() {
+    public static List<Block> chairs = new ArrayList<>() {
+        {
+        }
+    };
+
+    public static List<VanillaChair> vanillaChairs = new ArrayList<>() {
         {
         }
     };

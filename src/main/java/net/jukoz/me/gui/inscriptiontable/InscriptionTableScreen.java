@@ -164,7 +164,7 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
             context.drawTexture(TEXTURE, i + 188 + (m * (this.level - 1)) - m * this.maxLevel /2, j + 81, 282 + (m * (this.level  - 1)), 33 * (this.maxLevel - 1) + 14, m, 6, 512, 256);
 
             context.drawTexture(TEXTURE, i + 123, j + 25, 347, 39, 130, 16, 512, 256);
-            context.drawText(this.textRenderer, enchant, i + 188 - textRenderer.getWidth(enchant) / 2, j + 29, ColorHelper.fullAlpha(0xad6b3f), false);
+            context.drawText(this.textRenderer, enchant, i + 188 - textRenderer.getWidth(enchant) / 2, j + 29, net.jukoz.me.compat.MEColors.fullAlpha(0xad6b3f), false);
 
             int k = this.handler.getLevelCost();
             int l = this.handler.getPlayerLevels();
@@ -189,7 +189,7 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
             if(!this.selectedWords.isEmpty()){
                 context.drawTexture(TEXTURE, i + 123, j + 25, 347, 39, 130, 16, 512, 256);
                 StringVisitable stringVisitable = textRenderer.getTextHandler().trimToWidth(this.enchantText, 159, Style.EMPTY);
-                context.drawWrappedText(this.textRenderer, stringVisitable, i + 188 - textRenderer.getWidth(stringVisitable.getString()) / 2, j + 29, 159, ColorHelper.fullAlpha(0xad6b3f),false);
+                context.drawTextWrapped(this.textRenderer, stringVisitable, i + 188 - textRenderer.getWidth(stringVisitable.getString()) / 2, j + 29, 159, net.jukoz.me.compat.MEColors.fullAlpha(0xad6b3f));
             }
         }
 
@@ -215,7 +215,7 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        renderBackground(context, mouseX, mouseY, delta);
+        renderBackground(context);
         super.render(context, mouseX, mouseY, delta);
 
         int i = (this.width - this.backgroundWidth) / 2;
@@ -244,7 +244,7 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
                     if(widgetButtonPage.hidden) {
 //                        Text text = Text.literal(StringUtils.capitalize(word)).setStyle(Style.EMPTY.withStrikethrough(widgetButtonPage.hidden));
                         Text text = Text.translatable("inscription." + MiddleEarth.MOD_ID + "." + word).setStyle(Style.EMPTY.withStrikethrough(widgetButtonPage.hidden));
-                        context.drawText(this.textRenderer, text, i + 11, n, Colors.LIGHT_GRAY, false);
+                        context.drawText(this.textRenderer, text, i + 11, n, Colors.GRAY, false);
                     } else {
                         context.drawText(this.textRenderer, Text.translatable("inscription." + MiddleEarth.MOD_ID + "." + word), i + 11, n, Colors.WHITE, false);
                     }
@@ -279,8 +279,8 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
         }
     }
 
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        if (!super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double verticalAmount) {
+        if (!super.mouseScrolled(mouseX, mouseY, verticalAmount)) {
             int i = this.handler.getWords().size();
             if (this.canScroll(i)) {
                 int j = i - 11;
@@ -352,27 +352,27 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
         }
 
         @Override
-        protected void renderWidget(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
+        protected void renderButton(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
             MinecraftClient minecraftClient = MinecraftClient.getInstance();
             final int x = getX();
             final int y = getY();
             final int width = getWidth();
             final int height = getHeight();
             if (this.hidden){
-                context.drawTexture(DISABLED_BUTTON_TEXTURE, x, y, 0, 0, width, height, net.jukoz.me.compat.MEColors.getWhite(this.alpha));
+                context.drawTexture(DISABLED_BUTTON_TEXTURE, x, y, 0, 0, width, height);
             } else if (this.selected){
-                context.drawTexture(SELECTED_BUTTON_TEXTURE, x, y, 0, 0, width, height, net.jukoz.me.compat.MEColors.getWhite(this.alpha));
+                context.drawTexture(SELECTED_BUTTON_TEXTURE, x, y, 0, 0, width, height);
             } else if (this.isHovered()) {
-                context.drawTexture(HIGHLIGHTED_BUTTON_TEXTURE, x, y, 0, 0, width, height, net.jukoz.me.compat.MEColors.getWhite(this.alpha));
+                context.drawTexture(HIGHLIGHTED_BUTTON_TEXTURE, x, y, 0, 0, width, height);
             } else {
-                context.drawTexture(BUTTON_TEXTURE, x, y, 0, 0, width, height, net.jukoz.me.compat.MEColors.getWhite(this.alpha));
+                context.drawTexture(BUTTON_TEXTURE, x, y, 0, 0, width, height);
             }
 
             if(selectedIndex >= 0 && selectedIndex < 3) {
-                context.drawTexture(BUTTON_MARKERS, 16, 4, 0, 0, 4 * selectedIndex, 0, x + width - 8, y + 5, 4, 4, net.jukoz.me.compat.MEColors.getWhite(this.alpha));
+                context.drawTexture(BUTTON_MARKERS, x + width - 8, y + 5, 16 + 4 * selectedIndex, 4, 4, 4);
             }
 
-            int i = ColorHelper.withAlpha(this.alpha, this.active ? -1 : -6250336);
+            int i = net.jukoz.me.compat.MEColors.withAlpha(this.alpha, this.active ? -1 : -6250336);
             this.drawMessage(context, minecraftClient.textRenderer, i);
         }
 
@@ -393,16 +393,16 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
         }
 
         @Override
-        protected void renderWidget(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
+        protected void renderButton(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
             MinecraftClient minecraftClient = MinecraftClient.getInstance();
             if (this.isHovered() && this.active){
-                context.drawTexture(HIGHLIGHTED_BUTTON_TEXTURE, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight(), net.jukoz.me.compat.MEColors.getWhite(this.alpha));
+                context.drawTexture(HIGHLIGHTED_BUTTON_TEXTURE, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight());
             } else if (this.active) {
-                context.drawTexture(BUTTON_TEXTURE, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight(), net.jukoz.me.compat.MEColors.getWhite(this.alpha));
+                context.drawTexture(BUTTON_TEXTURE, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight());
             } else {
-                context.drawTexture(BUTTON_UNAVAILABLE, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight(), net.jukoz.me.compat.MEColors.getWhite(this.alpha));
+                context.drawTexture(BUTTON_UNAVAILABLE, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight());
             }
-            int i = ColorHelper.withAlpha(this.alpha, this.active ? -1 : -6250336);
+            int i = net.jukoz.me.compat.MEColors.withAlpha(this.alpha, this.active ? -1 : -6250336);
             this.drawMessage(context, minecraftClient.textRenderer, i);
         }
     }

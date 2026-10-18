@@ -29,6 +29,11 @@ public class FileUtils {
         this.classLoader = classLoader;
     }
 
+    /** 1.21 helper: whether the given language has a bundled {@code lang/<code>.json}. */
+    public static boolean isLanguageFileExist(String languageCode) {
+        return FileUtils.class.getClassLoader().getResource("assets/minecraft/lang/" + languageCode + ".json") != null;
+    }
+
     public BufferedImage getResourceImage(String path) {
         try{
             return ImageUtils.fetchResourceImage(getClass().getClassLoader(), path);

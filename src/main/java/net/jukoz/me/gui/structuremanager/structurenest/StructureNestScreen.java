@@ -133,7 +133,7 @@ public class StructureNestScreen extends HandledScreen<StructureNestScreenHandle
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
-        renderBackground(context, mouseX, mouseY, deltaTicks);
+        renderBackground(context);
         super.render(context, mouseX, mouseY, deltaTicks);
         ModWidget.updateMouse(mouseX, mouseY);
 
@@ -174,7 +174,7 @@ public class StructureNestScreen extends HandledScreen<StructureNestScreenHandle
                 isEnabledToggleButtonUvY = 18;
             context.drawTexture(TEXTURE, isEnabledToggleButton.getX(), isEnabledToggleButton.getY(), 18, isEnabledToggleButtonUvY, isEnabledToggleButton.getWidth(), isEnabledToggleButton.getHeight(), 256, 256);
             if(isEnabledToggleButton.isMouseOver(mouseX, mouseY))
-                context.drawTooltip(Text.of("[SET TO TRUE] To ready up the structure manager subscription."), isEnabledToggleButton.getX(), isEnabledToggleButton.getY());
+                context.drawTooltip(this.textRenderer, Text.of("[SET TO TRUE] To ready up the structure manager subscription."), isEnabledToggleButton.getX(), isEnabledToggleButton.getY());
         }
         else
             this.isEnabledToggleButton.active = false;
@@ -201,8 +201,8 @@ public class StructureNestScreen extends HandledScreen<StructureNestScreenHandle
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+    public boolean mouseScrolled(double mouseX, double mouseY, double verticalAmount) {
+        return super.mouseScrolled(mouseX, mouseY, verticalAmount);
     }
 
     @Override

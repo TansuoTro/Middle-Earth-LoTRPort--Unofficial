@@ -37,75 +37,63 @@ public class ServerPlayerEntityMixin extends PlayerEntity {
     @Shadow public MinecraftServer server;
     @Shadow public ServerPlayerInteractionManager interactionManager;
 
-    public ServerPlayerEntityMixin(World world, GameProfile profile) {
-        super(world, profile);
+    public ServerPlayerEntityMixin(MinecraftServer server, ServerWorld world, GameProfile profile) {
+        super(world, world.getSpawnPos(), 0.0F, profile);
     }
 
-
-    @Nullable
-    @Override
-    public GameMode getGameMode() {
-        return this.interactionManager.getGameMode();
-    }
-
-    @Inject(method = "getRespawnTarget", at = @At(value = "RETURN", ordinal = 1), cancellable = true)
-    public void getRespawnTargetWithBrokenBed(boolean alive, TeleportTarget.PostDimensionTransition postDimensionTransition, CallbackInfoReturnable<TeleportTarget> cir) {
-        if(ModDimensions.isInMiddleEarth(this.getWorld())){
-            if (tryToOverrideSpawn(postDimensionTransition, cir)) return;
-            resetSpawn(postDimensionTransition, cir);
+    @Inject(method = "getTeleportTarget", at = @At("RETURN"), cancellable = true)
+    private void me$getTeleportTarget(ServerWorld targetWorld, CallbackInfoReturnable<TeleportTarget> cir) {
+        if (!ModDimensions.isInMiddleEarth(this.getWorld())) {
             return;
         }
-        cir.setReturnValue(TeleportTarget.missingSpawnBlock(this.server.getOverworld(), this, postDimensionTransition));
-    }
-
-    @Inject(method = "getRespawnTarget", at = @At(value = "RETURN", ordinal = 2), cancellable = true)
-    public void getRespawnTargetNatural(boolean alive, TeleportTarget.PostDimensionTransition postDimensionTransition, CallbackInfoReturnable<TeleportTarget> cir) {
-        if(ModDimensions.isInMiddleEarth(this.getWorld())){
-            if (tryToOverrideSpawn(postDimensionTransition, cir)) return;
-            resetSpawn(postDimensionTransition, cir);
+        if (tryToOverrideSpawn(cir)) {
             return;
         }
-        cir.setReturnValue(TeleportTarget.missingSpawnBlock(this.server.getOverworld(), this, postDimensionTransition));
+        resetSpawn(cir);
     }
 
     @Unique
-    private void resetSpawn(TeleportTarget.PostDimensionTransition postDimensionTransition, CallbackInfoReturnable<TeleportTarget> cir){
-        if(this.getServer() == null) return;
+    private void resetSpawn(CallbackInfoReturnable<TeleportTarget> cir) {
+        if (this.getServer() == null) return;
 
         PlayerManager manager = this.getServer().getPlayerManager();
         ServerPlayerEntity foundPlayer = manager.getPlayer(this.getUuid());
-        if(this.getServer() == null) return;
-        foundPlayer.setSpawnPoint(World.OVERWORLD, foundPlayer.getServer().getOverworld().getSpawnPos(), foundPlayer.getServer().getOverworld().getSpawnAngle(), true);
+        if (foundPlayer == null) return;
+        foundPlayer.setSpawnPoint(World.OVERWORLD, foundPlayer.getServer().getOverworld().getSpawnPos(),
+                foundPlayer.getServer().getOverworld().getSpawnAngle(), true, false);
 
-        cir.setReturnValue(new TeleportTarget(this.server.getOverworld(), this, postDimensionTransition));
+        cir.setReturnValue(new TeleportTarget(this.server.getOverworld().getSpawnPos().toCenterPos(), Vec3d.ZERO, 0, 0));
     }
 
     @Unique
-    private boolean tryToOverrideSpawn(TeleportTarget.PostDimensionTransition postDimensionTransition, CallbackInfoReturnable<TeleportTarget> cir) {
+    private boolean tryToOverrideSpawn(CallbackInfoReturnable<TeleportTarget> cir) {
         MinecraftServer server = this.getServer();
 
-        if(server == null) return false;
+        if (server == null) return false;
         PlayerManager manager = server.getPlayerManager();
         ServerPlayerEntity foundPlayer = manager.getPlayer(this.getUuid());
 
-        if(foundPlayer == null) return false;
-        if(ModDimensions.isInMiddleEarth(this.getWorld()) && PlayerDataService.getPlayerSpawnData(foundPlayer, getWorld()) instanceof SpawnData data && data.getIdentifier() != null) {
+        if (foundPlayer == null) return false;
+        SpawnData data = PlayerDataService.getPlayerSpawnData(foundPlayer, getWorld());
+        if (ModDimensions.isInMiddleEarth(this.getWorld()) && data != null && data.getIdentifier() != null) {
             BlockPos spawnCoordinates = data.getWorldCoordinateBlockPos();
-            if(spawnCoordinates != null){
+            if (spawnCoordinates != null) {
                 ServerWorld MEWorld = this.server.getWorld(ModDimensions.ME_WORLD_KEY);
-                if(MEWorld != null){
+                if (MEWorld != null) {
                     Vec3d coordinates = new Vec3d(spawnCoordinates.getX(), spawnCoordinates.getY() + 1, spawnCoordinates.getZ());
 
-                    foundPlayer.setSpawnPoint(ModDimensions.ME_WORLD_KEY, new BlockPos((int) coordinates.x, (int) coordinates.y, (int) coordinates.z),0,true);
+                    foundPlayer.setSpawnPoint(ModDimensions.ME_WORLD_KEY,
+                            new BlockPos((int) coordinates.x, (int) coordinates.y, (int) coordinates.z), 0, true, false);
 
-                    cir.setReturnValue(new TeleportTarget(MEWorld, spawnCoordinates.toCenterPos(), Vec3d.ZERO, 0, 0, postDimensionTransition));
+                    cir.setReturnValue(new TeleportTarget(coordinates, Vec3d.ZERO, 0, 0));
                     return true;
                 }
             }
         }
-        foundPlayer.setSpawnPoint(World.OVERWORLD, server.getOverworld().getSpawnPos(), server.getOverworld().getSpawnAngle(), true);
+        foundPlayer.setSpawnPoint(World.OVERWORLD, server.getOverworld().getSpawnPos(),
+                server.getOverworld().getSpawnAngle(), true, false);
 
-        cir.setReturnValue(new TeleportTarget(server.getOverworld(), server.getOverworld().getSpawnPos().toCenterPos(), Vec3d.ZERO, 0, 0,postDimensionTransition));
+        cir.setReturnValue(new TeleportTarget(server.getOverworld().getSpawnPos().toCenterPos(), Vec3d.ZERO, 0, 0));
         return false;
     }
 

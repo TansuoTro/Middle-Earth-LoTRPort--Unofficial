@@ -5,6 +5,8 @@ import net.jukoz.me.utils.LoggerUtil;
 import net.jukoz.me.world.features.ores.SurfaceOreFeature;
 import net.jukoz.me.world.features.pillar.PillarFeature;
 import net.jukoz.me.world.features.pillar.PillarFeatureConfig;
+import net.jukoz.me.world.features.chain.ChainFeature;
+import net.jukoz.me.world.features.chain.ChainFeatureConfig;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -15,6 +17,7 @@ import net.minecraft.world.gen.feature.OreFeatureConfig;
 public class ModFeatures {
     public static Feature<OreFeatureConfig> SURFACE_ORE = register("surface_ore", new SurfaceOreFeature(OreFeatureConfig.CODEC));
     public static Feature<PillarFeatureConfig> PILLAR = register("pillar", new PillarFeature(PillarFeatureConfig.CODEC));
+    public static Feature<ChainFeatureConfig> CHAIN = register("chain", new ChainFeature(ChainFeatureConfig.CODEC));
 
     public static void init() {
         LoggerUtil.getInstance().logInfoMsg("Registering new features");

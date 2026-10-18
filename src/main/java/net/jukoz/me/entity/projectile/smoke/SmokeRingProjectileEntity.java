@@ -97,7 +97,7 @@ public class SmokeRingProjectileEntity extends ProjectileEntity {
             return;
         }
 
-        if (checkEntityCollision() || checkBlockCollision()) {
+        if (checkEntityCollision() || checkFanBlockCollision()) {
             return;
         }
 
@@ -125,7 +125,7 @@ public class SmokeRingProjectileEntity extends ProjectileEntity {
         return false;
     }
 
-    private boolean checkBlockCollision() {
+    private boolean checkFanBlockCollision() {
         return ModCollisionUtils.checkBlockFanCollision(this.getWorld(),
                 this.getBoundingBox(),
                 this.getVelocity(),

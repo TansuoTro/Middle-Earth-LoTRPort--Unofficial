@@ -2,12 +2,8 @@ package net.jukoz.me.item;
 
 import net.minecraft.block.Block;
 
-import net.minecraft.component.type.ConsumableComponents;
 import net.minecraft.item.FoodComponents;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.consume.RemoveEffectsConsumeEffect;
-import net.minecraft.sound.SoundEvents;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.block.registration.ModNatureBlocks;
@@ -28,10 +24,6 @@ import java.util.function.Function;
  * Middle-earth mod Food Items registry
  */
 public class FoodItemsME {
-    public static final ConsumableComponent BIRCH_BOTTLE = ConsumableComponents.drink().consumeSeconds(2.0F)
-            .consumeEffect(new RemoveEffectsConsumeEffect(StatusEffects.POISON)).build();;
-    public static final ConsumableComponent MAPLE_BOTTLE = ConsumableComponents.drink().consumeSeconds(2.0F)
-            .sound(SoundEvents.ITEM_HONEY_BOTTLE_DRINK).build();;
 
     public static final Item LEMBAS = registerItem("lembas",
             Item::new,new MESettings()
@@ -59,11 +51,11 @@ public class FoodItemsME {
     public static final Item MAPLE_SYRUP = registerItem("maple_syrup",
             Item::new,new MESettings()
                     .recipeRemainder(Items.GLASS_BOTTLE).recipeRemainder(Items.GLASS_BOTTLE)
-                    .food(FoodComponents.HONEY_BOTTLE, MAPLE_BOTTLE).maxCount(16));
+                    .food(FoodComponents.HONEY_BOTTLE).maxCount(16));
     public static final Item BIRCH_WATER = registerItem("birch_water",
             Item::new,new MESettings()
                     .recipeRemainder(Items.GLASS_BOTTLE).recipeRemainder(Items.GLASS_BOTTLE)
-                    .food(FoodComponents.HONEY_BOTTLE, BIRCH_BOTTLE).maxCount(16));
+                    .food(FoodComponents.HONEY_BOTTLE).maxCount(16));
 
     public static final Item TOMATO = registerItem("tomato",
             Item::new,new MESettings()

@@ -33,23 +33,20 @@ public class PlayerData {
     public PlayerData() {}
 
     public PlayerData(NbtCompound nbtCompound) {
-        if(!!nbtCompound.contains(getString))
+        if(nbtCompound.contains("faction", net.minecraft.nbt.NbtElement.STRING_TYPE))
             faction = new Identifier(nbtCompound.getString("faction"));
-        if(!!nbtCompound.contains(getString))
+        if(nbtCompound.contains("spawn", net.minecraft.nbt.NbtElement.STRING_TYPE))
             spawn = new Identifier(nbtCompound.getString("spawn"));
-        if(!!nbtCompound.contains(getString))
+        if(nbtCompound.contains("race", net.minecraft.nbt.NbtElement.STRING_TYPE))
             race = new Identifier(nbtCompound.getString("race"));
-        if(nbtCompound.getIntArray("posOrigin").isPresent()){
-            var intArray = nbtCompound.getIntArray("posOrigin").get();
+        int[] intArray = nbtCompound.getIntArray("origin_pos");
+        if(intArray.length >= 3) {
             posOrigin = new BlockPos(intArray[0], intArray[1], intArray[2]);
         }
-        if(!!nbtCompound.contains(getString))
+        if(nbtCompound.contains("dimensionOrigin", net.minecraft.nbt.NbtElement.STRING_TYPE))
             dimensionOrigin = new Identifier(nbtCompound.getString("dimensionOrigin"));
 
-        if(nbtCompound.contains("delversFearCountInSeconds"))
-            nbtCompound.putInt("delversFearCountInSeconds", delversFearCountInSeconds);
-        else
-            delversFearCountInSeconds = 0;
+        delversFearCountInSeconds = nbtCompound.getInt("delversFearCountInSeconds");
     }
     public boolean assignNewFactionInformation(Identifier factionId, Identifier spawnId){
         this.faction = factionId;

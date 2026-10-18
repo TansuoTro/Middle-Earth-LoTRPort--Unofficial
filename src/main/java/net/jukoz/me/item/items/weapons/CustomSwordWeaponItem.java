@@ -15,7 +15,7 @@ public class CustomSwordWeaponItem extends SwordItem {
 
     public CustomSwordWeaponItem(ToolMaterial toolMaterial, Item.Settings settings) {
         super(toolMaterial, (int) WeaponTypesME.SWORD.attack, WeaponTypesME.SWORD.attackSpeed,
-                settings.component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(WeaponTypesME.SWORD.name)));
+                ((net.jukoz.me.item.MESettings) settings).component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(WeaponTypesME.SWORD.name)));
     }
 
     @Override

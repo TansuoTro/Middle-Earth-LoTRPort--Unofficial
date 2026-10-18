@@ -17,7 +17,7 @@ public class AttributeModifierElement {
     }
 
     public AttributeModifierElement(Identifier identifier, double value, EntityAttributeModifier.Operation operation) {
-        this.modifier = new EntityAttributeModifier(identifier, value, operation);
+        this.modifier = new EntityAttributeModifier(identifier.toString(), value, operation);
     }
 
 

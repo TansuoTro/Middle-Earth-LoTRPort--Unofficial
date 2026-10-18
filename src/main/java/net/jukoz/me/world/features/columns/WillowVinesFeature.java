@@ -74,11 +74,11 @@ public class WillowVinesFeature extends Feature<DefaultFeatureConfig> {
                 }
 
                 if (i == length || !world.getBlockState(pos.down()).isAir()) {
-                    world.setBlockState(pos, ModNatureBlocks.WILLOW_VINES.getDefaultState().with(Properties.TIP, true), 2);
+                    world.setBlockState(pos, ModNatureBlocks.WILLOW_VINES.getDefaultState().with(net.jukoz.me.block.special.hangingstuff.CustomHangingBlock.TIP, true), 2);
                     break;
                 }
 
-                world.setBlockState(pos, ModNatureBlocks.WILLOW_VINES.getDefaultState().with(Properties.TIP, false), 2);
+                world.setBlockState(pos, ModNatureBlocks.WILLOW_VINES.getDefaultState().with(net.jukoz.me.block.special.hangingstuff.CustomHangingBlock.TIP, false), 2);
             }
 
             pos.move(Direction.DOWN);

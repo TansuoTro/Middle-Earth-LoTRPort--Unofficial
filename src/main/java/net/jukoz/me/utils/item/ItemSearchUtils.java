@@ -27,7 +27,7 @@ public class ItemSearchUtils {
      * @return The first matching {@link ItemStack}, or {@link ItemStack#EMPTY} if none found.
      */
     public static ItemStack findFirstMatching(PlayerEntity player, Predicate<ItemStack> filter) {
-        return player.getInventory().getMainStacks().stream()
+        return player.getInventory().main.stream()
                 .filter(filter)
                 .findFirst()
                 .orElse(ItemStack.EMPTY);

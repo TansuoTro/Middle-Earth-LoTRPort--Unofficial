@@ -27,7 +27,22 @@ public class SackScreenHandler extends ScreenHandler {
 		this.inventory = inventory;
 		inventory.onOpen(playerInventory.player);
 		this.add3x3Slots(inventory, 62, 17);
-		this.addPlayerSlots(playerInventory, 8, 84);
+		this.addPlayerInventory(playerInventory);
+		this.addPlayerHotbar(playerInventory);
+	}
+
+	private void addPlayerInventory(PlayerInventory playerInventory) {
+		for (int i = 0; i < 3; ++i) {
+			for (int j = 0; j < 9; ++j) {
+				this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+			}
+		}
+	}
+
+	private void addPlayerHotbar(PlayerInventory playerInventory) {
+		for (int i = 0; i < 9; ++i) {
+			this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
+		}
 	}
 
 	protected void add3x3Slots(Inventory inventory, int x, int y) {

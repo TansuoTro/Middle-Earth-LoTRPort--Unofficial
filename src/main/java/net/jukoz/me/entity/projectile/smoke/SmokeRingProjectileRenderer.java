@@ -124,10 +124,10 @@ public class SmokeRingProjectileRenderer extends MEEntityRenderer<SmokeRingProje
             SmokeRingProjectileRenderState state,
             float tickDelta) {
         float yawRad = (float) Math.toRadians(-MathHelper.lerp(tickDelta,
-                entity.lastYaw,
+                entity.prevYaw,
                 entity.getYaw()));
         float pitchRad = (float) Math.toRadians(MathHelper.lerp(tickDelta,
-                entity.lastPitch,
+                entity.prevPitch,
                 entity.getPitch()));
         state.orientationQuat = new Quaternionf().rotateYXZ(yawRad, pitchRad, 0f);
     }

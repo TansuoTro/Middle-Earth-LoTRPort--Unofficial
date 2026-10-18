@@ -93,7 +93,7 @@ public class StructureManagerScreen extends HandledScreen<StructureManagerScreen
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
-        renderBackground(context, mouseX, mouseY, deltaTicks);
+        renderBackground(context);
         super.render(context, mouseX, mouseY, deltaTicks);
 
         ModWidget.updateMouse(mouseX, mouseY);
@@ -142,7 +142,7 @@ public class StructureManagerScreen extends HandledScreen<StructureManagerScreen
 
         context.drawTexture(TEXTURE, toInitializeToggleButton.getX(), toInitializeToggleButton.getY(), 1, toInitializeToggleButtonUvY, toInitializeToggleButton.getWidth(), toInitializeToggleButton.getHeight(), 256, 256);
         if(toInitializeToggleButton.isMouseOver(mouseX, mouseY))
-            context.drawTooltip(Text.of("[SET TO TRUE] Before saving a structure."), toInitializeToggleButton.getX(), toInitializeToggleButton.getY());
+            context.drawTooltip(this.textRenderer, Text.of("[SET TO TRUE] Before saving a structure."), toInitializeToggleButton.getX(), toInitializeToggleButton.getY());
 
         isEnabledToggleButton.setPosition(centerX + 25, startY);
         boolean isEnabledToggleButtonFocused = isEnabledToggleButton.isMouseOver(mouseX, mouseY) || isEnabledToggleButton.isFocused();
@@ -153,7 +153,7 @@ public class StructureManagerScreen extends HandledScreen<StructureManagerScreen
             isEnabledToggleButtonUvY = 18;
         context.drawTexture(TEXTURE, isEnabledToggleButton.getX(), isEnabledToggleButton.getY(), 18, isEnabledToggleButtonUvY, isEnabledToggleButton.getWidth(), isEnabledToggleButton.getHeight(), 256, 256);
         if(isEnabledToggleButton.isMouseOver(mouseX, mouseY))
-            context.drawTooltip(Text.of("[SET TO FALSE] Before saving a structure."), isEnabledToggleButton.getX(), isEnabledToggleButton.getY());
+            context.drawTooltip(this.textRenderer, Text.of("[SET TO FALSE] Before saving a structure."), isEnabledToggleButton.getX(), isEnabledToggleButton.getY());
 
         startY += 15;
         showAllButton.setPosition(centerX + 5, startY);
@@ -191,8 +191,8 @@ public class StructureManagerScreen extends HandledScreen<StructureManagerScreen
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+    public boolean mouseScrolled(double mouseX, double mouseY, double verticalAmount) {
+        return super.mouseScrolled(mouseX, mouseY, verticalAmount);
     }
 
     @Override

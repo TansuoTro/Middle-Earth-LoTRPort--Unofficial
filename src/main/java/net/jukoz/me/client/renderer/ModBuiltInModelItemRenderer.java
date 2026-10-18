@@ -26,6 +26,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.jukoz.me.compat.MEBannerPatterns;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DyeColor;
+import net.minecraft.util.Identifier;
 
 import java.util.Objects;
 

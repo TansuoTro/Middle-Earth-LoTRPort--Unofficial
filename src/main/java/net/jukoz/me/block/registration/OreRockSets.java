@@ -38,6 +38,11 @@ public class OreRockSets {
     public static OreRockSet TRAVERTINE = registerOreSet("travertine_", STONE_STRENGTH,
             Arrays.asList(ORES.COAL_ORE, ORES.COPPER_ORE, ORES.TIN_ORE), StoneBlockSets.TRAVERTINE_SET.baseBlocks.base());
 
+    public static OreRockSet GONLUIN = STONE;
+    public static OreRockSet DIFTOMIN = STONE;
+    public static OreRockSet EPMOSTO = STONE;
+    public static OreRockSet FROZEN = STONE;
+
     public static OreRockSet DEEPSLATE = registerOreSet("deepslate_", DEEPSLATE_STRENGTH,
             Arrays.asList(ORES.TIN_ORE, ORES.LEAD_ORE), Blocks.DEEPSLATE);
 
@@ -90,7 +95,7 @@ public class OreRockSets {
 
         if(ores.contains(ORES.COAL_ORE)){
             coal_ore = ModNatureBlocks.registerBlock(
-                    rockName + "coal_ore", (settings) -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 2), settings),
+                    rockName + "coal_ore", (settings) -> new ExperienceDroppingBlock(settings, UniformIntProvider.create(0, 2)),
                     AbstractBlock.Settings.copy(Blocks.COAL_ORE).strength(STONE_STRENGTH * strength_mult, 3*strength_mult).requiresTool(), true);
         }
 

@@ -1,6 +1,6 @@
 package net.jukoz.me.registries.content.greathornvariants;
 
-import net.minecraft.entity.spawn.SpawnConditionSelectors;
+import net.jukoz.me.compat.spawn.SpawnConditionSelectors;
 import net.minecraft.registry.*;
 import net.minecraft.registry.tag.TagKey;
 import net.jukoz.me.MiddleEarth;

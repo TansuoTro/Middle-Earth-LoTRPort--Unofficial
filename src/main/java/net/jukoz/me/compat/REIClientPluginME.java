@@ -9,8 +9,8 @@ import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
-import net.jukoz.me.compat.artisantable.ArtisanTableCategory;
-import net.jukoz.me.compat.artisantable.ArtisanTableDisplay;
+import net.jukoz.me.compat.artisanTable.ArtisanTableCategory;
+import net.jukoz.me.compat.artisanTable.ArtisanTableDisplay;
 import net.jukoz.me.compat.forge.AlloyingCategory;
 import net.jukoz.me.compat.forge.AlloyingDisplay;
 import net.jukoz.me.gui.artisantable.ArtisanTableScreen;
@@ -31,16 +31,12 @@ public class REIClientPluginME implements REIClientPlugin {
 
     @Override
     public void registerDisplays(DisplayRegistry registry) {
-        REIClientPlugin.super.registerDisplays(registry);
-        registry.beginFiller(ArtisanRecipe.class)
-                .fill(ArtisanTableDisplay::new);
-        registry.beginFiller(AlloyingRecipe.class)
-                .fill(AlloyingDisplay::new);
+        registry.registerRecipeFiller(ArtisanRecipe.class, ArtisanRecipe.Type.INSTANCE, ArtisanTableDisplay::new);
+        registry.registerRecipeFiller(AlloyingRecipe.class, AlloyingRecipe.Type.INSTANCE, AlloyingDisplay::new);
     }
 
     @Override
     public void registerScreens(ScreenRegistry registry) {
-        REIClientPlugin.super.registerScreens(registry);
         registry.registerClickArea(screen -> new Rectangle(75, 30, 20, 30), ArtisanTableScreen.class, REICommonPluginME.ARTISAN_TABLE_CATEGORY);
         registry.registerClickArea(screen -> new Rectangle(75, 30, 20, 30), ForgeAlloyingScreen.class, REICommonPluginME.FORGE_CATEGORY);
     }

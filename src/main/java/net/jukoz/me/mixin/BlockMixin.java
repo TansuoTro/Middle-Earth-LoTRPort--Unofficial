@@ -40,13 +40,15 @@ public abstract class BlockMixin {
         if(explosion.getEntity() == null || explosion.getEntity().getType() == EntitiesME.FIRE_OF_ORTHANC) {
             if(block != Blocks.TNT && block != ModDecorativeBlocks.FIRE_OF_ORTHANC) {
                 if(Math.random() < RANDOM_FLYING_BLOCK) {
-                    float distance = (float) pos.getSquaredDistance(explosion.getPosition());
-                    if(distance < explosion.getPower() / DISCARD_DISTANCE) return;
+                    ExplosionAccessMixin access = (ExplosionAccessMixin) (Object) explosion;
+                    net.minecraft.util.math.Vec3d explosionPos = new net.minecraft.util.math.Vec3d(access.me$getX(), access.me$getY(), access.me$getZ());
+                    float distance = (float) pos.getSquaredDistance(explosionPos);
+                    if(distance < access.me$getPower() / DISCARD_DISTANCE) return;
 
                     FallingBlockEntity fallingBlockEntity = FallingBlockEntity.spawnFromBlock(world, pos, block.getDefaultState());
                     fallingBlockEntity.dropItem = false;
                     fallingBlockEntity.setDestroyedOnLanding();
-                    Vec3d velocity = pos.toCenterPos().subtract(explosion.getPosition()).normalize();
+                    Vec3d velocity = pos.toCenterPos().subtract(explosionPos).normalize();
                     float factor = FORCE / distance;
                     velocity.multiply(factor);
                     velocity.add(0, VERTICAL_MULTIPLIER * factor, 0);

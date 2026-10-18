@@ -4,7 +4,6 @@ import net.jukoz.me.compat.METext;
 import com.google.common.collect.Lists;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
@@ -25,22 +24,17 @@ public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandle
     private static final Identifier EXTRACT_BUTTON = MiddleEarth.of("extract");
     private static final Identifier EXTRACT_BUTTON_DISABLED = MiddleEarth.of("extract_disabled");
     private static final Identifier EXTRACT_BUTTON_FOCUSED = MiddleEarth.of("extract_focused");
-    private static final ButtonTextures EXTRACT_BUTTON_TEXTURES = new ButtonTextures(EXTRACT_BUTTON, EXTRACT_BUTTON_DISABLED, EXTRACT_BUTTON_FOCUSED);
 
     private static final Identifier LEFT_CYCLE_EXTRACT_BUTTON = MiddleEarth.of("left_cycle_arrow");
     private static final Identifier LEFT_CYCLE_EXTRACT_BUTTON_FOCUSED = MiddleEarth.of("left_cycle_arrow_focused");
-    private static final ButtonTextures LEFT_CYCLE_EXTRACT_BUTTON_TEXTURES = new ButtonTextures(LEFT_CYCLE_EXTRACT_BUTTON, LEFT_CYCLE_EXTRACT_BUTTON_FOCUSED);
 
     private static final Identifier RIGHT_CYCLE_EXTRACT_BUTTON = MiddleEarth.of("right_cycle_arrow");
     private static final Identifier RIGHT_CYCLE_EXTRACT_BUTTON_FOCUSED = MiddleEarth.of("right_cycle_arrow_focused");
-    private static final ButtonTextures RIGHT_CYCLE_EXTRACT_BUTTON_TEXTURES = new ButtonTextures(RIGHT_CYCLE_EXTRACT_BUTTON, RIGHT_CYCLE_EXTRACT_BUTTON_FOCUSED);
 
     private static final Identifier ALLOYING_SWITCH_BUTTON = MiddleEarth.of("alloying_mode");
     private static final Identifier ALLOYING_SWITCH_BUTTON_FOCUSED = MiddleEarth.of("alloying_mode_highlighted");
-    private static final ButtonTextures ALLOYING_SWITCH_BUTTON_TEXTURES = new ButtonTextures(ALLOYING_SWITCH_BUTTON, ALLOYING_SWITCH_BUTTON_FOCUSED);
     private static final Identifier HEATING_SWITCH_BUTTON = MiddleEarth.of("heating_mode");
     private static final Identifier HEATING_SWITCH_BUTTON_FOCUSED = MiddleEarth.of("heating_mode_highlighted");
-    private static final ButtonTextures HEATING_SWITCH_BUTTON_TEXTURES = new ButtonTextures(HEATING_SWITCH_BUTTON, HEATING_SWITCH_BUTTON_FOCUSED);
 
     private static final int PROGRESS_ARROW_SIZE = 27;
     private static final int COOKING_FIRE_SIZE = 14;
@@ -75,14 +69,14 @@ public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandle
         this.heatingMode = handler.heatingMode();
 
         this.leftExtractCycleButton = new ToggleButtonWidget(x + 121, y + 24, 7 ,11, true);
-        this.leftExtractCycleButton.setTextures(LEFT_CYCLE_EXTRACT_BUTTON_TEXTURES);
+        this.leftExtractCycleButton.setTextureUV(0, 0, 0, 0, LEFT_CYCLE_EXTRACT_BUTTON);
         this.leftExtractCycleButton.visible = false;
 
         this.rightExtractCycleButton = new ToggleButtonWidget(x + 162, y + 24, 7,11, true);
-        this.rightExtractCycleButton.setTextures(RIGHT_CYCLE_EXTRACT_BUTTON_TEXTURES);
+        this.rightExtractCycleButton.setTextureUV(0, 0, 0, 0, RIGHT_CYCLE_EXTRACT_BUTTON);
         this.rightExtractCycleButton.visible = false;
 
-        this.extractButton = new TexturedButtonWidget(x + 131, y + 12, 28 ,36, EXTRACT_BUTTON_TEXTURES, (button)-> {
+        this.extractButton = new TexturedButtonWidget(x + 131, y + 12, 28 ,36, 0, 0, 0, EXTRACT_BUTTON, 256, 256, (button)-> {
             int amount = 0;
             switch (outputMode){
                 case 1 -> amount = 16;
@@ -101,14 +95,14 @@ public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandle
             setExtractButtonTooltip();
         }
 
-        this.modeSwitchToAlloyButton = new TexturedButtonWidget(x + 23, y + 68, 10 ,10, HEATING_SWITCH_BUTTON_TEXTURES, (button)-> {
+        this.modeSwitchToAlloyButton = new TexturedButtonWidget(x + 23, y + 68, 10 ,10, 0, 0, 0, HEATING_SWITCH_BUTTON, 256, 256, (button)-> {
             ClientPlayNetworking.send(new ForgeModeSwitchPacket(handler.getPos().getX(),handler.getPos().getY(),handler.getPos().getZ()));
             this.modeSwitchToAlloyButton.visible = false;
             this.modeSwitchToAlloyButton.active = false;
             this.modeSwitchToHeatingButton.visible = true;
             this.modeSwitchToHeatingButton.active = true;
         }, Text.translatable("button." + MiddleEarth.MOD_ID + ".switch_mode"));
-        this.modeSwitchToHeatingButton = new TexturedButtonWidget(x + 23, y + 60, 10 ,10, ALLOYING_SWITCH_BUTTON_TEXTURES, (button)-> {
+        this.modeSwitchToHeatingButton = new TexturedButtonWidget(x + 23, y + 60, 10 ,10, 0, 0, 0, ALLOYING_SWITCH_BUTTON, 256, 256, (button)-> {
             ClientPlayNetworking.send(new ForgeModeSwitchPacket(handler.getPos().getX(),handler.getPos().getY(),handler.getPos().getZ()));
             this.modeSwitchToHeatingButton.visible = false;
             this.modeSwitchToHeatingButton.active = false;
@@ -278,7 +272,7 @@ public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandle
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        renderBackground(context, mouseX,mouseY,delta);
+        renderBackground(context);
         super.render(context, mouseX, mouseY, delta);
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;

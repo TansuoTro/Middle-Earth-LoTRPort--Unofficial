@@ -54,7 +54,7 @@ public class SearchBarWidget extends ModWidget {
                 searchBarToggle = true;
         };
         searchBarToggleButton = ButtonWidget.builder(Text.translatable("ui.%s.search.toggle_button".formatted(MiddleEarth.MOD_ID)), searchBarInputToggle).build();
-        searchBarToggleButton.setDimensions(desiredWidth, searchBarToggleButton.getHeight());
+        net.jukoz.me.compat.client.gui.MEGui.setSize(searchBarToggleButton, desiredWidth, searchBarToggleButton.getHeight());
 
         // Screen click
         screenClick = ButtonWidget.builder(Text.translatable("ui.%s.search.screen_click_button".formatted(MiddleEarth.MOD_ID)), button -> clickOnScreen(button, additionalScreenClickAction)).build();
@@ -213,7 +213,7 @@ public class SearchBarWidget extends ModWidget {
 
                 context.drawText(client.textRenderer, searchBarResult.getText(),
                         valuePanelStartX + 3, valuePanelStartY + - 11,
-                        Colors.DARK_GRAY, false);
+                        Colors.GRAY, false);
             }
 
             // Disable all other buttons
@@ -337,7 +337,7 @@ public class SearchBarWidget extends ModWidget {
     public boolean charTyped(char chr, int modifiers) {
         if (!searchBarToggle) {
             return false;
-        } else if (StringHelper.isValidChar(chr)) {
+        } else if (net.minecraft.SharedConstants.isValidChar(chr)) {
             this.addText(chr);
             return true;
         } else {
@@ -346,11 +346,11 @@ public class SearchBarWidget extends ModWidget {
     }
 
     private void addText(Character newChar) {
-        write(searchBarInput + StringHelper.stripInvalidChars(Character.toString(newChar)));
+        write(searchBarInput + net.minecraft.SharedConstants.stripInvalidChars(Character.toString(newChar)));
     }
 
     private void write(String newText) {
-        newText = StringHelper.stripInvalidChars(newText);
+        newText = net.minecraft.SharedConstants.stripInvalidChars(newText);
         if(textRenderer.getWidth(searchBarInput + newText) >= maximumShownLength){
             newText = textRenderer.trimToWidth(newText, maximumShownLength);
         }
@@ -394,10 +394,10 @@ public class SearchBarWidget extends ModWidget {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double verticalAmount) {
         if(searchBarToggle && isMouseOver(desiredWidth, currentSearchResultHeight, (int) searchResultPanelStarts.x, (int) searchResultPanelStarts.y))
             currentOffsetIndex = Math.max(0, Math.min(allPossibleResults.size() - currentAmount, currentOffsetIndex - (int) Math.round(verticalAmount)));
-        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+        return super.mouseScrolled(mouseX, mouseY, verticalAmount);
     }
 
     @Override

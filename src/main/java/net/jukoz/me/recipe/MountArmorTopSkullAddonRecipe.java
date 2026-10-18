@@ -53,7 +53,6 @@ public class MountArmorTopSkullAddonRecipe extends SpecialCraftingRecipe {
     }
 
     @Override
-    @Override
     public boolean fits(int width, int height) {
         return width * height >= 3;
     }    @Override

@@ -50,11 +50,11 @@ public class DecorativeItemsME {
             (settings) -> new VerticallyAttachableBlockItemME(ModDecorativeBlocks.LEAD_LANTERN, ModDecorativeBlocks.WALL_LEAD_LANTERN, settings, new Direction[]{Direction.DOWN, Direction.UP}), new MESettings());
 
     public static final Item SCONCE = registerItem("sconce",
-            (settings) -> new VerticallyAttachableBlockItem(ModDecorativeBlocks.SCONCE, ModDecorativeBlocks.WALL_SCONCE, Direction.DOWN, settings), new MESettings());
+            (settings) -> new VerticallyAttachableBlockItem(ModDecorativeBlocks.SCONCE, ModDecorativeBlocks.WALL_SCONCE, settings, Direction.DOWN), new MESettings());
     public static final Item GILDED_SCONCE = registerItem("gilded_sconce",
-            (settings) -> new VerticallyAttachableBlockItem(ModDecorativeBlocks.GILDED_SCONCE, ModDecorativeBlocks.GILDED_WALL_SCONCE, Direction.DOWN, settings), new MESettings());
+            (settings) -> new VerticallyAttachableBlockItem(ModDecorativeBlocks.GILDED_SCONCE, ModDecorativeBlocks.GILDED_WALL_SCONCE, settings, Direction.DOWN), new MESettings());
     public static final Item ORCISH_SCONCE = registerItem("orcish_sconce",
-            (settings) -> new VerticallyAttachableBlockItem(ModDecorativeBlocks.ORCISH_SCONCE, ModDecorativeBlocks.ORCISH_WALL_SCONCE, Direction.DOWN, settings), new MESettings());
+            (settings) -> new VerticallyAttachableBlockItem(ModDecorativeBlocks.ORCISH_SCONCE, ModDecorativeBlocks.ORCISH_WALL_SCONCE, settings, Direction.DOWN), new MESettings());
 
     public static final Item FORGE = registerItem("forge",
             (settings) -> new BlockItem(ModDecorativeBlocks.FORGE, settings), new MESettings());
@@ -236,7 +236,7 @@ public class DecorativeItemsME {
             (settings) -> new CustomSpawnEggItem(EntitiesME.PETRIFIED_TROLL, settings), new MESettings().maxCount(1));
 
     public static final Item ARKENSTONE = registerItem("arkenstone",
-            (settings) -> new VerticallyAttachableBlockItem(ModDecorativeBlocks.ARKENSTONE, ModDecorativeBlocks.WALL_ARKENSTONE, Direction.DOWN, settings), new MESettings().rarity(Rarity.EPIC).fireproof()
+            (settings) -> new VerticallyAttachableBlockItem(ModDecorativeBlocks.ARKENSTONE, ModDecorativeBlocks.WALL_ARKENSTONE, settings, Direction.DOWN), new MESettings().rarity(Rarity.EPIC).fireproof()
                     .lore(ArtefactUtils.getArtefactLore("arkenstone")));
 
 

@@ -7,9 +7,14 @@ import java.util.List;
 
 public class SimpleStoneStoolModel {
 
-    public record Stool(Block base, Block stool) {}
+    public record VanillaStool(Block base, Block origin) {}
 
-    public static List<Stool> stools = new ArrayList<>() {
+    public static List<Block> stools = new ArrayList<>() {
+        {
+        }
+    };
+
+    public static List<VanillaStool> vanillaStools = new ArrayList<>() {
         {
         }
     };

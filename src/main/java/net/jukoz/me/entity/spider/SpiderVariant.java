@@ -16,11 +16,13 @@ import net.jukoz.me.registries.DynamicRegistriesME;
  * (see SpawnOfShelobEntity / ShelobiteScuttlerEntity / ShelobiteLarvaEntity), so this
  * record only carries the asset textures.
  */
-public record SpiderVariant(SpiderAssetInfo assetInfo) {
+public record SpiderVariant(SpiderAssetInfo assetInfo, net.jukoz.me.compat.spawn.SpawnConditionSelectors spawnConditions) {
 
     public static final Codec<SpiderVariant> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
-                    SpiderAssetInfo.CODEC.fieldOf("assets").forGetter(SpiderVariant::assetInfo)
+                    SpiderAssetInfo.CODEC.fieldOf("assets").forGetter(SpiderVariant::assetInfo),
+                    net.jukoz.me.compat.spawn.SpawnConditionSelectors.CODEC.optionalFieldOf("spawn_conditions",
+                            net.jukoz.me.compat.spawn.SpawnConditionSelectors.createFallback(0)).forGetter(SpiderVariant::spawnConditions)
             ).apply(instance, SpiderVariant::new)
     );
 

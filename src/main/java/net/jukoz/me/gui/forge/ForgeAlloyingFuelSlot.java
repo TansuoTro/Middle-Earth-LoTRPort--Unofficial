@@ -15,7 +15,7 @@ public class ForgeAlloyingFuelSlot extends Slot {
 
     @Override
     public boolean canInsert(ItemStack stack) {
-        return handler.world.getFuelRegistry().isFuel(stack);
+        return net.fabricmc.fabric.api.registry.FuelRegistry.INSTANCE.get(stack.getItem()) != null;
     }
 
     @Override

@@ -47,7 +47,7 @@ public abstract class ModWidget {
         return true;
     }
 
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double verticalAmount) {
         return true;
     }
 

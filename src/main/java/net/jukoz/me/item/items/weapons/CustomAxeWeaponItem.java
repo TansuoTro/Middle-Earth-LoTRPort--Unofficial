@@ -15,7 +15,7 @@ public class CustomAxeWeaponItem extends AxeItem {
 
     public CustomAxeWeaponItem(ToolMaterial toolMaterial, Item.Settings settings) {
         super(toolMaterial, WeaponTypesME.AXE.attack, WeaponTypesME.AXE.attackSpeed,
-                settings.component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(WeaponTypesME.AXE.name)));
+                ((net.jukoz.me.item.MESettings) settings).component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(WeaponTypesME.AXE.name)));
     }
 
     @Override

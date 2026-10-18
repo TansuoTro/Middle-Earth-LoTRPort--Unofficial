@@ -134,10 +134,10 @@ public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
             CraftingRecipeCategory category = CraftingRecipeCategory.MISC;
             if (JsonHelper.hasString(json, "category")) {
                 try {
-                    category = CraftingRecipeCategory.valueOf(NbtCompat.getString(JsonHelper, json, "category").toUpperCase(Locale.ROOT));
+                    category = CraftingRecipeCategory.valueOf(JsonHelper.getString(json, "category").toUpperCase(Locale.ROOT));
                 } catch (IllegalArgumentException ignored) {}
             }
-            String output = NbtCompat.getString(JsonHelper, json, "output");
+            String output = JsonHelper.getString(json, "output");
             JsonArray ingredients = JsonHelper.getArray(json, "ingredients");
             DefaultedList<Ingredient> inputs = DefaultedList.ofSize(ingredients.size(), Ingredient.EMPTY);
             for (int i = 0; i < ingredients.size(); i++) {

@@ -8,6 +8,8 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
+import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import net.jukoz.me.MiddleEarth;import java.util.Map;public class SmithingTrimMaterialsME {
     public static final RegistryKey<ArmorTrimMaterial> BRONZE = of("bronze");
     public static final RegistryKey<ArmorTrimMaterial> BURZUM_STEEL = of("burzum_steel");
@@ -35,7 +37,7 @@ import net.jukoz.me.MiddleEarth;import java.util.Map;public class SmithingTrimMa
     // instead of the donor's ArmorTrimAssets(AssetId, overrides).
     private static void register(Registerable<ArmorTrimMaterial> registry, RegistryKey<ArmorTrimMaterial> key, float itemModelIndex, String assetName, Style style) {
         Text text = Text.translatable(Util.createTranslationKey("trim_material", key.getValue())).fillStyle(style);
-        registry.register(key, new ArmorTrimMaterial(itemModelIndex, assetName, Map.<ArmorMaterials, String>of(), text));
+        registry.register(key, new ArmorTrimMaterial(assetName, Registries.ITEM.getEntry(Items.IRON_INGOT), itemModelIndex, Map.<ArmorMaterials, String>of(), text));
     }    private static RegistryKey<ArmorTrimMaterial> of(String id) {
         return RegistryKey.of(RegistryKeys.TRIM_MATERIAL, new Identifier(MiddleEarth.MOD_ID, id));
     }

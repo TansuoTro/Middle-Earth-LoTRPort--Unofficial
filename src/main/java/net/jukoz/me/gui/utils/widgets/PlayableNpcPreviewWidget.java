@@ -127,7 +127,7 @@ public class PlayableNpcPreviewWidget extends ModWidget{
 
         npcEntity.setBodyYaw(currentAngle);
         npcEntity.setPitch(0f);
-        npcEntity.lastHeadYaw =npcEntity.getBodyYaw();
+        npcEntity.prevHeadYaw = npcEntity.getBodyYaw();
         npcEntity.headYaw = npcEntity.getBodyYaw();
 
         NpcEntityInitializerClient.initializeNpcEntity(world, npcEntity);
@@ -152,15 +152,11 @@ public class PlayableNpcPreviewWidget extends ModWidget{
             }
         }
 
-        EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
-        entityRenderDispatcher.setRenderShadows(true);
-        EntityRenderer<? super LivingEntity, ?> entityRenderer = entityRenderDispatcher.getRenderer(entity);
-        EntityRenderState entityRenderState = entityRenderer.getAndUpdateRenderState(entity, 1.0F);
-        NpcEntityRenderState npcEntityRenderState = (NpcEntityRenderState) entityRenderState;
-        npcEntityRenderState.LOD = 0;
-
         int entityY = y + 85;
-        context.addEntity(npcEntityRenderState, 35f, VECTOR, ENTITY_ROTATION, new Quaternionf(), x - 60, entityY - 200, x + 60, entityY);
+        // 1.20.1 has no render-state pipeline; render the live entity through the
+        // vanilla inventory-preview helper instead.
+        net.minecraft.client.gui.screen.ingame.InventoryScreen.drawEntity(
+                context, x, entityY - 100, 35, currentAngle, 0.0F, this.entity);
 
         int horizontalMargin = MINIMAL_MARGIN + 1;
 
@@ -206,7 +202,7 @@ public class PlayableNpcPreviewWidget extends ModWidget{
         this.entity.setBodyYaw(currentAngle);
         this.entity.setPitch(0f);
         this.entity.headYaw = this.entity.getBodyYaw();
-        this.entity.lastHeadYaw = this.entity.getBodyYaw();
+        this.entity.prevHeadYaw = this.entity.getBodyYaw();
     }
 
 

@@ -43,7 +43,6 @@ public class ModEvents {
     public static void register(){
         ServerPlayConnectionEvents.JOIN.register((serverPlayNetworkHandler, packetSender, minecraftServer) -> {
             ServerPlayerEntity player = serverPlayNetworkHandler.getPlayer();
-            MiddleEarthHeightMap.setSeed(player.getWorld().getSeed());
 
             PlayerData data = StateSaverAndLoader.getPlayerState(player);
             if(data == null)
@@ -69,7 +68,7 @@ public class ModEvents {
             if(entity instanceof PlayerEntity playerEntity) {
                 ItemStack stack = Objects.requireNonNull(playerEntity.getStackInHand(playerEntity.getActiveHand()));
                 RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager()
-                        .getOrThrow(RegistryKeys.ENCHANTMENT).getOptional(EnchantmentsME.BEHEADING).orElseThrow();
+                        .get(RegistryKeys.ENCHANTMENT).getEntry(EnchantmentsME.BEHEADING).orElseThrow();
                 boolean hasEnchant = MEEnchants.has(stack, enchantmentRegistryEntry);
 
                 if (hasEnchant) {
@@ -79,7 +78,7 @@ public class ModEvents {
                         net.minecraft.nbt.NbtHelper.writeGameProfile(drop.getOrCreateSubNbt("SkullOwner"), killedPlayer.getGameProfile());
                     }
                     if(!drop.isEmpty()) {
-                        killedEntity.dropStack(world, drop);
+                        killedEntity.dropStack(drop);
                     }
                 }
             }
@@ -88,9 +87,9 @@ public class ModEvents {
         PlayerBlockBreakEvents.AFTER.register((world, playerEntity, blockPos, blockState, blockEntity) -> {
             ItemStack stack = Objects.requireNonNull(playerEntity.getStackInHand(playerEntity.getActiveHand()));
             
-            RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getOptional(EnchantmentsME.HEWING).orElseThrow();
+            RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(EnchantmentsME.HEWING).orElseThrow();
             boolean hasEnchant = MEEnchants.has(stack, enchantmentRegistryEntry);
-            int level = EnchantmentHelper.getLevel(enchantmentRegistryEntry, stack);
+            int level = EnchantmentHelper.getLevel(enchantmentRegistryEntry.value(), stack);
             float hardness = blockState.getBlock().getHardness();
 
             if (hasEnchant) {
@@ -123,9 +122,9 @@ public class ModEvents {
             ItemStack stack = Objects.requireNonNull(playerEntity.getStackInHand(playerEntity.getActiveHand()));
             
             RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager()
-                    .getOrThrow(RegistryKeys.ENCHANTMENT).getOptional(EnchantmentsME.TREE_FELLER).orElseThrow();
+                    .get(RegistryKeys.ENCHANTMENT).getEntry(EnchantmentsME.TREE_FELLER).orElseThrow();
             boolean hasEnchant = MEEnchants.has(stack, enchantmentRegistryEntry);
-            int level = EnchantmentHelper.getLevel(enchantmentRegistryEntry, stack);
+            int level = EnchantmentHelper.getLevel(enchantmentRegistryEntry.value(), stack);
             float hardness = blockState.getBlock().getHardness();
 
             if (hasEnchant) {
@@ -232,7 +231,7 @@ public class ModEvents {
         
         BlockState blockState = world.getBlockState(blockpos);
 
-        if (!blockState.isAir() && toolComponent != null) {
+        if (!blockState.isAir()) {
             if (stack.isSuitableFor(blockState)) {
                 if (blockState.getBlock().getHardness() <= hardness) {
                     BlockEntity blockEntity = blockState.hasBlockEntity()

@@ -1,16 +1,13 @@
 package net.jukoz.me.resources;
 
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.datafixer.DataFixTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.PersistentStateManager;
-import net.minecraft.world.PersistentStateType;
 import net.minecraft.world.World;
 import net.jukoz.me.resources.persistent_datas.PlayerData;
 
@@ -21,33 +18,28 @@ import java.util.UUID;
  * <a href="https://github.com/TerraformersMC/Biolith/blob/main/common/src/main/java/com/terraformersmc/biolith/impl/config/BiolithState.java">Other Source</a>
  */
 public class StateSaverAndLoader extends PersistentState {
-    private static final PersistentStateType<StateSaverAndLoader> TYPE;
+    private static final String KEY = "middle_earth_player_datas";
 
     private HashMap<UUID, PlayerData> players;
-
-    public StateSaverAndLoader(Context context) {
-        this.players = new HashMap<>();
-    }
-
-    public static final Codec<StateSaverAndLoader> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            NbtCompound.CODEC.fieldOf("player_datas").forGetter(StateSaverAndLoader::getPlayerDataNbt)
-    ).apply(instance, StateSaverAndLoader::new));
 
     public StateSaverAndLoader() {
         this.players = new HashMap<>();
     }
     public StateSaverAndLoader(NbtCompound nbt){
         this.players = new HashMap<>();
-        var listOpt = nbt.getList("list", 9);
-        if(listOpt.isPresent()){
-            var list = listOpt.get();
-            for(int i = 0; i < list.size(); i++){
-                var playerDataNbt = list.getCompoundOrEmpty(i);
-                var uuidOpt = playerDataNbt.getString("uuid");
-                var newPlayerData = new PlayerData(playerDataNbt.getCompoundOrEmpty("data"));
-                uuidOpt.ifPresent(s -> this.players.put(UUID.fromString(s), newPlayerData));
-            }
+        NbtList list = nbt.getList("list", NbtElement.COMPOUND_TYPE);
+        for(int i = 0; i < list.size(); i++){
+            NbtCompound playerDataNbt = list.getCompound(i);
+            if(!playerDataNbt.contains("uuid", NbtElement.STRING_TYPE)) continue;
+            PlayerData newPlayerData = new PlayerData(playerDataNbt.getCompound("data"));
+            this.players.put(UUID.fromString(playerDataNbt.getString("uuid")), newPlayerData);
         }
+    }
+
+    @Override
+    public NbtCompound writeNbt(NbtCompound nbt) {
+        nbt.put("list", getPlayerDataNbt().getList("list", NbtElement.COMPOUND_TYPE));
+        return nbt;
     }
 
     public static StateSaverAndLoader createNew() {
@@ -71,7 +63,7 @@ public class StateSaverAndLoader extends PersistentState {
 
     public static StateSaverAndLoader getServerState(MinecraftServer server) {
         PersistentStateManager persistentStateManager = server.getWorld(World.OVERWORLD).getPersistentStateManager();
-        StateSaverAndLoader state = persistentStateManager.getOrCreate(TYPE);
+        StateSaverAndLoader state = persistentStateManager.getOrCreate(StateSaverAndLoader::new, StateSaverAndLoader::new, KEY);
         state.markDirty();
         return state;
     }
@@ -83,10 +75,6 @@ public class StateSaverAndLoader extends PersistentState {
         return serverState.players.get(playerUUID);
     }
 
-
-    static {
-        TYPE = new PersistentStateType<>("middle_earth_player_datas", StateSaverAndLoader::createNew, CODEC, (DataFixTypes) null);
-    }
 }
 
 

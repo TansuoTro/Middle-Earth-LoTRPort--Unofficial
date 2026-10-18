@@ -58,13 +58,13 @@ public class AttributePool {
             if(optAttributeEntry.isPresent()){
                 var attributeEntry = optAttributeEntry.get();
 
-                var attributeInstance = entity.getAttributeInstance(attributeEntry);
+                var attributeInstance = entity.getAttributeInstance(attributeEntry.value());
                 if(attributeInstance != null){
                     attributeInstance.clearModifiers();
                     attributeInstance.setBaseValue(element.getValue());
                     if(element.hasModifiers()){
                         for(AttributeModifierElement modifier : element.getModifiers()){
-                            attributeInstance.addPersistentModifier(new EntityAttributeModifier(modifier.getIdentifier(), modifier.getValue(), modifier.getOperation()));
+                            attributeInstance.addPersistentModifier(new EntityAttributeModifier(modifier.getIdentifier().toString(), modifier.getValue(), modifier.getOperation()));
                         }
                     }
                     couldResolveOneAttribute = true;
@@ -76,7 +76,7 @@ public class AttributePool {
 
     public static boolean reverse(LivingEntity entity){
         for (var identifier : Registries.ATTRIBUTE.getIds()) {
-            var attributeInstance = entity.getAttributeInstance(Registries.ATTRIBUTE.getEntry(net.minecraft.registry.RegistryKey.of(net.minecraft.registry.RegistryKeys.ATTRIBUTE, identifier)).get());
+            var attributeInstance = entity.getAttributeInstance(Registries.ATTRIBUTE.getEntry(net.minecraft.registry.RegistryKey.of(net.minecraft.registry.RegistryKeys.ATTRIBUTE, identifier)).get().value());
             if (attributeInstance == null) {
                 continue;
             }
@@ -103,7 +103,7 @@ public class AttributePool {
         }
 
         var defaultAttributeContainer = DefaultAttributeRegistry.get((EntityType<? extends LivingEntity>) entity.getType());
-        return defaultAttributeContainer.getBaseValue(defaultAttributeEntry.get());
+        return defaultAttributeContainer.getBaseValue(defaultAttributeEntry.get().value());
     }
     public static double getDefaultAttributeModifiers(Identifier identifier, LivingEntity entity) {
         var defaultAttribute = Registries.ATTRIBUTE.get(identifier);
@@ -117,7 +117,7 @@ public class AttributePool {
         }
 
         var defaultAttributeContainer = DefaultAttributeRegistry.get((EntityType<? extends LivingEntity>) entity.getType());
-        return defaultAttributeContainer.getBaseValue(defaultAttributeEntry.get());
+        return defaultAttributeContainer.getBaseValue(defaultAttributeEntry.get().value());
     }
 
     public List<AttributePoolElement> getPool() {

@@ -51,7 +51,7 @@ public class MapWidget extends ModWidget {
         if(currentPointRatio == null)
             currentPointRatio = new Vector2d(.5, .5);
         try{
-            mapImage = ImageUtils.fetchResourceImage(MiddleEarthMapConfigs.INITIAL_IMAGE);
+            mapImage = ImageUtils.fetchResourceImage(MapWidget.class.getClassLoader(), MiddleEarthMapConfigs.INITIAL_IMAGE);
         } catch (IOException e) {
             MiddleEarth.LOGGER.logDebugMsg("MapWidget::Couldn't find %s".formatted(MiddleEarthMapConfigs.INITIAL_IMAGE));
         }
@@ -231,7 +231,7 @@ public class MapWidget extends ModWidget {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double verticalAmount) {
         if(mouseIsInside(mouseX, mouseY)){
             clearFocus();
             float zoomAmount = 1f + (zoomTarget / 4f);

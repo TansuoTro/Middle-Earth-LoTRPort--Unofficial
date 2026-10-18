@@ -22,9 +22,9 @@ public class EnshroudedStatusEffect extends StatusEffect {
     }
 
     @Override
-    public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
+    public void applyUpdateEffect(LivingEntity entity, int amplifier) {
         if(entity instanceof PlayerEntity){
-            Map<RegistryEntry<StatusEffect>, StatusEffectInstance> map = entity.getActiveStatusEffects();
+            Map<StatusEffect, StatusEffectInstance> map = entity.getActiveStatusEffects();
             int ticksLeft = map.get(ModStatusEffects.ENSHROUDED).getDuration();
             if(ticksLeft != -1 && ticksLeft < EnshroudedData.STOPPING_TICK)
                 EnshroudedData.addEffect((IEntityDataSaver) entity, -2);
@@ -32,8 +32,6 @@ public class EnshroudedStatusEffect extends StatusEffect {
                 EnshroudedData.addEffect((IEntityDataSaver) entity, 2);
             }
         }
-
-        return true;
     }
 
     public void stop(LivingEntity entity){

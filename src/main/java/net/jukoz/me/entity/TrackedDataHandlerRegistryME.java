@@ -1,6 +1,5 @@
 package net.jukoz.me.entity;
 
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricTrackedDataRegistry;
 import net.jukoz.me.compat.net.TrackedDataHandlerME;
 import net.minecraft.entity.data.TrackedDataHandler;
 import net.jukoz.me.compat.net.PacketCodecs;
@@ -42,7 +41,7 @@ public class TrackedDataHandlerRegistryME {
     }
 
     private static void of(String name, TrackedDataHandler<?> dataHandler) {
-        FabricTrackedDataRegistry.register(new Identifier(MiddleEarth.MOD_ID, name), dataHandler);
+        net.minecraft.entity.data.TrackedDataHandlerRegistry.register(dataHandler);
     }
 
     static {

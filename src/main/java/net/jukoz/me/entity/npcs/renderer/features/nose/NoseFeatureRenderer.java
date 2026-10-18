@@ -52,7 +52,7 @@ public class NoseFeatureRenderer extends MEFeatureRenderer<NpcEntity, NpcEntityR
         }
     }
 
-    public static int getOverlay(LivingEntityRenderState state, float whiteOverlayProgress) {
+    public static int getOverlay(net.jukoz.me.compat.client.render.state.BipedEntityRenderState state, float whiteOverlayProgress) {
         return OverlayTexture.packUv(OverlayTexture.getU(whiteOverlayProgress), OverlayTexture.getV(state.hurt));
     }
 

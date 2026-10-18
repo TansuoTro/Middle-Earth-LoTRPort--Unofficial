@@ -40,7 +40,7 @@ public class PlatedFoodFeature extends Feature<PlatedFoodFeatureConfig> {
         BlockEntity blockEntity = structureWorldAccess.getBlockEntity(blockPos);
         if(blockEntity != null) {
             PlateBlockEntity plateBlockEntity = (PlateBlockEntity) blockEntity;
-            plateBlockEntity.setLootTable(RegistryKey.of(RegistryKeys.LOOT_TABLE, lootTableIdentifier), random.nextLong());
+            plateBlockEntity.setLootTable(lootTableIdentifier, random.nextLong());
             plateBlockEntity.setBlockPlaced();
             plateBlockEntity.generateItem((ServerWorld) structureWorldAccess);
         }

@@ -10,7 +10,7 @@ import net.jukoz.me.world.map.MiddleEarthMapUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
-import org.joml.Vector2d;
+import org.joml.Vector2i;
 
 public class PacketTeleportToDynamicCoordinate extends ClientToServerPacket<PacketTeleportToDynamicCoordinate> {
     public static final Identifier ID = new Identifier(MiddleEarth.MOD_ID, "packet_teleport_dynamic_spawn");
@@ -46,7 +46,7 @@ public class PacketTeleportToDynamicCoordinate extends ClientToServerPacket<Pack
     @Override
     public void process(ServerPacketContext context) {
         context.player().getServer().execute(() -> {
-            Vector2d worldCoordinate = MiddleEarthMapUtils.getInstance().getWorldCoordinateFromInitialMap(xCoordinate, zCoordinate);
+            Vector2i worldCoordinate = MiddleEarthMapUtils.getInstance().getWorldCoordinateFromInitialMap((int) xCoordinate, (int) zCoordinate);
             MinecraftServer server = context.player().getServer();
             Vec3d coordinates = new Vec3d(worldCoordinate.x, ModDimensions.getDimensionHeight((int)worldCoordinate.x, (int)worldCoordinate.y).y, worldCoordinate.y);
             ModDimensions.teleportPlayerToMe(context.player(), coordinates, true, welcomeNeeded);

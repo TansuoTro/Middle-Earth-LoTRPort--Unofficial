@@ -2,6 +2,8 @@ package net.jukoz.me.item;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.SpawnEggItem;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -24,32 +26,37 @@ public class EggItemsME {
 
 
     public static final Item BROADHOOF_GOAT_SPAWN_EGG = registerItem("broadhoof_goat_spawn_egg",
-            (settings) -> new SpawnEggItem(EntitiesME.BROADHOOF_GOAT, settings), new MESettings());
+            (settings) -> egg(EntitiesME.BROADHOOF_GOAT, settings), new MESettings());
 
     public static final Item GREAT_HORN_SPAWN_EGG = registerItem("great_horn_spawn_egg",
-            (settings) -> new SpawnEggItem(EntitiesME.GREAT_HORN, settings), new MESettings());
+            (settings) -> egg(EntitiesME.GREAT_HORN, settings), new MESettings());
 
     public static final Item WARG_SPAWN_EGG = registerItem("warg_spawn_egg",
-            (settings) -> new SpawnEggItem(EntitiesME.WARG, settings), new MESettings());
+            (settings) -> egg(EntitiesME.WARG, settings), new MESettings());
 
     public static final Item STONE_TROLL_SPAWN_EGG = registerItem("stone_troll_spawn_egg",
-            (settings) -> new SpawnEggItem(EntitiesME.STONE_TROLL, settings), new MESettings());
+            (settings) -> egg(EntitiesME.STONE_TROLL, settings), new MESettings());
 
     public static final Item SNOW_TROLL_SPAWN_EGG = registerItem("snow_troll_spawn_egg",
-            (settings) -> new SpawnEggItem(EntitiesME.SNOW_TROLL, settings), new MESettings());
+            (settings) -> egg(EntitiesME.SNOW_TROLL, settings), new MESettings());
     public static final Item CAVE_TROLL_SPAWN_EGG = registerItem("cave_troll_spawn_egg",
-            (settings) -> new SpawnEggItem(EntitiesME.CAVE_TROLL, settings), new MESettings());
+            (settings) -> egg(EntitiesME.CAVE_TROLL, settings), new MESettings());
 
     public static final Item SHELOBITE_LARVA_SPAWN_EGG = registerItem("shelobite_larva_spawn_egg",
-            (settings) -> new SpawnEggItem(EntitiesME.SHELOBITE_LARVA, settings), new MESettings());
+            (settings) -> egg(EntitiesME.SHELOBITE_LARVA, settings), new MESettings());
     public static final Item SHELOBITE_SCUTTLER_SPAWN_EGG = registerItem("shelobite_scuttler_spawn_egg",
-            (settings) -> new SpawnEggItem(EntitiesME.SHELOBITE_SCUTTLER, settings), new MESettings());
+            (settings) -> egg(EntitiesME.SHELOBITE_SCUTTLER, settings), new MESettings());
     public static final Item SHELOBITE_SPAWN_SPAWN_EGG = registerItem("spawn_of_shelob_spawn_egg",
-            (settings) -> new SpawnEggItem(EntitiesME.SPAWN_OF_SHELOB, settings), new MESettings());
+            (settings) -> egg(EntitiesME.SPAWN_OF_SHELOB, settings), new MESettings());
 
     // Npcs
     public static final Item NPC_SPAWN_EGG = registerSpecialEgg("npc_spawn_egg",
-            (settings) -> new SpawnEggItem(EntitiesME.NPC, settings), new MESettings());
+            (settings) -> egg(EntitiesME.NPC, settings), new MESettings());
+
+    /** 1.20.1 spawn eggs still take two colour ints; keep one shared Middle-earth palette. */
+    private static SpawnEggItem egg(EntityType<? extends MobEntity> type, Item.Settings settings) {
+        return new SpawnEggItem(type, 0x5B4A32, 0xD9C7A3, settings);
+    }
 
     private static Item registerItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
         Item item = (Item)factory.apply(settings);

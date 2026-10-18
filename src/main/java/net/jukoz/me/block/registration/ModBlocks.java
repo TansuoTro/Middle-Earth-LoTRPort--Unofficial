@@ -19,6 +19,8 @@ import net.jukoz.me.datageneration.content.TranslationEntries;
 import net.jukoz.me.datageneration.content.loot_tables.BlockDrops;
 import net.jukoz.me.item.utils.ItemGroupsME;
 import net.minecraft.block.*;
+import net.minecraft.world.BlockView;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;

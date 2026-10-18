@@ -24,7 +24,6 @@ import net.jukoz.me.item.DecorativeItemsME;
 import net.jukoz.me.item.EggItemsME;
 import net.jukoz.me.item.ResourceItemsME;
 import net.jukoz.me.item.ToolItemsME;
-import org.joml.Matrix3x2fStack;
 
 import java.util.Dictionary;
 import java.util.HashMap;
@@ -75,7 +74,7 @@ public class PlayerBookScreen extends Screen {
             drawScaledText(textRenderer, context, Text.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.title").formatted(Formatting.UNDERLINE).formatted(Formatting.BOLD),
                     startX + (int)(WIDTH * 0.325), startY + (int)(HEIGHT * 0.11f), 1.5f, Colors.BLACK, true);
 
-            context.drawWrappedText(textRenderer, Text.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.description"), startX + 38, startY + (int)(HEIGHT * 0.22f), 116, Colors.BLACK, false);
+            context.drawTextWrapped(textRenderer, Text.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.description"), startX + 38, startY + (int)(HEIGHT * 0.22f), 116, Colors.BLACK);
 
             drawScaledText(textRenderer, context, Text.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.chapters").formatted(Formatting.UNDERLINE).formatted(Formatting.BOLD),
                     startX + (int)(WIDTH * 0.75), startY + (int)(HEIGHT * 0.11f), 1.5f, Colors.BLACK, true);
@@ -105,10 +104,10 @@ public class PlayerBookScreen extends Screen {
                     context.drawTexture(pageData.image, startX, startY, 0, 0, WIDTH, HEIGHT, 320, 320);
                 }
 
-                context.drawWrappedText(textRenderer, Text.translatable("screen." + MiddleEarth.MOD_ID + "." + pageData.leftPageDescription),
-                        startX + 38, startY + (int)(HEIGHT * 0.2f), 116, Colors.BLACK, false);
-                context.drawWrappedText(textRenderer, Text.translatable("screen." + MiddleEarth.MOD_ID + "." + pageData.rightPageDescription),
-                        startX + (int)(WIDTH * 0.5f) + 16, startY + (int)(HEIGHT * 0.16f), 114, Colors.BLACK, false);
+                context.drawTextWrapped(textRenderer, Text.translatable("screen." + MiddleEarth.MOD_ID + "." + pageData.leftPageDescription),
+                        startX + 38, startY + (int)(HEIGHT * 0.2f), 116, Colors.BLACK);
+                context.drawTextWrapped(textRenderer, Text.translatable("screen." + MiddleEarth.MOD_ID + "." + pageData.rightPageDescription),
+                        startX + (int)(WIDTH * 0.5f) + 16, startY + (int)(HEIGHT * 0.16f), 114, Colors.BLACK);
             }
         }
 
@@ -149,9 +148,9 @@ public class PlayerBookScreen extends Screen {
     }
 
     public static void drawScaledText(TextRenderer textRenderer, DrawContext context, Text text, int x, int y, float scale, int color, boolean centered) {
-        Matrix3x2fStack matrices = context.getMatrices();
-        matrices.pushMatrix();
-        matrices.scale(scale);
+        net.minecraft.client.util.math.MatrixStack matrices = context.getMatrices();
+        matrices.push();
+        matrices.scale(scale, scale, 1.0f);
 
         if (centered) {
             context.drawText(textRenderer, text, (int)(x / scale) - (int)((textRenderer.getWidth(text) * Math.pow(scale, 0.5f)) / 2),
@@ -160,7 +159,7 @@ public class PlayerBookScreen extends Screen {
             context.drawText(textRenderer, text, x, y, color, false);
         }
 
-        matrices.popMatrix();
+        matrices.pop();
     }
 
     private void openPreviousPage() {

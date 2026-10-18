@@ -141,7 +141,7 @@ public class RacePools {
                     .addElement(AttributePoolElement.create(EntityAttributes.GENERIC_MAX_HEALTH, 22.0))
                     .addElement(AttributePoolElement.create(EntityAttributesME.ENTITY_INTERACTION_RANGE, 1.75))
                     .addElement(AttributePoolElement.create(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.27))
-                    .addElement(AttributePoolElement.create(EntityAttributes.GENERIC_STEP_HEIGHT, 0.70)));
+                    .addElement(AttributePoolElement.create(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.70)));
                 put(EntityCategories.MALE, new AttributePool()
                         .addElement(AttributePoolElement.create(EntityAttributesME.WIDTH_SCALE, 0.95, 1.01)));
             }},

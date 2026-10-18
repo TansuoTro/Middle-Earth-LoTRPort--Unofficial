@@ -1,7 +1,6 @@
 package net.jukoz.me.entity.beasts.cave_troll.feature;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.ModelTransformer;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntity;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntityModel;
 
@@ -45,7 +44,7 @@ public class CaveTrollSaddleModel extends CaveTrollEntityModel {
 
         ModelPartData cube_r1 = Saddle_Reigns.addChild("cube_r1", ModelPartBuilder.create().uv(0, 43).cuboid(-5.0F, -22.0F, -2.0F, 10.0F, 22.0F, 7.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -5.0F, -4.0F, -0.6981F, 0.0F, 0.0F));
 
-        return TexturedModelData.of(modelData, 256, 256).transform(ModelTransformer.NO_OP);
+        return TexturedModelData.of(modelData, 256, 256);
     }
 
     @Override

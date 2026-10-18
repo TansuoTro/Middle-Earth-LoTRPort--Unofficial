@@ -142,14 +142,14 @@ public class AttributePoolElement {
         Collection<EntityAttributeInstance> attributes = new ArrayList<>();
         var entries = registry.streamEntries().toList();
         for(var entry : entries){
-            EntityAttributeInstance instance = player.getAttributeInstance(entry);
+            EntityAttributeInstance instance = player.getAttributeInstance(entry.value());
             if(instance == null)
                 continue;
             attributes.add(instance);
         }
         attributes.forEach(attribute -> {
             AttributePoolElement attributePoolElement = new AttributePoolElement();
-            attributePoolElement.withIdentifier(MiddleEarth.fetchId(attribute.getAttribute().getId().toString()));
+            attributePoolElement.withIdentifier(MiddleEarth.fetchId(net.minecraft.registry.Registries.ATTRIBUTE.getId(attribute.getAttribute()).toString()));
             attributePoolElement.withDefineValue(attribute.getBaseValue());
             for(var modifier : attribute.getModifiers())
                 attributePoolElement.withModifier(MiddleEarth.fetchId(modifier.getName()), modifier.getValue(), modifier.getOperation());

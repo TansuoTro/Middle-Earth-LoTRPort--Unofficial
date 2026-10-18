@@ -1,16 +1,18 @@
 package net.jukoz.me.entity.spider;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 
-public class EnwebbedModel extends EntityModel<LivingEntity> {
+public class EnwebbedModel extends SinglePartEntityModel<LivingEntity> {
     private final ModelPart bigBody;
     private final ModelPart smallBody;
 
+    private final ModelPart root;
+
     public EnwebbedModel(ModelPart root) {
-        super(root);
+        this.root = root;
         this.bigBody = root.getChild("big_body");
         this.smallBody = root.getChild("small_body");
     }
@@ -33,5 +35,10 @@ public class EnwebbedModel extends EntityModel<LivingEntity> {
         boolean hasChestplate = !entity.getEquippedStack(EquipmentSlot.CHEST).isEmpty();
         this.bigBody.hidden = !hasChestplate;
         this.smallBody.hidden = hasChestplate;
+    }
+
+    @Override
+    public ModelPart getPart() {
+        return this.root;
     }
 }

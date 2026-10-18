@@ -18,7 +18,7 @@ public class DamageablePlantsUtil {
         if(isEntityArmored(livingEntity))
             return;
 
-        livingEntity.damage(serverWorld, damageSource, 1.0F);
+        livingEntity.damage(damageSource, 1.0F);
     }
 
     private static boolean isEntityArmored(LivingEntity livingEntity) {

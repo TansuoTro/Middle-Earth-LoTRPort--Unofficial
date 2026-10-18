@@ -8,7 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleTrapDoorModel {
-    public record Trapdoor(Block block, Block trapdoor, boolean orientable) {}
+    public record Trapdoor(Block block, Block trapdoor, boolean orientable) {
+        public Trapdoor(Block block, Block trapdoor) {
+            this(block, trapdoor, false);
+        }
+    }
 
     public static List<Trapdoor> trapdoors = new ArrayList<>() {
         {

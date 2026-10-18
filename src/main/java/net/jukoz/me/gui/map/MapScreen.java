@@ -291,8 +291,8 @@ public class MapScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        mapWidget.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
-        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+    public boolean mouseScrolled(double mouseX, double mouseY, double verticalAmount) {
+        mapWidget.mouseScrolled(mouseX, mouseY, verticalAmount);
+        return super.mouseScrolled(mouseX, mouseY, verticalAmount);
     }
 }

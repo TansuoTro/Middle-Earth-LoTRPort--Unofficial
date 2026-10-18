@@ -50,8 +50,8 @@ public class GreatHornArmorFeatureRenderer extends MEFeatureRenderer<GreatHornEn
             VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(new Identifier(MiddleEarth.MOD_ID, path)), true, itemStack.hasGlint());
 
             if(dyeable){
-                int color = itemStack.getItem() instanceof net.minecraft.item.DyeableItem dyeable
-                    ? dyeable.getColor(itemStack) : DyedColorComponent.DEFAULT_COLOR;
+                int color = itemStack.getItem() instanceof net.minecraft.item.DyeableItem dyeableItem
+                    ? dyeableItem.getColor(itemStack) : DyedColorComponent.DEFAULT_COLOR;
                 float red = ((color >> 16) & 255) / 255.0F;
                 float green = ((color >> 8) & 255) / 255.0F;
                 float blue = (color & 255) / 255.0F;

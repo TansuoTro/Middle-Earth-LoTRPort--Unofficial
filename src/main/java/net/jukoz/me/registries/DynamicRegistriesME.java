@@ -9,8 +9,6 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.jukoz.me.MiddleEarth;
-import net.jukoz.me.datageneration.providers.dynamic.GreatHornVariantsProvider;
-import net.jukoz.me.datageneration.providers.dynamic.*;
 import net.jukoz.me.entity.beasts.great_horn.GreatHornVariant;
 import net.jukoz.me.entity.spider.SpiderVariant;
 import net.jukoz.me.registries.content.biomevents.BiomeEventRegistry;
@@ -88,14 +86,5 @@ public class DynamicRegistriesME extends net.jukoz.me.api.registries.DynamicRegi
     }
 
     public static void addProviders(FabricDataGenerator.Pack pack) {
-        pack.addProvider(SpiderVariantsProvider::new);
-        pack.addProvider(RaceProvider::new);
-        pack.addProvider(TexturePresetsProvider::new);
-        pack.addProvider(NpcProvider::new);
-        pack.addProvider(FactionProvider::new);
-        pack.addProvider(StructureDataProvider::new);
-        pack.addProvider(BiomeEventProvider::new);
-        pack.addProvider(StructureEventProvider::new);
-        pack.addProvider(GreatHornVariantsProvider::new);
     }
 }

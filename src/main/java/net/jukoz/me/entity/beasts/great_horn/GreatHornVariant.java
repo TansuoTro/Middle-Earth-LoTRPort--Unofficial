@@ -15,11 +15,13 @@ import net.jukoz.me.registries.DynamicRegistriesME;
  * 1.21.5+ API); biome-driven variant choice is now done directly at initialize time
  * (see GreatHornEntity), so this record only carries the asset texture.
  */
-public record GreatHornVariant(GreatHornAssetInfo assetInfo) {
+public record GreatHornVariant(GreatHornAssetInfo assetInfo, net.jukoz.me.compat.spawn.SpawnConditionSelectors spawnConditions) {
 
     public static final Codec<GreatHornVariant> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
-                    GreatHornAssetInfo.CODEC.fieldOf("assets").forGetter(GreatHornVariant::assetInfo)
+                    GreatHornAssetInfo.CODEC.fieldOf("assets").forGetter(GreatHornVariant::assetInfo),
+                    net.jukoz.me.compat.spawn.SpawnConditionSelectors.CODEC.optionalFieldOf("spawn_conditions",
+                            net.jukoz.me.compat.spawn.SpawnConditionSelectors.createFallback(0)).forGetter(GreatHornVariant::spawnConditions)
             ).apply(instance, GreatHornVariant::new)
     );
 

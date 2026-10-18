@@ -30,7 +30,7 @@ public class PowderSnowBlockMixin {
     private static void canWalkOnPowderSnowEntity(Entity entity, final CallbackInfoReturnable<Boolean> info) {
         if(entity instanceof LivingEntity livingEntity){
             AttributeContainer container = livingEntity.getAttributes();
-            if(container.hasAttribute(EntityAttributesME.POWDERED_SNOW_IMMUNITY) && container.getValue(EntityAttributesME.POWDERED_SNOW_IMMUNITY) != 0.0){
+            if(container.hasAttribute(EntityAttributesME.POWDERED_SNOW_IMMUNITY.value()) && container.getValue(EntityAttributesME.POWDERED_SNOW_IMMUNITY.value()) != 0.0){
                 info.setReturnValue(true);
             }
         }

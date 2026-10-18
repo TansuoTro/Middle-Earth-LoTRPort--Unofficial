@@ -195,6 +195,12 @@ public interface ArmorMaterialsME {
         private final int color;
 
         public static final Codec<Tiers> CODEC = StringIdentifiable.createCodec(Tiers::values);
+        public static final net.jukoz.me.compat.net.PacketCodec<net.minecraft.network.PacketByteBuf, Tiers> PACKET_CODEC =
+                net.jukoz.me.compat.net.PacketCodecs.indexed(Tiers::byId, Tiers::getId);
+
+        public static Tiers byId(int id) {
+            return BY_ID.apply(id);
+        }
 
         Tiers(int id, String name, int color){
             this.name = name;

@@ -25,6 +25,7 @@ import net.jukoz.me.registries.RegistryAliasesME;
 import net.jukoz.me.world.features.tree.ModTreeConfiguredFeatures;
 import net.jukoz.me.world.features.tree.MushroomTreeConfiguredFeatures;
 import net.minecraft.block.*;
+import net.minecraft.block.sapling.SaplingGenerator;
 import net.jukoz.me.compat.MESaplingGenerator;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.BlockItem;

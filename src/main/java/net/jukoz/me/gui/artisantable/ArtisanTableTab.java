@@ -3,7 +3,7 @@ package net.jukoz.me.gui.artisantable;
 import com.google.common.collect.Maps;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.advancement.AdvancementEntry;
+import net.minecraft.advancement.Advancement;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.advancement.AdvancementWidget;
@@ -22,7 +22,7 @@ public class ArtisanTableTab {
     private final ItemStack icon;
     private final Text title;
     private final ArtisanTableInputsShape inputShape;
-    private final Map<AdvancementEntry, AdvancementWidget> widgets = Maps.newLinkedHashMap();
+    private final Map<Advancement, AdvancementWidget> widgets = Maps.newLinkedHashMap();
     private double originX;
     private double originY;
     private int minPanX = Integer.MAX_VALUE;

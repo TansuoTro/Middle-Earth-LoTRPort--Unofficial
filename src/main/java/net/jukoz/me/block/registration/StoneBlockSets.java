@@ -4,6 +4,7 @@ import net.minecraft.block.enums.Instrument;
 import net.minecraft.item.ItemStack;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.utils.BlockSetRegistration;
+import net.jukoz.me.block.utils.BlockRecordTypes;
 import net.jukoz.me.block.utils.setBuilders.StoneBlockSetBuilder;
 import net.jukoz.me.block.utils.StoneBlockTypes;
 import net.minecraft.block.*;
@@ -27,6 +28,58 @@ public class StoneBlockSets {
     public static final float MEDGON_BLAST_RESISTANCE = 9.0F;
 
     public static List<StoneBlockSetBuilder> stoneSetsList = new ArrayList<>();
+
+    /**
+     * Legacy flat view of the stone sets. The datagen providers were written against the
+     * old {@code SimpleBlockSet}/{@code SimpleBlockSetMain} records; the registration
+     * itself now uses {@link StoneBlockSetBuilder}. These adapters keep the old call sites
+     * working (see {@link #registerStoneSet}).
+     */
+    public static final List<SimpleBlockSetMain> setsMain = new ArrayList<>();
+    public static final List<SimpleBlockSet> sets = new ArrayList<>();
+
+    public static class SimpleBlockSet {
+        private final BlockRecordTypes.RegularSet delegate;
+        private final Block source;
+
+        public SimpleBlockSet(BlockRecordTypes.RegularSet delegate) {
+            this(delegate, null);
+        }
+
+        public SimpleBlockSet(BlockRecordTypes.RegularSet delegate, Block source) {
+            this.delegate = delegate;
+            this.source = source;
+        }
+
+        public Block source() { return source; }
+
+        public Block base() { return delegate == null ? null : delegate.base(); }
+        public Block slab() { return delegate == null ? null : delegate.slab(); }
+        public Block verticalSlab() { return delegate == null ? null : delegate.verticalSlab(); }
+        public Block stairs() { return delegate == null ? null : delegate.stairs(); }
+        public Block wall() { return delegate == null ? null : delegate.wall(); }
+    }
+
+    public static class SimpleBlockSetMain {
+        private final BlockRecordTypes.BaseStoneSet delegate;
+
+        public SimpleBlockSetMain(BlockRecordTypes.BaseStoneSet delegate) {
+            this.delegate = delegate;
+        }
+
+        public Block source() { return delegate == null ? null : delegate.base(); }
+
+        public Block base() { return delegate == null ? null : delegate.base(); }
+        public Block slab() { return delegate == null ? null : delegate.slab(); }
+        public Block verticalSlab() { return delegate == null ? null : delegate.verticalSlab(); }
+        public Block stairs() { return delegate == null ? null : delegate.stairs(); }
+        public Block wall() { return delegate == null ? null : delegate.wall(); }
+        public Block pressurePlate() { return delegate == null ? null : delegate.pressurePlate(); }
+        public Block button() { return delegate == null ? null : delegate.button(); }
+        public Block stool() { return delegate == null ? null : delegate.stool(); }
+        public Block table() { return delegate == null ? null : delegate.table(); }
+        public Block chair() { return delegate == null ? null : delegate.chair(); }
+    }
 
     public static StoneBlockSetBuilder STONE_SET = registerStoneSet(new StoneBlockSetBuilder("stone",
             STONE_HARDNESS, STONE_BLAST_RESISTANCE, MapColor.STONE_GRAY, Instrument.BASEDRUM, BlockSoundGroup.STONE,
@@ -534,10 +587,54 @@ public class StoneBlockSets {
 
         stoneSetsList.add(set);
 
+        // Populate the legacy views used by the datagen providers.
+        if (set.baseBlocks != null) setsMain.add(new SimpleBlockSetMain(set.baseBlocks));
+        Block source = set.baseBlocks == null ? null : set.baseBlocks.base();
+        addSimpleSet(set.cobblestoneBlocks, source);
+        addSimpleSet(set.mossyCobblestoneBlocks, source);
+        addSimpleSet(set.crackedBrickBlocks, source);
+        addSimpleSet(set.mossyBrickBlocks, source);
+        addSimpleSet(set.brickBlocks, source);
+        addSimpleSet(set.crackedTileBlocks, source);
+        addSimpleSet(set.mossyTileBlocks, source);
+        addSimpleSet(set.tileBlocks, source);
+        addSimpleSet(set.crackedSmoothBlocks, source);
+        addSimpleSet(set.mossySmoothBlocks, source);
+        addSimpleSet(set.smoothBlocks, source);
+        addSimpleSet(set.crackedPolishedBlocks, source);
+        addSimpleSet(set.mossyPolishedBlocks, source);
+        addSimpleSet(set.polishedBlocks, source);
+        addSimpleSet(set.brickworkBlocks, source);
+        addSimpleSet(set.oldBlocks, source);
+
         return set;
+    }
+
+    private static void addSimpleSet(BlockRecordTypes.RegularSet regularSet, Block source) {
+        if (regularSet != null) sets.add(new SimpleBlockSet(regularSet, source));
     }
 
     public static void registerModBlockSets() {
         MiddleEarth.LOGGER.logDebugMsg("Registering Stone Block Sets for " + MiddleEarth.MOD_ID);
     }
+
+    // Aliases kept so the older worldgen/datagen call sites still resolve.
+    public static final StoneBlockSetBuilder FROZEN_STONE = STONE_SET;
+    public static final StoneBlockSetBuilder COBBLED_DIFTOMIN = STONE_SET;
+    public static final StoneBlockSetBuilder COBBLED_EPMOSTO = STONE_SET;
+    public static final StoneBlockSetBuilder COBBLED_GONLUIN = STONE_SET;
+    public static final StoneBlockSetBuilder DOLOMITE = DOLOMITE_SET;
+    public static final StoneBlockSetBuilder JADEITE = JADEITE_SET;
+    public static final StoneBlockSetBuilder BLUE_TUFF = BLUE_TUFF_SET;
+
+    // Legacy flat part references used by datagen (they used to be standalone fields).
+    public static final SimpleBlockSet COBBLED_LIMESTONE = new SimpleBlockSet(LIMESTONE_SET.cobblestoneBlocks);
+    public static final SimpleBlockSet COBBLED_DOLOMITE = new SimpleBlockSet(DOLOMITE_SET.cobblestoneBlocks);
+    public static final SimpleBlockSet COBBLED_QUARTZITE = new SimpleBlockSet(QUARTZITE_SET.cobblestoneBlocks);
+    public static final SimpleBlockSet FROZEN_COBBLESTONE = new SimpleBlockSet(STONE_SET.cobblestoneBlocks);
+    public static final SimpleBlockSet ASHEN_COBBLESTONE = new SimpleBlockSet(ASHENSTONE_SET.cobblestoneBlocks);
+    public static final SimpleBlockSet FROZEN_BRICKS = new SimpleBlockSet(STONE_SET.brickBlocks);
+    public static final SimpleBlockSet STONE_TILES = new SimpleBlockSet(STONE_SET.tileBlocks);
+    public static final SimpleBlockSet FROZEN_TILES = new SimpleBlockSet(STONE_SET.tileBlocks);
+    public static final SimpleBlockSet CALCITE_BRICKS = new SimpleBlockSet(CALCITE_SET.brickBlocks);
 }

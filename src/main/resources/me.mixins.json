@@ -9,6 +9,7 @@
     "DyeableItemMixin",
     "EntityDataSaverMixin",
     "EntitySpawnMixin",
+    "ExplosionAccessMixin",
     "FoliagePlacerTypeInvoker",
     "ItemMixin",
     "ItemStackAttributeMixin",
@@ -24,7 +25,7 @@
   ],
   "client": [
     "IntegratedServerLoaderMixin",
-    "client.AnimationStateAccessorMixin",
+    "client.AnimationStateAccessor",
     "client.BipedEntityModelMixin",
     "client.PlayerEntityRendererMixin",
     "client.AbstractClientPlayerEntityMixin",

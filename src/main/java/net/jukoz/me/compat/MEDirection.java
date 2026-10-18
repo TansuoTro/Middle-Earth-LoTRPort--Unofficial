@@ -13,6 +13,7 @@ public final class MEDirection {
     }
 
     public static Direction facing(Entity entity) {
-        return Direction.getFacing(entity.getRotationVector());
+        net.minecraft.util.math.Vec3d rotation = entity.getRotationVector();
+        return Direction.getFacing(rotation.x, rotation.y, rotation.z);
     }
 }

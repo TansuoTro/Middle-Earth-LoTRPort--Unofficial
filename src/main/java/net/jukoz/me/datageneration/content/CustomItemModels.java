@@ -23,4 +23,8 @@ public class CustomItemModels {
 
     public static final Model CROSSBOW = new Model(Optional.of(
             new Identifier("item/crossbow")), Optional.empty(), TextureKey.LAYER0);
+
+    /** 1.20.1 has no {@code Models.TEMPLATE_SPAWN_EGG}; the parent is enough. */
+    public static final Model TEMPLATE_SPAWN_EGG = new Model(Optional.of(
+            new Identifier("item/template_spawn_egg")), Optional.empty());
 }

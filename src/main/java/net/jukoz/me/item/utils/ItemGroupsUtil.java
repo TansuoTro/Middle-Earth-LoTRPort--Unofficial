@@ -3,7 +3,6 @@ package net.jukoz.me.item.utils;
 import net.minecraft.client.MinecraftClient;
 
 import net.jukoz.me.item.MEComponents;
-import net.minecraft.component.type.NbtComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;

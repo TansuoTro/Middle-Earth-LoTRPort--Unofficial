@@ -98,7 +98,7 @@ public class InscriptionRecipe implements Recipe<SingleStackRecipeInput> {
 
         @Override
         public InscriptionRecipe read(Identifier id, JsonObject json) {
-            Identifier enchantmentId = new Identifier(NbtCompat.getString(JsonHelper, json, "enchantment"));
+            Identifier enchantmentId = new Identifier(JsonHelper.getString(json, "enchantment"));
             RegistryEntry<Enchantment> enchant = RegistryEntry.of(Registries.ENCHANTMENT.get(enchantmentId));
             int level = JsonHelper.getInt(json, "level");
             JsonArray words = JsonHelper.getArray(json, "words");

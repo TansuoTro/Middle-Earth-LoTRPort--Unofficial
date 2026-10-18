@@ -61,7 +61,7 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
         this.features.removeIf(x -> x.getClass() == ElytraFeatureRenderer.class);
         this.features.removeIf(x -> x.getClass() == HeadFeatureRenderer.class);
 
-        this.addFeature(new ArmorFeatureRenderer<NpcEntity, NpcEntityModel, ArmorEntityModel<NpcEntity>>(this, new ArmorEntityModel<>(context.getPart(EntityModelLayers.PLAYER_INNER_ARMOR)), new ArmorEntityModel<>(context.getPart(EntityModelLayers.PLAYER_OUTER_ARMOR))));
+        this.addFeature(new ArmorFeatureRenderer<NpcEntity, NpcEntityModel, ArmorEntityModel<NpcEntity>>(this, new ArmorEntityModel<>(context.getPart(EntityModelLayers.PLAYER_INNER_ARMOR)), new ArmorEntityModel<>(context.getPart(EntityModelLayers.PLAYER_OUTER_ARMOR)), net.minecraft.client.MinecraftClient.getInstance().getBakedModelManager()));
         this.addFeature(new HairFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader())));
         this.addFeature(new EarFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader())));
         this.addFeature(new NoseFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader())));
@@ -193,7 +193,7 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
         float widthScale = state.widthScale;
 
         matrices.scale(g * widthScale, g, g * widthScale);
-        this.setupTransforms(state, matrices, state.bodyYaw, state.tickDelta, g);
+        this.setupTransforms(state, matrices, state.bodyYaw, g);
         matrices.scale(-widthScale, -1.0f, widthScale);
         this.scale(state, matrices);
         matrices.translate(0.0f, -1.501f, 0.0f);

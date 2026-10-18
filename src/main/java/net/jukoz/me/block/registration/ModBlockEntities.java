@@ -98,6 +98,6 @@ private static <T extends BlockEntity> BlockEntityType<T> register(String name,
         Identifier id = new Identifier(MiddleEarth.MOD_ID, name);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.BLOCK_ENTITY_TYPE, name));
 
-        return Registry.register(Registries.BLOCK_ENTITY_TYPE, id, BlockEntityType.Builder.create(entityFactory, blocks).build(null));
+        return Registry.register(Registries.BLOCK_ENTITY_TYPE, id, FabricBlockEntityTypeBuilder.<T>create(entityFactory, blocks).build());
     }
 }

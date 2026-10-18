@@ -16,11 +16,10 @@ public class AnvilScreenHandlerMixin {
             target = "Lnet/minecraft/inventory/CraftingResultInventory;setStack(ILnet/minecraft/item/ItemStack;)V"))
     private void interceptAnvilOutput(CraftingResultInventory outputInventory, int slot, ItemStack stack) {
         if (!stack.isEmpty()) {
-            var enchants = EnchantmentHelper.getEnchantments(stack);
-            for (var entry : enchants.getEnchantmentEntries()) {
+            for (var entry : EnchantmentHelper.get(stack).entrySet()) {
                 var enchant = entry.getKey();
-                if ((enchant.matchesKey(Enchantments.SHARPNESS) && entry.getIntValue() >= ModServerConfigs.SHARPNESS_MAX_LEVEL)
-                        || (enchant.matchesKey(Enchantments.POWER) && entry.getIntValue() >= ModServerConfigs.POWER_MAX_LEVEL)) {
+                if ((enchant == Enchantments.SHARPNESS && entry.getValue() >= ModServerConfigs.SHARPNESS_MAX_LEVEL)
+                        || (enchant == Enchantments.POWER && entry.getValue() >= ModServerConfigs.POWER_MAX_LEVEL)) {
                     outputInventory.setStack(slot, ItemStack.EMPTY);
                     return;
                 }

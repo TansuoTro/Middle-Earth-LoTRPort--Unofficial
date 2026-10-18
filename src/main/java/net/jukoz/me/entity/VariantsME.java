@@ -32,7 +32,7 @@ public final class VariantsME {
     }
 
     public static <T> RegistryEntry<T> getOrDefaultOrThrow(DynamicRegistryManager manager, RegistryKey<T> key) {
-        Registry<T> registry = registry(manager, key.getRegistry());
+        Registry<T> registry = registry(manager, RegistryKey.ofRegistry(key.getRegistry()));
         if (registry == null) {
             return null;
         }
@@ -40,7 +40,7 @@ public final class VariantsME {
     }
 
     public static <T> Optional<RegistryEntry<T>> getEntry(DynamicRegistryManager manager, RegistryKey<T> key) {
-        Registry<T> registry = registry(manager, key.getRegistry());
+        Registry<T> registry = registry(manager, RegistryKey.ofRegistry(key.getRegistry()));
         if (registry == null) {
             return Optional.empty();
         }

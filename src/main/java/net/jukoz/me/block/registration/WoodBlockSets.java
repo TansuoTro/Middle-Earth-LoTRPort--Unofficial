@@ -3,6 +3,7 @@ package net.jukoz.me.block.registration;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.MapColor;
 import net.jukoz.me.block.special.plants.TintedParticleLeavesBlock;
@@ -29,6 +30,57 @@ public class WoodBlockSets {
     public static final float LEAVES_STRENGTH = 0.1f;
 
     public static List<WoodBlockSetBuilder> woodSetsList = new ArrayList<>();
+
+    /** Legacy flat view of the wood sets consumed by the datagen providers. */
+    public static final List<SimpleBlockSet> sets = new ArrayList<>();
+
+    public static class SimpleBlockSet {
+        private final WoodBlockSetBuilder b;
+
+        public SimpleBlockSet(WoodBlockSetBuilder b) {
+            this.b = b;
+        }
+
+        public Block base() { return b.planksBlocks == null ? null : b.planksBlocks.base(); }
+        public Block leaves() { return b.leaves; }
+        public Block sapling() { return b.sapling; }
+        public Block log() { return b.logBlocks == null ? null : b.logBlocks.log(); }
+        public Block wood() { return b.logBlocks == null ? null : b.logBlocks.wood(); }
+        public Block strippedLog() { return b.strippedLogBlocks == null ? null : b.strippedLogBlocks.log(); }
+        public Block strippedWood() { return b.strippedLogBlocks == null ? null : b.strippedLogBlocks.wood(); }
+        public Block planks() { return b.planksBlocks == null ? null : b.planksBlocks.base(); }
+        public Block slab() { return b.logBlocks == null ? null : b.logBlocks.slab(); }
+        public Block stairs() { return b.logBlocks == null ? null : b.logBlocks.stairs(); }
+        public Block verticalSlab() { return b.logBlocks == null ? null : b.logBlocks.verticalSlab(); }
+        public Block wall() { return b.logBlocks == null ? null : b.logBlocks.wall(); }
+        public Block woodWall() { return b.logBlocks == null ? null : b.logBlocks.wall(); }
+        public Block strippedWoodWall() { return b.strippedLogBlocks == null ? null : b.strippedLogBlocks.wall(); }
+        public Block logFence() { return b.logBlocks == null ? null : b.logBlocks.fence(); }
+        public Block woodFence() { return b.logBlocks == null ? null : b.logBlocks.fence(); }
+        public Block strippedWoodFence() { return b.strippedLogBlocks == null ? null : b.strippedLogBlocks.fence(); }
+        public Block planksFence() { return b.planksBlocks == null ? null : b.planksBlocks.fence(); }
+        public Block planksGate() { return b.planksBlocks == null ? null : b.planksBlocks.gate(); }
+        public Block woodSlab() { return b.logBlocks == null ? null : b.logBlocks.slab(); }
+        public Block planksSlab() { return b.planksBlocks == null ? null : b.planksBlocks.slab(); }
+        public Block strippedWoodSlab() { return b.strippedLogBlocks == null ? null : b.strippedLogBlocks.slab(); }
+        public Block woodVerticalSlab() { return b.logBlocks == null ? null : b.logBlocks.verticalSlab(); }
+        public Block planksVerticalSlab() { return b.planksBlocks == null ? null : b.planksBlocks.verticalSlab(); }
+        public Block strippedWoodVerticalSlab() { return b.strippedLogBlocks == null ? null : b.strippedLogBlocks.verticalSlab(); }
+        public Block woodStairs() { return b.logBlocks == null ? null : b.logBlocks.stairs(); }
+        public Block planksStairs() { return b.planksBlocks == null ? null : b.planksBlocks.stairs(); }
+        public Block strippedWoodStairs() { return b.strippedLogBlocks == null ? null : b.strippedLogBlocks.stairs(); }
+        public Block stem() { return b.mushroomStemBlocks == null ? null : b.mushroomStemBlocks.stem(); }
+        public Block stemFence() { return b.mushroomStemBlocks == null ? null : b.mushroomStemBlocks.fence(); }
+        public Block stemWall() { return b.mushroomStemBlocks == null ? null : b.mushroomStemBlocks.wall(); }
+        public Block door() { return b.redstoneBlocks == null ? null : b.redstoneBlocks.door(); }
+        public Block trapdoor() { return b.redstoneBlocks == null ? null : b.redstoneBlocks.trapdoor(); }
+        public Block pressurePlate() { return b.redstoneBlocks == null ? null : b.redstoneBlocks.pressurePlate(); }
+        public Block button() { return b.redstoneBlocks == null ? null : b.redstoneBlocks.button(); }
+        public Block stool() { return b.furnitureBlocks == null ? null : b.furnitureBlocks.stool(); }
+        public Block table() { return b.furnitureBlocks == null ? null : b.furnitureBlocks.table(); }
+        public Block chair() { return b.furnitureBlocks == null ? null : b.furnitureBlocks.chair(); }
+        public Block origin() { return b.logBlocks == null ? null : b.logBlocks.log(); }
+    }
 
     public static WoodBlockSetBuilder OAK_SET = registerWoodSet(new WoodBlockSetBuilder("oak",
             WOOD_STRENGTH, WOOD_BLAST_RESISTANCE, MapColor.OAK_TAN, Instrument.BASS, BlockSoundGroup.WOOD, Blocks.OAK_SAPLING)
@@ -477,6 +529,7 @@ public class WoodBlockSets {
         });
 
         woodSetsList.add(set);
+        sets.add(new SimpleBlockSet(set));
 
         return set;
     }
