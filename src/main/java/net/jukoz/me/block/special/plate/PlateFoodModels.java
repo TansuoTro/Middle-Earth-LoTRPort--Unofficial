@@ -16,7 +16,7 @@ public class PlateFoodModels {
     }
 
     public static void addVanillaModel(String name) {
-        plateModels.put(Identifier.ofVanilla(name), new Identifier(MiddleEarth.MOD_ID, "plate_" + name));
+        plateModels.put(new Identifier("minecraft", name), new Identifier(MiddleEarth.MOD_ID, "plate_" + name));
     }
     public static void addModel(String name) {
         plateModels.put(MiddleEarth.of(name), MiddleEarth.of('_', "plate", name));

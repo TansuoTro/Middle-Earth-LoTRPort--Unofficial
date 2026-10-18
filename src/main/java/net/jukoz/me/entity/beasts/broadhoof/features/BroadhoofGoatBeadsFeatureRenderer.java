@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class BroadhoofGoatBeadsFeatureRenderer extends FeatureRenderer<BroadhoofGoatEntityRenderState, BroadhoofGoatModel> {
     private static final String PATH = "textures/entities/broadhoof_goat/beads/";
-    private static final Identifier INVISIBLE_ID = Identifier.ofVanilla("invisible");
+    private static final Identifier INVISIBLE_ID = new Identifier("minecraft", "invisible");
 
     private static final Map<BroadhoofGoatBeads, Identifier> TEXTURES = Maps.newEnumMap(
             Map.of(

@@ -106,12 +106,12 @@ public class PaperSheetBlock extends Block {
 
     static {
         SHAPES_BY_PAPERS = new VoxelShape[]{
-                Block.createColumnShape(8.0, 0.0, 1.0),
-                Block.createColumnShape(12.0, 0.0, 1.0),
-                Block.createColumnShape(14.0, 0.0, 1.0),
-                Block.createColumnShape(16.0, 0.0, 3.0),
-                Block.createColumnShape(16.0, 0.0, 8.0),
-                Block.createColumnShape(16.0, 0.0, 12.0),
+                Block.createCuboidShape(8.0 - (8.0), 0.0, 8.0 - (8.0), 8.0 + (8.0), 1.0, 8.0 + (8.0)),
+                Block.createCuboidShape(8.0 - (12.0), 0.0, 8.0 - (12.0), 8.0 + (12.0), 1.0, 8.0 + (12.0)),
+                Block.createCuboidShape(8.0 - (14.0), 0.0, 8.0 - (14.0), 8.0 + (14.0), 1.0, 8.0 + (14.0)),
+                Block.createCuboidShape(8.0 - (16.0), 0.0, 8.0 - (16.0), 8.0 + (16.0), 3.0, 8.0 + (16.0)),
+                Block.createCuboidShape(8.0 - (16.0), 0.0, 8.0 - (16.0), 8.0 + (16.0), 8.0, 8.0 + (16.0)),
+                Block.createCuboidShape(8.0 - (16.0), 0.0, 8.0 - (16.0), 8.0 + (16.0), 12.0, 8.0 + (16.0)),
         };
     }
 }

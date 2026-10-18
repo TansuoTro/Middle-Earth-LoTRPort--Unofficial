@@ -3,7 +3,7 @@ package net.jukoz.me.item.items.armor;
 import net.jukoz.me.item.MEComponents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.equipment.EquipmentType;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.jukoz.me.MiddleEarth;
@@ -14,7 +14,7 @@ import net.jukoz.me.item.utils.armor.ExtendedArmorMaterial;
 public class HelmetAttachmentItem extends Item{
 
     public HelmetAttachmentItem(Item.Settings settings, ExtendedArmorMaterial armorMaterial) {
-        super(settings.armor(armorMaterial.material(), EquipmentType.HELMET).maxCount(1));
+        super(settings.armor(armorMaterial.material(), ArmorItem.Type.HELMET).maxCount(1));
     }
 
     public static void toggleHelmetAttachmentState(ServerPlayerEntity player, ItemStack stack){

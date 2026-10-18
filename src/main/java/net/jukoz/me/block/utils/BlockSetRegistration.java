@@ -413,10 +413,10 @@ public class BlockSetRegistration {
     }
 
     public static Block getVanillaOrCreateNew(String path, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings, List<ItemStack> group){
-        if (Registries.BLOCK.get(Identifier.ofVanilla(path)) == Blocks.AIR){
+        if (Registries.BLOCK.get(new Identifier("minecraft", path)) == Blocks.AIR){
             return ModBlocks.registerBlock(path, factory, settings, false, group);
         } else {
-            return Registries.BLOCK.get(Identifier.ofVanilla(path));
+            return Registries.BLOCK.get(new Identifier("minecraft", path));
         }
     }
 }

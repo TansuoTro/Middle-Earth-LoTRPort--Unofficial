@@ -9,7 +9,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.equipment.EquipmentType;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.particle.*;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
@@ -31,7 +31,7 @@ public class WoodlandRealmCrownItem extends CustomHelmetItem {
     private boolean initialized = false;
 
     public WoodlandRealmCrownItem(ExtendedArmorMaterial material, Settings settings) {
-        super(material, settings.armor(material.material(), EquipmentType.HELMET).maxCount(1));
+        super(material, settings.armor(material.material(), ArmorItem.Type.HELMET).maxCount(1));
     }
 
     @Override

@@ -177,6 +177,6 @@ public class CandleHolderBlock extends Block {
     static {
         LIT = Properties.LIT;
         STATE_TO_LUMINANCE = (state) -> state.get(LIT) ? 6 : 0;
-        SHAPE = VoxelShapes.union(Block.createColumnShape(2.0, 2.0, 10.0),Block.createCuboidShape(5, 0, 5, 11, 2.0, 11));
+        SHAPE = VoxelShapes.union(Block.createCuboidShape(8.0 - (2.0), 2.0, 8.0 - (2.0), 8.0 + (2.0), 10.0, 8.0 + (2.0)),Block.createCuboidShape(5, 0, 5, 11, 2.0, 11));
     }
 }

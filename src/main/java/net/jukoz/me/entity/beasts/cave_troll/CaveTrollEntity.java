@@ -534,7 +534,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
         AttributeModifiersComponent component = this.getWeaponStack().get(DataComponentTypes.ATTRIBUTE_MODIFIERS);
         if(component != null) {
             for(AttributeModifiersComponent.Entry modifier : component.modifiers()) {
-                if(modifier.matches(EntityAttributes.GENERIC_ATTACK_DAMAGE, Identifier.ofVanilla("base_attack_damage"))) {
+                if(modifier.matches(EntityAttributes.GENERIC_ATTACK_DAMAGE, new Identifier("minecraft", "base_attack_damage"))) {
                     weaponDamage = modifier.modifier().value();
                 }
             }

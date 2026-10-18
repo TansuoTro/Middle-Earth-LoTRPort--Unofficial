@@ -4,7 +4,7 @@ import net.jukoz.me.item.MEComponents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.equipment.EquipmentType;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.server.world.ServerWorld;
 import net.jukoz.me.item.DataComponentTypesME;
 import net.jukoz.me.item.dataComponents.BackAttachmentDataComponent;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public class CustomChestplateItem extends ArmorItem {
 
     public CustomChestplateItem(ExtendedArmorMaterial material, Settings settings) {
-        super(material, settings.armor(material.material(), EquipmentType.CHESTPLATE).maxCount(1));
+        super(material, settings.armor(material.material(), ArmorItem.Type.CHESTPLATE).maxCount(1));
     }
 
     @Override

@@ -3,7 +3,7 @@ package net.jukoz.me.item;
 import net.minecraft.component.DataComponentTypes;
 import net.jukoz.me.compat.DyedColorComponent;
 import net.minecraft.item.Item;
-import net.minecraft.item.equipment.EquipmentType;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Rarity;
@@ -2170,21 +2170,21 @@ public class EquipmentItemsME {
                 case HEAVY -> ArmorTags.heavyArmors.add(item);
             }
 
-            Map<EquipmentType, Integer> defensePointsMap = armorItem.getMaterial().material().defense();
+            Map<ArmorItem.Type, Integer> defensePointsMap = armorItem.getMaterial().material().defense();
 
             // Pattern switch is Java 21; this mod targets 17.
             if (item instanceof CustomHelmetItem helmetItem) {
                 ArmorTags.headArmors.add(helmetItem);
-                if (defensePointsMap.get(EquipmentType.HELMET) < 3) ArmorTags.incompleteArmors.add(item);
+                if (defensePointsMap.get(ArmorItem.Type.HELMET) < 3) ArmorTags.incompleteArmors.add(item);
             } else if (item instanceof CustomChestplateItem chestplateItem) {
                 ArmorTags.chestArmors.add(chestplateItem);
-                if (defensePointsMap.get(EquipmentType.CHESTPLATE) < 8) ArmorTags.incompleteArmors.add(item);
+                if (defensePointsMap.get(ArmorItem.Type.CHESTPLATE) < 8) ArmorTags.incompleteArmors.add(item);
             } else if (item instanceof CustomLeggingsItem leggingsItem) {
                 ArmorTags.legArmors.add(leggingsItem);
-                if (defensePointsMap.get(EquipmentType.LEGGINGS) < 6) ArmorTags.incompleteArmors.add(item);
+                if (defensePointsMap.get(ArmorItem.Type.LEGGINGS) < 6) ArmorTags.incompleteArmors.add(item);
             } else if (item instanceof CustomBootsItem bootsItem) {
                 ArmorTags.footArmors.add(bootsItem);
-                if (defensePointsMap.get(EquipmentType.BOOTS) < 3) ArmorTags.incompleteArmors.add(item);
+                if (defensePointsMap.get(ArmorItem.Type.BOOTS) < 3) ArmorTags.incompleteArmors.add(item);
             }
 
         }

@@ -6,7 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.equipment.ArmorMaterial;
 import net.minecraft.item.equipment.EquipmentAsset;
 import net.minecraft.item.equipment.EquipmentAssetKeys;
-import net.minecraft.item.equipment.EquipmentType;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.registry.Registry;
@@ -26,7 +26,7 @@ import java.util.EnumMap;
 import java.util.function.IntFunction;
 
 public interface ArmorMaterialsME {
-    RegistryKey<? extends Registry<EquipmentAsset>> REGISTRY_KEY = RegistryKey.ofRegistry(Identifier.ofVanilla("equipment_asset"));
+    RegistryKey<? extends Registry<EquipmentAsset>> REGISTRY_KEY = RegistryKey.ofRegistry(new Identifier("minecraft", "equipment_asset"));
 
     ExtendedArmorMaterial STRAW_T1 = registerArmor("straw_t1", Tiers.BASIC, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, ItemTagsME.REPAIRS_STRAW_ARMOR);
     ExtendedArmorMaterial WOOD_T1 = registerArmor("wood_t1", Tiers.BASIC, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, ItemTags.PLANKS);
@@ -91,7 +91,7 @@ public interface ArmorMaterialsME {
     ExtendedArmorMaterial LORIEN_HORSE_ARMOR = registerArmor("lorien_horse_armor", Tiers.HEAVY, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, ItemTagsME.REPAIRS_EDHEL_STEEL_ARMOR);
 
     private static ExtendedArmorMaterial registerArmor(String name, Tiers tier, RegistryEntry<SoundEvent> equipSound, TagKey<Item> repairTag) {
-        EnumMap<EquipmentType, Integer> map = new EnumMap<>(EquipmentType.class);
+        EnumMap<ArmorItem.Type, Integer> map = new EnumMap<>(ArmorItem.Type.class);
         float toughness;
         
         float knockbackResistance;
@@ -99,77 +99,70 @@ public interface ArmorMaterialsME {
         int durabilityMultiplier;
         switch (tier) {
             case CLOTHING -> {
-                map.put(EquipmentType.BOOTS, 1);
-                map.put(EquipmentType.LEGGINGS, 1);
-                map.put(EquipmentType.CHESTPLATE, 1);
-                map.put(EquipmentType.HELMET, 1);
-                map.put(EquipmentType.BODY, 1);
+                map.put(ArmorItem.Type.BOOTS, 1);
+                map.put(ArmorItem.Type.LEGGINGS, 1);
+                map.put(ArmorItem.Type.CHESTPLATE, 1);
+                map.put(ArmorItem.Type.HELMET, 1);
                 durabilityMultiplier = 2;
                 toughness = 0.0f;
                 knockbackResistance = 0.0f;
                 enchantability = 10;
             }
             case BASIC -> {
-                map.put(EquipmentType.BOOTS, 1);
-                map.put(EquipmentType.LEGGINGS, 2);
-                map.put(EquipmentType.CHESTPLATE, 3);
-                map.put(EquipmentType.HELMET, 1);
-                map.put(EquipmentType.BODY, 4);
+                map.put(ArmorItem.Type.BOOTS, 1);
+                map.put(ArmorItem.Type.LEGGINGS, 2);
+                map.put(ArmorItem.Type.CHESTPLATE, 3);
+                map.put(ArmorItem.Type.HELMET, 1);
                 durabilityMultiplier = 6;
                 toughness = 0.0f;
                 knockbackResistance = 0.0f;
                 enchantability = 10;
             }
             case LIGHT -> {
-                map.put(EquipmentType.BOOTS, 1);
-                map.put(EquipmentType.LEGGINGS, 3);
-                map.put(EquipmentType.CHESTPLATE, 4);
-                map.put(EquipmentType.HELMET, 1);
-                map.put(EquipmentType.BODY, 5);
+                map.put(ArmorItem.Type.BOOTS, 1);
+                map.put(ArmorItem.Type.LEGGINGS, 3);
+                map.put(ArmorItem.Type.CHESTPLATE, 4);
+                map.put(ArmorItem.Type.HELMET, 1);
                 durabilityMultiplier = 11;
                 toughness = 0.0f;
                 knockbackResistance = 0.0f;
                 enchantability = 10;
             }
             case MEDIUM -> {
-                map.put(EquipmentType.BOOTS, 2);
-                map.put(EquipmentType.LEGGINGS, 4);
-                map.put(EquipmentType.CHESTPLATE, 5);
-                map.put(EquipmentType.HELMET, 2);
-                map.put(EquipmentType.BODY, 6);
+                map.put(ArmorItem.Type.BOOTS, 2);
+                map.put(ArmorItem.Type.LEGGINGS, 4);
+                map.put(ArmorItem.Type.CHESTPLATE, 5);
+                map.put(ArmorItem.Type.HELMET, 2);
                 durabilityMultiplier = 18;
                 toughness = 0.5f;
                 knockbackResistance = 0.0f;
                 enchantability = 10;
             }
             case STURDY -> {
-                map.put(EquipmentType.BOOTS, 2);
-                map.put(EquipmentType.LEGGINGS, 5);
-                map.put(EquipmentType.CHESTPLATE, 6);
-                map.put(EquipmentType.HELMET, 2);
-                map.put(EquipmentType.BODY, 8);
+                map.put(ArmorItem.Type.BOOTS, 2);
+                map.put(ArmorItem.Type.LEGGINGS, 5);
+                map.put(ArmorItem.Type.CHESTPLATE, 6);
+                map.put(ArmorItem.Type.HELMET, 2);
                 durabilityMultiplier = 23;
                 toughness = 1.0f;
                 knockbackResistance = 0.0f;
                 enchantability = 10;
             }
             case HEAVY -> {
-                map.put(EquipmentType.BOOTS, 3);
-                map.put(EquipmentType.LEGGINGS, 6);
-                map.put(EquipmentType.CHESTPLATE, 7);
-                map.put(EquipmentType.HELMET, 3);
-                map.put(EquipmentType.BODY, 10);
+                map.put(ArmorItem.Type.BOOTS, 3);
+                map.put(ArmorItem.Type.LEGGINGS, 6);
+                map.put(ArmorItem.Type.CHESTPLATE, 7);
+                map.put(ArmorItem.Type.HELMET, 3);
                 durabilityMultiplier = 37;
                 toughness = 2.0f;
                 knockbackResistance = 0.0f;
                 enchantability = 10;
             }
             default -> {
-                map.put(EquipmentType.BOOTS, 1);
-                map.put(EquipmentType.LEGGINGS, 2);
-                map.put(EquipmentType.CHESTPLATE, 3);
-                map.put(EquipmentType.HELMET, 1);
-                map.put(EquipmentType.BODY, 3);
+                map.put(ArmorItem.Type.BOOTS, 1);
+                map.put(ArmorItem.Type.LEGGINGS, 2);
+                map.put(ArmorItem.Type.CHESTPLATE, 3);
+                map.put(ArmorItem.Type.HELMET, 1);
                 durabilityMultiplier = 5;
                 toughness = 0.0f;
                 knockbackResistance = 0.0f;
@@ -179,11 +172,11 @@ public interface ArmorMaterialsME {
         return register(name, map, durabilityMultiplier, enchantability, equipSound, toughness, knockbackResistance, repairTag, tier);
     }
 
-    private static ExtendedArmorMaterial register(String name, EnumMap<EquipmentType, Integer> defense,
+    private static ExtendedArmorMaterial register(String name, EnumMap<ArmorItem.Type, Integer> defense,
                                                   int durabilityMultiplier, int enchantability, RegistryEntry<SoundEvent> equipSound, float toughness, float knockbackResistance,
                                                   TagKey<Item> repairTag, Tiers tier) {
 
-        EnumMap<EquipmentType, Integer> enumMap = new EnumMap<>(EquipmentType.class);
+        EnumMap<ArmorItem.Type, Integer> enumMap = new EnumMap<>(ArmorItem.Type.class);
         for (EquipmentType type : EquipmentType.values()) {
             enumMap.put(type, defense.get(type));
         }

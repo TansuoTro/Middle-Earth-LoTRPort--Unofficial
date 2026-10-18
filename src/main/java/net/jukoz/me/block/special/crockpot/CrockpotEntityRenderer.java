@@ -19,7 +19,7 @@ import net.minecraft.util.math.Vec3d;
 @Environment(value= EnvType.CLIENT)
 public class CrockpotEntityRenderer implements BlockEntityRenderer<CrockpotBlockEntity> {
     private static final float SIZE_FACTOR = 0.25f;
-    private static SpriteIdentifier waterSpriteId = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, Identifier.ofVanilla("block/water_still"));
+    private static SpriteIdentifier waterSpriteId = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier("minecraft", "block/water_still"));
 
     public CrockpotEntityRenderer(BlockEntityRendererFactory.Context context) {
     }

@@ -26,7 +26,7 @@ public class OldSkullBlock extends BlockWithEntity {
     public static final IntProperty ROTATION = Properties.ROTATION;
     public static final int MAX_ROTATION_INDEX = RotationPropertyHelper.getMax();
     private static final int MAX_ROTATIONS = MAX_ROTATION_INDEX + 1;
-    private static final VoxelShape SHAPE = Block.createColumnShape(8.0, 0.0, 8.0);
+    private static final VoxelShape SHAPE = Block.createCuboidShape(8.0 - (8.0), 0.0, 8.0 - (8.0), 8.0 + (8.0), 8.0, 8.0 + (8.0));
 
     public OldSkullBlock(Settings settings) {
         super(settings);

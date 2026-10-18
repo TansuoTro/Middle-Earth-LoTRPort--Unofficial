@@ -256,6 +256,8 @@ REWRITES = [
     # 1.21.2 renames, verified against the mapped 1.20.1 jar.
     ("move-origin", r"Transformation[.]Targets[.]MOVE_ORIGIN", "Transformation.Targets.TRANSLATE"),
     ("animation-definition", r"(?<![A-Za-z0-9_$])AnimationDefinition", "Animation"),
+    # 1.21 helpers with a direct 1.20.1 equivalent.
+    ("of-vanilla", r"(?<![A-Za-z0-9_$])Identifier[.]ofVanilla[(]", 'new Identifier("minecraft", '),
 ]
 
 # 1.21 wraps block/item ids in a RegistryKey; 1.20.1 registers by Identifier.

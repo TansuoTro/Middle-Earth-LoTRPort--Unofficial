@@ -154,7 +154,7 @@ public class EnchantmentsME {
                                 AttributeModifierSlot.ARMOR))
                 .exclusiveSet(registryEntryLookup2.getOrThrow(EnchantmentTags.ARMOR_EXCLUSIVE_SET))
                 .addEffect(EnchantmentEffectComponentTypes.ATTRIBUTES,
-                        new AttributeEnchantmentEffect(Identifier.ofVanilla("enchantment.stalwart"),
+                        new AttributeEnchantmentEffect(new Identifier("minecraft", "enchantment.stalwart"),
                                 EntityAttributes.GENERIC_ARMOR, EnchantmentLevelBasedValue.linear(1F),
                                 EntityAttributeModifier.Operation.ADD_VALUE)));
 

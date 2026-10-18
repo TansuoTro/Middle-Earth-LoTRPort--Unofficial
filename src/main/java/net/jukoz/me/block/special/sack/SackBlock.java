@@ -107,7 +107,7 @@ public class SackBlock extends BlockWithEntity {
     }
 
     static {
-        CONTENTS_DYNAMIC_DROP_ID = Identifier.ofVanilla("contents");
+        CONTENTS_DYNAMIC_DROP_ID = new Identifier("minecraft", "contents");
         OPEN = Properties.OPEN;
     }
 }

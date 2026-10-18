@@ -7,7 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.equipment.EquipmentType;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
@@ -25,7 +25,7 @@ public class MantleOfYavannaItem extends BackAttachmentItem {
     private static final int DEFAULT_FOLIAGE = 5875248;
 
     public MantleOfYavannaItem(Settings settings, ExtendedArmorMaterial material) {
-        super(settings.armor(material.material(), EquipmentType.CHESTPLATE).maxCount(1), material);
+        super(settings.armor(material.material(), ArmorItem.Type.CHESTPLATE).maxCount(1), material);
     }
 
     @Override

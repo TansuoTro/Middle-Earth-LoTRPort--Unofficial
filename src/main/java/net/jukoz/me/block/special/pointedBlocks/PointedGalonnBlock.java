@@ -570,15 +570,15 @@ public class PointedGalonnBlock extends Block implements Falling, Waterloggable 
         VERTICAL_DIRECTION = Properties.VERTICAL_DIRECTION;
         THICKNESS = Properties.THICKNESS;
         WATERLOGGED = Properties.WATERLOGGED;
-        TIP_MERGE_SHAPE = Block.createColumnShape(6.0, 0.0, 16.0);
-        UP_TIP_SHAPE = Block.createColumnShape(6.0, 0.0, 11.0);
-        DOWN_TIP_SHAPE = Block.createColumnShape(6.0, 5.0, 16.0);
-        BASE_SHAPE = Block.createColumnShape(8.0, 0.0, 16.0);
-        FRUSTUM_SHAPE = Block.createColumnShape(10.0, 0.0, 16.0);
-        MIDDLE_SHAPE = Block.createColumnShape(12.0, 0.0, 16.0);
+        TIP_MERGE_SHAPE = Block.createCuboidShape(8.0 - (6.0), 0.0, 8.0 - (6.0), 8.0 + (6.0), 16.0, 8.0 + (6.0));
+        UP_TIP_SHAPE = Block.createCuboidShape(8.0 - (6.0), 0.0, 8.0 - (6.0), 8.0 + (6.0), 11.0, 8.0 + (6.0));
+        DOWN_TIP_SHAPE = Block.createCuboidShape(8.0 - (6.0), 5.0, 8.0 - (6.0), 8.0 + (6.0), 16.0, 8.0 + (6.0));
+        BASE_SHAPE = Block.createCuboidShape(8.0 - (8.0), 0.0, 8.0 - (8.0), 8.0 + (8.0), 16.0, 8.0 + (8.0));
+        FRUSTUM_SHAPE = Block.createCuboidShape(8.0 - (10.0), 0.0, 8.0 - (10.0), 8.0 + (10.0), 16.0, 8.0 + (10.0));
+        MIDDLE_SHAPE = Block.createCuboidShape(8.0 - (12.0), 0.0, 8.0 - (12.0), 8.0 + (12.0), 16.0, 8.0 + (12.0));
         DOWN_TIP_Y = DOWN_TIP_SHAPE.getMin(Direction.Axis.Y);
         MAX_HORIZONTAL_MODEL_OFFSET = (float)MIDDLE_SHAPE.getMin(Direction.Axis.X);
-        DRIP_COLLISION_SHAPE = Block.createColumnShape(4.0, 0.0, 16.0);
+        DRIP_COLLISION_SHAPE = Block.createCuboidShape(8.0 - (4.0), 0.0, 8.0 - (4.0), 8.0 + (4.0), 16.0, 8.0 + (4.0));
     }
 
     static record DrippingFluid(BlockPos pos, Fluid fluid, BlockState sourceState) {

@@ -2,7 +2,7 @@ package net.jukoz.me.item.items.armor;
 
 import net.jukoz.me.item.MEComponents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.equipment.EquipmentType;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.jukoz.me.MiddleEarth;
@@ -13,7 +13,7 @@ import net.jukoz.me.item.utils.armor.ExtendedArmorMaterial;
 public class CustomHelmetItem extends ArmorItem {
 
     public CustomHelmetItem(ExtendedArmorMaterial material, Settings settings) {
-        super(material, settings.armor(material.material(), EquipmentType.HELMET).maxCount(1));
+        super(material, settings.armor(material.material(), ArmorItem.Type.HELMET).maxCount(1));
     }
 
     public static void toggleHoodState(ServerPlayerEntity player, ItemStack stack){

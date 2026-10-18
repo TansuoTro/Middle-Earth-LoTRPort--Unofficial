@@ -33,7 +33,7 @@ public class StoneLecternBlock extends LecternBlock {
     }
 
     static {
-        BASE_SHAPE = VoxelShapes.union(Block.createColumnShape(16.0, 0.0, 2.0), Block.createColumnShape(12.0, 2.0, 14.0));
+        BASE_SHAPE = VoxelShapes.union(Block.createCuboidShape(8.0 - (16.0), 0.0, 8.0 - (16.0), 8.0 + (16.0), 2.0, 8.0 + (16.0)), Block.createCuboidShape(8.0 - (12.0), 2.0, 8.0 - (12.0), 8.0 + (12.0), 14.0, 8.0 + (12.0)));
         OUTLINE_SHAPES_BY_DIRECTION = VoxelShapes.createHorizontalFacingShapeMap(VoxelShapes.union(Block.createCuboidZShape(16.0, 10.0, 14.0, 1.0, 5.333333), new VoxelShape[]{Block.createCuboidZShape(16.0, 12.0, 16.0, 5.333333, 9.666667), Block.createCuboidZShape(16.0, 14.0, 18.0, 9.666667, 14.0), BASE_SHAPE}));
     }
 }
