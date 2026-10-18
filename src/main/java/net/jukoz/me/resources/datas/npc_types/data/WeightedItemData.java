@@ -1,4 +1,5 @@
 package net.jukoz.me.resources.datas.npc_types.data;
+import net.jukoz.me.compat.METext;
 import net.jukoz.me.compat.NbtCompat;
 
 import net.minecraft.item.Item;

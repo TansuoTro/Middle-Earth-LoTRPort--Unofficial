@@ -17,10 +17,10 @@ public class EnwebbedModel extends EntityModel<BipedEntityRenderState> {
         ModelData modelData = new ModelData();
         ModelPartData dataRoot = modelData.getRoot();
         ModelPartData bigBody = dataRoot.addChild("big_body", ModelPartBuilder.create().uv(0, 0)
-                .cuboid(-8.0F, -23.5F, -2.0F, 16.0F, 11.0F, 4.0F, new Dilation(1.15F)), ModelTransform.origin(0.0F, 24.0F, 0.0F));
+                .cuboid(-8.0F, -23.5F, -2.0F, 16.0F, 11.0F, 4.0F, new Dilation(1.15F)), ModelTransform.pivot(0.0F, 24.0F, 0.0F));
 
         ModelPartData smallBody = dataRoot.addChild("small_body", ModelPartBuilder.create().uv(0, 0)
-                .cuboid(-8.0F, -23.5F, -2.0F, 16.0F, 11.0F, 4.0F, new Dilation(0.65F)), ModelTransform.origin(0.0F, 24.0F, 0.0F));
+                .cuboid(-8.0F, -23.5F, -2.0F, 16.0F, 11.0F, 4.0F, new Dilation(0.65F)), ModelTransform.pivot(0.0F, 24.0F, 0.0F));
 
         return TexturedModelData.of(modelData, 64, 64);
     }

@@ -80,7 +80,7 @@ public class BroadhoofGoatModel extends EntityModel<BroadhoofGoatEntityRenderSta
 
 
         ModelPartData body_cube = body.addChild(EntityModelPartNames.BODY, ModelPartBuilder.create().uv(2, 48).cuboid(-6.0F, -9.0F, -11.0F, 12.0F, 11.0F, 20.0F, new Dilation(0.0F))
-                .uv(0, 18).cuboid(-7.0F, -11.0F, -12.0F, 14.0F, 16.0F, 13.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+                .uv(0, 18).cuboid(-7.0F, -11.0F, -12.0F, 14.0F, 16.0F, 13.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         ModelPartData tail_r1 = body.addChild("tail_r1", ModelPartBuilder.create().uv(86, 1).cuboid(-2.0F, -3.0F, 0.0F, 4.0F, 3.0F, 4.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -6.0F, 9.0F, 0.4363F, 0.0F, 0.0F));
 
@@ -161,10 +161,10 @@ public class BroadhoofGoatModel extends EntityModel<BroadhoofGoatEntityRenderSta
         ModelPartData right_front_leg = broadhoof_goat.getChild("right_front_leg");
         ModelPartData right_hind_leg = broadhoof_goat.getChild("right_hind_leg");
 
-        ModelPartData left_front_leg_cube = left_front_leg.addChild("left_front_leg", ModelPartBuilder.create().uv(43, 17).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 9.0F, 4.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-        ModelPartData left_hind_leg_cube = left_hind_leg.addChild("left_hind_leg", ModelPartBuilder.create().uv(61, 17).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 9.0F, 4.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-        ModelPartData right_front_leg_cube = right_front_leg.addChild("right_front_leg", ModelPartBuilder.create().uv(43, 17).mirrored().cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 9.0F, 4.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-        ModelPartData right_hind_leg_cube = right_hind_leg.addChild("right_hind_leg", ModelPartBuilder.create().uv(61, 17).mirrored().cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 9.0F, 4.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+        ModelPartData left_front_leg_cube = left_front_leg.addChild("left_front_leg", ModelPartBuilder.create().uv(43, 17).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 9.0F, 4.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData left_hind_leg_cube = left_hind_leg.addChild("left_hind_leg", ModelPartBuilder.create().uv(61, 17).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 9.0F, 4.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData right_front_leg_cube = right_front_leg.addChild("right_front_leg", ModelPartBuilder.create().uv(43, 17).mirrored().cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 9.0F, 4.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData right_hind_leg_cube = right_hind_leg.addChild("right_hind_leg", ModelPartBuilder.create().uv(61, 17).mirrored().cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 9.0F, 4.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         return TexturedModelData.of(modelData, 128, 128);
     }
@@ -174,19 +174,19 @@ public class BroadhoofGoatModel extends EntityModel<BroadhoofGoatEntityRenderSta
     public static ModelData getModelData() {
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();
-        ModelPartData broadhoof_goat = modelPartData.addChild("broadhoof_goat", ModelPartBuilder.create(), ModelTransform.origin(0.0F, 24.0F, 0.0F));
+        ModelPartData broadhoof_goat = modelPartData.addChild("broadhoof_goat", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 24.0F, 0.0F));
 
-        ModelPartData body = broadhoof_goat.addChild(EntityModelPartNames.BODY, ModelPartBuilder.create(), ModelTransform.origin(0.0F, -11.0F, 2.0F));
+        ModelPartData body = broadhoof_goat.addChild(EntityModelPartNames.BODY, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, -11.0F, 2.0F));
 
         ModelPartData head = body.addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(), ModelTransform.of(0.0F, -6.0F, -9.0F, -0.2182F, 0.0F, 0.0F));
 
-        ModelPartData wild_beard = head.addChild("wild_beard", ModelPartBuilder.create(), ModelTransform.origin(0.0F, 2.0F, -4.0F));
+        ModelPartData wild_beard = head.addChild("wild_beard", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 2.0F, -4.0F));
 
-        ModelPartData brushed_beard = head.addChild("brushed_beard", ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, -7.0F));
+        ModelPartData brushed_beard = head.addChild("brushed_beard", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, -7.0F));
 
         ModelPartData hair = head.addChild("hair", ModelPartBuilder.create().uv(100, 91).cuboid(-4.0F, -2.0F, -1.0F, 8.0F, 7.0F, 6.0F, new Dilation(-0.1F)), ModelTransform.of(0.0F, -9.0F, -9.0F, 0.3054F, 0.0F, 0.0F));
 
-        ModelPartData horns = head.addChild("horns", ModelPartBuilder.create(), ModelTransform.origin(-11.0F, -11.0208F, -7.4645F));
+        ModelPartData horns = head.addChild("horns", ModelPartBuilder.create(), ModelTransform.pivot(-11.0F, -11.0208F, -7.4645F));
 
         ModelPartData long_left_horn = horns.addChild("long_left_horn", ModelPartBuilder.create(), ModelTransform.of(0f, 0f, 0f, 0f, 0f, 0f));
         ModelPartData long_right_horn = horns.addChild("long_right_horn", ModelPartBuilder.create(), ModelTransform.of(0f, 0f, 0f, 0f, 0f, 0f));
@@ -197,11 +197,11 @@ public class BroadhoofGoatModel extends EntityModel<BroadhoofGoatEntityRenderSta
         ModelPartData tiny_left_horn = horns.addChild("tiny_left_horn", ModelPartBuilder.create(), ModelTransform.of(0F, -0F, 0F, 0F, 0.0F, 0.0F));
         ModelPartData tiny_right_horn = horns.addChild("tiny_right_horn", ModelPartBuilder.create(), ModelTransform.of(0F, 0F, 0F, 0F, 0.0F, 0.0F));
 
-        ModelPartData curly_left_horn = horns.addChild("curly_left_horn", ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-        ModelPartData curly_right_horn = horns.addChild("curly_right_horn", ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+        ModelPartData curly_left_horn = horns.addChild("curly_left_horn", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData curly_right_horn = horns.addChild("curly_right_horn", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData swirly_left_horn = horns.addChild("swirly_left_horn", ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-        ModelPartData swirly_right_horn = horns.addChild("swirly_right_horn", ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+        ModelPartData swirly_left_horn = horns.addChild("swirly_left_horn", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData swirly_right_horn = horns.addChild("swirly_right_horn", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         ModelPartData wide_left_horn = horns.addChild("wide_left_horn", ModelPartBuilder.create(), ModelTransform.of(0F, 0F, -0F, 0F, 0F, 0F));
         ModelPartData wide_right_horn = horns.addChild("wide_right_horn", ModelPartBuilder.create(), ModelTransform.of(0F, 0F, 0F, 0F, 0F, 0F));
@@ -209,10 +209,10 @@ public class BroadhoofGoatModel extends EntityModel<BroadhoofGoatEntityRenderSta
         ModelPartData huge_left_horn = horns.addChild("huge_left_horn", ModelPartBuilder.create(), ModelTransform.of(0F, 0F, 0F, 0F, 0F, 0F));
         ModelPartData huge_right_horn = horns.addChild("huge_right_horn", ModelPartBuilder.create(), ModelTransform.of(0F, 0F, 0F, 0F, 0F, 0F));
 
-        ModelPartData left_front_leg = broadhoof_goat.addChild("left_front_leg", ModelPartBuilder.create(), ModelTransform.origin(4.0F, -9.0F, -6.0F));
-        ModelPartData left_hind_leg = broadhoof_goat.addChild("left_hind_leg", ModelPartBuilder.create(), ModelTransform.origin(3.0F, -9.0F, 7.0F));
-        ModelPartData right_front_leg = broadhoof_goat.addChild("right_front_leg", ModelPartBuilder.create(), ModelTransform.origin(-4.0F, -9.0F, -6.0F));
-        ModelPartData right_hind_leg = broadhoof_goat.addChild("right_hind_leg", ModelPartBuilder.create(), ModelTransform.origin(-3.0F, -9.0F, 7.0F));
+        ModelPartData left_front_leg = broadhoof_goat.addChild("left_front_leg", ModelPartBuilder.create(), ModelTransform.pivot(4.0F, -9.0F, -6.0F));
+        ModelPartData left_hind_leg = broadhoof_goat.addChild("left_hind_leg", ModelPartBuilder.create(), ModelTransform.pivot(3.0F, -9.0F, 7.0F));
+        ModelPartData right_front_leg = broadhoof_goat.addChild("right_front_leg", ModelPartBuilder.create(), ModelTransform.pivot(-4.0F, -9.0F, -6.0F));
+        ModelPartData right_hind_leg = broadhoof_goat.addChild("right_hind_leg", ModelPartBuilder.create(), ModelTransform.pivot(-3.0F, -9.0F, 7.0F));
 
         return modelData;
     }

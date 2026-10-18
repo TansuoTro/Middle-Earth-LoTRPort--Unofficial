@@ -47,7 +47,7 @@ public class OakCofferEntityRenderer<T extends ChestBlockEntity> extends ChestBl
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();
         ModelPartData lid = modelPartData.addChild(LID, ModelPartBuilder.create(),
-                ModelTransform.origin(0.0F, 13.0F, 6.0F));
+                ModelTransform.pivot(0.0F, 13.0F, 6.0F));
 
         lid.addChild("lid_r1", ModelPartBuilder.create()
                         .uv(0, 9).cuboid(-12.0F, -3.0F, -16.0F, 12.0F, 3.0F, 16.0F, new Dilation(0.0F)),

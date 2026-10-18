@@ -18,14 +18,14 @@ public class CaveTrollSaddleModel extends CaveTrollEntityModel {
         ModelData modelData = getModelData();
         ModelPartData modelPartData = modelData.getRoot().getChild("root").getChild("body_no_legs").getChild("body_no_limbs");
 
-        ModelPartData body = modelPartData.addChild("body", ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+        ModelPartData body = modelPartData.addChild("body", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         ModelPartData armor = body.addChild("armor", ModelPartBuilder.create().uv(91, 51)
-                .cuboid(-16.0F, -40.0F, -9.0F, 33.0F, 40.0F, 17.0F, new Dilation(0.2F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+                .cuboid(-16.0F, -40.0F, -9.0F, 33.0F, 40.0F, 17.0F, new Dilation(0.2F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         ModelPartData saddle_platform = modelPartData.addChild("saddle_platform", ModelPartBuilder.create().uv(0, 0).cuboid(-7.5F, 1.0F, -7.5F, 15.0F, 2.0F, 16.0F, new Dilation(0.0F))
                 .uv(0, 77).cuboid(-7.5F, -17.0F, -7.5F, 15.0F, 18.0F, 16.0F,
-                        new Dilation(0.0F)), ModelTransform.origin(0.5F, -47.0F, 6.5F));
+                        new Dilation(0.0F)), ModelTransform.pivot(0.5F, -47.0F, 6.5F));
 
         ModelPartData log2_r1 = saddle_platform.addChild("log2_r1", ModelPartBuilder.create().uv(67, 25).cuboid(-1.5F, -1.5F, 3.0F, 4.0F, 4.0F, 6.0F, new Dilation(0.0F)), ModelTransform.of(0.4F, 4.5F, 9.0F, 3.1416F, 0.0F, 3.1416F));
 
@@ -33,13 +33,13 @@ public class CaveTrollSaddleModel extends CaveTrollEntityModel {
 
         ModelPartData platform = modelPartData.addChild("platform", ModelPartBuilder.create().uv(106, 15).cuboid(-15.5F, 12.0F, 1.5F, 31.0F, 4.0F, 4.0F, new Dilation(0.0F))
                 .uv(89, 28).cuboid(-19.0F, 10.0F, 1.6F, 38.0F, 2.0F, 16.0F, new Dilation(0.0F))
-                .uv(77, 114).cuboid(-19.0F, 1.0F, 1.6F, 38.0F, 9.0F, 16.0F, new Dilation(0.0F)), ModelTransform.origin(0.5F, -48.0F, 6.5F));
+                .uv(77, 114).cuboid(-19.0F, 1.0F, 1.6F, 38.0F, 9.0F, 16.0F, new Dilation(0.0F)), ModelTransform.pivot(0.5F, -48.0F, 6.5F));
 
         ModelPartData log2_r2 = platform.addChild("log2_r2", ModelPartBuilder.create().uv(111, 0).cuboid(-1.5F, -1.5F, -1.0F, 4.0F, 4.0F, 10.0F, new Dilation(0.0F)), ModelTransform.of(-7.5F, 13.5F, 14.5F, 3.1416F, 0.0F, 3.1416F));
 
         ModelPartData log1_r2 = platform.addChild("log1_r2", ModelPartBuilder.create().uv(142, 0).cuboid(-1.5F, -1.5F, -1.0F, 4.0F, 4.0F, 10.0F, new Dilation(0.0F)), ModelTransform.of(8.5F, 13.5F, 14.5F, 3.1416F, 0.0F, 3.1416F));
 
-        ModelPartData Head = modelPartData.addChild("Head", ModelPartBuilder.create(), ModelTransform.origin(0.5F, -34.5F, -8.5F));
+        ModelPartData Head = modelPartData.addChild("Head", ModelPartBuilder.create(), ModelTransform.pivot(0.5F, -34.5F, -8.5F));
 
         ModelPartData Saddle_Reigns = Head.addChild("Saddle_Reigns", ModelPartBuilder.create(), ModelTransform.of(0.0F, 0.0F, 0.0F, -0.0873F, 0.0F, 0.0F));
 

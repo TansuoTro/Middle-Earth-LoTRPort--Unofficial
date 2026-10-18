@@ -14,12 +14,12 @@ public class MoriaChiefHelmetModel extends HelmetAddonModel {
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();
 
-        ModelPartData head = modelPartData.addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-        head.addChild(EntityModelPartNames.HAT, ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+        ModelPartData head = modelPartData.addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        head.addChild(EntityModelPartNames.HAT, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         head.addChild("horizontal_crest", ModelPartBuilder.create()
                 .uv(31, 15).cuboid(-8.0F, -16.25F, 0.0F, 16.0F, 8.0F, 0.0F, new Dilation(0.0F)),
-                ModelTransform.origin(0.0F, 0.0F, 0.0F));
+                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         head.addChild("bottom_jaw", ModelPartBuilder.create()
                 .uv(0, 28).cuboid(-8.4497F, -9.75F, 2.0F, 6.0F, 10.0F, 6.0F, new Dilation(0.3F)),
@@ -30,14 +30,14 @@ public class MoriaChiefHelmetModel extends HelmetAddonModel {
                 .uv(47, 50).cuboid(-7.0F, -5.25F, 0.0F, 3.0F, 1.0F, 3.0F, new Dilation(0.0F))
                 .uv(44, 55).mirrored().cuboid(-7.0F, -4.25F, -3.0F, 3.0F, 2.0F, 6.0F, new Dilation(0.0F)).mirrored(false)
                 .uv(49, 45).mirrored().cuboid(-9.0F, -4.25F, -3.0F, 2.0F, 2.0F, 2.0F, new Dilation(0.0F)).mirrored(false),
-                ModelTransform.origin(0.0F, 0.0F, 0.0F));
+                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         head.addChild("horns_left", ModelPartBuilder.create()
                 .uv(44, 32).mirrored().cuboid(4.0F, -10.25F, -4.0F, 3.0F, 5.0F, 7.0F, new Dilation(0.0F)).mirrored(false)
                 .uv(47, 50).mirrored().cuboid(4.0F, -5.25F, 0.0F, 3.0F, 1.0F, 3.0F, new Dilation(0.0F)).mirrored(false)
                 .uv(44, 55).cuboid(4.0F, -4.25F, -3.0F, 3.0F, 2.0F, 6.0F, new Dilation(0.0F))
                 .uv(49, 45).cuboid(7.0F, -4.25F, -3.0F, 2.0F, 2.0F, 2.0F, new Dilation(0.0F)),
-                ModelTransform.origin(0.0F, 0.0F, 0.0F));
+                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         head.addChild("top_spike", ModelPartBuilder.create()
                 .uv(0, 59).cuboid(-2.5F, -2.75F, 0.0F, 5.0F, 5.0F, 0.0F, new Dilation(0.0F))
@@ -46,15 +46,15 @@ public class MoriaChiefHelmetModel extends HelmetAddonModel {
 
         head.addChild("eye_cover", ModelPartBuilder.create()
                 .uv(10, 60).cuboid(-4.5F, -4.55F, -4.5F, 9.0F, 2.0F, 2.0F, new Dilation(0.0F)),
-                ModelTransform.origin(0.0F, 0.0F, 0.0F));
+                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(EntityModelPartNames.BODY, ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(EntityModelPartNames.BODY, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(EntityModelPartNames.RIGHT_ARM, ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(EntityModelPartNames.LEFT_ARM, ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(EntityModelPartNames.RIGHT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(EntityModelPartNames.LEFT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(EntityModelPartNames.RIGHT_LEG, ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(EntityModelPartNames.LEFT_LEG, ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(EntityModelPartNames.RIGHT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(EntityModelPartNames.LEFT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         return TexturedModelData.of(modelData, 64, 64);
     }

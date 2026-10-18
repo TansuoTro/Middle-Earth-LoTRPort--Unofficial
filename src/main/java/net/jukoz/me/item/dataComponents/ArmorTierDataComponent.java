@@ -1,4 +1,5 @@
 package net.jukoz.me.item.dataComponents;
+import net.jukoz.me.compat.METext;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -39,7 +40,7 @@ public record ArmorTierDataComponent(ArmorMaterialsME.Tiers tier) implements Too
 
     @Override
     public void appendTooltip(Item.TooltipContext context, Consumer<Text> textConsumer, TooltipType type, ComponentsAccess components) {
-        textConsumer.accept(Text.translatable("tooltip.%s.%s".formatted(MiddleEarth.MOD_ID, tier.getName())).withColor(tier.getColor()));
+        textConsumer.accept(METext.withColor(METext, Text.translatable("tooltip.%s.%s".formatted(MiddleEarth.MOD_ID, tier.getName())), tier.getColor()));
     }
 
     @Override

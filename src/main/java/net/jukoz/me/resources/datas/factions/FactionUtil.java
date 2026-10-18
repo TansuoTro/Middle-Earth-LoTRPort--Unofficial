@@ -1,4 +1,5 @@
 package net.jukoz.me.resources.datas.factions;
+import net.jukoz.me.compat.METext;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.SubtitleS2CPacket;
@@ -45,7 +46,7 @@ public class FactionUtil {
             sendOnLeaveCommand(player, previousFaction);
             // Send leaving message to affected player
             MutableText targetText = Text.translatable("event.%s.leave.faction.success".formatted(MiddleEarth.MOD_ID), previousFaction.getFullName());
-            player.sendMessage(targetText.withColor(ModColors.WARNING.color));
+            player.sendMessage(METext.withColor(targetText, ModColors.WARNING.color));
         }
 
         // [JOIN] Add new affiliation data
@@ -56,7 +57,7 @@ public class FactionUtil {
 
         // Send join message to affected player
         MutableText targetText = Text.translatable("event.%s.join.faction.success".formatted(MiddleEarth.MOD_ID), faction.getFullName());
-        player.sendMessage(targetText.withColor(ModColors.SUCCESS.color));
+        player.sendMessage(METext.withColor(targetText, ModColors.SUCCESS.color));
 
         sendOnFactionJoinMessage(player);
         return true;
@@ -139,7 +140,7 @@ public class FactionUtil {
             new TitleS2CPacket(Text.of(""))
         );
         ((ServerPlayerEntity) player).networkHandler.sendPacket(
-                new SubtitleS2CPacket(targetText.withColor(ModColors.SUCCESS.color))
+                new SubtitleS2CPacket(METext.withColor(targetText, ModColors.SUCCESS.color))
         );
 
     }
@@ -151,7 +152,7 @@ public class FactionUtil {
         if(PlayerDataService.clearPlayerData(player)){
             sendOnLeaveCommand(player, faction);
             MutableText targetText = Text.translatable("event.%s.leave.faction.success".formatted(MiddleEarth.MOD_ID), faction.getFullName());
-            player.sendMessage(targetText.withColor(ModColors.WARNING.color));
+            player.sendMessage(METext.withColor(targetText, ModColors.WARNING.color));
             return true;
         }
         return false;

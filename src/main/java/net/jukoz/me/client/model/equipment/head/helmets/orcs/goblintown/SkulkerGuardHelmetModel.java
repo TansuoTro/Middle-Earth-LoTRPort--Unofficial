@@ -12,11 +12,11 @@ public class SkulkerGuardHelmetModel extends EggHelmetModel {
 
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = getModelData();
-        ModelPartData head = modelData.getRoot().addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+        ModelPartData head = modelData.getRoot().addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         head.addChild("large_crest", ModelPartBuilder.create()
                         .uv(28, -18).cuboid(0.0F, -15.25F, -7.0F, 0.0F, 14.0F, 18.0F, new Dilation(0.0F)),
-                ModelTransform.origin(0.0F, 0.0F, 0.0F));
+                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         head.addChild("mandible_left", ModelPartBuilder.create()
                         .uv(2, 15).cuboid(0.0F, -8.25F, -6.0F, 0.0F, 9.0F, 6.0F, new Dilation(0.0F)),

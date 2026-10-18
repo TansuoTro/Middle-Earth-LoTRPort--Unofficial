@@ -13,7 +13,7 @@ public class DGMarauderChestplateModel extends BlackCastellanChestplateModel {
         ModelData modelData = getModelData();
 
         ModelPartData body = modelData.getRoot().addChild(EntityModelPartNames.BODY, ModelPartBuilder.create(),
-                ModelTransform.origin(0.0F, 0.0F, 0.0F));
+                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         body.addChild("spike_right", ModelPartBuilder.create()
                 .uv(36, 0).cuboid(-10.25F, -14.5F, 0.252F, 11.0F, 19.0F, 0.0F, new Dilation(0.0F)),

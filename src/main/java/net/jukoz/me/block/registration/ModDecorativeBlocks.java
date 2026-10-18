@@ -42,7 +42,7 @@ import net.jukoz.me.block.special.wood_pile.WoodPileBlock;
 import net.jukoz.me.datageneration.content.TranslationEntries;
 import net.jukoz.me.item.utils.ItemGroupsME;
 import net.minecraft.block.*;
-import net.minecraft.block.enums.NoteBlockInstrument;
+import net.minecraft.block.enums.Instrument;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -133,35 +133,35 @@ public class ModDecorativeBlocks {
             VaultBlock::new, AbstractBlock.Settings.copy(Blocks.VAULT).nonOpaque());
 
     public static final Block SMALL_CRATE = registerBlock("small_crate",
-            CrateBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
+            CrateBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(Instrument.BASS).strength(2.0F, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
     public static final Block THIN_BARREL = registerBlock("thin_barrel",
-            ThinBarrelBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
+            ThinBarrelBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(Instrument.BASS).strength(2.0F, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
     public static final Block LARCH_COFFER = registerBlock("larch_coffer",
             LarchCofferBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN)
-                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
+                    .instrument(Instrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
     public static final Block PINE_COFFER = registerBlock("pine_coffer",
             PineCofferBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN)
-                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
+                    .instrument(Instrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
     public static final Block SPRUCE_COFFER = registerBlock("spruce_coffer",
             SpruceCofferBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.SPRUCE_BROWN)
-                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
+                    .instrument(Instrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
     public static final Block FIR_COFFER = registerBlock("fir_coffer",
             FirCofferBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN)
-                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
+                    .instrument(Instrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
     public static final Block BEECH_COFFER = registerBlock("beech_coffer",
             BeechCofferBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN)
-                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
+                    .instrument(Instrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
     public static final Block CHESTNUT_COFFER = registerBlock("chestnut_coffer",
             ChestnutCofferBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN)
-                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
+                    .instrument(Instrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
     public static final Block OAK_COFFER = registerBlock("oak_coffer",
             OakCofferBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN)
-                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
+                    .instrument(Instrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
     public static final Block WILLOW_COFFER = registerBlock("willow_coffer",
             WillowCofferBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN)
-                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
+                    .instrument(Instrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
     public static final Block REINFORCED_CHEST = registerBlock("reinforced_chest",
-            ReinforcedChestBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(5.0f).sounds(BlockSoundGroup.WOOD).nonOpaque().requiresTool());
+            ReinforcedChestBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(Instrument.BASS).strength(5.0f).sounds(BlockSoundGroup.WOOD).nonOpaque().requiresTool());
 
     public static final Block SACK = registerBlock("sack",
             SackBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.TERRACOTTA_WHITE).sounds(BlockSoundGroup.WOOL).nonOpaque());
@@ -173,7 +173,7 @@ public class ModDecorativeBlocks {
             OldSkullBlock::new, AbstractBlock.Settings.copy(Blocks.SKELETON_SKULL).nonOpaque().sounds(BlockSoundGroup.BONE));
     public static final Block SKELETON = registerBlockWithItem("skeleton",
             SkeletonBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW)
-                    .instrument(NoteBlockInstrument.XYLOPHONE).strength(0.5F).sounds(BlockSoundGroup.BONE));
+                    .instrument(Instrument.XYLOPHONE).strength(0.5F).sounds(BlockSoundGroup.BONE));
 
     public static final Block CANDLESTICK = registerBlockWithItem("candlestick",
             CandleStickBlock::new, AbstractBlock.Settings.copy(Blocks.CANDLE).luminance(createLightLevelFromLitBlockState(15)).nonOpaque());

@@ -24,7 +24,7 @@ public class EarModel extends EntityModel<NpcEntityRenderState> {
         ModelData modelData = new ModelData();
         ModelPartData root = modelData.getRoot();
 
-        ModelPartData ears = root.addChild("ears", ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+        ModelPartData ears = root.addChild("ears", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         ears.addChild("ear_right",
                 ModelPartBuilder.create().uv(0, 6).cuboid(3.5F, -8.0F, 2F, 7.0F, 6.0F, 0.0F, Dilation.NONE),

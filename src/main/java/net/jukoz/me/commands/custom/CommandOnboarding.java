@@ -1,4 +1,5 @@
 package net.jukoz.me.commands.custom;
+import net.jukoz.me.compat.METext;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
@@ -75,7 +76,7 @@ public class CommandOnboarding {
                     ServerPlayNetworking.send(playerSource, new PacketForceOnboardingScreen(ModServerConfigs.DELAY_ON_TELEPORT_CONFIRMATION, playerSource));
                 } else {
                     MutableText sourceText = Text.translatable("command.%s.open.onboarding.error".formatted(MiddleEarth.MOD_ID));
-                    playerSource.sendMessage(sourceText.withColor(ModColors.WARNING.color));
+                    playerSource.sendMessage(METext.withColor(sourceText, ModColors.WARNING.color));
                 }
             }
         }
@@ -89,10 +90,10 @@ public class CommandOnboarding {
             if(playerPassedOnboarding){
                 ServerPlayNetworking.send(playerTarget, new PacketForceOnboardingScreen(ModServerConfigs.DELAY_ON_TELEPORT_CONFIRMATION, playerTarget));
                 MutableText sourceText = Text.translatable("command.%s.open_target.onboarding.success".formatted(MiddleEarth.MOD_ID), playerTarget.getName());
-                context.getSource().sendMessage(sourceText.withColor(ModColors.SUCCESS.color));
+                context.getSource().sendMessage(METext.withColor(sourceText, ModColors.SUCCESS.color));
             } else {
                 MutableText sourceText = Text.translatable("command.%s.open_target.onboarding.error".formatted(MiddleEarth.MOD_ID), playerTarget.getName());
-                context.getSource().sendMessage(sourceText.withColor(ModColors.WARNING.color));
+                context.getSource().sendMessage(METext.withColor(sourceText, ModColors.WARNING.color));
             }
         }
 

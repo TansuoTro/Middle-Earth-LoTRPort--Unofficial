@@ -14,11 +14,11 @@ public class EgladilSentinelHelmetModel extends LorienHelmetModel {
         ModelData modelData = getModelData();
         ModelPartData modelPartData = modelData.getRoot();
 
-        ModelPartData head = modelPartData.addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+        ModelPartData head = modelPartData.addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         head.addChild("lower_extension", ModelPartBuilder.create()
                 .uv(0, 11).cuboid(-4.0F, 0.85F, -4.0F, 8.0F, 8.0F, 8.0F, new Dilation(0.55F)),
-                ModelTransform.origin(0.0F, 0.0F, 0.0F));
+                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         return TexturedModelData.of(modelData, 64, 64);
     }

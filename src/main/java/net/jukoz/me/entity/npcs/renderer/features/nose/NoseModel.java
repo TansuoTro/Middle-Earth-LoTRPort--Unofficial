@@ -27,18 +27,18 @@ public class NoseModel  extends EntityModel<NpcEntityRenderState>  {
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();
 
-        ModelPartData cubeRootPart = modelPartData.addChild("noseRoot", ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-        ModelPartData cubeNosePart = cubeRootPart.addChild("squareCube", ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-        cubeNosePart.addChild("cube", ModelPartBuilder.create().uv(0, 2).cuboid(-1.0f, -4f, -4.5f, 2, 2, 1, Dilation.NONE), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+        ModelPartData cubeRootPart = modelPartData.addChild("noseRoot", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData cubeNosePart = cubeRootPart.addChild("squareCube", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        cubeNosePart.addChild("cube", ModelPartBuilder.create().uv(0, 2).cuboid(-1.0f, -4f, -4.5f, 2, 2, 1, Dilation.NONE), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData villagerCubePart = cubeRootPart.addChild("villagerCube", ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-        villagerCubePart.addChild("cube", ModelPartBuilder.create().uv(0, 6).cuboid(-1.0f, -4f, -6f, 2, 4, 2, Dilation.NONE), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+        ModelPartData villagerCubePart = cubeRootPart.addChild("villagerCube", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        villagerCubePart.addChild("cube", ModelPartBuilder.create().uv(0, 6).cuboid(-1.0f, -4f, -6f, 2, 4, 2, Dilation.NONE), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData largeHighCubePart = cubeRootPart.addChild("largeHighCube", ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-        largeHighCubePart.addChild("cube", ModelPartBuilder.create().uv(11, 0).cuboid(-2.0f, -6f, -5f, 4, 3, 1, Dilation.NONE), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+        ModelPartData largeHighCubePart = cubeRootPart.addChild("largeHighCube", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        largeHighCubePart.addChild("cube", ModelPartBuilder.create().uv(11, 0).cuboid(-2.0f, -6f, -5f, 4, 3, 1, Dilation.NONE), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData largeCenterCubePart = cubeRootPart.addChild("largeCenterCube", ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
-        largeCenterCubePart.addChild("cube", ModelPartBuilder.create().uv(11, 5).cuboid(-2.0f, -5f, -5f, 4, 3, 1, Dilation.NONE), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+        ModelPartData largeCenterCubePart = cubeRootPart.addChild("largeCenterCube", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        largeCenterCubePart.addChild("cube", ModelPartBuilder.create().uv(11, 5).cuboid(-2.0f, -5f, -5f, 4, 3, 1, Dilation.NONE), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         return TexturedModelData.of(modelData, 32, 32);
     }

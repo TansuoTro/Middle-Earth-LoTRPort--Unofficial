@@ -52,7 +52,7 @@ public class ChestnutCofferEntityRenderer<T extends ChestBlockEntity> extends Ch
                         .uv(35, 34).cuboid(-4.0F, 6.1F, 5.0F, 4.0F, 2.0F, 1.0F, new Dilation(0.0F))
                         .uv(2, 39).cuboid(-16.0F, 6.1F, 5.0F, 4.0F, 2.0F, 1.0F, new Dilation(0.0F))
                         .uv(0, 13).cuboid(-16.0F, -1.9F, -5.0F, 16.0F, 8.0F, 11.0F, new Dilation(0.0F)),
-                ModelTransform.origin(8.0F, 15.9F, 0.0F));
+                ModelTransform.pivot(8.0F, 15.9F, 0.0F));
 
         body.addChild("cube_r1", ModelPartBuilder.create()
                         .uv(1, -1).cuboid(0.0F, 0.0F, -2.0F, 0.0F, 4.0F, 5.0F, new Dilation(0.0F)),
@@ -64,7 +64,7 @@ public class ChestnutCofferEntityRenderer<T extends ChestBlockEntity> extends Ch
 
         modelPartData.addChild(LID, ModelPartBuilder.create()
                         .uv(0, 49).cuboid(-8.0F, -2.0F, -12.0F, 16.0F, 2.0F, 13.0F, new Dilation(0.0F)),
-                ModelTransform.origin(0.0F, 14.0F, 6.0F));
+                ModelTransform.pivot(0.0F, 14.0F, 6.0F));
 
         return TexturedModelData.of(modelData, 64, 64);
     }

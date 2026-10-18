@@ -1,7 +1,7 @@
 package net.jukoz.me.block.utils.setBuilders;
 
 import net.minecraft.block.MapColor;
-import net.minecraft.block.enums.NoteBlockInstrument;
+import net.minecraft.block.enums.Instrument;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.BlockSoundGroup;
 import net.jukoz.me.block.utils.BlockRecordTypes;
@@ -18,13 +18,13 @@ public class GenericBlockSetBuilder {
     public float hardness;
     public float blastResistance;
     public MapColor mapColor;
-    public NoteBlockInstrument instrument;
+    public Instrument instrument;
     public BlockSoundGroup soundGroup;
     public boolean requiresTool;
     public List<ItemStack> group;
 
     public GenericBlockSetBuilder(String name, float hardness, float blastResistance,
-                                  MapColor mapColor, NoteBlockInstrument instrument, BlockSoundGroup soundGroup, boolean requiresTool,
+                                  MapColor mapColor, Instrument instrument, BlockSoundGroup soundGroup, boolean requiresTool,
                                   List<ItemStack> group){
         this.setName = name;
         this.hardness = hardness;

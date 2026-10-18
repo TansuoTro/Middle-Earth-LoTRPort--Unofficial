@@ -22,15 +22,15 @@ public class ShelobiteLarvaModel extends EntityModel<ShelobiteScuttlerRenderStat
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();
-        ModelPartData root = modelPartData.addChild("root", ModelPartBuilder.create(), ModelTransform.origin(0.0F, 23.5F, 5.0F));
+        ModelPartData root = modelPartData.addChild("root", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 23.5F, 5.0F));
 
-        ModelPartData abdomen = root.addChild("abdomen", ModelPartBuilder.create(), ModelTransform.origin(0.0F, -1.5F, -3.0F));
+        ModelPartData abdomen = root.addChild("abdomen", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, -1.5F, -3.0F));
 
         ModelPartData cube_r1 = abdomen.addChild("cube_r1", ModelPartBuilder.create().uv(0, 0).cuboid(-2.5F, -2.0F, -1.5F, 5.0F, 3.0F, 5.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -0.2F, 0.5F, 0.1745F, 0.0F, 0.0F));
 
-        ModelPartData core = root.addChild("core", ModelPartBuilder.create().uv(0, 11).cuboid(-1.5F, -0.95F, -1.2F, 3.0F, 2.0F, 3.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, -1.05F, -5.8F));
+        ModelPartData core = root.addChild("core", ModelPartBuilder.create().uv(0, 11).cuboid(-1.5F, -0.95F, -1.2F, 3.0F, 2.0F, 3.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, -1.05F, -5.8F));
 
-        ModelPartData leg_left = core.addChild("leg_left", ModelPartBuilder.create(), ModelTransform.origin(1.5F, -0.45F, 0.3F));
+        ModelPartData leg_left = core.addChild("leg_left", ModelPartBuilder.create(), ModelTransform.pivot(1.5F, -0.45F, 0.3F));
 
         ModelPartData leg_left_front = leg_left.addChild("leg_left_front", ModelPartBuilder.create(), ModelTransform.of(-0.2617F, 0.65F, 0.0804F, -1.5708F, 1.0472F, 0.0F));
 
@@ -48,7 +48,7 @@ public class ShelobiteLarvaModel extends EntityModel<ShelobiteScuttlerRenderStat
 
         ModelPartData cube_r5 = leg_left_back.addChild("cube_r5", ModelPartBuilder.create().uv(0, 17).cuboid(-0.1608F, -1.5F, -0.0804F, 4.0F, 3.0F, 0.0F, new Dilation(0.0F)), ModelTransform.of(0.1608F, 0.0804F, 0.5F, -1.5708F, 0.0F, 0.0F));
 
-        ModelPartData leg_right = core.addChild("leg_right", ModelPartBuilder.create(), ModelTransform.origin(-1.5F, -0.45F, 0.3F));
+        ModelPartData leg_right = core.addChild("leg_right", ModelPartBuilder.create(), ModelTransform.pivot(-1.5F, -0.45F, 0.3F));
 
         ModelPartData leg_right_front = leg_right.addChild("leg_right_front", ModelPartBuilder.create(), ModelTransform.of(0.2617F, 0.65F, 0.0804F, -1.5708F, -1.0472F, 0.0F));
 

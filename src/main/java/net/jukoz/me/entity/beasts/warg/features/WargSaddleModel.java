@@ -38,14 +38,14 @@ public class WargSaddleModel extends WargModel {
         ModelData modelData = getEmptyModelData();
         ModelPartData bodyNoLegs = modelData.getRoot().getChild("root").getChild(EntityModelPartNames.BODY).getChild("upper_body").getChild("body_no_legs");
 
-        ModelPartData saddle = bodyNoLegs.addChild("saddle", ModelPartBuilder.create(), ModelTransform.origin(-9.5F, -3.75F, -4.5F));
+        ModelPartData saddle = bodyNoLegs.addChild("saddle", ModelPartBuilder.create(), ModelTransform.pivot(-9.5F, -3.75F, -4.5F));
 
         saddle.addChild("cube_r3", ModelPartBuilder.create().uv(26, 12).cuboid(-2.5F, -0.5F, -7.0F, 11.0F, 16.0F, 11.0F, new Dilation(0.4F)), ModelTransform.of(-1.0F, -2.0F, 2.0F, 0.0F, -1.5708F, 0.0F));
 
-        ModelPartData cloth = saddle.addChild("cloth", ModelPartBuilder.create(), ModelTransform.origin(-1.0F, -2.0F, 2.0F));
+        ModelPartData cloth = saddle.addChild("cloth", ModelPartBuilder.create(), ModelTransform.pivot(-1.0F, -2.0F, 2.0F));
         cloth.addChild("cube_r4", ModelPartBuilder.create().uv(4, 44).cuboid(-2.5F, -0.5F, -9.0F, 11.0F, 16.0F, 12.0F, new Dilation(0.2F)), ModelTransform.of(-3.0F, 0.25F, 0.0F, 0.0F, -1.5708F, 0.0F));
 
-        saddle.addChild("saddle_addons", ModelPartBuilder.create(), ModelTransform.origin(-6.0F, -2.0F, 2.0F));
+        saddle.addChild("saddle_addons", ModelPartBuilder.create(), ModelTransform.pivot(-6.0F, -2.0F, 2.0F));
 
         return TexturedModelData.of(modelData, 128, 128);
     }

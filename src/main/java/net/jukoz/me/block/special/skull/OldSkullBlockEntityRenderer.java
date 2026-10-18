@@ -41,7 +41,7 @@ public class OldSkullBlockEntityRenderer implements BlockEntityRenderer<OldSkull
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();
         ModelPartData skull = modelPartData.addChild("skull", ModelPartBuilder.create().uv(0, 0)
-                .cuboid(-12.0F, -8.0F, 4.0F, 8.0F, 8.0F, 8.0F, new Dilation(0.0F)), ModelTransform.origin(8.0F, 24.0F, -8.0F));
+                .cuboid(-12.0F, -8.0F, 4.0F, 8.0F, 8.0F, 8.0F, new Dilation(0.0F)), ModelTransform.pivot(8.0F, 24.0F, -8.0F));
         return TexturedModelData.of(modelData, 64, 64);
     }
 

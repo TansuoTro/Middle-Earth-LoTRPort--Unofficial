@@ -1,4 +1,5 @@
 package net.jukoz.me.gui.map;
+import net.jukoz.me.compat.METext;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -135,7 +136,7 @@ public class MapScreen extends Screen {
             texts.add(Text.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.tooltip.biome_label").formatted(Formatting.GRAY)
                     .append(Text.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.tooltip.biome_content", Text.translatable(biome.getBiome().getBiomeRegistryKey().getValue().toTranslationKey("biome"))).formatted(Formatting.WHITE)));
             if(hasTeleportPermission){
-                texts.add(Text.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.tooltip.teleport_keybind", KeyInputHandler.mapTeleportKey.getBoundKeyLocalizedText().getString()).formatted(Formatting.ITALIC).withColor(ModColors.PENDING.color));
+                texts.add(METext.withColor(METext, Text.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.tooltip.teleport_keybind", KeyInputHandler.mapTeleportKey.getBoundKeyLocalizedText().getString()).formatted(Formatting.ITALIC), ModColors.PENDING.color));
             }
             context.drawTooltip(textRenderer, texts, mouseX, mouseY);
         }

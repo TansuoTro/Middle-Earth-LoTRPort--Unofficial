@@ -1,4 +1,5 @@
 package net.jukoz.me.item.utils;
+import net.jukoz.me.compat.METext;
 
 import net.minecraft.item.equipment.trim.ArmorTrimAssets;
 import net.minecraft.item.equipment.trim.ArmorTrimMaterial;

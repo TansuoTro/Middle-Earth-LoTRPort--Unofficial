@@ -18,7 +18,7 @@ public class BarrelEntityModel extends EntityModel<BoatEntityRenderState> {
                 .uv(0, 44).cuboid(-5.0F, -16.0F, -7.0F, 10.0F, 15.0F, 2.0F, new Dilation(0.0F))
                 .uv(24, 44).cuboid(-5.0F, -16.0F, 5.0F, 10.0F, 15.0F, 2.0F, new Dilation(0.0F))
                 .uv(0, 0).cuboid(-7.0F, -1.0F, -7.0F, 14.0F, 1.0F, 14.0F,
-                        new Dilation(0.0F)), ModelTransform.origin(0.0F, 24.0F, 0.0F));
+                        new Dilation(0.0F)), ModelTransform.pivot(0.0F, 24.0F, 0.0F));
         return TexturedModelData.of(modelData, 64, 64);
     }
 

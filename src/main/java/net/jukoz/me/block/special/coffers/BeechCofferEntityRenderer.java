@@ -38,7 +38,7 @@ public class BeechCofferEntityRenderer<T extends ChestBlockEntity> extends Chest
         ModelPartData modelPartData = modelData.getRoot();
         ModelPartData body = modelPartData.addChild(BODY, ModelPartBuilder.create()
                         .uv(8, 50).cuboid(-12.0F, -1.0F, -3.0F, 12.0F, 6.0F, 8.0F, new Dilation(0.0F)),
-                ModelTransform.origin(6.0F, 19.0F, 1.0F));
+                ModelTransform.pivot(6.0F, 19.0F, 1.0F));
 
         body.addChild("cube_r1", ModelPartBuilder.create()
                         .uv(43, 48).cuboid(0.0F, 0.0F, -1.0F, 0.0F, 2.0F, 4.0F, new Dilation(0.0F)),
@@ -50,7 +50,7 @@ public class BeechCofferEntityRenderer<T extends ChestBlockEntity> extends Chest
 
         modelPartData.addChild(LID, ModelPartBuilder.create()
                         .uv(12, 35).cuboid(-6.0F, -2.0F, -6.0F, 12.0F, 2.0F, 6.0F, new Dilation(0.0F)),
-                ModelTransform.origin(0.0F, 18.0F, 5.0F));
+                ModelTransform.pivot(0.0F, 18.0F, 5.0F));
 
         return TexturedModelData.of(modelData, 64, 64);
     }

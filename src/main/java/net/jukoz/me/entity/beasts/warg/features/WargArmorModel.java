@@ -26,13 +26,13 @@ public class WargArmorModel extends WargModel {
 
                 front_armor.addChild("front_armor_cube", ModelPartBuilder.create()
                         .uv(0, 0).cuboid(-7.0F, -6.4F, -6.0F, 14.0F, 12.0F, 12.0F, new Dilation(0.3F))
-                        .uv(52, 47).cuboid(-4.0F, -6.5F, -6.0F, 11.0F, 8.0F, 12.0F, new Dilation(0.5F)), ModelTransform.origin(0F, 0F, 0F));
+                        .uv(52, 47).cuboid(-4.0F, -6.5F, -6.0F, 11.0F, 8.0F, 12.0F, new Dilation(0.5F)), ModelTransform.pivot(0F, 0F, 0F));
 
                 ModelPartData left_chains = front_armor.getChild("left_chains");
-                left_chains.addChild("chains_r1", ModelPartBuilder.create().uv(34, 69).cuboid(-6.5F, -2.0F, 1.5F, 13.0F, 10.0F, 0.0F, new Dilation(0.1F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+                left_chains.addChild("chains_r1", ModelPartBuilder.create().uv(34, 69).cuboid(-6.5F, -2.0F, 1.5F, 13.0F, 10.0F, 0.0F, new Dilation(0.1F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
                 ModelPartData right_chains = front_armor.getChild("right_chains");
-                right_chains.addChild("chains_r2", ModelPartBuilder.create().uv(34, 69).cuboid(-6.5F, -3.0F, -1.5F, 13.0F, 10.0F, 0.0F, new Dilation(0.1F)), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+                right_chains.addChild("chains_r2", ModelPartBuilder.create().uv(34, 69).cuboid(-6.5F, -3.0F, -1.5F, 13.0F, 10.0F, 0.0F, new Dilation(0.1F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
                 ModelPartData back_armor = body_no_legs.getChild("back_armor");
                 back_armor.addChild("backlegplate_r1", ModelPartBuilder.create().uv(0, 45).cuboid(-8.2F, -6.5F, -5.0F, 15.0F, 9.0F, 11.0F, new Dilation(0.7F)), ModelTransform.of(-0.5F, 0.0F, 0.5F, 3.1416F, 0.0F, -3.1416F));
@@ -56,18 +56,18 @@ public class WargArmorModel extends WargModel {
                 ModelPartData upper_body = modelData.getRoot().getChild("root").getChild(EntityModelPartNames.BODY).getChild("upper_body");
                 ModelPartData body_no_legs = upper_body.getChild("body_no_legs");
                 ModelPartData head = body_no_legs.getChild(EntityModelPartNames.HEAD);
-                ModelPartData body_armor = body_no_legs.getChild("body_fur").addChild("body_armor", ModelPartBuilder.create(), ModelTransform.origin(-6.5F, -2.75F, 1.5F));
+                ModelPartData body_armor = body_no_legs.getChild("body_fur").addChild("body_armor", ModelPartBuilder.create(), ModelTransform.pivot(-6.5F, -2.75F, 1.5F));
 
-                ModelPartData front_armor = body_armor.addChild("front_armor", ModelPartBuilder.create(), ModelTransform.origin(7.8F, 1.5F, -1.0F));
+                ModelPartData front_armor = body_armor.addChild("front_armor", ModelPartBuilder.create(), ModelTransform.pivot(7.8F, 1.5F, -1.0F));
 
-                ModelPartData left_chains = front_armor.addChild("left_chains", ModelPartBuilder.create(), ModelTransform.origin(0.5F, -3.5F, 5.3F));
-                ModelPartData right_chains = front_armor.addChild("right_chains", ModelPartBuilder.create(), ModelTransform.origin(0.5F, -2.5F, -5.3F));
+                ModelPartData left_chains = front_armor.addChild("left_chains", ModelPartBuilder.create(), ModelTransform.pivot(0.5F, -3.5F, 5.3F));
+                ModelPartData right_chains = front_armor.addChild("right_chains", ModelPartBuilder.create(), ModelTransform.pivot(0.5F, -2.5F, -5.3F));
 
-                ModelPartData back_armor = body_no_legs.addChild("back_armor", ModelPartBuilder.create(), ModelTransform.origin(-13.7F, 1.25F, 0.5F));
+                ModelPartData back_armor = body_no_legs.addChild("back_armor", ModelPartBuilder.create(), ModelTransform.pivot(-13.7F, 1.25F, 0.5F));
 
-                ModelPartData head_armor = head.addChild("head_armor", ModelPartBuilder.create(), ModelTransform.origin(-0.1142F, 1.8638F, 0.5F));
+                ModelPartData head_armor = head.addChild("head_armor", ModelPartBuilder.create(), ModelTransform.pivot(-0.1142F, 1.8638F, 0.5F));
 
-                ModelPartData snout2 = head_armor.addChild("snout2", ModelPartBuilder.create(), ModelTransform.origin(7.3218F, -3.3967F, 3.1F));
+                ModelPartData snout2 = head_armor.addChild("snout2", ModelPartBuilder.create(), ModelTransform.pivot(7.3218F, -3.3967F, 3.1F));
 
                 return modelData;
         }

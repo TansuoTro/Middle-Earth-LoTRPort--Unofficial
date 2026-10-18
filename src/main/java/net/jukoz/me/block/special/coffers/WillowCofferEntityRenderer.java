@@ -52,11 +52,11 @@ public class WillowCofferEntityRenderer<T extends ChestBlockEntity> extends Ches
                         .uv(32, 36).cuboid(11.0F, -4.0F, 7.0F, 4.0F, 4.0F, 4.0F, new Dilation(0.0F))
                         .uv(0, 44).cuboid(11.0F, -4.0F, -1.0F, 4.0F, 4.0F, 4.0F, new Dilation(0.0F))
                         .uv(1, 0).cuboid(-1.0F, -13.0F, -1.0F, 16.0F, 9.0F, 12.0F, new Dilation(0.0F)),
-                ModelTransform.origin(-7.0F, 24.0F, -5.0F));
+                ModelTransform.pivot(-7.0F, 24.0F, -5.0F));
 
         modelPartData.addChild(LID, ModelPartBuilder.create()
                         .uv(1, 21).cuboid(-8.0F, -3.0F, -12.0F, 16.0F, 3.0F, 12.0F, new Dilation(0.0F)),
-                ModelTransform.origin(0.0F, 11.0F, 6.0F));
+                ModelTransform.pivot(0.0F, 11.0F, 6.0F));
 
         return TexturedModelData.of(modelData, 64, 64);
     }

@@ -13,7 +13,7 @@ public class IsenUrukCommanderHelmetModel extends IsenUrukHelmetModel {
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = getModelData();
 
-        ModelPartData head = modelData.getRoot().addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+        ModelPartData head = modelData.getRoot().addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         head.addChild("large_fan", ModelPartBuilder.create()
                         .uv(0, 17).cuboid(-13.0F, -6.75F, 0.0F, 26.0F, 12.0F, 0.0F, new Dilation(0.0F)),

@@ -19,7 +19,7 @@ public class FountainGuardHelmetModel extends EggHelmetModel {
                         .uv(0, 15).mirrored().cuboid(-4.0F, -7.75F, -4.314F, 8.0F, 8.0F, 0.0F, new Dilation(0.0F)).mirrored(false)
                         .uv(50, 0).mirrored().cuboid(2.0F, -19.55F, 0.0F, 7.0F, 16.0F, 0.0F, new Dilation(0.0F)).mirrored(false)
                         .uv(50, 16).cuboid(-9.0F, -19.55F, 0.0F, 7.0F, 16.0F, 0.0F, new Dilation(0.0F)),
-                ModelTransform.origin(0.0F, 0.0F, 0.0F));
+                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
 
         return TexturedModelData.of(modelData, 64, 64);

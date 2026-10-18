@@ -245,6 +245,11 @@ REWRITES = [
     ("identifier", r"(?<![A-Za-z0-9_$])Identifier[.]of[(]", "new Identifier("),
     ("registrykey-type-block", r"(?<![A-Za-z0-9_$])RegistryKey<Block>", "Identifier"),
     ("registrykey-type-item", r"(?<![A-Za-z0-9_$])RegistryKey<Item>", "Identifier"),
+    # 1.21.2 split ModelTransform.of into a builder; pivot(x, y, z) is the same thing
+    ("modeltransform-origin", r"(?<![A-Za-z0-9_$])ModelTransform[.]origin[(]", "ModelTransform.pivot("),
+    # 1.20.1 kept the old names for both of these.
+    ("instrument", r"(?<![A-Za-z0-9_$])NoteBlockInstrument", "Instrument"),
+    ("short-grass", r"(?<![A-Za-z0-9_$])Blocks[.]SHORT_GRASS", "Blocks.GRASS"),
 ]
 
 # 1.21 wraps block/item ids in a RegistryKey; 1.20.1 registers by Identifier.
@@ -279,6 +284,7 @@ def rewrite(text: str):
     stats.update(extra)
     text, extra = rewrite_nbt(text)
     stats.update(extra)
+
 
     # 1.21 items declare their components on Item.Settings; MESettings keeps that chain
     # intact and forwards the values to MEComponents when the Item is constructed.
@@ -365,7 +371,8 @@ def _matching_paren(text, i):
 def _receiver_start(text, dot):
     """Start index of the expression ending at the '.' before a method call."""
     i = dot - 1
-    while i >= 0 and text[i] in " \t":
+    # Skip newlines too: fluent chains are routinely wrapped.
+    while i >= 0 and text[i].isspace():
         i -= 1
     while i >= 0:
         c = text[i]
@@ -416,6 +423,36 @@ def _rewrite_chain(text, method, on_get, on_present, on_if):
         changed += 1
         pos = start
     return text, changed
+
+
+def _rewrite_to_static(text, method, helper):
+    """Turn RECV.method(ARGS) into helper(RECV, ARGS)."""
+    changed = 0
+    needle = '.' + method + '('
+    pos = len(text)
+    while True:
+        pos = text.rfind(needle, 0, pos)
+        if pos < 0:
+            break
+        start = _receiver_start(text, pos)
+        close = _matching_paren(text, pos + len(needle) - 1)
+        recv = text[start:pos]
+        args = text[pos + len(needle):close]
+        tail = ', ' + args if args.strip() else ''
+        repl = '{}({}{})'.format(helper, recv, tail)
+        text = text[:start] + repl + text[close + 1:]
+        changed += 1
+        pos = start
+    return text, changed
+
+
+def rewrite_text_calls(text):
+    stats = collections.Counter()
+    text, n = _rewrite_to_static(text, 'withColor', 'METext.withColor')
+    if n:
+        stats['text-withcolor'] = n
+        text = ensure_import(text, 'net.jukoz.me.compat.METext')
+    return text, stats
 
 
 def rewrite_nbt(text):

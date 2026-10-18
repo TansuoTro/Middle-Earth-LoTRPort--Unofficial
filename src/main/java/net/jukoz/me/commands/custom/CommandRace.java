@@ -1,4 +1,5 @@
 package net.jukoz.me.commands.custom;
+import net.jukoz.me.compat.METext;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
@@ -73,12 +74,12 @@ public class CommandRace {
                 Race playerRace = PlayerDataService.getPlayerRace(playerSource, playerSource.getWorld());
                 if(playerRace != null){
                     MutableText sourceText = Text.translatable("command.%s.race.get.success".formatted(MiddleEarth.MOD_ID),
-                            playerRace.getFullName().copyContentOnly().withColor(RACE_COLOR));
-                    playerSource.sendMessage(sourceText.withColor(ModColors.SUCCESS.color));
+                            METext.withColor(METext, playerRace.getFullName().copyContentOnly(), RACE_COLOR));
+                    playerSource.sendMessage(METext.withColor(sourceText, ModColors.SUCCESS.color));
                     return 0;
                 }
                 MutableText sourceText = Text.translatable("command.%s.race.get.fail".formatted(MiddleEarth.MOD_ID));
-                playerSource.sendMessage(sourceText.withColor(ModColors.WARNING.color));
+                playerSource.sendMessage(METext.withColor(sourceText, ModColors.WARNING.color));
             }
         }
         return 0;
@@ -96,14 +97,14 @@ public class CommandRace {
                         Race race = RaceLookup.getRace(context.getSource().getWorld(), id);
                         if(race != null){
                             MutableText sourceText = Text.translatable("command.%s.race.get.target.success".formatted(MiddleEarth.MOD_ID), targetPlayer.getName(),
-                                    race.getFullName().copyContentOnly().withColor(RACE_COLOR));
-                            source.sendMessage(sourceText.withColor(ModColors.SUCCESS.color));
+                                    METext.withColor(METext, race.getFullName().copyContentOnly(), RACE_COLOR));
+                            source.sendMessage(METext.withColor(sourceText, ModColors.SUCCESS.color));
                             return 0;
                         }
                     }
                 }
                 MutableText sourceText = Text.translatable("command.%s.race.get.target.fail".formatted(MiddleEarth.MOD_ID), targetPlayer.getName());
-                source.sendMessage(sourceText.withColor(ModColors.WARNING.color));
+                source.sendMessage(METext.withColor(sourceText, ModColors.WARNING.color));
             }
         }
         return 0;
@@ -121,13 +122,13 @@ public class CommandRace {
                         if(race != null){
                             RaceUtil.updateRace(source, race, true);
                             MutableText sourceText = Text.translatable("command.%s.race.set.success".formatted(MiddleEarth.MOD_ID),
-                                    race.getFullName().copyContentOnly().withColor(RACE_COLOR));
-                            source.sendMessage(sourceText.withColor(ModColors.SUCCESS.color));
+                                    METext.withColor(METext, race.getFullName().copyContentOnly(), RACE_COLOR));
+                            source.sendMessage(METext.withColor(sourceText, ModColors.SUCCESS.color));
                             return 0;
                         }
                     }
                     MutableText sourceText = Text.translatable("command.%s.race.set.fail".formatted(MiddleEarth.MOD_ID), raceId.toString());
-                    source.sendMessage(sourceText.withColor(ModColors.WARNING.color));
+                    source.sendMessage(METext.withColor(sourceText, ModColors.WARNING.color));
             }
         }
         return 0;
@@ -145,20 +146,20 @@ public class CommandRace {
                 if(race != null){
                     RaceUtil.updateRace(targetPlayer, race, true);
                     MutableText targetText = Text.translatable("command.%s.race.set.success".formatted(MiddleEarth.MOD_ID),
-                            race.getFullName().copyContentOnly().withColor(RACE_COLOR));
-                    targetPlayer.sendMessage(targetText.withColor(ModColors.SUCCESS.color));
+                            METext.withColor(METext, race.getFullName().copyContentOnly(), RACE_COLOR));
+                    targetPlayer.sendMessage(METext.withColor(targetText, ModColors.SUCCESS.color));
 
                     if(source != null){
                         MutableText sourceText = Text.translatable("command.%s.race.set.target.success".formatted(MiddleEarth.MOD_ID), targetPlayer.getName(),
-                                race.getFullName().copyContentOnly().withColor(RACE_COLOR));
-                        source.sendMessage(sourceText.withColor(ModColors.SUCCESS.color));
+                                METext.withColor(METext, race.getFullName().copyContentOnly(), RACE_COLOR));
+                        source.sendMessage(METext.withColor(sourceText, ModColors.SUCCESS.color));
                     }
 
                     return 0;
                 }
             }
             MutableText sourceText = Text.translatable("command.%s.race.set.target.fail".formatted(MiddleEarth.MOD_ID), raceId.toString());
-            source.sendMessage(sourceText.withColor(ModColors.WARNING.color));
+            source.sendMessage(METext.withColor(sourceText, ModColors.WARNING.color));
         }
         return 0;
     }
@@ -174,11 +175,11 @@ public class CommandRace {
                     RaceUtil.updateRace(source, null, true);
                     RaceUtil.reset(source);
                     MutableText sourceText = Text.translatable("command.%s.race.reset.success".formatted(MiddleEarth.MOD_ID));
-                    source.sendMessage(sourceText.withColor(ModColors.SUCCESS.color));
+                    source.sendMessage(METext.withColor(sourceText, ModColors.SUCCESS.color));
                     return 0;
                 }
                 MutableText sourceText = Text.translatable("command.%s.race.reset.fail".formatted(MiddleEarth.MOD_ID));
-                source.sendMessage(sourceText.withColor(ModColors.WARNING.color));
+                source.sendMessage(METext.withColor(sourceText, ModColors.WARNING.color));
             }
         }
         return 0;
@@ -195,14 +196,14 @@ public class CommandRace {
 
             if(source != null && targetPlayer != null) {
                 MutableText sourceText = Text.translatable("command.%s.race.reset.target.success".formatted(MiddleEarth.MOD_ID), targetPlayer.getName());
-                targetPlayer.sendMessage(sourceText.withColor(ModColors.SUCCESS.color));
+                targetPlayer.sendMessage(METext.withColor(sourceText, ModColors.SUCCESS.color));
             }
             MutableText targetText = Text.translatable("command.%s.race.reset.success".formatted(MiddleEarth.MOD_ID));
-            targetPlayer.sendMessage(targetText.withColor(ModColors.SUCCESS.color));
+            targetPlayer.sendMessage(METext.withColor(targetText, ModColors.SUCCESS.color));
             return 0;
         }
         MutableText sourceText = Text.translatable("command.%s.race.reset.target.fail".formatted(MiddleEarth.MOD_ID), targetPlayer.getName());
-        source.sendMessage(sourceText.withColor(ModColors.WARNING.color));
+        source.sendMessage(METext.withColor(sourceText, ModColors.WARNING.color));
 
         return 0;
     }

@@ -1,4 +1,5 @@
 package net.jukoz.me.commands.custom;
+import net.jukoz.me.compat.METext;
 
 import net.jukoz.me.item.MEComponents;
 import com.mojang.brigadier.CommandDispatcher;
@@ -65,18 +66,18 @@ public class CommandCustomEquipment {
 
         if (handStack.isEmpty()){
             MutableText sourceText = Text.translatable("command.%s.back_attachment.hand_empty".formatted(MiddleEarth.MOD_ID));
-            context.getSource().sendMessage(sourceText.withColor(ModColors.WARNING.color));
+            context.getSource().sendMessage(METext.withColor(sourceText, ModColors.WARNING.color));
             return 0;
         }
 
         if ((handStack.getItem() instanceof CustomChestplateItem || handStack.getItem() instanceof BackAttachmentItem)){
             MEComponents.set(handStack, MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(backAttachment));
             MutableText sourceText = Text.translatable("command.%s.back_attachment.success".formatted(MiddleEarth.MOD_ID)).append(Text.translatable("tooltip." + MiddleEarth.MOD_ID + "." + backAttachment.getName()));
-            context.getSource().sendMessage(sourceText.withColor(ModColors.SUCCESS.color));
+            context.getSource().sendMessage(METext.withColor(sourceText, ModColors.SUCCESS.color));
             return 0;
         } else {
             MutableText sourceText = Text.translatable("command.%s.back_attachment.wrong_item".formatted(MiddleEarth.MOD_ID));
-            context.getSource().sendMessage(sourceText.withColor(ModColors.WARNING.color));
+            context.getSource().sendMessage(METext.withColor(sourceText, ModColors.WARNING.color));
             return 0;
         }
     }
@@ -88,7 +89,7 @@ public class CommandCustomEquipment {
 
         if (handStack.isEmpty()){
             MutableText sourceText = Text.translatable("command.%s.helmet_attachment.hand_empty".formatted(MiddleEarth.MOD_ID));
-            context.getSource().sendMessage(sourceText.withColor(ModColors.WARNING.color));
+            context.getSource().sendMessage(METext.withColor(sourceText, ModColors.WARNING.color));
             return 0;
         }
 
@@ -99,11 +100,11 @@ public class CommandCustomEquipment {
                 MEComponents.set(handStack, MEComponents.HELMET_ATTACHMENT_DATA, new HelmetAttachmentDataComponent(false, helmetAttachment, DyedColorComponent.DEFAULT_COLOR));
             }
             MutableText sourceText = Text.translatable("command.%s.helmet_attachment.success".formatted(MiddleEarth.MOD_ID)).append(Text.translatable("tooltip." + MiddleEarth.MOD_ID + "." + helmetAttachment.getName()));
-            context.getSource().sendMessage(sourceText.withColor(ModColors.SUCCESS.color));
+            context.getSource().sendMessage(METext.withColor(sourceText, ModColors.SUCCESS.color));
             return 0;
         } else {
             MutableText sourceText = Text.translatable("command.%s.helmet_attachment.wrong_item".formatted(MiddleEarth.MOD_ID));
-            context.getSource().sendMessage(sourceText.withColor(ModColors.WARNING.color));
+            context.getSource().sendMessage(METext.withColor(sourceText, ModColors.WARNING.color));
             return 0;
         }
     }

@@ -38,7 +38,7 @@ public class PineCofferEntityRenderer<T extends ChestBlockEntity> extends ChestB
         ModelPartData modelPartData = modelData.getRoot();
         ModelPartData lid = modelPartData.addChild("lid", ModelPartBuilder.create().uv(0, 23)
                 .cuboid(-8.0F, -2.0F, -14.0F, 16.0F, 2.0F, 15.0F, new Dilation(0.0F)),
-                ModelTransform.origin(0.0F, 10.0F, 7.0F));
+                ModelTransform.pivot(0.0F, 10.0F, 7.0F));
 
         ModelPartData bottom = modelPartData.addChild("bottom", ModelPartBuilder.create().uv(48, 29).
                 cuboid(7.0F, -4.0F, -6.0F, 1.0F, 4.0F, 3.0F, new Dilation(0.0F))
@@ -48,7 +48,7 @@ public class PineCofferEntityRenderer<T extends ChestBlockEntity> extends ChestB
                 .uv(0, 41).cuboid(-8.0F, -14.0F, -6.0F, 16.0F, 10.0F, 13.0F, new Dilation(0.0F))
                 .uv(14, 5).cuboid(8.0F, -4.0F, -3.0F, 0.0F, 4.0F, 7.0F, new Dilation(0.0F))
                 .uv(30, 5).cuboid(-8.0F, -4.0F, -3.0F, 0.0F, 4.0F, 7.0F, new Dilation(0.0F)),
-                ModelTransform.origin(0.0F, 24.0F, 0.0F));
+                ModelTransform.pivot(0.0F, 24.0F, 0.0F));
 
         ModelPartData cube_r1 = bottom.addChild("cube_r1", ModelPartBuilder.create().uv(14, 0)
                 .mirrored().cuboid(0.0F, 0.0F, -4.0F, 0.0F, 4.0F, 7.0F, new Dilation(0.0F))

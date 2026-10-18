@@ -38,7 +38,7 @@ public class FirCofferEntityRenderer<T extends ChestBlockEntity> extends ChestBl
         ModelPartData modelPartData = modelData.getRoot();
         modelPartData.addChild(LID, ModelPartBuilder.create()
                         .uv(0, 24).cuboid(-5.0F, -2.0F, -8.0F, 10.0F, 2.0F, 8.0F, new Dilation(0.0F)),
-                ModelTransform.origin(0.0F, 18.0F, 4.0F));
+                ModelTransform.pivot(0.0F, 18.0F, 4.0F));
 
         modelPartData.addChild(BASE, ModelPartBuilder.create()
                         .uv(0, 36).cuboid(-1.0F, -4.0F, -7.0F, 10.0F, 4.0F, 8.0F, new Dilation(0.0F))
@@ -46,7 +46,7 @@ public class FirCofferEntityRenderer<T extends ChestBlockEntity> extends ChestBl
                         .uv(40, 29).cuboid(-1.0F, 0.0F, -1.0F, 2.0F, 2.0F, 2.0F, new Dilation(0.0F))
                         .uv(40, 44).cuboid(7.0F, 0.0F, -7.0F, 2.0F, 2.0F, 2.0F, new Dilation(0.0F))
                         .uv(40, 39).cuboid(7.0F, 0.0F, -1.0F, 2.0F, 2.0F, 2.0F, new Dilation(0.0F)),
-                ModelTransform.origin(-4.0F, 22.0F, 3.0F));
+                ModelTransform.pivot(-4.0F, 22.0F, 3.0F));
 
         return TexturedModelData.of(modelData, 48, 48);
     }

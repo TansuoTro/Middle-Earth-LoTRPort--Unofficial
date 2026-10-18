@@ -1,4 +1,5 @@
 package net.jukoz.me.item.dataComponents;
+import net.jukoz.me.compat.METext;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -37,8 +38,8 @@ public record SeasonDataComponent(Season season) implements TooltipAppender {
                     .append(Text.translatable("season.%s.".formatted(MiddleEarth.MOD_ID) + season.toString()).formatted(Formatting.WHITE)));
 
         } catch (Exception e){
-            textConsumer.accept(Text.translatable(FactionIdentifierException.KEY, this.season)
-                    .withColor(ModColors.ALERT.color));
+            textConsumer.accept(METext.withColor(Text.translatable(FactionIdentifierException.KEY, this.season),
+                    ModColors.ALERT.color));
         }
     }
 

@@ -1,4 +1,5 @@
 package net.jukoz.me.registries.content.npctypes.pools;
+import net.jukoz.me.compat.METext;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttributes;

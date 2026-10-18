@@ -12,10 +12,10 @@ public class IsenUrukSoldierHelmetModel extends IsenUrukCrestHelmetModel {
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = getModelData();
 
-        ModelPartData head = modelData.getRoot().addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(), ModelTransform.origin(0.0F, 0.0F, 0.0F));
+        ModelPartData head = modelData.getRoot().addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         ModelPartData side_spikes = head.addChild("side_spikes", ModelPartBuilder.create(),
-                ModelTransform.origin(6.75F, -1.65F, -1.0F));
+                ModelTransform.pivot(6.75F, -1.65F, -1.0F));
 
         side_spikes.addChild("spikes_right", ModelPartBuilder.create()
                         .uv(43, 53).cuboid(-2.7F, 2.25F, -7.0F, 5.0F, 0.0F, 11.0F, new Dilation(0.0F)),
