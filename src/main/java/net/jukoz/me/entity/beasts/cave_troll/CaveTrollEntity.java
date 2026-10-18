@@ -374,8 +374,8 @@ public class CaveTrollEntity extends AbstractBeastEntity {
             }
 
             if(this.getWorld().isClient() && this.smashingAnimationState.isRunning()) {
-                float time = (this.smashingAnimationState.getTimeInMilliseconds(this.age) / 2000.0F) * 2 * MathHelper.PI; // Goes from 0 to 2Pi over the duration of the animation
-                if(this.smashingAnimationState.getTimeInMilliseconds(this.age) < 1000) {
+                float time = (this.smashingAnimationState.getTimeRunning() / 2000.0F) * 2 * MathHelper.PI; // Goes from 0 to 2Pi over the duration of the animation
+                if(this.smashingAnimationState.getTimeRunning() < 1000) {
                     front -= MathHelper.sin(time) * 0.3;
                 }
                 else {
@@ -410,8 +410,8 @@ public class CaveTrollEntity extends AbstractBeastEntity {
             y = sprinting ? y + 0.15 : y; // Add offset if sprinting
 
             if(this.getWorld().isClient()) {
-                float time = (this.smashingAnimationState.getTimeInMilliseconds(this.age) / 2000.0F) * 2 * MathHelper.PI; // Goes from 0 to 2Pi over the duration of the animation
-                if(this.smashingAnimationState.getTimeInMilliseconds(this.age) < 1000) {
+                float time = (this.smashingAnimationState.getTimeRunning() / 2000.0F) * 2 * MathHelper.PI; // Goes from 0 to 2Pi over the duration of the animation
+                if(this.smashingAnimationState.getTimeRunning() < 1000) {
                     front -= MathHelper.sin(time) * 0.3;
                 }
                 else {
@@ -449,7 +449,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
             this.startSittingAnimationState.stop();
             this.stopSittingAnimationState.startIfNotRunning(this.age);
         }
-        if(this.stopSittingAnimationState.getTimeInMilliseconds(this.age) > 3000) {
+        if(this.stopSittingAnimationState.getTimeRunning() > 3000) {
             this.stopSittingAnimationState.stop();
         }
 
@@ -457,7 +457,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
             if(!this.startSleepingAnimationState.isRunning() && !this.sleepingAnimationState.isRunning()) {
                 this.startSleepingAnimationState.startIfNotRunning(this.age);
             }
-            if (this.startSleepingAnimationState.getTimeInMilliseconds(this.age) > 5000) {
+            if (this.startSleepingAnimationState.getTimeRunning() > 5000) {
                 this.sleepingAnimationState.startIfNotRunning(this.age);
                 this.startSleepingAnimationState.stop();
             }
@@ -467,7 +467,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
             this.sleepingAnimationState.stop();
             this.stopSleepingAnimationState.startIfNotRunning(this.age);
         }
-        if(this.stopSleepingAnimationState.getTimeInMilliseconds(this.age) > 5000) {
+        if(this.stopSleepingAnimationState.getTimeRunning() > 5000) {
             this.stopSleepingAnimationState.stop();
         }
 
@@ -481,7 +481,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
         if(this.isSmashing()) {
             this.smashingAnimationState.startIfNotRunning(this.age);
         }
-        else if(smashingAnimationState.getTimeInMilliseconds(this.age) >= 2000) {
+        else if(smashingAnimationState.getTimeRunning() >= 2000) {
             smashingAnimationState.stop();
         }
     }

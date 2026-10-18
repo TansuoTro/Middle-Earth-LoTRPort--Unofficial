@@ -182,10 +182,10 @@ public class PlateBlock extends BlockWithEntity {
                     ItemStack insertedStack = stack.copy();
                     insertedStack.setCount(1);
                     plateBlockEntity.setStack(insertedStack);
-                    stack.decrementUnlessCreative(1, player);
+                    stack.decrementUnlessCreative(1);
                     return ActionResult.SUCCESS;
                 } else if (world.isClient) {
-                    return onEat(world, pos, player);
+                    return onEat(world);
                 }
             } else {
                 return ActionResult.FAIL;

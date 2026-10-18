@@ -8,7 +8,7 @@ import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.item.trim.ArmorTrim;
 import net.minecraft.item.trim.ArmorTrimMaterial;
 import net.minecraft.item.trim.ArmorTrimPattern;
-import net.minecraft.recipe.ServerRecipeManager;
+import net.minecraft.recipe.RecipeManager;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.jukoz.me.compat.nbt.ReadView;
 import net.jukoz.me.compat.nbt.WriteView;
@@ -37,8 +37,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.recipe.RecipeEntry;
-import net.minecraft.recipe.input.SingleStackRecipeInput;
+
+import net.jukoz.me.compat.SingleStackRecipeInput;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
@@ -146,8 +146,8 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
     public void bonk(ShapingAnvilBlockEntity entity, ServerWorld world, ItemStack tool){
         ItemStack input = entity.getStack(0);
 
-        ServerRecipeManager serverRecipeManager = (ServerRecipeManager)entity.getWorld().getRecipeManager();
-        List<RecipeEntry<AnvilShapingRecipe>> match = serverRecipeManager.getAllMatches(AnvilShapingRecipe.Type.INSTANCE, new SingleStackRecipeInput(input), entity.getWorld()).toList();
+        RecipeManager serverRecipeManager = (RecipeManager)entity.getWorld().getRecipeManager();
+        List<AnvilShapingRecipe> match = serverRecipeManager.getAllMatches(AnvilShapingRecipe.Type.INSTANCE, new SingleStackRecipeInput(input), entity.getWorld());
 
         if (!match.isEmpty() && hasShapingRecipe(entity)){
             int temperature = 0;
@@ -190,7 +190,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
             if ((MEComponents.get(input, MEComponents.TEMPERATURE_DATA).temperature() - value) <= 0){
                 MEComponents.remove(input, MEComponents.TEMPERATURE_DATA);
             } else {
-                MEComponents.set(input, MEComponents.TEMPERATURE_DATA, new TemperatureDataComponent(input.get(MEComponents.TEMPERATURE_DATA).temperature() - value));
+                MEComponents.set(input, MEComponents.TEMPERATURE_DATA, new TemperatureDataComponent(MEComponents.get(input, MEComponents.TEMPERATURE_DATA).temperature() - value));
             }
             RegistryWrapper.Impl<ArmorTrimMaterial>  armorTrimMaterialRegistry = entity.getWorld().getRegistryManager().get(RegistryKeys.TRIM_MATERIAL);
             RegistryWrapper.Impl<ArmorTrimPattern>  armorTrimPatternRegistry = entity.getWorld().getRegistryManager().get(RegistryKeys.TRIM_PATTERN);
@@ -224,7 +224,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
                     }
                 }
                 if (MEComponents.get(input, MEComponents.TEMPERATURE_DATA) != null){
-                    MEComponents.set(output, MEComponents.TEMPERATURE_DATA, new TemperatureDataComponent(input.get(MEComponents.TEMPERATURE_DATA).temperature()));
+                    MEComponents.set(output, MEComponents.TEMPERATURE_DATA, new TemperatureDataComponent(MEComponents.get(input, MEComponents.TEMPERATURE_DATA).temperature()));
                 }
                 entity.getWorld().playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 1.0f, 1.0f);
                 entity.setStack(0, output);
@@ -242,8 +242,8 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
     public static void tick(World world, BlockPos blockPos, BlockState blockState, ShapingAnvilBlockEntity entity) {
         ItemStack input = entity.getStack(0);
         if (!input.isEmpty()){
-            ServerRecipeManager serverRecipeManager = (ServerRecipeManager)entity.getWorld().getRecipeManager();
-            List<RecipeEntry<AnvilShapingRecipe>> match = serverRecipeManager.getAllMatches(AnvilShapingRecipe.Type.INSTANCE, new SingleStackRecipeInput(input), entity.getWorld()).toList();
+            RecipeManager serverRecipeManager = (RecipeManager)entity.getWorld().getRecipeManager();
+            List<AnvilShapingRecipe> match = serverRecipeManager.getAllMatches(AnvilShapingRecipe.Type.INSTANCE, new SingleStackRecipeInput(input), entity.getWorld());
             if(!match.isEmpty()){
                 entity.maxOutputIndex = match.size() - 1;
                 if (entity.outputIndex > entity.maxOutputIndex){
@@ -270,8 +270,8 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
         if(input.isEmpty()) return false;
 
         SingleStackRecipeInput inputStack = new SingleStackRecipeInput(input);
-        ServerRecipeManager serverRecipeManager = (ServerRecipeManager)entity.getWorld().getRecipeManager();
-        List<RecipeEntry<AnvilShapingRecipe>> match = serverRecipeManager.getAllMatches(AnvilShapingRecipe.Type.INSTANCE, inputStack, entity.getWorld()).toList();
+        RecipeManager serverRecipeManager = (RecipeManager)entity.getWorld().getRecipeManager();
+        List<AnvilShapingRecipe> match = serverRecipeManager.getAllMatches(AnvilShapingRecipe.Type.INSTANCE, inputStack, entity.getWorld());
 
         return match.getFirst().value().getOutput() != null;
     }

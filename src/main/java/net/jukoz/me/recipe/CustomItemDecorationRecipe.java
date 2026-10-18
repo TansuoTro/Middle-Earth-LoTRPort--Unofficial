@@ -9,7 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
-import net.minecraft.recipe.input.CraftingRecipeInput;
+import net.minecraft.util.Identifier;
+import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.World;
 
@@ -17,16 +18,16 @@ public class CustomItemDecorationRecipe extends SpecialCraftingRecipe {
 
     //TODO NO WORKY
 
-    public CustomItemDecorationRecipe(CraftingRecipeCategory category) {
-        super(category);
+    public CustomItemDecorationRecipe(Identifier id, CraftingRecipeCategory category) {
+        super(id, category);
     }
 
-    public boolean matches(CraftingRecipeInput craftingRecipeInput, World world) {
+    public boolean matches(RecipeInputInventory craftingRecipeInput, World world) {
         ItemStack itemStack = ItemStack.EMPTY;
         ItemStack itemStack2 = ItemStack.EMPTY;
 
         for(int i = 0; i < craftingRecipeInput.size(); ++i) {
-            ItemStack itemStack3 = craftingRecipeInput.getStackInSlot(i);
+            ItemStack itemStack3 = craftingRecipeInput.getStack(i);
             if (!itemStack3.isEmpty()) {
                 if (itemStack3.getItem() instanceof BannerItem) {
                     if (!itemStack2.isEmpty()) {
@@ -60,12 +61,12 @@ public class CustomItemDecorationRecipe extends SpecialCraftingRecipe {
         }
     }
 
-    public ItemStack craft(CraftingRecipeInput craftingRecipeInput, RegistryWrapper.WrapperLookup wrapperLookup) {
+    public ItemStack craft(RecipeInputInventory craftingRecipeInput, DynamicRegistryManager wrapperLookup) {
         ItemStack itemStack = ItemStack.EMPTY;
         ItemStack itemStack2 = ItemStack.EMPTY;
 
         for(int i = 0; i < craftingRecipeInput.size(); ++i) {
-            ItemStack itemStack3 = craftingRecipeInput.getStackInSlot(i);
+            ItemStack itemStack3 = craftingRecipeInput.getStack(i);
             if (!itemStack3.isEmpty()) {
                 if (itemStack3.getItem() instanceof BannerItem) {
                     itemStack = itemStack3;

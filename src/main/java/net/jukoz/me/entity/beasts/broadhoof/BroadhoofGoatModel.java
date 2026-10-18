@@ -1,11 +1,10 @@
 package net.jukoz.me.entity.beasts.broadhoof;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.animation.Animation;
-import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.model.EntityModelPartNames;
+import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 
-public class BroadhoofGoatModel extends EntityModel<BroadhoofGoatEntityRenderState> {
+public class BroadhoofGoatModel extends SinglePartEntityModel<BroadhoofGoatEntity> {
     private final ModelPart broadhoofGoat;
     private final ModelPart head;
     private final ModelPart hair;
@@ -15,19 +14,7 @@ public class BroadhoofGoatModel extends EntityModel<BroadhoofGoatEntityRenderSta
     private final ModelPart[] leftHorns = new ModelPart[BroadhoofGoatHorns.values().length];
     private final ModelPart[] rightHorns = new ModelPart[BroadhoofGoatHorns.values().length];
 
-    private final Animation runningAnimation;
-    private final Animation walkingAnimation;
-    private final Animation eatingAnimation;
-    private final Animation rammingAnimation;
-    private final Animation layingAnimation;
-    private final Animation standingAnimation;
-    private final Animation lyingAnimation;
-    private final Animation chargingAnimation;
-    private final Animation jumpingAnimation;
-
     public BroadhoofGoatModel(ModelPart root) {
-        super(root);
-
         this.broadhoofGoat = root.getChild("broadhoof_goat");
         this.head = broadhoofGoat.getChild(EntityModelPartNames.BODY).getChild(EntityModelPartNames.HEAD);
 
@@ -58,15 +45,6 @@ public class BroadhoofGoatModel extends EntityModel<BroadhoofGoatEntityRenderSta
         this.leftHorns[6] = horns.getChild("huge_left_horn");
         this.rightHorns[6] = horns.getChild("huge_right_horn");
 
-        this.walkingAnimation = BroadhoofGoatAnimations.WALK.createAnimation(root);
-        this.runningAnimation = BroadhoofGoatAnimations.RUN.createAnimation(root);
-        this.eatingAnimation = BroadhoofGoatAnimations.EAT.createAnimation(root);
-        this.rammingAnimation = BroadhoofGoatAnimations.RAM_ATTACK.createAnimation(root);
-        this.layingAnimation = BroadhoofGoatAnimations.LAY_DOWN.createAnimation(root);
-        this.standingAnimation = BroadhoofGoatAnimations.STAND_UP.createAnimation(root);
-        this.lyingAnimation = BroadhoofGoatAnimations.LYING.createAnimation(root);
-        this.chargingAnimation = BroadhoofGoatAnimations.CHARGE_ATTACK.createAnimation(root);
-        this.jumpingAnimation = BroadhoofGoatAnimations.JUMP.createAnimation(root);
     }
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = getModelData();
@@ -218,33 +196,38 @@ public class BroadhoofGoatModel extends EntityModel<BroadhoofGoatEntityRenderSta
     }
 
     @Override
-    public void setAngles(BroadhoofGoatEntityRenderState state) {
-        super.setAngles(state);
+    public ModelPart getPart() {
+        return this.broadhoofGoat;
+    }
+
+    @Override
+    public void setAngles(BroadhoofGoatEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        this.getPart().traverse().forEach(ModelPart::resetTransform);
 
         for(int i = 0 ; i < BroadhoofGoatHorns.values().length; i++) {
-            this.leftHorns[i].visible = (state.horns.getId() == i) && state.hasLeftHorn && !state.baby;
-            this.rightHorns[i].visible = (state.horns.getId() == i) && state.hasRightHorn && !state.baby;
+            this.leftHorns[i].visible = (entity.getHorns().getId() == i) && entity.hasLeftHorn() && !entity.isBaby();
+            this.rightHorns[i].visible = (entity.getHorns().getId() == i) && entity.hasRightHorn() && !entity.isBaby();
         }
 
-        this.hair.visible = state.hair;
+        this.hair.visible = entity.hasHair();
 
-        this.wildBeard.visible = !state.beardBrushed;
-        this.brushedBeard.visible = state.beardBrushed;
+        this.wildBeard.visible = !entity.hasBrushedBeard();
+        this.brushedBeard.visible = entity.hasBrushedBeard();
 
-        if(!state.isSprinting && !(state.conrollingPassenger != null && state.conrollingPassenger.isSprinting()) && !state.isCharging) {
-            this.walkingAnimation.applyWalking(state.limbSwingAnimationProgress, state.limbSwingAmplitude, 4f, 4f);
+        if(!entity.isSprinting() && !(entity.getControllingPassenger() != null && entity.getControllingPassenger().isSprinting()) && !entity.isCharging()) {
+            this.animateMovement(BroadhoofGoatAnimations.WALK, limbSwing, limbSwingAmount, 4f, 4f);
         }
         else {
-            this.runningAnimation.applyWalking(state.limbSwingAnimationProgress, state.limbSwingAmplitude, 1.2f, 1.2f);
+            this.animateMovement(BroadhoofGoatAnimations.RUN, limbSwing, limbSwingAmount, 1.2f, 1.2f);
         }
 
-        this.eatingAnimation.apply(state.idleAnimationState, state.age);
-        this.rammingAnimation.apply(state.attackAnimationState, state.age);
-        this.layingAnimation.apply(state.startSittingAnimationState, state.age);
-        this.standingAnimation.apply(state.stopSittingAnimationState, state.age);
-        this.lyingAnimation.apply(state.sittingAnimationState, state.age);
-        this.chargingAnimation.apply(state.chargeAnimationState, state.age);
-        this.jumpingAnimation.apply(state.jumpAnimationState, state.age);
+        this.updateAnimation(entity.idleAnimationState, BroadhoofGoatAnimations.EAT, ageInTicks);
+        this.updateAnimation(entity.attackAnimationState, BroadhoofGoatAnimations.RAM_ATTACK, ageInTicks);
+        this.updateAnimation(entity.startSittingAnimationState, BroadhoofGoatAnimations.LAY_DOWN, ageInTicks);
+        this.updateAnimation(entity.stopSittingAnimationState, BroadhoofGoatAnimations.STAND_UP, ageInTicks);
+        this.updateAnimation(entity.sittingAnimationState, BroadhoofGoatAnimations.LYING, ageInTicks);
+        this.updateAnimation(entity.chargeAnimationState, BroadhoofGoatAnimations.CHARGE_ATTACK, ageInTicks);
+        this.updateAnimation(entity.jumpAnimationState, BroadhoofGoatAnimations.JUMP, ageInTicks);
 
     }
 }

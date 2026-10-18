@@ -35,7 +35,7 @@ public class MantleOfYavannaItem extends BackAttachmentItem {
     @Override
     public void inventoryTick(ItemStack stack, ServerWorld world, Entity entity, @Nullable EquipmentSlot slot) {
         super.inventoryTick(stack, world, entity, slot);
-        DyedColorComponent dyedColorComponent = stack.get(MEComponents.DYED_COLOR);
+        DyedColorComponent dyedColorComponent = MEComponents.get(stack, MEComponents.DYED_COLOR);
         if(dyedColorComponent == null) return;
 
         int targetColor = 4624722;
@@ -48,7 +48,7 @@ public class MantleOfYavannaItem extends BackAttachmentItem {
         }
 
         if(currentColor != targetColor) {
-            Color colorA = new Color(stack.get(MEComponents.DYED_COLOR).rgb());
+            Color colorA = new Color(MEComponents.get(stack, MEComponents.DYED_COLOR).rgb());
             Color colorB = new Color(targetColor);
             Color lerpColor = new Color(MathHelper.lerp(COLOR_LERP, colorA.getRed(), colorB.getRed()),
                     MathHelper.lerp(COLOR_LERP, colorA.getGreen(), colorB.getGreen()),

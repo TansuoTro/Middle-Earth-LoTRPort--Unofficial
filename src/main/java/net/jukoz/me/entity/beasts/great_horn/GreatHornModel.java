@@ -1,15 +1,13 @@
 package net.jukoz.me.entity.beasts.great_horn;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.animation.Animation;
 import net.minecraft.client.render.entity.model.BabyModelTransformer;
-import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.model.ModelTransformer;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 
 import java.util.Set;
 
-public class GreatHornModel extends EntityModel<GreatHornEntityRenderState> {
+public class GreatHornModel extends SinglePartEntityModel<GreatHornEntity> {
     public static final ModelTransformer BABY_TRANSFORMER = new BabyModelTransformer(true, 10.0F, 4.0F, Set.of("head"));
     private final ModelPart root;
     private final ModelPart body;
@@ -20,15 +18,7 @@ public class GreatHornModel extends EntityModel<GreatHornEntityRenderState> {
     private final ModelPart leftAntler;
     private final ModelPart beard;
 
-    private final Animation idleAnimation;
-    private final Animation earWiggleAnimation;
-    private final Animation walkingAnimation;
-    private final Animation gallopAnimation;
-    private final Animation bowAnimation;
-    private final Animation attackAnimation;
-
     public GreatHornModel(ModelPart root) {
-        super(root);
         this.root = root.getChild("root");
         this.body = this.root.getChild("body");
         this.frontHalf = this.body.getChild("front_half");
@@ -37,13 +27,6 @@ public class GreatHornModel extends EntityModel<GreatHornEntityRenderState> {
         this.rightAntler = this.topHead.getChild("right_antler");
         this.leftAntler = this.topHead.getChild("left_antler");
         this.beard = this.topHead.getChild("beard");
-
-        this.idleAnimation = GreatHornAnimations.IDLE.createAnimation(root);
-        this.earWiggleAnimation = GreatHornAnimations.EAR_WIGGLE.createAnimation(root);
-        this.walkingAnimation = GreatHornAnimations.WALK.createAnimation(root);
-        this.gallopAnimation = GreatHornAnimations.GALLOP.createAnimation(root);
-        this.bowAnimation = GreatHornAnimations.BOW.createAnimation(root);
-        this.attackAnimation = GreatHornAnimations.ATTACK.createAnimation(root);
     }
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = new ModelData();
@@ -136,33 +119,38 @@ public class GreatHornModel extends EntityModel<GreatHornEntityRenderState> {
     }
 
     @Override
-    public void setAngles(GreatHornEntityRenderState state) {
-        super.setAngles(state);
+    public ModelPart getPart() {
+        return this.root;
+    }
 
-        this.idleAnimation.apply(state.idleAnimationState, state.age);
-        this.earWiggleAnimation.apply(state.earWiggleAnimationState, state.age);
+    @Override
+    public void setAngles(GreatHornEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        this.getPart().traverse().forEach(ModelPart::resetTransform);
 
-        if(state.attackAnimationState.isRunning()) {
-            this.attackAnimation.apply(state.attackAnimationState, state.age);
+        this.updateAnimation(entity.idleAnimationState, GreatHornAnimations.IDLE, ageInTicks);
+        this.updateAnimation(entity.earWigglingAnimationState, GreatHornAnimations.EAR_WIGGLE, ageInTicks);
+
+        if(entity.attackAnimationState.isRunning()) {
+            this.updateAnimation(entity.attackAnimationState, GreatHornAnimations.ATTACK, ageInTicks);
         }
 
-        if(state.bowAnimationState.isRunning()) {
-            this.bowAnimation.apply(state.bowAnimationState, state.age);
+        if(entity.bowAnimationState.isRunning()) {
+            this.updateAnimation(entity.bowAnimationState, GreatHornAnimations.BOW, ageInTicks);
         } else {
-            if(state.gallopAnimationState.isRunning()) {
-                this.gallopAnimation.applyWalking(state.limbSwingAnimationProgress, state.limbSwingAmplitude, 1.0F, 2.5F);
+            if(entity.gallopAnimationState.isRunning()) {
+                this.animateMovement(GreatHornAnimations.GALLOP, limbSwing, limbSwingAmount, 1.0F, 2.5F);
             } else {
-                this.walkingAnimation.applyWalking(state.limbSwingAnimationProgress, state.limbSwingAmplitude, 2.75F, 2.5F);
+                this.animateMovement(GreatHornAnimations.WALK, limbSwing, limbSwingAmount, 2.75F, 2.5F);
             }
         }
 
         leftAntler.visible = true;
         rightAntler.visible = true;
-        if(state.baby) {
+        if(entity.isBaby()) {
             leftAntler.visible = false;
             rightAntler.visible = false;
             beard.hidden = true;
-        } else if(state.isElkebies()) {
+        } else if(entity.isElkebies()) {
             leftAntler.visible = false;
             rightAntler.visible = false;
         }

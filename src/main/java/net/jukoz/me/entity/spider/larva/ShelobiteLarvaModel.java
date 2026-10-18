@@ -1,22 +1,13 @@
 package net.jukoz.me.entity.spider.larva;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.animation.Animation;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.jukoz.me.entity.spider.scuttler.ShelobiteScuttlerRenderState;
+import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 
-public class ShelobiteLarvaModel extends EntityModel<ShelobiteScuttlerRenderState> {
+public class ShelobiteLarvaModel extends SinglePartEntityModel<ShelobiteLarvaEntity> {
     private final ModelPart root;
 
-    private final Animation walkingAnimation;
-    private final Animation biteAnimation;
-
     public ShelobiteLarvaModel(ModelPart root) {
-        super(root);
         this.root = root.getChild("root");
-
-        this.walkingAnimation = ShelobiteLarvaAnimations.SHELOBITE_LARVA_WALK.createAnimation(root);
-        this.biteAnimation = ShelobiteLarvaAnimations.SHELOBITE_LARVA_BITE.createAnimation(root);
     }
 
     public static TexturedModelData getTexturedModelData() {
@@ -69,10 +60,15 @@ public class ShelobiteLarvaModel extends EntityModel<ShelobiteScuttlerRenderStat
     }
 
     @Override
-    public void setAngles(ShelobiteScuttlerRenderState state) {
-        super.setAngles(state);
+    public ModelPart getPart() {
+        return this.root;
+    }
 
-        this.walkingAnimation.applyWalking(state.limbSwingAnimationProgress, state.limbSwingAmplitude, 3F, 2.5F);
-        this.biteAnimation.apply(state.biteAnimationState, state.age, 1.25f);
+    @Override
+    public void setAngles(ShelobiteLarvaEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        this.getPart().traverse().forEach(ModelPart::resetTransform);
+
+        this.animateMovement(ShelobiteLarvaAnimations.SHELOBITE_LARVA_WALK, limbSwing, limbSwingAmount, 3F, 2.5F);
+        this.updateAnimation(entity.biteAnimation, ShelobiteLarvaAnimations.SHELOBITE_LARVA_BITE, ageInTicks, 1.25f);
     }
 }

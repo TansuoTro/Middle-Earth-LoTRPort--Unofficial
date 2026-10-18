@@ -1,7 +1,7 @@
 package net.jukoz.me.block.special.forge;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.input.RecipeInput;
+
 
 import java.util.List;
 

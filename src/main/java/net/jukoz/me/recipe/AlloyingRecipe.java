@@ -1,24 +1,24 @@
 package net.jukoz.me.recipe;
+import net.jukoz.me.compat.NbtCompat;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import net.minecraft.recipe.*;
-import net.minecraft.recipe.book.RecipeBookCategories;
-import net.minecraft.recipe.book.RecipeBookCategory;
+import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.jukoz.me.block.special.forge.MultipleStackRecipeInput;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.jukoz.me.compat.net.PacketCodec;
-import net.jukoz.me.compat.net.PacketCodecs;
-import net.minecraft.recipe.book.CraftingRecipeCategory;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.Locale;
 
 public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
+    public final Identifier id;
     public final String output;
     public final int amount;
     public final List<Ingredient> inputs;
@@ -26,9 +26,8 @@ public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
     private final String group;
     private final int xp;
 
-    private IngredientPlacement ingredientPlacement;
-
-    public AlloyingRecipe(String group, CraftingRecipeCategory category, String output, List<Ingredient> recipeItems, int amount, int xp) {
+    public AlloyingRecipe(Identifier id, String group, CraftingRecipeCategory category, String output, List<Ingredient> recipeItems, int amount, int xp) {
+        this.id = id;
         this.output = output;
         this.group = group;
         this.inputs = recipeItems;
@@ -61,24 +60,39 @@ public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
         if(world.isClient()) return false;
         int i = 0;
         for (int j = 0; j < input.size(); j++) {
-            ItemStack itemStack = input.getStackInSlot(j);
+            ItemStack itemStack = input.getStack(j);
             if (itemStack.isEmpty()) continue;
             i++;
         }
         if(i != this.inputs.size()) return false;
 
         for (int j = 0; j < inputs.size(); j++) {
-            if(!inputs.get(j).test(input.getStackInSlot(j))) return false;
+            if(!inputs.get(j).test(input.getStack(j))) return false;
         }
         return true;
     }
 
     @Override
-    public ItemStack craft(MultipleStackRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+    public ItemStack craft(MultipleStackRecipeInput input, DynamicRegistryManager lookup) {
         return null;
     }
 
-    public String craftAlloy(MultipleStackRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+    @Override
+    public boolean fits(int width, int height) {
+        return true;
+    }
+
+    @Override
+    public ItemStack getOutput(DynamicRegistryManager registryManager) {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public Identifier getId() {
+        return id;
+    }
+
+    public String craftAlloy(MultipleStackRecipeInput input, DynamicRegistryManager lookup) {
         return output;
     }
 
@@ -104,20 +118,6 @@ public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
         return Type.INSTANCE;
     }
 
-    @Override
-    public IngredientPlacement getIngredientPlacement() {
-        if (this.ingredientPlacement == null) {
-            this.ingredientPlacement = IngredientPlacement.forShapeless(this.inputs);
-        }
-
-        return this.ingredientPlacement;
-    }
-
-    @Override
-    public RecipeBookCategory getRecipeBookCategory() {
-        return RecipeBookCategories.FURNACE_MISC;
-    }
-
     public static class Type implements RecipeType<AlloyingRecipe> {
         private Type() {}
         public static final Type INSTANCE = new Type();
@@ -127,52 +127,54 @@ public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
     public static class Serializer implements RecipeSerializer<AlloyingRecipe> {
         public static final Serializer INSTANCE = new Serializer();
         public static final String ID = "alloying";
-        private final MapCodec<AlloyingRecipe> codec;
-        private final PacketCodec<PacketByteBuf, AlloyingRecipe> packetCodec;
 
-        protected Serializer() {
-            this.codec = RecordCodecBuilder.mapCodec((instance) -> instance.group(
-                    Codec.STRING.optionalFieldOf("group", "").forGetter(recipe -> recipe.group),
-                    CraftingRecipeCategory.CODEC.fieldOf("category").orElse(CraftingRecipeCategory.MISC).forGetter(recipe -> recipe.category),
-                    Codec.STRING.fieldOf("output").forGetter(recipe -> recipe.output),
-                    Ingredient.CODEC.listOf().fieldOf("ingredients").forGetter(recipe -> recipe.inputs),
-                    Codec.INT.fieldOf("amount").forGetter(recipe -> recipe.amount),
-                    Codec.INT.fieldOf("xp").forGetter(recipe -> recipe.xp)
-                    ).apply(instance, AlloyingRecipe::new));
+        @Override
+        public AlloyingRecipe read(Identifier id, JsonObject json) {
+            String group = JsonHelper.getString(json, "group", "");
+            CraftingRecipeCategory category = CraftingRecipeCategory.MISC;
+            if (JsonHelper.hasString(json, "category")) {
+                try {
+                    category = CraftingRecipeCategory.valueOf(NbtCompat.getString(JsonHelper, json, "category").toUpperCase(Locale.ROOT));
+                } catch (IllegalArgumentException ignored) {}
+            }
+            String output = NbtCompat.getString(JsonHelper, json, "output");
+            JsonArray ingredients = JsonHelper.getArray(json, "ingredients");
+            DefaultedList<Ingredient> inputs = DefaultedList.ofSize(ingredients.size(), Ingredient.EMPTY);
+            for (int i = 0; i < ingredients.size(); i++) {
+                Ingredient ingredient = Ingredient.fromJson(ingredients.get(i), true);
+                if (ingredient.isEmpty()) continue;
+                inputs.set(i, ingredient);
+            }
+            int amount = JsonHelper.getInt(json, "amount");
+            int xp = JsonHelper.getInt(json, "xp");
 
-            this.packetCodec = PacketCodec.ofStatic(Serializer::write, Serializer::read);
+            return new AlloyingRecipe(id, group, category, output, inputs, amount, xp);
         }
 
         @Override
-        public MapCodec<AlloyingRecipe> codec() {
-            return this.codec;
-        }
-
-        @Override
-        public PacketCodec<PacketByteBuf, AlloyingRecipe> packetCodec() {
-            return this.packetCodec;
-        }
-
-        private static AlloyingRecipe read(PacketByteBuf buf) {
-            String string = buf.readString();
-            CraftingRecipeCategory craftingRecipeCategory = (CraftingRecipeCategory)buf.readEnumConstant(CraftingRecipeCategory.class);
-            String output = PacketCodecs.STRING.decode(buf);
-            int amount = PacketCodecs.INTEGER.decode(buf);
-            int i = buf.readVarInt();
-            DefaultedList<Ingredient> defaultedList = DefaultedList.ofSize(i);
-            defaultedList.replaceAll(empty -> Ingredient.PACKET_CODEC.decode(buf));
+        public AlloyingRecipe read(Identifier id, PacketByteBuf buf) {
+            String group = buf.readString();
+            CraftingRecipeCategory category = buf.readEnumConstant(CraftingRecipeCategory.class);
+            String output = buf.readString();
+            int amount = buf.readInt();
+            DefaultedList<Ingredient> inputs = DefaultedList.ofSize(buf.readVarInt(), Ingredient.EMPTY);
+            for (int i = 0; i < inputs.size(); i++) {
+                inputs.set(i, Ingredient.fromPacket(buf));
+            }
             int xp = buf.readVarInt();
-            return new AlloyingRecipe(string, craftingRecipeCategory, output, defaultedList, amount, xp);
+
+            return new AlloyingRecipe(id, group, category, output, inputs, amount, xp);
         }
 
-        private static void write(PacketByteBuf buf, AlloyingRecipe recipe) {
+        @Override
+        public void write(PacketByteBuf buf, AlloyingRecipe recipe) {
             buf.writeString(recipe.group);
             buf.writeEnumConstant(recipe.category);
-            PacketCodecs.STRING.encode(buf, recipe.output);
-            PacketCodecs.INTEGER.encode(buf, recipe.amount);
+            buf.writeString(recipe.output);
+            buf.writeInt(recipe.amount);
             buf.writeVarInt(recipe.inputs.size());
             for (Ingredient ingredient : recipe.inputs) {
-                Ingredient.PACKET_CODEC.encode(buf, ingredient);
+                ingredient.write(buf);
             }
             buf.writeVarInt(recipe.xp);
         }

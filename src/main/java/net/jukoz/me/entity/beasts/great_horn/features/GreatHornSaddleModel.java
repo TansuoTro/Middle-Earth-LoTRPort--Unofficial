@@ -1,8 +1,7 @@
 package net.jukoz.me.entity.beasts.great_horn.features;
 
 import net.minecraft.client.model.*;
-import net.minecraft.item.ItemStack;
-import net.jukoz.me.entity.beasts.great_horn.GreatHornEntityRenderState;
+import net.jukoz.me.entity.beasts.great_horn.GreatHornEntity;
 import net.jukoz.me.entity.beasts.great_horn.GreatHornModel;
 
 public class GreatHornSaddleModel extends GreatHornModel {
@@ -81,15 +80,15 @@ public class GreatHornSaddleModel extends GreatHornModel {
     }
 
     @Override
-    public void setAngles(GreatHornEntityRenderState state) {
-        super.setAngles(state);
+    public void setAngles(GreatHornEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        super.setAngles(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
 
-        boolean showSaddle = state.saddle != ItemStack.EMPTY;
+        boolean showSaddle = entity.isSaddled();
         saddle.hidden = !showSaddle;
         reinsHead.hidden = !showSaddle;
         reins.hidden = !showSaddle;
 
-        if(!state.hasRider) {
+        if(!entity.hasPlayerRider()) {
             reins.pitch = -12.5f * 0.017453292F;
         } else {
             reins.pitch = 0f;

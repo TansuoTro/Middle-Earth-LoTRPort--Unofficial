@@ -1,33 +1,25 @@
 package net.jukoz.me.recipe;
 import net.jukoz.me.item.MEComponents;
 
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.netty.buffer.ByteBuf;
+import com.google.gson.JsonObject;
 import net.minecraft.recipe.*;
-import net.minecraft.recipe.book.RecipeBookCategory;
-import net.minecraft.registry.RegistryKeys;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.jukoz.me.compat.net.PacketCodec;
-import net.jukoz.me.compat.net.PacketCodecs;
-import net.minecraft.recipe.input.SingleStackRecipeInput;
-import net.minecraft.registry.RegistryWrapper;
+import net.jukoz.me.compat.SingleStackRecipeInput;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
 
-import java.util.List;
-
 public class AnvilShapingRecipe implements Recipe<SingleStackRecipeInput> {
+    public final Identifier id;
     protected final Ingredient input;
     protected final ItemStack output;
     protected final int amount;
 
-    private IngredientPlacement ingredientPlacement;
-    public static final PacketCodec<ByteBuf, List<String>> STRING_LIST_CODEC =
-            PacketCodecs.STRING.collect(PacketCodecs.toList());
-
-    public AnvilShapingRecipe(Ingredient input, ItemStack output, int amount) {
+    public AnvilShapingRecipe(Identifier id, Ingredient input, ItemStack output, int amount) {
+        this.id = id;
         this.output = output;
         this.input = input;
         this.amount = amount;
@@ -45,12 +37,27 @@ public class AnvilShapingRecipe implements Recipe<SingleStackRecipeInput> {
     }
 
     @Override
-    public ItemStack craft(SingleStackRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+    public ItemStack craft(SingleStackRecipeInput input, DynamicRegistryManager lookup) {
         return this.output.copy();
+    }
+
+    @Override
+    public boolean fits(int width, int height) {
+        return true;
     }
 
     public ItemStack getOutput() {
         return output;
+    }
+
+    @Override
+    public ItemStack getOutput(DynamicRegistryManager registryManager) {
+        return output;
+    }
+
+    @Override
+    public Identifier getId() {
+        return id;
     }
 
     public Ingredient getIngredient() {
@@ -71,20 +78,6 @@ public class AnvilShapingRecipe implements Recipe<SingleStackRecipeInput> {
         return Type.INSTANCE;
     }
 
-    @Override
-    public IngredientPlacement getIngredientPlacement() {
-        if (this.ingredientPlacement == null) {
-            this.ingredientPlacement = IngredientPlacement.forSingleSlot(this.input);
-        }
-
-        return this.ingredientPlacement;
-    }
-
-    @Override
-    public RecipeBookCategory getRecipeBookCategory() {
-        return null;
-    }
-
     public static class Type implements RecipeType<AnvilShapingRecipe> {
         private Type() {}
         public static final Type INSTANCE = new Type();
@@ -99,40 +92,28 @@ public class AnvilShapingRecipe implements Recipe<SingleStackRecipeInput> {
     public static class Serializer implements RecipeSerializer<AnvilShapingRecipe> {
         public static final Serializer INSTANCE = new Serializer();
         public static final String ID = "anvil_shaping";
-        private final MapCodec<AnvilShapingRecipe> codec;
-        private final PacketCodec<PacketByteBuf, AnvilShapingRecipe> packetCodec;
 
-        protected Serializer() {
-            this.codec = RecordCodecBuilder.mapCodec((instance) -> instance.group(
-                    Ingredient.CODEC.fieldOf("ingredient").forGetter(recipe -> recipe.input),
-                    ItemStack.CODEC.fieldOf("output").forGetter(recipe -> recipe.output),
-                    CODEC.INT.fieldOf("amount").forGetter(recipe -> recipe.amount)
-            ).apply(instance, AnvilShapingRecipe::new));
-
-            this.packetCodec = PacketCodec.ofStatic(Serializer::write, Serializer::read);
+        @Override
+        public AnvilShapingRecipe read(Identifier id, JsonObject json) {
+            Ingredient input = Ingredient.fromJson(JsonHelper.getElement(json, "ingredient"), true);
+            ItemStack output = ShapedRecipe.outputFromJson(JsonHelper.getObject(json, "output"));
+            int amount = JsonHelper.getInt(json, "amount");
+            return new AnvilShapingRecipe(id, input, output, amount);
         }
 
         @Override
-        public MapCodec<AnvilShapingRecipe> codec() {
-            return this.codec;
+        public AnvilShapingRecipe read(Identifier id, PacketByteBuf buf) {
+            Ingredient input = Ingredient.fromPacket(buf);
+            ItemStack output = buf.readItemStack();
+            int amount = buf.readInt();
+            return new AnvilShapingRecipe(id, input, output, amount);
         }
 
         @Override
-        public PacketCodec<PacketByteBuf, AnvilShapingRecipe> packetCodec() {
-            return this.packetCodec;
-        }
-
-        private static AnvilShapingRecipe read(PacketByteBuf buf) {
-            Ingredient input = Ingredient.PACKET_CODEC.decode(buf);
-            ItemStack output = ItemStack.PACKET_CODEC.decode(buf);
-            int amount = PacketCodecs.INTEGER.decode(buf);
-            return new AnvilShapingRecipe(input,output, amount);
-        }
-
-        private static void write(PacketByteBuf buf, AnvilShapingRecipe recipe) {
-            Ingredient.PACKET_CODEC.encode(buf, recipe.input);
-            ItemStack.PACKET_CODEC.encode(buf, recipe.output);
-            PacketCodecs.INTEGER.encode(buf, recipe.amount);
+        public void write(PacketByteBuf buf, AnvilShapingRecipe recipe) {
+            recipe.input.write(buf);
+            buf.writeItemStack(recipe.output);
+            buf.writeInt(recipe.amount);
         }
     }
 }

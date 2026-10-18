@@ -10,9 +10,9 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.RecipeEntry;
-import net.minecraft.recipe.ServerRecipeManager;
-import net.minecraft.recipe.input.SingleStackRecipeInput;
+
+import net.minecraft.recipe.RecipeManager;
+import net.jukoz.me.compat.SingleStackRecipeInput;
 import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.Property;
 import net.minecraft.screen.PropertyDelegate;
@@ -40,7 +40,7 @@ public class ShapingAnvilScreenHandler extends ScreenHandler {
     private final PropertyDelegate propertyDelegate;
     protected BlockPos pos;
     private final World world;
-    private List<RecipeEntry<AnvilShapingRecipe>> availableRecipes;
+    private List<AnvilShapingRecipe> availableRecipes;
     private ItemStack outputStack;
     private PlayerEntity player;
     private Property selectedIndex;
@@ -124,12 +124,12 @@ public class ShapingAnvilScreenHandler extends ScreenHandler {
     public void updateStack(Inventory inventory) {
         ItemStack input = inventory.getStack(0);
         if (!this.world.isClient){
-            ServerRecipeManager serverRecipeManager = (ServerRecipeManager) this.world.getRecipeManager();
-            this.availableRecipes = serverRecipeManager.getAllMatches(RecipesME.ANVIL_SHAPING, new SingleStackRecipeInput(input), this.world).toList();
+            RecipeManager serverRecipeManager = (RecipeManager) this.world.getRecipeManager();
+            this.availableRecipes = serverRecipeManager.getAllMatches(RecipesME.ANVIL_SHAPING, new SingleStackRecipeInput(input), this.world);
             recipesSize.set(this.availableRecipes.size());
             int index = 0;
-            for(RecipeEntry<AnvilShapingRecipe> recipe : availableRecipes) {
-                ShapingAnvilRecipePacket newPacket = new ShapingAnvilRecipePacket(index++, recipe.value().getOutput());
+            for(AnvilShapingRecipe recipe : availableRecipes) {
+                ShapingAnvilRecipePacket newPacket = new ShapingAnvilRecipePacket(index++, recipe.getOutput());
                 ServerPlayNetworking.send((ServerPlayerEntity) player, newPacket);
             }
         }
@@ -139,14 +139,14 @@ public class ShapingAnvilScreenHandler extends ScreenHandler {
         int count = 0;
         ItemStack input = inventory.getStack(0);
         if (!this.world.isClient){
-            ServerRecipeManager serverRecipeManager = (ServerRecipeManager) this.world.getRecipeManager();
-            this.availableRecipes = serverRecipeManager.getAllMatches(RecipesME.ANVIL_SHAPING, new SingleStackRecipeInput(input), this.world).toList();
+            RecipeManager serverRecipeManager = (RecipeManager) this.world.getRecipeManager();
+            this.availableRecipes = serverRecipeManager.getAllMatches(RecipesME.ANVIL_SHAPING, new SingleStackRecipeInput(input), this.world);
             count = this.availableRecipes.size();
         }
         return count;
     }
 
-    public List<RecipeEntry<AnvilShapingRecipe>> getAvailableRecipes() {
+    public List<AnvilShapingRecipe> getAvailableRecipes() {
         return availableRecipes;
     }
 

@@ -1,45 +1,21 @@
 package net.jukoz.me.entity.beasts.cave_troll;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.animation.Animation;
-import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class CaveTrollEntityModel extends EntityModel<CaveTrollEntityRenderState> {
-    private final Animation walkingAnimation;
-    private final Animation chaseAnimation;
-    private final Animation scavengingAnimation;
-    private final Animation startSittingAnimation;
-    private final Animation stopSittingAnimation;
-    private final Animation startSleepingAnimation;
-    private final Animation sleepingAnimation;
-    private final Animation stopSleepingAnimation;
-    private final Animation roaringAnimation;
-    private final Animation smashingAnimation;
-
+public class CaveTrollEntityModel extends SinglePartEntityModel<CaveTrollEntity> {
     private final ModelPart rightArm;
     private final ModelPart upperBody;
     private final ModelPart rootChild;
     private final ModelPart chain;
 
     protected CaveTrollEntityModel(ModelPart root) {
-        super(root);
-
         rootChild = root.getChild("root");
         upperBody = rootChild.getChild("body_no_legs");
         rightArm = upperBody.getChild("ArmRight");
         chain = upperBody.getChild("body_no_limbs").getChild("Head").getChild("chain");
 
-        walkingAnimation = CaveTrollAnimations.PASSIVE_WALK.createAnimation(root);
-        chaseAnimation = CaveTrollAnimations.RUN.createAnimation(root);
-        scavengingAnimation = CaveTrollAnimations.INSPECT.createAnimation(root);
-        startSittingAnimation = CaveTrollAnimations.STANDING_TO_SITTING.createAnimation(root);
-        stopSittingAnimation = CaveTrollAnimations.STANDING_FROM_SITTING.createAnimation(root);
-        startSleepingAnimation = CaveTrollAnimations.SLEEP_LAYING_DOWN.createAnimation(root);
-        sleepingAnimation = CaveTrollAnimations.SLEEP_LAYING_DOWN.createAnimation(root);
-        stopSleepingAnimation = CaveTrollAnimations.SLEEP_LAYING_DOWN_STANDING_UP.createAnimation(root);
-        roaringAnimation = CaveTrollAnimations.SCREAM.createAnimation(root);
-        smashingAnimation = CaveTrollAnimations.OVERHAND_SMASH.createAnimation(root);
     }
 
     public static TexturedModelData getTexturedModelData() {
@@ -126,32 +102,36 @@ public class CaveTrollEntityModel extends EntityModel<CaveTrollEntityRenderState
     }
 
     @Override
-    public void setAngles(CaveTrollEntityRenderState state) {
-        super.setAngles(state);
+    public ModelPart getPart() {
+        return this.rootChild;
+    }
 
-        chain.visible = state.isTame;
+    @Override
+    public void setAngles(CaveTrollEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        this.getPart().traverse().forEach(ModelPart::resetTransform);
 
-        if(!state.isSprinting && !(state.conrollingPassenger != null && state.conrollingPassenger.isSprinting()) && !state.isCharging) {
-            this.walkingAnimation.applyWalking(state.limbSwingAnimationProgress, state.limbSwingAmplitude, 10.0f, 10.0f);
+        chain.visible = entity.isTame();
+
+        if(!entity.isSprinting() && !(entity.getControllingPassenger() != null && entity.getControllingPassenger().isSprinting()) && !entity.isCharging()) {
+            this.animateMovement(CaveTrollAnimations.PASSIVE_WALK, limbSwing, limbSwingAmount, 10.0f, 10.0f);
         }
         else {
-            this.chaseAnimation.applyWalking(state.limbSwingAnimationProgress, state.limbSwingAmplitude, 2.0f, 2.0f);
+            this.animateMovement(CaveTrollAnimations.RUN, limbSwing, limbSwingAmount, 2.0f, 2.0f);
         }
 
-        this.scavengingAnimation.apply(state.scavengingAnimationState, state.age);
-        this.startSittingAnimation.apply(state.startSittingAnimationState, state.age);
-        this.stopSittingAnimation.apply(state.stopSittingAnimationState, state.age);
-        this.startSleepingAnimation.apply(state.startSleepingAnimationState, state.age);
-        this.sleepingAnimation.apply(state.sleepingAnimationState, state.age);
-        this.stopSleepingAnimation.apply(state.stopSleepingAnimationState, state.age);
-        this.roaringAnimation.apply(state.roaringAnimationState, state.age);
-        this.smashingAnimation.apply(state.smashingAnimationState, state.age);
+        this.updateAnimation(entity.scavengingAnimationState, CaveTrollAnimations.INSPECT, ageInTicks);
+        this.updateAnimation(entity.startSittingAnimationState, CaveTrollAnimations.STANDING_TO_SITTING, ageInTicks);
+        this.updateAnimation(entity.stopSittingAnimationState, CaveTrollAnimations.STANDING_FROM_SITTING, ageInTicks);
+        this.updateAnimation(entity.startSleepingAnimationState, CaveTrollAnimations.SLEEP_LAYING_DOWN, ageInTicks);
+        this.updateAnimation(entity.sleepingAnimationState, CaveTrollAnimations.SLEEP_LAYING_DOWN, ageInTicks);
+        this.updateAnimation(entity.stopSleepingAnimationState, CaveTrollAnimations.SLEEP_LAYING_DOWN_STANDING_UP, ageInTicks);
+        this.updateAnimation(entity.roaringAnimationState, CaveTrollAnimations.SCREAM, ageInTicks);
+        this.updateAnimation(entity.smashingAnimationState, CaveTrollAnimations.OVERHAND_SMASH, ageInTicks);
     }
 
     public void setArmAngle(MatrixStack matrices) {
-        this.getRootPart().applyTransform(matrices);
-        this.rootChild.applyTransform(matrices);
-        this.upperBody.applyTransform(matrices);
-        this.rightArm.applyTransform(matrices);
+        this.getPart().rotate(matrices);
+        this.upperBody.rotate(matrices);
+        this.rightArm.rotate(matrices);
     }
 }

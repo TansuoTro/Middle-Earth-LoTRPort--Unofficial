@@ -1,40 +1,21 @@
 package net.jukoz.me.entity.beasts.warg;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.animation.Animation;
-import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.model.EntityModelPartNames;
+import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 
-public class WargModel extends EntityModel<WargEntityRenderState> {
+public class WargModel extends SinglePartEntityModel<WargEntity> {
     private final ModelPart warg;
     private final ModelPart head;
     private final ModelPart mane;
 
-    private final Animation runningAnimation;
-    private final Animation walkingAnimation;
-    private final Animation idleAnimation;
-    private final Animation bitingAnimation;
-    private final Animation startSittingAnimation;
-    private final Animation stopSittingAnimation;
-    private final Animation sittingAnimation;
-
     public WargModel(ModelPart root) {
-        super(root);
-
         this.warg = root.getChild("root");
         ModelPart body = this.warg.getChild(EntityModelPartNames.BODY);
         ModelPart upperBody = body.getChild("upper_body");
         ModelPart bodyNoLegs = upperBody.getChild("body_no_legs");
         this.head = bodyNoLegs.getChild(EntityModelPartNames.HEAD);
         this.mane = bodyNoLegs.getChild("body_fur").getChild("mane");
-
-        this.walkingAnimation = WargAnimations.WALK.createAnimation(root);
-        this.runningAnimation = WargAnimations.RUN.createAnimation(root);
-        this.idleAnimation = WargAnimations.IDLE.createAnimation(root);
-        this.bitingAnimation = WargAnimations.BITE.createAnimation(root);
-        this.startSittingAnimation = WargAnimations.STANDING_TO_SITTING.createAnimation(root);
-        this.stopSittingAnimation = WargAnimations.SITTING_TO_STANDING.createAnimation(root);
-        this.sittingAnimation = WargAnimations.SITTING.createAnimation(root);
     }
 
     public static TexturedModelData getTexturedModelData() {
@@ -126,28 +107,33 @@ public class WargModel extends EntityModel<WargEntityRenderState> {
     }
 
     @Override
-    public void setAngles(WargEntityRenderState state) {
-        super.setAngles(state);
+    public ModelPart getPart() {
+        return this.warg;
+    }
 
-        boolean running = state.isRunning || state.isSprinting
-                || (state.conrollingPassenger != null && state.conrollingPassenger.isSprinting())
-                || state.isCharging;
+    @Override
+    public void setAngles(WargEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        this.getPart().traverse().forEach(ModelPart::resetTransform);
+
+        boolean running = entity.isRunning() || entity.isSprinting()
+                || (entity.getControllingPassenger() != null && entity.getControllingPassenger().isSprinting())
+                || entity.isCharging();
 
         if(!running) {
             float speed = 3.5f;
-            if(state.conrollingPassenger != null) {
+            if(entity.getControllingPassenger() != null) {
                 speed = 2f;
             }
-            this.walkingAnimation.applyWalking(state.limbSwingAnimationProgress, state.limbSwingAmplitude, speed, 2f);
+            this.animateMovement(WargAnimations.WALK, limbSwing, limbSwingAmount, speed, 2f);
         }
         else {
-            this.runningAnimation.applyWalking(state.limbSwingAnimationProgress, state.limbSwingAmplitude, 1.4f, 1.2f);
+            this.animateMovement(WargAnimations.RUN, limbSwing, limbSwingAmount, 1.4f, 1.2f);
         }
 
-        this.idleAnimation.apply(state.idleAnimationState, state.age);
-        this.bitingAnimation.apply(state.attackAnimationState, state.age);
-        this.startSittingAnimation.apply(state.startSittingAnimationState, state.age);
-        this.stopSittingAnimation.apply(state.stopSittingAnimationState, state.age);
-        this.sittingAnimation.apply(state.sittingAnimationState, state.age);
+        this.updateAnimation(entity.idleAnimationState, WargAnimations.IDLE, ageInTicks);
+        this.updateAnimation(entity.attackAnimationState, WargAnimations.BITE, ageInTicks);
+        this.updateAnimation(entity.startSittingAnimationState, WargAnimations.STANDING_TO_SITTING, ageInTicks);
+        this.updateAnimation(entity.stopSittingAnimationState, WargAnimations.SITTING_TO_STANDING, ageInTicks);
+        this.updateAnimation(entity.sittingAnimationState, WargAnimations.SITTING, ageInTicks);
     }
 }

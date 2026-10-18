@@ -1,37 +1,35 @@
 package net.jukoz.me.recipe.inscription;
+import net.jukoz.me.compat.NbtCompat;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.fabricmc.fabric.impl.recipe.ingredient.CustomIngredientImpl;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
-import net.jukoz.me.compat.net.PacketCodec;
-import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.recipe.*;
-import net.minecraft.recipe.book.CraftingRecipeCategory;
-import net.minecraft.recipe.book.RecipeBookCategory;
-import net.minecraft.recipe.input.SingleStackRecipeInput;
-import net.minecraft.registry.RegistryWrapper;
+import net.jukoz.me.compat.SingleStackRecipeInput;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
-import net.jukoz.me.block.special.forge.MultipleStackRecipeInput;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class InscriptionRecipe implements Recipe<SingleStackRecipeInput> {
+    public final Identifier id;
     public final RegistryEntry<Enchantment> enchant;
     public final int level;
     public final List<String> inputWords;
     public final Ingredient inputChisel;
     public final int levelCost;
 
-    public InscriptionRecipe(RegistryEntry<Enchantment> enchant, int level, List<String> inputWords, Ingredient inputChisel, int levelCost) {
+    public InscriptionRecipe(Identifier id, RegistryEntry<Enchantment> enchant, int level, List<String> inputWords, Ingredient inputChisel, int levelCost) {
+        this.id = id;
         this.enchant = enchant;
         this.level = level;
         this.inputWords = inputWords;
@@ -45,17 +43,32 @@ public class InscriptionRecipe implements Recipe<SingleStackRecipeInput> {
 
     @Override
     public boolean matches(SingleStackRecipeInput input, World world) {
-        return this.inputChisel.test(input.getStackInSlot(0));
+        return this.inputChisel.test(input.getStack(0));
     }
 
     @Override
-    public ItemStack craft(SingleStackRecipeInput input, RegistryWrapper.WrapperLookup registries) {
-        ItemStack result = input.getStackInSlot(0).copy();
-        ItemEnchantmentsComponent enchants = result.getEnchantments();
-        if(enchants.getLevel(this.enchant) == this.level - 1) {
-            result.addEnchantment(this.enchant, this.level);
+    public ItemStack craft(SingleStackRecipeInput input, DynamicRegistryManager registries) {
+        ItemStack result = input.getStack(0).copy();
+        int currentLevel = EnchantmentHelper.getLevel(this.enchant.value(), result);
+        if(currentLevel == this.level - 1) {
+            result.addEnchantment(this.enchant.value(), this.level);
         }
         return result;
+    }
+
+    @Override
+    public boolean fits(int width, int height) {
+        return true;
+    }
+
+    @Override
+    public ItemStack getOutput(DynamicRegistryManager registryManager) {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public Identifier getId() {
+        return id;
     }
 
     @Override
@@ -66,16 +79,6 @@ public class InscriptionRecipe implements Recipe<SingleStackRecipeInput> {
     @Override
     public RecipeType<? extends Recipe<SingleStackRecipeInput>> getType() {
         return Type.INSTANCE;
-    }
-
-    @Override
-    public IngredientPlacement getIngredientPlacement() {
-        return null;
-    }
-
-    @Override
-    public RecipeBookCategory getRecipeBookCategory() {
-        return null;
     }
 
     public static class Type implements RecipeType<InscriptionRecipe> {
@@ -92,55 +95,49 @@ public class InscriptionRecipe implements Recipe<SingleStackRecipeInput> {
     public static class Serializer implements RecipeSerializer<InscriptionRecipe> {
         public static final Serializer INSTANCE = new Serializer();
         public static final String ID = "inscription_table";
-        private final MapCodec<InscriptionRecipe> codec;
-        private final PacketCodec<PacketByteBuf, InscriptionRecipe> packetCodec;
-
-        protected Serializer() {
-            this.codec = RecordCodecBuilder.mapCodec((instance) -> instance.group(
-                    Enchantment.ENTRY_CODEC.fieldOf("enchantment").forGetter(recipe -> recipe.enchant),
-                    Codec.INT.fieldOf("level").forGetter(recipe -> recipe.level),
-                    Codec.STRING.listOf().fieldOf("words").forGetter(recipe -> recipe.inputWords),
-                    Ingredient.CODEC.fieldOf("chisel").forGetter(recipe -> recipe.inputChisel),
-                    Codec.INT.fieldOf("level_cost").forGetter(recipe -> recipe.levelCost)
-            ).apply(instance, InscriptionRecipe::new));
-            this.packetCodec = PacketCodec.ofStatic(Serializer::write, Serializer::read);
-        }
 
         @Override
-        public MapCodec<InscriptionRecipe> codec() {
-            return this.codec;
-        }
-
-        @Override
-        public PacketCodec<PacketByteBuf, InscriptionRecipe> packetCodec() {
-            return this.packetCodec;
-        }
-
-        private static InscriptionRecipe read(PacketByteBuf buf) {
-            RegistryEntry<Enchantment> enchantment = Enchantment.ENTRY_PACKET_CODEC.decode(buf);
-            int level = PacketCodecs.INTEGER.decode(buf);
-
-            int i = buf.readVarInt();
-            DefaultedList<String> defaultedList = DefaultedList.ofSize(i);
-            defaultedList.replaceAll(empty -> PacketCodecs.STRING.decode(buf));
-
-            Ingredient chisel = Ingredient.PACKET_CODEC.decode(buf);
-
-            int levelCost = PacketCodecs.INTEGER.decode(buf);
-
-            return new InscriptionRecipe(enchantment, level, defaultedList, chisel, levelCost);
-        }
-
-        private static void write(PacketByteBuf buf, InscriptionRecipe recipe) {
-            Enchantment.ENTRY_PACKET_CODEC.encode(buf, recipe.enchant);
-            buf.writeVarInt(buf.readVarInt());
-
-            for (String string : recipe.inputWords) {
-                PacketCodecs.STRING.encode(buf, string);
+        public InscriptionRecipe read(Identifier id, JsonObject json) {
+            Identifier enchantmentId = new Identifier(NbtCompat.getString(JsonHelper, json, "enchantment"));
+            RegistryEntry<Enchantment> enchant = RegistryEntry.of(Registries.ENCHANTMENT.get(enchantmentId));
+            int level = JsonHelper.getInt(json, "level");
+            JsonArray words = JsonHelper.getArray(json, "words");
+            List<String> inputWords = new ArrayList<>(words.size());
+            for (int i = 0; i < words.size(); i++) {
+                inputWords.add(words.get(i).getAsString());
             }
+            Ingredient chisel = Ingredient.fromJson(JsonHelper.getElement(json, "chisel"), true);
+            int levelCost = JsonHelper.getInt(json, "level_cost");
 
-            Ingredient.PACKET_CODEC.encode(buf, recipe.inputChisel);
-            PacketCodecs.INTEGER.encode(buf, recipe.levelCost);
+            return new InscriptionRecipe(id, enchant, level, inputWords, chisel, levelCost);
+        }
+
+        @Override
+        public InscriptionRecipe read(Identifier id, PacketByteBuf buf) {
+            Identifier enchantmentId = buf.readIdentifier();
+            RegistryEntry<Enchantment> enchant = RegistryEntry.of(Registries.ENCHANTMENT.get(enchantmentId));
+            int level = buf.readVarInt();
+            int wordCount = buf.readVarInt();
+            List<String> inputWords = new ArrayList<>(wordCount);
+            for (int i = 0; i < wordCount; i++) {
+                inputWords.add(buf.readString());
+            }
+            Ingredient chisel = Ingredient.fromPacket(buf);
+            int levelCost = buf.readVarInt();
+
+            return new InscriptionRecipe(id, enchant, level, inputWords, chisel, levelCost);
+        }
+
+        @Override
+        public void write(PacketByteBuf buf, InscriptionRecipe recipe) {
+            buf.writeIdentifier(Registries.ENCHANTMENT.getId(recipe.enchant.value()));
+            buf.writeVarInt(recipe.level);
+            buf.writeVarInt(recipe.inputWords.size());
+            for (String word : recipe.inputWords) {
+                buf.writeString(word);
+            }
+            recipe.inputChisel.write(buf);
+            buf.writeVarInt(recipe.levelCost);
         }
     }
 }

@@ -1,9 +1,8 @@
 package net.jukoz.me.entity.beasts.broadhoof.features;
 
-import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.EntityModelPartNames;
-import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatEntityRenderState;
+import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatEntity;
 import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatModel;
 
 public class BroadhoofGoatArmorModel extends BroadhoofGoatModel {
@@ -41,7 +40,7 @@ public class BroadhoofGoatArmorModel extends BroadhoofGoatModel {
     }
 
     @Override
-    public void setAngles(BroadhoofGoatEntityRenderState state) {
-        super.setAngles(state);
+    public void setAngles(BroadhoofGoatEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        super.setAngles(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
     }
 }

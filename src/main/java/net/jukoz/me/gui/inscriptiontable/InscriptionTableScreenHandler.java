@@ -12,9 +12,9 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.recipe.RecipeEntry;
-import net.minecraft.recipe.ServerRecipeManager;
-import net.minecraft.recipe.input.SingleStackRecipeInput;
+
+import net.minecraft.recipe.RecipeManager;
+import net.jukoz.me.compat.SingleStackRecipeInput;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
@@ -42,7 +42,7 @@ import java.util.Objects;
 public class InscriptionTableScreenHandler extends ScreenHandler {
     private final ScreenHandlerContext context;
     private final World world;
-    public List<RecipeEntry<InscriptionRecipe>> outputRecipes;
+    public List<InscriptionRecipe> outputRecipes;
     public RegistryEntry<Enchantment> enchant;
     public int level;
     public final Inventory input;
@@ -191,20 +191,20 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
             }
         }
         if (!this.outputRecipes.isEmpty()){
-            for (RecipeEntry<InscriptionRecipe> recipe : this.outputRecipes){
-                if (this.selectedWords.size() == 2 && recipe.value().inputWords.size() == 3 && add){
-                    if (Objects.equals(this.selectedWords.get(1), recipe.value().inputWords.get(1))
-                            && recipe.value().enchant.value().isAcceptableItem(input.getStack(2))
-                            && this.selectedWords.get(0).equals(recipe.value().inputWords.get(0))){
+            for (InscriptionRecipe recipe : this.outputRecipes){
+                if (this.selectedWords.size() == 2 && recipe.inputWords.size() == 3 && add){
+                    if (Objects.equals(this.selectedWords.get(1), recipe.inputWords.get(1))
+                            && recipe.enchant.value().isAcceptableItem(input.getStack(2))
+                            && this.selectedWords.get(0).equals(recipe.inputWords.get(0))){
                     }
                 }
-                if (recipe.value().inputWords.equals(this.selectedWords)){
-                    if (canEnchant(input.getStack(2), recipe.value().enchant, recipe.value().level)){
+                if (recipe.inputWords.equals(this.selectedWords)){
+                    if (canEnchant(input.getStack(2), recipe.enchant, recipe.level)){
                         foundEnchant = true;
-                        resultEnchant = recipe.value().enchant;
-                        resultLevel = recipe.value().level;
-                        resultMaxLevel = recipe.value().enchant.value().getMaxLevel();
-                        resultLevelCost = recipe.value().levelCost;
+                        resultEnchant = recipe.enchant;
+                        resultLevel = recipe.level;
+                        resultMaxLevel = recipe.enchant.value().getMaxLevel();
+                        resultLevelCost = recipe.levelCost;
                     }
                 }
             }
@@ -218,16 +218,16 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
 
             availableWords = new byte[words.size() + 1];
             words.add(word);
-            ServerRecipeManager serverRecipeManager = (ServerRecipeManager) this.world.getRecipeManager();
-            List<RecipeEntry<InscriptionRecipe>> availableRecipes = serverRecipeManager.getAllOfType(RecipesME.INSCRIPTION_TABLE)
+            RecipeManager serverRecipeManager = (RecipeManager) this.world.getRecipeManager();
+            List<InscriptionRecipe> availableRecipes = serverRecipeManager.listAllOfType(RecipesME.INSCRIPTION_TABLE)
                     .stream().filter((inscriptionRecipeRecipeEntry -> {
-                            if(!inscriptionRecipeRecipeEntry.value().enchant.value().isAcceptableItem(input.getStack(2))) return false;
+                            if(!inscriptionRecipeRecipeEntry.enchant.value().isAcceptableItem(input.getStack(2))) return false;
                             if(selectedWords.isEmpty()) return true;
-                            else return inscriptionRecipeRecipeEntry.value().inputWords.getFirst().equals(selectedWords.getFirst());
+                            else return inscriptionRecipeRecipeEntry.inputWords.getFirst().equals(selectedWords.getFirst());
                     })).toList();
 
-            for(RecipeEntry<InscriptionRecipe> recipe : availableRecipes) {
-                List<String> recipeWords = recipe.value().inputWords;
+            for(InscriptionRecipe recipe : availableRecipes) {
+                List<String> recipeWords = recipe.inputWords;
                 for(String availableWord : recipeWords) {
                     if(!allowedWords.contains(availableWord)) {
                         allowedWords.add(availableWord);
@@ -264,8 +264,8 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
         if (this.hasAll()) {
              if (!this.world.isClient){
                 updateWords(false, "", true);
-                ServerRecipeManager serverRecipeManager = (ServerRecipeManager) this.world.getRecipeManager();
-                this.outputRecipes = serverRecipeManager.getAllMatches(RecipesME.INSCRIPTION_TABLE, new SingleStackRecipeInput(inputChisel), this.world).toList();
+                RecipeManager serverRecipeManager = (RecipeManager) this.world.getRecipeManager();
+                this.outputRecipes = serverRecipeManager.getAllMatches(RecipesME.INSCRIPTION_TABLE, new SingleStackRecipeInput(inputChisel), this.world);
              }
         } else {
             updateWords(false, "", true);

@@ -9,24 +9,25 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
-import net.minecraft.recipe.input.CraftingRecipeInput;
+import net.minecraft.util.Identifier;
+import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.World;
 
 
 public class BackAttachmentRecipe extends SpecialCraftingRecipe {
 
-    public BackAttachmentRecipe(CraftingRecipeCategory category) {
-        super(category);
+    public BackAttachmentRecipe(Identifier id, CraftingRecipeCategory category) {
+        super(id, category);
     }
 
     @Override
-    public boolean matches(CraftingRecipeInput input, World world) {
+    public boolean matches(RecipeInputInventory input, World world) {
         ItemStack itemStackChest = ItemStack.EMPTY;
         ItemStack itemStackBackAttachment = ItemStack.EMPTY;
 
         for(int i = 0; i < input.size(); ++i) {
-            ItemStack itemStack2 = input.getStackInSlot(i);
+            ItemStack itemStack2 = input.getStack(i);
             if (!itemStack2.isEmpty()) {
                 if (itemStack2.getItem() instanceof CustomChestplateItem) {
                     if (!itemStackChest.isEmpty()) {
@@ -48,12 +49,12 @@ public class BackAttachmentRecipe extends SpecialCraftingRecipe {
     }
 
     @Override
-    public ItemStack craft(CraftingRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+    public ItemStack craft(RecipeInputInventory input, DynamicRegistryManager lookup) {
         ItemStack itemStack = ItemStack.EMPTY;
         ItemStack backAttachment = ItemStack.EMPTY;
 
         for(int i = 0; i < input.size(); ++i) {
-            ItemStack itemStack2 = input.getStackInSlot(i);
+            ItemStack itemStack2 = input.getStack(i);
             if (!itemStack2.isEmpty()) {
                 if (itemStack2.getItem() instanceof CustomChestplateItem) {
                     if (!itemStack.isEmpty()) {
@@ -71,8 +72,8 @@ public class BackAttachmentRecipe extends SpecialCraftingRecipe {
 
         if (!itemStack.isEmpty()) {
             int color;
-            if (backAttachment.get(MEComponents.DYED_COLOR) != null){
-                color = backAttachment.get(MEComponents.DYED_COLOR).rgb();
+            if (MEComponents.get(backAttachment, MEComponents.DYED_COLOR) != null){
+                color = MEComponents.get(backAttachment, MEComponents.DYED_COLOR).rgb();
             } else {
                 color = 0;
             }

@@ -10,7 +10,7 @@ import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.item.trim.ArmorTrim;
 import net.minecraft.item.trim.ArmorTrimMaterial;
 import net.minecraft.item.trim.ArmorTrimPattern;
-import net.minecraft.recipe.ServerRecipeManager;
+import net.minecraft.recipe.RecipeManager;
 import net.minecraft.server.world.ServerWorld;
 import net.jukoz.me.compat.nbt.ReadView;
 import net.jukoz.me.compat.nbt.WriteView;
@@ -43,7 +43,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.recipe.RecipeEntry;
+
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
@@ -82,7 +82,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
     private int mode = 0;
     private int storage = 0;
 
-    private final ServerRecipeManager.MatchGetter<MultipleStackRecipeInput, ? extends AlloyingRecipe> matchGetter;
+    private final RecipeManager.MatchGetter<MultipleStackRecipeInput, ? extends AlloyingRecipe> matchGetter;
 
     private MetalTypes currentMetal = MetalTypes.EMPTY;
 
@@ -123,7 +123,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
             }
         };
 
-        this.matchGetter = ServerRecipeManager.createCachedMatchGetter(RecipesME.FORGE);
+        this.matchGetter = RecipeManager.createCachedMatchGetter(RecipesME.FORGE);
     }
 
     public ItemStack getRenderStack(ForgeBlockEntity entity) {
@@ -526,19 +526,19 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
             if(i != FUEL_SLOT && i != OUTPUT_SLOT) inputs.add(entity.getStack(i));
         }
 
-        RecipeEntry<? extends AlloyingRecipe> match = entity.matchGetter.getFirstMatch(
+        AlloyingRecipe match = entity.matchGetter.getFirstMatch(
                 new MultipleStackRecipeInput(inputs), world).orElse(null);
 
         if(match == null) throw new RuntimeException("Somehow... you crafted an item without recipe?!");
 
-        ExperienceOrbEntity.spawn(world, entity.getPos().toCenterPos().add(0, 1, 0), match.value().getXp());
+        ExperienceOrbEntity.spawn(world, entity.getPos().toCenterPos().add(0, 1, 0), match.getXp());
 
         if(hasAlloyingRecipe(entity, world)) {
             for (int i = 1; i <= 4; i++) {
                 entity.removeStack(i, 1);
             }
-            entity.storage = entity.storage + match.value().amount;
-            entity.currentMetal = MetalTypes.fromValue(match.value().output.toLowerCase());
+            entity.storage = entity.storage + match.amount;
+            entity.currentMetal = MetalTypes.fromValue(match.output.toLowerCase());
             entity.update();
         }
     }
@@ -552,7 +552,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
         }
         if(inputs.isEmpty()) return false;
 
-        RecipeEntry<? extends AlloyingRecipe> match = entity.matchGetter.getFirstMatch(
+        AlloyingRecipe match = entity.matchGetter.getFirstMatch(
                 new MultipleStackRecipeInput(inputs), world).orElse(null);
 
         if(match == null) return false;
@@ -644,10 +644,10 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
         else entity.getStack(FUEL_SLOT).decrement(1);
     }
 
-    private static boolean canInsertLiquid(int storage, MetalTypes currentMetal, RecipeEntry<? extends AlloyingRecipe> match) {
-        var value = match.value().output.toLowerCase();
+    private static boolean canInsertLiquid(int storage, MetalTypes currentMetal, AlloyingRecipe match) {
+        var value = match.output.toLowerCase();
         MetalTypes metal = MetalTypes.fromValue(value);
-        if((storage + match.value().amount) <= MAX_STORAGE){
+        if((storage + match.amount) <= MAX_STORAGE){
             if(metal == currentMetal){
                 return true;
             } else return currentMetal == MetalTypes.EMPTY;

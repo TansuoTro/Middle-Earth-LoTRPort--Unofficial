@@ -2,8 +2,8 @@ package net.jukoz.me.entity.beasts.cave_troll.feature;
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.ModelTransformer;
+import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntity;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntityModel;
-import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntityRenderState;
 
 public class CaveTrollSaddleModel extends CaveTrollEntityModel {
     private final ModelPart reins;
@@ -49,9 +49,9 @@ public class CaveTrollSaddleModel extends CaveTrollEntityModel {
     }
 
     @Override
-    public void setAngles(CaveTrollEntityRenderState state) {
-        super.setAngles(state);
+    public void setAngles(CaveTrollEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        super.setAngles(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
 
-        reins.visible = state.conrollingPassenger != null;
+        reins.visible = entity.getControllingPassenger() != null;
     }
 }

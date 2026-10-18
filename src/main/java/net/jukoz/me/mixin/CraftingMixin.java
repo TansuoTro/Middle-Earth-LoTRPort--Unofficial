@@ -9,8 +9,8 @@ import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.CraftingRecipe;
-import net.minecraft.recipe.RecipeEntry;
-import net.minecraft.recipe.input.CraftingRecipeInput;
+
+import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.screen.CraftingScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -30,7 +30,7 @@ public class CraftingMixin {
             cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
     private static void updateResultCancel(ScreenHandler handler, ServerWorld world, PlayerEntity player,
                                            RecipeInputInventory craftingInventory, CraftingResultInventory resultInventory,
-                                           @Nullable RecipeEntry<CraftingRecipe> recipe, CallbackInfo ci, CraftingRecipeInput craftingRecipeInput,
+                                           @Nullable CraftingRecipe recipe, CallbackInfo ci, RecipeInputInventory craftingRecipeInput,
                                            ServerPlayerEntity serverPlayerEntity, ItemStack itemStack){
         if (world.isClient){
             return;

@@ -1,29 +1,14 @@
 package net.jukoz.me.entity.spider.spawn;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.animation.Animation;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.jukoz.me.MiddleEarth;
+import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.jukoz.me.entity.spider.scuttler.ShelobiteScuttlerEntity;
 
-public class SpawnOfShelobModel extends EntityModel<SpawnOfShelobRenderState> {
+public class SpawnOfShelobModel extends SinglePartEntityModel<SpawnOfShelobEntity> {
     private final ModelPart root;
 
-    private final Animation idleAnimation;
-    private final Animation walkingAnimation;
-    private final Animation biteAnimation;
-    private final Animation walkingBlockAnimation;
-    private final Animation pounceAnimation;
-
     public SpawnOfShelobModel(ModelPart root) {
-        super(root);
         this.root = root.getChild("root");
-
-        this.idleAnimation = SpawnOfShelobAnimations.SPAWN_OF_SHELOB_IDLE.createAnimation(root);
-        this.walkingAnimation = SpawnOfShelobAnimations.SPAWN_OF_SHELOB_WALK.createAnimation(root);
-        this.biteAnimation = SpawnOfShelobAnimations.SPAWN_OF_SHELOB_BITE.createAnimation(root);
-        this.walkingBlockAnimation = SpawnOfShelobAnimations.SPAWN_OF_SHELOB_BLOCK.createAnimation(root);
-        this.pounceAnimation = SpawnOfShelobAnimations.SPAWN_OF_SHELOB_POUNCE.createAnimation(root);
     }
 
     public static TexturedModelData getTexturedModelData() {
@@ -160,38 +145,43 @@ public class SpawnOfShelobModel extends EntityModel<SpawnOfShelobRenderState> {
     }
 
     @Override
-    public void setAngles(SpawnOfShelobRenderState state) {
-        super.setAngles(state);
+    public ModelPart getPart() {
+        return this.root;
+    }
 
-        int croppedClimbingTicks = Math.min(ShelobiteScuttlerEntity.CLIMBING_TIME_TRANSITION, state.climbingTicks);
+    @Override
+    public void setAngles(SpawnOfShelobEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        this.getPart().traverse().forEach(ModelPart::resetTransform);
+
+        int croppedClimbingTicks = Math.min(ShelobiteScuttlerEntity.CLIMBING_TIME_TRANSITION, entity.getClimbingTicks());
         float climbingPercentage = (float) croppedClimbingTicks / SpawnOfShelobEntity.CLIMBING_TIME_TRANSITION;
 
-        int croppedLeapingTicks = Math.min(ShelobiteScuttlerEntity.LEAPING_TIME_TRANSITION, state.leapingTicks);
+        int croppedLeapingTicks = Math.min(ShelobiteScuttlerEntity.LEAPING_TIME_TRANSITION, entity.getLeapingTicks());
         float leapingPercentage = (float) croppedLeapingTicks / SpawnOfShelobEntity.LEAPING_TIME_TRANSITION;
 
-        if(state.climbingTicks > 0 && climbingPercentage > leapingPercentage) {
+        if(entity.getClimbingTicks() > 0 && climbingPercentage > leapingPercentage) {
             this.root.pitch = -1.5f * climbingPercentage;
-            this.walkingAnimation.applyWalking(state.age, 0.4f, 1.75F, 2F);
+            this.animateMovement(SpawnOfShelobAnimations.SPAWN_OF_SHELOB_WALK, ageInTicks, 0.4f, 1.75F, 2F);
             return;
-        } else if(state.leapingTicks > 0 && leapingPercentage > climbingPercentage) {
+        } else if(entity.getLeapingTicks() > 0 && leapingPercentage > climbingPercentage) {
             this.root.pitch = -0.8f * leapingPercentage;
-            this.walkingAnimation.applyWalking((float)state.leapingTicks / 3.1f, 0.75f, 2.2F, 2.5F);
+            this.animateMovement(SpawnOfShelobAnimations.SPAWN_OF_SHELOB_WALK, (float)entity.getLeapingTicks() / 3.1f, 0.75f, 2.2F, 2.5F);
             return;
         }
 
-        if(state.limbSwingAmplitude <= 0.4) {
-            this.idleAnimation.apply(state.idleAnimationState, state.age, 0.75f);
-        } else if(state.blockAnimationState.isRunning()) {
-            this.walkingBlockAnimation.applyWalking(state.limbSwingAnimationProgress, state.limbSwingAmplitude, 2.2F, 2.25F);
+        if(limbSwingAmount <= 0.4) {
+            this.updateAnimation(entity.idleAnimation, SpawnOfShelobAnimations.SPAWN_OF_SHELOB_IDLE, ageInTicks, 0.75f);
+        } else if(entity.blockAnimation.isRunning()) {
+            this.animateMovement(SpawnOfShelobAnimations.SPAWN_OF_SHELOB_BLOCK, limbSwing, limbSwingAmount, 2.2F, 2.25F);
         } else {
-            this.walkingAnimation.applyWalking(state.limbSwingAnimationProgress, state.limbSwingAmplitude, 2.25F, 2.5F);
+            this.animateMovement(SpawnOfShelobAnimations.SPAWN_OF_SHELOB_WALK, limbSwing, limbSwingAmount, 2.25F, 2.5F);
         }
 
-        if(state.biteAnimationState.isRunning()) {
-            this.biteAnimation.apply(state.biteAnimationState, state.age, 1.3f);
+        if(entity.biteAnimation.isRunning()) {
+            this.updateAnimation(entity.biteAnimation, SpawnOfShelobAnimations.SPAWN_OF_SHELOB_BITE, ageInTicks, 1.3f);
         }
-        if(state.pounceAnimationState.isRunning()) {
-            this.pounceAnimation.apply(state.pounceAnimationState, state.age, 1.0f);
+        if(entity.pounceAnimation.isRunning()) {
+            this.updateAnimation(entity.pounceAnimation, SpawnOfShelobAnimations.SPAWN_OF_SHELOB_POUNCE, ageInTicks, 1.0f);
         }
     }
 }

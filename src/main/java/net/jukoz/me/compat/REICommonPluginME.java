@@ -7,7 +7,7 @@ import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.plugins.REICommonPlugin;
 import me.shedaniel.rei.api.common.registry.display.ServerDisplayRegistry;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
-import net.minecraft.recipe.RecipeEntry;
+
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.compat.artisantable.ArtisanTableDisplay;
 import net.jukoz.me.compat.forge.AlloyingDisplay;
@@ -33,16 +33,16 @@ public class REICommonPluginME implements REICommonPlugin {
     public void registerDisplays(ServerDisplayRegistry registry) {
         REICommonPlugin.super.registerDisplays(registry);
 
-        Collection<RecipeEntry<ArtisanRecipe>> recipeEntryList = GameInstance.getServer().getRecipeManager().getAllOfType(RecipesME.ARTISAN_TABLE_SUPPLIER.get());
-        for(RecipeEntry<ArtisanRecipe> recipeEntry : recipeEntryList) {
-            ArtisanRecipe artisanRecipe = recipeEntry.value();
+        Collection<ArtisanRecipe> recipeEntryList = GameInstance.getServer().getRecipeManager().listAllOfType(RecipesME.ARTISAN_TABLE_SUPPLIER.get());
+        for(ArtisanRecipe recipeEntry : recipeEntryList) {
+            ArtisanRecipe artisanRecipe = recipeEntry;
             List<EntryIngredient> inputs = ArtisanTableDisplay.getInputs(artisanRecipe);
-            registry.add(new ArtisanTableDisplay(inputs, List.of(EntryIngredients.of(artisanRecipe.getOutput())), artisanRecipe.category));
+            registry.add(new ArtisanTableDisplay(inputs, List.of(EntryIngredients.of(artisanRecipe.getOutput(GameInstance.getServer().getRegistryManager()))), artisanRecipe.category));
         }
 
-        Collection<RecipeEntry<AlloyingRecipe>> alloyRecipeEntryList = GameInstance.getServer().getRecipeManager().getAllOfType(RecipesME.FORGE);
-        for(RecipeEntry<AlloyingRecipe> recipeEntry : alloyRecipeEntryList) {
-            AlloyingRecipe alloyRecipe = recipeEntry.value();
+        Collection<AlloyingRecipe> alloyRecipeEntryList = GameInstance.getServer().getRecipeManager().listAllOfType(RecipesME.FORGE);
+        for(AlloyingRecipe recipeEntry : alloyRecipeEntryList) {
+            AlloyingRecipe alloyRecipe = recipeEntry;
             if(!alloyRecipe.output.contains("nugget")) {
                 List<EntryIngredient> inputs = AlloyingDisplay.getInputs(alloyRecipe);
                 registry.add(new AlloyingDisplay(inputs, alloyRecipe.output, alloyRecipe.amount));

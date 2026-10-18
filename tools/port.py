@@ -330,6 +330,28 @@ REWRITES = [
     ("import-profile", r"import net[.]minecraft[.]component[.]type[.]ProfileComponent;", ""),
     ("import-tool", r"import net[.]minecraft[.]component[.]type[.]ToolComponent;", ""),
     ("import-charged", r"import net[.]minecraft[.]component[.]type[.]ChargedProjectilesComponent;", ""),
+    # --- recipe trio (census: build/agents/recipe-trio.md) ---
+    ("recipe-entry-wild", r"RecipeEntry<[?] extends ([A-Za-z0-9_]+)>", "\\1"),
+    ("recipe-entry-flat", r"RecipeEntry<([A-Za-z0-9_]+)>", "\\1"),
+    ("recipe-entry-value", r"recipeEntry[.]value[(][)]", "recipeEntry"),
+    ("recipe-entry-value2", r"match[.]value[(][)]", "match"),
+    ("recipe-entry-value3", r"recipe[.]value[(][)]", "recipe"),
+    ("import-recipe-entry", r"import net[.]minecraft[.]recipe[.]RecipeEntry;", ""),
+    ("server-recipe-manager", r"ServerRecipeManager", "RecipeManager"),
+    ("get-all-of-type", r"[.]getAllOfType[(]", ".listAllOfType("),
+    ("get-all-matches-tolist", r"([.]getAllMatches[(][^;]*[)])[.]toList[(][)]", "\\1"),
+    ("import-crafting-input", r"import net[.]minecraft[.]recipe[.]input[.]CraftingRecipeInput;", "import net.minecraft.inventory.RecipeInputInventory;"),
+    ("crafting-recipe-input", r"CraftingRecipeInput", "RecipeInputInventory"),
+    ("get-stack-in-slot", r"[.]getStackInSlot[(]", ".getStack("),
+    ("recipe-remainders", r"getRecipeRemainders", "getRemainder"),
+    ("craft-lookup", r"(craft[(][A-Za-z0-9_]+ [A-Za-z0-9_]+, )RegistryWrapper[.]WrapperLookup", "\\1DynamicRegistryManager"),
+    ("output-lookup", r"(getOutput[(])RegistryWrapper[.]WrapperLookup", "\\1DynamicRegistryManager"),
+    ("special-serializer-nest", r"SpecialCraftingRecipe[.]SpecialRecipeSerializer", "SpecialRecipeSerializer"),
+    ("import-single-stack", r"import net[.]minecraft[.]recipe[.]input[.]SingleStackRecipeInput;", "import net.jukoz.me.compat.SingleStackRecipeInput;"),
+    ("import-recipe-input", r"import net[.]minecraft[.]recipe[.]input[.]RecipeInput;", ""),
+    ("mecomponents-get", r"([A-Za-z_][A-Za-z0-9_]*)[.]get[(](MEComponents[.][A-Z_]+[A-Za-z0-9_]*)[)]", "MEComponents.get(\\1, \\2)"),
+    ("mecomponents-contains", r"([A-Za-z_][A-Za-z0-9_]*)[.]contains[(](MEComponents[.][A-Z_]+[A-Za-z0-9_]*)[)]", "MEComponents.contains(\\1, \\2)"),
+    ("recipe-remainder-item", r"([A-Za-z_][A-Za-z0-9_]*)[.]getItem[(][)][.]getRecipeRemainder[(][)]", "\\1.getRecipeRemainder()"),
 ]
 
 # 1.21 wraps block/item ids in a RegistryKey; 1.20.1 registers by Identifier.

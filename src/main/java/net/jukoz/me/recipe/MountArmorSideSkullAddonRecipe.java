@@ -7,24 +7,26 @@ import net.minecraft.item.Items;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
-import net.minecraft.recipe.input.CraftingRecipeInput;
+import net.minecraft.util.Identifier;
+import net.minecraft.inventory.RecipeInputInventory;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.World;
 import net.jukoz.me.utils.ItemTagsME;
 
 public class MountArmorSideSkullAddonRecipe extends SpecialCraftingRecipe {
-    public MountArmorSideSkullAddonRecipe(CraftingRecipeCategory category) {
-        super(category);
+    public MountArmorSideSkullAddonRecipe(Identifier id, CraftingRecipeCategory category) {
+        super(id, category);
     }
 
     @Override
-    public boolean matches(CraftingRecipeInput input, World world) {
+    public boolean matches(RecipeInputInventory input, World world) {
         ItemStack itemStackArmor = ItemStack.EMPTY;
         ItemStack itemStackString = ItemStack.EMPTY;
         ItemStack itemStackSkull= ItemStack.EMPTY;
 
         for(int i = 0; i < input.size(); ++i) {
-            ItemStack itemStack2 = input.getStackInSlot(i);
+            ItemStack itemStack2 = input.getStack(i);
             if (!itemStack2.isEmpty()) {
                 if (itemStack2.isIn(ItemTagsME.WARG_ARMORS)) {
                     if (!itemStackArmor.isEmpty()) {
@@ -50,11 +52,15 @@ public class MountArmorSideSkullAddonRecipe extends SpecialCraftingRecipe {
     }
 
     @Override
-    public ItemStack craft(CraftingRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+    @Override
+    public boolean fits(int width, int height) {
+        return width * height >= 3;
+    }    @Override
+    public ItemStack craft(RecipeInputInventory input, DynamicRegistryManager lookup) {
         ItemStack itemStack = ItemStack.EMPTY;
 
         for(int i = 0; i < input.size(); ++i) {
-            ItemStack itemStack2 = input.getStackInSlot(i);
+            ItemStack itemStack2 = input.getStack(i);
             if (!itemStack2.isEmpty()) {
                 if (itemStack2.isIn(ItemTagsME.WARG_ARMORS)) {
                     if (!itemStack.isEmpty()) {

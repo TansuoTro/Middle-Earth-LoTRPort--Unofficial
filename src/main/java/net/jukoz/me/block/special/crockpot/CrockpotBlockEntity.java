@@ -14,8 +14,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.recipe.RecipeEntry;
-import net.minecraft.recipe.ServerRecipeManager;
+
+import net.minecraft.recipe.RecipeManager;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
@@ -49,7 +49,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
     private final DefaultedList<ItemStack> inventory =
             DefaultedList.ofSize(5, ItemStack.EMPTY);
     protected final PropertyDelegate propertyDelegate;
-    private final ServerRecipeManager.MatchGetter<MultipleStackRecipeInput, ? extends CrockpotRecipe> matchGetter;
+    private final RecipeManager.MatchGetter<MultipleStackRecipeInput, ? extends CrockpotRecipe> matchGetter;
     private int progress = 0;
     private Random random;
     private float liquidTopLevel;
@@ -81,7 +81,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
                 return 1;
             }
         };
-        this.matchGetter = ServerRecipeManager.createCachedMatchGetter(RecipesME.CROCKPOT);
+        this.matchGetter = RecipeManager.createCachedMatchGetter(RecipesME.CROCKPOT);
         this.liquidTopLevel = liquidTopLevel;
         random = Random.create();
     }
@@ -99,7 +99,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
             blockEntity.randomBubbles();
             ServerWorld serverWorld = (ServerWorld) world;
             MultipleStackRecipeInput recipeInput = new MultipleStackRecipeInput(ingredients);
-            RecipeEntry recipeEntry;
+            CrockpotRecipe recipeEntry;
             if (ingredients.size() >= 2) {
                 recipeEntry = blockEntity.matchGetter.getFirstMatch(recipeInput, serverWorld).orElse(null);
             } else {
@@ -153,10 +153,10 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
         }
     }
 
-    private static boolean craftRecipe(DynamicRegistryManager dynamicRegistryManager, @Nullable RecipeEntry<CrockpotRecipe> recipe,
+    private static boolean craftRecipe(DynamicRegistryManager dynamicRegistryManager, @Nullable CrockpotRecipe recipe,
                                        MultipleStackRecipeInput input, DefaultedList<ItemStack> inventory) {
         if (recipe != null) {
-            ItemStack craftedStack = recipe.value().craft(input, dynamicRegistryManager);
+            ItemStack craftedStack = recipe.craft(input, dynamicRegistryManager);
             inventory.set(OUTPUT_SLOT, craftedStack.copy());
             for(int i = 0; i < OUTPUT_SLOT; i++) {
                 inventory.set(i, ItemStack.EMPTY);

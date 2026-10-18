@@ -1,32 +1,18 @@
 package net.jukoz.me.entity.spider.scuttler;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.animation.Animation;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.jukoz.me.entity.spider.spawn.SpawnOfShelobEntity;
+import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 
-public class ShelobiteScuttlerModel extends EntityModel<ShelobiteScuttlerRenderState> {
+public class ShelobiteScuttlerModel extends SinglePartEntityModel<ShelobiteScuttlerEntity> {
     private static final int CLIMBING_ROTATION_MAX = 90;
     private final ModelPart root;
     private final ModelPart legscore;
     private final ModelPart body;
 
-    private final Animation idleAnimation;
-    private final Animation walkingAnimation;
-    private final Animation biteAnimation;
-    private final Animation pounceAnimation;
-
     public ShelobiteScuttlerModel(ModelPart root) {
-        super(root);
-
         this.root = root.getChild("root");
         this.legscore = this.root.getChild("legscore");
         this.body = this.root.getChild("body");
-
-        this.idleAnimation = ShelobiteScuttlerAnimations.SHELOBITE_SCUTTLER_IDLE.createAnimation(root);
-        this.walkingAnimation = ShelobiteScuttlerAnimations.SHELOBITE_SCUTTLER_WALK.createAnimation(root);
-        this.biteAnimation = ShelobiteScuttlerAnimations.SHELOBITE_SCUTTLER_BITE.createAnimation(root);
-        this.pounceAnimation = ShelobiteScuttlerAnimations.SHELOBITE_SCUTTLER_POUNCE.createAnimation(root);
     }
 
     public static TexturedModelData getTexturedModelData() {
@@ -135,35 +121,40 @@ public class ShelobiteScuttlerModel extends EntityModel<ShelobiteScuttlerRenderS
     }
 
     @Override
-    public void setAngles(ShelobiteScuttlerRenderState state) {
-        super.setAngles(state);
-        int croppedClimbingTicks = Math.min(ShelobiteScuttlerEntity.CLIMBING_TIME_TRANSITION, state.climbingTicks);
+    public ModelPart getPart() {
+        return this.root;
+    }
+
+    @Override
+    public void setAngles(ShelobiteScuttlerEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        this.getPart().traverse().forEach(ModelPart::resetTransform);
+        int croppedClimbingTicks = Math.min(ShelobiteScuttlerEntity.CLIMBING_TIME_TRANSITION, entity.getClimbingTicks());
         float climbingPercentage = (float) croppedClimbingTicks / ShelobiteScuttlerEntity.CLIMBING_TIME_TRANSITION;
- 
-        int croppedLeapingTicks = Math.min(ShelobiteScuttlerEntity.LEAPING_TIME_TRANSITION, state.leapingTicks);
+
+        int croppedLeapingTicks = Math.min(ShelobiteScuttlerEntity.LEAPING_TIME_TRANSITION, entity.getLeapingTicks());
         float leapingPercentage = (float) croppedLeapingTicks / ShelobiteScuttlerEntity.LEAPING_TIME_TRANSITION;
 
-        if(state.climbingTicks > 0 && climbingPercentage > leapingPercentage) {
+        if(entity.getClimbingTicks() > 0 && climbingPercentage > leapingPercentage) {
             this.root.pitch = -1.5f * climbingPercentage;
-            this.walkingAnimation.applyWalking(state.age, 0.4f, 1.75F, 2F);
+            this.animateMovement(ShelobiteScuttlerAnimations.SHELOBITE_SCUTTLER_WALK, ageInTicks, 0.4f, 1.75F, 2F);
             return;
-        } else if(state.leapingTicks > 0 && leapingPercentage > climbingPercentage) {
+        } else if(entity.getLeapingTicks() > 0 && leapingPercentage > climbingPercentage) {
             this.root.pitch = -0.7f * leapingPercentage;
-            this.walkingAnimation.applyWalking((float)state.leapingTicks / 3.7f, 0.7f, 2.2F, 2.5F);
+            this.animateMovement(ShelobiteScuttlerAnimations.SHELOBITE_SCUTTLER_WALK, (float)entity.getLeapingTicks() / 3.7f, 0.7f, 2.2F, 2.5F);
             return;
         }
 
-        if(state.limbSwingAmplitude <= 0.4) {
-            this.idleAnimation.apply(state.idleAnimationState, state.age, 0.75f);
+        if(limbSwingAmount <= 0.4) {
+            this.updateAnimation(entity.idleAnimation, ShelobiteScuttlerAnimations.SHELOBITE_SCUTTLER_IDLE, ageInTicks, 0.75f);
         } else {
-            this.walkingAnimation.applyWalking(state.limbSwingAnimationProgress, state.limbSwingAmplitude, 2.25F, 2.5F);
+            this.animateMovement(ShelobiteScuttlerAnimations.SHELOBITE_SCUTTLER_WALK, limbSwing, limbSwingAmount, 2.25F, 2.5F);
         }
 
-        if(state.biteAnimationState.isRunning()) {
-            this.biteAnimation.apply(state.biteAnimationState, state.age, 1.5f);
+        if(entity.biteAnimation.isRunning()) {
+            this.updateAnimation(entity.biteAnimation, ShelobiteScuttlerAnimations.SHELOBITE_SCUTTLER_BITE, ageInTicks, 1.5f);
         }
-        if(state.pounceAnimationState.isRunning()) {
-            this.pounceAnimation.apply(state.pounceAnimationState, state.age, 1.1f);
+        if(entity.pounceAnimation.isRunning()) {
+            this.updateAnimation(entity.pounceAnimation, ShelobiteScuttlerAnimations.SHELOBITE_SCUTTLER_POUNCE, ageInTicks, 1.1f);
         }
     }
 }
