@@ -1,4 +1,6 @@
 package net.jukoz.me.entity.spider.scuttler;
+import net.jukoz.me.compat.client.render.MEAnimationStates;
+import net.jukoz.me.compat.client.render.MEMobEntityRenderer;
 
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
@@ -6,7 +8,7 @@ import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.util.Identifier;
 import net.jukoz.me.entity.EntityModelLayersME;
 
-public class ShelobiteScuttlerRenderer extends MobEntityRenderer<ShelobiteScuttlerEntity, ShelobiteScuttlerRenderState, ShelobiteScuttlerModel> {
+public class ShelobiteScuttlerRenderer extends MEMobEntityRenderer<ShelobiteScuttlerEntity, ShelobiteScuttlerRenderState, ShelobiteScuttlerModel> {
 
     public ShelobiteScuttlerRenderer(EntityRendererFactory.Context context) {
         this(context, 0.45F, EntityModelLayersME.SHELOBITE_SCUTTLER);
@@ -28,10 +30,10 @@ public class ShelobiteScuttlerRenderer extends MobEntityRenderer<ShelobiteScuttl
 
     public void updateRenderState(ShelobiteScuttlerEntity shelobiteScuttlerEntity, ShelobiteScuttlerRenderState shelobiteScuttlerEntityRenderState, float f) {
         super.updateRenderState(shelobiteScuttlerEntity, shelobiteScuttlerEntityRenderState, f);
-        shelobiteScuttlerEntityRenderState.idleAnimationState.copyFrom(shelobiteScuttlerEntity.idleAnimation);
-        shelobiteScuttlerEntityRenderState.walkAnimationState.copyFrom(shelobiteScuttlerEntity.walkingAnimation);
-        shelobiteScuttlerEntityRenderState.biteAnimationState.copyFrom(shelobiteScuttlerEntity.biteAnimation);
-        shelobiteScuttlerEntityRenderState.pounceAnimationState.copyFrom(shelobiteScuttlerEntity.pounceAnimation);
+        MEAnimationStates.copyFrom(shelobiteScuttlerEntityRenderState.idleAnimationState, shelobiteScuttlerEntity.idleAnimation);
+        MEAnimationStates.copyFrom(shelobiteScuttlerEntityRenderState.walkAnimationState, shelobiteScuttlerEntity.walkingAnimation);
+        MEAnimationStates.copyFrom(shelobiteScuttlerEntityRenderState.biteAnimationState, shelobiteScuttlerEntity.biteAnimation);
+        MEAnimationStates.copyFrom(shelobiteScuttlerEntityRenderState.pounceAnimationState, shelobiteScuttlerEntity.pounceAnimation);
         shelobiteScuttlerEntityRenderState.climbingTicks = shelobiteScuttlerEntity.getClimbingTicks();
         shelobiteScuttlerEntityRenderState.leapingTicks = shelobiteScuttlerEntity.getLeapingTicks();
         shelobiteScuttlerEntityRenderState.spiderVariant = shelobiteScuttlerEntity.getVariant();

@@ -1,4 +1,5 @@
 package net.jukoz.me.entity.barrel;
+import net.jukoz.me.compat.client.render.MEEntityRenderer;
 
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.ModelPart;
@@ -16,7 +17,7 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.EntityModelLayersME;
 import org.joml.Quaternionf;
 
-public class BarrelEntityRenderer extends EntityRenderer<BarrelEntity, BoatEntityRenderState> {
+public class BarrelEntityRenderer extends MEEntityRenderer<BarrelEntity, BoatEntityRenderState> {
     private static final Identifier TEXTURE = new Identifier(MiddleEarth.MOD_ID, "textures/entities/reinforced_barrel/reinforced_barrel.png");
     private ModelPart modelPart;
     private final Model waterMaskModel;

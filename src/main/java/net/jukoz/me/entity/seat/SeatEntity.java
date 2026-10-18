@@ -10,6 +10,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;public class SeatEntity extends Entity {    public SeatEntity(EntityType<?> type, World world) {
         super(type, world);
+    }    @Override
+    protected void initDataTracker() {
     }    protected Item asItem() {
         return null;
     }    @Override

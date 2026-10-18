@@ -21,7 +21,6 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.spawn.SpawnContext;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.RegistryKeys;
@@ -46,6 +45,7 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.biome.Biome;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.TrackedDataHandlerRegistryME;
+import net.jukoz.me.entity.VariantsME;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntity;
 import net.jukoz.me.entity.goals.SpiderPonceAtTargetGoal;
 import net.jukoz.me.entity.npcs.NpcEntity;
@@ -117,35 +117,23 @@ public class ShelobiteScuttlerEntity extends HostileEntity implements Pouncer {
 
     @Nullable
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound nbt) {
         if (entityData instanceof SpiderData spiderData) {
             this.setVariant(spiderData.variant);
         } else {
-            Optional<? extends RegistryEntry<SpiderVariant>> optional = Variants.select(SpawnContext.of(world, this.getBlockPos()), DynamicRegistriesME.SPIDER_VARIANTS);
+            Optional<RegistryEntry<SpiderVariant>> optional = VariantsME.select(world,
+                    VariantsME.registry(world.toServerWorld().getRegistryManager(), DynamicRegistriesME.SPIDER_VARIANTS));
             if (optional.isPresent()) {
                 this.setVariant(optional.get());
                 entityData = new SpiderData(optional.get());
             }
         }
-        return super.initialize(world, difficulty, spawnReason, entityData);
+        return super.initialize(world, difficulty, spawnReason, entityData, nbt);
     }
 
     @Override
     public boolean isPersistent() {
         return false;
-    }
-
-    public static boolean canSpawn(EntityType<NpcEntity> type, WorldAccess worldAccess, SpawnReason spawnReason, BlockPos pos, Random random) {
-        BlockPos below = pos.down();
-        boolean isOnSolidGround = worldAccess.getBlockState(below).isSolidBlock(worldAccess, below);
-        boolean isNotOnTopOfLogs = !worldAccess.getBlockState(below).isIn(BlockTags.LOGS);
-
-        if (spawnReason == SpawnReason.NATURAL && worldAccess instanceof ServerWorld world) {
-            RegistryEntry<Biome> biome = world.getBiome(pos);
-            boolean canSpawn = BiomeEventDataLookup.canEntitySpawn(world, biome, pos, type, random);
-            return isOnSolidGround && isNotOnTopOfLogs && canSpawn;
-        }
-        return isOnSolidGround && isNotOnTopOfLogs;
     }
 
     @Override
@@ -181,13 +169,13 @@ public class ShelobiteScuttlerEntity extends HostileEntity implements Pouncer {
         return new SpiderNavigation(this, world);
     }
 
-    protected void initDataTracker(DataTracker.Builder builder) {
-        super.initDataTracker(builder);
-        RegistryEntry<SpiderVariant> spiderVariantRegistryEntry = Variants.getOrDefaultOrThrow(this.getRegistryManager(), SpiderVariantRegistry.DEFAULT);
-        builder.add(VARIANT, spiderVariantRegistryEntry);
-        builder.add(SPIDER_FLAGS, (byte)0);
-        builder.add(BITE_FLAG, 0);
-        builder.add(POUNCE_FLAG, 0);
+    protected void initDataTracker() {
+        super.initDataTracker();
+        RegistryEntry<SpiderVariant> spiderVariantRegistryEntry = VariantsME.getOrDefaultOrThrow(this.getWorld().getRegistryManager(), SpiderVariantRegistry.DEFAULT);
+        this.dataTracker.startTracking(VARIANT, spiderVariantRegistryEntry);
+        this.dataTracker.startTracking(SPIDER_FLAGS, (byte)0);
+        this.dataTracker.startTracking(BITE_FLAG, 0);
+        this.dataTracker.startTracking(POUNCE_FLAG, 0);
     }
 
     //@Override
@@ -218,10 +206,10 @@ public class ShelobiteScuttlerEntity extends HostileEntity implements Pouncer {
     }
 
     @Override
-    public boolean tryAttack(ServerWorld world, Entity target) {
+    public boolean tryAttack(Entity target) {
         this.dataTracker.set(BITE_FLAG, 1);
         if(biteAnimationCooldown == 0) biteAnimationCooldown = 40;
-        return super.tryAttack(world, target);
+        return super.tryAttack(target);
     }
 
     @Override
@@ -260,8 +248,8 @@ public class ShelobiteScuttlerEntity extends HostileEntity implements Pouncer {
     }
 
     @Override
-    protected void mobTick(ServerWorld world) {
-        super.mobTick(world);
+    protected void mobTick() {
+        super.mobTick();
         //Profiler profiler = Profilers.get();
         //profiler.push("shelobiteScuttlerBrain");
         //this.getBrain().tick(world, this);
@@ -287,7 +275,7 @@ public class ShelobiteScuttlerEntity extends HostileEntity implements Pouncer {
     }
 
     @Override
-    protected int getExperienceToDrop(ServerWorld world) {
+    protected int getXpToDrop() {
         return 6 + this.random.nextInt(3);
     }
 
@@ -362,17 +350,17 @@ public class ShelobiteScuttlerEntity extends HostileEntity implements Pouncer {
     }
 
     @Override
-    protected void writeCustomDataToNbt(NbtCompound nbt) {
+    public void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
         WriteView view = new WriteView(nbt);
-        super.writeCustomData(view);
-        Variants.writeVariantToNbt(view, this.getRegistryVariant());
+        VariantsME.writeVariantToNbt(view, this.getRegistryVariant());
     }
 
     @Override
-    protected void readCustomDataFromNbt(NbtCompound nbt) {
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+        super.readCustomDataFromNbt(nbt);
         ReadView view = new ReadView(nbt);
-        super.readCustomData(view);
-        Variants.readVariantFromNbt(view, DynamicRegistriesME.SPIDER_VARIANTS).ifPresent(this::setVariant);
+        VariantsME.readVariantFromNbt(view, this.getWorld().getRegistryManager(), DynamicRegistriesME.SPIDER_VARIANTS).ifPresent(this::setVariant);
     }
 
     static {

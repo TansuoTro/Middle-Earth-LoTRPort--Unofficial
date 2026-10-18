@@ -1,4 +1,6 @@
 package net.jukoz.me.entity.spider.larva;
+import net.jukoz.me.compat.client.render.MEAnimationStates;
+import net.jukoz.me.compat.client.render.MEMobEntityRenderer;
 
 
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -10,7 +12,7 @@ import net.minecraft.util.Identifier;
 import net.jukoz.me.entity.EntityModelLayersME;
 import net.jukoz.me.entity.spider.scuttler.ShelobiteScuttlerRenderState;
 
-public class ShelobiteLarvaRenderer extends MobEntityRenderer<ShelobiteLarvaEntity, ShelobiteScuttlerRenderState, ShelobiteLarvaModel> {
+public class ShelobiteLarvaRenderer extends MEMobEntityRenderer<ShelobiteLarvaEntity, ShelobiteScuttlerRenderState, ShelobiteLarvaModel> {
     private static final String PATH = "textures/entities/spiders/";
 
     public ShelobiteLarvaRenderer(EntityRendererFactory.Context context) {
@@ -34,8 +36,8 @@ public class ShelobiteLarvaRenderer extends MobEntityRenderer<ShelobiteLarvaEnti
 
     public void updateRenderState(ShelobiteLarvaEntity larvaEntity, ShelobiteScuttlerRenderState shelobiteScuttlerEntityRenderState, float f) {
         super.updateRenderState(larvaEntity, shelobiteScuttlerEntityRenderState, f);
-        shelobiteScuttlerEntityRenderState.walkAnimationState.copyFrom(larvaEntity.walkingAnimation);
-        shelobiteScuttlerEntityRenderState.biteAnimationState.copyFrom(larvaEntity.biteAnimation);
+        MEAnimationStates.copyFrom(shelobiteScuttlerEntityRenderState.walkAnimationState, larvaEntity.walkingAnimation);
+        MEAnimationStates.copyFrom(shelobiteScuttlerEntityRenderState.biteAnimationState, larvaEntity.biteAnimation);
         shelobiteScuttlerEntityRenderState.spiderVariant = larvaEntity.getVariant();
     }
 

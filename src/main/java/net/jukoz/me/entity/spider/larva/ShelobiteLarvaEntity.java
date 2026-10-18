@@ -15,7 +15,6 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.spawn.SpawnContext;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
@@ -34,6 +33,7 @@ import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.TrackedDataHandlerRegistryME;
+import net.jukoz.me.entity.VariantsME;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntity;
 import net.jukoz.me.entity.goals.FollowDifferentMobGoal;
 import net.jukoz.me.entity.npcs.NpcEntity;
@@ -86,17 +86,18 @@ public class ShelobiteLarvaEntity extends HostileEntity {
 
     @Nullable
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound nbt) {
         if (entityData instanceof ShelobiteScuttlerEntity.SpiderData spiderData) {
             this.setVariant(spiderData.variant);
         } else {
-            Optional<? extends RegistryEntry<SpiderVariant>> optional = Variants.select(SpawnContext.of(world, this.getBlockPos()), DynamicRegistriesME.SPIDER_VARIANTS);
+            Optional<RegistryEntry<SpiderVariant>> optional = VariantsME.select(world,
+                    VariantsME.registry(world.toServerWorld().getRegistryManager(), DynamicRegistriesME.SPIDER_VARIANTS));
             if (optional.isPresent()) {
                 this.setVariant(optional.get());
                 entityData = new ShelobiteScuttlerEntity.SpiderData(optional.get());
             }
         }
-        return super.initialize(world, difficulty, spawnReason, entityData);
+        return super.initialize(world, difficulty, spawnReason, entityData, nbt);
     }
 
     public double getMountedHeightOffset() {
@@ -108,12 +109,12 @@ public class ShelobiteLarvaEntity extends HostileEntity {
         return new SpiderNavigation(this, world);
     }
 
-    protected void initDataTracker(DataTracker.Builder builder) {
-        super.initDataTracker(builder);
-        RegistryEntry<SpiderVariant> spiderVariantRegistryEntry = Variants.getOrDefaultOrThrow(this.getRegistryManager(), SpiderVariantRegistry.DEFAULT);
-        builder.add(VARIANT, spiderVariantRegistryEntry);
-        builder.add(ATTACK_FLAG, false);
-        builder.add(SPIDER_FLAGS, (byte)0);
+    protected void initDataTracker() {
+        super.initDataTracker();
+        RegistryEntry<SpiderVariant> spiderVariantRegistryEntry = VariantsME.getOrDefaultOrThrow(this.getWorld().getRegistryManager(), SpiderVariantRegistry.DEFAULT);
+        this.dataTracker.startTracking(VARIANT, spiderVariantRegistryEntry);
+        this.dataTracker.startTracking(ATTACK_FLAG, false);
+        this.dataTracker.startTracking(SPIDER_FLAGS, (byte)0);
     }
 
     protected void setupAnimationStates() {
@@ -129,8 +130,8 @@ public class ShelobiteLarvaEntity extends HostileEntity {
     }
 
     @Override
-    public boolean tryAttack(ServerWorld world, Entity target) {
-        boolean result = super.tryAttack(world, target);
+    public boolean tryAttack(Entity target) {
+        boolean result = super.tryAttack(target);
         this.dataTracker.set(ATTACK_FLAG, result);
         return result;
     }
@@ -156,7 +157,7 @@ public class ShelobiteLarvaEntity extends HostileEntity {
     }
 
     @Override
-    protected int getExperienceToDrop(ServerWorld world) {
+    protected int getXpToDrop() {
         return 1;
     }
 
@@ -227,17 +228,17 @@ public class ShelobiteLarvaEntity extends HostileEntity {
     }
 
     @Override
-    protected void writeCustomDataToNbt(NbtCompound nbt) {
+    public void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
         WriteView view = new WriteView(nbt);
-        super.writeCustomData(view);
-        Variants.writeVariantToNbt(view, this.getRegistryVariant());
+        VariantsME.writeVariantToNbt(view, this.getRegistryVariant());
     }
 
     @Override
-    protected void readCustomDataFromNbt(NbtCompound nbt) {
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+        super.readCustomDataFromNbt(nbt);
         ReadView view = new ReadView(nbt);
-        super.readCustomData(view);
-        Variants.readVariantFromNbt(view, DynamicRegistriesME.SPIDER_VARIANTS).ifPresent(this::setVariant);
+        VariantsME.readVariantFromNbt(view, this.getWorld().getRegistryManager(), DynamicRegistriesME.SPIDER_VARIANTS).ifPresent(this::setVariant);
     }
 
     static {

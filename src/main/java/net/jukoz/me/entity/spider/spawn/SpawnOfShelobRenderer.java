@@ -1,4 +1,6 @@
 package net.jukoz.me.entity.spider.spawn;
+import net.jukoz.me.compat.client.render.MEAnimationStates;
+import net.jukoz.me.compat.client.render.MEMobEntityRenderer;
 
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
@@ -6,7 +8,7 @@ import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.util.Identifier;
 import net.jukoz.me.entity.EntityModelLayersME;
 
-public class SpawnOfShelobRenderer extends MobEntityRenderer<SpawnOfShelobEntity, SpawnOfShelobRenderState, SpawnOfShelobModel> {
+public class SpawnOfShelobRenderer extends MEMobEntityRenderer<SpawnOfShelobEntity, SpawnOfShelobRenderState, SpawnOfShelobModel> {
     private static final String PATH = "textures/entities/spiders/";
 
     public SpawnOfShelobRenderer(EntityRendererFactory.Context context) {
@@ -29,11 +31,11 @@ public class SpawnOfShelobRenderer extends MobEntityRenderer<SpawnOfShelobEntity
 
     public void updateRenderState(SpawnOfShelobEntity spawnofShelobEntity, SpawnOfShelobRenderState shelobiteScuttlerEntityRenderState, float f) {
         super.updateRenderState(spawnofShelobEntity, shelobiteScuttlerEntityRenderState, f);
-        shelobiteScuttlerEntityRenderState.idleAnimationState.copyFrom(spawnofShelobEntity.idleAnimation);
-        shelobiteScuttlerEntityRenderState.walkAnimationState.copyFrom(spawnofShelobEntity.walkingAnimation);
-        shelobiteScuttlerEntityRenderState.biteAnimationState.copyFrom(spawnofShelobEntity.biteAnimation);
-        shelobiteScuttlerEntityRenderState.blockAnimationState.copyFrom(spawnofShelobEntity.blockAnimation);
-        shelobiteScuttlerEntityRenderState.pounceAnimationState.copyFrom(spawnofShelobEntity.pounceAnimation);
+        MEAnimationStates.copyFrom(shelobiteScuttlerEntityRenderState.idleAnimationState, spawnofShelobEntity.idleAnimation);
+        MEAnimationStates.copyFrom(shelobiteScuttlerEntityRenderState.walkAnimationState, spawnofShelobEntity.walkingAnimation);
+        MEAnimationStates.copyFrom(shelobiteScuttlerEntityRenderState.biteAnimationState, spawnofShelobEntity.biteAnimation);
+        MEAnimationStates.copyFrom(shelobiteScuttlerEntityRenderState.blockAnimationState, spawnofShelobEntity.blockAnimation);
+        MEAnimationStates.copyFrom(shelobiteScuttlerEntityRenderState.pounceAnimationState, spawnofShelobEntity.pounceAnimation);
         shelobiteScuttlerEntityRenderState.timelineTicks = spawnofShelobEntity.getTimelineTicks();
         shelobiteScuttlerEntityRenderState.climbingTicks = spawnofShelobEntity.getClimbingTicks();
         shelobiteScuttlerEntityRenderState.leapingTicks = spawnofShelobEntity.getLeapingTicks();

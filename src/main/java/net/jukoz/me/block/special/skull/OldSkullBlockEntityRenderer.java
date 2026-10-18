@@ -1,4 +1,5 @@
 package net.jukoz.me.block.special.skull;
+import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -33,7 +34,7 @@ public class OldSkullBlockEntityRenderer implements BlockEntityRenderer<OldSkull
     }
 
     @Nullable
-    public static SkullBlockEntityModel getModels(LoadedEntityModels models) {
+    public static SkullBlockEntityModel getModels(LoadedEntityModelsCompat models) {
         return new SkullEntityModel(models.getModelPart(EntityModelLayers.SKELETON_SKULL));
     }
 

@@ -1,4 +1,5 @@
 package net.jukoz.me.block.special.fire_of_orthanc;
+import net.jukoz.me.compat.client.render.MEEntityRenderer;
 
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -13,7 +14,7 @@ import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.World;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 
-public class FireOfOrthancEntityRenderer extends EntityRenderer<FireOfOrthancEntity, FireOfOrthancEntityRenderState> {
+public class FireOfOrthancEntityRenderer extends MEEntityRenderer<FireOfOrthancEntity, FireOfOrthancEntityRenderState> {
     private final BlockRenderManager blockRenderManager;
 
     public FireOfOrthancEntityRenderer(EntityRendererFactory.Context ctx) {

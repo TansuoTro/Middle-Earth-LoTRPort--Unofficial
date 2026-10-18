@@ -16,7 +16,6 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.entity.spawn.SpawnContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.BlockStateParticleEffect;
@@ -38,6 +37,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.*;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.TrackedDataHandlerRegistryME;
+import net.jukoz.me.entity.VariantsME;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntity;
 import net.jukoz.me.entity.goals.PounceRetreatGoal;
 import net.jukoz.me.entity.goals.ShieldAgainstProjectileGoal;
@@ -116,17 +116,18 @@ public class SpawnOfShelobEntity extends HostileEntity implements Pouncer, Shiel
 
     @Nullable
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound nbt) {
         if (entityData instanceof ShelobiteScuttlerEntity.SpiderData spiderData) {
             this.setVariant(spiderData.variant);
         } else {
-            Optional<? extends RegistryEntry<SpiderVariant>> optional = Variants.select(SpawnContext.of(world, this.getBlockPos()), DynamicRegistriesME.SPIDER_VARIANTS);
+            Optional<RegistryEntry<SpiderVariant>> optional = VariantsME.select(world,
+                    VariantsME.registry(world.toServerWorld().getRegistryManager(), DynamicRegistriesME.SPIDER_VARIANTS));
             if (optional.isPresent()) {
                 this.setVariant(optional.get());
                 entityData = new ShelobiteScuttlerEntity.SpiderData(optional.get());
             }
         }
-        return super.initialize(world, difficulty, spawnReason, entityData);
+        return super.initialize(world, difficulty, spawnReason, entityData, nbt);
     }
 
     public double getMountedHeightOffset() {
@@ -138,14 +139,14 @@ public class SpawnOfShelobEntity extends HostileEntity implements Pouncer, Shiel
         return new SpiderNavigation(this, world);
     }
 
-    protected void initDataTracker(DataTracker.Builder builder) {
-        super.initDataTracker(builder);
-        builder.add(SPIDER_FLAGS, (byte)0);
-        builder.add(BITE_FLAG, 0);
-        builder.add(POUNCE_FLAG, 0);
-        builder.add(BLOCK_FLAG, 0);
-        RegistryEntry<SpiderVariant> spiderVariantRegistryEntry = Variants.getOrDefaultOrThrow(this.getRegistryManager(), SpiderVariantRegistry.DEFAULT);
-        builder.add(VARIANT, spiderVariantRegistryEntry);
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(SPIDER_FLAGS, (byte)0);
+        this.dataTracker.startTracking(BITE_FLAG, 0);
+        this.dataTracker.startTracking(POUNCE_FLAG, 0);
+        this.dataTracker.startTracking(BLOCK_FLAG, 0);
+        RegistryEntry<SpiderVariant> spiderVariantRegistryEntry = VariantsME.getOrDefaultOrThrow(this.getWorld().getRegistryManager(), SpiderVariantRegistry.DEFAULT);
+        this.dataTracker.startTracking(VARIANT, spiderVariantRegistryEntry);
     }
 
     protected void setupAnimationStates() {
@@ -185,8 +186,8 @@ public class SpawnOfShelobEntity extends HostileEntity implements Pouncer, Shiel
     }
 
     @Override
-    public boolean tryAttack(ServerWorld world, Entity target) {
-        boolean result = super.tryAttack(world, target);
+    public boolean tryAttack(Entity target) {
+        boolean result = super.tryAttack(target);
         this.dataTracker.set(BITE_FLAG, 1);
         if(biteAnimationCooldown == 0) biteAnimationCooldown = 40;
         if (target instanceof LivingEntity) {
@@ -262,7 +263,7 @@ public class SpawnOfShelobEntity extends HostileEntity implements Pouncer, Shiel
     }
 
     @Override
-    protected int getExperienceToDrop(ServerWorld world) {
+    protected int getXpToDrop() {
         return 13 + this.random.nextInt(4);
     }
 
@@ -279,20 +280,22 @@ public class SpawnOfShelobEntity extends HostileEntity implements Pouncer, Shiel
     }
 
     @Override
+    public void attack(LivingEntity target, float pullProgress) {
+        this.shootAt(target, pullProgress);
+    }
+
     public void shootAt(LivingEntity target, float pullProgress) {
         double dX = target.getX() - this.getX();
         double e = target.getEyeY() - 1.1F;
         double dZ = target.getZ() - this.getZ();
         double g = Math.sqrt(dX * dX + dZ * dZ) * 0.2F;
         if (this.getWorld() instanceof ServerWorld serverWorld) {
-            ItemStack itemStack = new ItemStack(Items.COBWEB);
-            ProjectileEntity.spawn(
-                    new WebbedEntity(serverWorld, this, WEB_PROJECTILE_DAMAGE * pullProgress), serverWorld, itemStack,
-                    entity -> entity.setVelocity(dX, e + g - entity.getY(), dZ, 1.6F, 8 - this.getWorld().getDifficulty().getId() * 4)
-            );
+            WebbedEntity web = new WebbedEntity(serverWorld, this, WEB_PROJECTILE_DAMAGE * pullProgress);
+            web.setVelocity(dX, e + g - web.getY(), dZ, 1.6F, 8 - this.getWorld().getDifficulty().getId() * 4);
+            serverWorld.spawnEntity(web);
         }
 
-        this.playSound(SoundEvents.ENTITY_BREEZE_SHOOT, 1.0F, 0.7F + (this.getRandom().nextFloat() * 0.6F));
+        this.playSound(SoundEvents.ENTITY_SNOWBALL_THROW, 1.0F, 0.7F + (this.getRandom().nextFloat() * 0.6F));
     }
 
     @Override
@@ -368,17 +371,17 @@ public class SpawnOfShelobEntity extends HostileEntity implements Pouncer, Shiel
     }
 
     @Override
-    protected void writeCustomDataToNbt(NbtCompound nbt) {
+    public void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
         WriteView view = new WriteView(nbt);
-        super.writeCustomData(view);
-        Variants.writeVariantToNbt(view, this.getRegistryVariant());
+        VariantsME.writeVariantToNbt(view, this.getRegistryVariant());
     }
 
     @Override
-    protected void readCustomDataFromNbt(NbtCompound nbt) {
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+        super.readCustomDataFromNbt(nbt);
         ReadView view = new ReadView(nbt);
-        super.readCustomData(view);
-        Variants.readVariantFromNbt(view, DynamicRegistriesME.SPIDER_VARIANTS).ifPresent(this::setVariant);
+        VariantsME.readVariantFromNbt(view, this.getWorld().getRegistryManager(), DynamicRegistriesME.SPIDER_VARIANTS).ifPresent(this::setVariant);
     }
 
     static {

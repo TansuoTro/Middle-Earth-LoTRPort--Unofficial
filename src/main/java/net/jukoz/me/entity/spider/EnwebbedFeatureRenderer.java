@@ -1,4 +1,5 @@
 package net.jukoz.me.entity.spider;
+import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -23,7 +24,7 @@ public class EnwebbedFeatureRenderer <S extends BipedEntityRenderState, M extend
 
     private final EnwebbedModel model;
 
-    public EnwebbedFeatureRenderer(FeatureRendererContext<S, M> context, LoadedEntityModels loader, EquipmentRenderer equipmentRenderer) {
+    public EnwebbedFeatureRenderer(FeatureRendererContext<S, M> context, LoadedEntityModelsCompat loader, EquipmentRenderer equipmentRenderer) {
         super(context);
         this.model = new EnwebbedModel(loader.getModelPart(EntityModelLayersME.ENWEBBED));
     }

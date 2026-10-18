@@ -1,4 +1,5 @@
 package net.jukoz.me.entity.projectile.smoke;
+import net.jukoz.me.compat.client.render.MEEntityRenderer;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -18,7 +19,7 @@ import net.minecraft.client.render.RenderLayer;
 import org.joml.Quaternionf;
 
 @Environment(EnvType.CLIENT)
-public class SmokeRingProjectileRenderer extends EntityRenderer<SmokeRingProjectileEntity, SmokeRingProjectileRenderState> {
+public class SmokeRingProjectileRenderer extends MEEntityRenderer<SmokeRingProjectileEntity, SmokeRingProjectileRenderState> {
     private final Sprite[] frames;
 
     private static final Identifier SPRITES_ATLAS_ID = new Identifier(MiddleEarth.MOD_ID, "sprites");

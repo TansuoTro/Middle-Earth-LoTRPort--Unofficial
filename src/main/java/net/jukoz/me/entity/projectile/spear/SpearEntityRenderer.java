@@ -1,4 +1,5 @@
 package net.jukoz.me.entity.projectile.spear;
+import net.jukoz.me.compat.client.render.MEEntityRenderer;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -18,7 +19,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 
 @Environment(EnvType.CLIENT)
-public class SpearEntityRenderer extends EntityRenderer<SpearEntity, SpearEntityRenderState> {
+public class SpearEntityRenderer extends MEEntityRenderer<SpearEntity, SpearEntityRenderState> {
     private static final float MIN_DISTANCE = 12.25F;
     private static final float SCALE = 1.0F;
     private final EquipmentRenderer itemRenderer;
