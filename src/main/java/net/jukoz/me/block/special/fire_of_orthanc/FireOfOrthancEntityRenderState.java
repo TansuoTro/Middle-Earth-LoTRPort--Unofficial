@@ -1,6 +1,6 @@
 package net.jukoz.me.block.special.fire_of_orthanc;
 
-import net.minecraft.client.render.entity.state.EntityRenderState;
+import net.jukoz.me.compat.client.render.state.EntityRenderState;
 
 public class FireOfOrthancEntityRenderState extends EntityRenderState {
 

@@ -1,6 +1,6 @@
 package net.jukoz.me.client.model.equipment.head.helmets.humans.rohan;
 
-import net.minecraft.client.render.entity.state.BipedEntityRenderState;
+import net.jukoz.me.compat.client.render.state.BipedEntityRenderState;
 import net.jukoz.me.client.model.equipment.head.helmets.HelmetAddonModel;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.EntityModelPartNames;

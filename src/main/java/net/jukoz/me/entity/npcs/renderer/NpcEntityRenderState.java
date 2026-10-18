@@ -1,6 +1,6 @@
 package net.jukoz.me.entity.npcs.renderer;
 
-import net.minecraft.client.render.entity.state.BipedEntityRenderState;
+import net.jukoz.me.compat.client.render.state.BipedEntityRenderState;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;

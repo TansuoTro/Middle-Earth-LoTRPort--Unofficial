@@ -71,7 +71,7 @@ public class BellowsBlockEntityRenderer implements BlockEntityRenderer<BellowsBl
 
         float animationProgress = getAnimationProgress(entity);
 
-        float rotation = blockState.get(ChestBlock.FACING).getPositiveHorizontalDegrees();
+        float rotation = blockState.get(ChestBlock.FACING).asRotation();
         matrices.translate(0.5D, 1.5D, 0.5D);
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-rotation));
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));

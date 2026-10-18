@@ -35,7 +35,7 @@ public class WargArmorFrontSkullFeatureRenderer extends FeatureRenderer<WargEnti
         MountArmorAddonComponent component = MEComponents.get(itemStack, MEComponents.MOUNT_ARMOR_DATA);
 
         if(component != null && component.topArmorAddon() && itemStack.isOf(EquipmentItemsME.WARG_MORDOR_PLATE_ARMOR)) {
-            VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(new Identifier(MiddleEarth.MOD_ID, "textures/entities/warg/feature/warg_armor_addons.png")), itemStack.hasGlint());
+            VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(new Identifier(MiddleEarth.MOD_ID, "textures/entities/warg/feature/warg_armor_addons.png")), true, itemStack.hasGlint());
 
             model.setAngles(state);
             model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV);

@@ -2,7 +2,7 @@ package net.jukoz.me.client.renderer.armor;
 
 import net.jukoz.me.item.MEComponents;
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
-import net.minecraft.client.render.entity.state.BipedEntityRenderState;
+import net.jukoz.me.compat.client.render.state.BipedEntityRenderState;
 import net.jukoz.me.compat.DyedColorComponent;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.client.model.equipment.head.helmets.HelmetAddonModel;
@@ -28,7 +28,7 @@ public class HelmetAttachmentRenderer implements ArmorRenderer {
     }
 
     static void renderDyeableHelmetAttachment(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ItemStack stack, Model model, Identifier texture, boolean helmet) {
-        VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(texture), stack.hasGlint());
+        VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(texture), true, stack.hasGlint());
         int color;
         if (helmet){
             color =  ColorHelper.fullAlpha(MEComponents.get(stack, MEComponents.HELMET_ATTACHMENT_DATA).helmetAttachmentColor());

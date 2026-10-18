@@ -1,7 +1,7 @@
 package net.jukoz.me.client.renderer.armor;
 
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
-import net.minecraft.client.render.entity.state.BipedEntityRenderState;
+import net.jukoz.me.compat.client.render.state.BipedEntityRenderState;
 import net.minecraft.registry.tag.ItemTags;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.client.model.equipment.CustomBootsModel;

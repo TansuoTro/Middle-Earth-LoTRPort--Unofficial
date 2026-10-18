@@ -14,7 +14,7 @@ import net.minecraft.client.render.item.model.ItemModel;
 import net.minecraft.client.util.math.MatrixStack;
 
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemDisplayContext;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
@@ -77,7 +77,7 @@ public class PlateEntityRenderer implements BlockEntityRenderer<PlateBlockEntity
 
         int currentLight = getLightLevel(entity.getWorld(), entity.getPos(), direction);
 
-        this.itemRenderer.renderItem(copyStack, ItemDisplayContext.FIXED, currentLight, OverlayTexture.DEFAULT_UV,
+        this.itemRenderer.renderItem(copyStack, ModelTransformationMode.FIXED, currentLight, OverlayTexture.DEFAULT_UV,
                 matrices, vertexConsumers, entity.getWorld(), 1);
 
         matrices.pop();

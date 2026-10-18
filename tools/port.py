@@ -353,6 +353,23 @@ REWRITES = [
     ("mecomponents-contains", r"([A-Za-z_][A-Za-z0-9_]*)[.]contains[(](MEComponents[.][A-Z_]+[A-Za-z0-9_]*)[)]", "MEComponents.contains(\\1, \\2)"),
     ("recipe-remainder-item", r"([A-Za-z_][A-Za-z0-9_]*)[.]getItem[(][)][.]getRecipeRemainder[(][)]", "\\1.getRecipeRemainder()"),
     ("import-dct", r"import net[.]minecraft[.]component[.]DataComponentTypes;", ""),
+    # --- render layer R1: mechanical rules + shims (report: build/agents/render-r1-report.md) ---
+    # R2: extends XRenderState adapters
+    # R3: handheld registry re-base
+    # 1.21.8 moved every render state into net.minecraft.client.render.entity.state;
+    # 1.20.1 has none of it, so the compat package supplies pass-through skeletons.
+    ("render-state-pkg", r"net[.]minecraft[.]client[.]render[.]entity[.]state[.]", "net.jukoz.me.compat.client.render.state."),
+    # ItemDisplayContext -> ModelTransformationMode, and its import moved from
+    # net.minecraft.item to net.minecraft.client.render.model.json.
+    ("item-display-context-import", r"net[.]minecraft[.]item[.]ItemDisplayContext", "net.minecraft.client.render.model.json.ModelTransformationMode"),
+    ("item-display-context", r"ItemDisplayContext", "ModelTransformationMode"),
+    # Direction.getPositiveHorizontalDegrees() (1.21) is Direction.asRotation() (1.20.1).
+    ("direction-degrees", r"[.]getPositiveHorizontalDegrees[(][)]", ".asRotation()"),
+    # 1.21.8 getArmorGlintConsumer(vp, layer, glint) gained a 4th arg in 1.20.1:
+    # getArmorGlintConsumer(vp, layer, solid, glint). The donor shape always ends in
+    # an x.hasGlint() call, so match a real argument list (nested parens allowed) and
+    # refuse to touch sites that already have a 4th argument (negative lookahead).
+    ("armor-glint-3arg", r"getArmorGlintConsumer\(([^,()]+),\s*(RenderLayer\.[A-Za-z_]\w*\((?:[^()]|\([^()]*\))*\)),\s*([^,()]+\.hasGlint\(\))\)(?!\s*,)", "getArmorGlintConsumer(\\1, \\2, true, \\3)"),
 ]
 
 # 1.21 wraps block/item ids in a RegistryKey; 1.20.1 registers by Identifier.

@@ -1,7 +1,7 @@
 package net.jukoz.me.mixin.client;
 
 import net.minecraft.client.render.entity.LivingEntityRenderer;
-import net.minecraft.client.render.entity.state.LivingEntityRenderState;
+import net.jukoz.me.compat.client.render.state.LivingEntityRenderState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemStack;

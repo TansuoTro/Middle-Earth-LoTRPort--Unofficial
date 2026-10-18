@@ -2,7 +2,7 @@ package net.jukoz.me.entity.barrel;
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.render.entity.state.BoatEntityRenderState;
+import net.jukoz.me.compat.client.render.state.BoatEntityRenderState;
 
 public class BarrelEntityModel extends EntityModel<BoatEntityRenderState> {
     protected BarrelEntityModel(ModelPart root) {

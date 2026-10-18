@@ -1,9 +1,9 @@
 package net.jukoz.me.mixin.client;
 
-import net.minecraft.client.render.entity.state.ArmedEntityRenderState;
-import net.minecraft.client.render.entity.state.BipedEntityRenderState;
-import net.minecraft.client.render.entity.state.EntityRenderState;
-import net.minecraft.client.render.entity.state.LivingEntityRenderState;
+import net.jukoz.me.compat.client.render.state.ArmedEntityRenderState;
+import net.jukoz.me.compat.client.render.state.BipedEntityRenderState;
+import net.jukoz.me.compat.client.render.state.EntityRenderState;
+import net.jukoz.me.compat.client.render.state.LivingEntityRenderState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.jukoz.me.client.renderer.ArmedEntityRenderStateAccess;

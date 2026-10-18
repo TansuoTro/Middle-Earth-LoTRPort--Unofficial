@@ -196,8 +196,8 @@ public class PlateBlock extends BlockWithEntity {
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return Block.createCuboidShape(3.0, 0.0, 3.0, 13.0, 1.0, 13.0);
+    protected VoxelShape getOutlineShape(BlockState state) {
+        return Block.createCuboidShape(3.0);
     }
 
     @Override

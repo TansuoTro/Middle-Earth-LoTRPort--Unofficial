@@ -6,7 +6,7 @@ import net.minecraft.client.item.ItemModelManager;
 import net.minecraft.client.render.item.ItemRenderState;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemDisplayContext;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.util.Arm;
 import net.jukoz.me.entity.beasts.BeastEntityRenderState;
 
@@ -25,6 +25,6 @@ public class CaveTrollEntityRenderState extends BeastEntityRenderState {
     public AnimationState smashingAnimationState = new AnimationState();
 
     public static void updateRenderState(LivingEntity entity, CaveTrollEntityRenderState state, ItemModelManager itemModelManager) {
-        itemModelManager.updateForLivingEntity(state.handItemState, entity.getStackInArm(Arm.RIGHT), ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, entity);
+        itemModelManager.updateForLivingEntity(state.handItemState, entity.getStackInArm(Arm.RIGHT), ModelTransformationMode.THIRD_PERSON_RIGHT_HAND, entity);
     }
 }

@@ -24,6 +24,7 @@
   ],
   "client": [
     "IntegratedServerLoaderMixin",
+    "client.AnimationStateAccessorMixin",
     "client.AbstractClientPlayerEntityMixin",
     "client.ClientPlayerInteractionManagerMixin",
     "client.GameRendererMixin",

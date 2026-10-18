@@ -4,6 +4,7 @@ package net.jukoz.me.item;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.ToolMaterials;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Rarity;
@@ -48,14 +49,14 @@ public class WeaponItemsME {
 
     //region GENERIC
     public static final Item WOODEN_DAGGER = registerItemWithModel("wooden_dagger",
-            (settings) -> new CustomDaggerWeaponItem(ToolMaterial.WOOD, settings), new MESettings(), false);
+            (settings) -> new CustomDaggerWeaponItem(ToolMaterials.WOOD, settings), new MESettings(), false);
     public static final Item WOODEN_SPEAR = registerItemWithSpearModel("wooden_spear",
-            (settings) -> new CustomSpearWeaponItem(ToolMaterial.WOOD, settings), new MESettings());
+            (settings) -> new CustomSpearWeaponItem(ToolMaterials.WOOD, settings), new MESettings());
 
     public static final Item STONE_DAGGER = registerItemWithModel("stone_dagger",
-            (settings) -> new CustomDaggerWeaponItem(ToolMaterial.STONE, settings), new MESettings(), false);
+            (settings) -> new CustomDaggerWeaponItem(ToolMaterials.STONE, settings), new MESettings(), false);
     public static final Item STONE_SPEAR = registerItemWithSpearModel("stone_spear",
-            (settings) -> new CustomSpearWeaponItem(ToolMaterial.STONE, settings), new MESettings());
+            (settings) -> new CustomSpearWeaponItem(ToolMaterials.STONE, settings), new MESettings());
 
     public static final Item BONE_CLEAVER = registerItemWithModel("bone_cleaver",
             (settings) -> new CustomSwordWeaponItem(ToolMaterialsME.BONE, settings), new MESettings(), true);
@@ -85,14 +86,14 @@ public class WeaponItemsME {
             (settings) -> new CustomSpearWeaponItem(ToolMaterialsME.CRUDE, settings), new MESettings());
 
     public static final Item IRON_DAGGER = registerItemWithModel("iron_dagger",
-            (settings) -> new CustomDaggerWeaponItem(ToolMaterial.IRON, settings), new MESettings(), false);
+            (settings) -> new CustomDaggerWeaponItem(ToolMaterials.IRON, settings), new MESettings(), false);
     public static final Item IRON_SPEAR = registerItemWithSpearModel("iron_spear",
-            (settings) -> new CustomSpearWeaponItem(ToolMaterial.IRON, settings), new MESettings());
+            (settings) -> new CustomSpearWeaponItem(ToolMaterials.IRON, settings), new MESettings());
 
     public static final Item GOLDEN_DAGGER = registerItemWithModel("golden_dagger",
-            (settings) -> new CustomDaggerWeaponItem(ToolMaterial.GOLD, settings), new MESettings(), false);
+            (settings) -> new CustomDaggerWeaponItem(ToolMaterials.GOLD, settings), new MESettings(), false);
     public static final Item GOLDEN_SPEAR = registerItemWithSpearModel("golden_spear",
-            (settings) -> new CustomSpearWeaponItem(ToolMaterial.GOLD, settings), new MESettings());
+            (settings) -> new CustomSpearWeaponItem(ToolMaterials.GOLD, settings), new MESettings());
 
     public static final Item STEEL_SWORD = registerItemWithModel("steel_sword",
             (settings) -> new CustomSwordWeaponItem(ToolMaterialsME.STEEL, settings), new MESettings(), true);
@@ -115,14 +116,14 @@ public class WeaponItemsME {
             (settings) -> new CustomSpearWeaponItem(ToolMaterialsME.KHAZAD_STEEL, settings), new MESettings());
 
     public static final Item DIAMOND_DAGGER = registerItemWithModel("diamond_dagger",
-            (settings) -> new CustomDaggerWeaponItem(ToolMaterial.DIAMOND, settings), new MESettings(), false);
+            (settings) -> new CustomDaggerWeaponItem(ToolMaterials.DIAMOND, settings), new MESettings(), false);
     public static final Item DIAMOND_SPEAR = registerItemWithSpearModel("diamond_spear",
-            (settings) -> new CustomSpearWeaponItem(ToolMaterial.DIAMOND, settings), new MESettings());
+            (settings) -> new CustomSpearWeaponItem(ToolMaterials.DIAMOND, settings), new MESettings());
 
     public static final Item NETHERITE_DAGGER = registerItemWithModel("netherite_dagger",
-            (settings) -> new CustomDaggerWeaponItem(ToolMaterial.NETHERITE, settings), new MESettings(), false);
+            (settings) -> new CustomDaggerWeaponItem(ToolMaterials.NETHERITE, settings), new MESettings(), false);
     public static final Item NETHERITE_SPEAR = registerItemWithSpearModel("netherite_spear",
-            (settings) -> new CustomSpearWeaponItem(ToolMaterial.NETHERITE, settings), new MESettings());
+            (settings) -> new CustomSpearWeaponItem(ToolMaterials.NETHERITE, settings), new MESettings());
 
     public static final Item WEAVER_STING = registerItemWithModel("weaver_sting",
             (settings) -> new WeaverStingItem(ToolMaterialsME.WEAVER_STING, settings), new MESettings().rarity(Rarity.EPIC), false);
@@ -1089,7 +1090,7 @@ public class WeaponItemsME {
         return registerItem(item, name);
     }
 
-    private static Item registerBowItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerBowItem(String name, Function<Item.Settings, Item> factory, MESettings settings) {
         Item item = (Item)factory.apply(settings.enchantable(2));
         ItemGroupsME.WEAPONS_CONTENTS.add(item.getDefaultStack());
         SimpleBowItemModel.items.add(item);
@@ -1097,7 +1098,7 @@ public class WeaponItemsME {
         return registerItem(item, name);
     }
 
-    private static Item registerBigBowItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerBigBowItem(String name, Function<Item.Settings, Item> factory, MESettings settings) {
         Item item = (Item)factory.apply(settings.enchantable(2));
         ItemGroupsME.WEAPONS_CONTENTS.add(item.getDefaultStack());
         SimpleBigItemModel.bigBows.add(item);
@@ -1105,9 +1106,10 @@ public class WeaponItemsME {
         return registerItem(item, name);
     }
 
-    private static Item registerCrossbowItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerCrossbowItem(String name, Function<Item.Settings, Item> factory, MESettings settings) {
         Item item = (Item)factory.apply(settings.maxCount(1).maxDamage(465)
                 .enchantable(1)
+
                 );
         ItemGroupsME.WEAPONS_CONTENTS.add(item.getDefaultStack());
         SimpleCrossbowItemModel.items.add(item);

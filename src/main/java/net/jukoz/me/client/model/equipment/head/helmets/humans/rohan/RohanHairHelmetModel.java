@@ -2,7 +2,7 @@ package net.jukoz.me.client.model.equipment.head.helmets.humans.rohan;
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.EntityModelPartNames;
-import net.minecraft.client.render.entity.state.BipedEntityRenderState;
+import net.jukoz.me.compat.client.render.state.BipedEntityRenderState;
 
 public class RohanHairHelmetModel extends RohanHelmetModel {
     private static final float MAX_ANGLE_HAIR = 75f;

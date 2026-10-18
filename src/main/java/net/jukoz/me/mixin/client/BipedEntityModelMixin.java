@@ -2,7 +2,7 @@ package net.jukoz.me.mixin.client;
 
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.render.entity.state.BipedEntityRenderState;
+import net.jukoz.me.compat.client.render.state.BipedEntityRenderState;
 import net.minecraft.item.ItemStack;
 import net.jukoz.me.client.renderer.ArmedEntityRenderStateAccess;
 import net.jukoz.me.item.DecorativeItemsME;

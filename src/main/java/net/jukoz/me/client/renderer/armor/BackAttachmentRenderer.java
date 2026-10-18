@@ -2,7 +2,7 @@ package net.jukoz.me.client.renderer.armor;
 
 import net.jukoz.me.item.MEComponents;
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
-import net.minecraft.client.render.entity.state.BipedEntityRenderState;
+import net.jukoz.me.compat.client.render.state.BipedEntityRenderState;
 import net.jukoz.me.compat.DyedColorComponent;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.client.model.equipment.chest.ChestplateAddonModel;
@@ -28,7 +28,7 @@ public class BackAttachmentRenderer implements ArmorRenderer {
     }
 
     static void renderDyeableBackAttachment(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ItemStack stack, Model model, Identifier texture, boolean chestplate) {
-        VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(texture), stack.hasGlint());
+        VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(texture), true, stack.hasGlint());
         int color;
         if (chestplate){
             color =  ColorHelper.fullAlpha(MEComponents.get(stack, MEComponents.BACK_ATTACHMENT_DATA).backAttachmentColor());

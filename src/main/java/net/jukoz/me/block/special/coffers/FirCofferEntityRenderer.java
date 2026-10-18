@@ -69,7 +69,7 @@ public class FirCofferEntityRenderer<T extends ChestBlockEntity> extends ChestBl
         g = 1.0F - g * g * g;
 
         matrices.push();
-        float rotation = blockState.get(ChestBlock.FACING).getPositiveHorizontalDegrees();
+        float rotation = blockState.get(ChestBlock.FACING).asRotation();
         matrices.translate(0.5D, 1.5D, 0.5D);
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(rotation - 180));

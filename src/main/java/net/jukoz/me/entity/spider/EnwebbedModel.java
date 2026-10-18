@@ -2,7 +2,7 @@ package net.jukoz.me.entity.spider;
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.render.entity.state.BipedEntityRenderState;
+import net.jukoz.me.compat.client.render.state.BipedEntityRenderState;
 
 public class EnwebbedModel extends EntityModel<BipedEntityRenderState> {
     private final ModelPart bigBody;

@@ -78,7 +78,7 @@ public class SpruceCofferEntityRenderer<T extends ChestBlockEntity> extends Ches
 
         matrices.push();
         Direction facing = blockState.get(ChestBlock.FACING);
-        float rotation = facing.getPositiveHorizontalDegrees();
+        float rotation = facing.asRotation();
         matrices.translate(0.5D, 1.5D, 0.5D);
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));
         if(facing == Direction.NORTH || facing == Direction.SOUTH) {

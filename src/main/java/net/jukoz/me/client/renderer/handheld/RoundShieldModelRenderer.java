@@ -16,7 +16,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.component.ComponentMap;
 
 import net.jukoz.me.compat.MEBannerPatterns;
-import net.minecraft.item.ItemDisplayContext;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DyeColor;
 import net.jukoz.me.MiddleEarthClient;
@@ -38,14 +38,14 @@ public class RoundShieldModelRenderer implements SpecialModelRenderer<ComponentM
     }
 
     @Override
-    public void render(@Nullable ComponentMap data, ItemDisplayContext displayContext, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, boolean glint) {
+    public void render(@Nullable ComponentMap data, ModelTransformationMode displayContext, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, boolean glint) {
         MEBannerPatterns bannerPatternsComponent = data != null ? MEBannerPatterns.get(data) : MEBannerPatterns.DEFAULT;
         DyeColor dyeColor = data != null ? data.get(DataComponentTypes.BASE_COLOR) : null;
         boolean bl2 = !bannerPatternsComponent.layers().isEmpty() || dyeColor != null;
         matrices.push();
         matrices.scale(1.0F, -1.0F, -1.0F);
         SpriteIdentifier spriteIdentifier = bl2 ? MEModelLoader.ROUND_SHIELD_BASE : MEModelLoader.ROUND_SHIELD_BASE_NO_PATTERN;
-        VertexConsumer vertexConsumer = spriteIdentifier.getSprite().getTextureSpecificVertexConsumer(ItemRenderer.getItemGlintConsumer(vertexConsumers, this.model.getLayer(spriteIdentifier.getAtlasId()), displayContext == ItemDisplayContext.GUI, glint));
+        VertexConsumer vertexConsumer = spriteIdentifier.getSprite().getTextureSpecificVertexConsumer(ItemRenderer.getItemGlintConsumer(vertexConsumers, this.model.getLayer(spriteIdentifier.getAtlasId()), displayContext == ModelTransformationMode.GUI, glint));
         this.model.getHandle().render(matrices, vertexConsumer, light, overlay);
         if (bl2) {
             renderCanvas(matrices, vertexConsumers, light, overlay, this.model.getPlate(), spriteIdentifier, false, (DyeColor)Objects.requireNonNullElse(dyeColor, DyeColor.WHITE), bannerPatternsComponent, glint, false);

@@ -2,45 +2,40 @@ package net.jukoz.me.entity.beasts.great_horn;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.entity.VariantSelectorProvider;
-import net.minecraft.entity.spawn.SpawnCondition;
-import net.minecraft.entity.spawn.SpawnConditionSelectors;
-import net.minecraft.entity.spawn.SpawnContext;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.Identifier;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
-import net.minecraft.util.AssetInfo;
 import net.jukoz.me.registries.DynamicRegistriesME;
 
-import java.util.List;
+/**
+ * 1.20.1 port of the 1.21.5 data-driven GreatHornVariant.
+ * The donor carried a {@code SpawnConditionSelectors} field (net.minecraft.entity.spawn,
+ * 1.21.5+ API); biome-driven variant choice is now done directly at initialize time
+ * (see GreatHornEntity), so this record only carries the asset texture.
+ */
+public record GreatHornVariant(GreatHornAssetInfo assetInfo) {
 
-public record GreatHornVariant(GreatHornAssetInfo assetInfo, SpawnConditionSelectors spawnConditions) implements VariantSelectorProvider<SpawnContext, SpawnCondition> {
-	public static final Codec<GreatHornVariant> CODEC = RecordCodecBuilder.create(
-			instance -> instance.group(
-							GreatHornAssetInfo.CODEC.fieldOf("assets").forGetter(GreatHornVariant::assetInfo),
-							SpawnConditionSelectors.CODEC.fieldOf("spawn_conditions").forGetter(GreatHornVariant::spawnConditions)
-					)
-					.apply(instance, GreatHornVariant::new)
-	);
+    public static final Codec<GreatHornVariant> CODEC = RecordCodecBuilder.create(
+            instance -> instance.group(
+                    GreatHornAssetInfo.CODEC.fieldOf("assets").forGetter(GreatHornVariant::assetInfo)
+            ).apply(instance, GreatHornVariant::new)
+    );
 
-	public static final Codec<RegistryEntry<GreatHornVariant>> ENTRY_CODEC = RegistryFixedCodec.of(DynamicRegistriesME.GREAT_HORN_VARIANTS);
+    public static final PacketCodec<PacketByteBuf, RegistryEntry<GreatHornVariant>> PACKET_CODEC =
+            PacketCodecs.registryEntry(DynamicRegistriesME.GREAT_HORN_VARIANTS);
 
-	public static final PacketCodec<PacketByteBuf, RegistryEntry<GreatHornVariant>> PACKET_CODEC = PacketCodecs.registryEntry(DynamicRegistriesME.GREAT_HORN_VARIANTS);
+    public record AssetInfo(Identifier texturePath) {
+        public static final Codec<AssetInfo> CODEC =
+                Identifier.CODEC.xmap(AssetInfo::new, AssetInfo::texturePath);
+    }
 
-	private GreatHornVariant(GreatHornAssetInfo assetInfo) {
-		this(assetInfo, SpawnConditionSelectors.EMPTY);
-	}
-
-	@Override
-	public List<Selector<SpawnContext, SpawnCondition>> getSelectors() {
-		return this.spawnConditions.selectors();
-	}
-
-	public record GreatHornAssetInfo(AssetInfo id) {
-		public static final Codec<GreatHornAssetInfo> CODEC = RecordCodecBuilder.create(
-				instance -> instance.group(AssetInfo.CODEC.fieldOf("id").forGetter(GreatHornAssetInfo::id)).apply(instance, GreatHornAssetInfo::new)
-		);
-	}
+    public record GreatHornAssetInfo(AssetInfo id) {
+        public static final Codec<GreatHornAssetInfo> CODEC = RecordCodecBuilder.create(
+                instance -> instance.group(
+                        AssetInfo.CODEC.fieldOf("id").forGetter(GreatHornAssetInfo::id)
+                ).apply(instance, GreatHornAssetInfo::new)
+        );
+    }
 }

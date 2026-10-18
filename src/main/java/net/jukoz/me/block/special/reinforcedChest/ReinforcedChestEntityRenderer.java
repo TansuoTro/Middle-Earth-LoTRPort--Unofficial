@@ -66,7 +66,7 @@ public class ReinforcedChestEntityRenderer<T extends ChestBlockEntity> extends C
         g = 1.0F - g * g * g;
 
         matrices.push();
-        float rotation = blockState.get(ChestBlock.FACING).getPositiveHorizontalDegrees();
+        float rotation = blockState.get(ChestBlock.FACING).asRotation();
         matrices.translate(0.5D, 0.0D, 0.5D);
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-rotation));
 

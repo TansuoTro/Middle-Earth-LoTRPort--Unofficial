@@ -34,7 +34,7 @@ public class WargArmorSideSkullsFeatureRenderer extends FeatureRenderer<WargEnti
         MountArmorAddonComponent component = MEComponents.get(itemStack, MEComponents.MOUNT_ARMOR_DATA);
 
         if(component != null && component.sideArmorAddon()) {
-            VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(new Identifier(MiddleEarth.MOD_ID, "textures/entities/warg/feature/warg_armor_side_skull_addon.png")), itemStack.hasGlint());
+            VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(new Identifier(MiddleEarth.MOD_ID, "textures/entities/warg/feature/warg_armor_side_skull_addon.png")), true, itemStack.hasGlint());
 
             model.setAngles(state);
             model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV);

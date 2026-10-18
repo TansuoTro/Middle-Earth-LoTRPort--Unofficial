@@ -1,6 +1,6 @@
 package net.jukoz.me.entity.projectile.smoke;
 
-import net.minecraft.client.render.entity.state.ProjectileEntityRenderState;
+import net.jukoz.me.compat.client.render.state.ProjectileEntityRenderState;
 import org.joml.Quaternionf;
 
 public class SmokeRingProjectileRenderState extends ProjectileEntityRenderState {

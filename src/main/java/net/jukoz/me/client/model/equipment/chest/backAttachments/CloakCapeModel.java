@@ -1,6 +1,6 @@
 package net.jukoz.me.client.model.equipment.chest.backAttachments;
 
-import net.minecraft.client.render.entity.state.BipedEntityRenderState;
+import net.jukoz.me.compat.client.render.state.BipedEntityRenderState;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.jukoz.me.client.model.equipment.chest.ChestplateAddonModel;

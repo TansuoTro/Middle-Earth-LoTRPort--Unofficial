@@ -2,7 +2,7 @@ package net.jukoz.me.entity.beasts.broadhoof;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.entity.state.LivingEntityRenderState;
+import net.jukoz.me.compat.client.render.state.LivingEntityRenderState;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.passive.HorseColor;
 import net.minecraft.entity.passive.HorseMarking;

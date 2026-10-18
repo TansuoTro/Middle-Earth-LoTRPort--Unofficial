@@ -1,7 +1,7 @@
 package net.jukoz.me.mixin.client;
 
-import net.minecraft.client.render.entity.state.EntityRenderState;
-import net.minecraft.client.render.entity.state.LivingEntityRenderState;
+import net.jukoz.me.compat.client.render.state.EntityRenderState;
+import net.jukoz.me.compat.client.render.state.LivingEntityRenderState;
 import net.minecraft.item.ItemStack;
 import net.jukoz.me.client.renderer.ArmedEntityRenderStateAccess;
 import org.spongepowered.asm.mixin.Mixin;
