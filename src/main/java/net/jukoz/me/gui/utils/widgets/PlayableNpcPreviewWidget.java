@@ -63,13 +63,13 @@ public class PlayableNpcPreviewWidget extends ModWidget{
         };
 
         leftButton = ButtonWidget.builder(Text.of("left_button"), leftButtonAction).build();
-        leftButton.setDimensions(14, 9);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(leftButton, 14, 9);
 
         resetButton = ButtonWidget.builder(Text.of("reset_button"), resetButtonAction).build();
-        resetButton.setDimensions(6,6);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(resetButton, 6, 6);
 
         rightButton = ButtonWidget.builder(Text.of("right_button"), rightButtonAction).build();
-        rightButton.setDimensions(14, 9);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(rightButton, 14, 9);
     }
 
     private void addAngle(){

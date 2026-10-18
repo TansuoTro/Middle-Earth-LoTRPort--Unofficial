@@ -62,7 +62,7 @@ public class OreConfiguredFeatures {
     public static void bootstrap(Registerable<ConfiguredFeature<?, ?>> featureRegisterable) {
         TagMatchRuleTest dirtTest = new TagMatchRuleTest(BlockTags.DIRT);
         BlockMatchRuleTest grassTest = new BlockMatchRuleTest(Blocks.GRASS_BLOCK);
-        BlockMatchRuleTest ashenStoneTest = new BlockMatchRuleTest(StoneBlockSets.ASHEN_STONE.base());
+        BlockMatchRuleTest ashenStoneTest = new BlockMatchRuleTest(StoneBlockSets.ASHENSTONE_SET.base());
         TagMatchRuleTest stoneTest = new TagMatchRuleTest(BlockTags.BASE_STONE_OVERWORLD);
 
         List<OreFeatureConfig.Target> ashenStoneList = List.of(
@@ -140,13 +140,13 @@ public class OreConfiguredFeatures {
 
         ConfiguredFeatures.register(featureRegisterable, GONLUIN_GRASS_ORE, Feature.DISK,
                 new DiskFeatureConfig(PredicatedStateProvider.of(Blocks.GRASS_BLOCK),
-                        BlockPredicate.matchingBlocks(List.of(StoneBlockSets.GONLUIN.base())), UniformIntProvider.create(3, 6), 1));
+                        BlockPredicate.matchingBlocks(List.of(StoneBlockSets.GALONN_SET.base())), UniformIntProvider.create(3, 6), 1));
 
         ConfiguredFeatures.register(featureRegisterable, OLD_PODZOL_ORE, Feature.ORE,
                 new OreFeatureConfig(grassTest, ModNatureBlocks.OLD_PODZOL.getDefaultState(), 64, 0.4f));
 
         ConfiguredFeatures.register(featureRegisterable, LIMESTONE_ORE, Feature.ORE,
-                new OreFeatureConfig(stoneTest, StoneBlockSets.LIMESTONE.base().getDefaultState(), 64, 0.25f));
+                new OreFeatureConfig(stoneTest, StoneBlockSets.LIMESTONE_SET.base().getDefaultState(), 64, 0.25f));
 
         ConfiguredFeatures.register(featureRegisterable, MUD_ORE, Feature.ORE,
                 new OreFeatureConfig(dirtTest, Blocks.MUD.getDefaultState(), 48, 0.4f));

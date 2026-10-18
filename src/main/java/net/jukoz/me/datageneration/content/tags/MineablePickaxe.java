@@ -1,52 +1,54 @@
 package net.jukoz.me.datageneration.content.tags;
 
 import net.jukoz.me.block.registration.ModBlocks;
+import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.minecraft.block.Block;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MineablePickaxe {
+    public static List<Block> baseStoneOverworld = new ArrayList<>() {
+        {
+
+        }
+    };
+
     public static List<Block> blocks = new ArrayList<>() {
         {
-            add(ModBlocks.CHISELED_ASHEN_BRICKS);
-            add(ModBlocks.CHISELED_POLISHED_ASHEN_STONE);
+            add(ModBlocks.POINTED_GALONN);
+            add(ModBlocks.POINTED_LIMESTONE);
+            add(ModBlocks.POINTED_DOLOMITE);
+            add(ModBlocks.POINTED_IZHERABAN);
 
-            add(ModBlocks.CHISELED_GONLUIN_BRICKS);
-            add(ModBlocks.CHISELED_POLISHED_GONLUIN);
+            add(ModDecorativeBlocks.STONE_LECTERN);
+            add(ModDecorativeBlocks.CHISELED_DOLOMITE_BOOKSHELF);
 
-            add(ModBlocks.CHISELED_BLUE_TUFF_BRICKS);
-            add(ModBlocks.CHISELED_POLISHED_BLUE_TUFF);
+            add(ModDecorativeBlocks.BASALT_STATUE);
+            add(ModDecorativeBlocks.CALCITE_STATUE);
+            add(ModDecorativeBlocks.DEEPSLATE_STATUE);
+            add(ModDecorativeBlocks.DIORITE_STATUE);
+            add(ModDecorativeBlocks.GABBRO_STATUE);
+            add(ModDecorativeBlocks.GALONN_STATUE);
+            add(ModDecorativeBlocks.KHAGALABAN_STATUE);
+            add(ModDecorativeBlocks.MEDGON_SPIKE);
+            add(ModDecorativeBlocks.PUMICE_STATUE);
+            add(ModDecorativeBlocks.TUFF_STATUE);
+            add(ModDecorativeBlocks.ZIGILABAN_STATUE);
 
-            add(ModBlocks.CHISELED_CALCITE_BRICKS);
-            add(ModBlocks.CHISELED_POLISHED_CALCITE);
+            add(ModDecorativeBlocks.CRUDE_ROD);
+            add(ModDecorativeBlocks.TREATED_STEEL_ROD);
 
-            add(ModBlocks.CHISELED_LIMESTONE_BRICKS);
-            add(ModBlocks.CHISELED_POLISHED_LIMESTONE);
+            add(ModBlocks.BURZUM_SPIKES);
 
-            add(ModBlocks.CHISELED_SMOOTH_STONE);
+            add(ModDecorativeBlocks.BRONZE_CHAIN);
+            add(ModDecorativeBlocks.BRONZE_BROAD_CHAIN);
+            add(ModDecorativeBlocks.CRUDE_CHAIN);
+            add(ModDecorativeBlocks.CRUDE_BROAD_CHAIN);
+            add(ModDecorativeBlocks.SPIKY_CHAIN);
+            add(ModDecorativeBlocks.WATERING_CAN);
 
-            add(ModBlocks.CHISELED_ANDESITE_BRICKS);
-            add(ModBlocks.CHISELED_POLISHED_ANDESITE);
-
-            add(ModBlocks.CHISELED_GRANITE_BRICKS);
-            add(ModBlocks.CHISELED_POLISHED_GRANITE);
-
-            add(ModBlocks.CHISELED_DIORITE_BRICKS);
-            add(ModBlocks.CHISELED_POLISHED_DIORITE);
-
-            add(ModBlocks.CHISELED_BASALT_BRICKS);
-
-            add(ModBlocks.CHISELED_DOLOMITE_BRICKS);
-
-            add(ModBlocks.DIFTOMIN_PILLAR);
-            add(ModBlocks.CHISELED_DIFTOMIN_BRICKS);
-            add(ModBlocks.CHISELED_POLISHED_DIFTOMIN);
-
-            add(ModBlocks.EPMOSTO_PILLAR);
-            add(ModBlocks.CHISELED_EPMOSTO);
-            add(ModBlocks.CHISELED_EPMOSTO_BRICKS);
-            add(ModBlocks.CHISELED_POLISHED_EPMOSTO);
+            add(ModDecorativeBlocks.CHIMNEY);
 
             add(ModBlocks.RAW_MITHRIL_BLOCK);
             add(ModBlocks.MITHRIL_BLOCK);
@@ -58,53 +60,124 @@ public class MineablePickaxe {
             add(ModBlocks.SILVER_BLOCK);
 
             add(ModBlocks.BRONZE_BLOCK);
-            add(ModBlocks.ORC_STEEL_BLOCK);
+            add(ModBlocks.CRUDE_BLOCK);
             add(ModBlocks.STEEL_BLOCK);
-            add(ModBlocks.DWARVEN_STEEL_BLOCK);
-            add(ModBlocks.ELVEN_STEEL_BLOCK);
-            add(ModBlocks.URUK_STEEL_BLOCK);
+            add(ModBlocks.KHAZAD_STEEL_BLOCK);
+            add(ModBlocks.EDHEL_STEEL_BLOCK);
+            add(ModBlocks.BURZUM_STEEL_BLOCK);
 
-            add(ModBlocks.STONE_PILLAR);
-            add(ModBlocks.MOSSY_STONE_PILLAR);
-            add(ModBlocks.CRACKED_STONE_PILLAR);
+            add(ModBlocks.ADAMANT_BLOCK);
+            add(ModBlocks.RUBY_BLOCK);
+            add(ModBlocks.SAPPHIRE_BLOCK);
 
-            add(ModBlocks.ASHEN_PILLAR);
+            add(ModDecorativeBlocks.BIG_BRAZIER);
+            add(ModDecorativeBlocks.SMALL_BRAZIER);
 
-            add(ModBlocks.GONLUIN_PILLAR);
-            add(ModBlocks.CRACKED_GONLUIN_PILLAR);
+            add(ModDecorativeBlocks.GILDED_BIG_BRAZIER);
+            add(ModDecorativeBlocks.GILDED_SMALL_BRAZIER);
 
-            add(ModBlocks.DEEPSLATE_PILLAR);
+            add(ModDecorativeBlocks.FIRE_BOWL);
+            add(ModDecorativeBlocks.BONFIRE);
 
-            add(ModBlocks.FROZEN_PILLAR);
+            add(ModDecorativeBlocks.SCONCE);
+            add(ModDecorativeBlocks.WALL_SCONCE);
 
-            add(ModBlocks.DOLOMITE_PILLAR);
+            add(ModDecorativeBlocks.GILDED_SCONCE);
+            add(ModDecorativeBlocks.GILDED_WALL_SCONCE);
 
-            add(ModBlocks.BLUE_TUFF_PILLAR);
-            add(ModBlocks.MOSSY_BLUE_TUFF_PILLAR);
-            add(ModBlocks.CRACKED_BLUE_TUFF_PILLAR);
+            add(ModDecorativeBlocks.ORCISH_SCONCE);
+            add(ModDecorativeBlocks.ORCISH_WALL_SCONCE);
 
-            add(ModBlocks.CALCITE_PILLAR);
-            add(ModBlocks.MOSSY_CALCITE_PILLAR);
-            add(ModBlocks.CRACKED_CALCITE_PILLAR);
+            add(ModBlocks.BRONZE_DOOR);
+            add(ModBlocks.CRUDE_DOOR);
+            add(ModBlocks.TREATED_STEEL_DOOR);
+            add(ModBlocks.BRONZE_TRAPDOOR);
+            add(ModBlocks.CRUDE_TRAPDOOR);
+            add(ModBlocks.TREATED_STEEL_TRAPDOOR);
 
-            add(ModBlocks.LIMESTONE_PILLAR);
-            add(ModBlocks.MOSSY_LIMESTONE_PILLAR);
-            add(ModBlocks.CRACKED_LIMESTONE_PILLAR);
+            add(ModBlocks.BRONZE_BARS);
+            add(ModBlocks.CRUDE_BARS);
+            add(ModBlocks.TREATED_STEEL_BARS);
+            add(ModBlocks.BURZUM_BARS);
+            add(ModBlocks.GILDED_BARS);
 
-            add(ModBlocks.ANDESITE_PILLAR);
-            add(ModBlocks.MOSSY_ANDESITE_PILLAR);
-            add(ModBlocks.CRACKED_ANDESITE_PILLAR);
-            
-            add(ModBlocks.GRANITE_PILLAR);
-            add(ModBlocks.MOSSY_GRANITE_PILLAR);
-            add(ModBlocks.CRACKED_GRANITE_PILLAR);
-            
-            add(ModBlocks.DIORITE_PILLAR);
-            add(ModBlocks.MOSSY_DIORITE_PILLAR);
-            add(ModBlocks.CRACKED_DIORITE_PILLAR);
-            
-            add(ModBlocks.JADEITE_PILLAR);
-            add(ModBlocks.CRACKED_JADEITE_PILLAR);
+            add(ModDecorativeBlocks.FORGE);
+
+            add(ModDecorativeBlocks.STONE_ANVIL);
+            add(ModDecorativeBlocks.TREATED_ANVIL);
+            add(ModDecorativeBlocks.DWARVEN_TREATED_ANVIL);
+            add(ModDecorativeBlocks.ELVEN_TREATED_ANVIL);
+            add(ModDecorativeBlocks.ORCISH_TREATED_ANVIL);
+
+            add(ModDecorativeBlocks.GREAT_GONDORIAN_GATE);
+
+            add(ModDecorativeBlocks.GREAT_DWARVEN_GATE);
+            add(ModDecorativeBlocks.HIDDEN_DWARVEN_DOOR);
+
+            add(ModDecorativeBlocks.GREAT_ORCISH_GATE);
+
+            add(ModDecorativeBlocks.TORCH_OF_ORTHANC);
+
+            add(ModBlocks.SILVER_BARS);
+
+            add(ModBlocks.COPPER_BARS);
+            add(ModBlocks.EXPOSED_COPPER_BARS);
+            add(ModBlocks.WEATHERED_COPPER_BARS);
+            add(ModBlocks.OXIDIZED_COPPER_BARS);
+
+            add(ModBlocks.WAXED_COPPER_BARS);
+            add(ModBlocks.WAXED_EXPOSED_COPPER_BARS);
+            add(ModBlocks.WAXED_WEATHERED_COPPER_BARS);
+            add(ModBlocks.WAXED_OXIDIZED_COPPER_BARS);
+
+            add(ModBlocks.WATTLE_AND_BRICK);
+            add(ModBlocks.WATTLE_AND_BRICK_CROSS);
+            add(ModBlocks.WATTLE_AND_BRICK_RIGHT);
+            add(ModBlocks.WATTLE_AND_BRICK_LEFT);
+            add(ModBlocks.WATTLE_AND_BRICK_PILLAR);
+            add(ModBlocks.WATTLE_AND_BRICK_DIAMOND);
+
+            add(ModBlocks.WATTLE_AND_WHITE_DAUB);
+            add(ModBlocks.WATTLE_AND_WHITE_DAUB_CROSS);
+            add(ModBlocks.WATTLE_AND_WHITE_DAUB_RIGHT);
+            add(ModBlocks.WATTLE_AND_WHITE_DAUB_LEFT);
+            add(ModBlocks.WATTLE_AND_WHITE_DAUB_PILLAR);
+            add(ModBlocks.WATTLE_AND_WHITE_DAUB_DIAMOND);
+
+            add(ModBlocks.BLACK_WATTLE_AND_WHITE_DAUB);
+            add(ModBlocks.BLACK_WATTLE_AND_WHITE_DAUB_CROSS);
+            add(ModBlocks.BLACK_WATTLE_AND_WHITE_DAUB_RIGHT);
+            add(ModBlocks.BLACK_WATTLE_AND_WHITE_DAUB_LEFT);
+            add(ModBlocks.BLACK_WATTLE_AND_WHITE_DAUB_PILLAR);
+            add(ModBlocks.BLACK_WATTLE_AND_WHITE_DAUB_DIAMOND);
+
+            add(ModBlocks.GREEN_WATTLE_AND_WHITE_DAUB);
+            add(ModBlocks.GREEN_WATTLE_AND_WHITE_DAUB_CROSS);
+            add(ModBlocks.GREEN_WATTLE_AND_WHITE_DAUB_RIGHT);
+            add(ModBlocks.GREEN_WATTLE_AND_WHITE_DAUB_LEFT);
+            add(ModBlocks.GREEN_WATTLE_AND_WHITE_DAUB_PILLAR);
+            add(ModBlocks.GREEN_WATTLE_AND_WHITE_DAUB_DIAMOND);
+
+            add(ModBlocks.RED_WATTLE_AND_WHITE_DAUB);
+            add(ModBlocks.RED_WATTLE_AND_WHITE_DAUB_CROSS);
+            add(ModBlocks.RED_WATTLE_AND_WHITE_DAUB_RIGHT);
+            add(ModBlocks.RED_WATTLE_AND_WHITE_DAUB_LEFT);
+            add(ModBlocks.RED_WATTLE_AND_WHITE_DAUB_PILLAR);
+            add(ModBlocks.RED_WATTLE_AND_WHITE_DAUB_DIAMOND);
+
+            add(ModBlocks.DARK_WATTLE_AND_DARK_DAUB);
+            add(ModBlocks.DARK_WATTLE_AND_DARK_DAUB_CROSS);
+            add(ModBlocks.DARK_WATTLE_AND_DARK_DAUB_RIGHT);
+            add(ModBlocks.DARK_WATTLE_AND_DARK_DAUB_LEFT);
+            add(ModBlocks.DARK_WATTLE_AND_DARK_DAUB_PILLAR);
+            add(ModBlocks.DARK_WATTLE_AND_DARK_DAUB_DIAMOND);
+
+            add(ModBlocks.WATTLE_AND_YELLOW_DAUB);
+            add(ModBlocks.WATTLE_AND_YELLOW_DAUB_CROSS);
+            add(ModBlocks.WATTLE_AND_YELLOW_DAUB_RIGHT);
+            add(ModBlocks.WATTLE_AND_YELLOW_DAUB_LEFT);
+            add(ModBlocks.WATTLE_AND_YELLOW_DAUB_PILLAR);
+            add(ModBlocks.WATTLE_AND_YELLOW_DAUB_DIAMOND);
         }
     };
 }

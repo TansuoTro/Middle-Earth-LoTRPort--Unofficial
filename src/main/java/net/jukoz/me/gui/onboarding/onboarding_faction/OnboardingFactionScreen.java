@@ -160,16 +160,16 @@ public class OnboardingFactionScreen extends Screen {
 
         // Map Widget
         elements.mapFocusButton = ButtonWidget.builder(Text.translatable("screen." + MiddleEarth.MOD_ID + ".button.focus_current"), this::mapFocusToggle).build(); // TODO
-        elements.mapFocusButton.setDimensions(10, 10);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(elements.mapFocusButton, 10, 10);
         addDrawableChild(elements.mapFocusButton);
 
         elements.mapZoomInButton = ButtonWidget.builder(Text.translatable("screen." + MiddleEarth.MOD_ID + ".button.zoom_in"), this::mapZoomIn).build();
-        elements.mapZoomInButton.setDimensions(10, 10);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(elements.mapZoomInButton, 10, 10);
         addDrawableChild(elements.mapZoomInButton);
 
         elements.mapZoomOutButton = ButtonWidget.builder(Text.translatable("screen." + MiddleEarth.MOD_ID + ".button.zoom_out"), this::mapZoomOut).build();
 
-        elements.mapZoomOutButton.setDimensions(10, 10);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(elements.mapZoomOutButton, 10, 10);
         addDrawableChild(elements.mapZoomOutButton);
 
         // Race
@@ -344,7 +344,7 @@ public class OnboardingFactionScreen extends Screen {
         startY = this.elements.informationPanel.startY + this.elements.informationPanel.height - elements.fullRandomizerButton.getHeight();
 
         this.elements.fullRandomizerButton.setPosition(startX, startY);
-        this.elements.fullRandomizerButton.setDimensions(52, 18);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(this.elements.fullRandomizerButton, 52, 18);
 
         context.drawTexture(BUTTON_UI_IDENTIFIER, this.elements.fullRandomizerButton.getX(), this.elements.fullRandomizerButton.getY(), 103, this.elements.fullRandomizerButton.isFocused() || this.elements.fullRandomizerButton.isMouseOver(mouseX, mouseY) ? 129 : 111, this.elements.fullRandomizerButton.getWidth(), this.elements.fullRandomizerButton.getHeight(), 256, 256);
 
@@ -352,7 +352,7 @@ public class OnboardingFactionScreen extends Screen {
         startX = this.elements.mapPanel.startX + this.elements.mapPanel.width - this.elements.spawnConfirmButton.getWidth() - 4;
 
         this.elements.spawnConfirmButton.setPosition(startX, startY);
-        this.elements.spawnConfirmButton.setDimensions(52, 18);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(this.elements.spawnConfirmButton, 52, 18);
 
         if(elements.spawnConfirmButton.active){
             context.drawTexture(BUTTON_UI_IDENTIFIER, this.elements.spawnConfirmButton.getX(), this.elements.spawnConfirmButton.getY(), 103, this.elements.spawnConfirmButton.isFocused() || this.elements.spawnConfirmButton.isMouseOver(mouseX, mouseY) ? 37 : 19, this.elements.spawnConfirmButton.getWidth(), this.elements.spawnConfirmButton.getHeight(), 256, 256);
@@ -393,7 +393,7 @@ public class OnboardingFactionScreen extends Screen {
         startX -= this.elements.subfactionSelectionWidget.TOTAL_WIDTH / 2;
         startY = this.elements.informationPanel.startY + this.elements.informationPanel.height - CycledSelectionWidget.TOTAL_HEIGHT;
 
-        this.elements.npcRandomizerButton.setDimensions(52, 18);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(this.elements.npcRandomizerButton, 52, 18);
         this.elements.npcRandomizerButton.setPosition(startX - (this.elements.npcRandomizerButton.getWidth() / 2), startY);
 
         context.drawTexture(BUTTON_UI_IDENTIFIER, this.elements.npcRandomizerButton.getX(), this.elements.npcRandomizerButton.getY(), 103, this.elements.npcRandomizerButton.isFocused() || this.elements.npcRandomizerButton.isMouseOver(mouseX, mouseY) ? 92 : 74, this.elements.npcRandomizerButton.getWidth(), this.elements.npcRandomizerButton.getHeight(), 256, 256);

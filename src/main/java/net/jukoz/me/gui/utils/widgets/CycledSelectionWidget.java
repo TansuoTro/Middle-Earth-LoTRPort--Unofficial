@@ -34,13 +34,13 @@ public class CycledSelectionWidget extends ModWidget{
     public CycledSelectionWidget(ButtonWidget.PressAction leftAction, ButtonWidget.PressAction rightAction, ButtonWidget.PressAction selectionAction, CycledSelectionButtonType buttonType){
         this.buttonType = buttonType;
         buttonLeft = ButtonWidget.builder(Text.of("Cycled Selection Left"), leftAction).build();
-        buttonLeft.setDimensions(ARROW_SIZE_X, ARROW_SIZE_Y);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(buttonLeft, ARROW_SIZE_X, ARROW_SIZE_Y);
 
         buttonRight = ButtonWidget.builder(Text.of("Cycled Selection Right"), rightAction).build();
-        buttonRight.setDimensions(ARROW_SIZE_X, ARROW_SIZE_Y);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(buttonRight, ARROW_SIZE_X, ARROW_SIZE_Y);
 
         selectionButton = ButtonWidget.builder(Text.of("Cycled Selection"), selectionAction).build();
-        selectionButton.setDimensions(PANEL_SIZE_X, PANEL_SIZE_Y);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(selectionButton, PANEL_SIZE_X, PANEL_SIZE_Y);
 
         if(selectionAction == null){
             centerCanBeActive = false;

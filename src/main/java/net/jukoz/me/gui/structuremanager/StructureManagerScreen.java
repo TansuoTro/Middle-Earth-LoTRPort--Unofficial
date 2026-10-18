@@ -67,19 +67,19 @@ public class StructureManagerScreen extends HandledScreen<StructureManagerScreen
         addDrawableChild(this.searchBarWidget.getScreenClickButton());
 
         toInitializeToggleButton = ButtonWidget.builder(Text.of("toInitializeToggleButton"),x -> toggleToInitialize()).build();
-        toInitializeToggleButton.setDimensions(15, 15);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(toInitializeToggleButton, 15, 15);
         addDrawableChild(toInitializeToggleButton);
 
         isEnabledToggleButton = ButtonWidget.builder(Text.of("isEnabledToggleButton"),x -> toggleEnable()).build();
-        isEnabledToggleButton.setDimensions(15, 15);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(isEnabledToggleButton, 15, 15);
         addDrawableChild(isEnabledToggleButton);
 
         showAllButton = ButtonWidget.builder(Text.of("showAll"),x -> handler.triggerGlowOnAllEntities()).build();
-        showAllButton.setDimensions(104, 20);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(showAllButton, 104, 20);
         addDrawableChild(showAllButton);
 
         respawnAllButton = ButtonWidget.builder(Text.of("showAll"),x -> handler.triggerRespawnAllEntities()).build();
-        respawnAllButton.setDimensions(104, 20);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(respawnAllButton, 104, 20);
         addDrawableChild(respawnAllButton);
     }
 

@@ -137,7 +137,7 @@ public class ModVegetationConfiguredFeatures {
                         RegistryEntryList.of(Block::getRegistryEntry,
                                 Blocks.STONE, Blocks.ANDESITE, Blocks.DIORITE, Blocks.GRANITE, Blocks.MOSSY_COBBLESTONE, Blocks.COBBLESTONE,
                                 Blocks.GRASS_BLOCK, Blocks.DIRT,  Blocks.SPRUCE_LOG, Blocks.OAK_LOG, Blocks.BIRCH_LOG, Blocks.DARK_OAK_LOG,
-                                WoodBlockSets.MIRKWOOD.log(), ModNatureBlocks.OLD_PODZOL)));
+                                WoodBlockSets.MIRKWOOD_SET.log(), ModNatureBlocks.OLD_PODZOL)));
 
         ConfiguredFeatures.register(featureRegisterable, PATCH_CORRUPTED_MOSS_CARPET, Feature.BLOCK_PILE,
                 new BlockPileFeatureConfig(BlockStateProvider.of(ModNatureBlocks.CORRUPTED_MOSS_CARPET)));
@@ -156,8 +156,8 @@ public class ModVegetationConfiguredFeatures {
                     RegistryEntryList.of(Block::getRegistryEntry,
                         Blocks.STONE, Blocks.ANDESITE, Blocks.DIORITE, Blocks.GRANITE, Blocks.MOSSY_COBBLESTONE, Blocks.COBBLESTONE,
                         Blocks.GRASS_BLOCK, Blocks.DIRT,  Blocks.SPRUCE_LOG, Blocks.OAK_LOG, Blocks.BIRCH_LOG, Blocks.DARK_OAK_LOG,
-                        WoodBlockSets.PINE.log(), WoodBlockSets.LARCH.log(), WoodBlockSets.BEECH.log(), WoodBlockSets.MAPLE.log(),
-                        WoodBlockSets.SILVER_MAPLE.log(), WoodBlockSets.BLACK_LEBETHRON.log(), WoodBlockSets.WHITE_LEBETHRON.log())));
+                        WoodBlockSets.PINE_SET.log(), WoodBlockSets.LARCH_SET.log(), WoodBlockSets.BEECH_SET.log(), WoodBlockSets.MAPLE_SET.log(),
+                        WoodBlockSets.SILVER_MAPLE_SET.log(), WoodBlockSets.BLACK_LEBETHRON_SET.log(), WoodBlockSets.WHITE_LEBETHRON_SET.log())));
 
         ConfiguredFeatures.register(featureRegisterable, PATCH_FOREST_MOSS_CARPET, Feature.BLOCK_PILE,
                 new BlockPileFeatureConfig(BlockStateProvider.of(ModNatureBlocks.FOREST_MOSS_CARPET)));

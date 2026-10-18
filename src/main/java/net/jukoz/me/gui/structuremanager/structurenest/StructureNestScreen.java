@@ -79,7 +79,7 @@ public class StructureNestScreen extends HandledScreen<StructureNestScreenHandle
         updateNestList(0);
 
         isEnabledToggleButton = ButtonWidget.builder(Text.of("isEnabledToggleButton"),x -> toggleEnable()).build();
-        isEnabledToggleButton.setDimensions(15, 15);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(isEnabledToggleButton, 15, 15);
         addDrawableChild(isEnabledToggleButton);
     }
 

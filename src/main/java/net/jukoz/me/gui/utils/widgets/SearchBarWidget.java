@@ -110,7 +110,7 @@ public class SearchBarWidget extends ModWidget {
         // Search bar button
         context.drawTexture(SEARCH_WIDGET, startX, startY, 0, searchBarToggleButton.isFocused() || isMouseOver(panelSizeX, panelSizeY, startX, startY) ? 19 : 0, panelSizeX, panelSizeY, 256, 256);
 
-        searchBarToggleButton.setDimensionsAndPosition(desiredWidth, panelSizeY, startX, startY);
+        net.jukoz.me.compat.client.gui.MEGui.setBounds(searchBarToggleButton, desiredWidth, panelSizeY, startX, startY);
         drawSearchBarBackground(context, SEARCH_WIDGET, startX, startY);
 
         MutableText text = Text.translatable((!searchBarToggle && searchBarInput.isEmpty()) ? "ui.%s.search.label".formatted(MiddleEarth.MOD_ID) : searchBarInput);
@@ -204,7 +204,7 @@ public class SearchBarWidget extends ModWidget {
                 int uvY = mouseIsOver ? searchBarResult.getType().getActiveUvY() : searchBarResult.getType().getUvY();
 
                 resultButtons.get(i).setPosition(valuePanelStartX, valuePanelStartY + 1);
-                resultButtons.get(i).setDimensions(desiredWidth - 10, valuePanelSizeY - 2);
+                net.jukoz.me.compat.client.gui.MEGui.setSize(resultButtons.get(i), desiredWidth - 10, valuePanelSizeY - 2);
 
                 valuePanelStartY = drawResultButtonBackground(context, SEARCH_WIDGET, valuePanelStartX, valuePanelStartY, uvX, uvY, desiredWidth - 10);
 
@@ -291,7 +291,7 @@ public class SearchBarWidget extends ModWidget {
     }
 
     private void setScreenClickbutton(int width, int height) {
-        screenClick.setDimensionsAndPosition(width, height, 0, 0);
+        net.jukoz.me.compat.client.gui.MEGui.setBounds(screenClick, width, height, 0, 0);
     }
 
     public void toggleSearch(boolean enabled) {

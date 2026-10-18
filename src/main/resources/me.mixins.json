@@ -33,10 +33,10 @@
     "client.InGameHudMixin",
     "client.ItemRendererMixin",
     "client.ItemStackTooltipMixin",
-    "client.MouseMixin"
+    "client.MouseMixin",
+    "client.ClickableWidgetMixin"
   ],
-  "server": [
-  ],
+  "server": [],
   "injectors": {
     "defaultRequire": 1
   }

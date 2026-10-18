@@ -38,7 +38,7 @@ public class BoulderConfiguredFeatures {
         ConfiguredFeatures.register(featureRegisterable, GRANITE_BOULDER, Feature.FOREST_ROCK,
                 new SingleStateFeatureConfig(Blocks.GRANITE.getDefaultState()));
         ConfiguredFeatures.register(featureRegisterable, LIMESTONE_BOULDER, Feature.FOREST_ROCK,
-                new SingleStateFeatureConfig(StoneBlockSets.LIMESTONE.base().getDefaultState()));
+                new SingleStateFeatureConfig(StoneBlockSets.LIMESTONE_SET.base().getDefaultState()));
         ConfiguredFeatures.register(featureRegisterable, SANDSTONE_BOULDER, Feature.FOREST_ROCK,
                 new SingleStateFeatureConfig(Blocks.SANDSTONE.getDefaultState()));
         ConfiguredFeatures.register(featureRegisterable, STONE_BOULDER, Feature.FOREST_ROCK,

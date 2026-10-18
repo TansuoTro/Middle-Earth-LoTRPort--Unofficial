@@ -112,7 +112,7 @@ private static final Text ONBOARDING_SELECTION_TITLE = Text.translatable("ui.%s.
                     startY + (int) ((panelSizeY / 2f) - (textRenderer.fontHeight / 2f)) + 1,
                     Colors.BLACK, false);
 
-            continueAsCharacterButton.setDimensionsAndPosition(panelSizeX, panelSizeY, startX, startY);
+            net.jukoz.me.compat.client.gui.MEGui.setBounds(continueAsCharacterButton, panelSizeX, panelSizeY, startX, startY);
             if(focusEnabled && continueAsCharacterButton.isFocused()){
                 context.drawTexture(BUTTON_WIDGET, startX, startY, 103, 0, panelSizeX, panelSizeY, 256, 256);
             }
@@ -135,7 +135,7 @@ private static final Text ONBOARDING_SELECTION_TITLE = Text.translatable("ui.%s.
                     startX + (int) ((panelSizeX - textRenderer.getWidth(resetText)) / 2f),
                     startY + (int) ((panelSizeY / 2f) - (textRenderer.fontHeight / 2f)) + 1,
                     Colors.BLACK, false);
-            resetCharacterButton.setDimensionsAndPosition(panelSizeX, panelSizeY, startX, startY);
+            net.jukoz.me.compat.client.gui.MEGui.setBounds(resetCharacterButton, panelSizeX, panelSizeY, startX, startY);
             if(focusEnabled && resetCharacterButton.isFocused()){
                 context.drawTexture(BUTTON_WIDGET, startX, startY, 0, 103, 0, panelSizeX, panelSizeY, 256, 256);
             }

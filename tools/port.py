@@ -322,6 +322,8 @@ def ensure_import_simple(text: str, simple: str) -> str:
 # non-identifier boundary: a plain string replace of "Identifier.of(" also matched
 # CategoryIdentifier.of( and produced "Categorynew Identifier(".
 REWRITES = [
+    # 1.21 moved the datagen client helpers out of net.minecraft.data.client.
+    ("data-client-package", r"net[.]minecraft[.]client[.]data[.]", "net.minecraft.data.client."),
     ("package-api", r"net[.]sevenstars[.]api", "net.jukoz.me.api"),
     ("package", r"net[.]sevenstars[.]middleearth", "net.jukoz.me"),
     ("identifier", r"(?<![A-Za-z0-9_$])Identifier[.]of[(]", "new Identifier("),
@@ -510,6 +512,17 @@ REWRITES = [
     # --- R3 misc 1.21 helpers ---
     ("colorhelper-white", r"ColorHelper[.]getWhite[(]", "net.jukoz.me.compat.MEColors.getWhite("),
     ("settings-useremainder", r"[.]useRemainder[(]", ".recipeRemainder("),
+    # --- R3 block-set API: legacy flat fields -> canonical *_SET builders (donor renamed the stones) ---
+    ("woodset-field", r"WoodBlockSets[.](MALLORN|MIRKWOOD|WILLOW|PALM|BEECH|LARCH|PINE|MAPLE|SILVER_MAPLE|WHITE_PALM|BLACK_LEBETHRON|WHITE_LEBETHRON)(?![_A-Z0-9])", "WoodBlockSets.\\1_SET"),
+    ("stoneset-epmosto", r"StoneBlockSets[.]EPMOSTO(?![_A-Z0-9])", "StoneBlockSets.IZHERABAN_SET"),
+    ("stoneset-diftomin", r"StoneBlockSets[.]DIFTOMIN(?![_A-Z0-9])", "StoneBlockSets.ZIGILABAN_SET"),
+    ("stoneset-gonluin", r"StoneBlockSets[.]GONLUIN(?![_A-Z0-9])", "StoneBlockSets.GALONN_SET"),
+    ("stoneset-ashen", r"StoneBlockSets[.]ASHEN_STONE(?![_A-Z0-9])", "StoneBlockSets.ASHENSTONE_SET"),
+    ("stoneset-limestone", r"StoneBlockSets[.]LIMESTONE(?![_A-Z0-9])", "StoneBlockSets.LIMESTONE_SET"),
+    ("stoneset-quartzite", r"StoneBlockSets[.]QUARTZITE(?![_A-Z0-9])", "StoneBlockSets.QUARTZITE_SET"),
+    # --- R3 GUI: 1.21 widget sizing helpers -> MEGui (1.20.1 ClickableWidget has no setHeight) ---
+    ("gui-set-bounds", r"([A-Za-z0-9_$.()]+)[.]setDimensionsAndPosition[(]([^,]+),[ ]*([^,]+),[ ]*([^,]+),[ ]*([^;)]+)[)];", "net.jukoz.me.compat.client.gui.MEGui.setBounds(\\1, \\2, \\3, \\4, \\5);"),
+    ("gui-set-size", r"([A-Za-z0-9_$.()]+)[.]setDimensions[(]([^,]+),[ ]*([^;)]+)[)];", "net.jukoz.me.compat.client.gui.MEGui.setSize(\\1, \\2, \\3);"),
 ]
 
 # 1.21 wraps block/item ids in a RegistryKey; 1.20.1 registers by Identifier.

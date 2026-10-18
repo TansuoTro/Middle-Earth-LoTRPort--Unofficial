@@ -1,7 +1,7 @@
 package net.jukoz.me.datageneration.content.models;
 
 import net.jukoz.me.block.registration.ModNatureBlocks;
-import net.jukoz.me.item.ModResourceItems;
+import net.jukoz.me.item.ResourceItemsME;
 import net.minecraft.block.Block;
 
 import java.util.ArrayList;
@@ -11,16 +11,21 @@ public class SimpleDoubleBlockModel {
     public static List<Block> doubleBlocks = new ArrayList<>() {
         {
             add(ModNatureBlocks.WILD_PIPEWEED);
-            add(ModNatureBlocks.WILD_TOMATO);
+            add(ModNatureBlocks.TALL_WILD_WHEAT);
 
             add(ModNatureBlocks.TALL_TUBESHROOM);
             add(ModNatureBlocks.TALL_TRUMPET_SHROOM);
+
+            add(ModNatureBlocks.HOGWEED);
+
+            add(ModNatureBlocks.TALL_CATTAILS);
+            add(ModNatureBlocks.TALL_BULRUSH);
         }
     };
 
     public static List<Block> doubleBlocksItems = new ArrayList<>() {
         {
-            add(ModResourceItems.REEDS);
+            add(ResourceItemsME.REEDS);
         }
     };
 }

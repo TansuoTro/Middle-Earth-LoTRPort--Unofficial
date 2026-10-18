@@ -1,4 +1,5 @@
 package net.jukoz.me.entity.beasts.great_horn;
+import net.jukoz.me.compat.client.render.equipment.EquipmentRenderer;
 import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.jukoz.me.compat.client.render.MEAnimationStates;
 import net.jukoz.me.compat.client.render.MEMAgeableMobEntityRenderer;

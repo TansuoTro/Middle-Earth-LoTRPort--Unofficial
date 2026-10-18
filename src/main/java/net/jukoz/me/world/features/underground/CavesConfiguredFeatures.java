@@ -108,14 +108,14 @@ public class CavesConfiguredFeatures {
     // region TESTS
     static TagMatchRuleTest baseStone = new TagMatchRuleTest(BlockTags.BASE_STONE_OVERWORLD);
     static TagMatchRuleTest stoneTest = new TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES);
-    static BlockMatchRuleTest ashenStoneTest = new BlockMatchRuleTest(StoneBlockSets.ASHEN_STONE.base());
+    static BlockMatchRuleTest ashenStoneTest = new BlockMatchRuleTest(StoneBlockSets.ASHENSTONE_SET.base());
     static BlockMatchRuleTest calciteStoneTest = new BlockMatchRuleTest(Blocks.CALCITE);
     static BlockMatchRuleTest frozenStoneTest = new BlockMatchRuleTest(StoneBlockSets.FROZEN_STONE.base());
-    static BlockMatchRuleTest gonluinTest = new BlockMatchRuleTest(StoneBlockSets.GONLUIN.base());
-    static BlockMatchRuleTest limestoneTest = new BlockMatchRuleTest(StoneBlockSets.LIMESTONE.base());
+    static BlockMatchRuleTest gonluinTest = new BlockMatchRuleTest(StoneBlockSets.GALONN_SET.base());
+    static BlockMatchRuleTest limestoneTest = new BlockMatchRuleTest(StoneBlockSets.LIMESTONE_SET.base());
     static TagMatchRuleTest deepslateTest = new TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
-    static BlockMatchRuleTest diftominTest = new BlockMatchRuleTest(StoneBlockSets.DIFTOMIN.base());
-    static BlockMatchRuleTest epmostoTest = new BlockMatchRuleTest(StoneBlockSets.EPMOSTO.base());
+    static BlockMatchRuleTest diftominTest = new BlockMatchRuleTest(StoneBlockSets.ZIGILABAN_SET.base());
+    static BlockMatchRuleTest epmostoTest = new BlockMatchRuleTest(StoneBlockSets.IZHERABAN_SET.base());
     // endregion
 
     // region LISTS
@@ -199,12 +199,12 @@ public class CavesConfiguredFeatures {
             OreFeatureConfig.createTarget(epmostoTest, OreRockSets.EPMOSTO.lead_ore().getDefaultState()));
 
     static List<OreFeatureConfig.Target> quartziteList = List.of(
-            OreFeatureConfig.createTarget(stoneTest, StoneBlockSets.QUARTZITE.base().getDefaultState()),
-            OreFeatureConfig.createTarget(ashenStoneTest, StoneBlockSets.QUARTZITE.base().getDefaultState()),
-            OreFeatureConfig.createTarget(frozenStoneTest, StoneBlockSets.QUARTZITE.base().getDefaultState()),
-            OreFeatureConfig.createTarget(gonluinTest, StoneBlockSets.QUARTZITE.base().getDefaultState()),
-            OreFeatureConfig.createTarget(limestoneTest, StoneBlockSets.QUARTZITE.base().getDefaultState()),
-            OreFeatureConfig.createTarget(deepslateTest, StoneBlockSets.QUARTZITE.base().getDefaultState()));
+            OreFeatureConfig.createTarget(stoneTest, StoneBlockSets.QUARTZITE_SET.base().getDefaultState()),
+            OreFeatureConfig.createTarget(ashenStoneTest, StoneBlockSets.QUARTZITE_SET.base().getDefaultState()),
+            OreFeatureConfig.createTarget(frozenStoneTest, StoneBlockSets.QUARTZITE_SET.base().getDefaultState()),
+            OreFeatureConfig.createTarget(gonluinTest, StoneBlockSets.QUARTZITE_SET.base().getDefaultState()),
+            OreFeatureConfig.createTarget(limestoneTest, StoneBlockSets.QUARTZITE_SET.base().getDefaultState()),
+            OreFeatureConfig.createTarget(deepslateTest, StoneBlockSets.QUARTZITE_SET.base().getDefaultState()));
     static List<OreFeatureConfig.Target> ironList = List.of(
             OreFeatureConfig.createTarget(diftominTest, OreRockSets.DIFTOMIN.iron_ore().getDefaultState()),
             OreFeatureConfig.createTarget(epmostoTest, OreRockSets.EPMOSTO.iron_ore().getDefaultState()));
@@ -232,7 +232,7 @@ public class CavesConfiguredFeatures {
         registerGeode(GLOWSTONE_GEODE, featureRegisterable, ModBlocks.GLOWSTONE_BLOCK, ModBlocks.BUDDING_GLOWSTONE, ModBlocks.SMALL_GLOWSTONE_BUD,
                 ModBlocks.MEDIUM_GLOWSTONE_BUD, ModBlocks.LARGE_GLOWSTONE_BUD, ModBlocks.GLOWSTONE_CLUSTER, Blocks.CALCITE);
         registerGeode(QUARTZ_GEODE, featureRegisterable, ModBlocks.QUARTZ_BLOCK, ModBlocks.BUDDING_QUARTZ, ModBlocks.SMALL_QUARTZ_BUD,
-                ModBlocks.MEDIUM_QUARTZ_BUD, ModBlocks.LARGE_QUARTZ_BUD, ModBlocks.QUARTZ_CLUSTER, StoneBlockSets.QUARTZITE.base());
+                ModBlocks.MEDIUM_QUARTZ_BUD, ModBlocks.LARGE_QUARTZ_BUD, ModBlocks.QUARTZ_CLUSTER, StoneBlockSets.QUARTZITE_SET.base());
         registerGeode(RED_AGATE_GEODE, featureRegisterable, ModBlocks.RED_AGATE_BLOCK, ModBlocks.BUDDING_RED_AGATE, ModBlocks.SMALL_RED_AGATE_BUD,
                 ModBlocks.MEDIUM_RED_AGATE_BUD, ModBlocks.LARGE_RED_AGATE_BUD, ModBlocks.RED_AGATE_CLUSTER, Blocks.CALCITE);
 
@@ -344,7 +344,7 @@ public class CavesConfiguredFeatures {
                         Direction.DOWN, BlockPredicate.IS_AIR, true));
 
         ConfiguredFeatures.register(featureRegisterable, SPRING_LAVA, Feature.SPRING_FEATURE, new SpringFeatureConfig(Fluids.LAVA.getDefaultState(),
-                true, 4, 1, RegistryEntryList.of(Block::getRegistryEntry, StoneBlockSets.DIFTOMIN.base(), StoneBlockSets.EPMOSTO.base())));
+                true, 4, 1, RegistryEntryList.of(Block::getRegistryEntry, StoneBlockSets.ZIGILABAN_SET.base(), StoneBlockSets.IZHERABAN_SET.base())));
     }
 
     public static RegistryKey<ConfiguredFeature<?, ?>> registerKey(String name) {

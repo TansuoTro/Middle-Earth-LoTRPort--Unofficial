@@ -89,4 +89,16 @@ public class StoneBlockSetBuilder {
         this.existingList.add(type);
         return this;
     }
+
+    // --- 1.20.1 port compat: legacy flat accessors ---
+    public Block base() { return this.baseBlocks == null ? null : this.baseBlocks.base(); }
+    public Block slab() { return this.baseBlocks == null ? null : this.baseBlocks.slab(); }
+    public Block verticalSlab() { return this.baseBlocks == null ? null : this.baseBlocks.verticalSlab(); }
+    public Block stairs() { return this.baseBlocks == null ? null : this.baseBlocks.stairs(); }
+    public Block wall() { return this.baseBlocks == null ? null : this.baseBlocks.wall(); }
+    public Block cobblestone() { return this.cobblestoneBlocks == null ? null : this.cobblestoneBlocks.base(); }
+    public Block bricks() { return this.brickBlocks == null ? null : this.brickBlocks.base(); }
+    public Block tiles() { return this.tileBlocks == null ? null : this.tileBlocks.base(); }
+    public Block smooth() { return this.smoothBlocks == null ? null : this.smoothBlocks.base(); }
+    public Block polished() { return this.polishedBlocks == null ? null : this.polishedBlocks.base(); }
 }

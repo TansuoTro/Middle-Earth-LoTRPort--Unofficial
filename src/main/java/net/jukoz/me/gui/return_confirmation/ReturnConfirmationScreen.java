@@ -73,7 +73,7 @@ public class ReturnConfirmationScreen extends Screen {
                     startY + (int) ((panelSizeY / 2f) - (textRenderer.fontHeight / 2f)) + 1,
                     Colors.BLACK, false);
 
-            returnToOverworldButton.setDimensionsAndPosition(panelSizeX, panelSizeY, startX, startY);
+            net.jukoz.me.compat.client.gui.MEGui.setBounds(returnToOverworldButton, panelSizeX, panelSizeY, startX, startY);
             if(ModWidget.getFocusEnabled() && returnToOverworldButton.isFocused()){
                 context.drawTexture(BUTTON_WIDGET, startX, startY, 103, 0, panelSizeX, panelSizeY, 256, 256);
             }

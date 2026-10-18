@@ -1,7 +1,6 @@
 package net.jukoz.me.datageneration.content.models;
 
 import net.jukoz.me.block.registration.ModBlocks;
-import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.jukoz.me.block.registration.StoneBlockSets;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -16,60 +15,17 @@ public class SimplePillarModel {
 
     public static List<Pillar> blocks = new ArrayList<>() {
         {
-            add(new Pillar(ModBlocks.REED_BLOCK));
-            add(new Pillar(ModBlocks.STRAW_BLOCK));
         }
     };
 
     public static List<StonePillar> stonePillars = new ArrayList<>() {
         {
-            add(new StonePillar(ModBlocks.LIMESTONE_PILLAR, StoneBlockSets.LIMESTONE_BRICKS.base()));
-            add(new StonePillar(ModBlocks.MOSSY_LIMESTONE_PILLAR, ModBlocks.LIMESTONE_PILLAR));
-            add(new StonePillar(ModBlocks.CRACKED_LIMESTONE_PILLAR, ModBlocks.LIMESTONE_PILLAR));
 
-            add(new StonePillar(ModBlocks.STONE_PILLAR, Blocks.STONE_BRICKS));
-            add(new StonePillar(ModBlocks.MOSSY_STONE_PILLAR, ModBlocks.STONE_PILLAR));
-            add(new StonePillar(ModBlocks.CRACKED_STONE_PILLAR, ModBlocks.STONE_PILLAR));
-            
-            add(new StonePillar(ModBlocks.DEEPSLATE_PILLAR, Blocks.DEEPSLATE_BRICKS));
-            add(new StonePillar(ModBlocks.MOSSY_DEEPSLATE_PILLAR, ModBlocks.DEEPSLATE_PILLAR));
-            add(new StonePillar(ModBlocks.CRACKED_DEEPSLATE_PILLAR, ModBlocks.DEEPSLATE_PILLAR));
+        }
+    };
 
-            add(new StonePillar(ModBlocks.ASHEN_PILLAR, StoneBlockSets.ASHEN_BRICKS.base()));
-
-            add(new StonePillar(ModBlocks.GONLUIN_PILLAR, StoneBlockSets.GONLUIN_BRICKS.base()));
-            add(new StonePillar(ModBlocks.MOSSY_GONLUIN_PILLAR, ModBlocks.GONLUIN_PILLAR));
-            add(new StonePillar(ModBlocks.CRACKED_GONLUIN_PILLAR, ModBlocks.GONLUIN_PILLAR));
-
-            add(new StonePillar(ModBlocks.BLUE_TUFF_PILLAR, StoneBlockSets.BLUE_TUFF_BRICKS.base()));
-            add(new StonePillar(ModBlocks.MOSSY_BLUE_TUFF_PILLAR, ModBlocks.BLUE_TUFF_PILLAR));
-            add(new StonePillar(ModBlocks.CRACKED_BLUE_TUFF_PILLAR, ModBlocks.BLUE_TUFF_PILLAR));
-
-            add(new StonePillar(ModBlocks.FROZEN_PILLAR, StoneBlockSets.FROZEN_BRICKS.base()));
-
-            add(new StonePillar(ModBlocks.DOLOMITE_PILLAR, StoneBlockSets.DOLOMITE_BRICKS.base()));
-
-            add(new StonePillar(ModBlocks.CALCITE_PILLAR, StoneBlockSets.CALCITE_BRICKS.base()));
-            add(new StonePillar(ModBlocks.MOSSY_CALCITE_PILLAR, ModBlocks.CALCITE_PILLAR));
-            add(new StonePillar(ModBlocks.CRACKED_CALCITE_PILLAR, ModBlocks.CALCITE_PILLAR));
-
-            add(new StonePillar(ModBlocks.ANDESITE_PILLAR, StoneBlockSets.ANDESITE_BRICKS.base()));
-            add(new StonePillar(ModBlocks.MOSSY_ANDESITE_PILLAR, ModBlocks.ANDESITE_PILLAR));
-            add(new StonePillar(ModBlocks.CRACKED_ANDESITE_PILLAR, ModBlocks.ANDESITE_PILLAR));
-
-            add(new StonePillar(ModBlocks.GRANITE_PILLAR, StoneBlockSets.GRANITE_BRICKS.base()));
-            add(new StonePillar(ModBlocks.MOSSY_GRANITE_PILLAR, ModBlocks.GRANITE_PILLAR));
-            add(new StonePillar(ModBlocks.CRACKED_GRANITE_PILLAR, ModBlocks.GRANITE_PILLAR));
-
-            add(new StonePillar(ModBlocks.DIORITE_PILLAR, StoneBlockSets.DIORITE_BRICKS.base()));
-            add(new StonePillar(ModBlocks.MOSSY_DIORITE_PILLAR, ModBlocks.DIORITE_PILLAR));
-            add(new StonePillar(ModBlocks.CRACKED_DIORITE_PILLAR, ModBlocks.DIORITE_PILLAR));
-
-            add(new StonePillar(ModBlocks.JADEITE_PILLAR, StoneBlockSets.JADEITE_BRICKS.base()));
-            add(new StonePillar(ModBlocks.CRACKED_JADEITE_PILLAR, ModBlocks.JADEITE_PILLAR));
-
-            add(new StonePillar(ModBlocks.DIFTOMIN_PILLAR, StoneBlockSets.DIFTOMIN_BRICKS.base()));
-            add(new StonePillar(ModBlocks.EPMOSTO_PILLAR, StoneBlockSets.EPMOSTO_BRICKS.base()));
+    public static List<StonePillar> carvedWindows = new ArrayList<>() {
+        {
 
         }
     };

@@ -135,7 +135,7 @@ public class MapMarkerWidget extends ModWidget {
         buttonStartCoordinates.x += drawSize.x / 2 - buttonSize.x / 2;
         buttonStartCoordinates.y += drawSize.y / 2 - buttonSize.y / 2;
 
-        markerButton.setDimensionsAndPosition(buttonSize.x, buttonSize.y, buttonStartCoordinates.x, buttonStartCoordinates.y);
+        net.jukoz.me.compat.client.gui.MEGui.setBounds(markerButton, buttonSize.x, buttonSize.y, buttonStartCoordinates.x, buttonStartCoordinates.y);
         if(!markerButton.active)
             activateButton(true);
 

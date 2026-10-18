@@ -460,10 +460,10 @@ public class RecipeProvider extends net.minecraft.data.server.recipe.RecipeProvi
                 .pattern("EEE")
                 .pattern("EGE")
                 .pattern("EEE")
-                .input('E', StoneBlockSets.EPMOSTO.base())
+                .input('E', StoneBlockSets.IZHERABAN_SET.base())
                 .input('G', Blocks.GLASS)
-                .criterion(FabricRecipeProvider.hasItem(StoneBlockSets.EPMOSTO.base()),
-                        FabricRecipeProvider.conditionsFromItem(StoneBlockSets.EPMOSTO.base()))
+                .criterion(FabricRecipeProvider.hasItem(StoneBlockSets.IZHERABAN_SET.base()),
+                        FabricRecipeProvider.conditionsFromItem(StoneBlockSets.IZHERABAN_SET.base()))
                 .offerTo(exporter);
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, ModDecorativeBlocks.LEAD_GLASS, 4)
@@ -488,7 +488,7 @@ public class RecipeProvider extends net.minecraft.data.server.recipe.RecipeProvi
         createBrickRecipe(exporter, ModBlocks.ASH_BLOCK.asItem(), Blocks.TUFF, 1);
 
 
-        ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, StoneBlockSets.ASHEN_STONE.base(), 4)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, StoneBlockSets.ASHENSTONE_SET.base(), 4)
                 .pattern("AS")
                 .pattern("SA")
                 .input('A', ModBlocks.ASH_BLOCK)

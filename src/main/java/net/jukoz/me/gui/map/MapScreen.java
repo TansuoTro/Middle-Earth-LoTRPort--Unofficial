@@ -71,7 +71,7 @@ public class MapScreen extends Screen {
         fullscreenButton = ButtonWidget.builder(Text.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.button.fullscreen_toggle"), x -> {
             isFullscreen = !isFullscreen;
         }).build();
-        fullscreenButton.setDimensions(NORMAL_BUTTON_SIZE.x,NORMAL_BUTTON_SIZE.y);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(fullscreenButton, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y);
         addDrawableChild(fullscreenButton);
 
         // Overlay toggle
@@ -79,7 +79,7 @@ public class MapScreen extends Screen {
             mapWidget.setOverlayState(!mapWidget.isOverlayEnabled());
         }).build();
         overlayToggleButton.active = ModClientConfigs.ENABLE_MAP_OVERLAY;
-        overlayToggleButton.setDimensions(NORMAL_BUTTON_SIZE.x,NORMAL_BUTTON_SIZE.y);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(overlayToggleButton, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y);
         addDrawableChild(overlayToggleButton);
 
         // Recenter on player
@@ -89,21 +89,21 @@ public class MapScreen extends Screen {
             playerCoords.y /= MiddleEarthMapConfigs.FULL_MAP_SIZE;
             mapWidget.instantCenterOnRatio(playerCoords);
         }).build();
-        recenterButton.setDimensions(NORMAL_BUTTON_SIZE.x,NORMAL_BUTTON_SIZE.y);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(recenterButton, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y);
         addDrawableChild(recenterButton);
 
         // Zoom in button register
         zoomInButton = ButtonWidget.builder(Text.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.button.zoom_in"), x -> {
             mapWidget.zoomClick();
         }).build();
-        zoomInButton.setDimensions(NORMAL_BUTTON_SIZE.x,NORMAL_BUTTON_SIZE.y);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(zoomInButton, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y);
         addDrawableChild(zoomInButton);
 
         // Zoom out button register
         zoomOutButton = ButtonWidget.builder(Text.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.button.zoom_out"), x -> {
             mapWidget.dezoomClick();
         }).build();
-        zoomOutButton.setDimensions(NORMAL_BUTTON_SIZE.x,NORMAL_BUTTON_SIZE.y);
+        net.jukoz.me.compat.client.gui.MEGui.setSize(zoomOutButton, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y);
         addDrawableChild(zoomOutButton);
 
     }

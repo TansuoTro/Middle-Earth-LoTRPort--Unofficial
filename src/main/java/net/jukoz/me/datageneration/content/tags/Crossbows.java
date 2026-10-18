@@ -6,5 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Crossbows {
-    public static List<Item> crossbows = new ArrayList<>();
+    public static List<Item> crossbows = new ArrayList<>() {
+    {
+        
+    }};
 }

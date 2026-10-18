@@ -222,13 +222,13 @@ public class MiddleEarthChunkGenerator extends ChunkGenerator {
                 }
 
                 for(int y = bottomY + 1; y < EPMOSTO_LEVEL + caveBlendNoise; y++) {
-                    trySetBlock(chunk, chunk.getPos().getBlockPos(x, y, z), StoneBlockSets.EPMOSTO.base().getDefaultState());
+                    trySetBlock(chunk, chunk.getPos().getBlockPos(x, y, z), StoneBlockSets.IZHERABAN_SET.base().getDefaultState());
                 }
                 if(Math.random() < 0.5f) chunk.setBlockState(chunk.getPos().getBlockPos(x, chunk.getBottomY() + 1, z),
                         Blocks.BEDROCK.getDefaultState(), false);
 
                 for(int y = EPMOSTO_LEVEL + (int) caveBlendNoise; y < DIFTOMIN_LEVEL + caveBlendNoise; y++) {
-                    trySetBlock(chunk, chunk.getPos().getBlockPos(x, y, z), StoneBlockSets.DIFTOMIN.base().getDefaultState());
+                    trySetBlock(chunk, chunk.getPos().getBlockPos(x, y, z), StoneBlockSets.ZIGILABAN_SET.base().getDefaultState());
                 }
                 for(int y = DIFTOMIN_LEVEL + (int) caveBlendNoise; y < DEEPSLATE_LEVEL + caveBlendNoise; y++) {
                     trySetBlock(chunk, chunk.getPos().getBlockPos(x, y, z), Blocks.DEEPSLATE.getDefaultState());

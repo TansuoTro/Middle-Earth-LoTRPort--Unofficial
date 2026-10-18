@@ -1,5 +1,6 @@
 package net.jukoz.me.compat.client.render.equipment;
 
+import net.jukoz.me.compat.client.render.equipment.EquipmentRenderer;
 import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 import net.jukoz.me.compat.client.render.state.EntityRenderStateCompat;
 import net.jukoz.me.item.MEComponents;

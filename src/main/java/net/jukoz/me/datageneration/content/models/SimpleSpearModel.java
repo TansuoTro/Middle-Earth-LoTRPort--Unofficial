@@ -6,5 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleSpearModel {
-    public static List<Item> items = new ArrayList<>();
+    public static List<Item> items = new ArrayList<>() {
+        {
+
+        }
+    };
 }

@@ -1,10 +1,8 @@
 package net.jukoz.me.datageneration.content.models;
 
 import net.jukoz.me.block.registration.ModBlocks;
-import net.jukoz.me.block.registration.ModNatureBlocks;
-import net.jukoz.me.block.registration.StoneBlockSets;
+import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +13,37 @@ public class SimpleBlockModel {
 
     public record ChiseledPolishedBlock(Block base, Block origin) {}
 
-    public record CobbleableStoneBlock(Block base, Block origin) {}
-
 
     public static List<Block> blocks = new ArrayList<>() {
         {
+            add(ModBlocks.COBBLY_DIRT);
+
+
+            add(ModBlocks.SNOWY_DIRT);
+
+            add(ModBlocks.MIRE);
+
+            add(ModBlocks.DIRTY_ROOTS);
+
             add(ModBlocks.DRY_DIRT);
+
+            add(ModBlocks.CHALKSOIL);
+            add(ModBlocks.COARSE_CHALKSOIL);
+
+            add(ModBlocks.LOAM);
+            add(ModBlocks.COARSE_LOAM);
+
+            add(ModBlocks.PEAT);
+            add(ModBlocks.COARSE_PEAT);
+
+            add(ModBlocks.SILT);
+            add(ModBlocks.COARSE_SILT);
+
+            add(ModBlocks.FOUL_DIRT);
+
             add(ModBlocks.ASHEN_DIRT);
+
+            add(ModBlocks.COBBLY_ASHEN_DIRT);
 
             //METALS
             add(ModBlocks.RAW_MITHRIL_BLOCK);
@@ -32,15 +54,17 @@ public class SimpleBlockModel {
             add(ModBlocks.LEAD_BLOCK);
             add(ModBlocks.RAW_SILVER_BLOCK);
             add(ModBlocks.SILVER_BLOCK);
-            add(ModBlocks.CUT_LEAD);
-            add(ModBlocks.CUT_SILVER);
 
             add(ModBlocks.BRONZE_BLOCK);
-            add(ModBlocks.ORC_STEEL_BLOCK);
+            add(ModBlocks.CRUDE_BLOCK);
             add(ModBlocks.STEEL_BLOCK);
-            add(ModBlocks.DWARVEN_STEEL_BLOCK);
-            add(ModBlocks.ELVEN_STEEL_BLOCK);
-            add(ModBlocks.URUK_STEEL_BLOCK);
+            add(ModBlocks.KHAZAD_STEEL_BLOCK);
+            add(ModBlocks.EDHEL_STEEL_BLOCK);
+            add(ModBlocks.BURZUM_STEEL_BLOCK);
+
+            add(ModBlocks.ADAMANT_BLOCK);
+            add(ModBlocks.RUBY_BLOCK);
+            add(ModBlocks.SAPPHIRE_BLOCK);
 
             //GEMS
             add(ModBlocks.QUARTZ_BLOCK);
@@ -53,21 +77,92 @@ public class SimpleBlockModel {
             add(ModBlocks.BUDDING_GLOWSTONE);
 
             add(ModBlocks.RIVER_SAND);
-            add(ModBlocks.BLACK_SAND);
-            add(ModBlocks.WHITE_SAND);
             add(ModBlocks.ASH_BLOCK);
 
-            add(ModBlocks.WHITE_WATTLE_AND_DAUB);
-            add(ModBlocks.WHITE_WATTLE_AND_DAUB_CROSS);
-            add(ModBlocks.WHITE_WATTLE_AND_DAUB_RIGHT);
-            add(ModBlocks.WHITE_WATTLE_AND_DAUB_LEFT);
-            add(ModBlocks.WHITE_WATTLE_AND_DAUB_DIAMOND);
+            add(ModBlocks.WATTLE_AND_BRICK);
+            add(ModBlocks.WATTLE_AND_BRICK_CROSS);
+            add(ModBlocks.WATTLE_AND_BRICK_RIGHT);
+            add(ModBlocks.WATTLE_AND_BRICK_LEFT);
+            add(ModBlocks.WATTLE_AND_BRICK_PILLAR);
+            add(ModBlocks.WATTLE_AND_BRICK_DIAMOND);
 
-            add(ModBlocks.YELLOW_WATTLE_AND_DAUB);
-            add(ModBlocks.YELLOW_WATTLE_AND_DAUB_CROSS);
-            add(ModBlocks.YELLOW_WATTLE_AND_DAUB_RIGHT);
-            add(ModBlocks.YELLOW_WATTLE_AND_DAUB_LEFT);
-            add(ModBlocks.YELLOW_WATTLE_AND_DAUB_DIAMOND);
+            add(ModBlocks.WATTLE_AND_WHITE_DAUB);
+            add(ModBlocks.WATTLE_AND_WHITE_DAUB_CROSS);
+            add(ModBlocks.WATTLE_AND_WHITE_DAUB_RIGHT);
+            add(ModBlocks.WATTLE_AND_WHITE_DAUB_LEFT);
+            add(ModBlocks.WATTLE_AND_WHITE_DAUB_PILLAR);
+            add(ModBlocks.WATTLE_AND_WHITE_DAUB_DIAMOND);
+
+            add(ModBlocks.BLACK_WATTLE_AND_WHITE_DAUB);
+            add(ModBlocks.BLACK_WATTLE_AND_WHITE_DAUB_CROSS);
+            add(ModBlocks.BLACK_WATTLE_AND_WHITE_DAUB_RIGHT);
+            add(ModBlocks.BLACK_WATTLE_AND_WHITE_DAUB_LEFT);
+            add(ModBlocks.BLACK_WATTLE_AND_WHITE_DAUB_PILLAR);
+            add(ModBlocks.BLACK_WATTLE_AND_WHITE_DAUB_DIAMOND);
+
+            add(ModBlocks.GREEN_WATTLE_AND_WHITE_DAUB);
+            add(ModBlocks.GREEN_WATTLE_AND_WHITE_DAUB_CROSS);
+            add(ModBlocks.GREEN_WATTLE_AND_WHITE_DAUB_RIGHT);
+            add(ModBlocks.GREEN_WATTLE_AND_WHITE_DAUB_LEFT);
+            add(ModBlocks.GREEN_WATTLE_AND_WHITE_DAUB_PILLAR);
+            add(ModBlocks.GREEN_WATTLE_AND_WHITE_DAUB_DIAMOND);
+
+            add(ModBlocks.RED_WATTLE_AND_WHITE_DAUB);
+            add(ModBlocks.RED_WATTLE_AND_WHITE_DAUB_CROSS);
+            add(ModBlocks.RED_WATTLE_AND_WHITE_DAUB_RIGHT);
+            add(ModBlocks.RED_WATTLE_AND_WHITE_DAUB_LEFT);
+            add(ModBlocks.RED_WATTLE_AND_WHITE_DAUB_PILLAR);
+            add(ModBlocks.RED_WATTLE_AND_WHITE_DAUB_DIAMOND);
+
+            add(ModBlocks.DARK_WATTLE_AND_DARK_DAUB);
+            add(ModBlocks.DARK_WATTLE_AND_DARK_DAUB_CROSS);
+            add(ModBlocks.DARK_WATTLE_AND_DARK_DAUB_RIGHT);
+            add(ModBlocks.DARK_WATTLE_AND_DARK_DAUB_LEFT);
+            add(ModBlocks.DARK_WATTLE_AND_DARK_DAUB_PILLAR);
+            add(ModBlocks.DARK_WATTLE_AND_DARK_DAUB_DIAMOND);
+
+            add(ModBlocks.WATTLE_AND_YELLOW_DAUB);
+            add(ModBlocks.WATTLE_AND_YELLOW_DAUB_CROSS);
+            add(ModBlocks.WATTLE_AND_YELLOW_DAUB_RIGHT);
+            add(ModBlocks.WATTLE_AND_YELLOW_DAUB_LEFT);
+            add(ModBlocks.WATTLE_AND_YELLOW_DAUB_PILLAR);
+            add(ModBlocks.WATTLE_AND_YELLOW_DAUB_DIAMOND);
+
+            add(ModDecorativeBlocks.WOOD_FRAMED_WINDOW);
+            add(ModDecorativeBlocks.AGED_WOOD_WINDOW);
+            add(ModDecorativeBlocks.SIMPLE_OAK_WINDOW);
+            add(ModDecorativeBlocks.WATTLE_AND_BRICK_WINDOW);
+            add(ModDecorativeBlocks.WATTLE_FRAMED_WINDOW);
+            add(ModDecorativeBlocks.DARK_WATTLE_FRAMED_WINDOW);
+            add(ModDecorativeBlocks.BLACK_WATTLE_FRAMED_WINDOW);
+            add(ModDecorativeBlocks.GREEN_WATTLE_FRAMED_WINDOW);
+            add(ModDecorativeBlocks.RED_WATTLE_FRAMED_WINDOW);
+            add(ModDecorativeBlocks.WHITE_WATTLE_FRAMED_WINDOW);
+            add(ModDecorativeBlocks.WHITE_DAUB_HOBBIT_WINDOW);
+            add(ModDecorativeBlocks.PLASTER_HOBBIT_WINDOW);
+            add(ModDecorativeBlocks.PLASTER_ROUND_WINDOW);
+            add(ModDecorativeBlocks.YELLOW_DAUB_HOBBIT_WINDOW);
+            add(ModDecorativeBlocks.MUD_BRICK_ROUND_WINDOW);
+            add(ModDecorativeBlocks.WHITE_DAUB_ROUND_WINDOW);
+            add(ModDecorativeBlocks.YELLOW_DAUB_ROUND_WINDOW);
+
+            add(ModDecorativeBlocks.LEAD_GLASS);
+            add(ModDecorativeBlocks.BLUE_STAINED_LEAD_GLASS);
+            add(ModDecorativeBlocks.BLACK_STAINED_LEAD_GLASS);
+            add(ModDecorativeBlocks.BROWN_STAINED_LEAD_GLASS);
+            add(ModDecorativeBlocks.CYAN_STAINED_LEAD_GLASS);
+            add(ModDecorativeBlocks.GRAY_STAINED_LEAD_GLASS);
+            add(ModDecorativeBlocks.GREEN_STAINED_LEAD_GLASS);
+            add(ModDecorativeBlocks.LIGHT_BLUE_STAINED_LEAD_GLASS);
+            add(ModDecorativeBlocks.LIGHT_GRAY_STAINED_LEAD_GLASS);
+            add(ModDecorativeBlocks.LIME_STAINED_LEAD_GLASS);
+            add(ModDecorativeBlocks.MAGENTA_STAINED_LEAD_GLASS);
+            add(ModDecorativeBlocks.ORANGE_STAINED_LEAD_GLASS);
+            add(ModDecorativeBlocks.PINK_STAINED_LEAD_GLASS);
+            add(ModDecorativeBlocks.PURPLE_STAINED_LEAD_GLASS);
+            add(ModDecorativeBlocks.RED_STAINED_LEAD_GLASS);
+            add(ModDecorativeBlocks.WHITE_STAINED_LEAD_GLASS);
+            add(ModDecorativeBlocks.YELLOW_STAINED_LEAD_GLASS);
         }
     };
 
@@ -77,52 +172,39 @@ public class SimpleBlockModel {
         }
     };
 
-    public static List<ChiseledBlock> chiseledBlocks = new ArrayList<>() {
-        {
-            add(new ChiseledBlock(ModBlocks.CHISELED_GONLUIN_BRICKS, StoneBlockSets.GONLUIN_BRICKS.slab()));
-            add(new ChiseledBlock(ModBlocks.CHISELED_CALCITE_BRICKS, StoneBlockSets.CALCITE_BRICKS.slab()));
-            add(new ChiseledBlock(ModBlocks.CHISELED_LIMESTONE_BRICKS, StoneBlockSets.LIMESTONE_BRICKS.slab()));
-            add(new ChiseledBlock(ModBlocks.CHISELED_GRANITE_BRICKS, StoneBlockSets.GRANITE_BRICKS.slab()));
-            add(new ChiseledBlock(ModBlocks.CHISELED_BASALT_BRICKS, StoneBlockSets.BASALT_BRICKS.slab()));
-            add(new ChiseledBlock(ModBlocks.CHISELED_DIFTOMIN_BRICKS, StoneBlockSets.DIFTOMIN_BRICKS.slab()));
-        }
-    };
-
     public static List<ChiseledBlock> chiseledMainBlockTopBottom = new ArrayList<>() {
         {
-            add(new ChiseledBlock(ModBlocks.CHISELED_EPMOSTO, StoneBlockSets.EPMOSTO.slab()));
+
         }
     };
 
     public static List<ChiseledBlock> chiseledBlocksTopBottom = new ArrayList<>() {
         {
-            add(new ChiseledBlock(ModBlocks.CHISELED_ASHEN_BRICKS, StoneBlockSets.ASHEN_BRICKS.slab()));
-            add(new ChiseledBlock(ModBlocks.CHISELED_BLUE_TUFF_BRICKS, StoneBlockSets.BLUE_TUFF_BRICKS.slab()));
-            add(new ChiseledBlock(ModBlocks.CHISELED_ANDESITE_BRICKS, StoneBlockSets.ANDESITE_BRICKS.slab()));
-            add(new ChiseledBlock(ModBlocks.CHISELED_DIORITE_BRICKS, StoneBlockSets.DIORITE_BRICKS.slab()));
-            add(new ChiseledBlock(ModBlocks.CHISELED_DOLOMITE_BRICKS, StoneBlockSets.DOLOMITE_BRICKS.slab()));
-            add(new ChiseledBlock(ModBlocks.CHISELED_EPMOSTO_BRICKS, StoneBlockSets.EPMOSTO_BRICKS.slab()));
+
         }
     };
 
     public static List<ChiseledPolishedBlock> chiseledPolishedBlocksTopBottom = new ArrayList<>() {
         {
-            add(new ChiseledPolishedBlock(ModBlocks.CHISELED_POLISHED_ANDESITE, Blocks.POLISHED_ANDESITE_SLAB));
-            add(new ChiseledPolishedBlock(ModBlocks.CHISELED_POLISHED_DIORITE, Blocks.POLISHED_DIORITE_SLAB));
-            add(new ChiseledPolishedBlock(ModBlocks.CHISELED_POLISHED_BLUE_TUFF, StoneBlockSets.POLISHED_BLUE_TUFF.slab()));
-            add(new ChiseledPolishedBlock(ModBlocks.CHISELED_POLISHED_ASHEN_STONE, StoneBlockSets.POLISHED_ASHEN_STONE.slab()));
-            add(new ChiseledPolishedBlock(ModBlocks.CHISELED_POLISHED_EPMOSTO, StoneBlockSets.POLISHED_EPMOSTO.slab()));
+
         }
     };
 
     public static List<ChiseledPolishedBlock> chiseledPolishedBlocks = new ArrayList<>() {
         {
-            add(new ChiseledPolishedBlock(ModBlocks.CHISELED_POLISHED_GONLUIN, StoneBlockSets.POLISHED_GONLUIN.slab()));
-            add(new ChiseledPolishedBlock(ModBlocks.CHISELED_POLISHED_CALCITE, StoneBlockSets.POLISHED_CALCITE.slab()));
-            add(new ChiseledPolishedBlock(ModBlocks.CHISELED_POLISHED_DIFTOMIN, StoneBlockSets.POLISHED_DIFTOMIN.slab()));
-            add(new ChiseledPolishedBlock(ModBlocks.CHISELED_POLISHED_LIMESTONE, StoneBlockSets.POLISHED_LIMESTONE.slab()));
-            add(new ChiseledPolishedBlock(ModBlocks.CHISELED_SMOOTH_STONE, Blocks.SMOOTH_STONE_SLAB));
-            add(new ChiseledPolishedBlock(ModBlocks.CHISELED_POLISHED_GRANITE, Blocks.POLISHED_GRANITE_SLAB));
+
+        }
+    };
+
+    public static List<ChiseledPolishedBlock> chiseledTilesBlocksTopBottom = new ArrayList<>() {
+        {
+
+        }
+    };
+
+    public static List<ChiseledPolishedBlock> chiseledSmoothBlocksTopBottom = new ArrayList<>() {
+        {
+
         }
     };
 
