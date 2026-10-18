@@ -1,8 +1,8 @@
 package net.jukoz.me.item.utils;
 import net.jukoz.me.compat.METext;
 
-import net.minecraft.item.equipment.trim.ArmorTrimAssets;
-import net.minecraft.item.equipment.trim.ArmorTrimMaterial;
+import net.minecraft.item.trim.ArmorTrimAssets;
+import net.minecraft.item.trim.ArmorTrimMaterial;
 import net.minecraft.registry.Registerable;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;

@@ -258,6 +258,8 @@ REWRITES = [
     ("animation-definition", r"(?<![A-Za-z0-9_$])AnimationDefinition", "Animation"),
     # 1.21 helpers with a direct 1.20.1 equivalent.
     ("of-vanilla", r"(?<![A-Za-z0-9_$])Identifier[.]ofVanilla[(]", 'new Identifier("minecraft", '),
+    # 1.21 moved the trim classes; 1.20.1 keeps them in net.minecraft.item.trim.
+    ("trim-package", r"net[.]minecraft[.]item[.]equipment[.]trim[.]", "net.minecraft.item.trim."),
     # 1.21.2 renames on PlayerEntity / World.
     ("is-in-creative", r"(?<![A-Za-z0-9_$])isInCreativeMode[(]", "isCreative("),
     ("add-particle-client", r"(?<![A-Za-z0-9_$])addParticleClient[(]", "addParticle("),

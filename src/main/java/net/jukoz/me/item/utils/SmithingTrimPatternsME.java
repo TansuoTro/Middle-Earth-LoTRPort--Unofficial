@@ -1,6 +1,6 @@
 package net.jukoz.me.item.utils;
 
-import net.minecraft.item.equipment.trim.ArmorTrimPattern;
+import net.minecraft.item.trim.ArmorTrimPattern;
 import net.jukoz.me.MiddleEarth;
 import net.minecraft.registry.*;
 import net.minecraft.text.Text;
