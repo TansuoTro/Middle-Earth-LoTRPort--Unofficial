@@ -82,6 +82,32 @@ MEComponents     get / set / contains / remove / getOrDefault / defaultFor
 - 已移植 5 個 value class：Faction / Race / Temperature / Cooldown / SneakAttack（tooltip 先留空，等陣營 registry 到位）
 - `ComponentCodecs.alternative(...)` 補上 1.20.1 沒有的 `Codec.withAlternative`
 
+### 相容層：`MESettings`
+
+donor 的寫法是 `new Item.Settings().maxCount(1).component(KEY, V)`，而 1.20.1 的
+`Item.Settings` 只有 8 個方法、沒有 component。做法不是改 961 個呼叫點，而是換掉那個類別：
+
+```java
+public class MESettings extends Item.Settings {
+    public <T> MESettings component(MEComponent<T> key, T value) { ... return this; }
+    @Override public MESettings maxCount(int n) { super.maxCount(n); return this; }  // 8 個都覆寫
+}
+```
+
+關鍵是**共變回傳型別**：每個原版方法都覆寫成回傳 `MESettings`，否則
+`maxCount(1)` 會退回 `Item.Settings`，後面的 `.component(...)` 就接不上。
+
+這樣整條鏈原封不動就能編譯，轉換只需要一條規則：
+
+| 轉換 | 次數（EquipmentItemsME） |
+|---|---:|
+| `new Item.Settings()` → `new MESettings()` | 537 |
+| `DataComponentTypesME.X` → `MEComponents.X` | 519 |
+
+`ItemMixin` 在 `Item.<init>` 的 RETURN 攔一次，把 `MESettings` 收集到的 component
+交給 `MEComponents.captureDefaults`。物品建立後就不可變，所以模板存在
+identity map 裡，由 `get()` 回落——**不寫進每個 stack 的 NBT**，避免 NBT 膨脹。
+
 ### 為什麼要有 `defaultFor`
 
 掃描後發現 donor 的 component 用法其實分成兩種：

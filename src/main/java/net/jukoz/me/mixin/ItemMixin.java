@@ -1,0 +1,24 @@
+package net.jukoz.me.mixin;
+
+import net.jukoz.me.item.MEComponents;
+import net.jukoz.me.item.MESettings;
+import net.minecraft.item.Item;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+/**
+ * Hands the components declared on an {@link MESettings} to {@link MEComponents} once the
+ * item exists, so they can be resolved from a stack later.
+ */
+@Mixin(Item.class)
+public class ItemMixin {
+
+    @Inject(method = "<init>", at = @At("RETURN"))
+    private void me$captureComponentDefaults(Item.Settings settings, CallbackInfo ci) {
+        if (settings instanceof MESettings meSettings && !meSettings.components().isEmpty()) {
+            MEComponents.captureDefaults((Item) (Object) this, meSettings.components());
+        }
+    }
+}

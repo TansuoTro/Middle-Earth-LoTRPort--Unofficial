@@ -9,6 +9,7 @@
     "EntityDataSaverMixin",
     "EntitySpawnMixin",
     "FoliagePlacerTypeInvoker",
+    "ItemMixin",
     "PigEntityMixin",
     "PlayerEntityMixin",
     "PlayerMixin",

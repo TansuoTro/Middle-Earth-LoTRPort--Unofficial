@@ -67,6 +67,16 @@ public final class MEComponents {
         ITEM_DEFAULTS.computeIfAbsent(item, k -> new IdentityHashMap<>()).put(key, value);
     }
 
+    /** Bulk form used by {@code ItemMixin} when an item is built from {@link MESettings}. */
+    public static void captureDefaults(Item item, Map<MEComponent<?>, Object> components) {
+        ITEM_DEFAULTS.computeIfAbsent(item, k -> new IdentityHashMap<>()).putAll(components);
+    }
+
+    /** Test hook. */
+    public static void clearDefaults() {
+        ITEM_DEFAULTS.clear();
+    }
+
     private static <T> MEComponent<T> register(String path, Codec<T> codec) {
         return new MEComponent<>(new Identifier(MiddleEarth.MOD_ID, path), codec);
     }

@@ -213,6 +213,19 @@ def rewrite_components(text: str):
     return "".join(out), n
 
 
+def ensure_import(text: str, fqcn: str) -> str:
+    if f"import {fqcn};" in text:
+        return text
+    pkg = fqcn.rsplit(".", 1)[0]
+    m = re.search(r"package\s+" + re.escape(pkg) + r"\s*;", text)
+    if m:
+        return text  # same package, no import needed
+    m = re.search(r"package\s+[\w.]+\s*;", text)
+    if m:
+        return text[:m.end()] + f"\nimport {fqcn};" + text[m.end():]
+    return f"import {fqcn};\n" + text
+
+
 REWRITES = [
     ("package", "net.sevenstars.middleearth", "net.jukoz.me"),
     ("identifier", "Identifier.of(", "new Identifier("),
@@ -244,6 +257,22 @@ def rewrite(text: str):
     text, n = rewrite_components(text)
     if n:
         stats["components"] = n
+
+    # 1.21 items declare their components on Item.Settings; MESettings keeps that chain
+    # intact and forwards the values to MEComponents when the Item is constructed.
+    n = text.count("new Item.Settings()")
+    if n:
+        text = text.replace("new Item.Settings()", "new MESettings()")
+        stats["settings"] = n
+        text = ensure_import(text, "net.jukoz.me.item.MESettings")
+
+    # key references: DataComponentTypesME.X -> MEComponents.X (ComponentType -> MEComponent)
+    n = text.count("DataComponentTypesME.")
+    if n:
+        text = text.replace("DataComponentTypesME.", "MEComponents.")
+        stats["component-keys"] = n
+        text = ensure_import(text, "net.jukoz.me.item.MEComponents")
+
     return text, dict(stats)
 
 
@@ -307,6 +336,180 @@ def cmd_errors(args) -> int:
     return 0
 
 
+
+# --------------------------------------------------------------------------
+# component extraction (read-only)
+# --------------------------------------------------------------------------
+
+DECL = re.compile(
+    r"(?m)^[ \t]*(?:public|private|protected)?[ \t]*static[ \t]+final[ \t]+"
+    r"(?P<type>[A-Za-z_][\w.<>\[\], ]*?)[ \t]+(?P<name>[A-Z_][A-Z0-9_]*)[ \t]*=[ \t]*")
+COMPONENT_CALL = re.compile(r"\.component\(")
+
+
+def _skip_string(text: str, i: int) -> int:
+    quote = text[i]
+    i += 1
+    while i < len(text):
+        if text[i] == "\\":
+            i += 2
+            continue
+        if text[i] == quote:
+            return i + 1
+        i += 1
+    return i
+
+
+def blank_comments(text: str) -> str:
+    """Replace comments with spaces, preserving every offset and newline."""
+    out = list(text)
+    i, n = 0, len(text)
+    while i < n:
+        if text.startswith("//", i):
+            j = text.find("\n", i)
+            j = n if j < 0 else j
+            for k in range(i, j):
+                out[k] = " "
+            i = j
+        elif text.startswith("/*", i):
+            j = text.find("*/", i + 2)
+            j = n if j < 0 else j + 2
+            for k in range(i, j):
+                if out[k] != "\n":
+                    out[k] = " "
+            i = j
+        elif text[i] in "\"\'":
+            i = _skip_string(text, i)
+        else:
+            i += 1
+    return "".join(out)
+
+
+def _statement_end(text: str, pos: int) -> int:
+    depth = 0
+    i, n = pos, len(text)
+    while i < n:
+        c = text[i]
+        if c in "\"\'":
+            i = _skip_string(text, i)
+            continue
+        if c in "([{":
+            depth += 1
+        elif c in ")]}":
+            depth -= 1
+        elif c == ";" and depth == 0:
+            return i
+        i += 1
+    return n
+
+
+def _split_top_level(text: str):
+    parts, depth, start = [], 0, 0
+    for i, c in enumerate(text):
+        if c in "([{":
+            depth += 1
+        elif c in ")]}":
+            depth -= 1
+        elif c == "," and depth == 0:
+            parts.append(text[start:i])
+            start = i + 1
+    parts.append(text[start:])
+    return [p.strip() for p in parts]
+
+
+def cmd_components(args) -> int:
+    donor = Path(args.donor)
+    rows, unresolved = [], []
+    seen = collections.Counter()
+
+    for path in iter_java(donor):
+        text = blank_comments(path.read_text(encoding="utf-8", errors="replace"))
+        rel = path.relative_to(donor).as_posix()
+        covered = set()
+
+        for decl in DECL.finditer(text):
+            name = decl.group("name")
+            start = decl.end()
+            end = _statement_end(text, start)
+            statement = text[start:end]
+            for call in COMPONENT_CALL.finditer(statement):
+                open_idx = call.end()
+                close_idx = _statement_end_arg(statement, open_idx)
+                inner = statement[open_idx:close_idx]
+                args2 = _split_top_level(inner)
+                if len(args2) < 2:
+                    continue
+                key_raw, value = args2[0], " ".join(args2[1].split())
+                if key_raw.startswith("DataComponentTypesME."):
+                    family = "me"
+                elif key_raw.startswith("DataComponentTypes."):
+                    family = "vanilla"
+                else:
+                    family = "other"
+                key = key_raw.split(".")[-1]
+                line = text.count("\n", 0, start + call.start()) + 1
+                covered.add(start + call.start())
+                rows.append({"file": rel, "line": line, "item": name,
+                             "family": family, "key": key, "value": value})
+                seen[(name, key)] += 1
+
+        for call in COMPONENT_CALL.finditer(text):
+            if call.start() not in covered:
+                line = text.count("\n", 0, call.start()) + 1
+                unresolved.append({"file": rel, "line": line})
+
+    me_rows = [r for r in rows if r["family"] == "me"]
+    vanilla_rows = [r for r in rows if r["family"] == "vanilla"]
+    other_rows = [r for r in rows if r["family"] == "other"]
+    dupes = {k: v for k, v in seen.items() if v > 1}
+
+    print(f"items with components : {len({r['item'] for r in rows})}")
+    print(f"component calls       : {len(rows)}  (me={len(me_rows)}, vanilla={len(vanilla_rows)}, other={len(other_rows)})")
+    print(f"outside a declaration : {len(unresolved)}")
+    print(f"duplicate item+key    : {len(dupes)}")
+    print()
+    print("| item | key | value |")
+    print("|---|---|---|")
+    for r in rows[:args.limit]:
+        value = r["value"] if len(r["value"]) <= 70 else r["value"][:67] + "..."
+        print(f"| {r['item']} | {r['family']}:{r['key']} | {value} |")
+    if len(rows) > args.limit:
+        print(f"| ... | ({len(rows) - args.limit} more) | |")
+
+    if unresolved:
+        print("\nunresolved:")
+        for u in unresolved[:20]:
+            print(f"  {u['file']}:{u['line']}")
+    if dupes:
+        print("\nduplicates:")
+        for (name, key), n in list(dupes.items())[:20]:
+            print(f"  {name}.{key} x{n}")
+
+    if args.json:
+        Path(args.json).write_text(json.dumps(rows, indent=2), encoding="utf-8")
+        print(f"\nwrote {args.json}")
+    return 0
+
+
+def _statement_end_arg(text: str, pos: int) -> int:
+    """Index of the ')' closing an argument list; text[pos] is just past the '('."""
+    depth = 1
+    i = pos
+    while i < len(text) and depth:
+        c = text[i]
+        if c in "\"\'":
+            i = _skip_string(text, i)
+            continue
+        if c == "(":
+            depth += 1
+        elif c == ")":
+            depth -= 1
+            if depth == 0:
+                return i
+        i += 1
+    return i
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Middle-earth porting helper")
     ap.add_argument("--donor", default=str(DONOR_ROOT))
@@ -324,6 +527,11 @@ def main() -> int:
     p = sub.add_parser("errors")
     p.add_argument("--json")
     p.set_defaults(func=cmd_errors)
+
+    p = sub.add_parser("components", help="read-only: list Item.Settings.component calls")
+    p.add_argument("--limit", type=int, default=40)
+    p.add_argument("--json")
+    p.set_defaults(func=cmd_components)
 
     args = ap.parse_args()
     return args.func(args)
