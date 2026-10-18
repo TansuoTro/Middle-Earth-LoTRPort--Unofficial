@@ -182,7 +182,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
     public void tryBonding(PlayerEntity player) {
         double rand = this.random.nextDouble();
 
-        if(rand < 0.15 || (rand < 0.3 && this.getTameness() <= 0) || player.isInCreativeMode()) { // Tame success, chance is twice as high if the troll is feral
+        if(rand < 0.15 || (rand < 0.3 && this.getTameness() <= 0) || player.isCreative()) { // Tame success, chance is twice as high if the troll is feral
             this.tameBeast(player);
             this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
 
@@ -523,7 +523,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
 
             }
         }
-        this.getWorld().addParticleClient(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), 1, 0.1, 1);
+        this.getWorld().addParticle(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), 1, 0.1, 1);
     }
 
     public void smashAttack(float strength) { // Strength goes from 0 to 100

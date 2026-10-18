@@ -24,6 +24,6 @@ public class SmithingHammerItem extends Item {
 
     @Override
     public boolean canMine(ItemStack stack, BlockState state, World world, BlockPos pos, LivingEntity user) {
-        return !user.isInCreativeMode();
+        return !user.isCreative();
     }
 }

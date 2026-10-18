@@ -132,7 +132,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
 
             double i = blockEntity.random.nextDouble() * 0.4 - 0.2;
             double j = blockEntity.random.nextDouble() * 0.4 - 0.2;
-            world.addParticleClient(ParticleTypes.BUBBLE, x + i, y, z + j, 0.0, 0.1, 0.0);
+            world.addParticle(ParticleTypes.BUBBLE, x + i, y, z + j, 0.0, 0.1, 0.0);
         }
     }
 
@@ -148,7 +148,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
 
             double i = random.nextDouble() * 0.4 - 0.2;
             double j = random.nextDouble() * 0.4 - 0.2;
-            world.addParticleClient(ParticleTypes.BUBBLE, x + i, y, z + j, 0.0, 0.1, 0.0);
+            world.addParticle(ParticleTypes.BUBBLE, x + i, y, z + j, 0.0, 0.1, 0.0);
         }
     }
 

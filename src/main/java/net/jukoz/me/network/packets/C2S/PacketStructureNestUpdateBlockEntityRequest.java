@@ -1,11 +1,10 @@
 package net.jukoz.me.network.packets.C2S;
 
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.minecraft.network.PacketByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.structureManager.nest.StructureNestBlockEntity;
 import net.jukoz.me.network.contexts.ServerPacketContext;
@@ -15,16 +14,9 @@ import java.util.Optional;
 
 public class PacketStructureNestUpdateBlockEntityRequest extends ClientToServerPacket<PacketStructureNestUpdateBlockEntityRequest>
 {
-    public static final Id<PacketStructureNestUpdateBlockEntityRequest> ID = new Id<>(new Identifier(MiddleEarth.MOD_ID, "structure_nest_update_block_entity_request"));
+    public static final Identifier ID = new Identifier(MiddleEarth.MOD_ID, "structure_nest_update_block_entity_request");
 
-    public static final PacketCodec<RegistryByteBuf, PacketStructureNestUpdateBlockEntityRequest> CODEC = PacketCodec.tuple(
-            BlockPos.PACKET_CODEC, p -> p.pos,
-            PacketCodecs.optional(Identifier.PACKET_CODEC), p -> p.getStructureManagerId(),
-            PacketCodecs.optional(Identifier.PACKET_CODEC), p -> p.getStructureNestId(),
-            PacketCodecs.INTEGER, p -> p.spawnRadius,
-            PacketCodecs.BOOLEAN, p -> p.isEnabled,
-            PacketStructureNestUpdateBlockEntityRequest::new
-    );
+    public static final PacketType<PacketStructureNestUpdateBlockEntityRequest> TYPE = PacketType.create(ID, PacketStructureNestUpdateBlockEntityRequest::new);
 
     private Optional<Identifier> getStructureManagerId() {
         return Optional.ofNullable(structureManagerId);
@@ -56,14 +48,27 @@ public class PacketStructureNestUpdateBlockEntityRequest extends ClientToServerP
             this.structureNestId = null;
     }
 
-    @Override
-    public Id<PacketStructureNestUpdateBlockEntityRequest> getId() {
-        return ID;
+
+
+    public PacketStructureNestUpdateBlockEntityRequest(PacketByteBuf buf) {
+        this(buf.readBlockPos(),
+                Optional.ofNullable(buf.readNullable(PacketByteBuf::readIdentifier)),
+                Optional.ofNullable(buf.readNullable(PacketByteBuf::readIdentifier)),
+                buf.readInt(), buf.readBoolean());
     }
 
     @Override
-    public PacketCodec<RegistryByteBuf, PacketStructureNestUpdateBlockEntityRequest> streamCodec() {
-        return CODEC;
+    public PacketType<PacketStructureNestUpdateBlockEntityRequest> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public void write(PacketByteBuf buf) {
+        buf.writeBlockPos(this.pos);
+        buf.writeNullable(this.structureManagerId, PacketByteBuf::writeIdentifier);
+        buf.writeNullable(this.structureNestId, PacketByteBuf::writeIdentifier);
+        buf.writeInt(this.spawnRadius);
+        buf.writeBoolean(this.isEnabled);
     }
 
     @Override

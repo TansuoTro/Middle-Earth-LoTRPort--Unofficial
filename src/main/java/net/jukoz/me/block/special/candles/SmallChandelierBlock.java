@@ -77,7 +77,7 @@ public class SmallChandelierBlock extends Block {
         Hand hand = player.getActiveHand();
         if (!world.isClient && player.getAbilities().allowModifyWorld) {
             ItemStack itemStack = player.getStackInHand(hand);
-            if(player.isInCreativeMode() && itemStack == ItemStack.EMPTY){
+            if(player.isCreative() && itemStack == ItemStack.EMPTY){
                 world.setBlockState(pos, state.cycle(VARIANT));
                 return ActionResult.SUCCESS;
             }
@@ -110,12 +110,12 @@ public class SmallChandelierBlock extends Block {
     protected static void spawnCandleParticles(World world, Vec3d vec3d, Random random) {
         float f = random.nextFloat();
         if (f < 0.3F) {
-            world.addParticleClient(ParticleTypes.SMOKE, vec3d.x - 0.5f, vec3d.y - 0.5f, vec3d.z - 0.5f, 0.0, 0.0, 0.0);
+            world.addParticle(ParticleTypes.SMOKE, vec3d.x - 0.5f, vec3d.y - 0.5f, vec3d.z - 0.5f, 0.0, 0.0, 0.0);
             if (f < 0.17F) {
                 world.playSoundClient(vec3d.x, vec3d.y, vec3d.z, SoundEvents.BLOCK_CANDLE_AMBIENT, SoundCategory.BLOCKS, 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
             }
         }
-        world.addParticleClient(ParticleTypes.SMALL_FLAME, vec3d.x - 0.5f, vec3d.y - 0.5f, vec3d.z - 0.5f, 0.0, 0.0, 0.0);
+        world.addParticle(ParticleTypes.SMALL_FLAME, vec3d.x - 0.5f, vec3d.y - 0.5f, vec3d.z - 0.5f, 0.0, 0.0, 0.0);
     }
 
     protected static void setLit(WorldAccess world, BlockState state, BlockPos pos, boolean lit) {

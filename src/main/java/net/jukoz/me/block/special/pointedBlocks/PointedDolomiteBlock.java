@@ -362,7 +362,7 @@ public class PointedDolomiteBlock extends Block implements Falling, Waterloggabl
         double g = (double)pos.getZ() + 0.5 + vec3d.z;
         Fluid fluid2 = getDripFluid(world, fluid);
         ParticleEffect particleEffect = fluid2.isIn(FluidTags.LAVA) ? ParticleTypes.DRIPPING_DRIPSTONE_LAVA : ParticleTypes.DRIPPING_DRIPSTONE_WATER;
-        world.addParticleClient(particleEffect, e, f, g, 0.0, 0.0, 0.0);
+        world.addParticle(particleEffect, e, f, g, 0.0, 0.0, 0.0);
     }
 
     @Nullable

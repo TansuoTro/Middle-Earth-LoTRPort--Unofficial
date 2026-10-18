@@ -1,23 +1,18 @@
 package net.jukoz.me.network.packets.C2S;
 
+import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.minecraft.network.PacketByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.artisantable.ArtisanTableScreenHandler;
 import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
 public class ArtisanTableTabPacket extends ClientToServerPacket<ArtisanTableTabPacket> {
-    public static final Id<ArtisanTableTabPacket> ID = new Id<>(MiddleEarth.of("artisan_table_tab_packet"));
-    public static final PacketCodec<RegistryByteBuf, ArtisanTableTabPacket> CODEC = PacketCodec.tuple(
-            PacketCodecs.STRING, p -> p.shapeId,
-            PacketCodecs.INTEGER, p -> p.syncId,
-            ArtisanTableTabPacket::new
-    );
+    public static final Identifier ID = MiddleEarth.of("artisan_table_tab_packet");
+    public static final PacketType<ArtisanTableTabPacket> TYPE = PacketType.create(ID, ArtisanTableTabPacket::new);
 
     public String getShapeId() {
         return shapeId;
@@ -35,14 +30,21 @@ public class ArtisanTableTabPacket extends ClientToServerPacket<ArtisanTableTabP
         this.syncId = syncId;
     }
 
-    @Override
-    public Id<ArtisanTableTabPacket> getId() {
-        return ID;
+
+
+    public ArtisanTableTabPacket(PacketByteBuf buf) {
+        this(buf.readString(), buf.readInt());
     }
 
     @Override
-    public PacketCodec<RegistryByteBuf, ArtisanTableTabPacket> streamCodec() {
-        return CODEC;
+    public PacketType<ArtisanTableTabPacket> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public void write(PacketByteBuf buf) {
+        buf.writeString(this.shapeId);
+        buf.writeInt(this.syncId);
     }
 
     @Override

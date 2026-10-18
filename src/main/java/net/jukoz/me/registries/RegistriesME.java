@@ -759,7 +759,7 @@ public class RegistriesME {
             world.playSound(null, pos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 1.0f, 1.0f);
         } else {
             for (int i = 0; i < bigSmokeAmount; i++){
-                world.addParticleClient(ParticleTypes.POOF,
+                world.addParticle(ParticleTypes.POOF,
                         pos.getX() + random.nextDouble(),
                         pos.getY() + 0.9f,
                         pos.getZ()+ random.nextDouble(),
@@ -768,7 +768,7 @@ public class RegistriesME {
                         0.0f);
             }
             for (int i = 0; i < smokeAmount; i++) {
-                world.addParticleClient(ParticleTypes.SMOKE,
+                world.addParticle(ParticleTypes.SMOKE,
                         pos.getX() + random.nextDouble(),
                         pos.getY() + 0.8f,
                         pos.getZ() + random.nextDouble(),

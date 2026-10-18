@@ -1,23 +1,17 @@
 package net.jukoz.me.network.packets.C2S;
 
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.minecraft.network.PacketByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.forge.ForgeBlockEntity;
 import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
 
 public class ForgeModeSwitchPacket extends ClientToServerPacket<ForgeModeSwitchPacket> {
-    public static final Id<ForgeModeSwitchPacket> ID = new Id<>(MiddleEarth.of("forge_mode_switch_packet"));
-    public static final PacketCodec<RegistryByteBuf, ForgeModeSwitchPacket> CODEC = PacketCodec.tuple(
-            PacketCodecs.DOUBLE, p -> p.x,
-            PacketCodecs.DOUBLE, p -> p.y,
-            PacketCodecs.DOUBLE, p -> p.z,
-            ForgeModeSwitchPacket::new
-    );
+    public static final Identifier ID = MiddleEarth.of("forge_mode_switch_packet");
+    public static final PacketType<ForgeModeSwitchPacket> TYPE = PacketType.create(ID, ForgeModeSwitchPacket::new);
 
     public double getX() {
         return x;
@@ -41,14 +35,22 @@ public class ForgeModeSwitchPacket extends ClientToServerPacket<ForgeModeSwitchP
         this.z = z;
     }
 
-    @Override
-    public Id<ForgeModeSwitchPacket> getId() {
-        return ID;
+
+
+    public ForgeModeSwitchPacket(PacketByteBuf buf) {
+        this(buf.readDouble(), buf.readDouble(), buf.readDouble());
     }
 
     @Override
-    public PacketCodec<RegistryByteBuf, ForgeModeSwitchPacket> streamCodec() {
-        return CODEC;
+    public PacketType<ForgeModeSwitchPacket> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public void write(PacketByteBuf buf) {
+        buf.writeDouble(this.x);
+        buf.writeDouble(this.y);
+        buf.writeDouble(this.z);
     }
 
     @Override

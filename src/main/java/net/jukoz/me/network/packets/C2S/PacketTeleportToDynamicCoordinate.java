@@ -1,26 +1,20 @@
 package net.jukoz.me.network.packets.C2S;
 
+import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.minecraft.network.PacketByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
 import net.jukoz.me.world.dimension.ModDimensions;
 import net.jukoz.me.world.map.MiddleEarthMapUtils;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Vector2d;
 
 public class PacketTeleportToDynamicCoordinate extends ClientToServerPacket<PacketTeleportToDynamicCoordinate> {
-    public static final Id<PacketTeleportToDynamicCoordinate> ID = new Id<>(new Identifier(MiddleEarth.MOD_ID, "packet_teleport_dynamic_spawn"));
-    public static final PacketCodec<RegistryByteBuf, PacketTeleportToDynamicCoordinate> CODEC = PacketCodec.tuple(
-            PacketCodecs.DOUBLE, p -> p.xCoordinate,
-            PacketCodecs.DOUBLE, p -> p.zCoordinate,
-            PacketCodecs.BOOLEAN, p -> p.welcomeNeeded,
-            PacketTeleportToDynamicCoordinate::new
-    );
+    public static final Identifier ID = new Identifier(MiddleEarth.MOD_ID, "packet_teleport_dynamic_spawn");
+    public static final PacketType<PacketTeleportToDynamicCoordinate> TYPE = PacketType.create(ID, PacketTeleportToDynamicCoordinate::new);
     private final double xCoordinate;
     private final double zCoordinate;
     private final boolean welcomeNeeded;
@@ -30,14 +24,23 @@ public class PacketTeleportToDynamicCoordinate extends ClientToServerPacket<Pack
         this.zCoordinate = zCoordinate;
         this.welcomeNeeded = welcomeNeeded;
     }
-    @Override
-    public Id<PacketTeleportToDynamicCoordinate> getId() {
-        return ID;
+
+
+
+    public PacketTeleportToDynamicCoordinate(PacketByteBuf buf) {
+        this(buf.readDouble(), buf.readDouble(), buf.readBoolean());
     }
 
     @Override
-    public PacketCodec<RegistryByteBuf, PacketTeleportToDynamicCoordinate> streamCodec() {
-        return CODEC;
+    public PacketType<PacketTeleportToDynamicCoordinate> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public void write(PacketByteBuf buf) {
+        buf.writeDouble(this.xCoordinate);
+        buf.writeDouble(this.zCoordinate);
+        buf.writeBoolean(this.welcomeNeeded);
     }
 
     @Override

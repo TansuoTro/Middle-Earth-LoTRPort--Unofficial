@@ -1,13 +1,13 @@
 package net.jukoz.me.network.packets.C2S;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.minecraft.network.PacketByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.config.ModServerConfigs;
 import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
 import net.jukoz.me.network.packets.S2C.PacketOnboardingResult;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.jukoz.me.resources.datas.attributes.AttributePoolElement;
@@ -15,18 +15,26 @@ import net.jukoz.me.resources.persistent_datas.PlayerDataService;
 
 public class PacketOnboardingRequest extends ClientToServerPacket<PacketOnboardingRequest>
 {
-    public static final Id<PacketOnboardingRequest> ID = new Id<>(new Identifier(MiddleEarth.MOD_ID, "packet_onboarding_request"));
+    public static final Identifier ID = new Identifier(MiddleEarth.MOD_ID, "packet_onboarding_request");
     public static final PacketOnboardingRequest INSTANCE = new PacketOnboardingRequest();
-    public static final PacketCodec<RegistryByteBuf, PacketOnboardingRequest> CODEC = PacketCodec.unit(INSTANCE);
+    public static final PacketType<PacketOnboardingRequest> TYPE = PacketType.create(ID, PacketOnboardingRequest::new);
 
-    @Override
-    public Id<PacketOnboardingRequest> getId() {
-        return ID;
+
+
+    private PacketOnboardingRequest() {
+    }
+
+    public PacketOnboardingRequest(PacketByteBuf buf) {
+        this();
     }
 
     @Override
-    public PacketCodec<RegistryByteBuf, PacketOnboardingRequest> streamCodec() {
-        return CODEC;
+    public PacketType<PacketOnboardingRequest> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public void write(PacketByteBuf buf) {
     }
 
     @Override

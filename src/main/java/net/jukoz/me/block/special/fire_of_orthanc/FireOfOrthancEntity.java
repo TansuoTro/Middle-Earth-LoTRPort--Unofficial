@@ -114,7 +114,7 @@ public class FireOfOrthancEntity extends Entity implements Ownable {
             this.updateWaterState();
             if (this.getWorld().isClient && !chainReaction) {
                 for(int j = 0; j < 4; j++) {
-                    this.getWorld().addParticleClient(ParticleTypes.SMOKE, this.getX(), this.getY() + 0.8f, this.getZ(),
+                    this.getWorld().addParticle(ParticleTypes.SMOKE, this.getX(), this.getY() + 0.8f, this.getZ(),
                             (Math.random() - 0.5f) * 0.3f, 0.4f, (Math.random() - 0.5f) * 0.5f);
                 }
             }

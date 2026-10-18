@@ -1,11 +1,10 @@
 package net.jukoz.me.network.packets.C2S;
 
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.minecraft.network.PacketByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.structureManager.StructureManagerBlockEntity;
 import net.jukoz.me.network.contexts.ServerPacketContext;
@@ -13,15 +12,9 @@ import net.jukoz.me.network.packets.ClientToServerPacket;
 
 public class PacketStructureManagerUpdateBlockEntityRequest extends ClientToServerPacket<PacketStructureManagerUpdateBlockEntityRequest>
 {
-    public static final Id<PacketStructureManagerUpdateBlockEntityRequest> ID = new Id<>(new Identifier(MiddleEarth.MOD_ID, "structure_manager_update_block_entity_request"));
+    public static final Identifier ID = new Identifier(MiddleEarth.MOD_ID, "structure_manager_update_block_entity_request");
 
-    public static final PacketCodec<RegistryByteBuf, PacketStructureManagerUpdateBlockEntityRequest> CODEC = PacketCodec.tuple(
-            BlockPos.PACKET_CODEC, p -> p.pos,
-            Identifier.PACKET_CODEC, p -> p.structureManagerId,
-            PacketCodecs.BOOLEAN, p -> p.toInitialize,
-            PacketCodecs.BOOLEAN, p -> p.isActive,
-            PacketStructureManagerUpdateBlockEntityRequest::new
-    );
+    public static final PacketType<PacketStructureManagerUpdateBlockEntityRequest> TYPE = PacketType.create(ID, PacketStructureManagerUpdateBlockEntityRequest::new);
     private final BlockPos pos;
     private final Identifier structureManagerId;
     private final boolean toInitialize;
@@ -34,14 +27,23 @@ public class PacketStructureManagerUpdateBlockEntityRequest extends ClientToServ
         this.isActive = isActive;
     }
 
-    @Override
-    public Id<PacketStructureManagerUpdateBlockEntityRequest> getId() {
-        return ID;
+
+
+    public PacketStructureManagerUpdateBlockEntityRequest(PacketByteBuf buf) {
+        this(buf.readBlockPos(), buf.readIdentifier(), buf.readBoolean(), buf.readBoolean());
     }
 
     @Override
-    public PacketCodec<RegistryByteBuf, PacketStructureManagerUpdateBlockEntityRequest> streamCodec() {
-        return CODEC;
+    public PacketType<PacketStructureManagerUpdateBlockEntityRequest> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public void write(PacketByteBuf buf) {
+        buf.writeBlockPos(this.pos);
+        buf.writeIdentifier(this.structureManagerId);
+        buf.writeBoolean(this.toInitialize);
+        buf.writeBoolean(this.isActive);
     }
 
     @Override

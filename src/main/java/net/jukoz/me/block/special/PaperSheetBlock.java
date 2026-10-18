@@ -56,7 +56,7 @@ public class PaperSheetBlock extends Block {
         if (world.isClient) {
             return ActionResult.SUCCESS;
         }  else {
-            if (player.isInCreativeMode()) {
+            if (player.isCreative()) {
                 world.setBlockState(pos, state.cycle(PAPERS));
             }
         }

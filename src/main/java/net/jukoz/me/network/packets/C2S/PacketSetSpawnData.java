@@ -1,12 +1,11 @@
 package net.jukoz.me.network.packets.C2S;
 
 import net.minecraft.world.dimension.DimensionTypes;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.minecraft.network.PacketByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -15,14 +14,9 @@ import net.jukoz.me.resources.persistent_datas.PlayerDataService;
 
 public class PacketSetSpawnData extends ClientToServerPacket<PacketSetSpawnData>
 {
-    public static final Id<PacketSetSpawnData> ID = new Id<>(new Identifier(MiddleEarth.MOD_ID, "packet_spawn_data"));
+    public static final Identifier ID = new Identifier(MiddleEarth.MOD_ID, "packet_spawn_data");
 
-    public static final PacketCodec<RegistryByteBuf, PacketSetSpawnData> CODEC = PacketCodec.tuple(
-            PacketCodecs.INTEGER, p -> p.overworldX,
-            PacketCodecs.INTEGER, p -> p.overworldY,
-            PacketCodecs.INTEGER, p -> p.overworldZ,
-            PacketSetSpawnData::new
-    );
+    public static final PacketType<PacketSetSpawnData> TYPE = PacketType.create(ID, PacketSetSpawnData::new);
 
     private final int overworldX;
     private final int overworldY;
@@ -33,14 +27,22 @@ public class PacketSetSpawnData extends ClientToServerPacket<PacketSetSpawnData>
         this.overworldZ = overworldZ;
     }
 
-    @Override
-    public Id<PacketSetSpawnData> getId() {
-        return ID;
+
+
+    public PacketSetSpawnData(PacketByteBuf buf) {
+        this(buf.readInt(), buf.readInt(), buf.readInt());
     }
 
     @Override
-    public PacketCodec<RegistryByteBuf, PacketSetSpawnData> streamCodec() {
-        return CODEC;
+    public PacketType<PacketSetSpawnData> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public void write(PacketByteBuf buf) {
+        buf.writeInt(this.overworldX);
+        buf.writeInt(this.overworldY);
+        buf.writeInt(this.overworldZ);
     }
 
     @Override

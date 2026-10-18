@@ -3,10 +3,9 @@ package net.jukoz.me.network.packets.S2C;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.util.Identifier;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.minecraft.network.PacketByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.inscriptiontable.InscriptionTableScreen;
 import net.jukoz.me.gui.inscriptiontable.InscriptionTableScreenHandler;
@@ -19,14 +18,8 @@ import net.jukoz.me.world.dimension.ModDimensions;
 import java.util.List;
 
 public class InscriptionEnchantInfoPacket extends ServerToClientPacket<InscriptionEnchantInfoPacket> {
-    public static final Id<InscriptionEnchantInfoPacket> ID = new Id<>(MiddleEarth.of("inscription_enchant_info_packet"));
-    public static final PacketCodec<RegistryByteBuf, InscriptionEnchantInfoPacket> CODEC = PacketCodec.tuple(
-            PacketCodecs.STRING, p -> p.enchant,
-            PacketCodecs.INTEGER, p -> p.level,
-            PacketCodecs.INTEGER, p -> p.maxLevel,
-            PacketCodecs.BYTE_ARRAY, p -> p.words,
-            InscriptionEnchantInfoPacket::new
-    );
+    public static final Identifier ID = MiddleEarth.of("inscription_enchant_info_packet");
+    public static final PacketType<InscriptionEnchantInfoPacket> TYPE = PacketType.create(ID, InscriptionEnchantInfoPacket::new);
 
     private final String enchant;
     private final int level;
@@ -38,16 +31,6 @@ public class InscriptionEnchantInfoPacket extends ServerToClientPacket<Inscripti
         this.level = level;
         this.maxLevel = maxLevel;
         this.words = words;
-    }
-
-    @Override
-    public Id<InscriptionEnchantInfoPacket> getId() {
-        return ID;
-    }
-
-    @Override
-    public PacketCodec<RegistryByteBuf, InscriptionEnchantInfoPacket> streamCodec() {
-        return CODEC;
     }
 
     @Override
@@ -64,4 +47,23 @@ public class InscriptionEnchantInfoPacket extends ServerToClientPacket<Inscripti
             MiddleEarth.LOGGER.logError("InscriptionWordUpdate error: ", e);
         }
     }
+
+    public InscriptionEnchantInfoPacket(PacketByteBuf buf) {
+        this(buf.readString(), buf.readInt(), buf.readInt(), buf.readByteArray());
+    }
+
+    @Override
+    public PacketType<InscriptionEnchantInfoPacket> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public void write(PacketByteBuf buf) {
+        buf.writeString(this.enchant);
+        buf.writeInt(this.level);
+        buf.writeInt(this.maxLevel);
+        buf.writeByteArray(this.words);
+    }
+
+
 }

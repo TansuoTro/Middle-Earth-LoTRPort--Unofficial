@@ -4,10 +4,9 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.util.Identifier;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.minecraft.network.PacketByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.artisantable.ArtisanTableScreen;
 import net.jukoz.me.gui.artisantable.ArtisanTableScreenHandler;
@@ -15,13 +14,9 @@ import net.jukoz.me.network.contexts.ClientPacketContext;
 import net.jukoz.me.network.packets.ServerToClientPacket;
 
 public class ArtisanRecipePacket extends ServerToClientPacket<ArtisanRecipePacket> {
-    public static final Id<ArtisanRecipePacket> ID = new Id<>(MiddleEarth.of("artisan_recipe_packet"));
+    public static final Identifier ID = MiddleEarth.of("artisan_recipe_packet");
 
-    public static final PacketCodec<RegistryByteBuf, ArtisanRecipePacket> CODEC = PacketCodec.tuple(
-            PacketCodecs.INTEGER, p -> p.index,
-            ItemStack.PACKET_CODEC, p -> p.output,
-            ArtisanRecipePacket::new
-    );
+    public static final PacketType<ArtisanRecipePacket> TYPE = PacketType.create(ID, ArtisanRecipePacket::new);
 
     private final int index;
     private final ItemStack output;
@@ -29,16 +24,6 @@ public class ArtisanRecipePacket extends ServerToClientPacket<ArtisanRecipePacke
     public ArtisanRecipePacket(int index, ItemStack output) {
         this.index = index;
         this.output = output;
-    }
-
-    @Override
-    public Id<ArtisanRecipePacket> getId() {
-        return ID;
-    }
-
-    @Override
-    public PacketCodec<RegistryByteBuf, ArtisanRecipePacket> streamCodec() {
-        return CODEC;
     }
 
     @Override
@@ -53,4 +38,21 @@ public class ArtisanRecipePacket extends ServerToClientPacket<ArtisanRecipePacke
             }
         }
     }
+
+    public ArtisanRecipePacket(PacketByteBuf buf) {
+        this(buf.readInt(), buf.readItemStack());
+    }
+
+    @Override
+    public PacketType<ArtisanRecipePacket> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public void write(PacketByteBuf buf) {
+        buf.writeInt(this.index);
+        buf.writeItemStack(this.output);
+    }
+
+
 }

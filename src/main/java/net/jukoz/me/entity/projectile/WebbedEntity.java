@@ -109,7 +109,7 @@ public class WebbedEntity extends AbstractProjectileEntity {
         if (amount > 0) {
             for (int j = 0; j < amount; j++) {
                 this.getWorld()
-                        .addParticleClient(
+                        .addParticle(
                                 new BlockStateParticleEffect(ParticleTypes.BLOCK, ModNatureBlocks.WEBBING.getDefaultState()),
                                 this.getParticleX(0.5), this.getRandomBodyY(), this.getParticleZ(0.5), 0.0, 0.0, 0.0
                         );

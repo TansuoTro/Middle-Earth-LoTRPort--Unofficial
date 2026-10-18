@@ -1,25 +1,17 @@
 package net.jukoz.me.network.packets.C2S;
 
+import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.minecraft.network.PacketByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.forge.ForgeBlockEntity;
 import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
 public class ForgeOutputPacket extends ClientToServerPacket<ForgeOutputPacket> {
-    public static final Id<ForgeOutputPacket> ID = new Id<>(MiddleEarth.of("forge_output_packet"));
-    public static final PacketCodec<RegistryByteBuf, ForgeOutputPacket> CODEC = PacketCodec.tuple(
-            PacketCodecs.INTEGER, p -> p.amount,
-            PacketCodecs.DOUBLE, p -> p.x,
-            PacketCodecs.DOUBLE, p -> p.y,
-            PacketCodecs.DOUBLE, p -> p.z,
-            PacketCodecs.INTEGER, p -> p.mode,
-            ForgeOutputPacket::new
-    );
+    public static final Identifier ID = MiddleEarth.of("forge_output_packet");
+    public static final PacketType<ForgeOutputPacket> TYPE = PacketType.create(ID, ForgeOutputPacket::new);
 
     public int getAmount() {
         return amount;
@@ -55,14 +47,24 @@ public class ForgeOutputPacket extends ClientToServerPacket<ForgeOutputPacket> {
         this.mode = mode;
     }
 
-    @Override
-    public Id<ForgeOutputPacket> getId() {
-        return ID;
+
+
+    public ForgeOutputPacket(PacketByteBuf buf) {
+        this(buf.readInt(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readInt());
     }
 
     @Override
-    public PacketCodec<RegistryByteBuf, ForgeOutputPacket> streamCodec() {
-        return CODEC;
+    public PacketType<ForgeOutputPacket> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public void write(PacketByteBuf buf) {
+        buf.writeInt(this.amount);
+        buf.writeDouble(this.x);
+        buf.writeDouble(this.y);
+        buf.writeDouble(this.z);
+        buf.writeInt(this.mode);
     }
 
     @Override

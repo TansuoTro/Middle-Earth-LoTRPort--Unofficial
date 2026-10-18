@@ -6,10 +6,9 @@ import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.util.Identifier;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.minecraft.network.PacketByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.onboarding.onboarding_faction.OnboardingFactionScreenController;
 import net.jukoz.me.network.contexts.ClientPacketContext;
@@ -21,12 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PacketForceOnboardingScreen extends ServerToClientPacket<PacketForceOnboardingScreen> {
-    public static final Id<PacketForceOnboardingScreen> ID = new Id<>(new Identifier(MiddleEarth.MOD_ID, "packet_force_onboarding_screen"));
-    public static final PacketCodec<RegistryByteBuf, PacketForceOnboardingScreen> CODEC = PacketCodec.tuple(
-            PacketCodecs.FLOAT, p -> p.delayOnTeleportationConfirm,
-            PacketCodecs.NBT_COMPOUND, p -> p.attributeList,
-            PacketForceOnboardingScreen::new
-    );
+    public static final Identifier ID = new Identifier(MiddleEarth.MOD_ID, "packet_force_onboarding_screen");
+    public static final PacketType<PacketForceOnboardingScreen> TYPE = PacketType.create(ID, PacketForceOnboardingScreen::new);
     private final float delayOnTeleportationConfirm;
     private final NbtCompound attributeList;
 
@@ -41,24 +36,31 @@ public class PacketForceOnboardingScreen extends ServerToClientPacket<PacketForc
     }
 
     @Override
-    public Id<PacketForceOnboardingScreen> getId() {
-        return ID;
-    }
-
-    @Override
-    public PacketCodec<RegistryByteBuf, PacketForceOnboardingScreen> streamCodec() {
-        return CODEC;
-    }
-
-    @Override
     @Environment(EnvType.CLIENT)
     public void process(ClientPacketContext context) {
         float delay = delayOnTeleportationConfirm;
-        if(context.player().isInCreativeMode())
+        if(context.player().isCreative())
             delay = 0;
 
         PlayerEntity player = context.player();
         var controller = new OnboardingFactionScreenController(player.getWorld(), delay, AttributePoolElement.obtainAttributeList(attributeList));
         controller.open();
     }
+
+    public PacketForceOnboardingScreen(PacketByteBuf buf) {
+        this(buf.readFloat(), buf.readNbt());
+    }
+
+    @Override
+    public PacketType<PacketForceOnboardingScreen> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public void write(PacketByteBuf buf) {
+        buf.writeFloat(this.delayOnTeleportationConfirm);
+        buf.writeNbt(this.attributeList);
+    }
+
+
 }

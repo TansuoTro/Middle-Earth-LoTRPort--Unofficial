@@ -1,29 +1,34 @@
 package net.jukoz.me.network.packets.C2S;
 
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.util.Identifier;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.minecraft.network.PacketByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.inscriptiontable.InscriptionTableScreenHandler;
 import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
 
 public class InscriptionConfirmationPacket extends ClientToServerPacket<InscriptionConfirmationPacket> {
-    public static final Id<InscriptionConfirmationPacket> ID = new Id<>(MiddleEarth.of("inscription_confirmation_packet"));
+    public static final Identifier ID = MiddleEarth.of("inscription_confirmation_packet");
     public static final InscriptionConfirmationPacket INSTANCE = new InscriptionConfirmationPacket();
-    public static final PacketCodec<RegistryByteBuf, InscriptionConfirmationPacket> CODEC = PacketCodec.unit(INSTANCE);
+    public static final PacketType<InscriptionConfirmationPacket> TYPE = PacketType.create(ID, InscriptionConfirmationPacket::new);
 
     public InscriptionConfirmationPacket() {
     }
-    @Override
-    public Id<InscriptionConfirmationPacket> getId() {
-        return ID;
+
+
+
+    public InscriptionConfirmationPacket(PacketByteBuf buf) {
+        this();
     }
 
     @Override
-    public PacketCodec<RegistryByteBuf, InscriptionConfirmationPacket> streamCodec() {
-        return CODEC;
+    public PacketType<InscriptionConfirmationPacket> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public void write(PacketByteBuf buf) {
     }
 
     @Override

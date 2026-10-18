@@ -1,22 +1,19 @@
 package net.jukoz.me.network.packets.C2S;
 
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.minecraft.network.PacketByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.structureManager.StructureManagerBlockEntity;
 import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
 
 public class PacketStructureManagerRespawnEntities extends ClientToServerPacket<PacketStructureManagerRespawnEntities> {
-    public static final Id<PacketStructureManagerRespawnEntities> ID = new Id<>(new Identifier(MiddleEarth.MOD_ID, "structure_manager_respawn_entities"));
+    public static final Identifier ID = new Identifier(MiddleEarth.MOD_ID, "structure_manager_respawn_entities");
 
-    public static final PacketCodec<RegistryByteBuf, PacketStructureManagerRespawnEntities> CODEC = PacketCodec.tuple(
-            BlockPos.PACKET_CODEC, p -> p.pos,
-            PacketStructureManagerRespawnEntities::new
-    );
+    public static final PacketType<PacketStructureManagerRespawnEntities> TYPE = PacketType.create(ID, PacketStructureManagerRespawnEntities::new);
 
     private final BlockPos pos;
 
@@ -24,14 +21,20 @@ public class PacketStructureManagerRespawnEntities extends ClientToServerPacket<
         this.pos = pos;
     }
 
-    @Override
-    public Id<PacketStructureManagerRespawnEntities> getId() {
-        return ID;
+
+
+    public PacketStructureManagerRespawnEntities(PacketByteBuf buf) {
+        this(buf.readBlockPos());
     }
 
     @Override
-    public PacketCodec<RegistryByteBuf, PacketStructureManagerRespawnEntities> streamCodec() {
-        return CODEC;
+    public PacketType<PacketStructureManagerRespawnEntities> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public void write(PacketByteBuf buf) {
+        buf.writeBlockPos(this.pos);
     }
 
     @Override

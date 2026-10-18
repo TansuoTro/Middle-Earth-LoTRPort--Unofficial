@@ -1,5 +1,7 @@
 package net.jukoz.me.network.packets.C2S;
 
+import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.minecraft.network.PacketByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.item.items.StarlightPhialItem;
 import net.jukoz.me.network.contexts.ServerPacketContext;
@@ -7,23 +9,15 @@ import net.jukoz.me.network.packets.ClientToServerPacket;
 import net.jukoz.me.resources.datas.factions.Faction;
 import net.jukoz.me.resources.datas.factions.FactionLookup;
 import net.jukoz.me.resources.datas.factions.FactionUtil;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 
 public class PacketSetAffiliation extends ClientToServerPacket<PacketSetAffiliation>
 {
-    public static final Id<PacketSetAffiliation> ID = new Id<>(new Identifier(MiddleEarth.MOD_ID, "packet_set_affiliation"));
+    public static final Identifier ID = new Identifier(MiddleEarth.MOD_ID, "packet_set_affiliation");
 
-    public static final PacketCodec<RegistryByteBuf, PacketSetAffiliation> CODEC = PacketCodec.tuple(
-            PacketCodecs.STRING, p -> p.dispositionName,
-            PacketCodecs.STRING, p -> p.factionName,
-            PacketCodecs.STRING, p -> p.spawnName,
-            PacketSetAffiliation::new
-    );
+    public static final PacketType<PacketSetAffiliation> TYPE = PacketType.create(ID, PacketSetAffiliation::new);
 
     private final String dispositionName;
     private final String factionName;
@@ -36,14 +30,22 @@ public class PacketSetAffiliation extends ClientToServerPacket<PacketSetAffiliat
         this.spawnName = spawnName;
     }
 
-    @Override
-    public Id<PacketSetAffiliation> getId() {
-        return ID;
+
+
+    public PacketSetAffiliation(PacketByteBuf buf) {
+        this(buf.readString(), buf.readString(), buf.readString());
     }
 
     @Override
-    public PacketCodec<RegistryByteBuf, PacketSetAffiliation> streamCodec() {
-        return CODEC;
+    public PacketType<PacketSetAffiliation> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public void write(PacketByteBuf buf) {
+        buf.writeString(this.dispositionName);
+        buf.writeString(this.factionName);
+        buf.writeString(this.spawnName);
     }
 
     @Override

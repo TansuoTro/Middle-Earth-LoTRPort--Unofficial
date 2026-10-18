@@ -383,7 +383,7 @@ public class GreatHornEntity extends AbstractBeastEntity implements Evader {
         if (this.getWorld().isClient && bowAnimationState.isRunning()) {
             if(random.nextInt(2) == 0) {
                 Vector3f randPos = new Vector3f(this.random.nextFloat()*6 - 3f, this.random.nextFloat()*1.25f, this.random.nextFloat()*6 - 3f);
-                this.getWorld().addParticleClient(ParticleTypes.INSTANT_EFFECT, this.getX() + randPos.x, this.getY() + randPos.y, this.getZ() + randPos.z,
+                this.getWorld().addParticle(ParticleTypes.INSTANT_EFFECT, this.getX() + randPos.x, this.getY() + randPos.y, this.getZ() + randPos.z,
                         0.0, 0.75f + this.random.nextFloat(), 0.0);
             }
         }

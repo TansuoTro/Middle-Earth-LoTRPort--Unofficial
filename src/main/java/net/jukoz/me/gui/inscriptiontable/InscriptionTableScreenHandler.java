@@ -311,7 +311,7 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
         }
 
         if (this.enchant != null && this.level != 0){
-            if (!player.isInCreativeMode()) {
+            if (!player.isCreative()) {
                 player.addExperienceLevels(-this.levelCost.get());
             }
             this.levelCost.set(0);

@@ -400,7 +400,7 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
     }
 
     public void tryBonding(PlayerEntity player) {
-        if(random.nextDouble() <= 0.1d || player.isInCreativeMode()) {
+        if(random.nextDouble() <= 0.1d || player.isCreative()) {
             this.tameBeast(player);
             this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
 

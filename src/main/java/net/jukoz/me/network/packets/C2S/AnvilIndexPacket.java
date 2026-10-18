@@ -3,27 +3,20 @@ package net.jukoz.me.network.packets.C2S;
 import net.minecraft.screen.AnvilScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.minecraft.network.PacketByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.shapingAnvil.ShapingAnvilBlockEntity;
 import net.jukoz.me.gui.artisantable.ArtisanTableScreenHandler;
 import net.jukoz.me.gui.shapinganvil.ShapingAnvilScreenHandler;
 import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
 public class AnvilIndexPacket extends ClientToServerPacket<AnvilIndexPacket> {
-    public static final Id<AnvilIndexPacket> ID = new Id<>(MiddleEarth.of("anvil_index_packet"));
-    public static final PacketCodec<RegistryByteBuf, AnvilIndexPacket> CODEC = PacketCodec.tuple(
-            PacketCodecs.INTEGER, p -> p.index,
-            PacketCodecs.DOUBLE, p -> p.x,
-            PacketCodecs.DOUBLE, p -> p.y,
-            PacketCodecs.DOUBLE, p -> p.z,
-            AnvilIndexPacket::new
-    );
+    public static final Identifier ID = MiddleEarth.of("anvil_index_packet");
+    public static final PacketType<AnvilIndexPacket> TYPE = PacketType.create(ID, AnvilIndexPacket::new);
 
     public int getIndex() {
         return index;
@@ -53,14 +46,23 @@ public class AnvilIndexPacket extends ClientToServerPacket<AnvilIndexPacket> {
         this.z = z;
     }
 
-    @Override
-    public Id<AnvilIndexPacket> getId() {
-        return ID;
+
+
+    public AnvilIndexPacket(PacketByteBuf buf) {
+        this(buf.readInt(), buf.readDouble(), buf.readDouble(), buf.readDouble());
     }
 
     @Override
-    public PacketCodec<RegistryByteBuf, AnvilIndexPacket> streamCodec() {
-        return CODEC;
+    public PacketType<AnvilIndexPacket> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public void write(PacketByteBuf buf) {
+        buf.writeInt(this.index);
+        buf.writeDouble(this.x);
+        buf.writeDouble(this.y);
+        buf.writeDouble(this.z);
     }
 
     @Override

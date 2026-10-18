@@ -89,7 +89,7 @@ public class SkullCandleBlock extends Block {
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         Hand hand = player.getActiveHand();
         if (!world.isClient && player.getAbilities().allowModifyWorld) {
-            if(player.isInCreativeMode()){
+            if(player.isCreative()){
                 world.setBlockState(pos, state.cycle(LIT));
             } else {
                 ItemStack itemStack = player.getStackInHand(hand);
@@ -127,13 +127,13 @@ public class SkullCandleBlock extends Block {
     private static void spawnCandleParticles(World world, Vec3d vec3d, Random random) {
         float f = random.nextFloat();
         if (f < 0.3F) {
-            world.addParticleClient(ParticleTypes.SMOKE, vec3d.x, vec3d.y, vec3d.z, 0.0, 0.0, 0.0);
+            world.addParticle(ParticleTypes.SMOKE, vec3d.x, vec3d.y, vec3d.z, 0.0, 0.0, 0.0);
             if (f < 0.17F) {
                 world.playSoundClient(vec3d.x + 0.5, vec3d.y + 0.5, vec3d.z + 0.5, SoundEvents.BLOCK_CANDLE_AMBIENT, SoundCategory.BLOCKS, 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
             }
         }
 
-        world.addParticleClient(ParticleTypes.SMALL_FLAME, vec3d.x, vec3d.y, vec3d.z, 0.0, 0.0, 0.0);
+        world.addParticle(ParticleTypes.SMALL_FLAME, vec3d.x, vec3d.y, vec3d.z, 0.0, 0.0, 0.0);
     }
 
     protected static void setLit(WorldAccess world, BlockState state, BlockPos pos, boolean lit) {

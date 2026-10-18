@@ -2,7 +2,9 @@ package net.jukoz.me.item.dataComponents;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
+import net.jukoz.me.resources.datas.factions.Faction;
 
 /**
  * Faction tag carried by items and NPC equipment.
@@ -23,6 +25,10 @@ public class FactionDataComponent {
 
     public FactionDataComponent(Identifier identifier) {
         this.factionId = identifier;
+    }
+
+    public FactionDataComponent(RegistryKey<Faction> faction) {
+        this.factionId = faction.getValue();
     }
 
     public Identifier getFactionId() {

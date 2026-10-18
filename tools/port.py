@@ -258,6 +258,9 @@ REWRITES = [
     ("animation-definition", r"(?<![A-Za-z0-9_$])AnimationDefinition", "Animation"),
     # 1.21 helpers with a direct 1.20.1 equivalent.
     ("of-vanilla", r"(?<![A-Za-z0-9_$])Identifier[.]ofVanilla[(]", 'new Identifier("minecraft", '),
+    # 1.21.2 renames on PlayerEntity / World.
+    ("is-in-creative", r"(?<![A-Za-z0-9_$])isInCreativeMode[(]", "isCreative("),
+    ("add-particle-client", r"(?<![A-Za-z0-9_$])addParticleClient[(]", "addParticle("),
 ]
 
 # 1.21 wraps block/item ids in a RegistryKey; 1.20.1 registers by Identifier.
@@ -631,7 +634,7 @@ def cmd_promote(args) -> int:
 # Match both spellings so the tool keeps working whichever locale wins.
 # The path prefix is absolute on Windows ("H:\...\Foo.java"), so it contains a
 # colon itself -- matching [^:] silently produced zero hits.
-ERR = re.compile(r"^(?P<file>.+?[.]java):(?P<line>[0-9]+): (?:error|错误): (?P<msg>.*)$", re.M)
+ERR = re.compile(r"^(?P<file>\S.*?[.]java):(?P<line>[0-9]+): (?:error|错误): (?P<msg>.*)$", re.M)
 SYMBOL = re.compile(r"^\s*symbol:\s+(?P<kind>\S+)\s+(?P<name>.*)$", re.M)
 LOCATION = re.compile(r"^\s*location:\s+(?P<loc>.*)$", re.M)
 
@@ -668,6 +671,9 @@ def cmd_errors(args) -> int:
                           cwd=PROJECT, capture_output=True, text=True, errors="replace")
     blob = (proc.stdout or "") + (proc.stderr or "")
     found = parse_errors(blob)
+    log = PROJECT / "build/port-errors.log"
+    log.parent.mkdir(parents=True, exist_ok=True)
+    log.write_text(blob, encoding="utf-8", errors="replace")
 
     print(f"{len(found)} errors in {len({m['file'] for m in found})} files\n")
     groups = collections.Counter(m["msg"] for m in found)
@@ -704,6 +710,11 @@ def cmd_errors(args) -> int:
     print("\n-- by symbol --")
     for (msg, sym), n in symbols.most_common(30):
         print(f"{n:>4}  {sym[:90]:<90} ({msg[:40]})")
+    if args.files:
+        per = collections.Counter(m["file"] for m in real)
+        print("\n-- by file --")
+        for f, n in per.most_common(args.files):
+            print(f"{n:>5}  {f}")
     if args.json:
         Path(args.json).write_text(json.dumps(found, indent=2), encoding="utf-8")
         print(f"\nwrote {args.json}")
@@ -916,6 +927,7 @@ def main() -> int:
 
     p = sub.add_parser("errors")
     p.add_argument("--json")
+    p.add_argument("--files", type=int, default=0)
     p.set_defaults(func=cmd_errors)
 
     p = sub.add_parser("components", help="read-only: list Item.Settings.component calls")

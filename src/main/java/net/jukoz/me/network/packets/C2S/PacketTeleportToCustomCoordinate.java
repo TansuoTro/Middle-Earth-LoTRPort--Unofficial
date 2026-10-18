@@ -1,24 +1,17 @@
 package net.jukoz.me.network.packets.C2S;
 
+import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.minecraft.network.PacketByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
 import net.jukoz.me.world.dimension.ModDimensions;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
 public class PacketTeleportToCustomCoordinate extends ClientToServerPacket<PacketTeleportToCustomCoordinate> {
-    public static final Id<PacketTeleportToCustomCoordinate> ID = new Id<>(new Identifier(MiddleEarth.MOD_ID, "packet_teleport_custom_spawn"));
-    public static final PacketCodec<RegistryByteBuf, PacketTeleportToCustomCoordinate> CODEC = PacketCodec.tuple(
-            PacketCodecs.DOUBLE, p -> p.xCoordinate,
-            PacketCodecs.DOUBLE, p -> p.yCoordinate,
-            PacketCodecs.DOUBLE, p -> p.zCoordinate,
-            PacketCodecs.BOOLEAN, p -> p.welcomeNeeded,
-            PacketTeleportToCustomCoordinate::new
-    );
+    public static final Identifier ID = new Identifier(MiddleEarth.MOD_ID, "packet_teleport_custom_spawn");
+    public static final PacketType<PacketTeleportToCustomCoordinate> TYPE = PacketType.create(ID, PacketTeleportToCustomCoordinate::new);
     private final double xCoordinate;
     private final double yCoordinate;
     private final double zCoordinate;
@@ -30,14 +23,24 @@ public class PacketTeleportToCustomCoordinate extends ClientToServerPacket<Packe
         this.zCoordinate = zCoordinate;
         this.welcomeNeeded = welcomeNeeded;
     }
-    @Override
-    public Id<PacketTeleportToCustomCoordinate> getId() {
-        return ID;
+
+
+
+    public PacketTeleportToCustomCoordinate(PacketByteBuf buf) {
+        this(buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readBoolean());
     }
 
     @Override
-    public PacketCodec<RegistryByteBuf, PacketTeleportToCustomCoordinate> streamCodec() {
-        return CODEC;
+    public PacketType<PacketTeleportToCustomCoordinate> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public void write(PacketByteBuf buf) {
+        buf.writeDouble(this.xCoordinate);
+        buf.writeDouble(this.yCoordinate);
+        buf.writeDouble(this.zCoordinate);
+        buf.writeBoolean(this.welcomeNeeded);
     }
 
     @Override

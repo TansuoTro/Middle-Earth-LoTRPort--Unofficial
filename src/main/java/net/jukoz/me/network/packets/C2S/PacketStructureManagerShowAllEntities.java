@@ -1,8 +1,7 @@
 package net.jukoz.me.network.packets.C2S;
 
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -12,12 +11,8 @@ import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
 
 public class PacketStructureManagerShowAllEntities extends ClientToServerPacket<PacketStructureManagerShowAllEntities> {
-    public static final CustomPayload.Id<PacketStructureManagerShowAllEntities> ID = new CustomPayload.Id<>(new Identifier(MiddleEarth.MOD_ID, "structure_manager_show_all_entities"));
-
-    public static final PacketCodec<RegistryByteBuf, PacketStructureManagerShowAllEntities> CODEC = PacketCodec.tuple(
-            BlockPos.PACKET_CODEC, p -> p.pos,
-            PacketStructureManagerShowAllEntities::new
-    );
+    public static final Identifier ID = new Identifier(MiddleEarth.MOD_ID, "structure_manager_show_all_entities");
+    public static final PacketType<PacketStructureManagerShowAllEntities> TYPE = PacketType.create(ID, PacketStructureManagerShowAllEntities::new);
 
     private final BlockPos pos;
 
@@ -25,14 +20,18 @@ public class PacketStructureManagerShowAllEntities extends ClientToServerPacket<
         this.pos = pos;
     }
 
-    @Override
-    public Id<PacketStructureManagerShowAllEntities> getId() {
-        return ID;
+    public PacketStructureManagerShowAllEntities(PacketByteBuf buf) {
+        this(buf.readBlockPos());
     }
 
     @Override
-    public PacketCodec<RegistryByteBuf, PacketStructureManagerShowAllEntities> streamCodec() {
-        return CODEC;
+    public PacketType<PacketStructureManagerShowAllEntities> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public void write(PacketByteBuf buf) {
+        buf.writeBlockPos(this.pos);
     }
 
     @Override

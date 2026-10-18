@@ -173,7 +173,7 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
             String levelKey = (k == 1) ? ".level" : ".levels";
             Text text = Text.translatable("inscription." + MiddleEarth.MOD_ID + levelKey, k);
 
-            if (this.client.player.isInCreativeMode() || (l >= k && k != 0)){
+            if (this.client.player.isCreative() || (l >= k && k != 0)){
                 color = -8323296;
                 this.confirmationButton.active = true;
             } else{
