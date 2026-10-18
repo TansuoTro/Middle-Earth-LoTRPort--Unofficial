@@ -36,8 +36,9 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
+import net.minecraft.nbt.NbtCompound;
+import net.jukoz.me.compat.nbt.ReadView;
+import net.jukoz.me.compat.nbt.WriteView;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -262,29 +263,28 @@ public class NpcEntity extends PathAwareEntity implements EquipmentHolder, Cross
     }
 
     @Override
-    public void writeData(WriteView view) {
-        super.writeData(view);
+    protected void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
+        WriteView view = new WriteView(nbt);
         writeCustomData(view);
     }
 
     @Override
-    public void writeCustomData(WriteView view) {
-        super.writeCustomData(view);
+    protected void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
+        WriteView view = new WriteView(nbt);
         view.put(KeyStrings.DATA, NpcData.CODEC, this.retrieveNpcData());
         view.put(KeyStrings.INITIALIZATION_DATA, NpcInitializationData.CODEC, this.retrieveNpcInitializationData());
         view.put(KeyStrings.TEXTURE_DATA, NpcTextureData.CODEC, this.retrieveNpcTextureData());
         view.put(KeyStrings.IS_FIGHTING, Codec.BOOL, this.getFighting());
     }
 
-    @Override
-    public void readData(ReadView view) {
-        super.readData(view);
-        readCustomData(view);
-    }
+
 
     @Override
-    public void readCustomData(ReadView view) {
-        super.readCustomData(view);
+    protected void readCustomDataFromNbt(NbtCompound nbt) {
+        super.readCustomDataFromNbt(nbt);
+        ReadView view = new ReadView(nbt);
         NpcData foundNpcData = view.read(KeyStrings.DATA, NpcData.CODEC).orElse(new NpcData());
         NpcInitializationData foundNpcInitializationData = view.read(KeyStrings.INITIALIZATION_DATA, NpcInitializationData.CODEC).orElse(new NpcInitializationData());
         NpcTextureData foundNpcTextureData = view.read(KeyStrings.TEXTURE_DATA, NpcTextureData.CODEC).orElse(new NpcTextureData());

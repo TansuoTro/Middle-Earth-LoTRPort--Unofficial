@@ -13,8 +13,9 @@ import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
+import net.minecraft.nbt.NbtCompound;
+import net.jukoz.me.compat.nbt.ReadView;
+import net.jukoz.me.compat.nbt.WriteView;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -115,8 +116,9 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
+    protected void writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
+        WriteView view = new WriteView(nbt);
         view.putBoolean(SyncedData.ENABLED.name, this.enabled);
         view.putBoolean(SyncedData.TO_INITIALIZE.name, this.toInitialize);
         if(structureManagerIdentifier != null)
@@ -126,8 +128,9 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
+        ReadView view = new ReadView(nbt);
         this.enabled = view.getBoolean(SyncedData.ENABLED.name, false);
         this.toInitialize = view.getBoolean(SyncedData.TO_INITIALIZE.name, false);
         view.read(SyncedData.IDENTIFIER.name, Identifier.CODEC)

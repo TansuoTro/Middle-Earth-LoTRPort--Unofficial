@@ -8,8 +8,9 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
+import net.minecraft.nbt.NbtCompound;
+import net.jukoz.me.compat.nbt.ReadView;
+import net.jukoz.me.compat.nbt.WriteView;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
@@ -61,13 +62,15 @@ public class SmokeRingProjectileEntity extends ProjectileEntity {
     }
 
     @Override
-    protected void readCustomData(ReadView view) {
+    protected void readCustomDataFromNbt(NbtCompound nbt) {
+        ReadView view = new ReadView(nbt);
         super.readCustomData(view);
         this.setFailed(view.getBoolean("Failed", false));
     }
 
     @Override
-    protected void writeCustomData(WriteView view) {
+    protected void writeCustomDataToNbt(NbtCompound nbt) {
+        WriteView view = new WriteView(nbt);
         super.writeCustomData(view);
         view.putBoolean("Failed", this.isFailed());
     }

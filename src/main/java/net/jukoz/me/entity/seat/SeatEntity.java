@@ -1,7 +1,7 @@
 package net.jukoz.me.entity.seat;
 
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
+import net.jukoz.me.compat.nbt.ReadView;
+import net.jukoz.me.compat.nbt.WriteView;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.SeatBlock;
 import net.minecraft.entity.Entity;
@@ -41,12 +41,14 @@ public class SeatEntity extends VehicleEntity {
     }
 
     @Override
-    protected void readCustomData(ReadView view) {
+    protected void readCustomDataFromNbt(NbtCompound nbt) {
+        ReadView view = new ReadView(nbt);
 
     }
 
     @Override
-    protected void writeCustomData(WriteView view) {
+    protected void writeCustomDataToNbt(NbtCompound nbt) {
+        WriteView view = new WriteView(nbt);
 
     }
 

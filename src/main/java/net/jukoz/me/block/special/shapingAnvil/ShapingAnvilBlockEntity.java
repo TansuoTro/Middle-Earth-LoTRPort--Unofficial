@@ -10,8 +10,8 @@ import net.minecraft.item.equipment.trim.ArmorTrimMaterial;
 import net.minecraft.item.equipment.trim.ArmorTrimPattern;
 import net.minecraft.recipe.ServerRecipeManager;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
+import net.jukoz.me.compat.nbt.ReadView;
+import net.jukoz.me.compat.nbt.WriteView;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import net.jukoz.me.block.special.forge.MetalTypes;
@@ -278,18 +278,20 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory, true);
+    protected void writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
+        WriteView view = new WriteView(nbt);
+        Inventories.writeNbt(view.nbt(), this.inventory, true);
         view.putInt("current-index", this.outputIndex);
         view.putInt("current-max-index", this.maxOutputIndex);
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
+        ReadView view = new ReadView(nbt);
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
+        Inventories.readNbt(view.nbt(), this.inventory);
         this.outputIndex = view.getInt("current-index", 0);
         this.maxOutputIndex = view.getInt("current-max-index", 0);
     }

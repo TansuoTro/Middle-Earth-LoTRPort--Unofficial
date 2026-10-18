@@ -85,6 +85,7 @@ public class MiddleEarth implements ModInitializer {
 
 		ModDimensions.register();
 		MEBiomeKeys.registerModBiomes();
+		EnchantmentsME.register();
 		MEBiomesData.loadBiomes();
 		ModWorldGeneration.generateModWorldGen();
 

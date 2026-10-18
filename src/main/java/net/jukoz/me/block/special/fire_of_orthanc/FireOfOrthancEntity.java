@@ -9,8 +9,9 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
+import net.minecraft.nbt.NbtCompound;
+import net.jukoz.me.compat.nbt.ReadView;
+import net.jukoz.me.compat.nbt.WriteView;
 import net.minecraft.world.World;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.entity.EntitiesME;
@@ -74,14 +75,16 @@ public class FireOfOrthancEntity extends Entity implements Ownable {
     }
 
     @Override
-    protected void readCustomData(ReadView view) {
+    protected void readCustomDataFromNbt(NbtCompound nbt) {
+        ReadView view = new ReadView(nbt);
         this.setFuse(view.getShort("fuse", (short) 0));
         this.setBlockState((BlockState)view.read("block_state", BlockState.CODEC).orElse(DEFAULT_BLOCK_STATE));
 
     }
 
     @Override
-    protected void writeCustomData(WriteView view) {
+    protected void writeCustomDataToNbt(NbtCompound nbt) {
+        WriteView view = new WriteView(nbt);
         view.putShort("fuse", (short)this.getFuse());
         view.put("block_state", BlockState.CODEC, this.getBlockState());
     }

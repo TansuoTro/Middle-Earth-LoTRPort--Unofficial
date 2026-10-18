@@ -17,8 +17,8 @@ import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
+import net.jukoz.me.compat.nbt.ReadView;
+import net.jukoz.me.compat.nbt.WriteView;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.jukoz.me.block.registration.ModBlockEntities;
@@ -35,8 +35,9 @@ public class PlateBlockEntity extends BlockEntity implements SingleStackInventor
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
+    protected void writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
+        WriteView view = new WriteView(nbt);
         view.put("placed", Codec.BOOL, blockPlaced);
 
         if (!this.writeLootTableToData(view) && !this.food.isEmpty()) {
@@ -45,8 +46,9 @@ public class PlateBlockEntity extends BlockEntity implements SingleStackInventor
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
+        ReadView view = new ReadView(nbt);
         this.food.copyAndEmpty();
         this.blockPlaced = view.getBoolean("placed", false);
         if (!this.readLootTableFromData(view)) {

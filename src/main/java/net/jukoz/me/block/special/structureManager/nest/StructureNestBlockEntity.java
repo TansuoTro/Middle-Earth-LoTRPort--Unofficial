@@ -10,8 +10,9 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
+import net.minecraft.nbt.NbtCompound;
+import net.jukoz.me.compat.nbt.ReadView;
+import net.jukoz.me.compat.nbt.WriteView;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -80,8 +81,9 @@ public class StructureNestBlockEntity extends BlockEntity implements ExtendedScr
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
+        ReadView view = new ReadView(nbt);
         Optional<Identifier> managerId = view.read(SyncedData.MANAGER_ID.name, Identifier.CODEC);
         managerId.ifPresent(identifier -> this.managerId = identifier);
         Optional<Identifier> nestId = view.read(SyncedData.NEST_ID.name, Identifier.CODEC);
@@ -91,8 +93,9 @@ public class StructureNestBlockEntity extends BlockEntity implements ExtendedScr
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
+    protected void writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
+        WriteView view = new WriteView(nbt);
         if(nestId != null)
             view.put(SyncedData.NEST_ID.name, Identifier.CODEC, this.nestId);
         if(managerId != null)

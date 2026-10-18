@@ -27,8 +27,9 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
+import net.minecraft.nbt.NbtCompound;
+import net.jukoz.me.compat.nbt.ReadView;
+import net.jukoz.me.compat.nbt.WriteView;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -367,13 +368,15 @@ public class SpawnOfShelobEntity extends HostileEntity implements Pouncer, Shiel
     }
 
     @Override
-    protected void writeCustomData(WriteView view) {
+    protected void writeCustomDataToNbt(NbtCompound nbt) {
+        WriteView view = new WriteView(nbt);
         super.writeCustomData(view);
         Variants.writeVariantToNbt(view, this.getRegistryVariant());
     }
 
     @Override
-    protected void readCustomData(ReadView view) {
+    protected void readCustomDataFromNbt(NbtCompound nbt) {
+        ReadView view = new ReadView(nbt);
         super.readCustomData(view);
         Variants.readVariantFromNbt(view, DynamicRegistriesME.SPIDER_VARIANTS).ifPresent(this::setVariant);
     }

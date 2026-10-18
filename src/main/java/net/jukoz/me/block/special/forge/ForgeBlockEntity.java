@@ -11,8 +11,8 @@ import net.minecraft.item.equipment.trim.ArmorTrimMaterial;
 import net.minecraft.item.equipment.trim.ArmorTrimPattern;
 import net.minecraft.recipe.ServerRecipeManager;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
+import net.jukoz.me.compat.nbt.ReadView;
+import net.jukoz.me.compat.nbt.WriteView;
 import net.minecraft.util.math.MathHelper;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlockEntities;
@@ -197,9 +197,10 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory, true);
+    protected void writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
+        WriteView view = new WriteView(nbt);
+        Inventories.writeNbt(view.nbt(), this.inventory, true);
         view.putInt(ID + ".progress", this.progress);
         view.putInt(ID + ".boost-time", this.boostTime);
         view.putInt(ID + ".fuel-time", this.fuelTime);
@@ -210,10 +211,11 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
+        ReadView view = new ReadView(nbt);
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
+        Inventories.readNbt(view.nbt(), this.inventory);
         this.progress = view.getInt(ID + ".progress", 0);
         this.boostTime = view.getInt(ID + ".boost-time", 0);
         this.fuelTime = view.getInt(ID + ".fuel-time", 0);

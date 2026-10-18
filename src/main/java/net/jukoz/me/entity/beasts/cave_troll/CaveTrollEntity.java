@@ -34,8 +34,9 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
+import net.minecraft.nbt.NbtCompound;
+import net.jukoz.me.compat.nbt.ReadView;
+import net.jukoz.me.compat.nbt.WriteView;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -130,13 +131,15 @@ public class CaveTrollEntity extends AbstractBeastEntity {
     }
 
     @Override
-    public void writeData(WriteView view) {
-        super.writeData(view);
+    protected void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
+        WriteView view = new WriteView(nbt);
         view.putInt("Variant", this.getTypeVariant());
     }
 
     @Override
-    protected void readCustomData(ReadView view) {
+    protected void readCustomDataFromNbt(NbtCompound nbt) {
+        ReadView view = new ReadView(nbt);
         super.readCustomData(view);
         this.dataTracker.set(VARIANT, view.getInt("Variant", 0));
     }

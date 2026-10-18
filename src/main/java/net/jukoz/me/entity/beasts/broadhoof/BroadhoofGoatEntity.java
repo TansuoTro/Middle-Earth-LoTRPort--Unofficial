@@ -29,8 +29,9 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
+import net.minecraft.nbt.NbtCompound;
+import net.jukoz.me.compat.nbt.ReadView;
+import net.jukoz.me.compat.nbt.WriteView;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Util;
@@ -128,7 +129,8 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
     }
 
     @Override
-    protected void writeCustomData(WriteView view) {
+    protected void writeCustomDataToNbt(NbtCompound nbt) {
+        WriteView view = new WriteView(nbt);
         super.writeCustomData(view);
         view.putInt("Variant", this.getGoatVariant());
         view.putInt("Beads", this.getGoatBeadsIndex());
@@ -139,7 +141,8 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
     }
 
     @Override
-    protected void readCustomData(ReadView view) {
+    protected void readCustomDataFromNbt(NbtCompound nbt) {
+        ReadView view = new ReadView(nbt);
         super.readCustomData(view);
         this.dataTracker.set(VARIANT, view.getInt("Variant", 0));
         this.dataTracker.set(BEADS, view.getInt("Beads", 0));

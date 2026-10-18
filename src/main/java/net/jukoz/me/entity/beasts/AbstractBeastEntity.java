@@ -24,8 +24,9 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
+import net.minecraft.nbt.NbtCompound;
+import net.jukoz.me.compat.nbt.ReadView;
+import net.jukoz.me.compat.nbt.WriteView;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
@@ -96,7 +97,8 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
     }
 
     @Override
-    protected void writeCustomData(WriteView view) {
+    protected void writeCustomDataToNbt(NbtCompound nbt) {
+        WriteView view = new WriteView(nbt);
         super.writeCustomData(view);
         view.putBoolean("Sitting", this.isSitting());
         view.putBoolean("ChestedBeast", this.hasChest());
@@ -114,7 +116,8 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
     }
 
     @Override
-    protected void readCustomData(ReadView view) {
+    protected void readCustomDataFromNbt(NbtCompound nbt) {
+        ReadView view = new ReadView(nbt);
         super.readCustomData(view);
         this.setSitting(view.getBoolean("Sitting", false));
         this.setHasChest(view.getBoolean("ChestedBeast", false));

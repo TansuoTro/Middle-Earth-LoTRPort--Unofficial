@@ -22,8 +22,9 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.ShulkerBoxScreenHandler;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
+import net.minecraft.nbt.NbtCompound;
+import net.jukoz.me.compat.nbt.ReadView;
+import net.jukoz.me.compat.nbt.WriteView;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
@@ -88,23 +89,25 @@ public class SackBlockEntity extends LootableContainerBlockEntity implements Sid
         return Text.translatable(MiddleEarth.of("sack").toTranslationKey("screen"));
     }
 
-    protected void readData(ReadView view) {
-        super.readData(view);
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
+        ReadView view = new ReadView(nbt);
         this.readInventoryNbt(view);
     }
 
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        if (!this.writeLootTable(view)) {
-            Inventories.writeData(view, this.inventory, false);
+    protected void writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
+        WriteView view = new WriteView(nbt);
+        if (!this.writeLootTable(view.nbt())) {
+            Inventories.writeNbt(view.nbt(), this.inventory, false);
         }
 
     }
 
     public void readInventoryNbt(ReadView readView) {
         this.inventory = DefaultedList.ofSize(this.size(), ItemStack.EMPTY);
-        if (!this.readLootTable(readView)) {
-            Inventories.readData(readView, this.inventory);
+        if (!this.readLootTable(readView.nbt())) {
+            Inventories.readNbt(readView.nbt(), this.inventory);
         }
     }
 
