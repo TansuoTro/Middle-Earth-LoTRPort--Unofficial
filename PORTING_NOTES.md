@@ -301,3 +301,61 @@ port-staging/ 是 gitignored 的暫存樹，可隨時用 import 重建。
 4. **動畫**：1.20.1 沒有 Animation#createAnimation(ModelPart)，動畫要改成
    AnimationHelper.animate(model, animation, age, speed, vector)，每個 model 都要動。
 5. **AttributeModifierSlot 118**：1.20.5+ 的欄位概念，1.20.1 靠 EquipmentSlot 傳遞。
+
+---
+
+# 第二階段：網路層與相容層（2026-10-18）
+
+## 錯誤量
+
+| 時間點 | 錯誤 | 檔案 |
+|---|---|---|
+| 上一輪結束 | 5,429（原報表 10,858 是把 gradle 重列的重複算進去） | 571 |
+| 本輪結束 | **4,506** | 544 |
+
+> 提醒：`tools/port.py errors` 現在會把 javac 原始輸出存到
+> `build/port-errors.log`，並且只認行首無縮排的診斷行——gradle 在失敗後會把
+> 同一批錯誤再列一次（縮排兩格），先前因此把總數算成兩倍。
+
+## 本輪清掉的家族
+
+| 原錯誤數 | 家族 | 做法 |
+|---|---|---|
+| ~960 | 網路層（CustomPayload / PacketCodec / PayloadTypeRegistry） | 27 個封包改寫成 `FabricPacket` + `PacketType` + `PacketByteBuf` 手寫序列化；`ModServerNetworkHandler`/`ModClientNetworkHandler` 改用 `PlayPacketHandler` |
+| ~1300 | `FactionDataComponent(RegistryKey<Faction>)` 建構子被匯入時吃掉 | 補回建構子（`faction.getValue()`） |
+| 497 | 地表生物群系三個檔 | `MEBiomeKeys` 換成 donor 版（270 個 key），`register()` 裡的 `TranslationEntries` 先註記為 datagen 待辦 |
+| 94 | EnchantmentsME | 1.21 的 `Enchantment.builder` 在 1.20.1 不存在；改寫成 15 個 `Registries.ENCHANTMENT` 註冊（rarity / target / slots / power 曲線），屬性型效果留待手動套用 |
+| 77 | `net.minecraft.storage.ReadView/WriteView` | `compat/nbt/ReadView`、`WriteView`（NbtCompound 後端），18 個檔的 `readData/writeData` 改接 `readNbt/writeNbt` |
+| 57 | `Block#getCodec()`（1.20.5+） | 刪掉 54 個覆寫，1.20.1 方塊沒有 codec |
+| 31 | `onUse(...)` 少 `Hand` 參數 | 補參數、補 `super.onUse(..., hand, hit)` |
+| 60 | ArmorMaterialsME | `compat/SimpleArmorMaterial`（1.21 record → 1.20.1 介面），`EquipmentType` → `ArmorItem.Type` |
+| 45 | `DataComponentTypesME` | 刪除；`MEComponents` 早就取代它，實測沒有任何常數引用 |
+| 9 | `appendTooltip` 五參數版 | 改成 1.20.1 的 `(ItemStack, TooltipContext, List<Text>, TooltipType)` |
+| 9 | `METext.withColor(METext, …)` | 先前的替換把 receiver 也吃進去，修掉 |
+| 55 | ModDimensions | 換成 donor 的 API（`ME_WORLD_KEY`、`getDimensionHeight`、`teleportPlayerToOverworld`、`isInOverworld`），維度 id 仍用基準的 `me:middle-earth` |
+
+## 下一個工作順序（依錯誤數）
+
+1. **`PacketCodec` / `PacketCodecs` / `RegistryByteBuf`（≈150）**：1.20.1 完全沒有
+   這組類別。作法是把 `compat/net/PacketCodec`（`of/tuple/unit`）與 `PacketCodecs`
+   （`STRING/INTEGER/BOOLEAN/LONG/optional/indexed/codec/toList`）補起來，
+   再把 `RegistryByteBuf` 全部換成 `PacketByteBuf`。
+   **未解**：`PacketCodecs.registryEntry(dynamicKey)` 在 1.20.1 沒有執行期動態註冊表可查，
+   目前只能寫入 Identifier，解碼端需要一個由 datapack 載入時填充的對照表。
+2. **`net.minecraft.component.type.*`（71）+ `net.minecraft.component.*`（63）**：
+   `AttributeModifiersComponent`（10）、`ToolComponent`（9）、`FoodComponent`（6）、
+   `BannerPatternsComponent`（11）… 每一個都要對到 1.20.1 的 item 行為或 NBT。
+3. **client render state（57 + `render` 44 + `setAngles` 18 + `createRenderState` 14）**：
+   1.21.2 的 `EntityRenderer<T, S>` 拆成 createRenderState/updateRenderState，
+   1.20.1 直接吃 entity。20 個 renderer、15 個 model 要一起改。
+4. **`AttributeModifierSlot` / `EntityAttribute` vs `RegistryEntry<EntityAttribute>`（59 + 46）**。
+5. **datagen（`TranslationEntries` 26）**：46 個 provider 還壓在 `port-staging`。
+
+## 已知的執行期地雷（編譯過了但行為不對）
+
+- `EnchantmentsME`：celerity / grounded / stalwart / vantage 的屬性加成在 1.20.1 沒有對應機制，
+  目前只是一個沒有數值效果的附魔。
+- `MEBiomeKeys.register()` 不再把生物群系名字寫進 `TranslationEntries`，翻譯要等 datagen。
+- `ArtisanTableScreenHandler` 仍是基準的 6 格版本，donor 的 3×3 + 分頁版本還沒合併；
+  `ArtisanIndexPacket` / `ArtisanTableTabPacket` 呼叫的 `updateIndex` / `changeTab` /
+  `addRecipeOutput` 因此還缺。
