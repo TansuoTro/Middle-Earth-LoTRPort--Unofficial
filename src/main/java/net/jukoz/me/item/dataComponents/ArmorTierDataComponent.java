@@ -3,7 +3,7 @@ import net.jukoz.me.compat.METext;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.netty.buffer.ByteBuf;
+import net.minecraft.network.PacketByteBuf;
 import net.jukoz.me.compat.DyedColorComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,10 +25,10 @@ public record ArmorTierDataComponent(ArmorMaterialsME.Tiers tier) implements Too
         return instance.group(ArmorMaterialsME.Tiers.CODEC.fieldOf("tier").forGetter(ArmorTierDataComponent::tier))
                 .apply(instance, ArmorTierDataComponent::new);
     });
-    public static final Codec<ArmorTierDataComponent> CODEC  = Codec.withAlternative(BASE_CODEC, ArmorMaterialsME.Tiers.CODEC, (enabled) -> {
+    public static final Codec<ArmorTierDataComponent> CODEC  = ComponentCodecs.alternative(BASE_CODEC, ArmorMaterialsME.Tiers.CODEC, (enabled) -> {
         return new ArmorTierDataComponent(ArmorMaterialsME.Tiers.BASIC);
     });
-    public static final PacketCodec<ByteBuf, ArmorTierDataComponent> PACKET_CODEC  = PacketCodec.tuple(ArmorMaterialsME.Tiers.PACKET_CODEC, ArmorTierDataComponent::tier, ArmorTierDataComponent::new);
+    public static final PacketCodec<PacketByteBuf, ArmorTierDataComponent> PACKET_CODEC  = PacketCodec.tuple(ArmorMaterialsME.Tiers.PACKET_CODEC, ArmorTierDataComponent::tier, ArmorTierDataComponent::new);
     ;
 
     public ArmorTierDataComponent(ArmorMaterialsME.Tiers tier){
@@ -36,7 +36,7 @@ public record ArmorTierDataComponent(ArmorMaterialsME.Tiers tier) implements Too
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip) {
+    public void appendTooltip(ItemStack stack, net.minecraft.client.item.TooltipContext context, List<Text> tooltip) {
         tooltip.add(METext.withColor( Text.translatable("tooltip.%s.%s".formatted(MiddleEarth.MOD_ID, tier.getName())), tier.getColor()));
     }
 

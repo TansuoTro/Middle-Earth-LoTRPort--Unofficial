@@ -23,7 +23,7 @@ public class CaveTrollRenderer extends MEMobEntityRenderer<CaveTrollEntity, Cave
     public CaveTrollRenderer(EntityRendererFactory.Context context) {
         super(context, new CaveTrollEntityModel(context.getPart(EntityModelLayersME.CAVE_TROLL)), 1.1f);
         this.addFeature(new CaveTrollDroolFeatureRenderer(this));
-        this.addFeature(new CaveTrollSaddleFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader()), context.getEquipmentRenderer()));
+        this.addFeature(new CaveTrollSaddleFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader()), EquipmentRenderer.INSTANCE));
         this.addFeature(new CaveTrollHeldItemFeatureRenderer(this));
     }
 

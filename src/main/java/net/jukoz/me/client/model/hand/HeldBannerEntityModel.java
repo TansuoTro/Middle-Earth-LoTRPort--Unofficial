@@ -12,7 +12,7 @@ public class HeldBannerEntityModel extends Model {
     private final ModelPart banner;
 
     public HeldBannerEntityModel(ModelPart root) {
-        super(root, RenderLayer::getEntitySolid);
+        super(RenderLayer::getEntitySolid);
         this.root = root;
         this.pole = root.getChild("pole");
         this.banner = root.getChild("banner");
@@ -41,5 +41,11 @@ public class HeldBannerEntityModel extends Model {
 
     public ModelPart getBanner() {
         return banner;
+    }
+
+    @Override
+    public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay,
+                       float red, float green, float blue, float alpha) {
+        this.root.render(matrices, vertices, light, overlay);
     }
 }

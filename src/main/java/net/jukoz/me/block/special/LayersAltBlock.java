@@ -42,7 +42,7 @@ public class LayersAltBlock extends SnowBlock implements Waterloggable {
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         if (state.get(WATERLOGGED)) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
@@ -61,7 +61,7 @@ public class LayersAltBlock extends SnowBlock implements Waterloggable {
 
 
     @Override
-    protected boolean canReplace(BlockState state, ItemPlacementContext context) {
+    public boolean canReplace(BlockState state, ItemPlacementContext context) {
         int i = state.get(LAYERS);
         if (context.getStack().isOf(this.asItem()) && i < 8) {
             if (context.canReplaceExisting()) {
@@ -75,7 +75,7 @@ public class LayersAltBlock extends SnowBlock implements Waterloggable {
     }
 
     @Override
-    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         return true;
     }
 }

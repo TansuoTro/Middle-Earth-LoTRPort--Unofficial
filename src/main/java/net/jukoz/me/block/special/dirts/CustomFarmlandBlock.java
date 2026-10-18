@@ -41,14 +41,14 @@ public class CustomFarmlandBlock extends FarmlandBlock {
         world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(entity, blockState));
     }
 
-    protected void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         if (!state.canPlaceAt(world, pos)) {
             setToDirt((Entity)null, state, world, pos, target);
         }
 
     }
 
-    protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         int i = (Integer)state.get(MOISTURE);
         if (!isWaterNearby(world, pos) && !world.hasRain(pos.up())) {
             if (i > 0) {

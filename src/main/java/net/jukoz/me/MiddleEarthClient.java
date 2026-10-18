@@ -12,6 +12,8 @@ import net.jukoz.me.client.model.equipment.InnerArmorModel;
 import net.jukoz.me.client.model.equipment.head.CloakHoodModel;
 import net.jukoz.me.client.model.equipment.head.RohirricHelmetArmorModel;
 import net.jukoz.me.client.renderer.ModArmorRenderer;
+import net.jukoz.me.client.renderer.ModBuiltInModelItemRenderer;
+import net.jukoz.me.item.WeaponItemsME;
 import net.jukoz.me.datageneration.VariantsModelProvider;
 import net.jukoz.me.datageneration.content.models.SimpleDoubleBlockModel;
 import net.jukoz.me.datageneration.content.models.SimpleFlowerBedModel;
@@ -76,6 +78,10 @@ public class MiddleEarthClient implements ClientModInitializer {
     public static final EntityModelLayer HELMET_ADDON_MODEL_LAYER = new EntityModelLayer(new Identifier(MiddleEarth.MOD_ID, "armor"), "helmet_addon");
     public static final EntityModelLayer CAPE_MODEL_LAYER = new EntityModelLayer(new Identifier(MiddleEarth.MOD_ID, "armor"), "cape");
     public static final EntityModelLayer HOOD_MODEL_LAYER = new EntityModelLayer(new Identifier(MiddleEarth.MOD_ID, "armor"), "hood");
+    public static final EntityModelLayer HEATER_SHIELD_LAYER = new EntityModelLayer(new Identifier(MiddleEarth.MOD_ID, "heater_shield"), "main");
+    public static final EntityModelLayer KITE_SHIELD_LAYER = new EntityModelLayer(new Identifier(MiddleEarth.MOD_ID, "kite_shield"), "main");
+    public static final EntityModelLayer ROUND_SHIELD_LAYER = new EntityModelLayer(new Identifier(MiddleEarth.MOD_ID, "round_shield"), "main");
+    public static final EntityModelLayer HELD_BANNER_LAYER = new EntityModelLayer(new Identifier(MiddleEarth.MOD_ID, "held_banner"), "main");
 
     @Override
     public void onInitializeClient() {
@@ -174,6 +180,16 @@ public class MiddleEarthClient implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(HELMET_ADDON_MODEL_LAYER, RohirricHelmetArmorModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(CAPE_MODEL_LAYER, CloakCapeModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(HOOD_MODEL_LAYER, CloakHoodModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(HEATER_SHIELD_LAYER, net.jukoz.me.client.model.hand.shields.HeaterShieldEntityModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(KITE_SHIELD_LAYER, net.jukoz.me.client.model.hand.shields.KiteShieldEntityModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ROUND_SHIELD_LAYER, net.jukoz.me.client.model.hand.shields.RoundShieldEntityModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(HELD_BANNER_LAYER, net.jukoz.me.client.model.hand.HeldBannerEntityModel::getTexturedModelData);
+
+        ModBuiltInModelItemRenderer builtinItemRenderer = new ModBuiltInModelItemRenderer();
+        BuiltinItemRendererRegistry.INSTANCE.register(WeaponItemsME.HEATER_SHIELD, builtinItemRenderer::render);
+        BuiltinItemRendererRegistry.INSTANCE.register(WeaponItemsME.KITE_SHIELD, builtinItemRenderer::render);
+        BuiltinItemRendererRegistry.INSTANCE.register(WeaponItemsME.ROUND_SHIELD, builtinItemRenderer::render);
+        BuiltinItemRendererRegistry.INSTANCE.register(WeaponItemsME.HELD_BANNER, builtinItemRenderer::render);
 
         for (ModArmors armor : ModArmors.values()) {
         ArmorRenderer.register(new ModArmorRenderer(armor.getHelmetModel(), armor.getChestPlateModel(), armor.getSimpleName(), armor.hasInnerLayer() , armor.hasVanillaArmorModel(), armor.hasCape(), armor.hasHood(), armor.isDyeable()),

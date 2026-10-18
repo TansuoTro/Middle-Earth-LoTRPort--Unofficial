@@ -19,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
 
 public class WebbingBlock extends MultifaceGrowthBlock {
     public static final BooleanProperty PERSISTENT = Properties.PERSISTENT;
-    public static final MapCodec<WebbingBlock> CODEC = createCodec(WebbingBlock::new);
     private final LichenGrower grower = new LichenGrower(this);
 
     public WebbingBlock(Settings settings) {
@@ -40,7 +39,7 @@ public class WebbingBlock extends MultifaceGrowthBlock {
         super.appendProperties(builder);
     }
 
-    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         Vec3d vec3d = new Vec3d(0.75, 0.50, 0.75);
         if (entity instanceof LivingEntity livingEntity) {
             if (livingEntity.hasStatusEffect(StatusEffects.WEAVING)) {
@@ -52,7 +51,7 @@ public class WebbingBlock extends MultifaceGrowthBlock {
     }
 
     @Override
-    protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos fromPos, boolean notify) {
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos fromPos, boolean notify) {
         if (!world.isClient) {
             for (Direction direction : Direction.values()) {
                 if (world.getFluidState(pos.offset(direction)).isIn(net.minecraft.registry.tag.FluidTags.WATER)) {
@@ -64,11 +63,11 @@ public class WebbingBlock extends MultifaceGrowthBlock {
         super.neighborUpdate(state, world, pos, sourceBlock, fromPos, notify);
     }
 
-    protected boolean hasRandomTicks(BlockState state) {
+    public boolean hasRandomTicks(BlockState state) {
         return !(Boolean)state.get(PERSISTENT);
     }
 
-    protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         if (this.shouldDecay(state)) {
             world.removeBlock(pos, false);
         }

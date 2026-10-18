@@ -33,7 +33,7 @@ public class SpruceCofferBlock extends ChestBlock {
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 11.0, 16.0);
     }
 }

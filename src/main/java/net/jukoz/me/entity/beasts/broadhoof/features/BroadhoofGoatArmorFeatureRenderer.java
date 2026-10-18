@@ -2,8 +2,8 @@ package net.jukoz.me.entity.beasts.broadhoof.features;
 import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatEntity;
 import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
-import net.minecraft.client.render.entity.equipment.EquipmentModel;
-import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
+import net.jukoz.me.compat.client.render.equipment.EquipmentModel;
+import net.jukoz.me.compat.client.render.equipment.EquipmentRenderer;
 import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 
 import net.minecraft.util.Identifier;
@@ -32,9 +32,9 @@ public class BroadhoofGoatArmorFeatureRenderer extends MEFeatureRenderer<Broadho
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, BroadhoofGoatEntityRenderState state, float limbAngle, float limbDistance) {
         ItemStack itemStack = state.armor;
         Identifier equippableComponent = MEComponents.get(itemStack, MEComponents.EQUIPPABLE_ASSET);
-        if (equippableComponent != null && !equippableComponent.assetId().isEmpty()) {
+        if (equippableComponent != null && !equippableComponent.getPath().isEmpty()) {
             model.setAngles(state);
-            this.equipmentRenderer.render(EquipmentModel.LayerType.HORSE_BODY, (RegistryKey)equippableComponent.assetId().get(), model, itemStack, matrices, vertexConsumers, light);
+            this.equipmentRenderer.render(EquipmentModel.LayerType.HORSE_BODY, equippableComponent, model, itemStack, matrices, vertexConsumers, light);
         }
     }
 }

@@ -7,7 +7,7 @@ import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
+import net.jukoz.me.compat.client.render.equipment.EquipmentRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
@@ -39,9 +39,9 @@ public class GreatHornArmorFeatureRenderer extends MEFeatureRenderer<GreatHornEn
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, GreatHornEntityRenderState state, float limbAngle, float limbDistance) {
         ItemStack itemStack = state.armor;
         Identifier equippableComponent = MEComponents.get(itemStack, MEComponents.EQUIPPABLE_ASSET);
-        if (equippableComponent != null && !equippableComponent.assetId().isEmpty()) {
+        if (equippableComponent != null && !equippableComponent.getPath().isEmpty()) {
             model.setAngles(state);
-            String path = "textures/entities/great_horn/feature/" + equippableComponent.assetId().get().getValue().getPath() + ".png";
+            String path = "textures/entities/great_horn/feature/" + equippableComponent.getPath() + ".png";
             boolean dyeable = false;
             if (itemStack.isIn(ItemTags.DYEABLE)) {
                 dyeable = true;

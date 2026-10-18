@@ -91,7 +91,7 @@ public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements
     }
 
     @Override
-    protected boolean canBucketPlace(BlockState state, Fluid fluid) {
+    public boolean canBucketPlace(BlockState state, Fluid fluid) {
         return state.get(HALF) == DoubleBlockHalf.LOWER && super.canBucketPlace(state, fluid);
     }
 

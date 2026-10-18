@@ -128,7 +128,7 @@ public final class MEComponents {
      * component registry.
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static void appendTooltips(ItemStack stack, Item.TooltipContext context, java.util.List<net.minecraft.text.Text> tooltip) {
+    public static void appendTooltips(ItemStack stack, net.minecraft.client.item.TooltipContext context, java.util.List<net.minecraft.text.Text> tooltip) {
         tooltip.addAll(net.jukoz.me.item.ItemExtras.lore(stack.getItem()));
         for (MEComponent<?> key : ALL) {
             Object value = get(stack, (MEComponent) key);

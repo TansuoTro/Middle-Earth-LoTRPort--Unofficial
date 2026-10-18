@@ -19,7 +19,6 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 
 public class DecorativeRodBlock extends RodBlock implements Waterloggable {
-    public static final MapCodec<DecorativeRodBlock> CODEC = createCodec(DecorativeRodBlock::new);
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 
     public DecorativeRodBlock(Settings settings) {
@@ -34,7 +33,7 @@ public class DecorativeRodBlock extends RodBlock implements Waterloggable {
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         if (state.get(WATERLOGGED)) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }

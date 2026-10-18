@@ -1,6 +1,5 @@
 package net.jukoz.me.block.special.plants;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.registry.tag.BlockTags;
@@ -9,8 +8,6 @@ import net.minecraft.world.BlockView;
 import net.jukoz.me.utils.BlockTagsME;
 
 public class DesertPlantBlock extends CustomPlantBlock {
-    public static final MapCodec<DesertPlantBlock> CODEC = DesertPlantBlock.createCodec(DesertPlantBlock::new);
-
     public DesertPlantBlock(Settings settings) {
         super(settings);
     }

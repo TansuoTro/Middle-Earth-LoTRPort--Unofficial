@@ -177,6 +177,9 @@ public class MEBiomeKeys extends BiomeKeys {
     public static final RegistryKey<Biome> MORDOR_ASHEN_FOREST = MEBiomeKeys.register("mordor_ashen_forest");
     public static final RegistryKey<Biome> MORDOR_HILL = MEBiomeKeys.register("mordor_hill");
     public static final RegistryKey<Biome> MORDOR_WASTES = MEBiomeKeys.register("mordor_wastes");
+    /** Referenced by MEBiomesData/StoneTrollEntity in the donor snapshot but never declared there. */
+    public static final RegistryKey<Biome> MORDOR_MOUNTAINS = MEBiomeKeys.register("mordor_mountains");
+    public static final RegistryKey<Biome> MORDOR_MOUNTAINS_FOOTHILLS = MEBiomeKeys.register("mordor_mountains_foothills");
     public static final RegistryKey<Biome> MORGUL_VALE = MEBiomeKeys.register("morgul_vale");
     public static final RegistryKey<Biome> MORGUL_FOREST = MEBiomeKeys.register("morgul_forest");
     public static final RegistryKey<Biome> MORGUL_RIVER = MEBiomeKeys.register("morgul_river");

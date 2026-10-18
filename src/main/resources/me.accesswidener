@@ -1,0 +1,4 @@
+accessWidener v2 named
+
+# 1.21.8 HeldItemRenderer.HandRenderType is public; 1.20.1 keeps it package-private.
+accessible class net/minecraft/client/render/item/HeldItemRenderer$HandRenderType

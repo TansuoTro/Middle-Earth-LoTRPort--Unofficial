@@ -21,15 +21,15 @@ public class TransparentVerticalSlab extends VerticalSlabBlock{
         return true;
     }
 
-    protected boolean isSideInvisible(BlockState state, BlockState stateFrom, Direction direction) {
+    public boolean isSideInvisible(BlockState state, BlockState stateFrom, Direction direction) {
         return stateFrom.isOf(this) ? true : super.isSideInvisible(state, stateFrom, direction);
     }
 
-    protected VoxelShape getCameraCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getCameraCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return VoxelShapes.empty();
     }
 
-    protected float getAmbientOcclusionLightLevel(BlockState state, BlockView world, BlockPos pos) {
+    public float getAmbientOcclusionLightLevel(BlockState state, BlockView world, BlockPos pos) {
         return 1.0F;
     }
 }

@@ -13,6 +13,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
  * {@link net.jukoz.me.mixin.DyeableItemMixin} makes DyeableItem read it.
  */
 public record DyedColorComponent(int rgb, boolean showInTooltip) {
+    /** 1.21's {@code DyedColorComponent.DEFAULT_COLOR} (leather brown, opaque). */
+    public static final int DEFAULT_COLOR = 0xFFA06540;
+
     public static final Codec<DyedColorComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.INT.fieldOf("rgb").forGetter(DyedColorComponent::rgb),
             Codec.BOOL.optionalFieldOf("show_in_tooltip", true).forGetter(DyedColorComponent::showInTooltip)

@@ -20,7 +20,7 @@ public class CustomBedBlock extends BedBlock {
     }
 
     @Override
-    protected BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
     }
 }

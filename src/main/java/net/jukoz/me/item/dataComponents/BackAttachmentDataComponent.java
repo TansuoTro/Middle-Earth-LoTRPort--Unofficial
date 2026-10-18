@@ -3,7 +3,7 @@ package net.jukoz.me.item.dataComponents;
 import net.jukoz.me.item.MEComponents;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.netty.buffer.ByteBuf;
+import net.minecraft.network.PacketByteBuf;
 import net.jukoz.me.compat.DyedColorComponent;
 import net.minecraft.item.Item;
 import net.jukoz.me.compat.TooltipAppender;
@@ -26,10 +26,10 @@ public record BackAttachmentDataComponent(BackAttachmentsME backAttachment, int 
                 Codec.INT.optionalFieldOf("back_attachment_color", DyedColorComponent.DEFAULT_COLOR).forGetter(BackAttachmentDataComponent::backAttachmentColor))
                 .apply(instance, BackAttachmentDataComponent::new);
     });
-    public static final Codec<BackAttachmentDataComponent> CODEC  = Codec.withAlternative(BASE_CODEC, Codec.BOOL, (enabled) -> {
+    public static final Codec<BackAttachmentDataComponent> CODEC  = ComponentCodecs.alternative(BASE_CODEC, Codec.BOOL, (enabled) -> {
         return new BackAttachmentDataComponent(BackAttachmentsME.CAPE, DyedColorComponent.DEFAULT_COLOR);
     });
-    public static final PacketCodec<ByteBuf, BackAttachmentDataComponent> PACKET_CODEC  = PacketCodec.tuple(BackAttachmentsME.PACKET_CODEC, BackAttachmentDataComponent::getBackAttachment, PacketCodecs.INTEGER, BackAttachmentDataComponent::backAttachmentColor, BackAttachmentDataComponent::new);
+    public static final PacketCodec<PacketByteBuf, BackAttachmentDataComponent> PACKET_CODEC  = PacketCodec.tuple(BackAttachmentsME.PACKET_CODEC, BackAttachmentDataComponent::getBackAttachment, PacketCodecs.INTEGER, BackAttachmentDataComponent::backAttachmentColor, BackAttachmentDataComponent::new);
     ;
 
     public BackAttachmentDataComponent(BackAttachmentsME backAttachment, int backAttachmentColor){
@@ -39,7 +39,7 @@ public record BackAttachmentDataComponent(BackAttachmentsME backAttachment, int 
 
     public static int getColor(ItemStack stack, int defaultColor) {
         BackAttachmentDataComponent backAttachmentDataComponent = MEComponents.get(stack, MEComponents.BACK_ATTACHMENT_DATA);
-        return backAttachmentDataComponent != null ? ColorHelper.fullAlpha(backAttachmentDataComponent.backAttachmentColor) : defaultColor;
+        return backAttachmentDataComponent != null ? ComponentCodecs.fullAlpha(backAttachmentDataComponent.backAttachmentColor) : defaultColor;
     }
 
     public static BackAttachmentDataComponent newBackAttachment(BackAttachmentsME backAttachment) {
@@ -74,7 +74,7 @@ public record BackAttachmentDataComponent(BackAttachmentsME backAttachment, int 
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip) {
+    public void appendTooltip(ItemStack stack, net.minecraft.client.item.TooltipContext context, List<Text> tooltip) {
         tooltip.add(Text.translatable("tooltip.%s.%s".formatted(MiddleEarth.MOD_ID, this.backAttachment().getName())).formatted(Formatting.GRAY));
     }
 }

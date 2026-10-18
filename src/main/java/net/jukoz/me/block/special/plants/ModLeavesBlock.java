@@ -37,7 +37,7 @@ public class ModLeavesBlock extends TintedParticleLeavesBlock {
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         int i;
         if (state.get(WATERLOGGED)) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
@@ -70,7 +70,7 @@ public class ModLeavesBlock extends TintedParticleLeavesBlock {
     }
 
     @Override
-    protected int getOpacity(BlockState state, BlockView world, BlockPos pos) {
+    public int getOpacity(BlockState state, BlockView world, BlockPos pos) {
         if(castShadow) return super.getOpacity(state, world, pos);
         return 0;
     }

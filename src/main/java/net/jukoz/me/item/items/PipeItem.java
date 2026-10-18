@@ -1,6 +1,6 @@
 package net.jukoz.me.item.items;
 
-import net.minecraft.item.consume.UseAction;
+import net.minecraft.util.UseAction;
 import net.minecraft.util.ActionResult;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.projectile.smoke.SmokeRingProjectileEntity;

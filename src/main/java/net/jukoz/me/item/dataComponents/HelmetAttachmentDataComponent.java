@@ -3,7 +3,7 @@ package net.jukoz.me.item.dataComponents;
 import net.jukoz.me.item.MEComponents;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.netty.buffer.ByteBuf;
+import net.minecraft.network.PacketByteBuf;
 import net.jukoz.me.compat.DyedColorComponent;
 import net.minecraft.item.Item;
 import net.jukoz.me.compat.TooltipAppender;
@@ -27,10 +27,10 @@ public record HelmetAttachmentDataComponent(boolean down, HelmetAttachmentsME he
                 Codec.INT.optionalFieldOf("helmet_attachment_color", DyedColorComponent.DEFAULT_COLOR).forGetter(HelmetAttachmentDataComponent::helmetAttachmentColor))
                 .apply(instance, HelmetAttachmentDataComponent::new);
     });
-    public static final Codec<HelmetAttachmentDataComponent> CODEC = Codec.withAlternative(BASE_CODEC, Codec.BOOL, (enabled) -> {
+    public static final Codec<HelmetAttachmentDataComponent> CODEC = ComponentCodecs.alternative(BASE_CODEC, Codec.BOOL, (enabled) -> {
         return new HelmetAttachmentDataComponent(false, HelmetAttachmentsME.HOOD, DyedColorComponent.DEFAULT_COLOR);
     });
-    public static final PacketCodec<ByteBuf, HelmetAttachmentDataComponent> PACKET_CODEC  = PacketCodec.tuple(PacketCodecs.BOOLEAN, HelmetAttachmentDataComponent::down, HelmetAttachmentsME.PACKET_CODEC, HelmetAttachmentDataComponent::getHelmetAttachment, PacketCodecs.INTEGER, HelmetAttachmentDataComponent::helmetAttachmentColor, HelmetAttachmentDataComponent::new);
+    public static final PacketCodec<PacketByteBuf, HelmetAttachmentDataComponent> PACKET_CODEC  = PacketCodec.tuple(PacketCodecs.BOOLEAN, HelmetAttachmentDataComponent::down, HelmetAttachmentsME.PACKET_CODEC, HelmetAttachmentDataComponent::getHelmetAttachment, PacketCodecs.INTEGER, HelmetAttachmentDataComponent::helmetAttachmentColor, HelmetAttachmentDataComponent::new);
     ;
 
     public HelmetAttachmentDataComponent(boolean down, HelmetAttachmentsME helmetAttachment, int helmetAttachmentColor) {
@@ -41,7 +41,7 @@ public record HelmetAttachmentDataComponent(boolean down, HelmetAttachmentsME he
 
     public static int getColor(ItemStack stack, int defaultColor) {
         HelmetAttachmentDataComponent helmetAttachmentDataComponent = MEComponents.get(stack, MEComponents.HELMET_ATTACHMENT_DATA);
-        return helmetAttachmentDataComponent != null ? ColorHelper.fullAlpha(helmetAttachmentDataComponent.helmetAttachmentColor) : defaultColor;
+        return helmetAttachmentDataComponent != null ? ComponentCodecs.fullAlpha(helmetAttachmentDataComponent.helmetAttachmentColor) : defaultColor;
     }
 
     public static HelmetAttachmentDataComponent newHelmetAttachment(HelmetAttachmentsME helmetAttachment) {
@@ -84,7 +84,7 @@ public record HelmetAttachmentDataComponent(boolean down, HelmetAttachmentsME he
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip) {
+    public void appendTooltip(ItemStack stack, net.minecraft.client.item.TooltipContext context, List<Text> tooltip) {
         tooltip.add(Text.translatable("tooltip.%s.%s".formatted(MiddleEarth.MOD_ID, this.helmetAttachment().getName())).formatted(Formatting.GRAY));
     }
 }

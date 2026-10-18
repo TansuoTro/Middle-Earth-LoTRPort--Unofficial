@@ -45,7 +45,7 @@ public class FallenLeavesBlock extends PlantBlock {
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 1.5, 15.0);
     }
 

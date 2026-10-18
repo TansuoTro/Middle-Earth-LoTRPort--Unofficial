@@ -2,7 +2,6 @@ package net.jukoz.me.client.renderer;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.model.ModelBaker;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.jukoz.me.MiddleEarthClient;
 import net.jukoz.me.client.MEModelLoader;
@@ -33,6 +32,8 @@ import java.util.Objects;
 @Environment(EnvType.CLIENT)
 public class ModBuiltInModelItemRenderer {
 
+    private static final SpriteIdentifier BANNER_BASE = new SpriteIdentifier(TexturedRenderLayers.BANNER_PATTERNS_ATLAS_TEXTURE, new Identifier("entity/banner_base"));
+
     private HeaterShieldEntityModel heaterShieldEntityModel;
     private KiteShieldEntityModel kiteShieldEntityModel;
     private RoundShieldEntityModel roundShieldEntityModel;
@@ -43,10 +44,10 @@ public class ModBuiltInModelItemRenderer {
     }
 
     public void render(ItemStack stack, ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        this.heaterShieldEntityModel = new HeaterShieldEntityModel(MinecraftClient.getInstance().getLoadedEntityModels().getModelPart(MiddleEarthClient.HEATER_SHIELD_LAYER));
-        this.kiteShieldEntityModel = new KiteShieldEntityModel(MinecraftClient.getInstance().getLoadedEntityModels().getModelPart(MiddleEarthClient.KITE_SHIELD_LAYER));
-        this.roundShieldEntityModel = new RoundShieldEntityModel(MinecraftClient.getInstance().getLoadedEntityModels().getModelPart(MiddleEarthClient.ROUND_SHIELD_LAYER));
-        this.heldBannerEntityModel = new HeldBannerEntityModel(MinecraftClient.getInstance().getLoadedEntityModels().getModelPart(MiddleEarthClient.HELD_BANNER_LAYER));
+        this.heaterShieldEntityModel = new HeaterShieldEntityModel(MinecraftClient.getInstance().getEntityModelLoader().getModelPart(MiddleEarthClient.HEATER_SHIELD_LAYER));
+        this.kiteShieldEntityModel = new KiteShieldEntityModel(MinecraftClient.getInstance().getEntityModelLoader().getModelPart(MiddleEarthClient.KITE_SHIELD_LAYER));
+        this.roundShieldEntityModel = new RoundShieldEntityModel(MinecraftClient.getInstance().getEntityModelLoader().getModelPart(MiddleEarthClient.ROUND_SHIELD_LAYER));
+        this.heldBannerEntityModel = new HeldBannerEntityModel(MinecraftClient.getInstance().getEntityModelLoader().getModelPart(MiddleEarthClient.HELD_BANNER_LAYER));
 
         if (stack.getItem() instanceof CustomBannerShieldItem) {
             MEBannerPatterns bannerPatternsComponent = MEBannerPatterns.get(stack);
@@ -99,7 +100,7 @@ public class ModBuiltInModelItemRenderer {
             matrices.scale(1.0F, -1.0F, -1.0F);
 
             if (stack.isOf(WeaponItemsME.HELD_BANNER)){
-                SpriteIdentifier spriteIdentifier = ModelBaker.BANNER_BASE;
+                SpriteIdentifier spriteIdentifier = BANNER_BASE;
                 VertexConsumer vertexConsumer = spriteIdentifier.getSprite().getTextureSpecificVertexConsumer(ItemRenderer.getItemGlintConsumer(vertexConsumers, this.heldBannerEntityModel.getLayer(spriteIdentifier.getAtlasId()), true, stack.hasGlint()));
                 this.heldBannerEntityModel.getPole().render(matrices, vertexConsumer, light, overlay);
                 if (bl) {
@@ -114,19 +115,19 @@ public class ModBuiltInModelItemRenderer {
     }
 
     public static void renderCanvas(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, ModelPart canvas, SpriteIdentifier baseSprite, boolean isBanner, DyeColor color, MEBannerPatterns patterns, boolean glint, ItemStack stack, boolean solid) {
-        canvas.render(matrices, baseSprite.getVertexConsumer(vertexConsumers, RenderLayer::getEntitySolid, solid, glint), light, overlay);
+        canvas.render(matrices, baseSprite.getVertexConsumer(vertexConsumers, RenderLayer::getEntitySolid), light, overlay);
         if (stack.isOf(WeaponItemsME.HEATER_SHIELD)){
-            renderLayer(matrices, vertexConsumers, light, overlay, canvas, isBanner ? TexturedRenderLayers.BANNER_BASE : ModTexturedRenderLayers.HEATER_SHIELD_BASE, color);
+            renderLayer(matrices, vertexConsumers, light, overlay, canvas, isBanner ? BANNER_BASE : ModTexturedRenderLayers.HEATER_SHIELD_BASE, color);
         } else if (stack.isOf(WeaponItemsME.KITE_SHIELD)){
-            renderLayer(matrices, vertexConsumers, light, overlay, canvas, isBanner ? TexturedRenderLayers.BANNER_BASE : ModTexturedRenderLayers.KITE_SHIELD_BASE, color);
+            renderLayer(matrices, vertexConsumers, light, overlay, canvas, isBanner ? BANNER_BASE : ModTexturedRenderLayers.KITE_SHIELD_BASE, color);
         }else if (stack.isOf(WeaponItemsME.ROUND_SHIELD)){
-            renderLayer(matrices, vertexConsumers, light, overlay, canvas, isBanner ? TexturedRenderLayers.BANNER_BASE : ModTexturedRenderLayers.ROUND_SHIELD_BASE, color);
+            renderLayer(matrices, vertexConsumers, light, overlay, canvas, isBanner ? BANNER_BASE : ModTexturedRenderLayers.ROUND_SHIELD_BASE, color);
         }else if (stack.isOf(WeaponItemsME.HELD_BANNER)){
-            renderLayer(matrices, vertexConsumers, light, overlay, canvas, TexturedRenderLayers.BANNER_BASE, color);
+            renderLayer(matrices, vertexConsumers, light, overlay, canvas, BANNER_BASE, color);
         }
         for(int i = 0; i < 16 && i < patterns.layers().size(); ++i) {
             MEBannerPatterns.Layer layer = (MEBannerPatterns.Layer)patterns.layers().get(i);
-            SpriteIdentifier spriteIdentifier = isBanner ? TexturedRenderLayers.getBannerPatternTextureId(layer.pattern()) : ModTexturedRenderLayers.getRoundShieldPatternTextureId(layer.pattern());
+            SpriteIdentifier spriteIdentifier = isBanner ? TexturedRenderLayers.getBannerPatternTextureId(layer.pattern().getKey().orElseThrow()) : ModTexturedRenderLayers.getRoundShieldPatternTextureId(layer.pattern());
             if (stack.isOf(WeaponItemsME.HEATER_SHIELD)){
                 spriteIdentifier = ModTexturedRenderLayers.getHeaterShieldPatternTextureId(layer.pattern());
             } else if (stack.isOf(WeaponItemsME.KITE_SHIELD)){
@@ -134,7 +135,7 @@ public class ModBuiltInModelItemRenderer {
             }else if (stack.isOf(WeaponItemsME.ROUND_SHIELD)){
                 spriteIdentifier = ModTexturedRenderLayers.getRoundShieldPatternTextureId(layer.pattern());
             } else if (stack.isOf(WeaponItemsME.HELD_BANNER)){
-                spriteIdentifier = TexturedRenderLayers.getBannerPatternTextureId(layer.pattern());
+                spriteIdentifier = TexturedRenderLayers.getBannerPatternTextureId(layer.pattern().getKey().orElseThrow());
             }
             renderLayer(matrices, vertexConsumers, light, overlay, canvas, spriteIdentifier, layer.color());
         }
@@ -143,7 +144,8 @@ public class ModBuiltInModelItemRenderer {
 
 
     private static void renderLayer(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, ModelPart canvas, SpriteIdentifier textureId, DyeColor color) {
-        int i = color.getEntityColor();
-        canvas.render(matrices, textureId.getVertexConsumer(vertexConsumers, RenderLayer::getEntityNoOutline), light, overlay, i);
+        float[] components = color.getColorComponents();
+        canvas.render(matrices, textureId.getVertexConsumer(vertexConsumers, RenderLayer::getEntityNoOutline), light, overlay,
+                components[0], components[1], components[2], 1.0F);
     }
 }

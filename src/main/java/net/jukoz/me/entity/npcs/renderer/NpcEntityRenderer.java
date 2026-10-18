@@ -23,7 +23,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.consume.UseAction;
+import net.minecraft.util.UseAction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
@@ -60,11 +60,12 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
         this.features.removeIf(x -> x.getClass() == ElytraFeatureRenderer.class);
         this.features.removeIf(x -> x.getClass() == HeadFeatureRenderer.class);
 
-        this.addFeature(new ArmorFeatureRenderer<>(this, new ArmorEntityModel<>(context.getPart(EntityModelLayers.PLAYER_INNER_ARMOR)), new ArmorEntityModel<>(context.getPart(EntityModelLayers.PLAYER_OUTER_ARMOR)), context.getEquipmentRenderer()));
+        this.addFeature(new ArmorFeatureRenderer<NpcEntity, NpcEntityModel>(this, new ArmorEntityModel<>(context.getPart(EntityModelLayers.PLAYER_INNER_ARMOR)), new ArmorEntityModel<>(context.getPart(EntityModelLayers.PLAYER_OUTER_ARMOR))));
         this.addFeature(new HairFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader())));
         this.addFeature(new EarFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader())));
         this.addFeature(new NoseFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader())));
         this.addFeature(new FeetFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader())));
+        this.addFeature(new net.jukoz.me.entity.spider.EnwebbedFeatureRenderer<NpcEntity, NpcEntityModel>(this, new LoadedEntityModelsCompat(context.getModelLoader()), net.jukoz.me.compat.client.render.equipment.EquipmentRenderer.INSTANCE));
 
         characterTextureAtlas = AtlasesME.getAtlasFromPath(ModTexturedRenderLayers.CHARACTER_ATLAS_TEXTURES);
 
@@ -192,7 +193,7 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
         float widthScale = state.widthScale;
 
         matrices.scale(g * widthScale, g, g * widthScale);
-        this.setupTransforms(state, matrices, state.bodyYaw, g);
+        this.setupTransforms(state, matrices, state.bodyYaw, state.tickDelta, g);
         matrices.scale(-widthScale, -1.0f, widthScale);
         this.scale(state, matrices);
         matrices.translate(0.0f, -1.501f, 0.0f);
@@ -207,8 +208,9 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
             renderComplexVersion(matrices, vertexConsumers, light, overlay, state);
         }
 
-        if (this.shouldRenderFeatures(state) && state.LOD < ModClientConfigs.LOD_NPC_ARMOR_DISTANCE) {
-            for (FeatureRenderer<NpcEntityRenderState, NpcEntityModel> feature : this.features) {
+        if (!state.invisible && state.LOD < ModClientConfigs.LOD_NPC_ARMOR_DISTANCE) {
+            NpcEntity featureEntity = (NpcEntity) state.entity;
+            for (FeatureRenderer<NpcEntity, NpcEntityModel> feature : this.features) {
                 if (feature instanceof EarFeatureRenderer)
                     if ((state.simplifiedEarId == null && state.earId == null) || state.LOD > ModClientConfigs.LOD_NPC_FEATURES_DISTANCE)
                         continue;
@@ -222,7 +224,8 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
                 if(feature instanceof FeetFeatureRenderer)
                     if((state.simplifiedFeetId == null && state.feetId == null) || state.LOD > ModClientConfigs.LOD_NPC_FEATURES_DISTANCE)
                         continue;
-                feature.render(matrices, vertexConsumers, light, state, state.relativeHeadYaw, state.pitch);
+                feature.render(matrices, vertexConsumers, light, featureEntity, state.limbSwingAnimationProgress,
+                        state.limbSwingAmplitude, state.tickDelta, state.age, state.relativeHeadYaw, state.relativeHeadPitch);
             }
         }
 
@@ -279,13 +282,6 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
 
     private void renderTexture(MatrixStack matrices, VertexConsumer vertexConsumer, Identifier textureId, int light, int overlay, boolean isEmissive){
         RenderUtil.renderAtlasTexture(characterTextureAtlas, model, matrices, vertexConsumer, textureId, light, overlay);
-    }
-
-    @Override
-    protected int getMixColor(NpcEntityRenderState state) {
-        if(state.hurt)
-            return HURT_COLOR;
-        return super.getMixColor(state);
     }
 
     @Override

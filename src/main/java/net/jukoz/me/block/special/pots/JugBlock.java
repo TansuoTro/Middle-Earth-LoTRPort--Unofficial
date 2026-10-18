@@ -14,7 +14,7 @@ public class JugBlock extends LootablePotBlock {
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return Block.createCuboidShape(3, 0, 3, 13, 16, 13);
     }
 }

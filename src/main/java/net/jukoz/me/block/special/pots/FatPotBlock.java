@@ -14,7 +14,7 @@ public class FatPotBlock extends LootablePotBlock {
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return Block.createCuboidShape(1.5, 0, 1.5, 14.5, 12, 14.5);
     }
 }

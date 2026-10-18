@@ -24,8 +24,8 @@ public class GreatHornRenderer extends MEMAgeableMobEntityRenderer<GreatHornEnti
     public GreatHornRenderer(EntityRendererFactory.Context context) {
         super(context, new GreatHornModel(context.getPart(EntityModelLayersME.GREAT_HORN)),
                 new GreatHornModel(context.getPart(EntityModelLayersME.GREAT_HORN_BABY)), 0.95f);
-        this.addFeature(new GreatHornSaddleFeatureRenderer(this,  new LoadedEntityModelsCompat(context.getModelLoader()), context.getEquipmentRenderer()));
-        this.addFeature(new GreatHornArmorFeatureRenderer(this,  new LoadedEntityModelsCompat(context.getModelLoader()), context.getEquipmentRenderer()));
+        this.addFeature(new GreatHornSaddleFeatureRenderer(this,  new LoadedEntityModelsCompat(context.getModelLoader()), EquipmentRenderer.INSTANCE));
+        this.addFeature(new GreatHornArmorFeatureRenderer(this,  new LoadedEntityModelsCompat(context.getModelLoader()), EquipmentRenderer.INSTANCE));
         this.addFeature(new GreatHornNoseFeatureRenderer(this,  new LoadedEntityModelsCompat(context.getModelLoader())));
     }
 

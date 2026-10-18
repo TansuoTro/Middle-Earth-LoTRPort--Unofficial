@@ -491,6 +491,25 @@ REWRITES = [
     # identifiers match, which keeps NBT .copyFrom(...) calls (whose receiver ends in a
     # parenthesis) untouched.
     ("anim-state-copyfrom", r"([A-Za-z0-9_$.]+)[.]copyFrom[(]([A-Za-z0-9_$.]+)[)]", "MEAnimationStates.copyFrom(\\1, \\2)"),
+    # --- R3 equipment layer: 1.21.x data-driven equipment -> compat direct draw (compat/client/render/equipment) ---
+    ("equipment-renderer-import", r"import net[.]minecraft[.]client[.]render[.]entity[.]equipment[.]EquipmentRenderer;", "import net.jukoz.me.compat.client.render.equipment.EquipmentRenderer;"),
+    ("equipment-model-import", r"import net[.]minecraft[.]client[.]render[.]entity[.]equipment[.]EquipmentModel;", "import net.jukoz.me.compat.client.render.equipment.EquipmentModel;"),
+    ("saddle-feature-import", r"import net[.]minecraft[.]client[.]render[.]entity[.]feature[.]SaddleFeatureRenderer;", "import net.jukoz.me.compat.client.render.equipment.SaddleFeatureRenderer;"),
+    ("npc-armor-3arg", r"new ArmorEntityModel<[(]context[.]getPart[(]EntityModelLayers[.]PLAYER_OUTER_ARMOR[)][)], context[.]getEquipmentRenderer[()]", "new ArmorEntityModel<>(context.getPart(EntityModelLayers.PLAYER_OUTER_ARMOR))"),
+    ("equipment-renderer-ctx", r"context[.]getEquipmentRenderer[(][)]", "EquipmentRenderer.INSTANCE"),
+    ("equippable-assetid-empty", r"!equippableComponent[.]assetId[(][)][.]isEmpty[(][)]", "!equippableComponent.getPath().isEmpty()"),
+    ("equippable-assetid-arg", r"[(]RegistryKey[)]equippableComponent[.]assetId[(][)][.]get[(][)]", "equippableComponent"),
+    ("equippable-assetid-path", r"equippableComponent[.]assetId[(][)][.]get[(][)][.]getValue[(][)][.]getPath[(][)]", "equippableComponent.getPath()"),
+    ("useaction-import", r"import net[.]minecraft[.]item[.]consume[.]UseAction;", "import net.minecraft.util.UseAction;"),
+    # --- R3 block API drift: 1.21.2+ block codec/Falling/MatchException -> 1.20.1 ---
+    ("block-falling-iface", r"implements Falling, Waterloggable", "implements Waterloggable"),
+    ("block-codec-line", r"    public static final MapCodec<[A-Za-z0-9_]+> CODEC = createCodec[(][A-Za-z0-9_]+::new[)];[ ]*\n", ""),
+    ("block-model-offset", r"[.]getModelOffset[(]([A-Za-z0-9_]+)[)]", ".getModelOffset(world, \\1)"),
+    ("block-match-exception", r"throw new MatchException[(][^;]*[)];", "throw new IllegalStateException();"),
+    ("block-fall-damage-cast", r"[.]handleFallDamage[(]fallDistance \+ 2[.]5,", ".handleFallDamage((float)(fallDistance + 2.5),"),
+    # --- R3 misc 1.21 helpers ---
+    ("colorhelper-white", r"ColorHelper[.]getWhite[(]", "net.jukoz.me.compat.MEColors.getWhite("),
+    ("settings-useremainder", r"[.]useRemainder[(]", ".recipeRemainder("),
 ]
 
 # 1.21 wraps block/item ids in a RegistryKey; 1.20.1 registers by Identifier.

@@ -26,7 +26,7 @@ public class CrateBlock extends BarrelBlock {
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return switch (state.get(FACING)) {
             case DOWN, UP, NORTH, SOUTH -> Block.createCuboidShape(0, 0, 3, 16, 7, 13);
             case WEST,EAST -> Block.createCuboidShape(3, 0, 0, 13, 7, 16);

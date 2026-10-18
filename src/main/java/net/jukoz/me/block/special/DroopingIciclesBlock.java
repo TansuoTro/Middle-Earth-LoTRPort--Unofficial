@@ -25,7 +25,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 
 public class DroopingIciclesBlock extends Block {
-    public static final MapCodec<DroopingIciclesBlock> CODEC = createCodec(DroopingIciclesBlock::new);
     protected static final VoxelShape SHAPE = Block.createCuboidShape(2.0, 10.0, 2.0, 14.0, 16.0, 14.0);
     public static final EnumProperty<DoubleBlockHalf> HALF = Properties.DOUBLE_BLOCK_HALF;
 
@@ -41,14 +40,14 @@ public class DroopingIciclesBlock extends Block {
         builder.add(HALF);
     }
 
-    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         BlockPos blockPos = pos.up();
         BlockState blockState = world.getBlockState(blockPos);
         return blockState.isSideSolidFullSquare(world, blockPos, Direction.DOWN) || blockState.isOf(this);
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         DoubleBlockHalf doubleBlockHalf = state.get(HALF);
         BlockState upState = world.getBlockState(pos.up());
 
@@ -71,7 +70,7 @@ public class DroopingIciclesBlock extends Block {
         }
     }
 
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         if (state.get(HALF) == DoubleBlockHalf.UPPER){
             return super.getOutlineShape(state, world, pos, context);
         } else  {
@@ -79,7 +78,7 @@ public class DroopingIciclesBlock extends Block {
         }
     }
 
-    protected void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
+    public void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
         if (!world.isClient) {
             BlockPos blockPos = hit.getBlockPos();
             if (world instanceof ServerWorld) {

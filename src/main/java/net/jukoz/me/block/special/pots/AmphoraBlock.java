@@ -14,7 +14,7 @@ public class AmphoraBlock extends LootablePotBlock {
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return Block.createCuboidShape(5, 0, 5, 11, 16, 11);
     }
 }

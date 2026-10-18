@@ -1,6 +1,5 @@
 package net.jukoz.me.block.special;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
 import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,7 +26,6 @@ import net.minecraft.world.WorldView;
 import net.minecraft.world.event.GameEvent;
 
 public class LayeredCakeBlock extends Block {
-    public static final MapCodec<net.minecraft.block.CakeBlock> CODEC = createCodec(net.minecraft.block.CakeBlock::new);
     public static final int MAX_BITES = 8;
     public static final IntProperty BITES;
     public static final int DEFAULT_COMPARATOR_OUTPUT;
@@ -40,7 +38,7 @@ public class LayeredCakeBlock extends Block {
         this.setDefaultState((this.stateManager.getDefaultState()));
     }
 
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return SHAPES_BY_BITES[state.get(BITES)];
     }
 
@@ -62,7 +60,7 @@ public class LayeredCakeBlock extends Block {
         return ActionResult.PASS;
     }
 
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.isClient) {
             if (tryEat(world, pos, state, player).isAccepted()) {
                 return ActionResult.SUCCESS;
@@ -95,11 +93,11 @@ public class LayeredCakeBlock extends Block {
         }
     }
 
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         return direction == Direction.DOWN && !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
-    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         return world.getBlockState(pos.down()).isSolid();
     }
 
@@ -107,7 +105,7 @@ public class LayeredCakeBlock extends Block {
         builder.add(BITES);
     }
 
-    protected int getComparatorOutput(BlockState state, World world, BlockPos pos) {
+    public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
         return getComparatorOutput(state.get(BITES));
     }
 
@@ -115,7 +113,7 @@ public class LayeredCakeBlock extends Block {
         return (MAX_BITES - bites) * 2;
     }
 
-    protected boolean hasComparatorOutput(BlockState state) {
+    public boolean hasComparatorOutput(BlockState state) {
         return true;
     }
 

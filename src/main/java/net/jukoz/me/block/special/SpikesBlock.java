@@ -27,7 +27,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 
 public class SpikesBlock extends Block {
-    public static final MapCodec<SpikesBlock> CODEC = createCodec(SpikesBlock::new);
     public static final EnumProperty<DoubleBlockHalf> HALF = Properties.DOUBLE_BLOCK_HALF;
 
     public SpikesBlock(Settings settings) {
@@ -41,14 +40,14 @@ public class SpikesBlock extends Block {
         builder.add(HALF);
     }
 
-    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         BlockPos blockPos = pos.down();
         BlockState blockState = world.getBlockState(blockPos);
         return blockState.isSideSolidFullSquare(world, blockPos, Direction.UP) || blockState.isOf(this);
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         DoubleBlockHalf doubleBlockHalf = state.get(HALF);
         BlockState downState = world.getBlockState(pos.down());
 
@@ -71,7 +70,7 @@ public class SpikesBlock extends Block {
         }
     }
 
-    protected void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
+    public void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
         if (!world.isClient) {
             BlockPos blockPos = hit.getBlockPos();
             if (world instanceof ServerWorld) {
@@ -84,6 +83,6 @@ public class SpikesBlock extends Block {
     }
 
     public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, double fallDistance) {
-        entity.handleFallDamage(fallDistance + 2.5, 2.0F, world.getDamageSources().fall());
+        entity.handleFallDamage((float)(fallDistance + 2.5), 2.0F, world.getDamageSources().fall());
     }
 }

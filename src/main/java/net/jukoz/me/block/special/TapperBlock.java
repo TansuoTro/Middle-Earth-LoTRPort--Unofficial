@@ -43,7 +43,7 @@ public class TapperBlock extends HorizontalFacingBlock {
                 .with(FACING, Direction.NORTH));
     }
 
-    protected int getComparatorOutput(BlockState state, World world, BlockPos pos) {
+    public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
         return state.get(TAP_LEVEL);
     }
 
@@ -54,13 +54,13 @@ public class TapperBlock extends HorizontalFacingBlock {
         return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
     }
 
-    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         BlockState behindBlock = world.getBlockState(pos.offset(state.get(FACING).getOpposite()));
         return behindBlock.isIn(BlockTags.LOGS);
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return switch (state.get(FACING)) {
             case SOUTH -> Block.createCuboidShape(4.0, 0.0, 0.0, 12.0, 10.0, 8.0);
             default -> Block.createCuboidShape(4.0, 0.0, 8.0, 12.0, 10.0, 16.0);
@@ -126,7 +126,7 @@ public class TapperBlock extends HorizontalFacingBlock {
         }
     }
 
-    protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         int rand = world.random.nextInt(RANDOM_TICK_CHANCE);
         if (rand == 0) {
             int i = state.get(TAP_LEVEL);
@@ -151,7 +151,7 @@ public class TapperBlock extends HorizontalFacingBlock {
     }
 
     @Override
-    protected BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
     }
 }

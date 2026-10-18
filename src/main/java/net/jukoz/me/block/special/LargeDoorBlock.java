@@ -1,6 +1,5 @@
 package net.jukoz.me.block.special;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.util.Hand;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -45,8 +44,6 @@ public class LargeDoorBlock extends Block {
     public static final BooleanProperty OPEN = Properties.OPEN;
     public static final EnumProperty<DoorHinge> HINGE = Properties.DOOR_HINGE;
 
-    public static final MapCodec<LargeDoorBlock> CODEC = LargeDoorBlock.createCodec(LargeDoorBlock::new);
-
     protected int doorHeight;
     protected int doorWidth;
 
@@ -65,7 +62,7 @@ public class LargeDoorBlock extends Block {
     }
 
     //TODO improve this door to door invisibility
-    protected boolean isSideInvisible(BlockState state, BlockState stateFrom, Direction direction) {
+    public boolean isSideInvisible(BlockState state, BlockState stateFrom, Direction direction) {
         return stateFrom.isOf(this) || super.isSideInvisible(state, stateFrom, direction);
     }
 
@@ -199,7 +196,7 @@ public class LargeDoorBlock extends Block {
     }
 
     @Override
-    protected void onExploded(BlockState state, ServerWorld world, BlockPos pos, Explosion explosion, BiConsumer<ItemStack, BlockPos> stackMerger) {
+    public void onExploded(BlockState state, ServerWorld world, BlockPos pos, Explosion explosion, BiConsumer<ItemStack, BlockPos> stackMerger) {
         BlockPos blockPos = getOrigin(pos, state);
         BlockPos blockPos1 = blockPos;
 
@@ -248,7 +245,7 @@ public class LargeDoorBlock extends Block {
     }
 
     //Door opening
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         BlockPos blockPos = getOrigin(pos, state);
         BlockPos blockPos1 = blockPos;
 
@@ -313,11 +310,11 @@ public class LargeDoorBlock extends Block {
         return (Boolean)state.get(OPEN);
     }
 
-    protected BlockState rotate(BlockState state, BlockRotation rotation) {
+    public BlockState rotate(BlockState state, BlockRotation rotation) {
         return (BlockState)state.with(HORIZONTAL_FACING, rotation.rotate((Direction)state.get(HORIZONTAL_FACING)));
     }
 
-    protected BlockState mirror(BlockState state, BlockMirror mirror) {
+    public BlockState mirror(BlockState state, BlockMirror mirror) {
         return mirror == BlockMirror.NONE ? state : (BlockState)state.rotate(mirror.getRotation((Direction)state.get(HORIZONTAL_FACING)));
     }
 
@@ -337,11 +334,11 @@ public class LargeDoorBlock extends Block {
         return switch (type) {
             case LAND, AIR -> (Boolean) state.get(OPEN);
             case WATER -> false;
-            default -> throw new MatchException((String) null, (Throwable) null);
+            default -> throw new IllegalStateException();
         };
     }
 
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         Direction direction = (Direction) state.get(HORIZONTAL_FACING);
         VoxelShape var10000 = null;
         if (state.get(HINGE) == DoorHinge.LEFT) {

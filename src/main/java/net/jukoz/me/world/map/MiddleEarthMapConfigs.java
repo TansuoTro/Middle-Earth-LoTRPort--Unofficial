@@ -26,6 +26,12 @@ public class MiddleEarthMapConfigs {
      * 7 : 384 000 (1,536,000);
      */
     public static final int MAP_ITERATION = 3;
+    /**
+     * World diameter in blocks for the current MAP_ITERATION (the donor snapshot never
+     * defined this constant; derived from the iteration table above:
+     * 3000 px * 2^iteration * 4 blocks/px).
+     */
+    public static final int FULL_MAP_SIZE = REGION_SIZE * PIXEL_WEIGHT * (1 << MAP_ITERATION);
     public static final int BIOME_VALIDATION_TICK_DELAY = 1000;
     public static final int BIOME_VALIDATION_BLOCK_DELAY = 5000;
     public final static int BIOME_VALIDATION_DIST_CHECK = 2000;

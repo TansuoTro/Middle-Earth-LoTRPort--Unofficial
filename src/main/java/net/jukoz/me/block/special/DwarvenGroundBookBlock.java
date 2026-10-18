@@ -33,7 +33,7 @@ public class DwarvenGroundBookBlock extends Block {
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if(!world.isClient && player.getAbilities().allowModifyWorld){
             world.setBlockState(pos, state.cycle(OPEN), 2 | 3);
         }
@@ -71,7 +71,7 @@ public class DwarvenGroundBookBlock extends Block {
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         if(state.get(OPEN)){
             return switch(state.get(Properties.HORIZONTAL_FACING)) {
                 case WEST, EAST -> Block.createCuboidShape(2, 0, 0, 14, 5, 16);

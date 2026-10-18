@@ -2,7 +2,7 @@ package net.jukoz.me.item.dataComponents;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.netty.buffer.ByteBuf;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.jukoz.me.compat.TooltipAppender;
@@ -21,12 +21,12 @@ public record WeaponTypeDataComponent(String type) implements TooltipAppender {
         return instance.group(Codec.STRING.fieldOf("type").forGetter(WeaponTypeDataComponent::type))
                 .apply(instance, WeaponTypeDataComponent::new);
     });
-    public static final Codec<WeaponTypeDataComponent> CODEC  = Codec.withAlternative(BASE_CODEC, Codec.STRING, WeaponTypeDataComponent::new);
-    public static final PacketCodec<ByteBuf, WeaponTypeDataComponent> PACKET_CODEC  = PacketCodec.tuple(PacketCodecs.STRING, WeaponTypeDataComponent::type, WeaponTypeDataComponent::new);
+    public static final Codec<WeaponTypeDataComponent> CODEC  = ComponentCodecs.alternative(BASE_CODEC, Codec.STRING, WeaponTypeDataComponent::new);
+    public static final PacketCodec<PacketByteBuf, WeaponTypeDataComponent> PACKET_CODEC  = PacketCodec.tuple(PacketCodecs.STRING, WeaponTypeDataComponent::type, WeaponTypeDataComponent::new);
     ;
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip) {
+    public void appendTooltip(ItemStack stack, net.minecraft.client.item.TooltipContext context, List<Text> tooltip) {
         tooltip.add(Text.translatable("tooltip.%s.type".formatted(MiddleEarth.MOD_ID)).formatted(Formatting.GOLD)
                 .append(Text.translatable("tooltip.%s.%s".formatted(MiddleEarth.MOD_ID, this.type)).formatted(Formatting.WHITE)));
     }

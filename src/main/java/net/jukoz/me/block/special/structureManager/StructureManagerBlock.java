@@ -69,7 +69,7 @@ public class StructureManagerBlock extends BlockWithEntity implements BlockEntit
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return switch (state.get(FACING)){
             case DOWN, UP -> null;
             case NORTH -> Block.createCuboidShape(0, 0, 2, 16, 16, 16);
@@ -80,7 +80,7 @@ public class StructureManagerBlock extends BlockWithEntity implements BlockEntit
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.isClient) {
             return ActionResult.SUCCESS;
         } else if(player.isCreative() && player.isCreativeLevelTwoOp()) {
@@ -102,17 +102,17 @@ public class StructureManagerBlock extends BlockWithEntity implements BlockEntit
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return validateTicker(world, type, ModBlockEntities.STRUCTURE_MANAGER);
+        return checkType(world, type, ModBlockEntities.STRUCTURE_MANAGER);
     }
 
     @Nullable
-    protected static <T extends BlockEntity> BlockEntityTicker<T> validateTicker(World world, BlockEntityType<T> givenType, BlockEntityType<StructureManagerBlockEntity> expectedType) {
+    protected static <T extends BlockEntity> BlockEntityTicker<T> checkType(World world, BlockEntityType<T> givenType, BlockEntityType<StructureManagerBlockEntity> expectedType) {
         BlockEntityTicker ticker;
         if (world.isClient) {
             return null;
         }
 
-        ticker = validateTicker(givenType, expectedType, (worldx, pos, state, blockEntity) -> {
+        ticker = checkType(givenType, expectedType, (worldx, pos, state, blockEntity) -> {
             StructureManagerBlockEntity.tickEvent(world, pos, state, blockEntity);
         });
 

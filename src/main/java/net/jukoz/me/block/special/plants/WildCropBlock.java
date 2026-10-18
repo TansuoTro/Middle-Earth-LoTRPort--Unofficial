@@ -1,6 +1,5 @@
 package net.jukoz.me.block.special.plants;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Fertilizable;
@@ -15,7 +14,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 
 public class WildCropBlock extends CustomPlantBlock implements Fertilizable {
-    public static final MapCodec<WildCropBlock> CODEC = WildCropBlock.createCodec(WildCropBlock::new);
     protected static final VoxelShape SHAPE = Block.createCuboidShape(2.0, 0.0, 2.0, 14.0, 13.0, 14.0);
 
     public WildCropBlock(Settings settings) {

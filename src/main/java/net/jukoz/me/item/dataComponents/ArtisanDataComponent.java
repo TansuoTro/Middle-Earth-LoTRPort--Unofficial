@@ -3,7 +3,7 @@ package net.jukoz.me.item.dataComponents;
 import com.mojang.authlib.GameProfile;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.netty.buffer.ByteBuf;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.block.entity.SkullBlockEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -29,26 +29,24 @@ public record ArtisanDataComponent(UUID uuid) implements TooltipAppender {
         return instance.group(Uuids.CODEC.fieldOf("uuid").forGetter(ArtisanDataComponent::uuid))
                 .apply(instance, ArtisanDataComponent::new);
     });
-    public static final Codec<ArtisanDataComponent> CODEC = Codec.withAlternative(BASE_CODEC, Uuids.CODEC, ArtisanDataComponent::new);
+    public static final Codec<ArtisanDataComponent> CODEC = ComponentCodecs.alternative(BASE_CODEC, Uuids.CODEC, ArtisanDataComponent::new);
 
-    public static final PacketCodec<ByteBuf, ArtisanDataComponent> PACKET_CODEC  = PacketCodec.tuple(Uuids.PACKET_CODEC, ArtisanDataComponent::uuid,
+    public static final PacketCodec<PacketByteBuf, ArtisanDataComponent> PACKET_CODEC  = PacketCodec.tuple(ComponentCodecs.UUID_CODEC, ArtisanDataComponent::uuid,
             ArtisanDataComponent::new);
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip) {
-        CompletableFuture<Optional<GameProfile>> profile = SkullBlockEntity.fetchProfileByUuid(uuid);
-        try {
-            if (profile.get().isPresent()){
-                try {
-                    tooltip.add(Text.translatable("tooltip.%s.artisan".formatted(MiddleEarth.MOD_ID)).append(
-                            profile.get().get().getName()).formatted(Formatting.GRAY));
-                } catch (InterruptedException | ExecutionException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
+    public void appendTooltip(ItemStack stack, net.minecraft.client.item.TooltipContext context, List<Text> tooltip) {
+        // 1.21 could resolve the artisan's profile asynchronously from the UUID; 1.20.1 has no
+        // such lookup, so use the name the client already knows and fall back to the uuid.
+        net.minecraft.client.network.PlayerListEntry entry = null;
+        net.minecraft.client.network.ClientPlayNetworkHandler handler =
+                net.minecraft.client.MinecraftClient.getInstance().getNetworkHandler();
+        if (handler != null) {
+            entry = handler.getPlayerListEntry(uuid);
         }
+        String name = entry != null ? entry.getProfile().getName() : uuid.toString().substring(0, 8);
+        tooltip.add(Text.translatable("tooltip.%s.artisan".formatted(MiddleEarth.MOD_ID)).append(name)
+                .formatted(Formatting.GRAY));
     }
 
     @Override

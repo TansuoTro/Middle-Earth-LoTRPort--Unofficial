@@ -81,13 +81,13 @@ public class CandleStickBlock extends Block {
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         return attachedDirection(state).getOpposite() == direction && !state.canPlaceAt(world, pos) ?
                 Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
     @Override
-    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         if(state.get(ATTACHED)) {
             return Block.sideCoversSmallSquare(world, pos.offset(state.get(HORIZONTAL_FACING).getOpposite()), state.get(HORIZONTAL_FACING));
         } else return Block.sideCoversSmallSquare(world, pos.down(), Direction.UP);
@@ -99,8 +99,13 @@ public class CandleStickBlock extends Block {
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        Hand hand = player.getActiveHand();
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        ItemStack heldStack = player.getStackInHand(hand);
+        if (heldStack.getItem() == this.asItem() && state.get(CANDLES) < 4) {
+            if (!player.isCreative()) heldStack.decrement(1);
+            world.setBlockState(pos, state.cycle(CANDLES));
+            return ActionResult.CONSUME;
+        }
         if (!world.isClient && player.getAbilities().allowModifyWorld) {
             ItemStack itemStack = player.getStackInHand(hand);
             if(player.isCreative() && itemStack == ItemStack.EMPTY){
@@ -116,21 +121,10 @@ public class CandleStickBlock extends Block {
         return ActionResult.SUCCESS;
     }
 
-    @Override
-    protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        ItemStack itemStack = player.getStackInHand(hand);
-        if(itemStack.getItem() == this.asItem() && state.get(CANDLES) < 4) {
-            stack.decrementUnlessCreative(1, player);
-            world.setBlockState(pos, state.cycle(CANDLES));
-            return ActionResult.CONSUME;
-        }
-        return super.onUseWithItem(stack, state, world, pos, player, hand, hit);
-    }
-
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
         if (state.get(LIT)) {
             this.getParticleOffsets(state).forEach((offset) -> {
-                int quarter = state.get(HORIZONTAL_FACING).getHorizontalQuarterTurns();
+                int quarter = state.get(HORIZONTAL_FACING).getHorizontal();
                 Vec3d rotatedOffset = offset.add(-0.5, -0.5, -0.5).rotateY(quarter * -90 * ((float)Math.PI / 180)).add(0.5, 0.5, 0.5);
                 spawnCandleParticles(world, rotatedOffset.add(pos.getX(), pos.getY(), pos.getZ()), random);
             });
@@ -142,7 +136,7 @@ public class CandleStickBlock extends Block {
         if (f < 0.3F) {
             world.addParticle(ParticleTypes.SMOKE, vec3d.x, vec3d.y, vec3d.z, 0.0, 0.0, 0.0);
             if (f < 0.17F) {
-                world.playSoundClient(vec3d.x + 0.5, vec3d.y + 0.5, vec3d.z + 0.5, SoundEvents.BLOCK_CANDLE_AMBIENT, SoundCategory.BLOCKS, 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
+                world.playSound(vec3d.x + 0.5, vec3d.y + 0.5, vec3d.z + 0.5, SoundEvents.BLOCK_CANDLE_AMBIENT, SoundCategory.BLOCKS, 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F);
             }
         }
 

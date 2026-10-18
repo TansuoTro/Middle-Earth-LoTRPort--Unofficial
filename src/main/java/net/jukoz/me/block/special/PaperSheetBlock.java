@@ -47,12 +47,12 @@ public class PaperSheetBlock extends Block {
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return SHAPES_BY_PAPERS[state.get(PAPERS) - 1];
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.isClient) {
             return ActionResult.SUCCESS;
         }  else {
@@ -75,7 +75,7 @@ public class PaperSheetBlock extends Block {
     }
 
     @Override
-    protected boolean canReplace(BlockState state, ItemPlacementContext context) {
+    public boolean canReplace(BlockState state, ItemPlacementContext context) {
         boolean bl1 = !context.shouldCancelInteraction();
         boolean bl2 = context.getStack().getItem() == this.asItem();
         boolean bl3 = state.get(PAPERS) <= MAX_PAPERS;
@@ -91,7 +91,7 @@ public class PaperSheetBlock extends Block {
         }
     }
 
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         return direction == Direction.DOWN && !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() :
                 super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }

@@ -14,7 +14,7 @@ public class JarBlock extends LootablePotBlock {
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return Block.createCuboidShape(4.5, 0, 4.5, 11.5, 10, 11.5);
     }
 }

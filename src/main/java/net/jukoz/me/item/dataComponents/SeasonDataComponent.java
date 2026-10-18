@@ -24,22 +24,18 @@ public record SeasonDataComponent(Season season) implements TooltipAppender {
         return instance.group(Season.CODEC.fieldOf("season").forGetter(SeasonDataComponent::season))
                 .apply(instance, SeasonDataComponent::new);
     });
-    public static final Codec<SeasonDataComponent> CODEC = Codec.withAlternative(BASE_CODEC, Season.CODEC, SeasonDataComponent::new);
+    public static final Codec<SeasonDataComponent> CODEC = ComponentCodecs.alternative(BASE_CODEC, Season.CODEC, SeasonDataComponent::new);
 
     public static final PacketCodec<PacketByteBuf, SeasonDataComponent> PACKET_CODEC =
             PacketCodec.tuple(Season.PACKET_CODEC, SeasonDataComponent::season, SeasonDataComponent::new);
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip) {
-        try{
-            Identifier identifier = context.getRegistryLookup().getOrThrow(RegistryKeys.BIOME).getKey().getRegistry();
-            tooltip.add(Text.translatable("tooltip.%s.season".formatted(MiddleEarth.MOD_ID)).formatted(Formatting.GOLD)
-                    .append(Text.translatable("season.%s.".formatted(MiddleEarth.MOD_ID) + season.toString()).formatted(Formatting.WHITE)));
-
-        } catch (Exception e){
-            tooltip.add(METext.withColor(Text.translatable(FactionIdentifierException.KEY, this.season),
-                    ModColors.ALERT.color));
-        }
+    public void appendTooltip(ItemStack stack, net.minecraft.client.item.TooltipContext context, List<Text> tooltip) {
+        // 1.21 read the biome registry out of the tooltip context just to fail when no world
+        // was attached; 1.20.1's TooltipContext has no registry lookup and the season is a
+        // plain enum, so the line is always available.
+        tooltip.add(Text.translatable("tooltip.%s.season".formatted(MiddleEarth.MOD_ID)).formatted(Formatting.GOLD)
+                .append(Text.translatable("season.%s.".formatted(MiddleEarth.MOD_ID) + season.toString()).formatted(Formatting.WHITE)));
     }
 
     public Season season() {

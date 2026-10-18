@@ -33,7 +33,7 @@ public class BeechCofferBlock extends ChestBlock {
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         if(state.get(FACING) == Direction.NORTH) {
             return Block.createCuboidShape(2.0, 0.0, 2.0, 14.0, 8.0, 10.0);
         } else if(state.get(FACING) == Direction.SOUTH) {

@@ -1,8 +1,6 @@
 package net.jukoz.me.block.special;
 
 import com.google.common.collect.Maps;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.*;
 import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -31,11 +29,6 @@ import java.util.List;
 import java.util.Map;
 
 public class CandleLayeredCakeBlock extends AbstractCandleBlock {
-    public static final MapCodec<CandleLayeredCakeBlock> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
-        return instance.group(Registries.BLOCK.getCodec().fieldOf("candle").forGetter((block) -> {
-            return block.candle;
-        }), createSettingsCodec()).apply(instance, CandleLayeredCakeBlock::new);
-    });
     public static final BooleanProperty LIT;
     private static final VoxelShape SHAPE;
     private static final Map<CandleBlock, CandleLayeredCakeBlock> CANDLES_TO_CANDLE_CAKES;
@@ -60,7 +53,7 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
         return PARTICLE_OFFSETS;
     }
 
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return SHAPE;
     }
 
@@ -85,7 +78,7 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
         world.setBlockState(pos, state.with(LIT, lit), 11);
     }
 
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         ActionResult actionResult = LayeredCakeBlock.tryEat(world, pos, ModBlocks.LAYERED_CAKE.getDefaultState(), player);
         if (actionResult.isAccepted()) {
             dropStacks(state, world, pos);
@@ -102,23 +95,23 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
         builder.add(new Property[]{LIT});
     }
 
-    protected ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state, boolean includeData) {
+    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state, boolean includeData) {
         return new ItemStack(ModBlocks.LAYERED_CAKE);
     }
 
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         return direction == Direction.DOWN && !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
-    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         return world.getBlockState(pos.down()).isSolid();
     }
 
-    protected int getComparatorOutput(BlockState state, World world, BlockPos pos) {
+    public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
         return CakeBlock.DEFAULT_COMPARATOR_OUTPUT;
     }
 
-    protected boolean hasComparatorOutput(BlockState state) {
+    public boolean hasComparatorOutput(BlockState state) {
         return true;
     }
 

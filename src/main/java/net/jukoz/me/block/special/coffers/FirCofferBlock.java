@@ -33,7 +33,7 @@ public class FirCofferBlock extends ChestBlock {
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         if(state.get(FACING) == Direction.NORTH || state.get(FACING) == Direction.SOUTH) {
             return Block.createCuboidShape(3.0, 0.0, 4.0, 13.0, 8.0, 12.0);
         } else {

@@ -38,6 +38,6 @@ public final class RenderUtil {
     }
 
     public static void renderModel(EntityModel<?> model, MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay) {
-        model.render(matrices, vertexConsumer, light, overlay);
+        model.render(matrices, vertexConsumer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

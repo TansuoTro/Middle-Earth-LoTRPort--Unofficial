@@ -54,13 +54,13 @@ public class CeramicLampBlock extends CandleHolderBlock {
     }
 
     @Override
-    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         return Block.sideCoversSmallSquare(world, pos.down(), Direction.UP);
     }
 
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
         if (state.get(LIT)) {
-            int quarter = state.get(HORIZONTAL_FACING).getHorizontalQuarterTurns();
+            int quarter = state.get(HORIZONTAL_FACING).getHorizontal();
             Vec3d rotatedOffset = PARTICLE_OFFSET.add(-0.5, -0.5, -0.5).rotateY(quarter * -90 * ((float)Math.PI / 180)).add(0.5, 0.5, 0.5);
             spawnCandleParticles(world, rotatedOffset.add(pos.getX(), pos.getY(), pos.getZ()), random);
         }

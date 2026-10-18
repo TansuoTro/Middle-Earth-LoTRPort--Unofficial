@@ -48,21 +48,21 @@ public class ModTexturedRenderLayers extends TexturedRenderLayers {
     }
 
     public static SpriteIdentifier getHeaterShieldPatternTextureId(RegistryEntry<BannerPattern> pattern) {
-        return HEATER_SHIELD_PATTERN_TEXTURES.computeIfAbsent((pattern.value()).assetId(), (id) -> {
+        return HEATER_SHIELD_PATTERN_TEXTURES.computeIfAbsent(pattern.getKey().orElseThrow().getValue(), (id) -> {
             Identifier identifier = id.withPrefixedPath("entity/heater_shield/");
             return new SpriteIdentifier(SHIELD_PATTERNS_ATLAS_TEXTURE, identifier);
         });
     }
 
     public static SpriteIdentifier getKiteShieldPatternTextureId(RegistryEntry<BannerPattern> pattern) {
-        return KITE_SHIELD_PATTERN_TEXTURES.computeIfAbsent((pattern.value()).assetId(), (id) -> {
+        return KITE_SHIELD_PATTERN_TEXTURES.computeIfAbsent(pattern.getKey().orElseThrow().getValue(), (id) -> {
             Identifier identifier = id.withPrefixedPath("entity/kite_shield/");
             return new SpriteIdentifier(SHIELD_PATTERNS_ATLAS_TEXTURE, identifier);
         });
     }
 
     public static SpriteIdentifier getRoundShieldPatternTextureId(RegistryEntry<BannerPattern> pattern) {
-        return ROUND_SHIELD_PATTERN_TEXTURES.computeIfAbsent((pattern.value()).assetId(), (id) -> {
+        return ROUND_SHIELD_PATTERN_TEXTURES.computeIfAbsent(pattern.getKey().orElseThrow().getValue(), (id) -> {
             Identifier identifier = id.withPrefixedPath("entity/round_shield/");
             return new SpriteIdentifier(SHIELD_PATTERNS_ATLAS_TEXTURE, identifier);
         });

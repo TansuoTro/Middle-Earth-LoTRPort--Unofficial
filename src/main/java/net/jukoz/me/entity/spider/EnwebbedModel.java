@@ -2,9 +2,10 @@ package net.jukoz.me.entity.spider;
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.EntityModel;
-import net.jukoz.me.compat.client.render.state.BipedEntityRenderState;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 
-public class EnwebbedModel extends EntityModel<BipedEntityRenderState> {
+public class EnwebbedModel extends EntityModel<LivingEntity> {
     private final ModelPart bigBody;
     private final ModelPart smallBody;
 
@@ -13,6 +14,7 @@ public class EnwebbedModel extends EntityModel<BipedEntityRenderState> {
         this.bigBody = root.getChild("big_body");
         this.smallBody = root.getChild("small_body");
     }
+
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = new ModelData();
         ModelPartData dataRoot = modelData.getRoot();
@@ -26,10 +28,10 @@ public class EnwebbedModel extends EntityModel<BipedEntityRenderState> {
     }
 
     @Override
-    public void setAngles(BipedEntityRenderState state) {
-         boolean hasChestplate = !state.equippedChestStack.isEmpty();
-        bigBody.hidden = !hasChestplate;
-        smallBody.hidden = hasChestplate;
-        super.setAngles(state);
+    public void setAngles(LivingEntity entity, float limbAngle, float limbDistance,
+                          float animationProgress, float headYaw, float headPitch) {
+        boolean hasChestplate = !entity.getEquippedStack(EquipmentSlot.CHEST).isEmpty();
+        this.bigBody.hidden = !hasChestplate;
+        this.smallBody.hidden = hasChestplate;
     }
 }

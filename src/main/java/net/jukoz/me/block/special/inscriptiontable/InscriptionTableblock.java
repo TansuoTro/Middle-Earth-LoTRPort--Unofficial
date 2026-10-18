@@ -37,11 +37,11 @@ public class InscriptionTableblock extends HorizontalFacingBlock {
         builder.add(FACING);
     }
 
-    protected BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
     }
 
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient) {
             player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
         }
@@ -50,7 +50,7 @@ public class InscriptionTableblock extends HorizontalFacingBlock {
     }
 
     @Nullable
-    protected NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
+    public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
         return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> {
             return new InscriptionTableScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos));
         }, TITLE);

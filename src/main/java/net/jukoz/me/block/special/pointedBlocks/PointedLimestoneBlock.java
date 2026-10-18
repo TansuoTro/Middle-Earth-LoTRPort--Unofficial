@@ -41,8 +41,7 @@ import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-public class PointedLimestoneBlock extends Block implements Falling, Waterloggable {
-    public static final MapCodec<PointedLimestoneBlock> CODEC = createCodec(PointedLimestoneBlock::new);
+public class PointedLimestoneBlock extends Block implements Waterloggable {
     public static final EnumProperty<Direction> VERTICAL_DIRECTION;
     public static final EnumProperty<Thickness> THICKNESS;
     public static final BooleanProperty WATERLOGGED;
@@ -67,11 +66,11 @@ public class PointedLimestoneBlock extends Block implements Falling, Waterloggab
         builder.add(new Property[]{VERTICAL_DIRECTION, THICKNESS, WATERLOGGED});
     }
 
-    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         return canPlaceAtWithDirection(world, pos, (Direction)state.get(VERTICAL_DIRECTION));
     }
 
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         if ((Boolean)state.get(WATERLOGGED)) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
@@ -98,7 +97,7 @@ public class PointedLimestoneBlock extends Block implements Falling, Waterloggab
         }
     }
 
-    protected void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
+    public void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
         if (!world.isClient) {
             BlockPos blockPos = hit.getBlockPos();
             if (world instanceof ServerWorld) {
@@ -113,7 +112,7 @@ public class PointedLimestoneBlock extends Block implements Falling, Waterloggab
 
     public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, double fallDistance) {
         if (state.get(VERTICAL_DIRECTION) == Direction.UP && state.get(THICKNESS) == Thickness.TIP) {
-            entity.handleFallDamage(fallDistance + 2.5, 2.0F, world.getDamageSources().stalagmite());
+            entity.handleFallDamage((float)(fallDistance + 2.5), 2.0F, world.getDamageSources().stalagmite());
         } else {
             super.onLandedUpon(world, state, pos, entity, fallDistance);
         }
@@ -133,7 +132,7 @@ public class PointedLimestoneBlock extends Block implements Falling, Waterloggab
         }
     }
 
-    protected void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         if (isPointingUp(state) && !this.canPlaceAt(state, world, pos)) {
             world.breakBlock(pos, true);
         } else {
@@ -142,7 +141,7 @@ public class PointedLimestoneBlock extends Block implements Falling, Waterloggab
 
     }
 
-    protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         dripTick(state, world, pos, random.nextFloat());
         if (random.nextFloat() < 0.011377778F && isHeldByPointedDripstone(state, world, pos)) {
             tryGrow(state, world, pos, random);
@@ -209,7 +208,7 @@ public class PointedLimestoneBlock extends Block implements Falling, Waterloggab
         }
     }
 
-    protected FluidState getFluidState(BlockState state) {
+    public FluidState getFluidState(BlockState state) {
         return (Boolean)state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
     }
 
@@ -217,7 +216,7 @@ public class PointedLimestoneBlock extends Block implements Falling, Waterloggab
         return VoxelShapes.empty();
     }
 
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         VoxelShape var10000;
         switch ((Thickness)state.get(THICKNESS)) {
             case TIP_MERGE -> var10000 = TIP_MERGE_SHAPE;
@@ -225,18 +224,18 @@ public class PointedLimestoneBlock extends Block implements Falling, Waterloggab
             case FRUSTUM -> var10000 = BASE_SHAPE;
             case MIDDLE -> var10000 = FRUSTUM_SHAPE;
             case BASE -> var10000 = MIDDLE_SHAPE;
-            default -> throw new MatchException((String)null, (Throwable)null);
+            default -> throw new IllegalStateException();
         }
 
         VoxelShape voxelShape = var10000;
-        return voxelShape.offset(state.getModelOffset(pos));
+        return voxelShape.offset(state.getModelOffset(world, pos));
     }
 
-    protected boolean isShapeFullCube(BlockState state, BlockView world, BlockPos pos) {
+    public boolean isShapeFullCube(BlockState state, BlockView world, BlockPos pos) {
         return false;
     }
 
-    protected float getMaxHorizontalModelOffset() {
+    public float getMaxHorizontalModelOffset() {
         return MAX_HORIZONTAL_MODEL_OFFSET;
     }
 
@@ -353,7 +352,7 @@ public class PointedLimestoneBlock extends Block implements Falling, Waterloggab
     }
 
     private static void createParticle(World world, BlockPos pos, BlockState state, Fluid fluid) {
-        Vec3d vec3d = state.getModelOffset(pos);
+        Vec3d vec3d = state.getModelOffset(world, pos);
         double d = 0.0625;
         double e = (double)pos.getX() + 0.5 + vec3d.x;
         double f = (double)pos.getY() + DOWN_TIP_Y - 0.0625;

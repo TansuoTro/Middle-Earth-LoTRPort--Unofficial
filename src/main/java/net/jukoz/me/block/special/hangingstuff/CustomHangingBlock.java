@@ -18,7 +18,7 @@ public class CustomHangingBlock extends HangingMossBlock {
     }
 
     @Override
-    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         return this.canPlaceAt(world, pos);
     }
 
@@ -28,7 +28,7 @@ public class CustomHangingBlock extends HangingMossBlock {
         return MultifaceBlock.canGrowOn(world, Direction.UP, blockPos, blockState) || blockState.isOf(this);
     }
 
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         if (!this.canPlaceAt(world, pos)) {
             world.scheduleBlockTick(pos, this, 1);
         }
@@ -36,7 +36,7 @@ public class CustomHangingBlock extends HangingMossBlock {
         return (BlockState)state.with(TIP, !world.getBlockState(pos.down()).isOf(this));
     }
 
-    protected void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         if (!this.canPlaceAt(world, pos)) {
             world.breakBlock(pos, true);
         }

@@ -52,6 +52,34 @@ public abstract class MEMobEntityRenderer<T extends MobEntity, S extends LivingE
         return this.model;
     }
 
+    // --- R3: state-typed helpers the donor bodies call (1.20.1 equivalents are entity-typed) ---
+
+    @SuppressWarnings("unchecked")
+    protected T entityOf(S state) {
+        return (T) state.entity;
+    }
+
+    protected void setupTransforms(S state, MatrixStack matrices, float bodyYaw, float animationProgress) {
+        super.setupTransforms(entityOf(state), matrices, bodyYaw, state.tickDelta, animationProgress);
+    }
+
+    protected void scale(S state, MatrixStack matrices) {
+        super.scale(entityOf(state), matrices, state.tickDelta);
+    }
+
+    protected int getOverlay(S state, float whiteOverlayProgress) {
+        return super.getOverlay(entityOf(state), whiteOverlayProgress);
+    }
+
+    protected float getAnimationCounter(S state) {
+        return super.getAnimationCounter(entityOf(state), state.tickDelta);
+    }
+
+    protected void renderLabelIfPresent(S state, net.minecraft.text.Text text, MatrixStack matrices,
+                                        VertexConsumerProvider vertexConsumers, int light) {
+        super.renderLabelIfPresent(entityOf(state), text, matrices, vertexConsumers, light);
+    }
+
     public void render(S state, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         M model = this.getModel(state);
         Identifier texture = this.getTexture(state);

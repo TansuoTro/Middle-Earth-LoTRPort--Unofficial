@@ -51,6 +51,7 @@ processResources {
 }
 
 loom {
+    accessWidenerPath = file("src/main/resources/me.accesswidener")
     runs {
         client {
             // The bridge only listens once a world is joined, so automated client runs

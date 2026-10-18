@@ -11,7 +11,7 @@ public class HeaterShieldEntityModel extends Model {
     private final ModelPart handle;
 
     public HeaterShieldEntityModel(ModelPart root) {
-        super(root, RenderLayer::getEntitySolid);
+        super(RenderLayer::getEntitySolid);
         this.root = root;
         this.plate = root.getChild("plate");
         this.handle = root.getChild("handle");
@@ -38,5 +38,11 @@ public class HeaterShieldEntityModel extends Model {
 
     public ModelPart getPlate() {
         return plate;
+    }
+
+    @Override
+    public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay,
+                       float red, float green, float blue, float alpha) {
+        this.root.render(matrices, vertices, light, overlay);
     }
 }

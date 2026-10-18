@@ -38,7 +38,7 @@ public class LargeThickDoor3x2 extends LargeDoorBlock {
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if(state.get(PART) == 4 && player.getMainHandStack().getItem() == ResourceItemsME.DWARVEN_KEY){
             return super.onUse(state, world, pos, player, hand, hit);
         } else {
@@ -47,7 +47,7 @@ public class LargeThickDoor3x2 extends LargeDoorBlock {
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         Direction direction = (Direction) state.get(HORIZONTAL_FACING);
         VoxelShape var10000 = null;
         if (state.get(HINGE) == DoorHinge.LEFT) {

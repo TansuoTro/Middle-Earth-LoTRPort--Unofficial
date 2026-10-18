@@ -60,7 +60,7 @@ public class PlateBlock extends BlockWithEntity {
     }
 
     @Override
-    protected void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
+    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
         super.onBlockAdded(state, world, pos, oldState, notify);
         PlateBlockEntity plateBlockEntity = (PlateBlockEntity) world.getBlockEntity(pos);
         if(plateBlockEntity != null && world instanceof ServerWorld serverWorld) {
@@ -69,7 +69,7 @@ public class PlateBlock extends BlockWithEntity {
     }
 
     @Override
-    protected void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         super.scheduledTick(state, world, pos, random);
         PlateBlockEntity plateBlockEntity = (PlateBlockEntity) world.getBlockEntity(pos);
         if(plateBlockEntity != null && plateBlockEntity.isBlockPlaced()) {
@@ -79,7 +79,7 @@ public class PlateBlock extends BlockWithEntity {
     }
 
     @Override
-    protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         PlateBlockEntity plateBlockEntity = (PlateBlockEntity) world.getBlockEntity(pos);
         if(plateBlockEntity != null && plateBlockEntity.isBlockPlaced()) {
             plateBlockEntity.generateItem(world);
@@ -91,28 +91,28 @@ public class PlateBlock extends BlockWithEntity {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         if (!world.isClient) {
-            return PlateBlock.validateTicker(world, type, ModBlockEntities.PLATE);
+            return PlateBlock.checkType(world, type, ModBlockEntities.PLATE);
         }
         return super.getTicker(world, state, type);
     }
 
-    private static <T extends BlockEntity> BlockEntityTicker<T> validateTicker(World world, BlockEntityType<T> type, BlockEntityType<PlateBlockEntity> plate) {
-        return PlateBlock.validateTicker(type, plate, PlateBlockEntity::tick);
+    private static <T extends BlockEntity> BlockEntityTicker<T> checkType(World world, BlockEntityType<T> type, BlockEntityType<PlateBlockEntity> plate) {
+        return PlateBlock.checkType(type, plate, PlateBlockEntity::tick);
     }
 
     @Override
-    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         return Block.sideCoversSmallSquare(world, pos.down(), Direction.UP);
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         return !state.canPlaceAt(world, pos) ?
                 Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         ActionResult result = onEat(world, pos, player);
         if(result == ActionResult.PASS || result == ActionResult.FAIL) {
             if(world instanceof ServerWorld serverWorld) {
@@ -197,7 +197,7 @@ public class PlateBlock extends BlockWithEntity {
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state) {
+    public VoxelShape getOutlineShape(BlockState state) {
         return Block.createCuboidShape(3.0);
     }
 

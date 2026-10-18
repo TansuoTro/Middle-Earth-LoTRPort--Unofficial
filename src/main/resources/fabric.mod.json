@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "me",
+  "accessWidener": "me.accesswidener",
   "version": "${version}",
 
   "name": "Middle-earth",

@@ -33,7 +33,7 @@ public class PineCofferBlock extends ChestBlock {
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         if(state.get(FACING) == Direction.NORTH) {
             return Block.createCuboidShape(0.0, 0.0, 1.0, 16.0, 16.0, 14.0);
         } else if(state.get(FACING) == Direction.SOUTH) {

@@ -58,11 +58,11 @@ public class FoodItemsME {
 
     public static final Item MAPLE_SYRUP = registerItem("maple_syrup",
             Item::new,new MESettings()
-                    .recipeRemainder(Items.GLASS_BOTTLE).useRemainder(Items.GLASS_BOTTLE)
+                    .recipeRemainder(Items.GLASS_BOTTLE).recipeRemainder(Items.GLASS_BOTTLE)
                     .food(FoodComponents.HONEY_BOTTLE, MAPLE_BOTTLE).maxCount(16));
     public static final Item BIRCH_WATER = registerItem("birch_water",
             Item::new,new MESettings()
-                    .recipeRemainder(Items.GLASS_BOTTLE).useRemainder(Items.GLASS_BOTTLE)
+                    .recipeRemainder(Items.GLASS_BOTTLE).recipeRemainder(Items.GLASS_BOTTLE)
                     .food(FoodComponents.HONEY_BOTTLE, BIRCH_BOTTLE).maxCount(16));
 
     public static final Item TOMATO = registerItem("tomato",
@@ -97,31 +97,31 @@ public class FoodItemsME {
                     new FoodComponent.Builder().hunger(3).saturationModifier(0.6f).build()));
     public static final Item FISH_STEW = registerItem("fish_stew",
             Item::new,new MESettings().food(
-                    new FoodComponent.Builder().hunger(8).saturationModifier(1.0f).build()).maxCount(1).useRemainder(Items.BOWL));
+                    new FoodComponent.Builder().hunger(8).saturationModifier(1.0f).build()).maxCount(1).recipeRemainder(Items.BOWL));
     public static final Item MEAT_BOWL = registerItem("meat_bowl",
             Item::new,new MESettings().food(
-                    new FoodComponent.Builder().hunger(12).saturationModifier(1.0f).build()).maxCount(1).useRemainder(Items.BOWL));
+                    new FoodComponent.Builder().hunger(12).saturationModifier(1.0f).build()).maxCount(1).recipeRemainder(Items.BOWL));
     public static final Item MEAT_EGG_MEAL = registerItem("meat_egg_meal",
             Item::new,new MESettings().food(
-                    new FoodComponent.Builder().hunger(9).saturationModifier(0.9f).build()).maxCount(1).useRemainder(Items.BOWL));
+                    new FoodComponent.Builder().hunger(9).saturationModifier(0.9f).build()).maxCount(1).recipeRemainder(Items.BOWL));
     public static final Item MEAT_SKEWER = registerItem("meat_skewer",
             Item::new,new MESettings().food(
-                    new FoodComponent.Builder().hunger(5).saturationModifier(0.6f).build()).maxCount(8).useRemainder(Items.STICK));
+                    new FoodComponent.Builder().hunger(5).saturationModifier(0.6f).build()).maxCount(8).recipeRemainder(Items.STICK));
     public static final Item COOKED_MEAT_SKEWER = registerItem("cooked_meat_skewer",
             Item::new,new MESettings().food(
-                    new FoodComponent.Builder().hunger(10).saturationModifier(0.8f).build()).maxCount(8).useRemainder(Items.STICK));
+                    new FoodComponent.Builder().hunger(10).saturationModifier(0.8f).build()).maxCount(8).recipeRemainder(Items.STICK));
     public static final Item POULTRY_MEAL = registerItem("poultry_meal",
             Item::new,new MESettings().food(
-                    new FoodComponent.Builder().hunger(8).saturationModifier(0.8f).build()).maxCount(8).useRemainder(Items.BOWL));
+                    new FoodComponent.Builder().hunger(8).saturationModifier(0.8f).build()).maxCount(8).recipeRemainder(Items.BOWL));
     public static final Item VEGETABLE_SKEWER = registerItem("vegetable_skewer",
             Item::new,new MESettings().food(
-                    new FoodComponent.Builder().hunger(3).saturationModifier(0.3f).build()).maxCount(8).useRemainder(Items.STICK));
+                    new FoodComponent.Builder().hunger(3).saturationModifier(0.3f).build()).maxCount(8).recipeRemainder(Items.STICK));
     public static final Item COOKED_VEGETABLE_SKEWER = registerItem("cooked_vegetable_skewer",
             Item::new,new MESettings().food(
-                    new FoodComponent.Builder().hunger(6).saturationModifier(0.6f).build()).maxCount(8).useRemainder(Items.STICK));
+                    new FoodComponent.Builder().hunger(6).saturationModifier(0.6f).build()).maxCount(8).recipeRemainder(Items.STICK));
     public static final Item VEGETABLE_SOUP = registerItem("vegetable_soup",
             Item::new,new MESettings().food(
-                    new FoodComponent.Builder().hunger(7).saturationModifier(0.6f).build()).maxCount(1).useRemainder(Items.BOWL));
+                    new FoodComponent.Builder().hunger(7).saturationModifier(0.6f).build()).maxCount(1).recipeRemainder(Items.BOWL));
 
     public static final Item SACK_OF_HORSEFEED = registerItem("sack_of_horsefeed",
             Item::new,new MESettings().food(

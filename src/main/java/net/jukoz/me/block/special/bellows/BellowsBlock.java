@@ -44,14 +44,14 @@ public class BellowsBlock extends BlockWithEntity {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return BellowsBlock.validateTicker(world, type, ModBlockEntities.BELLOWS);
+        return BellowsBlock.checkType(world, type, ModBlockEntities.BELLOWS);
     }
 
     @Nullable
-    protected static <T extends BlockEntity> BlockEntityTicker<T> validateTicker(World world, BlockEntityType<T> givenType, BlockEntityType<BellowsBlockEntity> expectedType) {
+    protected static <T extends BlockEntity> BlockEntityTicker<T> checkType(World world, BlockEntityType<T> givenType, BlockEntityType<BellowsBlockEntity> expectedType) {
         return world.isClient
-                ? BellowsBlock.validateTicker(givenType, expectedType, BellowsBlockEntity::clientTick)
-                : BellowsBlock.validateTicker(givenType, expectedType, BellowsBlockEntity::serverTick);
+                ? BellowsBlock.checkType(givenType, expectedType, BellowsBlockEntity::clientTick)
+                : BellowsBlock.checkType(givenType, expectedType, BellowsBlockEntity::serverTick);
     }
 
     @Override

@@ -2,12 +2,24 @@ package net.jukoz.me.item.dataComponents;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
+import net.jukoz.me.compat.net.PacketCodec;
+import net.minecraft.network.PacketByteBuf;
 
+import java.util.UUID;
 import java.util.function.Function;
 
 /** Small codec helpers shared by the ported data components. */
 public final class ComponentCodecs {
     private ComponentCodecs() {
+    }
+
+    /** 1.20.1 has no {@code Uuids.PACKET_CODEC}; the wire form is the vanilla uuid pair of longs. */
+    public static final PacketCodec<PacketByteBuf, UUID> UUID_CODEC =
+            PacketCodec.of((buf, value) -> buf.writeUuid(value), PacketByteBuf::readUuid);
+
+    /** 1.20.1's {@code ColorHelper} has no {@code fullAlpha}; the donor passes an opaque rgb. */
+    public static int fullAlpha(int rgb) {
+        return 0xFF000000 | (rgb & 0xFFFFFF);
     }
 
     /**

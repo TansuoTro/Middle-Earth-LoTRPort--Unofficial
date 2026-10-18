@@ -19,7 +19,6 @@ import net.minecraft.util.DyeColor;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.jukoz.me.MiddleEarth;
-import net.jukoz.me.gui.render.states.BannerResultWithScaleGuiElementRenderState;
 import net.jukoz.me.gui.utils.CycledSelectionButtonType;
 import net.jukoz.me.gui.utils.widgets.CycledSelectionWidget;
 import net.jukoz.me.gui.utils.widgets.ModWidget;
@@ -120,7 +119,7 @@ public class OnboardingFactionScreen extends Screen {
         super.init();
         elements = new OnboardingFactionScreenElements();
 
-        elements.bannerField = this.client.getLoadedEntityModels().getModelPart(EntityModelLayers.STANDING_BANNER_FLAG).getChild("flag");
+        elements.bannerField = this.client.getEntityModelLoader().getModelPart(EntityModelLayers.STANDING_BANNER_FLAG).getChild("flag");
 
         elements.searchBarWidget = new SearchBarWidget(9, controller.getAllSearchBarResults(), x -> controller.updateScreenInformation(), CycledSelectionWidget.TOTAL_WIDTH);
         addDrawableChild(elements.searchBarWidget.getSearchBarToggleButton());
@@ -296,7 +295,14 @@ public class OnboardingFactionScreen extends Screen {
             }
             int bannerX = elements.informationPanel.startX + elements.informationPanel.width - 48;
             int bannerY = elements.informationPanel.startY + 8;
-            context.state.addSpecialElement(new BannerResultWithScaleGuiElementRenderState(this.elements.bannerField, DyeColor.GRAY, bannerBuilder.build(), bannerX, 0, bannerX + 40, bannerY + 80, 32f, context.scissorStack.peekLast()));
+            // R3: 1.20.1 has no GUI render-state pipeline; draw the banner as an item stack.
+            net.minecraft.item.ItemStack bannerPreview = new net.minecraft.item.ItemStack(net.minecraft.item.Items.WHITE_BANNER);
+            MEBannerPatterns.set(bannerPreview, bannerBuilder.build());
+            context.getMatrices().push();
+            context.getMatrices().translate(bannerX, bannerY, 0);
+            context.getMatrices().scale(2.0F, 2.0F, 1.0F);
+            context.drawItem(bannerPreview, 0, 0);
+            context.getMatrices().pop();
         }
 
         // Right panel

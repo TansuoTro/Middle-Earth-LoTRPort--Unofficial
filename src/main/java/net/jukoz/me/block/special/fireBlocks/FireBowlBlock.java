@@ -1,6 +1,5 @@
 package net.jukoz.me.block.special.fireBlocks;
 
-import com.mojang.serialization.MapCodec;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -18,8 +17,6 @@ import org.jetbrains.annotations.Nullable;
 
 public class FireBowlBlock extends AbstractToggleableFireBlock {
 
-    public static final MapCodec<FireBowlBlock> CODEC = FireBowlBlock.createCodec(FireBowlBlock::new);
-
     protected static final VoxelShape SHAPE = Block.createCuboidShape(1, 0, 1, 15, 10, 15);
     public static final BooleanProperty LIT = Properties.LIT;
 
@@ -29,7 +26,7 @@ public class FireBowlBlock extends AbstractToggleableFireBlock {
 
 
 
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return SHAPE;
     }
 
@@ -38,7 +35,7 @@ public class FireBowlBlock extends AbstractToggleableFireBlock {
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         if (world.isClient) {
             if (state.get(LIT)) {
-                return AbstractToggleableFireBlock.validateTicker(type, ModBlockEntities.FIRE_BOWL, FireBowlBlockEntity::clientTick);
+                return AbstractToggleableFireBlock.checkType(type, ModBlockEntities.FIRE_BOWL, FireBowlBlockEntity::clientTick);
             }
         }
         return null;
