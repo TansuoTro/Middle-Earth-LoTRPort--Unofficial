@@ -30,10 +30,10 @@ public class SpawnDataHandler {
     }
 
     private void deserializeNbt(NbtCompound nbtCompound) {
-        NbtList compoundList = nbtCompound.getList("data").get();
+        NbtList compoundList = nbtCompound.getList("data");
         spawns = new HashMap<>();
         for(int i = 0; i < compoundList.size(); i++){
-            SpawnData spawnData = SpawnData.deserialize(compoundList.getCompound(i).get());
+            SpawnData spawnData = SpawnData.deserialize(compoundList.getCompound(i));
             spawns.put(spawnData.getIdentifier(), spawnData);
         }
     }

@@ -61,10 +61,10 @@ public class NpcType {
         this.factionId = factionId;
         this.npcTextureKey = npcTextureKey;
 
-        NbtList npcGears = gearDatas.getList("pool").get();
+        NbtList npcGears = gearDatas.getList("pool");
         List<WeightedGearData> weightedGearData = new ArrayList<>();
         for(int j = 0; j < npcGears.size(); j++) {
-            NbtCompound compound = npcGears.getCompound(j).get();
+            NbtCompound compound = npcGears.getCompound(j);
             weightedGearData.add(WeightedGearData.readNbt(compound));
         }
         this.gearDatas = new WeightedPool<>(weightedGearData);
@@ -72,7 +72,7 @@ public class NpcType {
         this.npcAttributePools = new HashMap<>();
         for(var category : EntityCategories.values()){
             if(npcAttributes.contains(category.name())){
-                this.npcAttributePools.put(category, new AttributePool(npcAttributes.getCompound(category.name()).get()));
+                this.npcAttributePools.put(category, new AttributePool(npcAttributes.getCompound(category.name())));
             }
         }
 

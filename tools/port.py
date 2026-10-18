@@ -402,12 +402,24 @@ def cmd_errors(args) -> int:
 
     # Anything referring to a class that is still sitting in port-staging is not a
     # porting problem yet -- it is just a file that has not been promoted.
-    staged = PROJECT / "port-staging/java"
-    pending = {f.stem for f in staged.rglob("*.java")} if staged.exists() else set()
+    # "Not ported yet" means the class exists in the donor but not in the compiled
+    # tree -- derived from the donor rather than from port-staging, because staging
+    # only holds what has not been promoted and would make the number drift.
+    donor_root = Path(args.donor) / DONOR_PKG
+    compiled_root = PROJECT / "src/main/java" / TARGET_PKG
+    have = {f.stem for f in compiled_root.rglob("*.java")}
+    pending = {f.stem for f in donor_root.rglob("*.java")} - have if donor_root.exists() else set()
 
     def is_pending(rec):
-        name = rec["symbol"].split()[-1] if rec["symbol"] else ""
-        return name.split("(")[0].split(".")[-1] in pending
+        # A missing method only counts as "not ported yet" if the class it was
+        # looked up on is itself still sitting in staging -- otherwise it is a real
+        # API drift that has to be fixed.
+        for field in ("symbol", "location"):
+            name = rec[field].split()[-1] if rec[field] else ""
+            name = name.split("(")[0].split(".")[-1]
+            if name in pending:
+                return True
+        return False
 
     real = [m for m in found if not is_pending(m)]
     print(f"\n{len(real)} errors are not explained by an un-promoted class "

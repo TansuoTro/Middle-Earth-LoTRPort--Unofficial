@@ -1,5 +1,6 @@
 package net.jukoz.me.resources.datas.texture_presets;
 
+import net.jukoz.me.compat.NbtCompat;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -171,12 +172,12 @@ public class TexturePreset {
 
     private void fetchMaterials(NbtCompound compound, CharacterMaterialTypes type){
         if(compound.contains(type.name())){
-            NbtCompound value = compound.getCompound(type.name()).get();
+            NbtCompound value = compound.getCompound(type.name());
 
             if(value.contains(MATERIALS)){
                 var materials = value.get(MATERIALS);
                 if(materials != null){
-                    NbtList nbtList = materials.asNbtList().get();
+                    NbtList nbtList = NbtCompat.list(materials);
 
                     List<NbtElement> fetchedValues = nbtList.stream().toList();
                     List<WeightedIdentifier> weightedList = new ArrayList<>();
@@ -198,11 +199,11 @@ public class TexturePreset {
 
     private void fetchPatterns(NbtCompound compound, CharacterPatternTypes type){
         if(compound.contains(type.name())){
-            NbtCompound value = compound.getCompound(type.name()).get();
+            NbtCompound value = compound.getCompound(type.name());
             if(value.contains(PATTERNS)){
                 var patterns = value.get(PATTERNS);
                 if(patterns != null){
-                    NbtList nbtList = patterns.asNbtList().get();
+                    NbtList nbtList = NbtCompat.list(patterns);
 
                     List<NbtElement> fetchedValues = nbtList.stream().toList();
                     List<WeightedIdentifier> weightedIdentifiers = new ArrayList<>();
@@ -235,11 +236,11 @@ public class TexturePreset {
     private void fetchClothes(NbtCompound compound){
         if(compound.contains(CLOTHES)){
             if(compound.getList(CLOTHES).isPresent()){
-                NbtList listClothePresets = compound.getList(CLOTHES).get();
+                NbtList listClothePresets = compound.getList(CLOTHES);
 
                 listClothePresets.forEach(x -> {
-                    if(x.asCompound().isPresent()){
-                        this.characterClothePresets.add(new WeightedClothingPresetHolder(x.asCompound().get()));
+                    if(NbtCompat.isCompound(x)){
+                        this.characterClothePresets.add(new WeightedClothingPresetHolder(NbtCompat.compound(x)));
                     }
                 });
             }
@@ -251,8 +252,8 @@ public class TexturePreset {
         if(compound.contains(SIMPLIFIED)){
             var simplifiedList = compound.getList(SIMPLIFIED);
             simplifiedList.ifPresent(listSimplifiedTextures -> listSimplifiedTextures.forEach(x -> {
-                if (x.asCompound().isPresent()) {
-                    this.simplifiedTextures.add(new WeightedSimplifiedTexturePresetHolder(x.asCompound().get()));
+                if (NbtCompat.isCompound(x)) {
+                    this.simplifiedTextures.add(new WeightedSimplifiedTexturePresetHolder(NbtCompat.compound(x)));
                 }
             }));
         }

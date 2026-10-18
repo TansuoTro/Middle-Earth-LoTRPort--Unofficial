@@ -1,5 +1,6 @@
 package net.jukoz.me.api.dtos;
 
+import net.jukoz.me.compat.NbtCompat;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.registry.RegistryKey;
@@ -9,10 +10,10 @@ public class WeightedIdentifier extends WeightedItem<Identifier> {
     public WeightedIdentifier(NbtElement element){
         super(element);
 
-        if(element.asString().isPresent()){
-            this.item = new Identifier(element.asString().get());
-        } else if(element.asCompound().isPresent()) {
-            var potentialId = element.asCompound().get().getString("id");
+        if(!element.asString().isEmpty()){
+            this.item = new Identifier(element.asString());
+        } else if(NbtCompat.isCompound(element)) {
+            var potentialId = NbtCompat.compound(element).getString("id");
             potentialId.ifPresent(integer -> this.item = new Identifier(potentialId.get()));
         }
     }
@@ -41,7 +42,7 @@ public class WeightedIdentifier extends WeightedItem<Identifier> {
         if(newNbt == null)
             return NbtString.of(item.toString());
 
-        newNbt.asCompound().get().putString("id", this.item.toString());
+        NbtCompat.compound(newNbt).putString("id", this.item.toString());
         return newNbt;
     }
 }

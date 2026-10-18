@@ -1,5 +1,6 @@
 package net.jukoz.me.resources.datas.npc_types.data;
 
+import net.jukoz.me.compat.NbtCompat;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -28,10 +29,10 @@ public class WeightedItemData extends WeightedItem<GearItemData> {
         super(element);
         if(element == null)
             return;
-        if(element.asString().isPresent())
-            this.item = new GearItemData(new Identifier(element.asString().get()));
-        else if(element.asCompound().isPresent())
-            this.item = new GearItemData(element.asCompound().get());
+        if(!element.asString().isEmpty())
+            this.item = new GearItemData(new Identifier(element.asString()));
+        else if(NbtCompat.isCompound(element))
+            this.item = new GearItemData(NbtCompat.compound(element));
     }
 
     public static WeightedItemData create() {
@@ -103,7 +104,7 @@ public class WeightedItemData extends WeightedItem<GearItemData> {
         NbtElement nbt = super.getNbt();
         if(nbt == null)
             nbt = new NbtCompound();
-        nbt = this.item.getNbt(nbt.asCompound().get());
+        nbt = this.item.getNbt(NbtCompat.compound(nbt));
         return nbt;
     }
 

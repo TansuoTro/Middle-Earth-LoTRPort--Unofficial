@@ -1,5 +1,6 @@
 package net.jukoz.me.resources.datas.texture_presets;
 
+import net.jukoz.me.compat.NbtCompat;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.Identifier;
@@ -53,19 +54,19 @@ public class SimplifiedTexturePreset {
 
     public NbtElement getNbt(NbtElement newNbt) {
         if(base != null){
-            newNbt.asCompound().get().putString("base", this.base.toString());
+            NbtCompat.compound(newNbt).putString("base", this.base.toString());
         }
         if(hair != null){
-            newNbt.asCompound().get().putString("hair", this.hair.toString());
+            NbtCompat.compound(newNbt).putString("hair", this.hair.toString());
         }
         if(feet != null){
-            newNbt.asCompound().get().putString("feet", this.feet.toString());
+            NbtCompat.compound(newNbt).putString("feet", this.feet.toString());
         }
         if(nose != null){
-            newNbt.asCompound().get().putString("nose", this.nose.toString());
+            NbtCompat.compound(newNbt).putString("nose", this.nose.toString());
         }
         if(ear != null){
-            newNbt.asCompound().get().putString("ear", this.ear.toString());
+            NbtCompat.compound(newNbt).putString("ear", this.ear.toString());
         }
         return newNbt;
     }

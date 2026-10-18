@@ -405,10 +405,10 @@ public class WoodlandRealmNpcTypePool {
                         )
         ), new HashMap<>(){{
             put(EntityCategories.SHARED, new AttributePool().addElements(List.of(
-                    AttributePoolElement.create(EntityAttributes.MOVEMENT_SPEED, 0.25, 0.30),
-                    AttributePoolElement.create(EntityAttributes.MAX_HEALTH, 28),
-                    AttributePoolElement.create(EntityAttributes.ARMOR, 10, 20),
-                    AttributePoolElement.create(EntityAttributes.ATTACK_DAMAGE, 1, 2)
+                    AttributePoolElement.create(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25, 0.30),
+                    AttributePoolElement.create(EntityAttributes.GENERIC_MAX_HEALTH, 28),
+                    AttributePoolElement.create(EntityAttributes.GENERIC_ARMOR, 10, 20),
+                    AttributePoolElement.create(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1, 2)
                             .withModifier(TOTAL_DAMAGE_MODIFIER, 1.5, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL) // Does 1.5x damage, with 1 -> 2 base damage (strong)
             )));
         }}, CombatArchetypePool.DEFAULT, NpcLoot.FROM_15_TO_25);

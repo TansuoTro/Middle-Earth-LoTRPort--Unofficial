@@ -1,4 +1,5 @@
 package net.jukoz.me.resources.datas.npc_types.data;
+import net.jukoz.me.compat.NbtCompat;
 import net.jukoz.me.item.MEComponents;
 
 import net.minecraft.component.DataComponentTypes;
@@ -202,7 +203,7 @@ public class GearItemData {
     }
 
     public GearItemData(NbtCompound nbt){
-        this(new Identifier(nbt.getString("id").get()));
+        this(new Identifier(nbt.getString("id")));
 
         if(nbt.get("color") != null){
             color = nbt.getInt("color").get();
@@ -219,13 +220,13 @@ public class GearItemData {
             noCape = nbt.getBoolean("no_cape").get();
         }
         if(nbt.get("cape") != null){
-            cape = BackAttachmentsME.valueOf(nbt.getString("cape").get().toUpperCase());
+            cape = BackAttachmentsME.valueOf(nbt.getString("cape").toUpperCase());
 
             if(nbt.getInt("cape_color").isPresent()){
                 capeColor = nbt.getInt("cape_color").get();
             }
-            else if(nbt.get("cape_colors") != null && nbt.get("cape_colors").asNbtList().isPresent()){
-                var capeElements = nbt.get("cape_colors").asNbtList().get();
+            else if(nbt.get("cape_colors") != null && NbtCompat.isList(nbt.get("cape_colors"))){
+                var capeElements = NbtCompat.list(nbt.get("cape_colors"));
                 List<Integer> newList = new ArrayList<>();
                 for (var element : capeElements){
                     newList.add(element.asInt().get());
@@ -238,15 +239,15 @@ public class GearItemData {
             noHood = nbt.getBoolean("no_hood").get();
         }
         if(nbt.get("hood") != null){
-            hood = HelmetAttachmentsME.valueOf(nbt.getString("hood").get().toUpperCase());
+            hood = HelmetAttachmentsME.valueOf(nbt.getString("hood").toUpperCase());
             if(nbt.get("hood_is_down") != null)
                 isDown = nbt.getBoolean("hood_is_down").get();
 
             if(nbt.get("hood_color") != null){
                 hoodColor = nbt.getInt("hood_color").get();
             }
-            else if(nbt.get("hood_colors") != null && nbt.get("hood_colors").asNbtList().isPresent()){
-                var hoodElements = nbt.get("hood_colors").asNbtList().get();
+            else if(nbt.get("hood_colors") != null && NbtCompat.isList(nbt.get("hood_colors"))){
+                var hoodElements = NbtCompat.list(nbt.get("hood_colors"));
                 List<Integer> newList = new ArrayList<>();
                 for (var element : hoodElements){
                     newList.add(element.asInt().get());
@@ -301,8 +302,8 @@ public class GearItemData {
             if(hoodColors != null)
                 nbt.putIntArray("hood_colors", hoodColors);
         }
-        if(nbt.getKeys().size() == 1 && nbt.getString("id").isPresent()){
-            return NbtString.of(nbt.getString("id").get());
+        if(nbt.getKeys().size() == 1 && !nbt.getString("id").isEmpty()){
+            return NbtString.of(nbt.getString("id"));
         }
         return nbt;
     }

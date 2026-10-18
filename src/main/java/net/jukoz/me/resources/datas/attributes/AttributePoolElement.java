@@ -1,5 +1,6 @@
 package net.jukoz.me.resources.datas.attributes;
 
+import net.jukoz.me.compat.NbtCompat;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -33,7 +34,7 @@ public class AttributePoolElement {
 
     public static AttributePoolElement createFromNbt(NbtCompound nbtCompound){
         var newElement = new AttributePoolElement();
-        newElement.withIdentifier(new Identifier(nbtCompound.getString("id").get()));
+        newElement.withIdentifier(new Identifier(nbtCompound.getString("id")));
 
         if(nbtCompound.contains("value"))
             newElement.withDefineValue(nbtCompound.getDouble("value").get());
@@ -41,7 +42,7 @@ public class AttributePoolElement {
             newElement.withMinMaxValue(nbtCompound.getDouble("min").get(), nbtCompound.getDouble("max").get());
 
         if(nbtCompound.contains("modifiers")){
-            newElement.withModifiers(nbtCompound.getList("modifiers").get());
+            newElement.withModifiers(nbtCompound.getList("modifiers"));
         }
 
         return newElement;
@@ -50,7 +51,7 @@ public class AttributePoolElement {
     private void withModifiers(NbtList modifierList) {
         this.modifiers = new ArrayList<>();
         modifierList.forEach(modifierNbt -> {
-            modifiers.add(new AttributeModifierElement(modifierNbt.asCompound().get()));
+            modifiers.add(new AttributeModifierElement(NbtCompat.compound(modifierNbt)));
         });
     }
 
@@ -156,7 +157,7 @@ public class AttributePoolElement {
         NbtList nbtList = nbtCompound.getListOrEmpty("attributes");
 
         nbtList.forEach(attribute -> {
-            attributePoolElementList.add(AttributePoolElement.createFromNbt(attribute.asCompound().get()));
+            attributePoolElementList.add(AttributePoolElement.createFromNbt(NbtCompat.compound(attribute)));
         });
         return attributePoolElementList;
     }

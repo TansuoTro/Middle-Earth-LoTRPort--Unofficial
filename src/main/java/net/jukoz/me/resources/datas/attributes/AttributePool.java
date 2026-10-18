@@ -33,7 +33,7 @@ public class AttributePool {
             pool = new ArrayList<>();
             var list =  compound.getList("pool");
             for(int i = 0; i < list.get().size(); i++){
-                pool.add(AttributePoolElement.createFromNbt(list.get().getCompound(i).get()));
+                pool.add(AttributePoolElement.createFromNbt(list.get().getCompound(i)));
             }
         }
     }

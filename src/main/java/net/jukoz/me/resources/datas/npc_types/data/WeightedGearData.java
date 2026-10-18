@@ -1,5 +1,6 @@
 package net.jukoz.me.resources.datas.npc_types.data;
 
+import net.jukoz.me.compat.NbtCompat;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -67,7 +68,7 @@ public class WeightedGearData extends WeightedItem<HashMap<EquipmentSlot, GearSl
             nbt = new NbtCompound();
 
         for(EquipmentSlot slot : item.keySet()){
-            nbt.asCompound().get().put(slot.getName().toLowerCase(), GearSlotPool.createNbt(item.get(slot)));
+            NbtCompat.compound(nbt).put(slot.getName().toLowerCase(), GearSlotPool.createNbt(item.get(slot)));
         }
         return nbt;
     }

@@ -1,5 +1,6 @@
 package net.jukoz.me.resources.datas.texture_presets;
 
+import net.jukoz.me.compat.NbtCompat;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.Identifier;
@@ -36,7 +37,7 @@ public class WeightedTexturePresetHolder extends WeightedItem<TexturePreset> {
         if(nbt == null){
             nbt = new NbtCompound();
         }
-        return item.getNbt(nbt.asCompound().get());
+        return item.getNbt(NbtCompat.compound(nbt));
     }
 
     public WeightedTexturePresetHolder withEmissiveEyes(boolean value){

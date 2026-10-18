@@ -696,36 +696,36 @@ public class RegistriesME {
     public static void registerCauldronBehaviour() {
 
         HotMetalsModel.items.forEach(item -> {
-            CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(item, COOL_DOWN_METAL);
+            CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(item, COOL_DOWN_METAL);
         });
 
         HotMetalsModel.ingots.forEach(item -> {
-            CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(item, COOL_DOWN_METAL);
+            CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(item, COOL_DOWN_METAL);
         });
 
         HotMetalsModel.nuggets.forEach(item -> {
-            CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(item, COOL_DOWN_METAL);
+            CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(item, COOL_DOWN_METAL);
         });
 
         HotMetalsModel.nuggies.forEach(item -> {
-            CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(item, COOL_DOWN_METAL);
+            CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(item, COOL_DOWN_METAL);
         });
 
         SimpleDyeableItemModel.items.forEach(item -> {
-            CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(item, CLEAN_EQUIPMENT);
+            CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(item, CLEAN_EQUIPMENT);
         });
 
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(EquipmentItemsME.BROADHOOF_GOAT_PADDED_ARMOR, CLEAN_EQUIPMENT);
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(EquipmentItemsME.BROADHOOF_GOAT_ORNAMENTED_PADDED_ARMOR, CLEAN_EQUIPMENT);
+        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.BROADHOOF_GOAT_PADDED_ARMOR, CLEAN_EQUIPMENT);
+        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.BROADHOOF_GOAT_ORNAMENTED_PADDED_ARMOR, CLEAN_EQUIPMENT);
 
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(EquipmentItemsME.WARG_LEATHER_ARMOR, CLEAN_EQUIPMENT);
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(EquipmentItemsME.WARG_REINFORCED_LEATHER_ARMOR, CLEAN_EQUIPMENT);
+        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.WARG_LEATHER_ARMOR, CLEAN_EQUIPMENT);
+        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.WARG_REINFORCED_LEATHER_ARMOR, CLEAN_EQUIPMENT);
 
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(EquipmentItemsME.GREAT_HORN_LIGHT_ARMOR, CLEAN_EQUIPMENT);
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(EquipmentItemsME.GREAT_HORN_LIGHT_GRAY_ARMOR, CLEAN_EQUIPMENT);
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(EquipmentItemsME.GREAT_HORN_LIGHT_GREEN_ARMOR, CLEAN_EQUIPMENT);
+        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.GREAT_HORN_LIGHT_ARMOR, CLEAN_EQUIPMENT);
+        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.GREAT_HORN_LIGHT_GRAY_ARMOR, CLEAN_EQUIPMENT);
+        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.GREAT_HORN_LIGHT_GREEN_ARMOR, CLEAN_EQUIPMENT);
 
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(ResourceItemsME.DIRTY_BONE, CLEAN_ITEM);
+        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(ResourceItemsME.DIRTY_BONE, CLEAN_ITEM);
     }
 
     //This not good but will do for now until more cases appear

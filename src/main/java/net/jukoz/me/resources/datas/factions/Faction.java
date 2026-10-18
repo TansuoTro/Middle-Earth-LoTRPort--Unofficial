@@ -107,16 +107,16 @@ public class Faction {
 
         this.npcDatasByRank = new HashMap<>();
         if(npcs.isPresent()){
-            NbtList list = npcs.get().getList("ranks").get();
+            NbtList list = npcs.get().getList("ranks");
             for(int i = 0; i < list.size(); i++){
-                NbtCompound rankCompound = list.getCompound(i).get();
-                String rankName = rankCompound.getString("rank").get().toUpperCase();
+                NbtCompound rankCompound = list.getCompound(i);
+                String rankName = rankCompound.getString("rank").toUpperCase();
                 try{
                     NpcRank rank = NpcRank.valueOf(rankName);
-                    NbtList npcDataList = rankCompound.getList("pool").get();
+                    NbtList npcDataList = rankCompound.getList("pool");
                     List<Identifier> dataList = new ArrayList<>();
                     for(int j = 0; j < npcDataList.size(); j++){
-                        dataList.add(MiddleEarth.fetchId(npcDataList.getString(j).get()));
+                        dataList.add(MiddleEarth.fetchId(npcDataList.getString(j)));
                     }
                     this.npcDatasByRank.put(rank, dataList);
                 } catch (Exception ignored){

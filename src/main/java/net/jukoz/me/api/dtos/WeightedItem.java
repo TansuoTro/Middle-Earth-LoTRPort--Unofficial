@@ -1,5 +1,6 @@
 package net.jukoz.me.api.dtos;
 
+import net.jukoz.me.compat.NbtCompat;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 
@@ -23,8 +24,8 @@ public abstract class WeightedItem<T> {
 
     public WeightedItem(NbtElement element) {
         this.weight = 1;
-        if(element.asCompound().isPresent()){
-            var potentialWeight = element.asCompound().get().getInt("weight");
+        if(NbtCompat.isCompound(element)){
+            var potentialWeight = NbtCompat.compound(element).getInt("weight");
             potentialWeight.ifPresent(integer -> this.weight = integer);
         }
     }

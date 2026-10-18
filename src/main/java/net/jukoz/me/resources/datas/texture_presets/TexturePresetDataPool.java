@@ -31,7 +31,7 @@ public class TexturePresetDataPool {
             NbtList nbtListPresets = optList.get();
             WeightedPool<WeightedTexturePresetHolder> dataPresetList = new WeightedPool<>();
             for(int i = 0; i < nbtListPresets.size(); i++){
-                WeightedTexturePresetHolder fetchedPreset = new WeightedTexturePresetHolder(nbtListPresets.getCompound(i).get());
+                WeightedTexturePresetHolder fetchedPreset = new WeightedTexturePresetHolder(nbtListPresets.getCompound(i));
                 dataPresetList.add(fetchedPreset);
             }
             presetsByCategory.put(category, dataPresetList);

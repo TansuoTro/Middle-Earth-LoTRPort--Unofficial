@@ -51,8 +51,8 @@ public class WildGoblinNpcTypePool {
 
     public static final HashMap<EntityCategories, AttributePool> TANKY_ATTRIBUTES = new HashMap<>(){{
         put(EntityCategories.SHARED, new AttributePool().addElements(List.of(
-            AttributePoolElement.create(EntityAttributes.MOVEMENT_SPEED, 0.35, 0.45),
-            AttributePoolElement.create(EntityAttributes.ARMOR, 5, 10)
+            AttributePoolElement.create(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.35, 0.45),
+            AttributePoolElement.create(EntityAttributes.GENERIC_ARMOR, 5, 10)
         )));
     }};
 
@@ -155,9 +155,9 @@ public class WildGoblinNpcTypePool {
                         )
         ), new HashMap<>(){{
             put(EntityCategories.SHARED, new AttributePool().addElements(List.of(
-                    AttributePoolElement.create(EntityAttributes.MOVEMENT_SPEED, 0.25, 0.30),
-                    AttributePoolElement.create(EntityAttributes.MAX_HEALTH, 22),
-                    AttributePoolElement.create(EntityAttributes.ARMOR, 5, 10)
+                    AttributePoolElement.create(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25, 0.30),
+                    AttributePoolElement.create(EntityAttributes.GENERIC_MAX_HEALTH, 22),
+                    AttributePoolElement.create(EntityAttributes.GENERIC_ARMOR, 5, 10)
             )));
         }}, CombatArchetypePool.DEFAULT, new MountData(EntitiesME.CAVE_TROLL).withPassengerSlots(
                 new MountPassengerSlotData(new MountPassengerData(NpcRegistry.WILD_GOBLIN_SCOUT).withDiscardChance(0.25)),
@@ -231,11 +231,11 @@ public class WildGoblinNpcTypePool {
                 )
         ), new HashMap<>(){{
             put(EntityCategories.SHARED, new AttributePool().addElements(List.of(
-                    AttributePoolElement.create(EntityAttributes.SCALE, 0.85, 0.91),
-                    AttributePoolElement.create(EntityAttributes.MOVEMENT_SPEED, 0.25, 0.30),
-                    AttributePoolElement.create(EntityAttributes.MAX_HEALTH, 28),
+                    AttributePoolElement.create(EntityAttributesME.SCALE, 0.85, 0.91),
+                    AttributePoolElement.create(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25, 0.30),
+                    AttributePoolElement.create(EntityAttributes.GENERIC_MAX_HEALTH, 28),
                     AttributePoolElement.create(EntityAttributesME.WIDTH_SCALE, 1.0, 1.05),
-                    AttributePoolElement.create(EntityAttributes.ATTACK_DAMAGE, 2).withModifier(MiddleEarth.of("brute_attack_damage_buff"), 1.35)
+                    AttributePoolElement.create(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2).withModifier(MiddleEarth.of("brute_attack_damage_buff"), 1.35)
                 )
             ));
         }}, CombatArchetypePool.DEFAULT, NpcLoot.FROM_13_TO_20);

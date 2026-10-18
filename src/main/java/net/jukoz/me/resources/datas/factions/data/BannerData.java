@@ -1,5 +1,6 @@
 package net.jukoz.me.resources.datas.factions.data;
 
+import net.jukoz.me.compat.NbtCompat;
 import com.google.gson.JsonParser;
 import net.minecraft.block.entity.BannerPattern;
 import net.minecraft.block.entity.BannerPatterns;
@@ -73,17 +74,17 @@ public class BannerData {
         }
         NbtCompound compound = optionalBannerDataNbt.get();
 
-        baseBannerColor = DyeColor.byId(compound.getString("base_color").get(), DEFAULT_DYE);
+        baseBannerColor = DyeColor.byId(compound.getString("base_color"), DEFAULT_DYE);
 
-        NbtList patterns = compound.getList("patterns").get();
+        NbtList patterns = compound.getList("patterns");
         this.bannerPatternWithColors = new ArrayList<>();
 
         JsonParser jsonParser = new JsonParser();
 
         for(NbtElement element: patterns){
             try{
-                NbtCompound elementCompound = element.asCompound().get();
-                Identifier id = new Identifier(elementCompound.getString("id").get());
+                NbtCompound elementCompound = NbtCompat.compound(element);
+                Identifier id = new Identifier(elementCompound.getString("id"));
                 DyeColor color = DyeColor.byId(elementCompound.getString("dye_color", DEFAULT_DYE.asString()), DEFAULT_DYE);
 
                 BannerPatternWithColor bannerPatternWithColor = new BannerPatternWithColor(id, color);

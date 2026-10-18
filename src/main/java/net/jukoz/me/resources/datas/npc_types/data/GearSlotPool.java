@@ -1,5 +1,6 @@
 package net.jukoz.me.resources.datas.npc_types.data;
 
+import net.jukoz.me.compat.NbtCompat;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -54,31 +55,31 @@ public class GearSlotPool {
             return null;
         }
         var nbt = slotData.weightedItemData.getNbt();
-        if(nbt.asString().isPresent()){
+        if(!nbt.asString().isEmpty()){
             return nbt;
-        } else if(nbt.asCompound().isPresent())
-            return nbt.asCompound().get();
+        } else if(NbtCompat.isCompound(nbt))
+            return NbtCompat.compound(nbt);
         return null;
     }
 
     public static GearSlotPool readNbt(NbtElement nbt){
-        if(nbt.asCompound().isPresent()){
-            NbtCompound nbtCompound = nbt.asCompound().get();
+        if(NbtCompat.isCompound(nbt)){
+            NbtCompound nbtCompound = NbtCompat.compound(nbt);
             if(nbtCompound.get("pool") == null){
                 return GearSlotPool.create(new WeightedItemData(nbtCompound));
             }
-            NbtList list = nbtCompound.getList("pool").get();
+            NbtList list = nbtCompound.getList("pool");
             GearSlotPool gearSlotPool = GearSlotPool.create();
             for(int i = 0; i < list.size(); i++){
-                if(list.getString(i).isPresent()){
-                    gearSlotPool.add(new WeightedItemData(MiddleEarth.fetchId(list.getString(i).get())));
+                if(!list.getString(i).isEmpty()){
+                    gearSlotPool.add(new WeightedItemData(MiddleEarth.fetchId(list.getString(i))));
                 } else if(list.getCompound(i).isPresent()){
-                    gearSlotPool.add(new WeightedItemData(list.getCompound(i).get()));
+                    gearSlotPool.add(new WeightedItemData(list.getCompound(i)));
                 }
             }
             return gearSlotPool;
-        } else if(nbt.asString().isPresent()){
-            return new GearSlotPool(new WeightedItemData(MiddleEarth.fetchId(nbt.asString().get())));
+        } else if(!nbt.asString().isEmpty()){
+            return new GearSlotPool(new WeightedItemData(MiddleEarth.fetchId(nbt.asString())));
         }
 
         return null;

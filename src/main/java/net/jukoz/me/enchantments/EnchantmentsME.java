@@ -1,5 +1,6 @@
 package net.jukoz.me.enchantments;
 
+import net.jukoz.me.entity.EntityAttributesME;
 import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.enchantment.Enchantment;
@@ -86,7 +87,7 @@ public class EnchantmentsME {
                         AttributeModifierSlot.MAINHAND))
                 .addEffect(EnchantmentEffectComponentTypes.ATTRIBUTES,
                         new AttributeEnchantmentEffect(MiddleEarth.of("enchantment.celerity"),
-                                EntityAttributes.ATTACK_SPEED, new EnchantmentLevelBasedValue.Linear(0.2f, 0.2f), EntityAttributeModifier.Operation.ADD_VALUE)));
+                                EntityAttributes.GENERIC_ATTACK_SPEED, new EnchantmentLevelBasedValue.Linear(0.2f, 0.2f), EntityAttributeModifier.Operation.ADD_VALUE)));
 
         register(registry, FIRST_STRIKE, Enchantment.builder(
                         Enchantment.definition(registryEntryLookup3.getOrThrow(ItemTags.WEAPON_ENCHANTABLE), 3, 1,
@@ -103,7 +104,7 @@ public class EnchantmentsME {
                 .exclusiveSet(registryEntryLookup2.getOrThrow(EnchantmentTags.ARMOR_EXCLUSIVE_SET))
                 .addEffect(EnchantmentEffectComponentTypes.ATTRIBUTES,
                         new AttributeEnchantmentEffect(MiddleEarth.of("enchantment.grounded"),
-                                EntityAttributes.KNOCKBACK_RESISTANCE, EnchantmentLevelBasedValue.linear(0.025F),
+                                EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, EnchantmentLevelBasedValue.linear(0.025F),
                                 EntityAttributeModifier.Operation.ADD_VALUE)));
 
         register(registry, HEWING, Enchantment.builder(
@@ -154,7 +155,7 @@ public class EnchantmentsME {
                 .exclusiveSet(registryEntryLookup2.getOrThrow(EnchantmentTags.ARMOR_EXCLUSIVE_SET))
                 .addEffect(EnchantmentEffectComponentTypes.ATTRIBUTES,
                         new AttributeEnchantmentEffect(Identifier.ofVanilla("enchantment.stalwart"),
-                                EntityAttributes.ARMOR, EnchantmentLevelBasedValue.linear(1F),
+                                EntityAttributes.GENERIC_ARMOR, EnchantmentLevelBasedValue.linear(1F),
                                 EntityAttributeModifier.Operation.ADD_VALUE)));
 
         register(registry, VANTAGE, Enchantment.builder(
@@ -164,7 +165,7 @@ public class EnchantmentsME {
                         AttributeModifierSlot.MAINHAND))
                 .addEffect(EnchantmentEffectComponentTypes.ATTRIBUTES,
                         new AttributeEnchantmentEffect(MiddleEarth.of("enchantment.vantage"),
-                                EntityAttributes.ENTITY_INTERACTION_RANGE, new EnchantmentLevelBasedValue.Linear(0.5f, 0.5f), EntityAttributeModifier.Operation.ADD_VALUE)));
+                                EntityAttributesME.ENTITY_INTERACTION_RANGE, new EnchantmentLevelBasedValue.Linear(0.5f, 0.5f), EntityAttributeModifier.Operation.ADD_VALUE)));
     }
 
     private static void register(Registerable<Enchantment> registry, RegistryKey<Enchantment> key, Enchantment.Builder builder) {
