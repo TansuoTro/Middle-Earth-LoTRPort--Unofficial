@@ -96,7 +96,7 @@ public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements
     }
 
     @Override
-    public boolean canFillWithFluid(LivingEntity filler, BlockView world, BlockPos pos, BlockState state, Fluid fluid) {
+    public boolean canFillWithFluid(BlockView world, BlockPos pos, BlockState state, Fluid fluid) {
         if (fluid != Fluids.WATER) {
             return false;
         }
@@ -104,7 +104,7 @@ public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements
         if (state.get(HALF) == DoubleBlockHalf.UPPER) {
             return true;
         }
-        return Waterloggable.super.canFillWithFluid(filler, world, pos, state, fluid);
+        return Waterloggable.super.canFillWithFluid(world, pos, state, fluid);
     }
 
     @Override

@@ -39,7 +39,7 @@ public class NpcData {
                 PacketCodecs.optional(PacketCodecs.registryEntry(DynamicRegistriesME.NPC_TYPE)), NpcData::getOptionalType,
                 PacketCodecs.optional(PacketCodecs.STRING), NpcData::getOptionalCategory,
                 PacketCodecs.optional(PacketCodecs.STRING), NpcData::getOptionalSpawnReason,
-                PacketCodecs.optional(BlockPos.PACKET_CODEC), NpcData::getOptionalStructureManagerPos,
+                PacketCodecs.optional(PacketCodecs.BLOCK_POS), NpcData::getOptionalStructureManagerPos,
                 NpcData::new);
     }
 

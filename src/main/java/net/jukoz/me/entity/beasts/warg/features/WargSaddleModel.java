@@ -68,7 +68,7 @@ public class WargSaddleModel extends WargModel {
         this.backBody.visible = false;
 
         try {
-            super.render(matrices, vertices, light, overlay);
+            super.render(matrices, vertices, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
         }
         finally {
             this.bodyFur.visible = bodyFurVisible;

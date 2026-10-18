@@ -26,7 +26,7 @@ import net.jukoz.me.registries.AtlasesME;
 
 @Environment(EnvType.CLIENT)
 public class FeetFeatureRenderer extends MEFeatureRenderer<NpcEntity, NpcEntityRenderState, NpcEntityModel> {
-    private final EntityModel<NpcEntityRenderState> feetModel;
+    private final FeetModel feetModel;
     private final SpriteAtlasTexture characterTexturesAtlas;
 
     public FeetFeatureRenderer(FeatureRendererContext<NpcEntity, NpcEntityModel> context, LoadedEntityModelsCompat loader) {
@@ -62,7 +62,7 @@ public class FeetFeatureRenderer extends MEFeatureRenderer<NpcEntity, NpcEntityR
     private void renderModel(Sprite sprite, MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay){
         if(sprite != null){
             VertexConsumer newLayerVertexConsumer = sprite.getTextureSpecificVertexConsumer(vertexConsumer);
-            feetModel.render(matrices, newLayerVertexConsumer, light, overlay);
+            feetModel.render(matrices, newLayerVertexConsumer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 }

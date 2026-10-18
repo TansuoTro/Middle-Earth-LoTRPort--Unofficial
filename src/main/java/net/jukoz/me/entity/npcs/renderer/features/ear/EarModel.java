@@ -2,17 +2,19 @@ package net.jukoz.me.entity.npcs.renderer.features.ear;
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.client.render.entity.model.SinglePartEntityModel;
+import net.jukoz.me.entity.npcs.NpcEntity;
 import net.minecraft.util.math.MathHelper;
 import net.jukoz.me.entity.npcs.renderer.NpcEntityRenderState;
 
-public class EarModel extends EntityModel<NpcEntityRenderState> {
+public class EarModel extends SinglePartEntityModel<NpcEntity> {
+    private final ModelPart root;
     public final ModelPart ears;
     public final ModelPart planeFlatLeft;
     public final ModelPart planeFlatRight;
 
     public EarModel(ModelPart modelPart) {
-        super(modelPart);
+        this.root = modelPart;
 
         this.ears = modelPart.getChild("ears");
 
@@ -37,9 +39,7 @@ public class EarModel extends EntityModel<NpcEntityRenderState> {
         return TexturedModelData.of(modelData, 16, 16);
     }
 
-    @Override
     public void setAngles(NpcEntityRenderState state) {
-        super.setAngles(state);
 
         // Taken from BipedEntityModel.class
         float f = state.leaningPitch;
@@ -50,10 +50,19 @@ public class EarModel extends EntityModel<NpcEntityRenderState> {
         if (bl) {
             this.ears.pitch = -0.7853982F;
         } else if (f > 0.0F) {
-            this.ears.pitch = MathHelper.lerpAngleRadians(f, this.ears.pitch, -0.7853982F);
+            this.ears.pitch = net.jukoz.me.compat.MEAngles.lerpAngleRadians(f, this.ears.pitch, -0.7853982F);
         }
 
         this.planeFlatLeft.yaw = (float)Math.toRadians(-20);
         this.planeFlatRight.yaw = (float)Math.toRadians(-160);
+    }
+
+    @Override
+    public ModelPart getPart() {
+        return this.root;
+    }
+
+    @Override
+    public void setAngles(NpcEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
     }
 }

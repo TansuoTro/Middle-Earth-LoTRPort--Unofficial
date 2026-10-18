@@ -11,7 +11,7 @@ public class NpcEntityInitializerUtil {
         if(typeId == null)
             return false;
         DynamicRegistryManager registryManager = world.getRegistryManager();
-        NpcType type =  registryManager.getOrThrow(DynamicRegistriesME.NPC_TYPE).get(typeId);
+        NpcType type =  registryManager.get(DynamicRegistriesME.NPC_TYPE).get(typeId);
         return type != null;
     }
 }

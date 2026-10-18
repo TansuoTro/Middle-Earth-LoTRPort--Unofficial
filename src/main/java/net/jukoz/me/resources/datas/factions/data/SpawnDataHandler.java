@@ -76,12 +76,12 @@ public class SpawnDataHandler {
     public SpawnData getDefaultSpawnData() {
         if(spawns == null || spawns.isEmpty())
             return null;
-        return spawns.values().stream().toList().getFirst();
+        return spawns.values().stream().findFirst().orElse(null);
     }
     public Identifier getDefaultSpawn() {
         if(spawns == null || spawns.isEmpty())
             return null;
-        return spawns.keySet().stream().toList().getFirst();
+        return spawns.keySet().stream().findFirst().orElse(null);
     }
 
     public BlockPos getSpawnBlockPos(Identifier spawnId) {

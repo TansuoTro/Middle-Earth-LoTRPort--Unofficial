@@ -17,7 +17,7 @@ import net.jukoz.me.block.registration.ModBlockEntities;
 public class LarchCofferBlock extends ChestBlock {
 
     public LarchCofferBlock(Settings settings) {
-        super(() -> ModBlockEntities.LARCH_COFFER, settings);
+        super(settings, () -> ModBlockEntities.LARCH_COFFER);
     }
 
     @Override

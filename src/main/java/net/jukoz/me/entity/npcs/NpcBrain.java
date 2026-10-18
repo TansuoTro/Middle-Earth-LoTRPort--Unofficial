@@ -68,7 +68,7 @@ public class NpcBrain {
 
         brain.setTaskList(Activity.FIGHT, ImmutableList.of(
                         Pair.of(0, UpdateAttackTargetTask.create(NpcBrain::getAttackTarget)),
-                        Pair.of(1, ForgetAttackTargetTask.create(((world, target) -> shouldForgetTarget(world, target, npcEntity)))),
+                        Pair.of(1, ForgetAttackTargetTask.create()),
                         Pair.of(2, NpcRangedAttackTask.create(attackSpeed)),
                         //Pair.of(2, new NpcMountedApproachTask()),
                         Pair.of(3, NpcRangedApproachTask.create(movementSpeed, 10))
@@ -94,8 +94,6 @@ public class NpcBrain {
         brain.forget(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
 
         brain.setTaskList(Activity.CORE, 0, ImmutableList.of(
-                new MoveToTargetTask(),
-                new UpdateLookControlTask(45, 90),
                 //UpdateAttackTargetTask.create((world, npc) -> npc.getHurtBy()),
                 UpdateAttackTargetTask.create(NpcBrain::getAttackTarget))
         );
@@ -118,7 +116,7 @@ public class NpcBrain {
 
         brain.setTaskList(Activity.FIGHT, ImmutableList.of(
                         Pair.of(0, UpdateAttackTargetTask.create(NpcBrain::getAttackTarget)),
-                        Pair.of(1, ForgetAttackTargetTask.create(((world, target) -> shouldForgetTarget(world, target, npc)))),
+                        Pair.of(1, ForgetAttackTargetTask.create()),
                         Pair.of(2, new NpcMountedApproachTask()),
                         Pair.of(3, new NpcOnGroundApproachTask()),
                         Pair.of(4, RangedApproachTask.create(movementSpeed)),
@@ -129,7 +127,7 @@ public class NpcBrain {
                 ));
     }
 
-    private static Optional<? extends LivingEntity> getAttackTarget(ServerWorld serverWorld, NpcEntity npc) {
+    private static Optional<? extends LivingEntity> getAttackTarget(NpcEntity npc) {
         return npc.getBrain().getOptionalRegisteredMemory(MemoryModuleType.NEAREST_ATTACKABLE);
     }
 

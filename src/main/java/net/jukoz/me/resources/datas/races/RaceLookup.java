@@ -26,7 +26,7 @@ public class RaceLookup {
     }
 
     public static Race getRace(World world, Identifier identifier) {
-        Optional<Race> race = world.getRegistryManager().get(DynamicRegistriesME.RACE).getOptionalValue(identifier);
+        Optional<Race> race = world.getRegistryManager().get(DynamicRegistriesME.RACE).getOrEmpty(identifier);
         return race.orElse(null);
     }
 }

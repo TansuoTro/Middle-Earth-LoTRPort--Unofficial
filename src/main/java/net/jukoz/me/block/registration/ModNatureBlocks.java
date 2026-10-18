@@ -25,7 +25,7 @@ import net.jukoz.me.registries.RegistryAliasesME;
 import net.jukoz.me.world.features.tree.ModTreeConfiguredFeatures;
 import net.jukoz.me.world.features.tree.MushroomTreeConfiguredFeatures;
 import net.minecraft.block.*;
-import net.minecraft.block.sapling.SaplingGenerator;
+import net.jukoz.me.compat.MESaplingGenerator;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -614,7 +614,7 @@ public class ModNatureBlocks {
     }
 
     public static Block registerSimpleSapling(String name, RegistryKey<ConfiguredFeature<?, ?>> treeFeature) {
-        SaplingBlock saplingBlock = new SaplingBlock(new SaplingGenerator(name, Optional.empty(), Optional.ofNullable(treeFeature), Optional.empty()),
+        SaplingBlock saplingBlock = new SaplingBlock(new MESaplingGenerator(name, Optional.empty(), Optional.ofNullable(treeFeature), Optional.empty()),
                 AbstractBlock.Settings.copy(Blocks.OAK_SAPLING));
         Block resultBlock = Registry.register(Registries.BLOCK, ModBlocks.keyOfBlock(name), saplingBlock);
         registerBlockItem(name, resultBlock);
@@ -630,7 +630,7 @@ public class ModNatureBlocks {
     public static Block registerVariantSapling(String name, List<RegistryKey<ConfiguredFeature<?, ?>>> treeFeatures) {
         List<SaplingGenerator> saplingGenerators = new ArrayList<>();
         for(RegistryKey<ConfiguredFeature<?,?>> treeFeature : treeFeatures) {
-            saplingGenerators.add(new SaplingGenerator(name, Optional.empty(), Optional.ofNullable(treeFeature),
+            saplingGenerators.add(new MESaplingGenerator(name, Optional.empty(), Optional.ofNullable(treeFeature),
                             Optional.empty()));
         }
         SaplingBlock saplingBlock = new VariantSaplingBlock(AbstractBlock.Settings.copy(Blocks.OAK_SAPLING), saplingGenerators);

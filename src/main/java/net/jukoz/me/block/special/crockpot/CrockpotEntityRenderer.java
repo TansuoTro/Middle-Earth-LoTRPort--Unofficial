@@ -26,7 +26,7 @@ public class CrockpotEntityRenderer implements BlockEntityRenderer<CrockpotBlock
 
     @Override
     public void render(CrockpotBlockEntity entity, float tickProgress, MatrixStack matrices,
-                       VertexConsumerProvider vertexConsumers, int light, int overlay, Vec3d cameraPos) {
+                       VertexConsumerProvider vertexConsumers, int light, int overlay) {
         int color = 4161734;
         int red = color >> 16 & 255;
         int green = color >> 8 & 255;
@@ -56,10 +56,10 @@ public class CrockpotEntityRenderer implements BlockEntityRenderer<CrockpotBlock
             minV = MathHelper.lerp(SIZE_FACTOR, minV, maxV);
             maxV = MathHelper.lerp(1 - SIZE_FACTOR, tempMin, maxV);
 
-            consumer.vertex(entry, SIZE_FACTOR, 0, SIZE_FACTOR)               .color(50, 80, 240, 190).texture(minU, minV).light(light).overlay(overlay).normal(1, 1, 1);
-            consumer.vertex(entry, SIZE_FACTOR, 0, 1 - SIZE_FACTOR)  .color(50, 80, 190, 190).texture(minU, maxV).light(light).overlay(overlay).normal(1, 1, 1);
-            consumer.vertex(entry, 1 - SIZE_FACTOR, 0, 1 - SIZE_FACTOR)        .color(50, 80, 240, 190).texture(maxU, maxV).light(light).overlay(overlay).normal(1, 1, 1);
-            consumer.vertex(entry, 1 - SIZE_FACTOR, 0, SIZE_FACTOR)               .color(50, 80, 240, 190).texture(maxU, minV).light(light).overlay(overlay).normal(1, 1, 1);
+            consumer.vertex(entry.getPositionMatrix(), SIZE_FACTOR, 0, SIZE_FACTOR)               .color(50, 80, 240, 190).texture(minU, minV).light(light).overlay(overlay).normal(1, 1, 1);
+            consumer.vertex(entry.getPositionMatrix(), SIZE_FACTOR, 0, 1 - SIZE_FACTOR)  .color(50, 80, 190, 190).texture(minU, maxV).light(light).overlay(overlay).normal(1, 1, 1);
+            consumer.vertex(entry.getPositionMatrix(), 1 - SIZE_FACTOR, 0, 1 - SIZE_FACTOR)        .color(50, 80, 240, 190).texture(maxU, maxV).light(light).overlay(overlay).normal(1, 1, 1);
+            consumer.vertex(entry.getPositionMatrix(), 1 - SIZE_FACTOR, 0, SIZE_FACTOR)               .color(50, 80, 240, 190).texture(maxU, minV).light(light).overlay(overlay).normal(1, 1, 1);
         }
 
         matrices.pop();

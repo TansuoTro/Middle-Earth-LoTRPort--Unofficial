@@ -44,6 +44,6 @@ public class EnwebbedFeatureRenderer<T extends LivingEntity, M extends EntityMod
         }
         this.model.setAngles(entity, limbAngle, limbDistance, animationProgress, headYaw, headPitch);
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(TEXTURE));
-        this.model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
+        this.model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

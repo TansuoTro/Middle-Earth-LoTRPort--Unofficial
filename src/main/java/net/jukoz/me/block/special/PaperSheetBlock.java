@@ -53,25 +53,18 @@ public class PaperSheetBlock extends Block {
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (world.isClient) {
-            return ActionResult.SUCCESS;
-        }  else {
-            if (player.isCreative()) {
-                world.setBlockState(pos, state.cycle(PAPERS));
-            }
-        }
-        return ActionResult.SUCCESS;
-    }
-
-    @Override
-    protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        ItemStack itemStack = player.getStackInHand(hand);
-        if(itemStack.getItem() == this.asItem() && state.get(PAPERS) < MAX_PAPERS) {
-            stack.decrementUnlessCreative(1, player);
+        ItemStack stack = player.getStackInHand(hand);
+        if(stack.getItem() == this.asItem() && state.get(PAPERS) < MAX_PAPERS) {
+            if (!player.isCreative()) stack.decrement(1);
             world.setBlockState(pos, state.cycle(PAPERS));
             return ActionResult.CONSUME;
         }
-        return super.onUseWithItem(stack, state, world, pos, player, hand, hit);
+        if (world.isClient) {
+            return ActionResult.SUCCESS;
+        } else if (player.isCreative()) {
+            world.setBlockState(pos, state.cycle(PAPERS));
+        }
+        return ActionResult.SUCCESS;
     }
 
     @Override

@@ -53,7 +53,7 @@ public class TrackedDataHandlerRegistryME {
         NPC_DATA_ID = TrackedDataHandlerME.create(PacketCodecs.STRING);
         CATEGORY = TrackedDataHandlerME.create(PacketCodecs.STRING);
         NPC_TEXTURE_DATA = TrackedDataHandlerME.create(NpcTextureData.PACKET_CODEC);
-        STRUCTURE_MANAGER_HOST_POS = TrackedDataHandlerME.create(BlockPos.PACKET_CODEC);
+        STRUCTURE_MANAGER_HOST_POS = TrackedDataHandlerME.create(PacketCodecs.BLOCK_POS);
         SPIDER_VARIANT = TrackedDataHandlerME.create(SpiderVariant.PACKET_CODEC);
         GREAT_HORN_VARIANT = TrackedDataHandlerME.create(GreatHornVariant.PACKET_CODEC);
     }

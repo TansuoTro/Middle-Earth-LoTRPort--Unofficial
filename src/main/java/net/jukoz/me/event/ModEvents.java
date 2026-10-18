@@ -34,6 +34,8 @@ import net.jukoz.me.world.chunkgen.map.MiddleEarthHeightMap;
 import net.jukoz.me.world.dimension.ModDimensions;
 
 import java.util.Objects;
+import net.jukoz.me.compat.MEEnchants;
+import net.jukoz.me.compat.MEDirection;
 
 public class ModEvents {
     private static final String GOT_STARTER_ITEM = MiddleEarth.MOD_ID + ".received_starter_item";
@@ -68,7 +70,7 @@ public class ModEvents {
                 ItemStack stack = Objects.requireNonNull(playerEntity.getStackInHand(playerEntity.getActiveHand()));
                 RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager()
                         .getOrThrow(RegistryKeys.ENCHANTMENT).getOptional(EnchantmentsME.BEHEADING).orElseThrow();
-                boolean hasEnchant = stack.getEnchantments().getEnchantments().contains(enchantmentRegistryEntry);
+                boolean hasEnchant = MEEnchants.has(stack, enchantmentRegistryEntry);
 
                 if (hasEnchant) {
                     ItemStack drop = ItemStack.EMPTY;
@@ -87,7 +89,7 @@ public class ModEvents {
             ItemStack stack = Objects.requireNonNull(playerEntity.getStackInHand(playerEntity.getActiveHand()));
             
             RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getOptional(EnchantmentsME.HEWING).orElseThrow();
-            boolean hasEnchant = stack.getEnchantments().getEnchantments().contains(enchantmentRegistryEntry);
+            boolean hasEnchant = MEEnchants.has(stack, enchantmentRegistryEntry);
             int level = EnchantmentHelper.getLevel(enchantmentRegistryEntry, stack);
             float hardness = blockState.getBlock().getHardness();
 
@@ -95,7 +97,7 @@ public class ModEvents {
                 if (!playerEntity.isCreative() && !playerEntity.isSneaking()) {
                     
                     if (stack.isSuitableFor(blockState)){
-                        if (playerEntity.getFacing() == Direction.DOWN || playerEntity.getFacing() == Direction.UP){
+                        if (MEDirection.facing(playerEntity) == Direction.DOWN || MEDirection.facing(playerEntity) == Direction.UP){
                             if (level == 1){
                                 level1BreakVertical(world, playerEntity, blockPos, stack, hardness);
                             } else if (level == 2){
@@ -122,7 +124,7 @@ public class ModEvents {
             
             RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager()
                     .getOrThrow(RegistryKeys.ENCHANTMENT).getOptional(EnchantmentsME.TREE_FELLER).orElseThrow();
-            boolean hasEnchant = stack.getEnchantments().getEnchantments().contains(enchantmentRegistryEntry);
+            boolean hasEnchant = MEEnchants.has(stack, enchantmentRegistryEntry);
             int level = EnchantmentHelper.getLevel(enchantmentRegistryEntry, stack);
             float hardness = blockState.getBlock().getHardness();
 
@@ -204,8 +206,8 @@ public class ModEvents {
 
         breakAndDamage(world, player, blockPosUp, stack, hardness);
 
-        breakAndDamage(world, player, blockPos.offset(player.getFacing().rotateYClockwise()), stack, hardness);
-        breakAndDamage(world, player, blockPos.offset(player.getFacing().rotateYCounterclockwise()), stack, hardness);
+        breakAndDamage(world, player, blockPos.offset(MEDirection.facing(player).rotateYClockwise()), stack, hardness);
+        breakAndDamage(world, player, blockPos.offset(MEDirection.facing(player).rotateYCounterclockwise()), stack, hardness);
 
         breakAndDamage(world, player, blockPosDown, stack, hardness);
     }
@@ -215,15 +217,15 @@ public class ModEvents {
         BlockPos blockPosDown = blockPos.down();
 
         breakAndDamage(world, player, blockPosUp, stack, hardness);
-        breakAndDamage(world, player, blockPosUp.offset(player.getFacing().rotateYClockwise()), stack, hardness);
-        breakAndDamage(world, player, blockPosUp.offset(player.getFacing().rotateYCounterclockwise()), stack, hardness);
+        breakAndDamage(world, player, blockPosUp.offset(MEDirection.facing(player).rotateYClockwise()), stack, hardness);
+        breakAndDamage(world, player, blockPosUp.offset(MEDirection.facing(player).rotateYCounterclockwise()), stack, hardness);
 
-        breakAndDamage(world, player, blockPos.offset(player.getFacing().rotateYClockwise()), stack, hardness);
-        breakAndDamage(world, player, blockPos.offset(player.getFacing().rotateYCounterclockwise()), stack, hardness);
+        breakAndDamage(world, player, blockPos.offset(MEDirection.facing(player).rotateYClockwise()), stack, hardness);
+        breakAndDamage(world, player, blockPos.offset(MEDirection.facing(player).rotateYCounterclockwise()), stack, hardness);
 
         breakAndDamage(world, player, blockPosDown, stack, hardness);
-        breakAndDamage(world, player, blockPosDown.offset(player.getFacing().rotateYClockwise()), stack, hardness);
-        breakAndDamage(world, player, blockPosDown.offset(player.getFacing().rotateYCounterclockwise()), stack, hardness);
+        breakAndDamage(world, player, blockPosDown.offset(MEDirection.facing(player).rotateYClockwise()), stack, hardness);
+        breakAndDamage(world, player, blockPosDown.offset(MEDirection.facing(player).rotateYCounterclockwise()), stack, hardness);
     }
 
     private static void breakAndDamage(World world, PlayerEntity player, BlockPos blockpos, ItemStack stack, float hardness){

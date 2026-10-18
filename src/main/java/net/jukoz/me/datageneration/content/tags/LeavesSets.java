@@ -26,6 +26,8 @@ public class LeavesSets {
         }
     };
 
+    public static List<Block> blocks = leaves;
+
     public static List<Block> grayscaleLeaves = new ArrayList<>() {
         {
 

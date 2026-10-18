@@ -53,23 +53,22 @@ public class PipeItem extends Item {
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand) {
+    public net.minecraft.util.TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack pipe = user.getStackInHand(hand);
 
         if (DamageableItemUtils.isFullyDamaged(pipe)) {
             boolean refilled = tryRefillPipe(pipe, user, world);
-            return refilled ? ActionResult.CONSUME.withNewHandStack(pipe) : ActionResult.FAIL;
+            return refilled ? net.minecraft.util.TypedActionResult.consume(pipe) : net.minecraft.util.TypedActionResult.fail(pipe);
         }
 
         startSmoking(pipe, user, world, hand);
-        return ActionResult.CONSUME.withNewHandStack(pipe);
+        return net.minecraft.util.TypedActionResult.consume(pipe);
     }
 
     @Override
-    public boolean onStoppedUsing(ItemStack pipe, World world, LivingEntity user, int remainingUseTicks) {
+    public void onStoppedUsing(ItemStack pipe, World world, LivingEntity user, int remainingUseTicks) {
         int elapsedTicks = MAX_USE_TIME_TICKS - remainingUseTicks;
         finishSmoking(pipe, world, user, elapsedTicks, false);
-        return false;
     }
 
     @Override
@@ -92,7 +91,7 @@ public class PipeItem extends Item {
     }
 
     @Override
-    public int getMaxUseTime(ItemStack stack, LivingEntity user) {
+    public int getMaxUseTime(ItemStack stack) {
         return MAX_USE_TIME_TICKS;
     }
 
@@ -129,7 +128,7 @@ public class PipeItem extends Item {
     }
 
     private void applyCooldown(PlayerEntity user, ItemStack pipe) {
-        user.getItemCooldownManager().set(pipe, USE_COOLDOWN_TICKS);
+        user.getItemCooldownManager().set(pipe.getItem(), USE_COOLDOWN_TICKS);
     }
 
     private boolean isSmoking(LivingEntity user) {

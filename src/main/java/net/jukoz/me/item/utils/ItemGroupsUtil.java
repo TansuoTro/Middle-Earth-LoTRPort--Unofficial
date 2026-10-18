@@ -19,6 +19,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.jukoz.me.MiddleEarth;
+import net.jukoz.me.compat.MEArmorTrim;
 import net.jukoz.me.entity.npcs.NpcEntity;
 import net.jukoz.me.entity.npcs.data.NpcInitializationData;
 import net.jukoz.me.entity.npcs.initializer.NpcSpawnEggHelper;
@@ -54,10 +55,9 @@ public class ItemGroupsUtil {
 
         NbtElement element = NpcInitializationData.CODEC
                 .encodeStart(ops, npcInitializationData)
-                .getOrThrow();
+                .result().orElse(new NbtCompound());
         compoundData.put(NpcEntity.KeyStrings.INITIALIZATION_DATA, element);
 
-        randomNpcSpawnEgg.set(DataComponentTypes.ENTITY_DATA, NbtComponent.of(compoundData));
         randomNpcSpawnEgg.setCustomName(Text.translatable(randomSpawnEggId.toTranslationKey("item")));
         MEComponents.set(randomNpcSpawnEgg, MEComponents.ITEM_MODEL, new Identifier(MiddleEarth.MOD_ID, randomSpawnEggId.getPath().replaceAll("\\.", "_")));
 
@@ -71,8 +71,8 @@ public class ItemGroupsUtil {
 
     private static ItemStack addTrim(Item partItem, RegistryWrapper.WrapperLookup wrapper, RegistryKey<ArmorTrimMaterial> reference) {
         ItemStack item = partItem.getDefaultStack();
-        RegistryEntry.Reference<ArmorTrimMaterial> material = wrapper.getOptional(RegistryKeys.TRIM_MATERIAL).orElseThrow().getOrThrow(reference);
-        RegistryEntry.Reference<ArmorTrimPattern> pattern = wrapper.getOptional(RegistryKeys.TRIM_PATTERN).orElseThrow().getOptional(RegistryKey.of(RegistryKeys.TRIM_PATTERN, MiddleEarth.of( "smithing_part"))).orElse(null);
+        RegistryEntry.Reference<ArmorTrimMaterial> material = wrapper.getOptionalWrapper(RegistryKeys.TRIM_MATERIAL).orElseThrow().getOrThrow(reference);
+        RegistryEntry.Reference<ArmorTrimPattern> pattern = wrapper.getOptionalWrapper(RegistryKeys.TRIM_PATTERN).orElseThrow().getOptional(RegistryKey.of(RegistryKeys.TRIM_PATTERN, MiddleEarth.of( "smithing_part"))).orElse(null);
         MEArmorTrim.set(item, new ArmorTrim(material , pattern));
         return item;
     }
@@ -132,7 +132,7 @@ public class ItemGroupsUtil {
 
     public static Collection<ItemStack> addFactionBanners(RegistryWrapper.WrapperLookup lookup) {
         List<ItemStack> bannerList = new ArrayList<>();
-        List<RegistryEntry.Reference<Faction>> factions = lookup.getOrThrow(DynamicRegistriesME.FACTION).streamEntries().toList();
+        List<RegistryEntry.Reference<Faction>> factions = lookup.getWrapperOrThrow(DynamicRegistriesME.FACTION).streamEntries().toList();
         for(RegistryEntry.Reference<Faction> factionReference : factions){
             ItemStack bannerItem = factionReference.value().getBannerItem(lookup);
             if(!bannerItem.isEmpty())

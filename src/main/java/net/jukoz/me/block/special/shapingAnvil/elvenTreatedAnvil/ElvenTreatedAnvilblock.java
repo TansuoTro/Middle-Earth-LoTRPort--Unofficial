@@ -27,7 +27,7 @@ public class ElvenTreatedAnvilblock extends AbstractShapingAnvilBlock {
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         switch (state.get(FACING)){
             case NORTH -> {
                 return Stream.of(
@@ -87,6 +87,6 @@ public class ElvenTreatedAnvilblock extends AbstractShapingAnvilBlock {
 
     @Nullable
     protected static <T extends BlockEntity> BlockEntityTicker<T> validateTicker(World world, BlockEntityType<T> givenType, BlockEntityType<ShapingAnvilBlockEntity> expectedType) {
-        return world.isClient ? null : ElvenTreatedAnvilblock.validateTicker(givenType, expectedType, ShapingAnvilBlockEntity::tick);
+        return world.isClient ? null : ElvenTreatedAnvilblock.checkType(givenType, expectedType, ShapingAnvilBlockEntity::tick);
     }
 }

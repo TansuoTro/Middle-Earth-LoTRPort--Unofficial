@@ -76,7 +76,7 @@ public class BellowsBlockEntity extends BlockEntity {
             this.animationProgress = 0;
             if(this.world != null){
                 BlockPos blockPos = this.getPos();
-                this.world.addSyncedBlockEvent(blockPos, this.getCachedState().getBlock(), 1, direction.getIndex());
+                this.world.addSyncedBlockEvent(blockPos, this.getCachedState().getBlock(), 1, direction.getId());
             }
             return true;
         }

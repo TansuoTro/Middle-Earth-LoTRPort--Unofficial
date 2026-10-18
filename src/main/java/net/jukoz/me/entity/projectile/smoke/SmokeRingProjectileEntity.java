@@ -52,26 +52,24 @@ public class SmokeRingProjectileEntity extends ProjectileEntity {
     }
 
     @Override
-    public boolean damage(ServerWorld world, DamageSource source, float amount) {
+    public boolean damage(DamageSource source, float amount) {
         return false;
     }
 
     @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
-        builder.add(FAILED, false);
+    protected void initDataTracker() {
+        this.dataTracker.startTracking(FAILED, false);
     }
 
     @Override
     protected void readCustomDataFromNbt(NbtCompound nbt) {
         ReadView view = new ReadView(nbt);
-        super.readCustomData(view);
         this.setFailed(view.getBoolean("Failed", false));
     }
 
     @Override
     protected void writeCustomDataToNbt(NbtCompound nbt) {
         WriteView view = new WriteView(nbt);
-        super.writeCustomData(view);
         view.putBoolean("Failed", this.isFailed());
     }
 

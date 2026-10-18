@@ -15,7 +15,7 @@ import java.util.Random;
 /// StructureSpawnNestPool is a list of npcs with spawn parameters such as weight, category, etc.
 public class StructureSpawnNestPool {
     public static final Codec<StructureSpawnNestPool> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            EntityType.CODEC.fieldOf("entity_type").forGetter(StructureSpawnNestPool::getEntityType),
+            net.minecraft.registry.Registries.ENTITY_TYPE.getCodec().fieldOf("entity_type").forGetter(StructureSpawnNestPool::getEntityType),
             Codec.INT.fieldOf("weight").forGetter(StructureSpawnNestPool::getWeight),
             Codec.INT.fieldOf("amount").forGetter(StructureSpawnNestPool::getAmount),
             RegistryKey.createCodec(DynamicRegistriesME.FACTION).optionalFieldOf("faction_key").forGetter(StructureSpawnNestPool::getFaction),

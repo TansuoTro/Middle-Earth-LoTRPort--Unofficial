@@ -13,7 +13,7 @@ public class ChestnutCofferBlockEntity extends ChestBlockEntity {
     public ChestnutCofferBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CHESTNUT_COFFER, pos, state);
 
-        this.setHeldStacks(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
+        this.setInvStackList(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
     }
 
     @Override

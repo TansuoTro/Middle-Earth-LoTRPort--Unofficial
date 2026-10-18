@@ -44,7 +44,7 @@ public class ModItemGroups {
     public static final List<ItemStack> MISC_BLOCKS_CONTENTS = new LinkedList<>();
     public static final ItemGroup MISC_BLOCKS = FabricItemGroup.builder()
             .displayName(Text.translatable("itemGroup." + MiddleEarth.MOD_ID + ".misc_blocks"))
-            .icon(() -> new ItemStack(ModBlocks.STRAW_BLOCK.asItem()))
+            .icon(() -> new ItemStack(net.jukoz.me.compat.MEBlocksLegacy.STRAW_BLOCK.asItem()))
             .entries((displayContext, entries) -> {
                 for (ItemStack item : MISC_BLOCKS_CONTENTS) {
                     entries.add(item);

@@ -48,7 +48,7 @@ public class CharacterTextureMaterial {
 
     static {
         PACKET_CODEC = PacketCodec.tuple(
-                Identifier.PACKET_CODEC, CharacterTextureMaterial::getIdentifier,
+                PacketCodecs.IDENTIFIER, CharacterTextureMaterial::getIdentifier,
                 PacketCodecs.STRING, CharacterTextureMaterial::getTypeValue, CharacterTextureMaterial::new);
         ENTRY_CODEC = RegistryElementCodec.of(DynamicRegistriesME.SKIN_MATERIAL, CODEC);
         ENTRY_PACKET_CODEC = PacketCodecs.registryEntry(DynamicRegistriesME.SKIN_MATERIAL, PACKET_CODEC);

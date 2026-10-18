@@ -17,7 +17,7 @@ import net.jukoz.me.block.registration.ModBlockEntities;
 public class SpruceCofferBlock extends ChestBlock {
 
     public SpruceCofferBlock(Settings settings) {
-        super(() -> ModBlockEntities.SPRUCE_COFFER, settings);
+        super(settings, () -> ModBlockEntities.SPRUCE_COFFER);
     }
 
     @Override

@@ -26,7 +26,7 @@ import net.jukoz.me.registries.AtlasesME;
 
 @Environment(EnvType.CLIENT)
 public class NoseFeatureRenderer extends MEFeatureRenderer<NpcEntity, NpcEntityRenderState, NpcEntityModel> {
-    private final EntityModel<NpcEntityRenderState> noseModel;
+    private final NoseModel noseModel;
     private final SpriteAtlasTexture characterTexturesAtlas;
 
     public NoseFeatureRenderer(FeatureRendererContext<NpcEntity, NpcEntityModel> context, LoadedEntityModelsCompat loader) {
@@ -59,7 +59,7 @@ public class NoseFeatureRenderer extends MEFeatureRenderer<NpcEntity, NpcEntityR
     private void renderModel(Sprite sprite, MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay){
         if(sprite != null){
             VertexConsumer newLayerVertexConsumer = sprite.getTextureSpecificVertexConsumer(vertexConsumer);
-            noseModel.render(matrices, newLayerVertexConsumer, light, overlay);
+            noseModel.render(matrices, newLayerVertexConsumer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 }

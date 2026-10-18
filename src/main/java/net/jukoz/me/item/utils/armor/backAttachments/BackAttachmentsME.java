@@ -88,12 +88,12 @@ public enum BackAttachmentsME implements StringIdentifiable {
     MANTLE_OF_YAVANNA(61,"mantle_of_yavanna")
     ;
 
-    private static final IntFunction<BackAttachmentsME> BY_ID = ValueLists.createIndexToValueFunction(BackAttachmentsME::getId, BackAttachmentsME.values(), ValueLists.OutOfBoundsHandling.ZERO);;
+    private static final IntFunction<BackAttachmentsME> BY_ID = ValueLists.createIdToValueFunction(BackAttachmentsME::getId, BackAttachmentsME.values(), ValueLists.OutOfBoundsHandling.ZERO);;
     private final String name;
     private final int id;
 
-    public static final Codec<BackAttachmentsME> CODEC = StringIdentifiable.createBasicCodec(BackAttachmentsME::values);
-    public static final PacketCodec<ByteBuf, BackAttachmentsME> PACKET_CODEC = PacketCodecs.indexed(BY_ID, BackAttachmentsME::getId);
+    public static final Codec<BackAttachmentsME> CODEC = StringIdentifiable.createCodec(BackAttachmentsME::values);
+    public static final PacketCodec<net.minecraft.network.PacketByteBuf, BackAttachmentsME> PACKET_CODEC = PacketCodecs.indexed(BY_ID, BackAttachmentsME::getId);
 
     BackAttachmentsME(int id, String name){
         this.name = name;

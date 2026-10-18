@@ -30,7 +30,7 @@ public class CustomSpearWeaponItem extends ReachWeaponItem {
     }
 
     @Override
-    public int getMaxUseTime(ItemStack stack, LivingEntity user) {
+    public int getMaxUseTime(ItemStack stack) {
         return 48000;
     }
 
@@ -40,7 +40,7 @@ public class CustomSpearWeaponItem extends ReachWeaponItem {
             return;
         }
         PlayerEntity playerEntity = (PlayerEntity)user;
-        int i = this.getMaxUseTime(stack, user) - remainingUseTicks;
+        int i = this.getMaxUseTime(stack) - remainingUseTicks;
         if (i < 7) {
             return;
         }

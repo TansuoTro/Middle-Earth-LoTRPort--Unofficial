@@ -499,7 +499,7 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
 
     @Override
     public boolean isBondingItem(ItemStack itemStack) {
-        return itemStack.isIn(ItemTags.GOAT_FOOD);
+        return itemStack.isIn(ItemTagsME.GOAT_FOOD);
     }
 
     /* VARIANTS */

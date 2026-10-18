@@ -48,7 +48,8 @@ public class CrockpotBlock extends BlockWithEntity {
 
 
     @Override
-    protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        ItemStack stack = player.getStackInHand(hand);
         BlockEntity blockEntity = player.getWorld().getBlockEntity(pos);
 
         if(blockEntity instanceof CrockpotBlockEntity crockpotBlockEntity) {
@@ -87,11 +88,11 @@ public class CrockpotBlock extends BlockWithEntity {
                 }
             }
         }
-        return super.onUseWithItem(stack, state, world, pos, player, hand, hit);
+        return super.onUse(state, world, pos, player, hand, hit);
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return Block.createCuboidShape(4.0, 0.0, 4.0, 12, 7.0, 12.0);
     }
 
@@ -128,8 +129,8 @@ public class CrockpotBlock extends BlockWithEntity {
     @Nullable
     protected static <T extends BlockEntity> BlockEntityTicker<T> validateTicker(World world, BlockEntityType<T> givenType, BlockEntityType<CrockpotBlockEntity> expectedType) {
         return world.isClient
-                ? BellowsBlock.validateTicker(givenType, expectedType, CrockpotBlockEntity::clientTick)
-                : BellowsBlock.validateTicker(givenType, expectedType, CrockpotBlockEntity::serverTick);
+                ? checkType(givenType, expectedType, CrockpotBlockEntity::clientTick)
+                : checkType(givenType, expectedType, CrockpotBlockEntity::serverTick);
     }
 
     @Override

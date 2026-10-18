@@ -30,7 +30,7 @@ public class MEWallTorchBlock extends WallTorchBlock {
     public static final BooleanProperty LIT = Properties.LIT;
 
     public MEWallTorchBlock(Settings settings) {
-        super(ParticleTypes.FLAME, settings);
+        super(settings, ParticleTypes.FLAME);
         this.setDefaultState((BlockState)((BlockState)((BlockState)((BlockState)((BlockState)this.stateManager.getDefaultState()).with(LIT, true).with(FACING, Direction.NORTH)))));
     }
 

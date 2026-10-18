@@ -29,14 +29,14 @@ public enum HelmetAttachmentsME implements StringIdentifiable {
     SKULL(11,"skull", HelmetAttachmentsStatesME.UP),
     ;
 
-    private static final IntFunction<HelmetAttachmentsME> BY_ID = ValueLists.createIndexToValueFunction(HelmetAttachmentsME::getId, HelmetAttachmentsME.values(), ValueLists.OutOfBoundsHandling.ZERO);;
+    private static final IntFunction<HelmetAttachmentsME> BY_ID = ValueLists.createIdToValueFunction(HelmetAttachmentsME::getId, HelmetAttachmentsME.values(), ValueLists.OutOfBoundsHandling.ZERO);;
 
     private final String name;
     private final int id;
     private final HelmetAttachmentsStatesME constantState;
 
-    public static final Codec<HelmetAttachmentsME> CODEC = StringIdentifiable.createBasicCodec(HelmetAttachmentsME::values);
-    public static final PacketCodec<ByteBuf, HelmetAttachmentsME> PACKET_CODEC = PacketCodecs.indexed(BY_ID, HelmetAttachmentsME::getId);;
+    public static final Codec<HelmetAttachmentsME> CODEC = StringIdentifiable.createCodec(HelmetAttachmentsME::values);
+    public static final PacketCodec<net.minecraft.network.PacketByteBuf, HelmetAttachmentsME> PACKET_CODEC = PacketCodecs.indexed(BY_ID, HelmetAttachmentsME::getId);;
 
     HelmetAttachmentsME(int id, String name){
         this.id = id;

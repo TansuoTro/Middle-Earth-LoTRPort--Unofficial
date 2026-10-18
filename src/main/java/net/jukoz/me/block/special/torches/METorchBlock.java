@@ -30,7 +30,7 @@ public class METorchBlock extends TorchBlock {
     public static final BooleanProperty LIT = Properties.LIT;
 
     public METorchBlock(Settings settings) {
-        super(ParticleTypes.FLAME, settings);
+        super(settings, ParticleTypes.FLAME);
         this.setDefaultState((BlockState)((BlockState)((BlockState)((BlockState)((BlockState)this.stateManager.getDefaultState()).with(LIT, true)))));
     }
 

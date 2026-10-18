@@ -3,8 +3,6 @@ package net.jukoz.me.entity.npcs.initializer;
 import net.jukoz.me.item.MEComponents;
 import net.minecraft.client.MinecraftClient;
 
-import net.minecraft.component.type.CustomModelDataComponent;
-import net.minecraft.component.type.NbtComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -58,7 +56,7 @@ public class NpcSpawnEggHelper {
 
         NbtElement element = NpcInitializationData.CODEC
                 .encodeStart(ops, npcInitializationData)
-                .getOrThrow();
+                .result().orElse(new NbtCompound());
         compoundData.put(NpcEntity.KeyStrings.INITIALIZATION_DATA, element);
 
         itemStack.getOrCreateSubNbt("EntityTag").copyFrom(compoundData);

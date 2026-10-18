@@ -1,5 +1,6 @@
 package net.jukoz.me.block.utils.setBuilders;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.enums.Instrument;
 import net.minecraft.sound.BlockSoundGroup;

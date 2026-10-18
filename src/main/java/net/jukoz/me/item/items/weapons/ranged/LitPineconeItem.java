@@ -20,14 +20,14 @@ public class LitPineconeItem extends PineconeItem {
 
 
     @Override
-    public boolean onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+    public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
         if (!(user instanceof PlayerEntity)) {
-            return false;
+            return;
         }
         PlayerEntity playerEntity = (PlayerEntity)user;
-        int i = this.getMaxUseTime(stack, user) - remainingUseTicks;
+        int i = this.getMaxUseTime(stack) - remainingUseTicks;
         if (i < 7) {
-            return false;
+            return;
         }
         if(i > STRENGTH_CHARGE_TIME) i = STRENGTH_CHARGE_TIME;
         float percentage = (float) i / STRENGTH_CHARGE_TIME;
@@ -43,6 +43,6 @@ public class LitPineconeItem extends PineconeItem {
             }
         }
         playerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
-        return false;
+        return;
     }
 }

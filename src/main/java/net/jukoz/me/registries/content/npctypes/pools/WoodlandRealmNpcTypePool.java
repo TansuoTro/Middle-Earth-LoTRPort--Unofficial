@@ -410,7 +410,7 @@ public class WoodlandRealmNpcTypePool {
                     AttributePoolElement.create(EntityAttributes.GENERIC_MAX_HEALTH, 28),
                     AttributePoolElement.create(EntityAttributes.GENERIC_ARMOR, 10, 20),
                     AttributePoolElement.create(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1, 2)
-                            .withModifier(TOTAL_DAMAGE_MODIFIER, 1.5, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL) // Does 1.5x damage, with 1 -> 2 base damage (strong)
+                            .withModifier(TOTAL_DAMAGE_MODIFIER, 1.5, EntityAttributeModifier.Operation.MULTIPLY_TOTAL) // Does 1.5x damage, with 1 -> 2 base damage (strong)
             )));
         }}, CombatArchetypePool.DEFAULT, NpcLoot.FROM_15_TO_25);
     }

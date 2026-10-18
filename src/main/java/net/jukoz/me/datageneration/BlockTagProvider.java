@@ -166,7 +166,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         }
 
         cobwebs.add(Blocks.COBWEB);
-        cobwebs.add(ModNatureBlocks.HANGING_COBWEB);
+        cobwebs.add(net.jukoz.me.compat.MEBlocksLegacy.HANGING_COBWEB);
         cobwebs.add(ModNatureBlocks.CORNER_COBWEB);
 
         SimpleStoneStoolModel.stools.forEach(seat::add);
@@ -228,11 +228,11 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         needsDiamondTools.add(OreRockSets.EPMOSTO.mithril_ore());
 
         needsStoneTools.add(ModBlocks.BRONZE_BLOCK);
-        needsStoneTools.add(ModBlocks.ORC_STEEL_BLOCK);
+        needsStoneTools.add(net.jukoz.me.compat.MEBlocksLegacy.ORC_STEEL_BLOCK);
         needsIronTools.add(ModBlocks.STEEL_BLOCK);
-        needsIronTools.add(ModBlocks.DWARVEN_STEEL_BLOCK);
-        needsIronTools.add(ModBlocks.ELVEN_STEEL_BLOCK);
-        needsIronTools.add(ModBlocks.URUK_STEEL_BLOCK);
+        needsIronTools.add(net.jukoz.me.compat.MEBlocksLegacy.DWARVEN_STEEL_BLOCK);
+        needsIronTools.add(net.jukoz.me.compat.MEBlocksLegacy.ELVEN_STEEL_BLOCK);
+        needsIronTools.add(net.jukoz.me.compat.MEBlocksLegacy.URUK_STEEL_BLOCK);
 
         mineablePickaxe.add(ModBlocks.STONE_MYCELIUM);
         mineableShovel.add(ModBlocks.ASH_BLOCK);
@@ -250,36 +250,36 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         mineableShovel.add(ModBlocks.ASHEN_DIRT_SLAB);
         mineableShovel.add(ModBlocks.ASHEN_DIRT_STAIRS);
 
-        mineableHoe.add(ModBlocks.REED_BLOCK);
-        mineableHoe.add(ModBlocks.REED_SLAB);
-        mineableHoe.add(ModBlocks.REED_VERTICAL_SLAB);
-        mineableHoe.add(ModBlocks.REED_STAIRS);
-        mineableHoe.add(ModBlocks.REED_WALL);
-        mineableHoe.add(ModBlocks.STRAW_BLOCK);
-        mineableHoe.add(ModBlocks.STRAW_SLAB);
-        mineableHoe.add(ModBlocks.STRAW_VERTICAL_SLAB);
-        mineableHoe.add(ModBlocks.STRAW_STAIRS);
-        mineableHoe.add(ModBlocks.STRAW_WALL);
+        mineableHoe.add(net.jukoz.me.compat.MEBlocksLegacy.REED_BLOCK);
+        mineableHoe.add(net.jukoz.me.compat.MEBlocksLegacy.REED_SLAB);
+        mineableHoe.add(net.jukoz.me.compat.MEBlocksLegacy.REED_VERTICAL_SLAB);
+        mineableHoe.add(net.jukoz.me.compat.MEBlocksLegacy.REED_STAIRS);
+        mineableHoe.add(net.jukoz.me.compat.MEBlocksLegacy.REED_WALL);
+        mineableHoe.add(net.jukoz.me.compat.MEBlocksLegacy.STRAW_BLOCK);
+        mineableHoe.add(net.jukoz.me.compat.MEBlocksLegacy.STRAW_SLAB);
+        mineableHoe.add(net.jukoz.me.compat.MEBlocksLegacy.STRAW_VERTICAL_SLAB);
+        mineableHoe.add(net.jukoz.me.compat.MEBlocksLegacy.STRAW_STAIRS);
+        mineableHoe.add(net.jukoz.me.compat.MEBlocksLegacy.STRAW_WALL);
 
         mineableAxe.add(ModDecorativeBlocks.WOOD_PILE);
         mineableAxe.add(ModDecorativeBlocks.ARTISAN_TABLE);
 
-        mineablePickaxe.add(ModBlocks.STONE_VERTICAL_SLAB);
-        mineablePickaxe.add(ModBlocks.COBBLESTONE_VERTICAL_SLAB);
-        mineablePickaxe.add(ModBlocks.MOSSY_COBBLESTONE_VERTICAL_SLAB);
-        mineablePickaxe.add(ModBlocks.SMOOTH_STONE_VERTICAL_SLAB);
-        mineablePickaxe.add(ModBlocks.STONE_BRICK_VERTICAL_SLAB);
-        mineablePickaxe.add(ModBlocks.MOSSY_STONE_BRICK_VERTICAL_SLAB);
-        mineablePickaxe.add(ModBlocks.GRANITE_VERTICAL_SLAB);
-        mineablePickaxe.add(ModBlocks.POLISHED_GRANITE_VERTICAL_SLAB);
-        mineablePickaxe.add(ModBlocks.DIORITE_VERTICAL_SLAB);
-        mineablePickaxe.add(ModBlocks.POLISHED_DIORITE_VERTICAL_SLAB);
-        mineablePickaxe.add(ModBlocks.ANDESITE_VERTICAL_SLAB);
-        mineablePickaxe.add(ModBlocks.POLISHED_ANDESITE_VERTICAL_SLAB);
-        mineablePickaxe.add(ModBlocks.COBBLED_DEEPSLATE_VERTICAL_SLAB);
-        mineablePickaxe.add(ModBlocks.POLISHED_DEEPSLATE_VERTICAL_SLAB);
-        mineablePickaxe.add(ModBlocks.DEEPSLATE_BRICK_VERTICAL_SLAB);
-        mineablePickaxe.add(ModBlocks.DEEPSLATE_TILE_VERTICAL_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.STONE_VERTICAL_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.COBBLESTONE_VERTICAL_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.MOSSY_COBBLESTONE_VERTICAL_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.SMOOTH_STONE_VERTICAL_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.STONE_BRICK_VERTICAL_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.MOSSY_STONE_BRICK_VERTICAL_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.GRANITE_VERTICAL_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.POLISHED_GRANITE_VERTICAL_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.DIORITE_VERTICAL_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.POLISHED_DIORITE_VERTICAL_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.ANDESITE_VERTICAL_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.POLISHED_ANDESITE_VERTICAL_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.COBBLED_DEEPSLATE_VERTICAL_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.POLISHED_DEEPSLATE_VERTICAL_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.DEEPSLATE_BRICK_VERTICAL_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.DEEPSLATE_TILE_VERTICAL_SLAB);
         mineablePickaxe.add(ModBlocks.BRICK_VERTICAL_SLAB);
         mineablePickaxe.add(ModBlocks.MUD_BRICK_VERTICAL_SLAB);
         mineablePickaxe.add(ModBlocks.SANDSTONE_VERTICAL_SLAB);
@@ -294,8 +294,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         mineablePickaxe.add(ModBlocks.NETHER_BRICK_VERTICAL_SLAB);
         mineablePickaxe.add(ModBlocks.RED_NETHER_BRICK_VERTICAL_SLAB);
         mineablePickaxe.add(ModBlocks.BLACKSTONE_VERTICAL_SLAB);
-        mineablePickaxe.add(ModBlocks.POLISHED_BLACKSTONE_VERTICAL_SLAB);
-        mineablePickaxe.add(ModBlocks.POLISHED_BLACKSTONE_BRICK_VERTICAL_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.POLISHED_BLACKSTONE_VERTICAL_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.POLISHED_BLACKSTONE_BRICK_VERTICAL_SLAB);
         mineablePickaxe.add(ModBlocks.END_STONE_BRICK_VERTICAL_SLAB);
         mineablePickaxe.add(ModBlocks.PURPUR_VERTICAL_SLAB);
         mineablePickaxe.add(ModBlocks.QUARTZ_VERTICAL_SLAB);
@@ -309,62 +309,62 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         mineablePickaxe.add(ModBlocks.WAXED_WEATHERED_CUT_COPPER_VERTICAL_SLAB);
         mineablePickaxe.add(ModBlocks.WAXED_OXIDIZED_CUT_COPPER_VERTICAL_SLAB);
 
-        mineableAxe.add(ModBlocks.OAK_WOOD_SLAB);
-        mineableAxe.add(ModBlocks.SPRUCE_WOOD_SLAB);
-        mineableAxe.add(ModBlocks.BIRCH_WOOD_SLAB);
-        mineableAxe.add(ModBlocks.JUNGLE_WOOD_SLAB);
-        mineableAxe.add(ModBlocks.ACACIA_WOOD_SLAB);
-        mineableAxe.add(ModBlocks.DARK_OAK_WOOD_SLAB);
-        mineableAxe.add(ModBlocks.MANGROVE_WOOD_SLAB);
-        mineableAxe.add(ModBlocks.CHERRY_WOOD_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.OAK_WOOD_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.SPRUCE_WOOD_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.BIRCH_WOOD_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.JUNGLE_WOOD_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.ACACIA_WOOD_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.DARK_OAK_WOOD_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.MANGROVE_WOOD_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.CHERRY_WOOD_SLAB);
 
-        mineableAxe.add(ModBlocks.STRIPPED_OAK_WOOD_SLAB);
-        mineableAxe.add(ModBlocks.STRIPPED_SPRUCE_WOOD_SLAB);
-        mineableAxe.add(ModBlocks.STRIPPED_BIRCH_WOOD_SLAB);
-        mineableAxe.add(ModBlocks.STRIPPED_JUNGLE_WOOD_SLAB);
-        mineableAxe.add(ModBlocks.STRIPPED_ACACIA_WOOD_SLAB);
-        mineableAxe.add(ModBlocks.STRIPPED_DARK_OAK_WOOD_SLAB);
-        mineableAxe.add(ModBlocks.STRIPPED_MANGROVE_WOOD_SLAB);
-        mineableAxe.add(ModBlocks.STRIPPED_CHERRY_WOOD_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_OAK_WOOD_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_SPRUCE_WOOD_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_BIRCH_WOOD_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_JUNGLE_WOOD_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_ACACIA_WOOD_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_DARK_OAK_WOOD_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_MANGROVE_WOOD_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_CHERRY_WOOD_SLAB);
 
-        mineableAxe.add(ModBlocks.STRIPPED_OAK_WOOD_STAIRS);
-        mineableAxe.add(ModBlocks.STRIPPED_SPRUCE_WOOD_STAIRS);
-        mineableAxe.add(ModBlocks.STRIPPED_BIRCH_WOOD_STAIRS);
-        mineableAxe.add(ModBlocks.STRIPPED_JUNGLE_WOOD_STAIRS);
-        mineableAxe.add(ModBlocks.STRIPPED_ACACIA_WOOD_STAIRS);
-        mineableAxe.add(ModBlocks.STRIPPED_DARK_OAK_WOOD_STAIRS);
-        mineableAxe.add(ModBlocks.STRIPPED_MANGROVE_WOOD_STAIRS);
-        mineableAxe.add(ModBlocks.STRIPPED_CHERRY_WOOD_STAIRS);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_OAK_WOOD_STAIRS);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_SPRUCE_WOOD_STAIRS);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_BIRCH_WOOD_STAIRS);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_JUNGLE_WOOD_STAIRS);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_ACACIA_WOOD_STAIRS);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_DARK_OAK_WOOD_STAIRS);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_MANGROVE_WOOD_STAIRS);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_CHERRY_WOOD_STAIRS);
 
-        mineableAxe.add(ModBlocks.OAK_WOOD_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.SPRUCE_WOOD_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.BIRCH_WOOD_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.JUNGLE_WOOD_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.ACACIA_WOOD_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.DARK_OAK_WOOD_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.MANGROVE_WOOD_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.CHERRY_WOOD_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.OAK_WOOD_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.SPRUCE_WOOD_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.BIRCH_WOOD_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.JUNGLE_WOOD_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.ACACIA_WOOD_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.DARK_OAK_WOOD_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.MANGROVE_WOOD_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.CHERRY_WOOD_VERTICAL_SLAB);
 
-        mineableAxe.add(ModBlocks.STRIPPED_OAK_WOOD_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.STRIPPED_SPRUCE_WOOD_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.STRIPPED_BIRCH_WOOD_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.STRIPPED_JUNGLE_WOOD_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.STRIPPED_ACACIA_WOOD_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.STRIPPED_DARK_OAK_WOOD_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.STRIPPED_MANGROVE_WOOD_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.STRIPPED_CHERRY_WOOD_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_OAK_WOOD_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_SPRUCE_WOOD_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_BIRCH_WOOD_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_JUNGLE_WOOD_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_ACACIA_WOOD_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_DARK_OAK_WOOD_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_MANGROVE_WOOD_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.STRIPPED_CHERRY_WOOD_VERTICAL_SLAB);
 
-        mineableAxe.add(ModBlocks.OAK_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.SPRUCE_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.BIRCH_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.JUNGLE_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.ACACIA_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.DARK_OAK_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.MANGROVE_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.CHERRY_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.BAMBOO_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.CRIMSON_VERTICAL_SLAB);
-        mineableAxe.add(ModBlocks.WARPED_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.OAK_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.SPRUCE_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.BIRCH_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.JUNGLE_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.ACACIA_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.DARK_OAK_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.MANGROVE_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.CHERRY_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.BAMBOO_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.CRIMSON_VERTICAL_SLAB);
+        mineableAxe.add(net.jukoz.me.compat.MEBlocksLegacy.WARPED_VERTICAL_SLAB);
 
         mineableShovel.add(ModBlocks.GRAVEL_LAYER);
         mineableShovel.add(ModBlocks.SAND_LAYER);
@@ -386,20 +386,20 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         mineablePickaxe.add(ModBlocks.PACKED_MUD_STAIRS);
         mineablePickaxe.add(ModBlocks.PACKED_MUD_WALL);
 
-        mineablePickaxe.add(ModBlocks.TUFF_SLAB);
-        mineablePickaxe.add(ModBlocks.TUFF_VERTICAL_SLAB);
-        mineablePickaxe.add(ModBlocks.TUFF_STAIRS);
-        mineablePickaxe.add(ModBlocks.TUFF_WALL);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.TUFF_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.TUFF_VERTICAL_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.TUFF_STAIRS);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.TUFF_WALL);
 
-        mineablePickaxe.add(ModBlocks.CALCITE_SLAB);
-        mineablePickaxe.add(ModBlocks.CALCITE_VERTICAL_SLAB);
-        mineablePickaxe.add(ModBlocks.CALCITE_STAIRS);
-        mineablePickaxe.add(ModBlocks.CALCITE_WALL);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.CALCITE_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.CALCITE_VERTICAL_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.CALCITE_STAIRS);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.CALCITE_WALL);
 
-        mineablePickaxe.add(ModBlocks.SMOOTH_BASALT_SLAB);
-        mineablePickaxe.add(ModBlocks.SMOOTH_BASALT_VERTICAL_SLAB);
-        mineablePickaxe.add(ModBlocks.SMOOTH_BASALT_STAIRS);
-        mineablePickaxe.add(ModBlocks.SMOOTH_BASALT_WALL);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.SMOOTH_BASALT_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.SMOOTH_BASALT_VERTICAL_SLAB);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.SMOOTH_BASALT_STAIRS);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.SMOOTH_BASALT_WALL);
 
         mineablePickaxe.add(ModBlocks.QUARTZ_BLOCK);
         mineablePickaxe.add(ModBlocks.BUDDING_QUARTZ);
@@ -426,6 +426,6 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         mineablePickaxe.add(ModBlocks.LARGE_GLOWSTONE_BUD);
         mineablePickaxe.add(ModBlocks.GLOWSTONE_CLUSTER);
 
-        mineablePickaxe.add(ModDecorativeBlocks.ALLOY_FURNACE);
+        mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.ALLOY_FURNACE);
     }
 }

@@ -34,13 +34,17 @@ public abstract class AbstractShapingAnvilBlock extends BlockWithEntity implemen
     }
 
     @Override
-    protected BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
     }
 
     @Override
-    protected void onStateReplaced(BlockState state, ServerWorld world, BlockPos pos, boolean moved) {
-        ItemScatterer.onStateReplaced(state, world, pos);
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity instanceof Inventory inventory) {
+            ItemScatterer.spawn(world, pos, inventory);
+        }
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 
     @Override
@@ -64,13 +68,13 @@ public abstract class AbstractShapingAnvilBlock extends BlockWithEntity implemen
     }
 
     @Override
-    public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 
-        return super.onBreak(world, pos, state, player);
+        super.onBreak(world, pos, state, player);
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         Inventory blockEntity = (Inventory) world.getBlockEntity(pos);
 
         if (!world.isClient) {
@@ -89,14 +93,14 @@ public abstract class AbstractShapingAnvilBlock extends BlockWithEntity implemen
     }
 
     @Override
-    protected void onBlockBreakStart(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+    public void onBlockBreakStart(BlockState state, World world, BlockPos pos, PlayerEntity player) {
         ItemStack stack = player.getEquippedStack(EquipmentSlot.MAINHAND);
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (!world.isClient) {
             if (stack.getItem() instanceof SmithingHammerItem hammer && player.getAttackCooldownProgress(0.5f) > 0.9f) {
                 player.incrementStat(Stats.USED.getOrCreateStat(hammer));
                 stack.use(world, player, player.getActiveHand());
-                player.getStackInHand(player.getActiveHand()).damage(1, player, EquipmentSlot.MAINHAND);
+                player.getStackInHand(player.getActiveHand()).damage(1, player, (p) -> p.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
                 if (blockEntity instanceof ShapingAnvilBlockEntity shapingAnvilBlockEntity) {
                     ServerWorld serverWorld = (ServerWorld) world;
                     shapingAnvilBlockEntity.bonk(shapingAnvilBlockEntity, serverWorld, stack);

@@ -73,7 +73,7 @@ public class CharacterTexturePattern {
 
     static {
         PACKET_CODEC = PacketCodec.tuple(
-                Identifier.PACKET_CODEC,
+                PacketCodecs.IDENTIFIER,
                 CharacterTexturePattern::getIdentifier,
                 PacketCodecs.STRING,
                 CharacterTexturePattern::getCategoryString,

@@ -74,7 +74,7 @@ public class BannerData {
         }
         NbtCompound compound = optionalBannerDataNbt.get();
 
-        baseBannerColor = DyeColor.byId(compound.getString("base_color"), DEFAULT_DYE);
+        baseBannerColor = DyeColor.byName(compound.getString("base_color"), DEFAULT_DYE);
 
         NbtList patterns = compound.getList("patterns", 9);
         this.bannerPatternWithColors = new ArrayList<>();
@@ -85,7 +85,7 @@ public class BannerData {
             try{
                 NbtCompound elementCompound = NbtCompat.compound(element);
                 Identifier id = new Identifier(elementCompound.getString("id"));
-                DyeColor color = DyeColor.byId(NbtCompat.getString(elementCompound, "dye_color", DEFAULT_DYE.asString()), DEFAULT_DYE);
+                DyeColor color = DyeColor.byName(NbtCompat.getString(elementCompound, "dye_color", DEFAULT_DYE.asString()), DEFAULT_DYE);
 
                 BannerPatternWithColor bannerPatternWithColor = new BannerPatternWithColor(id, color);
                 bannerPatternWithColors.add(bannerPatternWithColor);
@@ -138,7 +138,7 @@ public class BannerData {
     public MEBannerPatterns getBannerPatternComponents(RegistryEntryLookup<BannerPattern> bannerPatternLookup) {
         MEBannerPatterns.Builder bannerPatternsComponentBuilder = new MEBannerPatterns.Builder();
 
-        bannerPatternsComponentBuilder.add(new MEBannerPatterns.Layer(BannerPattern.BASE.getEntry(), baseBannerColor));
+        bannerPatternsComponentBuilder.add(new MEBannerPatterns.Layer(net.minecraft.registry.Registries.BANNER_PATTERN.getEntry(net.minecraft.block.entity.BannerPatterns.BASE), baseBannerColor));
         for(BannerPatternWithColor bannerPatternWithColor :  bannerPatternWithColors){
             bannerPatternsComponentBuilder.add(bannerPatternLookup.getOrThrow(bannerPatternWithColor.patternRegistryKey), bannerPatternWithColor.color);
         }

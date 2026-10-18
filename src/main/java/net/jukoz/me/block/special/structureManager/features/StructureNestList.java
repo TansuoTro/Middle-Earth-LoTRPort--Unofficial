@@ -15,7 +15,7 @@ import java.util.List;
 public class StructureNestList {
     ModLogger logger = MiddleEarth.LOGGER;
     public static final Codec<StructureNestList> CODEC;
-    public static final PacketCodec<ByteBuf, StructureNestList> PACKET_CODEC;
+    public static final PacketCodec<net.minecraft.network.PacketByteBuf, StructureNestList> PACKET_CODEC;
     private static final String ID = "spawn_nest_list";
 
     private List<SpawnNestManager> managers;

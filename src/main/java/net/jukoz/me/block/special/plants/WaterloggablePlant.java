@@ -56,7 +56,7 @@ public class WaterloggablePlant extends CustomPlantBlock implements Fertilizable
     }
 
     @Override
-    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state) {
+    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean isClient) {
         return true;
     }
 

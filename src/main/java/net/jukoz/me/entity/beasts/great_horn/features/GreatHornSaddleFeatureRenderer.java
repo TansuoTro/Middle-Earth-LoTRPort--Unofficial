@@ -38,7 +38,7 @@ public class GreatHornSaddleFeatureRenderer extends MEFeatureRenderer<GreatHornE
             VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(new Identifier(MiddleEarth.MOD_ID, PATH + suffix + ".png")), true, itemStack.hasGlint());
 
             model.setAngles(state);
-            model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
+            model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 }

@@ -80,7 +80,7 @@ public class TextBlockWidget extends ModWidget {
                 List<Word> currentLineWords = new ArrayList<>();
                 int currentWidth = 0;
                 while (currentWidth < width){
-                    Word chosenWord = textWords.getFirst();
+                    Word chosenWord = textWords.get(0);
                     if(currentWidth + chosenWord.width + _spaceWidth > width){
                         break;
                     }
@@ -133,7 +133,7 @@ public class TextBlockWidget extends ModWidget {
         StringBuilder textContentBuilder = new StringBuilder();
         for(Word word : words) {
             textContentBuilder.append(word.content);
-            if(word != words.getLast())
+            if(word != words.get(words.size()-1))
                 textContentBuilder.append(" ");
         }
         return Text.literal(textContentBuilder.toString());
@@ -148,7 +148,7 @@ public class TextBlockWidget extends ModWidget {
     private void drawTextLine(DrawContext context, List<Word> currentLine, int currentStart, boolean isEnd) {
         if (isJustified && !isEnd) {
             Text text = getJustifiedTextFromList(currentLine);
-            Text lastWordText = Text.literal(currentLine.getLast().content);
+            Text lastWordText = Text.literal(currentLine.get(currentLine.size()-1).content);
             context.drawText(textRenderer, text,
                     startX, startY + currentStart, Colors.BLACK, false);
             context.drawText(textRenderer, lastWordText,
@@ -172,7 +172,7 @@ public class TextBlockWidget extends ModWidget {
         int _spaceWidth = this.hasNoSpace ? 0 : this.spaceWidth;
         for(Word word : currentLine){
             currentWidth += word.width;
-            if(word != currentLine.getLast())
+            if(word != currentLine.get(currentLine.size()-1))
                 currentWidth += _spaceWidth;
         }
         StringBuilder stringBuilder = new StringBuilder();
@@ -209,7 +209,7 @@ public class TextBlockWidget extends ModWidget {
         StringBuilder stringBuilder = new StringBuilder();
         for (Word word : currentLine) {
             stringBuilder.append(word.content);
-            if (word != currentLine.getLast())
+            if (word != currentLine.get(currentLine.size()-1))
                 if (!hasNoSpace)
                     stringBuilder.append(" ");
         }

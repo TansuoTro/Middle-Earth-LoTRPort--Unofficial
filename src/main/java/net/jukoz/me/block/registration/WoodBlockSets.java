@@ -127,7 +127,7 @@ public class WoodBlockSets {
             .addToSet(WoodBlockTypes.LEAVES));
 
     public static WoodBlockSetBuilder PALE_OAK_SET = registerWoodSet(new WoodBlockSetBuilder("pale_oak",
-            WOOD_STRENGTH, WOOD_BLAST_RESISTANCE, MapColor.OFF_WHITE, Instrument.BASS, BlockSoundGroup.WOOD, Blocks.PALE_OAK_SAPLING)
+            WOOD_STRENGTH, WOOD_BLAST_RESISTANCE, MapColor.OFF_WHITE, Instrument.BASS, BlockSoundGroup.WOOD, Blocks.OAK_SAPLING)
             .vanilla(true)
             .addToSet(WoodBlockTypes.LOG_BLOCKS)
             .addToSet(WoodBlockTypes.STRIPPED_LOG_BLOCKS)

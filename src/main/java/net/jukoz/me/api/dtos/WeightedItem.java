@@ -25,8 +25,10 @@ public abstract class WeightedItem<T> {
     public WeightedItem(NbtElement element) {
         this.weight = 1;
         if(NbtCompat.isCompound(element)){
-            var potentialWeight = NbtCompat.compound(element).getInt("weight");
-            potentialWeight.ifPresent(integer -> this.weight = integer);
+            NbtCompound compound = NbtCompat.compound(element);
+            if (compound.contains("weight")) {
+                this.weight = compound.getInt("weight");
+            }
         }
     }
 

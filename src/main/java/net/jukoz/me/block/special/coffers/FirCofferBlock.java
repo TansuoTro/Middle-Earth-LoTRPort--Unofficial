@@ -17,7 +17,7 @@ import net.jukoz.me.block.registration.ModBlockEntities;
 public class FirCofferBlock extends ChestBlock {
 
     public FirCofferBlock(Settings settings) {
-        super(() -> ModBlockEntities.FIR_COFFER, settings);
+        super(settings, () -> ModBlockEntities.FIR_COFFER);
     }
 
     @Override

@@ -23,10 +23,10 @@ public class PebbleItem extends Item{
         super(settings);
     }
 
-    public ActionResult use(World world, PlayerEntity user, Hand hand) {
+    public net.minecraft.util.TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
         user.setCurrentHand(hand);
-        return ActionResult.SUCCESS.withNewHandStack(itemStack);
+        return net.minecraft.util.TypedActionResult.success(itemStack);
     }
 
     @Override
@@ -35,19 +35,19 @@ public class PebbleItem extends Item{
     }
 
     @Override
-    public int getMaxUseTime(ItemStack stack, LivingEntity user) {
+    public int getMaxUseTime(ItemStack stack) {
         return 72000;
     }
 
     @Override
-    public boolean onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+    public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
         if (!(user instanceof PlayerEntity)) {
-            return false;
+            return;
         }
         PlayerEntity playerEntity = (PlayerEntity)user;
-        int i = this.getMaxUseTime(stack, user) - remainingUseTicks;
+        int i = this.getMaxUseTime(stack) - remainingUseTicks;
         if (i < 7) {
-            return false;
+            return;
         }
         if(i > STRENGTH_CHARGE_TIME) i = STRENGTH_CHARGE_TIME;
         float percentage = (float) i / STRENGTH_CHARGE_TIME;
@@ -63,6 +63,6 @@ public class PebbleItem extends Item{
             }
         }
         playerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
-        return true;
+        return;
     }
 }

@@ -55,7 +55,7 @@ public class WateringCanItem extends BlockItem {
         World world = context.getWorld();
 
         if (tryRefilling(world, player, stack, context.getBlockPos())) {
-            return ActionResult.SUCCESS.withNewHandStack(stack);
+            return ActionResult.SUCCESS;
         }
 
         if (player.isSneaking()) {
@@ -66,30 +66,29 @@ public class WateringCanItem extends BlockItem {
             return ActionResult.PASS;
         }
 
-        return use(world, player, context.getHand());
+        return use(world, player, context.getHand()).getResult();
     }
 
-    @Override
-    public boolean allowComponentsUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack) {
+        public boolean allowComponentsUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack) {
         return false;
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand) {
+    public net.minecraft.util.TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
 
         BlockHitResult blockHitResult = raycast(world, user, RaycastContext.FluidHandling.SOURCE_ONLY);
         if (blockHitResult.getType() == HitResult.Type.BLOCK
                 && tryRefilling(world, user, stack, blockHitResult.getBlockPos())) {
-            return ActionResult.SUCCESS.withNewHandStack(stack);
+            return net.minecraft.util.TypedActionResult.success(stack);
         }
 
         if (!canWater(stack)) {
-            return ActionResult.PASS;
+            return net.minecraft.util.TypedActionResult.pass(stack);
         }
 
         startWatering(world, user, hand);
-        return ActionResult.CONSUME.withNewHandStack(stack);
+        return net.minecraft.util.TypedActionResult.consume(stack);
     }
 
     @Override
@@ -124,7 +123,7 @@ public class WateringCanItem extends BlockItem {
     }
 
     @Override
-    public int getMaxUseTime(ItemStack stack, LivingEntity user) {
+    public int getMaxUseTime(ItemStack stack) {
         return MAX_USE_TIME_TICKS;
     }
 
@@ -150,7 +149,7 @@ public class WateringCanItem extends BlockItem {
     }
 
     private boolean tryRefilling(World world, PlayerEntity user, ItemStack stack, BlockPos pos) {
-        if (!world.canEntityModifyAt(user, pos) || !world.getFluidState(pos).isIn(FluidTags.WATER) || !world.getFluidState(pos).isStill()) {
+        if (!world.canPlayerModifyAt(user, pos) || !world.getFluidState(pos).isIn(FluidTags.WATER) || !world.getFluidState(pos).isStill()) {
             return false;
         }
 

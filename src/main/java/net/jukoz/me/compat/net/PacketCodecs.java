@@ -25,6 +25,12 @@ import java.util.function.ToIntFunction;
  */
 public final class PacketCodecs {
 
+    public static final PacketCodec<PacketByteBuf, net.minecraft.util.Identifier> IDENTIFIER =
+            PacketCodec.of((buf, value) -> buf.writeIdentifier(value), PacketByteBuf::readIdentifier);
+
+    public static final PacketCodec<PacketByteBuf, net.minecraft.util.math.BlockPos> BLOCK_POS =
+            PacketCodec.of((buf, value) -> buf.writeBlockPos(value), PacketByteBuf::readBlockPos);
+
     public static final PacketCodec<PacketByteBuf, Boolean> BOOLEAN =
             PacketCodec.of((buf, value) -> buf.writeBoolean(value), PacketByteBuf::readBoolean);
 

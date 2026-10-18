@@ -37,7 +37,7 @@ public class BroadhoofGoatRenderer extends MEMobEntityRenderer<BroadhoofGoatEnti
                         EquipmentRenderer.INSTANCE,
                         new BroadhoofGoatModel(context.getPart(EntityModelLayersME.BROADHOOF_GOAT_ARMOR)),
                         EquipmentModel.LayerType.HORSE_BODY,
-                        broadhoofGoatEntityRenderState -> broadhoofGoatEntityRenderState.armor
+                        (BroadhoofGoatEntityRenderState s) -> s.armor
 
                 )
         );
@@ -99,7 +99,7 @@ public class BroadhoofGoatRenderer extends MEMobEntityRenderer<BroadhoofGoatEnti
         state.isCharging = goat.isCharging();
         state.isTame = goat.isTame();
         state.conrollingPassenger = goat.getControllingPassenger();
-        state.saddle = goat.getEquippedStack(EquipmentSlot.SADDLE);
+        state.saddle = goat.getEquippedStack(EquipmentSlot.CHEST);
         state.armor = goat.getBodyArmor();
 
         state.chargeAnimationState = goat.chargeAnimationState;

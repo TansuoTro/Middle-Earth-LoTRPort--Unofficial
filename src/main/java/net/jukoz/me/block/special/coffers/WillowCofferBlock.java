@@ -17,7 +17,7 @@ import net.jukoz.me.block.registration.ModBlockEntities;
 public class WillowCofferBlock extends ChestBlock {
 
     public WillowCofferBlock(Settings settings) {
-        super(() -> ModBlockEntities.WILLOW_COFFER, settings);
+        super(settings, () -> ModBlockEntities.WILLOW_COFFER);
     }
 
     @Override

@@ -48,6 +48,6 @@ public class StructureManagerData {
                 return nest;
         }
         MiddleEarth.LOGGER.logDebugMsg("StructureManagerData :: Couldn't find nest id : %s".formatted(idToCompare));
-        return spawnNestNodeData.getFirst();
+        return spawnNestNodeData.get(0);
     }
 }

@@ -43,16 +43,16 @@ public class FireOfOrthancEntity extends Entity implements Ownable {
         }
         else this.setFuse(DEFAULT_FUSE);
 
-        this.lastX = x;
-        this.lastY = y;
-        this.lastZ = z;
+        this.prevX = x;
+        this.prevY = y;
+        this.prevZ = z;
         this.causingEntity = igniter;
     }
 
     @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
-        builder.add(FUSE, DEFAULT_FUSE);
-        builder.add(BLOCK_STATE, ModDecorativeBlocks.FIRE_OF_ORTHANC.getDefaultState());
+    protected void initDataTracker() {
+        this.dataTracker.startTracking(FUSE, DEFAULT_FUSE);
+        this.dataTracker.startTracking(BLOCK_STATE, ModDecorativeBlocks.FIRE_OF_ORTHANC.getDefaultState());
     }
 
     public void explode() {
@@ -66,10 +66,10 @@ public class FireOfOrthancEntity extends Entity implements Ownable {
         if(owner instanceof LivingEntity ownerEntity && world instanceof ServerWorld serverWorld) {
             if(ownerEntity instanceof PlayerEntity playerEntity){
                 if(!playerEntity.isCreative()){
-                    playerEntity.kill(serverWorld);
+                    playerEntity.kill();
                 }
             } else {
-                ownerEntity.kill(serverWorld);
+                ownerEntity.kill();
             }
         }
     }
@@ -94,12 +94,12 @@ public class FireOfOrthancEntity extends Entity implements Ownable {
     }
 
     @Override
-    public boolean damage(ServerWorld world, DamageSource source, float amount) {
+    public boolean damage(DamageSource source, float amount) {
         return false;
     }
 
     public void tick() {
-        this.applyGravity();
+        this.setVelocity(this.getVelocity().add(0.0, -this.getGravity(), 0.0));
         this.move(MovementType.SELF, this.getVelocity());
         this.setVelocity(this.getVelocity().multiply(0.98));
         if (this.isOnGround()) {

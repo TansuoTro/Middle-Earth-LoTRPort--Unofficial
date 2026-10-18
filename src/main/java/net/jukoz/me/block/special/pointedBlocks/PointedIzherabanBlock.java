@@ -102,7 +102,7 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
             BlockPos blockPos = hit.getBlockPos();
             if (world instanceof ServerWorld) {
                 ServerWorld serverWorld = (ServerWorld)world;
-                if (projectile.canModifyAt(serverWorld, blockPos) && projectile.canBreakBlocks(serverWorld) && projectile instanceof TridentEntity && projectile.getVelocity().length() > 0.6) {
+                if (projectile.canModifyAt(serverWorld, blockPos) && projectile instanceof TridentEntity && projectile.getVelocity().length() > 0.6) {
                     world.breakBlock(blockPos, true);
                 }
             }
@@ -110,7 +110,7 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
         }
     }
 
-    public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, double fallDistance) {
+    public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
         if (state.get(VERTICAL_DIRECTION) == Direction.UP && state.get(THICKNESS) == Thickness.TIP) {
             entity.handleFallDamage((float)(fallDistance + 2.5), 2.0F, world.getDamageSources().stalagmite());
         } else {
@@ -228,7 +228,8 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
         }
 
         VoxelShape voxelShape = var10000;
-        return voxelShape.offset(state.getModelOffset(world, pos));
+        Vec3d modelOffset = state.getModelOffset(world, pos);
+        return voxelShape.offset(modelOffset.getX(), modelOffset.getY(), modelOffset.getZ());
     }
 
     public boolean isShapeFullCube(BlockState state, BlockView world, BlockPos pos) {
@@ -467,7 +468,7 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
         return isPointingDown(state) && !world.getBlockState(pos.up()).isOf(ModBlocks.POINTED_IZHERABAN);
     }
 
-    protected boolean canPathfindThrough(BlockState state, NavigationType type) {
+    public boolean canPathfindThrough(BlockState state, net.minecraft.world.BlockView world, BlockPos pos, NavigationType type) {
         return false;
     }
 
@@ -478,7 +479,7 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
     @Nullable
     private static BlockPos getCauldronPos(World world, BlockPos pos, Fluid fluid) {
         Predicate<BlockState> predicate = (state) -> {
-            return state.getBlock() instanceof AbstractCauldronBlock && ((AbstractCauldronBlock)state.getBlock()).canBeFilledByDripstone(fluid);
+            return state.getBlock() instanceof AbstractCauldronBlock;
         };
         BiPredicate<BlockPos, BlockState> biPredicate = (posx, state) -> {
             return canDripThrough(world, posx, state);
@@ -553,7 +554,7 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
     private static boolean canDripThrough(BlockView world, BlockPos pos, BlockState state) {
         if (state.isAir()) {
             return true;
-        } else if (state.isOpaqueFullCube()) {
+        } else if (state.isOpaqueFullCube(world, pos)) {
             return false;
         } else if (!state.getFluidState().isEmpty()) {
             return false;

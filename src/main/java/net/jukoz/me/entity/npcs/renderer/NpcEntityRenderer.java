@@ -61,7 +61,7 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
         this.features.removeIf(x -> x.getClass() == ElytraFeatureRenderer.class);
         this.features.removeIf(x -> x.getClass() == HeadFeatureRenderer.class);
 
-        this.addFeature(new ArmorFeatureRenderer<NpcEntity, NpcEntityModel>(this, new ArmorEntityModel<>(context.getPart(EntityModelLayers.PLAYER_INNER_ARMOR)), new ArmorEntityModel<>(context.getPart(EntityModelLayers.PLAYER_OUTER_ARMOR))));
+        this.addFeature(new ArmorFeatureRenderer<NpcEntity, NpcEntityModel, ArmorEntityModel<NpcEntity>>(this, new ArmorEntityModel<>(context.getPart(EntityModelLayers.PLAYER_INNER_ARMOR)), new ArmorEntityModel<>(context.getPart(EntityModelLayers.PLAYER_OUTER_ARMOR))));
         this.addFeature(new HairFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader())));
         this.addFeature(new EarFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader())));
         this.addFeature(new NoseFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader())));
@@ -158,7 +158,6 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
 
     // region [Layered Texture Renderer]
     @Nullable
-    @Override
     protected RenderLayer getRenderLayer(NpcEntityRenderState state, boolean showBody, boolean translucent, boolean showOutline) {
         Identifier identifier = this.getTexture(state);
         if (translucent) {
@@ -232,8 +231,8 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
 
         matrices.pop();
 
-        if ((state).displayName != null) {
-            this.renderLabelIfPresent(state, (state).displayName, matrices, vertexConsumers, light);
+        if (state.customName != null) {
+            this.renderLabelIfPresent(state, state.customName, matrices, vertexConsumers, light);
         }
     }
 

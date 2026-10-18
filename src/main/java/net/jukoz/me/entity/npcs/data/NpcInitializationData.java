@@ -77,7 +77,7 @@ public class NpcInitializationData {
 
         if(isRandom != null && isRandom){
             Registry<NpcType> registry = world.getRegistryManager().get(DynamicRegistriesME.NPC_TYPE);
-            List<RegistryKey<NpcType>> entryList =  registry.streamKeys().toList();
+            List<RegistryKey<NpcType>> entryList =  registry.getKeys().stream().toList();
             Random random = new Random();
             RegistryKey<NpcType> randomKey = entryList.get(random.nextInt(entryList.size()));
             this.type = randomKey.getValue();

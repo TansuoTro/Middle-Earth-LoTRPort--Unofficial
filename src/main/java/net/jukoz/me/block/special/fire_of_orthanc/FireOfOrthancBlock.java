@@ -31,16 +31,17 @@ public class FireOfOrthancBlock extends Block {
         super(settings);
     }
 
-    protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        ItemStack stack = player.getStackInHand(hand);
         if (!stack.isOf(DecorativeItemsME.TORCH_OF_ORTHANC)) {
-            return super.onUseWithItem(stack, state, world, pos, player, hand, hit);
+            return super.onUse(state, world, pos, player, hand, hit);
         } else {
             explode(world, pos, player);
             world.setBlockState(pos, Blocks.AIR.getDefaultState(), 11);
             Item item = stack.getItem();
             if (!player.isCreative()) {
                 if (stack.isOf(Items.FLINT_AND_STEEL)) {
-                    stack.damage(1, player, LivingEntity.getSlotForHand(hand));
+                    stack.damage(1, player, (p) -> p.sendEquipmentBreakStatus(hand == Hand.MAIN_HAND ? net.minecraft.entity.EquipmentSlot.MAINHAND : net.minecraft.entity.EquipmentSlot.OFFHAND));
                 } else {
                     stack.decrement(1);
                 }

@@ -40,7 +40,7 @@ public class GreatHornNoseFeatureRenderer extends MEFeatureRenderer<GreatHornEnt
 	public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, GreatHornEntityRenderState state, float limbAngle, float limbDistance) {
 		if(state.hasRedNose() || isChristmas()) {
 			VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(TEXTURE));
-			this.getContextModel().render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
+			this.getContextModel().render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
 		}
 	}
 }

@@ -13,7 +13,7 @@ public class LarchCofferBlockEntity extends ChestBlockEntity {
     public LarchCofferBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.LARCH_COFFER, pos, state);
 
-        this.setHeldStacks(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
+        this.setInvStackList(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
     }
 
     @Override

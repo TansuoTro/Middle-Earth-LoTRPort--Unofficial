@@ -70,7 +70,7 @@ public class WebbedEntity extends AbstractProjectileEntity {
             entity.damage(serverWorld, this.getDamageSources().thrown( this, this.getOwner()), this.damage);
             if(entity instanceof LivingEntity livingEntity) {
                 livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 200));
-                livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAVING, 200));
+                livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 200));
                 livingEntity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.RESTRAINED, 200));
                 //if(entity instanceof ServerPlayerEntity playerEntity) {
                 //    ServerPlayNetworking.send(playerEntity, new PacketLivingEntityData(1));

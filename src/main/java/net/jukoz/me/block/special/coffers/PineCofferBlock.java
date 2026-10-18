@@ -17,7 +17,7 @@ import net.jukoz.me.block.registration.ModBlockEntities;
 public class PineCofferBlock extends ChestBlock {
 
     public PineCofferBlock(Settings settings) {
-        super(() -> ModBlockEntities.PINE_COFFER, settings);
+        super(settings, () -> ModBlockEntities.PINE_COFFER);
     }
 
     @Override

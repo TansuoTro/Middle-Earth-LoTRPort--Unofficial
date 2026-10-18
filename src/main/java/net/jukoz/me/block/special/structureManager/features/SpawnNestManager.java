@@ -133,7 +133,7 @@ public class SpawnNestManager {
         if(entities != null && !entities.isEmpty()){
             List<UUID> toRemove = new ArrayList<>();
             for (UUID uuid : entities){ // Wellness check
-                var entity = world.getEntity(uuid);
+                var entity = world instanceof net.minecraft.server.world.ServerWorld sw ? sw.getEntity(uuid) : null;
                 if(entity == null || !entity.isAlive())
                     toRemove.add(uuid);
             }

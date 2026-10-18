@@ -359,3 +359,41 @@ port-staging/ 是 gitignored 的暫存樹，可隨時用 import 重建。
 - `ArtisanTableScreenHandler` 仍是基準的 6 格版本，donor 的 3×3 + 分頁版本還沒合併；
   `ArtisanIndexPacket` / `ArtisanTableTabPacket` 呼叫的 `updateIndex` / `changeTab` /
   `addRecipeOutput` 因此還缺。
+
+## 本輪（opencode 單一 worker，46 分鐘）：2207 → 587
+
+做法：**不再手改**，改成「把 donor 的資料檔整批覆蓋過來」＋「機械規則」＋「一個 opencode CLI worker
+連續跑」。三個有效手段：
+
+1. **`datageneration/content/**` 全部以 donor 版本覆蓋**（72 檔）。原本 port 裡的 model/tag 清單是舊版
+   1.20.1 的，引用了一堆這棵樹根本不存在的方塊（`STRAW_BLOCK`、`REED_SLAB`、`OAK_WOOD_SLAB`、
+   `EPMOSTO`…）。donor 的清單才是跟目前 registry 對得上的那一份。這一步單獨就清掉 ~300 個錯誤。
+2. **set builder 的相容存取子**：`WoodBlockSetBuilder` / `StoneBlockSetBuilder` 補上舊版扁平
+   accessor（`log()`、`leaves()`、`trapdoor()`、`base()`…）轉呼叫 `logBlocks` / `baseBlocks` 等欄位。
+   舊呼叫點因此不用一個一個改成 `set.baseBlocks.base()`。
+3. **機械批次**：`ServerPlayerEntity.Respawn` 兩行式 → `setPlayerSpawnPoint(...)` 單行、
+   `setHeldStacks` → `setInvStackList`、`SimpleParticleType` → `DefaultParticleType`、
+   `canBreakBlocks` 條件移除、`ItemStack.getEnchantments().getEnchantments()` → `MEEnchants`、
+   `X.getFacing()` → `MEDirection.facing(X)`（1.21.2 把 3D facing 搬上 Entity，1.20.1 只有靜態
+   `Direction.getFacing(x,y,z)`）、`net.minecraft.client.data.*` → `net.minecraft.data.client.*`。
+
+### 教訓（別再犯）
+
+- `Registry#getOrThrow(RegistryKey)` 在 1.20.1 **存在**，`RegistryEntryLookup#getOrThrow` 也存在；
+  只有 `DynamicRegistryManager` 沒有。把 `.getOrThrow(` 全域換成 `.get(` 會炸掉 chunkgen / features
+  （`RegistryEntryLookup.get` 不存在）。要換就得先看 receiver 型別。
+- donor 的 `datageneration/providers/**`（23 檔，1.21 版 `FabricDataOutput` / `BlockModelProvider`）
+  **不能**直接覆蓋進來：一次就多出 5400 個錯誤。datagen provider 這一層要另外手工移植，
+  只先覆蓋 `content/**`（純資料清單）是安全的。
+- Gradle 會把每個診斷印兩次（一次路徑帶前導空白），統計時要除以二。
+
+### 尚未解決的結構性問題（編譯過了也會出事）
+
+`item/` 底下同時存在兩套註冊類：donor 的 `*ItemsME`（`ResourceItemsME`、`WeaponItemsME`…）與舊版
+1.20.1 的 `Mod*Items`（`ModResourceItems`、`ModWeaponItems`…），**兩邊都真的呼叫 `Registry.register`**，
+而且 ID 一樣。目前兩邊都被各自的呼叫點引用（舊 entity / 舊 datagen 用 `Mod*`，registries 用 `*ME`），
+所以還不能刪。真正跑起來會 duplicate registry id 直接 crash。
+
+要收尾得選一邊：把 `Mod*Items` 改成純 alias（`public static final Item X = ResourceItemsME.X;`），
+欄位對不上的（donor 已移除的方塊/物品）就連呼叫點一起刪。方塊那邊 `ModBlocks` 已經是 donor 版，
+沒有這個問題。

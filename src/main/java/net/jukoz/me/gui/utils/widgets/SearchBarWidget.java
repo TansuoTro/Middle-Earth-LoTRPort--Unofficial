@@ -65,7 +65,7 @@ public class SearchBarWidget extends ModWidget {
         for(int i = 0; i < maxAmountOnScreen; i++){
             final int index = i;
             resultButtons.add(ButtonWidget.builder(Text.of("N/A"), x -> buttonPress(x, index)).build());
-            resultButtons.getLast().active = false;
+            resultButtons.get(resultButtons.size()-1).active = false;
         }
         textRenderer = MinecraftClient.getInstance().textRenderer;
     }

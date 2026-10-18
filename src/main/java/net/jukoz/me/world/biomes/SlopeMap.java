@@ -17,7 +17,7 @@ public class SlopeMap {
 
     public SlopeMap addSlopeData(float angle, Block block) {
         if(!slopeDatas.isEmpty()) {
-            float newAngle = slopeDatas.getLast().angle;
+            float newAngle = slopeDatas.get(slopeDatas.size()-1).angle;
             if (newAngle >= angle) {
                 throw new ArithmeticException("Cannot add slope angle smaller than previous slope data: " + newAngle + " >= " + angle);
             } else if(newAngle < 0 || newAngle > 90) {
@@ -34,7 +34,7 @@ public class SlopeMap {
                 return slopeData.block;
             }
         }
-        throw new RuntimeException("The angle exceeds the maximal allowed slope of: " + slopeDatas.getLast().angle + " degrees");
+        throw new RuntimeException("The angle exceeds the maximal allowed slope of: " + slopeDatas.get(slopeDatas.size()-1).angle + " degrees");
     }
 
     public class SlopeData {

@@ -13,7 +13,7 @@ public class FirCofferBlockEntity extends ChestBlockEntity {
     public FirCofferBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.FIR_COFFER, pos, state);
 
-        this.setHeldStacks(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
+        this.setInvStackList(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
     }
 
     @Override

@@ -33,7 +33,7 @@ public class WargRenderer extends MEMobEntityRenderer<WargEntity, WargEntityRend
                         EquipmentRenderer.INSTANCE,
                         new WargModel(context.getPart(EntityModelLayersME.WARG_ARMOR)),
                         EquipmentModel.LayerType.HORSE_BODY,
-                        state -> state.armor
+                        (WargEntityRenderState s) -> s.armor
                 )
         );
         this.addFeature(new WargArmorSpineFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader()), EquipmentRenderer.INSTANCE));
@@ -95,7 +95,7 @@ public class WargRenderer extends MEMobEntityRenderer<WargEntity, WargEntityRend
         state.isCharging = warg.isCharging();
         state.isTame = warg.isTame();
         state.conrollingPassenger = warg.getControllingPassenger();
-        state.saddle = warg.getEquippedStack(EquipmentSlot.SADDLE);
+        state.saddle = warg.getEquippedStack(EquipmentSlot.CHEST);
         state.armor = warg.getBodyArmor();
         state.haveEmissiveEyes = warg.getWorld().isNight() || warg.getWorld().getLightLevel(warg.getBlockPos()) <= LIGHT_LEVEL_EMISSIVE_EYES;
 

@@ -237,11 +237,10 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
         return ItemStack.EMPTY;
     }
 
-    @Override
     public void onBlockReplaced(BlockPos pos, BlockState oldState) {
         if (this.world != null) {
             List<ItemStack> items = new ArrayList<>(getList());
-            items.removeLast();
+            items.remove(items.size()-1);
             for (ItemStack item : items) {
                 ItemScatterer.spawn(this.world, pos.getX(), pos.getY(), pos.getZ(), item);
             }
@@ -315,11 +314,6 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
     }
 
     @Override
-    public Object getScreenOpeningData(ServerPlayerEntity serverPlayerEntity) {
-        return pos;
-    }
-
-    @Override
     public Text getDisplayName() {
         return Text.translatable("screen." + MiddleEarth.MOD_ID + "." + ID);
     }
@@ -339,5 +333,10 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
         this.inventory.clear();
         Inventories.readNbt(view.nbt(), this.inventory);
         this.progress = view.getInt(ID + ".progress", 0);
+    }
+
+    @Override
+    public void writeScreenOpeningData(net.minecraft.server.network.ServerPlayerEntity player, net.minecraft.network.PacketByteBuf buf) {
+        buf.writeBlockPos(this.pos);
     }
 }

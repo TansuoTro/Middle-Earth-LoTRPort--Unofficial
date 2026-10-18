@@ -95,10 +95,6 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
     }
 
     @Override
-    public Object getScreenOpeningData(ServerPlayerEntity serverPlayerEntity) {
-        return new StructureManagerScreenData(this.pos, this.enabled, this.toInitialize, Optional.ofNullable(this.structureManagerIdentifier));
-    }
-    @Override
     public BlockEntityUpdateS2CPacket toUpdatePacket() {
         return BlockEntityUpdateS2CPacket.create(this);
     }
@@ -152,7 +148,7 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
             return;
         for(SpawnNestManager nest : structureNestList.getManagers()){
             for(UUID uuid : nest.getEntityUuids()){
-                if(world.getEntity(uuid) instanceof LivingEntity livingEntity){
+                if((world instanceof net.minecraft.server.world.ServerWorld sw ? sw.getEntity(uuid) : null) instanceof LivingEntity livingEntity){
                     livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 10*20));
                 }
             }
@@ -280,5 +276,11 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
     public void redistributeBeds(){
         // TODO : Redistribute beds to the nest nodes
         // TODO : Makes sure the beds are still distributed to the correct npcs
+    }
+
+    @Override
+    public void writeScreenOpeningData(net.minecraft.server.network.ServerPlayerEntity player, net.minecraft.network.PacketByteBuf buf) {
+        net.jukoz.me.gui.structuremanager.StructureManagerScreenData.PACKET_CODEC.encode(buf,
+                new net.jukoz.me.gui.structuremanager.StructureManagerScreenData(this.pos, this.enabled, this.toInitialize, java.util.Optional.ofNullable(this.structureManagerIdentifier)));
     }
 }

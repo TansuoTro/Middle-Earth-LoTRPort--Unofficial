@@ -337,106 +337,104 @@ public class RegistriesME {
     }
 
     public static void registerFuels() {
-        FuelRegistryEvents.BUILD.register(((builder, context) -> {
-            builder.add(ModNatureBlocks.MIRKWOOD_ROOTS, 300);
-            builder.add(ModNatureBlocks.GREEN_SHRUB, 100);
-            builder.add(ModNatureBlocks.SMALL_DRY_SHRUB, 100);
-            builder.add(ModNatureBlocks.TAN_SHRUB, 100);
+        FuelRegistry.INSTANCE.add(ModNatureBlocks.MIRKWOOD_ROOTS, 300);
+            FuelRegistry.INSTANCE.add(ModNatureBlocks.GREEN_SHRUB, 100);
+            FuelRegistry.INSTANCE.add(ModNatureBlocks.SMALL_DRY_SHRUB, 100);
+            FuelRegistry.INSTANCE.add(ModNatureBlocks.TAN_SHRUB, 100);
 
-            builder.add(ModDecorativeBlocks.ROPE, 150);
-            builder.add(ModDecorativeBlocks.WOOD_PILE, 200);
+            FuelRegistry.INSTANCE.add(ModDecorativeBlocks.ROPE, 150);
+            FuelRegistry.INSTANCE.add(ModDecorativeBlocks.WOOD_PILE, 200);
 
-            builder.add(ModBlocks.WHITE_WOOL_SLAB, 50);
-            builder.add(ModBlocks.ORANGE_WOOL_SLAB, 50);
-            builder.add(ModBlocks.MAGENTA_WOOL_SLAB, 50);
-            builder.add(ModBlocks.LIGHT_BLUE_WOOL_SLAB, 50);
-            builder.add(ModBlocks.YELLOW_WOOL_SLAB, 50);
-            builder.add(ModBlocks.LIME_WOOL_SLAB, 50);
-            builder.add(ModBlocks.PINK_WOOL_SLAB, 50);
-            builder.add(ModBlocks.GRAY_WOOL_SLAB, 50);
-            builder.add(ModBlocks.LIGHT_GRAY_WOOL_SLAB, 50);
-            builder.add(ModBlocks.CYAN_WOOL_SLAB, 50);
-            builder.add(ModBlocks.PURPLE_WOOL_SLAB, 50);
-            builder.add(ModBlocks.BLUE_WOOL_SLAB, 50);
-            builder.add(ModBlocks.BROWN_WOOL_SLAB, 50);
-            builder.add(ModBlocks.GREEN_WOOL_SLAB, 50);
-            builder.add(ModBlocks.RED_WOOL_SLAB, 50);
-            builder.add(ModBlocks.BLACK_WOOL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.WHITE_WOOL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.ORANGE_WOOL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.MAGENTA_WOOL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.LIGHT_BLUE_WOOL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.YELLOW_WOOL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.LIME_WOOL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.PINK_WOOL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.GRAY_WOOL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.LIGHT_GRAY_WOOL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.CYAN_WOOL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.PURPLE_WOOL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.BLUE_WOOL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.BROWN_WOOL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.GREEN_WOOL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.RED_WOOL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.BLACK_WOOL_SLAB, 50);
 
-            builder.add(ModBlocks.WHITE_WOOL_VERTICAL_SLAB, 50);
-            builder.add(ModBlocks.ORANGE_WOOL_VERTICAL_SLAB, 50);
-            builder.add(ModBlocks.MAGENTA_WOOL_VERTICAL_SLAB, 50);
-            builder.add(ModBlocks.LIGHT_BLUE_WOOL_VERTICAL_SLAB, 50);
-            builder.add(ModBlocks.YELLOW_WOOL_VERTICAL_SLAB, 50);
-            builder.add(ModBlocks.LIME_WOOL_VERTICAL_SLAB, 50);
-            builder.add(ModBlocks.PINK_WOOL_VERTICAL_SLAB, 50);
-            builder.add(ModBlocks.GRAY_WOOL_VERTICAL_SLAB, 50);
-            builder.add(ModBlocks.LIGHT_GRAY_WOOL_VERTICAL_SLAB, 50);
-            builder.add(ModBlocks.CYAN_WOOL_VERTICAL_SLAB, 50);
-            builder.add(ModBlocks.PURPLE_WOOL_VERTICAL_SLAB, 50);
-            builder.add(ModBlocks.BLUE_WOOL_VERTICAL_SLAB, 50);
-            builder.add(ModBlocks.BROWN_WOOL_VERTICAL_SLAB, 50);
-            builder.add(ModBlocks.GREEN_WOOL_VERTICAL_SLAB, 50);
-            builder.add(ModBlocks.RED_WOOL_VERTICAL_SLAB, 50);
-            builder.add(ModBlocks.BLACK_WOOL_VERTICAL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.WHITE_WOOL_VERTICAL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.ORANGE_WOOL_VERTICAL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.MAGENTA_WOOL_VERTICAL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.LIGHT_BLUE_WOOL_VERTICAL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.YELLOW_WOOL_VERTICAL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.LIME_WOOL_VERTICAL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.PINK_WOOL_VERTICAL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.GRAY_WOOL_VERTICAL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.LIGHT_GRAY_WOOL_VERTICAL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.CYAN_WOOL_VERTICAL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.PURPLE_WOOL_VERTICAL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.BLUE_WOOL_VERTICAL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.BROWN_WOOL_VERTICAL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.GREEN_WOOL_VERTICAL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.RED_WOOL_VERTICAL_SLAB, 50);
+            FuelRegistry.INSTANCE.add(ModBlocks.BLACK_WOOL_VERTICAL_SLAB, 50);
 
-            builder.add(ModBlocks.WHITE_WOOL_STAIRS, 100);
-            builder.add(ModBlocks.ORANGE_WOOL_STAIRS, 100);
-            builder.add(ModBlocks.MAGENTA_WOOL_STAIRS, 100);
-            builder.add(ModBlocks.LIGHT_BLUE_WOOL_STAIRS, 100);
-            builder.add(ModBlocks.YELLOW_WOOL_STAIRS, 100);
-            builder.add(ModBlocks.LIME_WOOL_STAIRS, 100);
-            builder.add(ModBlocks.PINK_WOOL_STAIRS, 100);
-            builder.add(ModBlocks.GRAY_WOOL_STAIRS, 100);
-            builder.add(ModBlocks.LIGHT_GRAY_WOOL_STAIRS, 100);
-            builder.add(ModBlocks.CYAN_WOOL_STAIRS, 100);
-            builder.add(ModBlocks.PURPLE_WOOL_STAIRS, 100);
-            builder.add(ModBlocks.BLUE_WOOL_STAIRS, 100);
-            builder.add(ModBlocks.BROWN_WOOL_STAIRS, 100);
-            builder.add(ModBlocks.GREEN_WOOL_STAIRS, 100);
-            builder.add(ModBlocks.RED_WOOL_STAIRS, 100);
-            builder.add(ModBlocks.BLACK_WOOL_STAIRS, 100);
+            FuelRegistry.INSTANCE.add(ModBlocks.WHITE_WOOL_STAIRS, 100);
+            FuelRegistry.INSTANCE.add(ModBlocks.ORANGE_WOOL_STAIRS, 100);
+            FuelRegistry.INSTANCE.add(ModBlocks.MAGENTA_WOOL_STAIRS, 100);
+            FuelRegistry.INSTANCE.add(ModBlocks.LIGHT_BLUE_WOOL_STAIRS, 100);
+            FuelRegistry.INSTANCE.add(ModBlocks.YELLOW_WOOL_STAIRS, 100);
+            FuelRegistry.INSTANCE.add(ModBlocks.LIME_WOOL_STAIRS, 100);
+            FuelRegistry.INSTANCE.add(ModBlocks.PINK_WOOL_STAIRS, 100);
+            FuelRegistry.INSTANCE.add(ModBlocks.GRAY_WOOL_STAIRS, 100);
+            FuelRegistry.INSTANCE.add(ModBlocks.LIGHT_GRAY_WOOL_STAIRS, 100);
+            FuelRegistry.INSTANCE.add(ModBlocks.CYAN_WOOL_STAIRS, 100);
+            FuelRegistry.INSTANCE.add(ModBlocks.PURPLE_WOOL_STAIRS, 100);
+            FuelRegistry.INSTANCE.add(ModBlocks.BLUE_WOOL_STAIRS, 100);
+            FuelRegistry.INSTANCE.add(ModBlocks.BROWN_WOOL_STAIRS, 100);
+            FuelRegistry.INSTANCE.add(ModBlocks.GREEN_WOOL_STAIRS, 100);
+            FuelRegistry.INSTANCE.add(ModBlocks.RED_WOOL_STAIRS, 100);
+            FuelRegistry.INSTANCE.add(ModBlocks.BLACK_WOOL_STAIRS, 100);
 
-            builder.add(WeaponItemsME.WOODEN_SPEAR, 300);
-            builder.add(WeaponItemsME.WOODEN_DAGGER, 150);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.WOODEN_SPEAR, 300);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.WOODEN_DAGGER, 150);
 
-            builder.add(WeaponItemsME.GONDORIAN_BOW, 300);
-            builder.add(WeaponItemsME.GONDORIAN_LONGBOW, 400);
-            builder.add(WeaponItemsME.GONDORIAN_NOBLE_LONGBOW, 400);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.GONDORIAN_BOW, 300);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.GONDORIAN_LONGBOW, 400);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.GONDORIAN_NOBLE_LONGBOW, 400);
 
-            builder.add(WeaponItemsME.ROHIRRIC_BOW, 300);
-            builder.add(WeaponItemsME.ROHIRRIC_NOBLE_BOW, 300);
-            builder.add(WeaponItemsME.ROHIRRIC_LONGBOW, 400);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.ROHIRRIC_BOW, 300);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.ROHIRRIC_NOBLE_BOW, 300);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.ROHIRRIC_LONGBOW, 400);
 
-            builder.add(WeaponItemsME.LORIEN_BOW, 300);
-            builder.add(WeaponItemsME.LORIEN_LONGBOW, 400);
-            builder.add(WeaponItemsME.LORIEN_NOBLE_LONGBOW, 400);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.LORIEN_BOW, 300);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.LORIEN_LONGBOW, 400);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.LORIEN_NOBLE_LONGBOW, 400);
 
-            builder.add(WeaponItemsME.WOODLAND_REALM_BOW, 300);
-            builder.add(WeaponItemsME.WOODLAND_REALM_LONGBOW, 400);
-            builder.add(WeaponItemsME.WOODLAND_REALM_NOBLE_BOW, 300);
-            builder.add(WeaponItemsME.WOODLAND_REALM_NOBLE_LONGBOW, 400);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.WOODLAND_REALM_BOW, 300);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.WOODLAND_REALM_LONGBOW, 400);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.WOODLAND_REALM_NOBLE_BOW, 300);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.WOODLAND_REALM_NOBLE_LONGBOW, 400);
 
-            builder.add(WeaponItemsME.EREBOR_BOW, 300);
-            builder.add(WeaponItemsME.EREBOR_NOBLE_BOW, 300);
-            builder.add(WeaponItemsME.EREBOR_CROSSBOW, 400);
-            builder.add(WeaponItemsME.EREBOR_NOBLE_CROSSBOW, 400);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.EREBOR_BOW, 300);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.EREBOR_NOBLE_BOW, 300);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.EREBOR_CROSSBOW, 400);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.EREBOR_NOBLE_CROSSBOW, 400);
 
-            builder.add(WeaponItemsME.ORCISH_BOW, 300);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.ORCISH_BOW, 300);
 
-            builder.add(WeaponItemsME.MORDOR_BOW, 300);
-            builder.add(WeaponItemsME.MORDOR_ELITE_LONGBOW, 400);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.MORDOR_BOW, 300);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.MORDOR_ELITE_LONGBOW, 400);
 
-            builder.add(WeaponItemsME.URUK_HAI_BOW, 300);
-            builder.add(WeaponItemsME.URUK_HAI_CROSSBOW, 400);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.URUK_HAI_BOW, 300);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.URUK_HAI_CROSSBOW, 400);
 
-            builder.add(WeaponItemsME.GUNDABAD_BOW, 300);
-            builder.add(WeaponItemsME.GUNDABAD_LONGBOW, 400);
-            builder.add(WeaponItemsME.GOBLIN_CROSSBOW, 400);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.GUNDABAD_BOW, 300);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.GUNDABAD_LONGBOW, 400);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.GOBLIN_CROSSBOW, 400);
 
-            builder.add(WeaponItemsME.MORIA_GOBLIN_BOW, 300);
-            builder.add(WeaponItemsME.GOBLIN_TOWN_BOW, 300);
-        }));
+            FuelRegistry.INSTANCE.add(WeaponItemsME.MORIA_GOBLIN_BOW, 300);
+            FuelRegistry.INSTANCE.add(WeaponItemsME.GOBLIN_TOWN_BOW, 300);
     }
 
     public static void registerComposterBlocks() {

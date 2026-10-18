@@ -38,6 +38,7 @@ import net.jukoz.me.utils.ItemTagsME;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import net.jukoz.me.compat.MEEnchants;
 
 public class InscriptionTableScreenHandler extends ScreenHandler {
     private final ScreenHandlerContext context;
@@ -223,7 +224,7 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
                     .stream().filter((inscriptionRecipeRecipeEntry -> {
                             if(!inscriptionRecipeRecipeEntry.enchant.value().isAcceptableItem(input.getStack(2))) return false;
                             if(selectedWords.isEmpty()) return true;
-                            else return inscriptionRecipeRecipeEntry.inputWords.getFirst().equals(selectedWords.getFirst());
+                            else return inscriptionRecipeRecipeEntry.inputWords.get(0).equals(selectedWords.get(0));
                     })).toList();
 
             for(InscriptionRecipe recipe : availableRecipes) {
@@ -276,10 +277,10 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
 
     private boolean canEnchant(ItemStack stack, RegistryEntry<Enchantment> enchant, int level) {
         boolean acceptableItem = enchant.value().isAcceptableItem(stack);
-        if (acceptableItem && EnchantmentHelper.isCompatible(stack.getEnchantments().getEnchantments(), enchant)){
+        if (acceptableItem && EnchantmentHelper.isCompatible(MEEnchants.list(stack), enchant)){
             return stack.getEnchantments().getLevel(enchant) == level - 1;
         } else {
-            if (stack.getEnchantments().getEnchantments().contains(enchant)){
+            if (MEEnchants.has(stack, enchant)){
                 return stack.getEnchantments().getLevel(enchant) == level - 1;
             } else {
                 return false;

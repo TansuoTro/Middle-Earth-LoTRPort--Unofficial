@@ -13,7 +13,7 @@ public class PineCofferBlockEntity extends ChestBlockEntity {
     public PineCofferBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.PINE_COFFER, pos, state);
 
-        this.setHeldStacks(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
+        this.setInvStackList(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
     }
 
     @Override

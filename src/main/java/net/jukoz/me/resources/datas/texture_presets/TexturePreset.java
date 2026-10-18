@@ -228,14 +228,14 @@ public class TexturePreset {
             }
 
             if(type == CharacterPatternTypes.EYE && value.contains(IS_EMISSIVE)){
-                this.haveEmissiveEyes = value.getBoolean(IS_EMISSIVE).get();
+                this.haveEmissiveEyes = value.getBoolean(IS_EMISSIVE);
             }
         }
     }
 
     private void fetchClothes(NbtCompound compound){
         if(compound.contains(CLOTHES)){
-            if(compound.getList(CLOTHES, 9).isPresent()){
+            if(compound.contains(CLOTHES)){
                 NbtList listClothePresets = compound.getList(CLOTHES, 9);
 
                 listClothePresets.forEach(x -> {
@@ -251,11 +251,11 @@ public class TexturePreset {
     private void fetchSimplifiedTextures(NbtCompound compound) {
         if(compound.contains(SIMPLIFIED)){
             var simplifiedList = compound.getList(SIMPLIFIED, 9);
-            simplifiedList.ifPresent(listSimplifiedTextures -> listSimplifiedTextures.forEach(x -> {
+            simplifiedList.forEach(x -> {
                 if (NbtCompat.isCompound(x)) {
                     this.simplifiedTextures.add(new WeightedSimplifiedTexturePresetHolder(NbtCompat.compound(x)));
                 }
-            }));
+            });
         }
     }
 

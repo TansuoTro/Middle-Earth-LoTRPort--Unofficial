@@ -230,4 +230,11 @@ public class BroadhoofGoatModel extends SinglePartEntityModel<BroadhoofGoatEntit
         this.updateAnimation(entity.jumpAnimationState, BroadhoofGoatAnimations.JUMP, ageInTicks);
 
     }
+
+    public void setAngles(BroadhoofGoatEntityRenderState state) {
+        if (state.entity instanceof BroadhoofGoatEntity entity) {
+            this.setAngles(entity, state.limbSwingAnimationProgress, state.limbSwingAmplitude,
+                    state.age, state.relativeHeadYaw, state.relativeHeadPitch);
+        }
+    }
 }

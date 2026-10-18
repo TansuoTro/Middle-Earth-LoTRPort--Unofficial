@@ -1,5 +1,7 @@
 package net.jukoz.me.block.special.shapingAnvil.stoneanvil;
 
+import net.jukoz.me.compat.MEArmorTrim;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 
@@ -33,7 +35,7 @@ public class StoneAnvilBlockEntity extends ShapingAnvilBlockEntity {
 
         ArmorTrim trim = MEArmorTrim.get(input);
         if (trim != null){
-            Optional<RegistryKey<ArmorTrimMaterial>> armorTrimMaterialRegistryKey = trim.material().getKey();
+            Optional<RegistryKey<ArmorTrimMaterial>> armorTrimMaterialRegistryKey = trim.getMaterial().getKey();
             if(armorTrimMaterialRegistryKey.isPresent()) {
                 RegistryKey<ArmorTrimMaterial> armorTrimMaterial = armorTrimMaterialRegistryKey.get();
                 if (!armorTrimMaterial.getValue().equals(MiddleEarth.of("bronze")) &&

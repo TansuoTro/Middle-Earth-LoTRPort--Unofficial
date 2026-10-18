@@ -30,7 +30,7 @@ public class ShapingAnvilEntityRenderer implements BlockEntityRenderer<ShapingAn
     }
 
     @Override
-    public void render(ShapingAnvilBlockEntity entity, float tickProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, Vec3d cameraPos) {
+    public void render(ShapingAnvilBlockEntity entity, float tickProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         ItemStack stack = entity.getRenderStack(entity);
 
         if(stack.isEmpty()) return;

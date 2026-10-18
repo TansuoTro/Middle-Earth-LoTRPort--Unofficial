@@ -155,4 +155,11 @@ public class GreatHornModel extends SinglePartEntityModel<GreatHornEntity> {
             rightAntler.visible = false;
         }
     }
+
+    public void setAngles(GreatHornEntityRenderState state) {
+        if (state.entity instanceof GreatHornEntity entity) {
+            this.setAngles(entity, state.limbSwingAnimationProgress, state.limbSwingAmplitude,
+                    state.age, state.relativeHeadYaw, state.relativeHeadPitch);
+        }
+    }
 }

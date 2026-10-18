@@ -118,7 +118,8 @@ public class NpcGenerator {
         // Hair
         Identifier hairPatternId = TexturePresetDataPool.getRawPattern(textureIdentity, CharacterPatternTypes.HAIR);
         Optional<RegistryEntry.Reference<CharacterTexturePattern>> foundHairPattern = CharacterPatternsRegistryME.get(manager, CharacterPatternTypes.HAIR, hairPatternId);
-        if(foundHairPattern.isPresent() && foundHairPattern.get().value() instanceof CharacterTexturePattern pattern){
+        if(foundHairPattern.isPresent()){
+            CharacterTexturePattern pattern = foundHairPattern.get().value();
             npcTextureData = npcTextureData.withHairTexture(TexturePresetDataPool.buildId(hairPatternId, globalHairMaterialId));
             if(pattern.hasAddonRawValue()){
                 npcTextureData = npcTextureData.withHairAddonTexture(TexturePresetDataPool.buildAddonId(hairPatternId, globalHairMaterialId));

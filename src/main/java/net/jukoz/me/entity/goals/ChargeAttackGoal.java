@@ -16,6 +16,10 @@ public class ChargeAttackGoal extends Goal {
         this.MAX_COOLDOWN = maxCooldown;
     }
 
+    public ChargeAttackGoal(AbstractBeastEntity mob, net.jukoz.me.resources.datas.common.DispositionType beastDispositionType, int maxCooldown) {
+        this(mob, maxCooldown);
+    }
+
     @Override
     public boolean canStart() {
         return this.mob.getChargeTimeout() == 0 &&

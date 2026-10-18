@@ -17,12 +17,12 @@ public enum BlockAuthor implements StringIdentifiable {
     ANGMARZKU(5, "Angmarzku")
     ;
 
-    private static final IntFunction<BlockAuthor> BY_ID = ValueLists.createIndexToValueFunction(BlockAuthor::getId, BlockAuthor.values(), ValueLists.OutOfBoundsHandling.ZERO);;
+    private static final IntFunction<BlockAuthor> BY_ID = ValueLists.createIdToValueFunction(BlockAuthor::getId, BlockAuthor.values(), ValueLists.OutOfBoundsHandling.ZERO);;
     private final int id;
     private final String authorName;
 
-    public static final Codec<BlockAuthor> CODEC = StringIdentifiable.createBasicCodec(BlockAuthor::values);
-    public static final PacketCodec<ByteBuf, BlockAuthor> PACKET_CODEC = PacketCodecs.indexed(BY_ID, BlockAuthor::getId);
+    public static final Codec<BlockAuthor> CODEC = StringIdentifiable.createCodec(BlockAuthor::values);
+    public static final PacketCodec<net.minecraft.network.PacketByteBuf, BlockAuthor> PACKET_CODEC = PacketCodecs.indexed(BY_ID, BlockAuthor::getId);
 
     BlockAuthor(int id, String authorName) {
         this.id = id;

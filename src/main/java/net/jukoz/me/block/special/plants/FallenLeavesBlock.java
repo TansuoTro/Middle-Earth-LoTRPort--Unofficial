@@ -36,7 +36,7 @@ public class FallenLeavesBlock extends PlantBlock {
 
     @Override
     protected boolean canPlantOnTop(BlockState floor, BlockView world, BlockPos pos) {
-        return floor.isOpaqueFullCube();
+        return floor.isOpaqueFullCube(world, pos);
     }
 
     @Override

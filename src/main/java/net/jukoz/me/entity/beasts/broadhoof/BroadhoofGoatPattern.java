@@ -69,7 +69,7 @@ public enum BroadhoofGoatPattern {
             BroadhoofGoatColor.BLACK, new WeightedPool<>(Stream.of(GENERIC_SET, BROWN_SET, PALE_SET))
     );
 
-    private static final IntFunction<BroadhoofGoatPattern> INDEX_MAPPER = ValueLists.createIndexToValueFunction(
+    private static final IntFunction<BroadhoofGoatPattern> INDEX_MAPPER = ValueLists.createIdToValueFunction(
             BroadhoofGoatPattern::getIndex, values(), ValueLists.OutOfBoundsHandling.WRAP
     );
     private final int index;

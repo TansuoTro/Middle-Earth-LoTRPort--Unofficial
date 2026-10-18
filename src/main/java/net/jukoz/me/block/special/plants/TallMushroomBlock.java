@@ -23,7 +23,7 @@ public class TallMushroomBlock extends TallPlantBlock {
         }
         BlockPos floor = pos.down();
         boolean dark = world.getBaseLightLevel(floor, 0) < 13;
-        boolean opaque = world.getBlockState(floor).isOpaqueFullCube();
+        boolean opaque = world.getBlockState(floor).isOpaqueFullCube(world, floor);
         return dark & opaque;
     }
 }

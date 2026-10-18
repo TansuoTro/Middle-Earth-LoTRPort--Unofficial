@@ -26,8 +26,8 @@ public class ArtefactCustomGlowingDaggerWeaponItem extends CustomDaggerWeaponIte
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, ServerWorld world, Entity entity, @Nullable EquipmentSlot slot) {
-        super.inventoryTick(stack, world, entity, slot);
+    public void inventoryTick(ItemStack stack, net.minecraft.world.World world, Entity entity, int slot, boolean selected) {
+        super.inventoryTick(stack, world, entity, slot, selected);
         ArtefactCustomGlowingDaggerWeaponItem item = (ArtefactCustomGlowingDaggerWeaponItem) stack.getItem();
         item.glowing = shouldBeGlowing(world, entity);
     }
@@ -55,10 +55,12 @@ public class ArtefactCustomGlowingDaggerWeaponItem extends CustomDaggerWeaponIte
     }
 
     @Override
-    public void postDamageEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (stack.getDamage() == stack.getMaxDamage() - 1) {
             BluntWeapon.blunt(stack);
         }
+    
+        return true;
     }
 
     @Override

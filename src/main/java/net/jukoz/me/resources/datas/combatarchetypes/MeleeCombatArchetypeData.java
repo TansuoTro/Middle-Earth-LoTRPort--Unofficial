@@ -13,7 +13,7 @@ public class MeleeCombatArchetypeData extends CombatArchetypeData {
 
     public MeleeCombatArchetypeData(NbtCompound data) {
         super(data);
-        critialChance = data.getFloat("critical_chance", 0.2f);
+        critialChance = data.getFloat("critical_chance");
     }
 
     @Override

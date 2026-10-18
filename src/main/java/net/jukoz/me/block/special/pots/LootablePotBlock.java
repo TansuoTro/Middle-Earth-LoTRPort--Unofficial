@@ -35,7 +35,7 @@ public class LootablePotBlock extends DecoratedPotBlock {
     }
 
     @Override
-    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state, boolean includeData) {
+    public ItemStack getPickStack(net.minecraft.world.BlockView world, BlockPos pos, BlockState state) {
         return new ItemStack(this);
     }
 

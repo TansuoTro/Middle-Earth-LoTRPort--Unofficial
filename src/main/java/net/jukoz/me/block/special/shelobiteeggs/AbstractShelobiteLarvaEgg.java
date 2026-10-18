@@ -36,7 +36,7 @@ public abstract class AbstractShelobiteLarvaEgg extends Block {
         entity.age = 0;
         entity.refreshPositionAndAngles(pos, 0, 0);
         if(world instanceof ServerWorldAccess serverWorldAccess) {
-            entity.initialize(serverWorldAccess, serverWorldAccess.getLocalDifficulty(pos), SpawnReason.NATURAL, null);
+            entity.initialize(serverWorldAccess, serverWorldAccess.getLocalDifficulty(pos), SpawnReason.NATURAL, null, null);
         }
         world.spawnEntity(entity);
     }

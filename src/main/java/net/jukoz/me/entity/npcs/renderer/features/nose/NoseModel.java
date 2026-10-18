@@ -1,11 +1,13 @@
 package net.jukoz.me.entity.npcs.renderer.features.nose;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.client.render.entity.model.SinglePartEntityModel;
+import net.jukoz.me.entity.npcs.NpcEntity;
 import net.minecraft.util.math.MathHelper;
 import net.jukoz.me.entity.npcs.renderer.NpcEntityRenderState;
 
-public class NoseModel  extends EntityModel<NpcEntityRenderState>  {
+public class NoseModel extends SinglePartEntityModel<NpcEntity> {
+    private final ModelPart root;
     public final ModelPart noseRoot;
 
     public final ModelPart squareCube;
@@ -14,7 +16,7 @@ public class NoseModel  extends EntityModel<NpcEntityRenderState>  {
     public final ModelPart largeCenterCube;
 
     public NoseModel(ModelPart modelPart) {
-        super(modelPart);
+        this.root = modelPart;
         this.noseRoot = modelPart.getChild("noseRoot");
         this.squareCube = noseRoot.getChild("squareCube");
         this.villagerCube = noseRoot.getChild("villagerCube");
@@ -43,9 +45,7 @@ public class NoseModel  extends EntityModel<NpcEntityRenderState>  {
         return TexturedModelData.of(modelData, 32, 32);
     }
 
-    @Override
     public void setAngles(NpcEntityRenderState state) {
-        super.setAngles(state);
 
         float f = state.leaningPitch;
         boolean bl = state.isGliding;
@@ -57,7 +57,16 @@ public class NoseModel  extends EntityModel<NpcEntityRenderState>  {
             this.noseRoot.pitch = -0.7853982F;
 
         } else if (f > 0.0F) {
-            this.noseRoot.pitch = MathHelper.lerpAngleRadians(f, this.noseRoot.pitch, -0.7853982F);
+            this.noseRoot.pitch = net.jukoz.me.compat.MEAngles.lerpAngleRadians(f, this.noseRoot.pitch, -0.7853982F);
         }
+    }
+
+    @Override
+    public ModelPart getPart() {
+        return this.root;
+    }
+
+    @Override
+    public void setAngles(NpcEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
     }
 }

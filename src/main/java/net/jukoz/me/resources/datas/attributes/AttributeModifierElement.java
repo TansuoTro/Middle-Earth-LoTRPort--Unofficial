@@ -10,8 +10,8 @@ public class AttributeModifierElement {
 
     public AttributeModifierElement(NbtCompound modifierNbt) {
         this.modifier = new EntityAttributeModifier(
-                MiddleEarth.fetchId(modifierNbt.getString("id")),
-                modifierNbt.getDouble("value").get(),
+                modifierNbt.getString("id"),
+                modifierNbt.getDouble("value"),
                 EntityAttributeModifier.Operation.valueOf(modifierNbt.getString("operation"))
         );
     }
@@ -23,21 +23,21 @@ public class AttributeModifierElement {
 
     public NbtCompound toNbt() {
         NbtCompound nbt = new NbtCompound();
-        nbt.putString("id", modifier.id().toString());
-        nbt.putDouble("value", modifier.value());
-        nbt.putString("operation", modifier.operation().name());
+        nbt.putString("id", modifier.getName());
+        nbt.putDouble("value", modifier.getValue());
+        nbt.putString("operation", modifier.getOperation().name());
         return nbt;
     }
 
     public Identifier getIdentifier() {
-        return modifier.id();
+        return MiddleEarth.fetchId(modifier.getName());
     }
     public double getValue() {
-        return modifier.value();
+        return modifier.getValue();
     }
 
     public EntityAttributeModifier.Operation getOperation() {
-        return modifier.operation();
+        return modifier.getOperation();
     }
 
     public EntityAttributeModifier getEntityAttributeModifier() {

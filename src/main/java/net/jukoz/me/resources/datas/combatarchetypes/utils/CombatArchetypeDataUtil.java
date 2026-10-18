@@ -10,12 +10,12 @@ import java.util.Optional;
 
 public class CombatArchetypeDataUtil {
     public static CombatArchetypeData create(NbtCompound combatArchetypeData) {
-        Optional<String> type = combatArchetypeData.getString("type");
+        String type = combatArchetypeData.getString("type");
         if(type.isEmpty())
             return null;
-        CombatArchetype combatArchetype = CombatArchetype.valueOf(type.get());
+        CombatArchetype combatArchetype = CombatArchetype.valueOf(type);
 
-        NbtCompound data = combatArchetypeData.getCompoundOrEmpty("data");
+        NbtCompound data = combatArchetypeData.getCompound("data");
         return switch (combatArchetype) {
             case MELEE -> new MeleeCombatArchetypeData(data);
             case RANGED -> new RangedCombatArchetypeData(data);

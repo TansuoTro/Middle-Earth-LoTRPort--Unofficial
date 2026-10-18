@@ -41,7 +41,7 @@ public class OldSkullBlock extends BlockWithEntity {
     }
 
     @Override
-    protected boolean canPathfindThrough(BlockState state, NavigationType type) {
+    public boolean canPathfindThrough(BlockState state, net.minecraft.world.BlockView world, BlockPos pos, NavigationType type) {
         return false;
     }
 

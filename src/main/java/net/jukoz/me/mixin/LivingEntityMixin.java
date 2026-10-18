@@ -38,6 +38,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import net.jukoz.me.compat.MEEnchants;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
@@ -67,7 +68,7 @@ public abstract class LivingEntityMixin extends Entity {
             if(!chestplate.isEmpty()) {
                 RegistryEntry<Enchantment> enchantmentRegistryEntry = entity.getWorld().getRegistryManager()
                         .getOrThrow(RegistryKeys.ENCHANTMENT).getOptional(EnchantmentsME.STEALTHY_TRAIL).orElseThrow();
-                boolean hasEnchant = chestplate.getEnchantments().getEnchantments().contains(enchantmentRegistryEntry);
+                boolean hasEnchant = MEEnchants.has(chestplate, enchantmentRegistryEntry);
                 int level = EnchantmentHelper.getLevel(enchantmentRegistryEntry, chestplate);
                 if(hasEnchant) {
                     double original = cir.getReturnValue();
@@ -142,7 +143,7 @@ public abstract class LivingEntityMixin extends Entity {
         int level = 0;
         RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT)
                 .getOptional(EnchantmentsME.AILMENT_PROTECTION).orElseThrow();
-        boolean hasEnchant = itemStack.getEnchantments().getEnchantments().contains(enchantmentRegistryEntry);
+        boolean hasEnchant = MEEnchants.has(itemStack, enchantmentRegistryEntry);
         if(hasEnchant) {
             level = EnchantmentHelper.getLevel(enchantmentRegistryEntry, itemStack);
         }

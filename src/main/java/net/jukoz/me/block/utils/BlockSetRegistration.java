@@ -1,7 +1,7 @@
 package net.jukoz.me.block.utils;
 
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
-import net.fabricmc.fabric.api.registry.FuelRegistryEvents;
+import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.Instrument;
 import net.minecraft.block.piston.PistonBehavior;
@@ -157,13 +157,11 @@ public class BlockSetRegistration {
         FlammableBlockRegistry.getDefaultInstance().add(wall, 5, 5);
         FlammableBlockRegistry.getDefaultInstance().add(fence, 5, 5);
 
-        FuelRegistryEvents.BUILD.register(((builder, context) -> {
-            builder.add(slab, 150);
-            builder.add(stairs, 300);
-            builder.add(verticalSlab, 150);
-            builder.add(wall, 300);
-            builder.add(fence, 300);
-        }));
+        FuelRegistry.INSTANCE.add(slab, 150);
+            FuelRegistry.INSTANCE.add(stairs, 300);
+            FuelRegistry.INSTANCE.add(verticalSlab, 150);
+            FuelRegistry.INSTANCE.add(wall, 300);
+            FuelRegistry.INSTANCE.add(fence, 300);
 
         return new BlockRecordTypes.WoodSet(log, wood, slab, verticalSlab, stairs, wall, fence);
     }
@@ -240,8 +238,7 @@ public class BlockSetRegistration {
         Block fence = getVanillaOrCreateNew(name + "_fence", FenceBlock::new,
                 AbstractBlock.Settings.copy(base).strength(hardness, blastResistance), group);
 
-        Block gate = getVanillaOrCreateNew(name + "_fence_gate", (settings) -> new FenceGateBlock(
-                WoodType.OAK, settings), AbstractBlock.Settings.copy(base).strength(hardness, blastResistance), group);
+        Block gate = getVanillaOrCreateNew(name + "_fence_gate", (settings) -> new FenceGateBlock(settings, WoodType.OAK), AbstractBlock.Settings.copy(base).strength(hardness, blastResistance), group);
 
         FlammableBlockRegistry.getDefaultInstance().add(base, 5, 20);
         FlammableBlockRegistry.getDefaultInstance().add(slab, 5, 20);
@@ -250,37 +247,29 @@ public class BlockSetRegistration {
         FlammableBlockRegistry.getDefaultInstance().add(fence, 5, 20);
         FlammableBlockRegistry.getDefaultInstance().add(gate, 5, 20);
 
-        FuelRegistryEvents.BUILD.register(((builder, context) -> {
-            builder.add(slab, 150);
-            builder.add(verticalSlab, 150);
-            builder.add(stairs, 300);
-            builder.add(fence, 300);
-            builder.add(gate, 300);
-        }));
+        FuelRegistry.INSTANCE.add(slab, 150);
+            FuelRegistry.INSTANCE.add(verticalSlab, 150);
+            FuelRegistry.INSTANCE.add(stairs, 300);
+            FuelRegistry.INSTANCE.add(fence, 300);
+            FuelRegistry.INSTANCE.add(gate, 300);
 
         return new BlockRecordTypes.PlanksSet(base, slab, verticalSlab, stairs, fence, gate);
     }
 
     public static BlockRecordTypes.WoodRedstoneBlocks createWoodRedstoneSet(String name, float hardness, float blastResistance, MapColor mapColor, BlockSoundGroup soundGroup, Block base, List<ItemStack> group) {
 
-        Block door = getVanillaOrCreateNew(name + "_door", (settings) -> new DoorBlock(
-                BlockSetType.OAK, settings), AbstractBlock.Settings.copy(base).strength(hardness, blastResistance).mapColor(mapColor).sounds(soundGroup).nonOpaque(), group);
+        Block door = getVanillaOrCreateNew(name + "_door", (settings) -> new DoorBlock(settings, BlockSetType.OAK), AbstractBlock.Settings.copy(base).strength(hardness, blastResistance).mapColor(mapColor).sounds(soundGroup).nonOpaque(), group);
 
-        Block trapdoor = getVanillaOrCreateNew(name + "_trapdoor", (settings) -> new TrapdoorBlock(
-                BlockSetType.OAK, settings), AbstractBlock.Settings.copy(base).strength(hardness, blastResistance).mapColor(mapColor).sounds(soundGroup).nonOpaque(), group);
+        Block trapdoor = getVanillaOrCreateNew(name + "_trapdoor", (settings) -> new TrapdoorBlock(settings, BlockSetType.OAK), AbstractBlock.Settings.copy(base).strength(hardness, blastResistance).mapColor(mapColor).sounds(soundGroup).nonOpaque(), group);
 
-        Block pressurePlate = getVanillaOrCreateNew(name + "_pressure_plate", (settings) -> new PressurePlateBlock(
-                BlockSetType.OAK, settings), AbstractBlock.Settings.copy(base).strength(0.5f, blastResistance).mapColor(mapColor).sounds(soundGroup).noCollision(), group);
+        Block pressurePlate = getVanillaOrCreateNew(name + "_pressure_plate", (settings) -> new PressurePlateBlock(PressurePlateBlock.ActivationRule.EVERYTHING, settings, BlockSetType.OAK), AbstractBlock.Settings.copy(base).strength(0.5f, blastResistance).mapColor(mapColor).sounds(soundGroup).noCollision(), group);
 
-        Block button = getVanillaOrCreateNew(name + "_button", (settings) -> new ButtonBlock(
-                BlockSetType.OAK, 30, settings), AbstractBlock.Settings.copy(base).strength(0.5f, blastResistance).mapColor(mapColor).sounds(soundGroup).noCollision().pistonBehavior(PistonBehavior.DESTROY), group);
+        Block button = getVanillaOrCreateNew(name + "_button", (settings) -> new ButtonBlock(settings, BlockSetType.OAK, 30, true), AbstractBlock.Settings.copy(base).strength(0.5f, blastResistance).mapColor(mapColor).sounds(soundGroup).noCollision().pistonBehavior(PistonBehavior.DESTROY), group);
 
-        FuelRegistryEvents.BUILD.register(((builder, context) -> {
-            builder.add(button, 100);
-            builder.add(pressurePlate, 300);
-            builder.add(door, 200);
-            builder.add(trapdoor, 200);
-        }));
+        FuelRegistry.INSTANCE.add(button, 100);
+            FuelRegistry.INSTANCE.add(pressurePlate, 300);
+            FuelRegistry.INSTANCE.add(door, 200);
+            FuelRegistry.INSTANCE.add(trapdoor, 200);
 
         return new BlockRecordTypes.WoodRedstoneBlocks(door, trapdoor, pressurePlate, button);
     }
@@ -307,12 +296,10 @@ public class BlockSetRegistration {
         FlammableBlockRegistry.getDefaultInstance().add(table, 5, 20);
         FlammableBlockRegistry.getDefaultInstance().add(chair, 5, 20);
 
-        FuelRegistryEvents.BUILD.register(((builder, context) -> {
-            builder.add(table, 300);
-            builder.add(chair, 300);
-            builder.add(bench, 300);
-            builder.add(stool, 300);
-        }));
+        FuelRegistry.INSTANCE.add(table, 300);
+            FuelRegistry.INSTANCE.add(chair, 300);
+            FuelRegistry.INSTANCE.add(bench, 300);
+            FuelRegistry.INSTANCE.add(stool, 300);
 
         return new BlockRecordTypes.WoodFurnitureBlocks(table, chair, stool, bench, ladder);
     }
@@ -341,14 +328,11 @@ public class BlockSetRegistration {
         Block wall = getVanillaOrCreateNew(name + "_wall", WallBlock::new,
                 AbstractBlock.Settings.copy(base), group);
 
-        Block pressurePlate = getVanillaOrCreateNew(name + "_pressure_plate", (settings) -> new PressurePlateBlock(
-                BlockSetType.STONE, settings), AbstractBlock.Settings.copy(base).noCollision(), group);
+        Block pressurePlate = getVanillaOrCreateNew(name + "_pressure_plate", (settings) -> new PressurePlateBlock(PressurePlateBlock.ActivationRule.EVERYTHING, settings, BlockSetType.STONE), AbstractBlock.Settings.copy(base).noCollision(), group);
 
-        Block button = getVanillaOrCreateNew(name + "_button", (settings) -> new ButtonBlock(
-                BlockSetType.STONE, 20, settings), AbstractBlock.Settings.copy(base).noCollision(), group);
+        Block button = getVanillaOrCreateNew(name + "_button", (settings) -> new ButtonBlock(settings, BlockSetType.STONE, 20, false), AbstractBlock.Settings.copy(base).noCollision(), group);
 
-        Block trapdoor = getVanillaOrCreateNew(name + "_trapdoor", (settings) -> new TrapdoorBlock(
-                BlockSetType.STONE, settings), AbstractBlock.Settings.copy(base).nonOpaque(), group);
+        Block trapdoor = getVanillaOrCreateNew(name + "_trapdoor", (settings) -> new TrapdoorBlock(settings, BlockSetType.STONE), AbstractBlock.Settings.copy(base).nonOpaque(), group);
 
         Block rocks = getVanillaOrCreateNew(name + "_rocks", RocksBlock::new,
                 AbstractBlock.Settings.copy(base).nonOpaque(), group);

@@ -15,6 +15,7 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 
 import net.jukoz.me.compat.DyedColorComponent;
+import net.jukoz.me.item.MEComponents;
 import net.minecraft.util.Identifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.ItemTags;
@@ -43,20 +44,24 @@ public class GreatHornArmorFeatureRenderer extends MEFeatureRenderer<GreatHornEn
             model.setAngles(state);
             String path = "textures/entities/great_horn/feature/" + equippableComponent.getPath() + ".png";
             boolean dyeable = false;
-            if (itemStack.isIn(ItemTags.DYEABLE)) {
+            if (itemStack.getItem() instanceof net.minecraft.item.DyeableItem) {
                 dyeable = true;
             }
             VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(new Identifier(MiddleEarth.MOD_ID, path)), true, itemStack.hasGlint());
 
             if(dyeable){
-                int color = DyedColorComponent.getColor(itemStack, DyedColorComponent.DEFAULT_COLOR);
-                model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, color);
+                int color = itemStack.getItem() instanceof net.minecraft.item.DyeableItem dyeable
+                    ? dyeable.getColor(itemStack) : DyedColorComponent.DEFAULT_COLOR;
+                float red = ((color >> 16) & 255) / 255.0F;
+                float green = ((color >> 8) & 255) / 255.0F;
+                float blue = (color & 255) / 255.0F;
+                model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, red, green, blue, 1.0F);
                 if(DyeablePiecesME.dyeablePieces.get(itemStack.getItem())) {
                     ArmorRenderer.renderPart(matrices, vertexConsumers, light, itemStack, model,
                             new Identifier(MiddleEarth.MOD_ID, path.replaceAll(".png", "_overlay.png")));
                 }
             } else {
-                model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
+                model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
             }
         }
     }

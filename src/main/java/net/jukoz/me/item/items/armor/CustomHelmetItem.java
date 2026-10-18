@@ -12,7 +12,7 @@ import net.jukoz.me.item.utils.armor.ExtendedArmorMaterial;
 public class CustomHelmetItem extends ArmorItem {
 
     public CustomHelmetItem(ExtendedArmorMaterial material, Settings settings) {
-        super(material, settings.armor(material.material(), ArmorItem.Type.HELMET).maxCount(1));
+        super(material.material(), ArmorItem.Type.HELMET, settings.maxCount(1));
     }
 
     public static void toggleHoodState(ServerPlayerEntity player, ItemStack stack){

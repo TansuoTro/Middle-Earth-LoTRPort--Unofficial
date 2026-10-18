@@ -107,7 +107,7 @@ public abstract class AbstractToggleableFireBlock extends BlockWithEntity {
         if (state.get(LIT) && entity instanceof LivingEntity) {
             if (!world.isClient) {
                 if (isEntityAbove(pos, entity)) {
-                    entity.damage(world.getDamageSources().campfire(), (float) 1);
+                    entity.damage(world.getDamageSources().inFire(), (float) 1);
                 }
             }
         }

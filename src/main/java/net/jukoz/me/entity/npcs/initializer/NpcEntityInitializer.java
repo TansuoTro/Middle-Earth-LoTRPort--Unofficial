@@ -2,7 +2,6 @@ package net.jukoz.me.entity.npcs.initializer;
 
 import net.minecraft.block.BedBlock;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentHolder;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.AbstractHorseEntity;
@@ -87,7 +86,7 @@ public class NpcEntityInitializer {
             return true;
 
         DynamicRegistryManager registryManager = serverWorld.getRegistryManager();
-        Optional<RegistryEntry.Reference<NpcType>> optionalEntry = registryManager.getOptional(DynamicRegistriesME.NPC_TYPE).get().getEntry(currentNpcDataId);
+        Optional<RegistryEntry.Reference<NpcType>> optionalEntry = registryManager.getOptional(DynamicRegistriesME.NPC_TYPE).get().getEntry(net.minecraft.registry.RegistryKey.of(DynamicRegistriesME.NPC_TYPE, currentNpcDataId));
 
 
         if(!npcEntity.hasTextureData())

@@ -70,7 +70,8 @@ public class TapperBlock extends HorizontalFacingBlock {
     }
 
     @Override
-    protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        ItemStack stack = player.getStackInHand(hand);
         int i = state.get(TAP_LEVEL);
         boolean bl = false;
         if (i >= FULL_TAP_LEVEL) {
@@ -78,7 +79,7 @@ public class TapperBlock extends HorizontalFacingBlock {
 
             BlockState behindBlock = world.getBlockState(pos.offset(state.get(FACING).getOpposite()));
 
-            Item result = Items.RESIN_CLUMP;
+            Item result = Items.SLIME_BALL;
             if(behindBlock.getBlock() == WoodBlockSets.MAPLE_SET.logBlocks.log() || behindBlock.getBlock() == WoodBlockSets.SILVER_MAPLE_SET.logBlocks.log()) {
                 result = FoodItemsME.MAPLE_SYRUP;
             } else if (behindBlock.getBlock() == Blocks.BIRCH_LOG) {
@@ -86,7 +87,7 @@ public class TapperBlock extends HorizontalFacingBlock {
             }
 
             ItemStack stackResult = new ItemStack(result);
-            if(result.equals(Items.RESIN_CLUMP)) {
+            if(result.equals(Items.SLIME_BALL)) {
                 if (!player.getInventory().insertStack(stackResult)) {
                     player.dropItem(stackResult, false);
                 }
@@ -94,7 +95,7 @@ public class TapperBlock extends HorizontalFacingBlock {
                 emptyBucket(state, world, pos);
             }
             else if (stack.isOf(Items.GLASS_BOTTLE)) {
-                if(result != Items.RESIN_CLUMP) stack.decrement(1);
+                if(result != Items.SLIME_BALL) stack.decrement(1);
                 world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 1.0F, 1.1F);
 
                 if (stack.isEmpty()) {
@@ -116,7 +117,7 @@ public class TapperBlock extends HorizontalFacingBlock {
         if (bl) {
             return ActionResult.SUCCESS;
         } else {
-            return super.onUseWithItem(stack, state, world, pos, player, hand, hit);
+            return super.onUse(state, world, pos, player, hand, hit);
         }
     }
 

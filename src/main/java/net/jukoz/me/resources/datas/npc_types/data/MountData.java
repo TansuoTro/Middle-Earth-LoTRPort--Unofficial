@@ -9,6 +9,7 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.jukoz.me.item.MEComponents;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
@@ -80,7 +81,7 @@ public class MountData {
     public MountData withColor(DyedColorComponent color){
         if(this.armor == null)
             return this;
-        this.armor.set(MEComponents.DYED_COLOR, color);
+        MEComponents.set(this.armor, MEComponents.DYED_COLOR, color);
         return this;
     }
 
@@ -110,26 +111,27 @@ public class MountData {
         if(this.entityType == null || owner.hasVehicle() || owner.hasPassengers())
             return;
         EntityType<?> type = Registries.ENTITY_TYPE.get(this.entityType);
-        var notLiving = type.create(world, SpawnReason.JOCKEY);
+        var notLiving = type.create(world);
         if(notLiving == null)
             return;
         if(notLiving instanceof LivingEntity entity){
             entity.setPosition(owner.getPos());
-            entity.equipStack(EquipmentSlot.SADDLE, Items.SADDLE.asItem().getDefaultStack());
+            entity.equipStack(EquipmentSlot.CHEST, Items.SADDLE.asItem().getDefaultStack());
             if(armor != null)
-                entity.equipStack(EquipmentSlot.BODY, this.armor);
+                entity.equipStack(EquipmentSlot.CHEST, this.armor);
 
             if (entity instanceof MobEntity mob) {
                 mob.initialize(
                         world,
                         world.getLocalDifficulty(owner.getBlockPos()),
                         SpawnReason.EVENT,
+                        null,
                         null
                 );
             }
             if(entity instanceof AbstractHorseEntity horse){
                 horse.setTame(true);
-                horse.setOwner(owner);
+                horse.setOwnerUuid(owner.getUuid());
                 if(horse instanceof AbstractBeastEntity beast){
                     beast.tameBeast(owner);
                 }

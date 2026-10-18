@@ -65,7 +65,7 @@ public class RaceStatTooltip {
 
     private static boolean addAttributeLine(LivingEntity entity, Registry<EntityAttribute> registry, AttributePoolElement currentEntityAttribute, List<AttributePoolElement> nextBoundAttributes, boolean detailed) {
         Identifier attributeId = currentEntityAttribute.getIdentifier();
-        boolean buffIsReversed = registry.getEntry(attributeId).get().isIn(TagKey.of(RegistryKeys.ATTRIBUTE, MiddleEarth.of("is_buff_reversed")));
+        boolean buffIsReversed = registry.getEntry(net.minecraft.registry.RegistryKey.of(net.minecraft.registry.RegistryKeys.ATTRIBUTE, attributeId)).get().isIn(TagKey.of(RegistryKeys.ATTRIBUTE, MiddleEarth.of("is_buff_reversed")));
 
         AttributePoolElement nextAttribute = nextBoundAttributes.stream().filter(attribute -> attributeId.equals(attribute.getIdentifier())).findFirst().orElse(null);
 
@@ -95,9 +95,9 @@ public class RaceStatTooltip {
                 boolean willFollow = verifyIfModifierExistInList(currentModifier, nextBoundModifiers);
                 double modifierValue = currentModifier.getValue();
                 currentTotal += switch (currentModifier.getOperation()){
-                    case ADD_VALUE -> modifierValue;
-                    case ADD_MULTIPLIED_BASE -> round(currentValue * modifierValue);
-                    case ADD_MULTIPLIED_TOTAL -> round(currentTotal * modifierValue);
+                    case ADDITION -> modifierValue;
+                    case MULTIPLY_BASE -> round(currentValue * modifierValue);
+                    case MULTIPLY_TOTAL -> round(currentTotal * modifierValue);
                 };
 
                 if(!willFollow){
@@ -124,9 +124,9 @@ public class RaceStatTooltip {
                     }
                     double modifierValue = nextModifier.getValue();
                     nextTotal += switch (nextModifier.getOperation()){
-                        case ADD_VALUE -> modifierValue;
-                        case ADD_MULTIPLIED_BASE -> round( nextAttribute.getValue() * modifierValue);
-                        case ADD_MULTIPLIED_TOTAL -> round(nextTotal * modifierValue);
+                        case ADDITION -> modifierValue;
+                        case MULTIPLY_BASE -> round( nextAttribute.getValue() * modifierValue);
+                        case MULTIPLY_TOTAL -> round(nextTotal * modifierValue);
                     };
                 }
                 expectedNextValue = nextTotal;

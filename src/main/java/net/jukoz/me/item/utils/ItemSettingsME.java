@@ -19,7 +19,7 @@ import net.minecraft.util.Identifier;
  *
  * <p>The 1.21.5 donor builds weapon and mount-armour settings out of data components:
  * {@code TOOL} / {@code WEAPON} on every weapon, and {@code EQUIPPABLE} (with a
- * {@code EquipmentSlot.BODY} slot and an allowed-entities tag) on goat / warg / great-horn
+ * {@code EquipmentSlot.CHEST} slot and an allowed-entities tag) on goat / warg / great-horn
  * armour. 1.20.1 has neither component: weapon behaviour comes from the item class itself
  * ({@code SwordItem}, {@code AxeItem}, ...), and mount armour is a {@code HorseArmorItem},
  * which has no allowed-entities filter.
@@ -31,17 +31,17 @@ public interface ItemSettingsME {
 
     Identifier ENTITY_INTERACTION_RANGE_MODIFIER_ID = new Identifier(MiddleEarth.MOD_ID, "entity_interaction_range");
 
-    static Item.Settings createWeaponSettings(ToolMaterial material, Item.Settings settings, WeaponTypesME type) {
-        return settings.maxDamage(material.getDurability());
+    static MESettings createWeaponSettings(ToolMaterial material, Item.Settings settings, WeaponTypesME type) {
+        return settings instanceof MESettings meSettings ? meSettings.maxDamage(material.getDurability()) : new MESettings().maxDamage(material.getDurability());
     }
 
     static Multimap<EntityAttribute, EntityAttributeModifier> createWeaponAttibutes(
             ToolMaterial material, float attackDamage, float attackSpeed, float attackRange) {
         ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(
-                Item.BASE_ATTACK_DAMAGE_MODIFIER_ID, attackDamage + material.getAttackDamage(), EntityAttributeModifier.Operation.ADDITION));
+                java.util.UUID.fromString("cb3f55d3-645c-4f38-a497-9c13a33db5cf"), attackDamage + material.getAttackDamage(), EntityAttributeModifier.Operation.ADDITION));
         builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(
-                Item.BASE_ATTACK_SPEED_MODIFIER_ID, attackSpeed, EntityAttributeModifier.Operation.ADDITION));
+                java.util.UUID.fromString("fa233e1c-4180-4865-b01b-bcce9785aca3"), attackSpeed, EntityAttributeModifier.Operation.ADDITION));
         builder.put(EntityAttributesME.ENTITY_INTERACTION_RANGE, new EntityAttributeModifier(
                 ENTITY_INTERACTION_RANGE_MODIFIER_ID, attackRange, EntityAttributeModifier.Operation.ADDITION));
         return builder.build();

@@ -1,5 +1,8 @@
 package net.jukoz.me.block.special.shapingAnvil;
+
+import net.jukoz.me.compat.MEArmorTrim;
 import net.jukoz.me.item.MEComponents;
+import net.jukoz.me.item.MEDurability;
 
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.enchantment.Enchantment;
@@ -59,6 +62,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import net.jukoz.me.compat.MEEnchants;
 
 public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory, SidedInventory {
     private static final String ID = "shaping_anvil";
@@ -161,26 +165,25 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
             if(temperature <= 0) {
                 minRandProgress = maxRandProgress = 1;
             } else {
-                RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager()
-                        .getOrThrow(RegistryKeys.ENCHANTMENT).getOptional(EnchantmentsME.AULE_BLESSING).orElseThrow();
-                boolean hasEnchant = tool.getEnchantments().getEnchantments().contains(enchantmentRegistryEntry);
+                RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(EnchantmentsME.AULE_BLESSING).orElseThrow();
+                boolean hasEnchant = MEEnchants.has(tool, enchantmentRegistryEntry);
                 if (hasEnchant) {
-                    int level = EnchantmentHelper.getLevel(enchantmentRegistryEntry, tool);
+                    int level = EnchantmentHelper.getLevel(enchantmentRegistryEntry.value(), tool);
                     minRandProgress = 7 + level;
                     maxRandProgress = 14 + (2 * level);
                 }
             }
 
             if (input.getMaxDamage() == 0 && input.getDamage() == 0){
-                MEDurability.set(input, match.get(entity.outputIndex).value().getAmount());
-                input.setDamage(match.get(entity.outputIndex).value().getAmount() - (int) (Math.random() * (maxRandProgress - minRandProgress) + minRandProgress));
+                MEDurability.set(input, match.get(entity.outputIndex).getAmount());
+                input.setDamage(match.get(entity.outputIndex).getAmount() - (int) (Math.random() * (maxRandProgress - minRandProgress) + minRandProgress));
             } else{
                 input.setDamage(input.getDamage() - (int) (Math.random() * (maxRandProgress - minRandProgress) + minRandProgress));
             }
 
             World serverWorld = this.getWorld();
             if (serverWorld instanceof ServerWorld) {
-                ((ServerWorld)serverWorld).spawnParticles(ModParticleTypes.ANVIL_SPARK_PARTICLE, pos.getX()+ 0.5f, pos.getY() + 1.0f, pos.getZ() + 0.5f, Math.max(temperature / 10, 3), 0.0, 0.0, 0.0, 0.0);
+                ((ServerWorld)serverWorld).spawnParticles(net.minecraft.particle.ParticleTypes.CRIT, pos.getX()+ 0.5f, pos.getY() + 1.0f, pos.getZ() + 0.5f, Math.max(temperature / 10, 3), 0.0, 0.0, 0.0, 0.0);
             }
 
             int minRandTemperature = 10;
@@ -192,8 +195,8 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
             } else {
                 MEComponents.set(input, MEComponents.TEMPERATURE_DATA, new TemperatureDataComponent(MEComponents.get(input, MEComponents.TEMPERATURE_DATA).temperature() - value));
             }
-            RegistryWrapper.Impl<ArmorTrimMaterial>  armorTrimMaterialRegistry = entity.getWorld().getRegistryManager().get(RegistryKeys.TRIM_MATERIAL);
-            RegistryWrapper.Impl<ArmorTrimPattern>  armorTrimPatternRegistry = entity.getWorld().getRegistryManager().get(RegistryKeys.TRIM_PATTERN);
+            RegistryWrapper.Impl<ArmorTrimMaterial>  armorTrimMaterialRegistry = entity.getWorld().getRegistryManager().getWrapperOrThrow(RegistryKeys.TRIM_MATERIAL);
+            RegistryWrapper.Impl<ArmorTrimPattern>  armorTrimPatternRegistry = entity.getWorld().getRegistryManager().getWrapperOrThrow(RegistryKeys.TRIM_PATTERN);
 
 
             if (input.getDamage() == 0){
@@ -202,7 +205,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
                 if(input.getItem() == ResourceItemsME.LARGE_ROD) xp = 7;
                 ExperienceOrbEntity.spawn(world, entity.getPos().toCenterPos().add(0, 1, 0), xp);
 
-                ItemStack output = match.get(entity.outputIndex).value().craft(new SingleStackRecipeInput(input), entity.world.getRegistryManager());
+                ItemStack output = match.get(entity.outputIndex).craft(new SingleStackRecipeInput(input), entity.world.getRegistryManager());
 
                 if(MEArmorTrim.get(input) != null){
                     MEArmorTrim.set(output, MEArmorTrim.get(input));
@@ -233,7 +236,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
         } else {
             World serverWorld = this.getWorld();
             if (serverWorld instanceof ServerWorld) {
-                ((ServerWorld)serverWorld).spawnParticles(ModParticleTypes.ANVIL_SPARK_PARTICLE, pos.getX()+ 0.5f, pos.getY() + 1.0f, pos.getZ() + 0.5f, 2, 0.0, 0.0, 0.0, 0.0);
+                ((ServerWorld)serverWorld).spawnParticles(net.minecraft.particle.ParticleTypes.CRIT, pos.getX()+ 0.5f, pos.getY() + 1.0f, pos.getZ() + 0.5f, 2, 0.0, 0.0, 0.0, 0.0);
             }
             entity.getWorld().playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.5f, 1.0f);
         }
@@ -273,7 +276,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
         RecipeManager serverRecipeManager = (RecipeManager)entity.getWorld().getRecipeManager();
         List<AnvilShapingRecipe> match = serverRecipeManager.getAllMatches(AnvilShapingRecipe.Type.INSTANCE, inputStack, entity.getWorld());
 
-        return match.getFirst().value().getOutput() != null;
+        return match.get(0).getOutput() != null;
     }
 
     @Override
@@ -313,8 +316,8 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
-        return createNbt(registryLookup);
+    public NbtCompound toInitialChunkDataNbt() {
+        return createNbt();
     }
 
     @Override
@@ -396,7 +399,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
     }
 
     @Override
-    public Object getScreenOpeningData(ServerPlayerEntity player) {
-        return pos;
+    public void writeScreenOpeningData(net.minecraft.server.network.ServerPlayerEntity player, net.minecraft.network.PacketByteBuf buf) {
+        buf.writeBlockPos(this.pos);
     }
 }

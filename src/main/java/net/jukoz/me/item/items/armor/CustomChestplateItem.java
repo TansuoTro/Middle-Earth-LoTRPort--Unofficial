@@ -14,17 +14,17 @@ import org.jetbrains.annotations.Nullable;
 public class CustomChestplateItem extends ArmorItem {
 
     public CustomChestplateItem(ExtendedArmorMaterial material, Settings settings) {
-        super(material, settings.armor(material.material(), ArmorItem.Type.CHESTPLATE).maxCount(1));
+        super(material.material(), ArmorItem.Type.CHESTPLATE, settings.maxCount(1));
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, ServerWorld world, Entity entity, @Nullable EquipmentSlot slot) {
-        super.inventoryTick(stack, world, entity, slot);
+    public void inventoryTick(ItemStack stack, net.minecraft.world.World world, Entity entity, int slot, boolean selected) {
+        super.inventoryTick(stack, world, entity, slot, selected);
         BackAttachmentDataComponent backAttachmentDataComponent = MEComponents.get(stack, MEComponents.BACK_ATTACHMENT_DATA);
         if(backAttachmentDataComponent != null) {
             int id = backAttachmentDataComponent.getBackAttachment().getId();
             if(id == BackAttachmentsME.MANTLE_OF_YAVANNA.getId()) {
-                MantleOfYavannaItem.applyBackAttachmentColor(stack, world, entity, backAttachmentDataComponent);
+                MantleOfYavannaItem.applyBackAttachmentColor(stack, (net.minecraft.server.world.ServerWorld) world, entity, backAttachmentDataComponent);
             }
         }
     }

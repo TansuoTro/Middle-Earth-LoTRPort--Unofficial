@@ -1,6 +1,5 @@
 package net.jukoz.me.block.special.plate;
 
-import com.mojang.serialization.Codec;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -8,25 +7,23 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.SingleStackInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTable;
+import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.loot.context.LootContextTypes;
-import net.minecraft.loot.context.LootWorldContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.world.ServerWorld;
-import net.jukoz.me.compat.nbt.ReadView;
-import net.jukoz.me.compat.nbt.WriteView;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import org.jetbrains.annotations.Nullable;
 
-public class PlateBlockEntity extends BlockEntity implements SingleStackInventory.SingleStackBlockEntityInventory {
+public class PlateBlockEntity extends BlockEntity implements SingleStackInventory {
     private ItemStack food = ItemStack.EMPTY;
-    private RegistryKey lootTable;
+    @Nullable
+    private Identifier lootTable;
     private long lootTableSeed;
     private boolean blockPlaced = false;
 
@@ -37,49 +34,43 @@ public class PlateBlockEntity extends BlockEntity implements SingleStackInventor
     @Override
     protected void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
-        WriteView view = new WriteView(nbt);
-        view.put("placed", Codec.BOOL, blockPlaced);
+        nbt.putBoolean("placed", blockPlaced);
 
-        if (!this.writeLootTableToData(view) && !this.food.isEmpty()) {
-            view.put("item", ItemStack.CODEC, this.food);
+        if (!this.writeLootTableToData(nbt) && !this.food.isEmpty()) {
+            nbt.put("item", this.food.writeNbt(new NbtCompound()));
         }
     }
 
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
-        ReadView view = new ReadView(nbt);
-        this.food.copyAndEmpty();
-        this.blockPlaced = view.getBoolean("placed", false);
-        if (!this.readLootTableFromData(view)) {
-            this.food = view.read("item", ItemStack.CODEC).orElse(ItemStack.EMPTY);
-        } else {
-            this.food = ItemStack.EMPTY;
+        this.food = ItemStack.EMPTY;
+        this.blockPlaced = nbt.getBoolean("placed");
+        if (!this.readLootTableFromData(nbt)) {
+            this.food = ItemStack.fromNbt(nbt.getCompound("item"));
         }
     }
 
-    public void setLootTable(RegistryKey<LootTable> lootTable, long seed) {
+    public void setLootTable(Identifier lootTable, long seed) {
         this.lootTable = lootTable;
         this.lootTableSeed = seed;
     }
 
-    private boolean readLootTableFromData(ReadView view) {
-        this.lootTable = (RegistryKey)view.read("LootTable", LootTable.TABLE_KEY).orElse(null);
-        this.lootTableSeed = view.getLong("LootTableSeed", 0L);
+    private boolean readLootTableFromData(NbtCompound nbt) {
+        this.lootTable = nbt.contains("LootTable") ? Identifier.tryParse(nbt.getString("LootTable")) : null;
+        this.lootTableSeed = nbt.getLong("LootTableSeed");
         return this.lootTable != null;
     }
 
-    private boolean writeLootTableToData(WriteView view) {
+    private boolean writeLootTableToData(NbtCompound nbt) {
         if (this.lootTable == null) {
             return false;
-        } else {
-            view.put("LootTable", LootTable.TABLE_KEY, this.lootTable);
-            if (this.lootTableSeed != 0L) {
-                view.putLong("LootTableSeed", this.lootTableSeed);
-            }
-
-            return true;
         }
+        nbt.putString("LootTable", this.lootTable.toString());
+        if (this.lootTableSeed != 0L) {
+            nbt.putLong("LootTableSeed", this.lootTableSeed);
+        }
+        return true;
     }
 
     public void setBlockPlaced() {
@@ -103,18 +94,23 @@ public class PlateBlockEntity extends BlockEntity implements SingleStackInventor
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registries) {
-        return createNbt(registries);
+    public NbtCompound toInitialChunkDataNbt() {
+        return createNbt();
     }
 
     @Override
-    public BlockEntity asBlockEntity() {
-        return this;
+    public boolean canPlayerUse(net.minecraft.entity.player.PlayerEntity player) {
+        return true;
     }
 
     @Override
     public ItemStack getStack() {
         return food;
+    }
+
+    @Override
+    public void setStack(int slot, ItemStack stack) {
+        this.setStack(stack);
     }
 
     @Override
@@ -125,10 +121,9 @@ public class PlateBlockEntity extends BlockEntity implements SingleStackInventor
 
     public void generateItem(ServerWorld world) {
         if (this.lootTable != null && blockPlaced) {
-            LootTable lootTable = world.getServer().getReloadableRegistries().getLootTable(this.lootTable);
-
-            LootWorldContext lootWorldContext = (new LootWorldContext.Builder(world)).build(LootContextTypes.EMPTY);
-            ObjectArrayList<ItemStack> lootList = lootTable.generateLoot(lootWorldContext, this.lootTableSeed);
+            LootTable lootTable = world.getServer().getLootManager().getLootTable(this.lootTable);
+            LootContextParameterSet lootContext = new LootContextParameterSet.Builder(world).build(LootContextTypes.EMPTY);
+            ObjectArrayList<ItemStack> lootList = lootTable.generateLoot(lootContext, this.lootTableSeed);
             ItemStack itemLoot = ItemStack.EMPTY;
             if(!lootList.isEmpty()) itemLoot = lootList.get(world.getRandom().nextInt(lootList.size()));
 
@@ -141,6 +136,8 @@ public class PlateBlockEntity extends BlockEntity implements SingleStackInventor
 
     public void update() {
         markDirty();
-        world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
+        if (world != null) {
+            world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
+        }
     }
 }

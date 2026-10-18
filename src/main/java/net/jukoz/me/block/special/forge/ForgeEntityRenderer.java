@@ -24,7 +24,7 @@ public class ForgeEntityRenderer implements BlockEntityRenderer<ForgeBlockEntity
     }
 
     @Override
-    public void render(ForgeBlockEntity entity, float tickProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, Vec3d cameraPos) {
+    public void render(ForgeBlockEntity entity, float tickProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         ItemStack stack = entity.getRenderStack(entity);
 
         if(stack.isEmpty()) return;

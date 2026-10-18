@@ -136,4 +136,11 @@ public class WargModel extends SinglePartEntityModel<WargEntity> {
         this.updateAnimation(entity.stopSittingAnimationState, WargAnimations.SITTING_TO_STANDING, ageInTicks);
         this.updateAnimation(entity.sittingAnimationState, WargAnimations.SITTING, ageInTicks);
     }
+
+    public void setAngles(WargEntityRenderState state) {
+        if (state.entity instanceof WargEntity entity) {
+            this.setAngles(entity, state.limbSwingAnimationProgress, state.limbSwingAmplitude,
+                    state.age, state.relativeHeadYaw, state.relativeHeadPitch);
+        }
+    }
 }

@@ -390,25 +390,25 @@ public class RecipeProvider extends net.minecraft.data.server.recipe.RecipeProvi
         createLayerRecipe(exporter, ModBlocks.BLACK_SAND.asItem(), ModBlocks.BLACK_SAND_LAYER);
         createLayerRecipe(exporter, ModBlocks.WHITE_SAND.asItem(), ModBlocks.WHITE_SAND_LAYER);
 
-        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.CUT_LEAD, ModBlocks.LEAD_BLOCK, 4);
-        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.CUT_LEAD_SLAB, ModBlocks.LEAD_BLOCK, 8);
-        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.CUT_LEAD_STAIRS, ModBlocks.LEAD_BLOCK, 4);
-        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.CUT_LEAD_SLAB, ModBlocks.CUT_LEAD, 2);
-        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.CUT_LEAD_STAIRS, ModBlocks.CUT_LEAD);
+        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, net.jukoz.me.compat.MEBlocksLegacy.CUT_LEAD, ModBlocks.LEAD_BLOCK, 4);
+        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, net.jukoz.me.compat.MEBlocksLegacy.CUT_LEAD_SLAB, ModBlocks.LEAD_BLOCK, 8);
+        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, net.jukoz.me.compat.MEBlocksLegacy.CUT_LEAD_STAIRS, ModBlocks.LEAD_BLOCK, 4);
+        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, net.jukoz.me.compat.MEBlocksLegacy.CUT_LEAD_SLAB, net.jukoz.me.compat.MEBlocksLegacy.CUT_LEAD, 2);
+        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, net.jukoz.me.compat.MEBlocksLegacy.CUT_LEAD_STAIRS, net.jukoz.me.compat.MEBlocksLegacy.CUT_LEAD);
 
-        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.CUT_SILVER, ModBlocks.SILVER_BLOCK, 4);
-        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.CUT_SILVER_SLAB, ModBlocks.SILVER_BLOCK, 8);
-        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.CUT_SILVER_STAIRS, ModBlocks.SILVER_BLOCK, 4);
-        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.CUT_SILVER_SLAB, ModBlocks.CUT_SILVER, 2);
-        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.CUT_SILVER_STAIRS, ModBlocks.CUT_SILVER);
+        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, net.jukoz.me.compat.MEBlocksLegacy.CUT_SILVER, ModBlocks.SILVER_BLOCK, 4);
+        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, net.jukoz.me.compat.MEBlocksLegacy.CUT_SILVER_SLAB, ModBlocks.SILVER_BLOCK, 8);
+        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, net.jukoz.me.compat.MEBlocksLegacy.CUT_SILVER_STAIRS, ModBlocks.SILVER_BLOCK, 4);
+        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, net.jukoz.me.compat.MEBlocksLegacy.CUT_SILVER_SLAB, net.jukoz.me.compat.MEBlocksLegacy.CUT_SILVER, 2);
+        offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, net.jukoz.me.compat.MEBlocksLegacy.CUT_SILVER_STAIRS, net.jukoz.me.compat.MEBlocksLegacy.CUT_SILVER);
 
-        createStairsRecipe(exporter, ModBlocks.REED_BLOCK, ModBlocks.REED_STAIRS);
-        createSlabsRecipe(exporter, ModBlocks.REED_BLOCK, ModBlocks.REED_SLAB);
-        createWallsRecipe(exporter, ModBlocks.REED_BLOCK, ModBlocks.REED_WALL);
+        createStairsRecipe(exporter, net.jukoz.me.compat.MEBlocksLegacy.REED_BLOCK, net.jukoz.me.compat.MEBlocksLegacy.REED_STAIRS);
+        createSlabsRecipe(exporter, net.jukoz.me.compat.MEBlocksLegacy.REED_BLOCK, net.jukoz.me.compat.MEBlocksLegacy.REED_SLAB);
+        createWallsRecipe(exporter, net.jukoz.me.compat.MEBlocksLegacy.REED_BLOCK, net.jukoz.me.compat.MEBlocksLegacy.REED_WALL);
 
-        createStairsRecipe(exporter, ModBlocks.STRAW_BLOCK, ModBlocks.STRAW_STAIRS);
-        createSlabsRecipe(exporter, ModBlocks.STRAW_BLOCK, ModBlocks.STRAW_SLAB);
-        createWallsRecipe(exporter, ModBlocks.STRAW_BLOCK, ModBlocks.STRAW_WALL);
+        createStairsRecipe(exporter, net.jukoz.me.compat.MEBlocksLegacy.STRAW_BLOCK, net.jukoz.me.compat.MEBlocksLegacy.STRAW_STAIRS);
+        createSlabsRecipe(exporter, net.jukoz.me.compat.MEBlocksLegacy.STRAW_BLOCK, net.jukoz.me.compat.MEBlocksLegacy.STRAW_SLAB);
+        createWallsRecipe(exporter, net.jukoz.me.compat.MEBlocksLegacy.STRAW_BLOCK, net.jukoz.me.compat.MEBlocksLegacy.STRAW_WALL);
 
         createStairsRecipe(exporter, ModBlocks.DRY_DIRT, ModBlocks.DRY_DIRT_STAIRS);
         createSlabsRecipe(exporter, ModBlocks.DRY_DIRT, ModBlocks.DRY_DIRT_SLAB);
@@ -416,10 +416,10 @@ public class RecipeProvider extends net.minecraft.data.server.recipe.RecipeProvi
         createStairsRecipe(exporter, ModBlocks.ASHEN_DIRT, ModBlocks.ASHEN_DIRT_STAIRS);
         createSlabsRecipe(exporter, ModBlocks.ASHEN_DIRT, ModBlocks.ASHEN_DIRT_SLAB);
 
-        createPaneRecipe(exporter, ModResourceItems.SILVER_INGOT, ModBlocks.SILVERS_BARS, 6);
+        createPaneRecipe(exporter, ModResourceItems.SILVER_INGOT, net.jukoz.me.compat.MEBlocksLegacy.SILVERS_BARS, 6);
 
-        createTrapdoorRecipe(exporter, Blocks.STONE, ModBlocks.STONE_TRAPDOOR);
-        createTrapdoorRecipe(exporter, Blocks.BLACKSTONE, ModBlocks.BLACKSTONE_TRAPDOOR);
+        createTrapdoorRecipe(exporter, Blocks.STONE, net.jukoz.me.compat.MEBlocksLegacy.STONE_TRAPDOOR);
+        createTrapdoorRecipe(exporter, Blocks.BLACKSTONE, net.jukoz.me.compat.MEBlocksLegacy.BLACKSTONE_TRAPDOOR);
 
         createDyeableBlockRecipe(exporter, Blocks.STONE, Blocks.ICE.asItem(), StoneBlockSets.FROZEN_STONE.base(), 8);
         createDyeableBlockRecipe(exporter, Blocks.COBBLESTONE, Blocks.ICE.asItem(), StoneBlockSets.FROZEN_COBBLESTONE.base(), 8);
@@ -456,7 +456,7 @@ public class RecipeProvider extends net.minecraft.data.server.recipe.RecipeProvi
                         FabricRecipeProvider.conditionsFromItem(StoneBlockSets.YELLOW_DAUB.base()))
                 .offerTo(exporter);
 
-        ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, ModDecorativeBlocks.EPMOSTO_CARVED_WINDOW, 2)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, net.jukoz.me.compat.MEBlocksLegacy.EPMOSTO_CARVED_WINDOW, 2)
                 .pattern("EEE")
                 .pattern("EGE")
                 .pattern("EEE")
@@ -525,11 +525,11 @@ public class RecipeProvider extends net.minecraft.data.server.recipe.RecipeProvi
         createMetalsRecipe(exporter, ModResourceItems.MITHRIL_NUGGET, ModResourceItems.MITHRIL_INGOT, ModResourceItems.MITHRIL_ROD, ModBlocks.MITHRIL_BLOCK);
 
         createMetalsRecipe(exporter, ModResourceItems.BRONZE_NUGGET, ModResourceItems.BRONZE_INGOT, ModResourceItems.BRONZE_ROD, ModBlocks.BRONZE_BLOCK);
-        createMetalsRecipe(exporter, ModResourceItems.ORC_STEEL_NUGGET, ModResourceItems.ORC_STEEL_INGOT, ModResourceItems.ORC_STEEL_ROD, ModBlocks.ORC_STEEL_BLOCK);
-        createMetalsRecipe(exporter, ModResourceItems.URUK_STEEL_NUGGET, ModResourceItems.URUK_STEEL_INGOT, ModResourceItems.URUK_STEEL_ROD, ModBlocks.URUK_STEEL_BLOCK);
+        createMetalsRecipe(exporter, ModResourceItems.ORC_STEEL_NUGGET, ModResourceItems.ORC_STEEL_INGOT, ModResourceItems.ORC_STEEL_ROD, net.jukoz.me.compat.MEBlocksLegacy.ORC_STEEL_BLOCK);
+        createMetalsRecipe(exporter, ModResourceItems.URUK_STEEL_NUGGET, ModResourceItems.URUK_STEEL_INGOT, ModResourceItems.URUK_STEEL_ROD, net.jukoz.me.compat.MEBlocksLegacy.URUK_STEEL_BLOCK);
         createMetalsRecipe(exporter, ModResourceItems.STEEL_NUGGET, ModResourceItems.STEEL_INGOT, ModResourceItems.STEEL_ROD, ModBlocks.STEEL_BLOCK);
-        createMetalsRecipe(exporter, ModResourceItems.ELVEN_STEEL_NUGGET, ModResourceItems.ELVEN_STEEL_INGOT, ModResourceItems.ELVEN_STEEL_ROD, ModBlocks.ELVEN_STEEL_BLOCK);
-        createMetalsRecipe(exporter, ModResourceItems.DWARVEN_STEEL_NUGGET, ModResourceItems.DWARVEN_STEEL_INGOT, ModResourceItems.DWARVEN_STEEL_ROD, ModBlocks.DWARVEN_STEEL_BLOCK);
+        createMetalsRecipe(exporter, ModResourceItems.ELVEN_STEEL_NUGGET, ModResourceItems.ELVEN_STEEL_INGOT, ModResourceItems.ELVEN_STEEL_ROD, net.jukoz.me.compat.MEBlocksLegacy.ELVEN_STEEL_BLOCK);
+        createMetalsRecipe(exporter, ModResourceItems.DWARVEN_STEEL_NUGGET, ModResourceItems.DWARVEN_STEEL_INGOT, ModResourceItems.DWARVEN_STEEL_ROD, net.jukoz.me.compat.MEBlocksLegacy.DWARVEN_STEEL_BLOCK);
         createMetalsRecipeNoBlock(exporter, ModResourceItems.MORGUL_STEEL_NUGGET, ModResourceItems.MORGUL_STEEL_INGOT, ModResourceItems.MORGUL_STEEL_ROD);
 
         createRodRecipe(exporter, Items.COPPER_INGOT, ModResourceItems.COPPER_ROD);

@@ -14,9 +14,11 @@ public class WeaverStingItem extends CustomDaggerWeaponItem {
     }
 
     @Override
-    public void postDamageEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (stack.getDamage() == stack.getMaxDamage() - 1) {
             BluntWeapon.blunt(stack);
         }
+    
+        return true;
     }
 }

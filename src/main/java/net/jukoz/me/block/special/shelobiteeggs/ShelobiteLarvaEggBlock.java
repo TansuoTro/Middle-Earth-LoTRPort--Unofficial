@@ -28,7 +28,7 @@ import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.spider.larva.ShelobiteLarvaEntity;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
+import net.minecraft.util.math.random.Random;
 
 public class ShelobiteLarvaEggBlock extends AbstractShelobiteLarvaEgg {
     private static final EnumProperty<Direction> FACING;
@@ -60,15 +60,15 @@ public class ShelobiteLarvaEggBlock extends AbstractShelobiteLarvaEgg {
 
     @Override
     public void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity) {
-        if(!entity.collidedSoftly && !entity.getType().isIn(EntityTypeTags.ARTHROPOD)){
+        if(!entity.collidedSoftly && !(entity instanceof net.minecraft.entity.mob.SpiderEntity)){
             breakEgg(world, pos, state);
             super.onSteppedOn(world, pos, state, entity);
         }
     }
 
     @Override
-    public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, double fallDistance) {
-        if(!entity.collidedSoftly && !entity.getType().isIn(EntityTypeTags.ARTHROPOD)) {
+    public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
+        if(!entity.collidedSoftly && !(entity instanceof net.minecraft.entity.mob.SpiderEntity)) {
             super.onLandedUpon(world, state, pos, entity, fallDistance);
             breakEgg(world, pos, state);
         }
@@ -79,8 +79,8 @@ public class ShelobiteLarvaEggBlock extends AbstractShelobiteLarvaEgg {
         world.playSound(null, pos, SoundEvents.ENTITY_TURTLE_EGG_BREAK, SoundCategory.BLOCKS, 0.7F, 0.9F + world.random.nextFloat() * 0.2F);
         world.emitGameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Emitter.of(state));
         world.syncWorldEvent(2001, pos, Block.getRawIdFromState(state));
-        Random random = new Random();
-        int amountOfSpider = random.nextInt(1, 4);
+        Random random = Random.create();
+        int amountOfSpider = random.nextInt(3) + 1;
         for(int i = 0; i < amountOfSpider; i++)
             SpawnSpider(pos, world);
         world.removeBlock(pos, false);
@@ -91,7 +91,7 @@ public class ShelobiteLarvaEggBlock extends AbstractShelobiteLarvaEgg {
         entity.age = 0;
         entity.refreshPositionAndAngles(pos, 0, 0);
         if(world instanceof ServerWorldAccess serverWorldAccess) {
-            entity.initialize(serverWorldAccess, serverWorldAccess.getLocalDifficulty(pos), SpawnReason.NATURAL, null);
+            entity.initialize(serverWorldAccess, serverWorldAccess.getLocalDifficulty(pos), SpawnReason.NATURAL, null, null);
         }
         world.spawnEntity(entity);
     }

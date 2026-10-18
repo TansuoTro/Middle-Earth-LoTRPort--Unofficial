@@ -45,7 +45,7 @@ public class MistweedPlantBlock extends CustomPlantBlock implements Fertilizable
             double d = (double)pos.getX() + random.nextDouble() * 16.0 - 8.0;
             double e = (double)pos.getY() + random.nextDouble() * 5.0;
             double f = (double)pos.getZ() + random.nextDouble() * 16.0 - 8.0;
-            world.addImportantParticleClient(ModParticleTypes.BIOME_FOG_PARTICLE, true, d, e, f, 0.0, 0.0, 0.0);
+            world.addImportantParticle(net.minecraft.particle.ParticleTypes.CLOUD, true, d, e, f, 0.0, 0.0, 0.0);
         }
         super.randomDisplayTick(state, world, pos, random);
     }
@@ -67,14 +67,14 @@ public class MistweedPlantBlock extends CustomPlantBlock implements Fertilizable
         world.setBlockState(pos, state.with(ACTIVE, true), 11);
         world.playSound(null, pos, SoundEvents.ITEM_AXE_WAX_OFF, SoundCategory.BLOCKS, 1.0F, 1.0F);
         world.emitGameEvent(player, GameEvent.BLOCK_CHANGE, pos);
-        world.syncWorldEvent(WorldEvents.WAX_REMOVED, pos);
+        world.syncWorldEvent(WorldEvents.WAX_REMOVED, pos, 0);
     }
 
     protected static void deactivateState(@Nullable PlayerEntity player, BlockState state, World world, BlockPos pos) {
         world.setBlockState(pos, state.with(ACTIVE, false), 11);
         world.playSound(null, pos, SoundEvents.ITEM_HONEYCOMB_WAX_ON, SoundCategory.BLOCKS, 1.0F, 1.0F);
         world.emitGameEvent(player, GameEvent.BLOCK_CHANGE, pos);
-        world.syncWorldEvent(WorldEvents.BLOCK_WAXED, pos);
+        world.syncWorldEvent(WorldEvents.BLOCK_WAXED, pos, 0);
     }
 
     public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean isClient) {

@@ -3,13 +3,15 @@ package net.jukoz.me.entity.npcs.renderer.features.feet;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.client.render.entity.model.SinglePartEntityModel;
+import net.jukoz.me.entity.npcs.NpcEntity;
 
 import net.minecraft.util.math.MathHelper;
 import net.jukoz.me.entity.npcs.renderer.NpcEntityRenderState;
 
 @Environment(EnvType.CLIENT)
-public class FeetModel extends EntityModel<NpcEntityRenderState> {
+public class FeetModel extends SinglePartEntityModel<NpcEntity> {
+    private final ModelPart root;
     public final ModelPart toeCubeLeft;
     public final ModelPart toeCubeRight;
 
@@ -17,7 +19,7 @@ public class FeetModel extends EntityModel<NpcEntityRenderState> {
     public final ModelPart leftLeg;
 
     public FeetModel(ModelPart modelPart) {
-        super(modelPart);
+        this.root = modelPart;
 
         this.leftLeg = modelPart.getChild("left_leg");
         this.rightLeg = modelPart.getChild("right_leg");
@@ -44,9 +46,7 @@ public class FeetModel extends EntityModel<NpcEntityRenderState> {
         return TexturedModelData.of(modelData, 16, 16);
     }
 
-    @Override
     public void setAngles(NpcEntityRenderState state) {
-        super.setAngles(state);
 
         float g = state.limbSwingAnimationProgress;
         float h = state.limbSwingAmplitude;
@@ -65,5 +65,14 @@ public class FeetModel extends EntityModel<NpcEntityRenderState> {
             this.leftLeg.yaw = (-(float)Math.PI / 10F);
             this.leftLeg.roll = -0.07853982F;
         }
+    }
+
+    @Override
+    public ModelPart getPart() {
+        return this.root;
+    }
+
+    @Override
+    public void setAngles(NpcEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
     }
 }

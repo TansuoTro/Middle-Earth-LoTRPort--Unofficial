@@ -56,16 +56,6 @@ public class StructureNestBlockEntity extends BlockEntity implements ExtendedScr
         super(ModBlockEntities.STRUCTURE_NEST, pos, state);
     }
 
-    @Override
-    public Object getScreenOpeningData(ServerPlayerEntity serverPlayerEntity) {
-        return new StructureNestScreenData(this.pos,
-                Optional.ofNullable(this.managerId),
-                Optional.ofNullable(this.nestId),
-                spawnRadius,
-                isEnabled
-            );
-    }
-
     public Text getDisplayName() {
         return Text.translatable("screen.%s.%s".formatted(MiddleEarth.MOD_ID, ID));
     }
@@ -170,5 +160,12 @@ public class StructureNestBlockEntity extends BlockEntity implements ExtendedScr
             world.removeBlockEntity(pos);
             updateListeners();
         }
+    }
+
+    @Override
+    public void writeScreenOpeningData(net.minecraft.server.network.ServerPlayerEntity player, net.minecraft.network.PacketByteBuf buf) {
+        net.jukoz.me.gui.structuremanager.structurenest.StructureNestScreenData.PACKET_CODEC.encode(buf,
+                new net.jukoz.me.gui.structuremanager.structurenest.StructureNestScreenData(this.pos,
+                        java.util.Optional.ofNullable(this.managerId), java.util.Optional.ofNullable(this.nestId), this.spawnRadius, this.isEnabled));
     }
 }

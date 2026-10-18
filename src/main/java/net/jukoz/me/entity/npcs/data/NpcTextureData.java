@@ -63,7 +63,7 @@ public class NpcTextureData {
         this.scarTexture = MiddleEarth.fetchId(NbtCompat.getString(dynamic, NpcRenderedPart.SCAR.getField(), null));
         this.eyeTexture = MiddleEarth.fetchId(NbtCompat.getString(dynamic, NpcRenderedPart.EYE.getField(), null));
         this.eyeEmissiveTexture = MiddleEarth.fetchId(NbtCompat.getString(dynamic, NpcRenderedPart.EYE_EMISSIVE.getField(), null));
-        this.eyeIsEmissive = dynamic.getBoolean(NpcRenderedPart.EYE_EMISSIVE_TOGGLE.getField(), false);
+        this.eyeIsEmissive = dynamic.getBoolean(NpcRenderedPart.EYE_EMISSIVE_TOGGLE.getField());
 
         this.hairTexture = MiddleEarth.fetchId(NbtCompat.getString(dynamic, NpcRenderedPart.HAIR.getField(), null));
         this.hairAddonTexture = MiddleEarth.fetchId(NbtCompat.getString(dynamic, NpcRenderedPart.HAIR_ADDON.getField(), null));

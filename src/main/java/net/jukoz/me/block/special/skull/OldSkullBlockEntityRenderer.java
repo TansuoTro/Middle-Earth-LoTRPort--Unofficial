@@ -46,7 +46,7 @@ public class OldSkullBlockEntityRenderer implements BlockEntityRenderer<OldSkull
         return TexturedModelData.of(modelData, 64, 64);
     }
 
-    public void render(OldSkullBlockEntity skullBlockEntity, float f, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, int j, Vec3d vec3d) {
+    public void render(OldSkullBlockEntity skullBlockEntity, float f, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, int j) {
         BlockState blockState = skullBlockEntity.getCachedState();
         boolean bl = blockState.getBlock() instanceof WallSkullBlock;
         Direction direction = bl ? blockState.get(WallSkullBlock.FACING) : null;

@@ -112,9 +112,9 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
                     if (button.isSelected() && !wordButton.hidden){
                         if (!((WidgetInscriptionButtonPage) button).selected){
                             if (this.selectedWords.size() == 3){
-                                this.selectedWords.remove(this.selectedWords.getLast());
-                                ClientPlayNetworking.send(new InscriptionWordUpdatePacket(false, this.selectedWords.getLast()));
-                                this.selectedButtons.remove(this.selectedButtons.getLast());
+                                this.selectedWords.remove(this.selectedWords.get(this.selectedWords.size()-1));
+                                ClientPlayNetworking.send(new InscriptionWordUpdatePacket(false, this.selectedWords.get(this.selectedWords.size()-1)));
+                                this.selectedButtons.remove(this.selectedButtons.get(this.selectedButtons.size()-1));
                             }
                             this.selectedWords.add(handler.getWords().get(((WidgetInscriptionButtonPage) button).index + this.indexStartOffset));
                             ClientPlayNetworking.send(new InscriptionWordUpdatePacket(true, handler.getWords().get(((WidgetInscriptionButtonPage) button).index + this.indexStartOffset)));

@@ -36,7 +36,7 @@ public class ModConfigProvider implements SimpleConfig.DefaultConfig {
     public void addKeyValuePair(Pair<String, ?> keyValuePair, String acceptedValues) {
         configsList.add(keyValuePair);
         addDescription("Accept values: " + acceptedValues + " | Default: " + keyValuePair.getSecond());
-        configContents += VALUE_PREFIX + keyValuePair.getFirst() + "=" + keyValuePair.getSecond() + "\n";
+        configContents += VALUE_PREFIX + keyValuePair.getLeft() + "=" + keyValuePair.getSecond() + "\n";
     }
 
     @Override

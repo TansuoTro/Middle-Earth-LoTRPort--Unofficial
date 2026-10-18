@@ -24,17 +24,16 @@ public class MantleOfYavannaItem extends BackAttachmentItem {
     private static final int DEFAULT_FOLIAGE = 5875248;
 
     public MantleOfYavannaItem(Settings settings, ExtendedArmorMaterial material) {
-        super(settings.armor(material.material(), ArmorItem.Type.CHESTPLATE).maxCount(1), material);
+        super(settings.maxCount(1), material);
     }
 
-    @Override
-    public boolean allowComponentsUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack) {
+        public boolean allowComponentsUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack) {
         return false;
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, ServerWorld world, Entity entity, @Nullable EquipmentSlot slot) {
-        super.inventoryTick(stack, world, entity, slot);
+    public void inventoryTick(ItemStack stack, net.minecraft.world.World world, Entity entity, int slot, boolean selected) {
+        super.inventoryTick(stack, world, entity, slot, selected);
         DyedColorComponent dyedColorComponent = MEComponents.get(stack, MEComponents.DYED_COLOR);
         if(dyedColorComponent == null) return;
 
@@ -54,7 +53,7 @@ public class MantleOfYavannaItem extends BackAttachmentItem {
                     MathHelper.lerp(COLOR_LERP, colorA.getGreen(), colorB.getGreen()),
                     MathHelper.lerp(COLOR_LERP, colorA.getBlue(), colorB.getBlue()));
             currentColor = lerpColor.getRGB();
-            stack.set(MEComponents.DYED_COLOR, new DyedColorComponent(currentColor));
+            MEComponents.set(stack, MEComponents.DYED_COLOR, new DyedColorComponent(currentColor));
         }
     }
 

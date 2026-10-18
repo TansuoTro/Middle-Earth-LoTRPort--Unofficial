@@ -17,7 +17,7 @@ import net.jukoz.me.block.registration.ModBlockEntities;
 public class OakCofferBlock extends ChestBlock {
 
     public OakCofferBlock(Settings settings) {
-        super(() -> ModBlockEntities.OAK_COFFER, settings);
+        super(settings, () -> ModBlockEntities.OAK_COFFER);
     }
 
     @Override

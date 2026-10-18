@@ -261,7 +261,7 @@ public class OnboardingFactionScreen extends Screen {
         // Race.s
         if(elements.raceList != null){
             startY += textRenderer.fontHeight + 3;
-            var text = elements.raceList.getValue().getFirst().getString();
+            var text = elements.raceList.getValue().get(0).getString();
             boolean hasManyRaces = text.contains(",");
             Text raceTitle = Text.translatable((hasManyRaces)
                     ? "screen." + MiddleEarth.MOD_ID + ".information.races.many"

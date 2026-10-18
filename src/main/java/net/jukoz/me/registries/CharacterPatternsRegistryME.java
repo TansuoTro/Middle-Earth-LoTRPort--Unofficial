@@ -255,14 +255,14 @@ public class CharacterPatternsRegistryME {
 
     public static RegistryKey<Registry<CharacterTexturePattern>> getKey(CharacterPatternTypes type){
         return switch (type) {
-            case CharacterPatternTypes.BODY, CharacterPatternTypes.FEET, CharacterPatternTypes.HEAD, CharacterPatternTypes.SCAR, CharacterPatternTypes.EAR, CharacterPatternTypes.NOSE -> DynamicRegistriesME.SKIN_PATTERN;
-            case CharacterPatternTypes.EYE -> DynamicRegistriesME.EYE_PATTERN;
-            case CharacterPatternTypes.HAIR, CharacterPatternTypes.EYEBROW, CharacterPatternTypes.BEARD -> DynamicRegistriesME.HAIR_PATTERN;
+            case BODY, CharacterPatternTypes.FEET, CharacterPatternTypes.HEAD, CharacterPatternTypes.SCAR, CharacterPatternTypes.EAR, CharacterPatternTypes.NOSE -> DynamicRegistriesME.SKIN_PATTERN;
+            case EYE -> DynamicRegistriesME.EYE_PATTERN;
+            case HAIR, CharacterPatternTypes.EYEBROW, CharacterPatternTypes.BEARD -> DynamicRegistriesME.HAIR_PATTERN;
         };
     }
 
     public static Optional<RegistryEntry.Reference<CharacterTexturePattern>> get(RegistryWrapper.WrapperLookup registries, CharacterPatternTypes type, Identifier id) {
-        return registries.getOrThrow(getKey(type)).streamEntries().filter((pattern) ->
+        return registries.get(getKey(type)).streamEntries().filter((pattern) ->
                 pattern.value().getPatternType() == type && pattern.matchesId(id)).findFirst();
     }
 

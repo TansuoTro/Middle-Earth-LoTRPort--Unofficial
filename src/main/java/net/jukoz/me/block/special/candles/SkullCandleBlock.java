@@ -82,36 +82,30 @@ public class SkullCandleBlock extends Block {
     }
 
     @Override
-    protected boolean canPathfindThrough(BlockState state, NavigationType type) {
+    public boolean canPathfindThrough(BlockState state, net.minecraft.world.BlockView world, BlockPos pos, NavigationType type) {
         return false;
     }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        ItemStack stack = player.getStackInHand(hand);
+        if(stack.isIn(ItemTags.CANDLES) && state.get(CANDLES) < 3) {
+            if (!player.isCreative()) stack.decrement(1);
+            world.setBlockState(pos, state.cycle(CANDLES));
+            return ActionResult.CONSUME;
+        }
         if (!world.isClient && player.getAbilities().allowModifyWorld) {
             if(player.isCreative()){
                 world.setBlockState(pos, state.cycle(LIT));
             } else {
-                ItemStack itemStack = player.getStackInHand(hand);
-                if (state.get(LIT) && itemStack.isIn(ItemTags.SHOVELS)) {
+                if (state.get(LIT) && stack.isIn(ItemTags.SHOVELS)) {
                     extinguish(null, state, world, pos);
-                } else if (!state.get(LIT) && itemStack.isOf(Items.FLINT_AND_STEEL) || itemStack.isOf(Items.TORCH)) {
+                } else if (!state.get(LIT) && stack.isOf(Items.FLINT_AND_STEEL) || stack.isOf(Items.TORCH)) {
                     setLit(world, state, pos, true);
                 }
             }
         }
         return ActionResult.SUCCESS;
-    }
-
-    @Override
-    protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        ItemStack itemStack = player.getStackInHand(hand);
-        if(itemStack.isIn(ItemTags.CANDLES) && state.get(CANDLES) < 3) {
-            stack.decrementUnlessCreative(1, player);
-            world.setBlockState(pos, state.cycle(CANDLES));
-            return ActionResult.CONSUME;
-        }
-        return super.onUseWithItem(stack, state, world, pos, player, hand, hit);
     }
 
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
@@ -129,7 +123,7 @@ public class SkullCandleBlock extends Block {
         if (f < 0.3F) {
             world.addParticle(ParticleTypes.SMOKE, vec3d.x, vec3d.y, vec3d.z, 0.0, 0.0, 0.0);
             if (f < 0.17F) {
-                world.playSound(vec3d.x + 0.5, vec3d.y + 0.5, vec3d.z + 0.5, SoundEvents.BLOCK_CANDLE_AMBIENT, SoundCategory.BLOCKS, 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F);
+                world.playSound(vec3d.x + 0.5, vec3d.y + 0.5, vec3d.z + 0.5, SoundEvents.BLOCK_CANDLE_AMBIENT, SoundCategory.BLOCKS, 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
             }
         }
 

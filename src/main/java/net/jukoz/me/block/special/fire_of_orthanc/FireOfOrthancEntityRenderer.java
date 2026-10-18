@@ -20,7 +20,7 @@ public class FireOfOrthancEntityRenderer extends MEEntityRenderer<FireOfOrthancE
     public FireOfOrthancEntityRenderer(EntityRendererFactory.Context ctx) {
         super(ctx);
         this.shadowRadius = 0.5F;
-        this.blockRenderManager = ctx.getBlockRenderManager();
+        this.blockRenderManager = net.minecraft.client.MinecraftClient.getInstance().getBlockRenderManager();
     }
 
     @Override
@@ -49,7 +49,7 @@ public class FireOfOrthancEntityRenderer extends MEEntityRenderer<FireOfOrthancE
         matrixStack.translate(-0.5, 0.0, -0.5);
 
         //TODO to test if this worky
-        this.blockRenderManager.renderBlockAsEntity(blockState, matrixStack, vertexConsumerProvider, light, OverlayTexture.DEFAULT_UV);
+        ((net.jukoz.me.compat.MERenderManagerAccess) this.blockRenderManager).renderBlockAsEntity(blockState, matrixStack, vertexConsumerProvider, light, OverlayTexture.DEFAULT_UV);
 
         /*this.blockRenderManager.getModelRenderer().render(world, this.blockRenderManager.getModel(blockState), blockState,
                 blockPos, matrixStack, vertexConsumerProvider.getBuffer(RenderLayers.getMovingBlockLayer(blockState)), false,

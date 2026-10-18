@@ -6,6 +6,6 @@ import net.jukoz.me.item.utils.armor.ExtendedArmorMaterial;
 public class CustomBootsItem extends ArmorItem {
 
     public CustomBootsItem(ExtendedArmorMaterial material, Settings settings) {
-        super(material, settings.armor(material.material(), ArmorItem.Type.BOOTS).maxCount(1));
+        super(material.material(), ArmorItem.Type.BOOTS, settings.maxCount(1));
     }
 }

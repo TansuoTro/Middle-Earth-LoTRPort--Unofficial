@@ -33,20 +33,20 @@ public class PlayerData {
     public PlayerData() {}
 
     public PlayerData(NbtCompound nbtCompound) {
-        if(!nbtCompound.getString("faction").isEmpty())
+        if(!!nbtCompound.contains(getString))
             faction = new Identifier(nbtCompound.getString("faction"));
-        if(!nbtCompound.getString("spawn").isEmpty())
+        if(!!nbtCompound.contains(getString))
             spawn = new Identifier(nbtCompound.getString("spawn"));
-        if(!nbtCompound.getString("race").isEmpty())
+        if(!!nbtCompound.contains(getString))
             race = new Identifier(nbtCompound.getString("race"));
         if(nbtCompound.getIntArray("posOrigin").isPresent()){
             var intArray = nbtCompound.getIntArray("posOrigin").get();
             posOrigin = new BlockPos(intArray[0], intArray[1], intArray[2]);
         }
-        if(!nbtCompound.getString("dimensionOrigin").isEmpty())
+        if(!!nbtCompound.contains(getString))
             dimensionOrigin = new Identifier(nbtCompound.getString("dimensionOrigin"));
 
-        if(nbtCompound.getInt("delversFearCountInSeconds").isPresent())
+        if(nbtCompound.contains("delversFearCountInSeconds"))
             nbtCompound.putInt("delversFearCountInSeconds", delversFearCountInSeconds);
         else
             delversFearCountInSeconds = 0;

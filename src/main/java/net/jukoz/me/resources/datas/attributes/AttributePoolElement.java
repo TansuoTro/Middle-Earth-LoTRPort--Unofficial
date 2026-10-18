@@ -46,9 +46,9 @@ public class AttributePoolElement {
         newElement.withIdentifier(new Identifier(nbtCompound.getString("id")));
 
         if(nbtCompound.contains("value"))
-            newElement.withDefineValue(nbtCompound.getDouble("value").get());
+            newElement.withDefineValue(nbtCompound.getDouble("value"));
         else if(nbtCompound.contains("min") && nbtCompound.contains("max"))
-            newElement.withMinMaxValue(nbtCompound.getDouble("min").get(), nbtCompound.getDouble("max").get());
+            newElement.withMinMaxValue(nbtCompound.getDouble("min"), nbtCompound.getDouble("max"));
 
         if(nbtCompound.contains("modifiers")){
             newElement.withModifiers(nbtCompound.getList("modifiers", 9));
@@ -102,7 +102,7 @@ public class AttributePoolElement {
     }
 
     public AttributePoolElement withModifier(Identifier identifier, double value) {
-        withModifier(identifier, value, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+        withModifier(identifier, value, EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
         return this;
     }
 
@@ -140,7 +140,7 @@ public class AttributePoolElement {
         NbtList attributeList = new NbtList();
         var registry = player.getWorld().getRegistryManager().getOptional(RegistryKeys.ATTRIBUTE).get();
         Collection<EntityAttributeInstance> attributes = new ArrayList<>();
-        var entries = registry.getIndexedEntries();
+        var entries = registry.streamEntries().toList();
         for(var entry : entries){
             EntityAttributeInstance instance = player.getAttributeInstance(entry);
             if(instance == null)
@@ -149,10 +149,10 @@ public class AttributePoolElement {
         }
         attributes.forEach(attribute -> {
             AttributePoolElement attributePoolElement = new AttributePoolElement();
-            attributePoolElement.withIdentifier(MiddleEarth.fetchId(attribute.getAttribute().getIdAsString()));
+            attributePoolElement.withIdentifier(MiddleEarth.fetchId(attribute.getAttribute().getId().toString()));
             attributePoolElement.withDefineValue(attribute.getBaseValue());
             for(var modifier : attribute.getModifiers())
-                attributePoolElement.withModifier(modifier.id(), modifier.value(), modifier.operation());
+                attributePoolElement.withModifier(MiddleEarth.fetchId(modifier.getName()), modifier.getValue(), modifier.getOperation());
             attributeList.add(attributePoolElement.createNbt());
         });
         NbtCompound compound = new NbtCompound();
@@ -163,7 +163,7 @@ public class AttributePoolElement {
     public static List<AttributePoolElement> obtainAttributeList(NbtCompound nbtCompound) {
         List<AttributePoolElement> attributePoolElementList = new ArrayList<>();
 
-        NbtList nbtList = nbtCompound.getListOrEmpty("attributes");
+        NbtList nbtList = nbtCompound.getList("attributes", 9);
 
         nbtList.forEach(attribute -> {
             attributePoolElementList.add(AttributePoolElement.createFromNbt(NbtCompat.compound(attribute)));

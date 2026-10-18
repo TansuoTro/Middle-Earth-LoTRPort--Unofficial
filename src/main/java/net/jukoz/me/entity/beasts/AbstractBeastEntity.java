@@ -660,4 +660,8 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
         float f = this.getPose() == EntityPose.STANDING ? Math.min(posDelta * 6.0f, 1.0f) : 0.0f;
         this.limbAnimator.updateLimbs(f, 0.2f);
     }
+
+    public ItemStack getBodyArmor() {
+        return this.getEquippedStack(EquipmentSlot.CHEST);
+    }
 }

@@ -3,6 +3,7 @@ import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatEntity;
 import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
 import net.jukoz.me.compat.client.render.equipment.EquipmentModel;
+import net.jukoz.me.item.MEComponents;
 import net.jukoz.me.compat.client.render.equipment.EquipmentRenderer;
 import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 

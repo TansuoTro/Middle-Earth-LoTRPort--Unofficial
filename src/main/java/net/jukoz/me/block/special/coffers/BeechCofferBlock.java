@@ -17,7 +17,7 @@ import net.jukoz.me.block.registration.ModBlockEntities;
 public class BeechCofferBlock extends ChestBlock {
 
     public BeechCofferBlock(Settings settings) {
-        super(() -> ModBlockEntities.BEECH_COFFER, settings);
+        super(settings, () -> ModBlockEntities.BEECH_COFFER);
     }
 
     @Override

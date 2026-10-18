@@ -9,7 +9,6 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 
-import net.minecraft.component.type.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
@@ -91,13 +90,9 @@ public class PlateBlock extends BlockWithEntity {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         if (!world.isClient) {
-            return PlateBlock.checkType(world, type, ModBlockEntities.PLATE);
+            return checkType(type, ModBlockEntities.PLATE, PlateBlockEntity::tick);
         }
         return super.getTicker(world, state, type);
-    }
-
-    private static <T extends BlockEntity> BlockEntityTicker<T> checkType(World world, BlockEntityType<T> type, BlockEntityType<PlateBlockEntity> plate) {
-        return PlateBlock.checkType(type, plate, PlateBlockEntity::tick);
     }
 
     @Override
@@ -113,6 +108,27 @@ public class PlateBlock extends BlockWithEntity {
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        ItemStack stack = player.getStackInHand(hand);
+        if(!stack.isEmpty() && stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof PlateBlock) {
+            return ActionResult.PASS;
+        }
+        if(!stack.isEmpty() && stack.getItem().isFood()) {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if(blockEntity instanceof PlateBlockEntity plateBlockEntity) {
+                ItemStack plateStack = plateBlockEntity.getStack();
+                if(plateStack == null || plateStack.isEmpty()) {
+                    ItemStack insertedStack = stack.copy();
+                    insertedStack.setCount(1);
+                    plateBlockEntity.setStack(insertedStack);
+                    if (!player.isCreative()) stack.decrement(1);
+                    return ActionResult.SUCCESS;
+                } else if (world.isClient) {
+                    return onEat(world, pos, player);
+                }
+            } else {
+                return ActionResult.FAIL;
+            }
+        }
         ActionResult result = onEat(world, pos, player);
         if(result == ActionResult.PASS || result == ActionResult.FAIL) {
             if(world instanceof ServerWorld serverWorld) {
@@ -150,60 +166,28 @@ public class PlateBlock extends BlockWithEntity {
         }
 
         FoodComponent foodComponent = food.getItem().getFoodComponent();
-        
-        if(foodComponent != null && consumableComponent != null) {
+
+        if(foodComponent != null) {
             if(!world.isClient) {
                 player.getHungerManager().add((foodComponent.getHunger() / 2), foodComponent.getSaturationModifier() / 2);
             }
-            foodComponent.onConsume(player.getWorld(), player, food);
-            world.emitGameEvent(player);
+            world.emitGameEvent(player, GameEvent.EAT, pos);
 
-            ItemStack remainderItem = ItemStack.EMPTY;
-            ItemStack useRemainderComponent = food.getRecipeRemainder();
-            if(useRemainderComponent != null) remainderItem = useRemainderComponent;
-            plateBlockEntity.setStack(remainderItem);
+            net.minecraft.item.Item remainderItem = food.getItem().getRecipeRemainder();
+            plateBlockEntity.setStack(remainderItem == null ? ItemStack.EMPTY : new ItemStack(remainderItem));
         }
 
         return ActionResult.SUCCESS;
     }
 
     @Override
-    protected ActionResult onUseWithItem(ItemStack stack) {
-        if(stack.getItem() instanceof BlockItem blockItem) {
-            if(blockItem.getBlock() instanceof PlateBlock) {
-                return ActionResult.PASS;
-            }
-        }
-
-        if(stack.getItem().isFood()) {
-            BlockEntity blockEntity = player.getWorld().getBlockEntity(pos);
-            if(blockEntity instanceof PlateBlockEntity plateBlockEntity) {
-                ItemStack plateStack = plateBlockEntity.getStack();
-                if(plateStack == null || plateStack.isEmpty()) {
-                    ItemStack insertedStack = stack.copy();
-                    insertedStack.setCount(1);
-                    plateBlockEntity.setStack(insertedStack);
-                    stack.decrementUnlessCreative(1);
-                    return ActionResult.SUCCESS;
-                } else if (world.isClient) {
-                    return onEat(world);
-                }
-            } else {
-                return ActionResult.FAIL;
-            }
-        }
-
-        return super.onUseWithItem(stack);
-    }
-
-    @Override
-    public VoxelShape getOutlineShape(BlockState state) {
-        return Block.createCuboidShape(3.0);
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return Block.createCuboidShape(3.0, 0.0, 3.0, 13.0, 1.0, 13.0);
     }
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
+        builder.add(FACING, UTENSILS);
         super.appendProperties(builder);
     }
 
@@ -215,7 +199,7 @@ public class PlateBlock extends BlockWithEntity {
         for(int var5 = 0; var5 < var4; ++var5) {
             Direction direction = var3[var5];
             if (direction.getAxis() == Direction.Axis.Y) {
-                BlockState blockState = this.getDefaultState().with(Properties.HORIZONTAL_FACING, direction.getOpposite()).with(UTENSILS, false);
+                BlockState blockState = this.getDefaultState().with(Properties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(UTENSILS, false);
                 if (blockState.canPlaceAt(ctx.getWorld(), ctx.getBlockPos())) {
                     return blockState;
                 }

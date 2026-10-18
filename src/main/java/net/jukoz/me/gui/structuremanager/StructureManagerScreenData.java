@@ -53,10 +53,10 @@ public class StructureManagerScreenData{
 
     static {
         PACKET_CODEC = PacketCodec.tuple(
-                BlockPos.PACKET_CODEC, StructureManagerScreenData::getPos,
+                PacketCodecs.BLOCK_POS, StructureManagerScreenData::getPos,
                 PacketCodecs.BOOLEAN, StructureManagerScreenData::getIsActive,
                 PacketCodecs.BOOLEAN, StructureManagerScreenData::getToInitialize,
-                PacketCodecs.optional(Identifier.PACKET_CODEC), StructureManagerScreenData::getStructureManagerIdentifierOptional,
+                PacketCodecs.optional(PacketCodecs.IDENTIFIER), StructureManagerScreenData::getStructureManagerIdentifierOptional,
                 StructureManagerScreenData::new
         );
     }

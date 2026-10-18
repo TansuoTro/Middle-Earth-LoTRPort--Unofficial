@@ -42,7 +42,7 @@ public class WebbingBlock extends MultifaceGrowthBlock {
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         Vec3d vec3d = new Vec3d(0.75, 0.50, 0.75);
         if (entity instanceof LivingEntity livingEntity) {
-            if (livingEntity.hasStatusEffect(StatusEffects.WEAVING)) {
+            if (livingEntity.hasStatusEffect(StatusEffects.SLOWNESS)) {
                 vec3d = new Vec3d(0.90, 0.75, 0.90);
             }
         }

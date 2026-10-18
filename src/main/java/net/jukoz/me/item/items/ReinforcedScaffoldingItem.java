@@ -36,9 +36,9 @@ public class ReinforcedScaffoldingItem extends ScaffoldingItem {
 
             while (horizontalDistance < ReinforcedScaffoldingBlock.MAX_SUPPORT_DISTANCE) {
                 if (!world.isClient && !world.isInBuildLimit(mutable)) {
-                    if (context.getPlayer() instanceof ServerPlayerEntity serverPlayer && mutable.getY() > world.getTopYInclusive()) {
+                    if (context.getPlayer() instanceof ServerPlayerEntity serverPlayer && mutable.getY() > world.getTopY()) {
                         serverPlayer.sendMessageToClient(
-                                Text.translatable("build.tooHigh", world.getTopYInclusive()).formatted(Formatting.RED),
+                                Text.translatable("build.tooHigh", world.getTopY()).formatted(Formatting.RED),
                                 true
                         );
                     }

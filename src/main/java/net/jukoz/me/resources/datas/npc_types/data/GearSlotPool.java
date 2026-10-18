@@ -73,7 +73,7 @@ public class GearSlotPool {
             for(int i = 0; i < list.size(); i++){
                 if(!list.getString(i).isEmpty()){
                     gearSlotPool.add(new WeightedItemData(MiddleEarth.fetchId(list.getString(i))));
-                } else if(list.getCompound(i).isPresent()){
+                } else if(!list.getCompound(i).isEmpty()){
                     gearSlotPool.add(new WeightedItemData(list.getCompound(i)));
                 }
             }

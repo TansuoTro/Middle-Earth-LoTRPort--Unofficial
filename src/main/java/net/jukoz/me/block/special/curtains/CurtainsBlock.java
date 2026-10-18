@@ -3,6 +3,7 @@ package net.jukoz.me.block.special.curtains;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.LichenGrower;
 import net.minecraft.block.MultifaceGrowthBlock;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.Waterloggable;
@@ -46,10 +47,16 @@ public class CurtainsBlock extends MultifaceGrowthBlock implements Waterloggable
             Direction.EAST, Block.createCuboidShape(13.0, 0.0, 0.0, 16.0, 3.0, 16.0));
 
     private final Function<BlockState, VoxelShape> shapeFunction;
+    private final LichenGrower grower = new LichenGrower(this);
 
     public CurtainsBlock(AbstractBlock.Settings settings) {
         super(settings);
         shapeFunction = createShapeFunction();
+    }
+
+    @Override
+    public LichenGrower getGrower() {
+        return grower;
     }
 
     @Override

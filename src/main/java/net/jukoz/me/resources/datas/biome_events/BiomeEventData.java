@@ -90,7 +90,7 @@ public class BiomeEventData {
             return null;
 
         WildSpawnEventData spawningData = weightedData.get(Random.create().nextInt(weightedData.size()));
-        Registry<NpcType> npcDataRegistry = manager.getOrThrow(DynamicRegistriesME.NPC_TYPE);
+        Registry<NpcType> npcDataRegistry = manager.get(DynamicRegistriesME.NPC_TYPE);
         Identifier npcId = spawningData.getNpcType(null);
         NpcType foundNpcType = (npcId != null) ? npcDataRegistry.get(npcId) : null;
 

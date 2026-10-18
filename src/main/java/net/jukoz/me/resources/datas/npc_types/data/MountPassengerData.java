@@ -104,7 +104,7 @@ public class MountPassengerData {
 
     public LivingEntity createEntity(ServerWorld serverWorld, LivingEntity owner) {
         EntityType<?> type = Registries.ENTITY_TYPE.get(this.entityType);
-        var notLiving = type.create(serverWorld, SpawnReason.NATURAL);
+        var notLiving = type.create(serverWorld);
         if(notLiving == null)
             return null;
         if(notLiving instanceof LivingEntity entity){
@@ -119,6 +119,7 @@ public class MountPassengerData {
                         serverWorld,
                         serverWorld.getLocalDifficulty(owner.getBlockPos()),
                         SpawnReason.EVENT,
+                        null,
                         null
                 );
             }

@@ -35,13 +35,13 @@ public class WargArmorSpineFeatureRenderer extends MEFeatureRenderer<WargEntity,
             VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(new Identifier(MiddleEarth.MOD_ID, "textures/entities/warg/feature/warg_armor_bone_spine_addon.png")), true, itemStack.hasGlint());
 
             model.setAngles(state);
-            model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
+            model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
         }
         else if(itemStack.isOf(EquipmentItemsME.WARG_MORDOR_PLATE_ARMOR) || itemStack.isOf(EquipmentItemsME.WARG_MORDOR_MAIL_ARMOR)) {
             VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(new Identifier(MiddleEarth.MOD_ID, "textures/entities/warg/feature/warg_armor_mordor_spine_addon.png")), true, itemStack.hasGlint());
 
             model.setAngles(state);
-            model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
+            model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 }

@@ -20,12 +20,12 @@ public class PlayerBookItem extends Item {
 
     @Environment(EnvType.CLIENT)
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand) {
+    public net.minecraft.util.TypedActionResult<net.minecraft.item.ItemStack> use(World world, PlayerEntity user, Hand hand) {
         if(world.isClient) {
             MinecraftClient client = MinecraftClient.getInstance();
             client.setScreen(new PlayerBookScreen(Text.of("Player's book")));
-            return ActionResult.SUCCESS;
+            return net.minecraft.util.TypedActionResult.success(user.getStackInHand(hand));
         }
-        return ActionResult.FAIL;
+        return net.minecraft.util.TypedActionResult.fail(user.getStackInHand(hand));
     }
 }

@@ -104,8 +104,7 @@ public class PlayerDataService {
             data.assignNewFactionInformation(faction.getId(), spawnId);
 
             if(ModDimensions.isInMiddleEarth(player.getWorld())){
-                ServerPlayerEntity.Respawn respawn = new ServerPlayerEntity.Respawn(ModDimensions.ME_WORLD_KEY, getPlayerSpawnData(player, world).getBlockPos(), 0, true);
-                player.setSpawnPoint(respawn, true);
+                player.setSpawnPoint(ModDimensions.ME_WORLD_KEY, getPlayerSpawnData(player, world).getBlockPos(), 0, true);
                 return true;
             }
 

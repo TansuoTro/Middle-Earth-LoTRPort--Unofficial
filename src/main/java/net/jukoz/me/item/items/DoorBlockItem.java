@@ -1,11 +1,12 @@
 package net.jukoz.me.item.items;
 
-import net.minecraft.component.type.TooltipDisplayComponent;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.LargeDoorBlock;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
+import net.minecraft.world.World;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -19,8 +20,8 @@ public class DoorBlockItem extends BlockItem {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
-        textConsumer.accept(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".door_size").append(block.getDoorWidth() + "x" + block.getDoorHeight()));
-        super.appendTooltip(stack, context, displayComponent, textConsumer, type);
+    public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
+        tooltip.add(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".door_size").append(block.getDoorWidth() + "x" + block.getDoorHeight()));
+        super.appendTooltip(stack, world, tooltip, context);
     }
 }

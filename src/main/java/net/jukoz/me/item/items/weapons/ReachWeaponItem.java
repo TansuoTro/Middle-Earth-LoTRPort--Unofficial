@@ -29,9 +29,8 @@ public class ReachWeaponItem extends Item {
         this.type = type;
     }
 
-    @Override
     public boolean canMine(ItemStack stack, BlockState state, World world, BlockPos pos, LivingEntity user) {
-        return !user.isCreative();
+        return !(user instanceof net.minecraft.entity.player.PlayerEntity player && player.isCreative());
     }
 
     @Override

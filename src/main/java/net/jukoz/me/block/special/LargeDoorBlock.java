@@ -173,7 +173,7 @@ public class LargeDoorBlock extends Block {
     }
 
     @Override
-    public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         BlockPos blockPos = getOrigin(pos, state);
         BlockPos blockPos1 = blockPos;
 
@@ -192,11 +192,12 @@ public class LargeDoorBlock extends Block {
             }
         }
 
-        return super.onBreak(world, pos, state, player);
+        super.onBreak(world, pos, state, player);
     }
 
     @Override
-    public void onExploded(BlockState state, ServerWorld world, BlockPos pos, Explosion explosion, BiConsumer<ItemStack, BlockPos> stackMerger) {
+    public void onDestroyedByExplosion(World world, BlockPos pos, Explosion explosion) {
+        BlockState state = world.getBlockState(pos);
         BlockPos blockPos = getOrigin(pos, state);
         BlockPos blockPos1 = blockPos;
 
@@ -215,7 +216,7 @@ public class LargeDoorBlock extends Block {
             }
         }
 
-        super.onExploded(state, world, pos, explosion, stackMerger);
+        super.onDestroyedByExplosion(world, pos, explosion);
     }
 
     //Check space for door opening/closing
@@ -330,7 +331,7 @@ public class LargeDoorBlock extends Block {
         return PART;
     }
 
-    protected boolean canPathfindThrough(BlockState state, NavigationType type) {
+    public boolean canPathfindThrough(BlockState state, net.minecraft.world.BlockView world, BlockPos pos, NavigationType type) {
         return switch (type) {
             case LAND, AIR -> (Boolean) state.get(OPEN);
             case WATER -> false;

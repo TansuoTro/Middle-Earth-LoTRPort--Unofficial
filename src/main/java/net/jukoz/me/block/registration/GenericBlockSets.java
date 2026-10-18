@@ -1,7 +1,7 @@
 package net.jukoz.me.block.registration;
 
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
-import net.fabricmc.fabric.api.registry.FuelRegistryEvents;
+import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.minecraft.block.enums.Instrument;
 import net.minecraft.sound.BlockSoundGroup;
 import net.jukoz.me.MiddleEarth;
@@ -461,13 +461,11 @@ public class GenericBlockSets {
             FlammableBlockRegistry.getDefaultInstance().add(set.blockSet.stairs(), 5, 20);
             FlammableBlockRegistry.getDefaultInstance().add(set.blockSet.wall(), 5, 20);
 
-            FuelRegistryEvents.BUILD.register(((builder, context) -> {
-                builder.add(set.blockSet.base(), 300);
-                builder.add(set.blockSet.slab(), 150);
-                builder.add(set.blockSet.verticalSlab(), 150);
-                builder.add(set.blockSet.stairs(), 300);
-                builder.add(set.blockSet.wall(), 300);
-            }));
+            FuelRegistry.INSTANCE.add(set.blockSet.base(), 300);
+                FuelRegistry.INSTANCE.add(set.blockSet.slab(), 150);
+                FuelRegistry.INSTANCE.add(set.blockSet.verticalSlab(), 150);
+                FuelRegistry.INSTANCE.add(set.blockSet.stairs(), 300);
+                FuelRegistry.INSTANCE.add(set.blockSet.wall(), 300);
         }
 
         return set;

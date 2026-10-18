@@ -17,7 +17,7 @@ import net.jukoz.me.block.registration.ModBlockEntities;
 public class ChestnutCofferBlock extends ChestBlock {
 
     public ChestnutCofferBlock(Settings settings) {
-        super(() -> ModBlockEntities.CHESTNUT_COFFER, settings);
+        super(settings, () -> ModBlockEntities.CHESTNUT_COFFER);
     }
 
     @Override

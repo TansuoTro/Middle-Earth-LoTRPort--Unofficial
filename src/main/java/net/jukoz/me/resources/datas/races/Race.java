@@ -28,8 +28,8 @@ public class Race {
             Codec.STRING.fieldOf(TYPE_FIELD).forGetter(Race::getRaceTypeValue),
             NbtCompound.CODEC.fieldOf(BASE_ATTRIBUTE_FIELD).forGetter(Race::getBaseAttributePoolNbt),
             NbtCompound.CODEC.fieldOf(CATEGORY_BASED_ATTRIBUTE_FIELD).forGetter(Race::getCategoryBasedAttributePool),
-            Codec.list(Codec.STRING, 0, 5).optionalFieldOf(COMMAND_JOIN_FIELD).forGetter(Race::getJoinCommands),
-            Codec.list(Codec.STRING, 0, 5).optionalFieldOf(COMMAND_LEAVE_FIELD).forGetter(Race::getLeaveCommands)
+            Codec.list(Codec.STRING).optionalFieldOf(COMMAND_JOIN_FIELD).forGetter(Race::getJoinCommands),
+            Codec.list(Codec.STRING).optionalFieldOf(COMMAND_LEAVE_FIELD).forGetter(Race::getLeaveCommands)
     ).apply(instance, Race::new));
 
     private final Identifier id;

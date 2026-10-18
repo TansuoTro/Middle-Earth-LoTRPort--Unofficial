@@ -103,7 +103,7 @@ public class StructureNestScreen extends HandledScreen<StructureNestScreenHandle
 
         if(this.nest == null){
             // Pick first by default
-            this.nest = nests.getFirst();
+            this.nest = nests.get(0);
         }
 
         if(difference != 0){

@@ -13,7 +13,7 @@ import net.jukoz.me.item.utils.armor.ExtendedArmorMaterial;
 public class HelmetAttachmentItem extends Item{
 
     public HelmetAttachmentItem(Item.Settings settings, ExtendedArmorMaterial armorMaterial) {
-        super(settings.armor(armorMaterial.material(), ArmorItem.Type.HELMET).maxCount(1));
+        super(settings.maxCount(1));
     }
 
     public static void toggleHelmetAttachmentState(ServerPlayerEntity player, ItemStack stack){

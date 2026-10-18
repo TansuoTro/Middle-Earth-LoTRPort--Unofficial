@@ -70,8 +70,8 @@ public class GreatHornRenderer extends MEMAgeableMobEntityRenderer<GreatHornEnti
         MEAnimationStates.copyFrom(state.gallopAnimationState, greatHornEntity.gallopAnimationState);
         MEAnimationStates.copyFrom(state.bowAnimationState, greatHornEntity.bowAnimationState);
         MEAnimationStates.copyFrom(state.attackAnimationState, greatHornEntity.attackAnimationState);
-        state.saddle = greatHornEntity.getEquippedStack(EquipmentSlot.SADDLE);
-        state.armor = greatHornEntity.getEquippedStack(EquipmentSlot.BODY);
+        state.saddle = greatHornEntity.getEquippedStack(EquipmentSlot.CHEST);
+        state.armor = greatHornEntity.getEquippedStack(EquipmentSlot.CHEST);
         state.blueSaddle = greatHornEntity.hasBlueSaddle();
         state.hasRider = greatHornEntity.hasPlayerRider();
         state.greatHornVariant = greatHornEntity.getVariant();

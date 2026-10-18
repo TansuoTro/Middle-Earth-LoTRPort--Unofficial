@@ -14,7 +14,7 @@ public class OnboardingFactionScreenService {
     private List<Faction> factions = new ArrayList<>();
     public OnboardingFactionScreenService(World world){
         DynamicRegistryManager registryManager = world.getRegistryManager();
-        this.factions = registryManager.getOrThrow(DynamicRegistriesME.FACTION).stream().toList();
+        this.factions = registryManager.get(DynamicRegistriesME.FACTION).stream().toList();
     }
 
     public List<Faction> getFactionsByDisposition(DispositionType dispositionType){

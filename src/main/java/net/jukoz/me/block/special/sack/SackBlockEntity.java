@@ -45,7 +45,7 @@ public class SackBlockEntity extends LootableContainerBlockEntity implements Sid
     public SackBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.SACK, pos, state);
         this.inventory = DefaultedList.ofSize(size(), ItemStack.EMPTY);
-        this.setHeldStacks(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
+        this.setInvStackList(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
         this.stateManager = new ViewerCountManager() {
             protected void onContainerOpen(World world, BlockPos pos, BlockState state) {
                 SackBlockEntity.this.setOpen(state, true);
@@ -98,7 +98,7 @@ public class SackBlockEntity extends LootableContainerBlockEntity implements Sid
     protected void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
         WriteView view = new WriteView(nbt);
-        if (!this.writeLootTable(view.nbt())) {
+        if (!this.serializeLootTable(view.nbt())) {
             Inventories.writeNbt(view.nbt(), this.inventory, false);
         }
 
@@ -106,12 +106,11 @@ public class SackBlockEntity extends LootableContainerBlockEntity implements Sid
 
     public void readInventoryNbt(ReadView readView) {
         this.inventory = DefaultedList.ofSize(this.size(), ItemStack.EMPTY);
-        if (!this.readLootTable(readView.nbt())) {
+        if (!this.deserializeLootTable(readView.nbt())) {
             Inventories.readNbt(readView.nbt(), this.inventory);
         }
     }
 
-    @Override
     public void onBlockReplaced(BlockPos pos, BlockState oldState) {
         // Keep empty
     }
@@ -170,5 +169,19 @@ public class SackBlockEntity extends LootableContainerBlockEntity implements Sid
 
     void setOpen(BlockState state, boolean open) {
         this.world.setBlockState(this.getPos(), (BlockState)state.with(BarrelBlock.OPEN, open), Block.NOTIFY_ALL);
+    }
+
+    @Override
+    protected DefaultedList<ItemStack> getInvStackList() {
+        return this.inventory;
+    }
+
+    @Override
+    protected void setInvStackList(DefaultedList<ItemStack> list) {
+        this.inventory = list;
+    }
+
+    public void generateLoot(PlayerEntity player) {
+        this.checkLootInteraction(player);
     }
 }

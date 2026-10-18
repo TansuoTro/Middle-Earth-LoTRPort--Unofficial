@@ -134,4 +134,11 @@ public class CaveTrollEntityModel extends SinglePartEntityModel<CaveTrollEntity>
         this.upperBody.rotate(matrices);
         this.rightArm.rotate(matrices);
     }
+
+    public void setAngles(CaveTrollEntityRenderState state) {
+        if (state.entity instanceof CaveTrollEntity entity) {
+            this.setAngles(entity, state.limbSwingAnimationProgress, state.limbSwingAmplitude,
+                    state.age, state.relativeHeadYaw, state.relativeHeadPitch);
+        }
+    }
 }

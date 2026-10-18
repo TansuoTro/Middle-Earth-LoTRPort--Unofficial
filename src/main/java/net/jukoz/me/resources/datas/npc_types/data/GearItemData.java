@@ -156,18 +156,18 @@ public class GearItemData {
 
         if(this.color != null){
             List<TagKey<Item>> tags = itemStack.streamTags().toList();
-            if(tags.contains(ItemTags.DYEABLE))
-                itemStack.set(MEComponents.DYED_COLOR, new DyedColorComponent(this.color));
-            else if(itemStack.isIn(ItemTags.DYEABLE))
-                itemStack.set(MEComponents.DYED_COLOR, new DyedColorComponent(this.color));
+            if(itemStack.getItem() instanceof net.minecraft.item.DyeableItem)
+                MEComponents.set(itemStack, MEComponents.DYED_COLOR, new DyedColorComponent(this.color));
+            else if(itemStack.getItem() instanceof net.minecraft.item.DyeableItem)
+                MEComponents.set(itemStack, MEComponents.DYED_COLOR, new DyedColorComponent(this.color));
         } else if(this.colors != null){
             List<TagKey<Item>> tags = itemStack.streamTags().toList();
-            if(tags.contains(ItemTags.DYEABLE))
-                itemStack.set(MEComponents.DYED_COLOR, new DyedColorComponent(getRandomColor(colors)));
-            else if(itemStack.isIn(ItemTags.DYEABLE))
-                itemStack.set(MEComponents.DYED_COLOR, new DyedColorComponent(getRandomColor(colors)));
+            if(itemStack.getItem() instanceof net.minecraft.item.DyeableItem)
+                MEComponents.set(itemStack, MEComponents.DYED_COLOR, new DyedColorComponent(getRandomColor(colors)));
+            else if(itemStack.getItem() instanceof net.minecraft.item.DyeableItem)
+                MEComponents.set(itemStack, MEComponents.DYED_COLOR, new DyedColorComponent(getRandomColor(colors)));
         }
-        if(this.noCape != null && this.noCape && itemStack.getComponents().contains(MEComponents.BACK_ATTACHMENT_DATA)){
+        if(this.noCape != null && this.noCape && MEComponents.contains(itemStack, MEComponents.BACK_ATTACHMENT_DATA)){
             MEComponents.remove(itemStack, MEComponents.BACK_ATTACHMENT_DATA);
         } else if (cape != null)
             if(capeColor != null)
@@ -177,7 +177,7 @@ public class GearItemData {
             else
                 MEComponents.set(itemStack, MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(cape));
 
-        if(this.noHood != null && this.noHood && itemStack.getComponents().contains(MEComponents.HELMET_ATTACHMENT_DATA)){
+        if(this.noHood != null && this.noHood && MEComponents.contains(itemStack, MEComponents.HELMET_ATTACHMENT_DATA)){
             MEComponents.remove(itemStack, MEComponents.HELMET_ATTACHMENT_DATA);
         } else if(hood != null){
             boolean hoodState = false;
@@ -205,10 +205,10 @@ public class GearItemData {
         this(new Identifier(nbt.getString("id")));
 
         if(nbt.get("color") != null){
-            color = nbt.getInt("color").get();
+            color = nbt.getInt("color");
         }
-        if(nbt.get("colors") != null && nbt.getIntArray("colors").isPresent()){
-            int[] list = nbt.getIntArray("colors").get();
+        if(nbt.get("colors") != null && nbt.contains("colors")){
+            int[] list = nbt.getIntArray("colors");
             List<Integer> newColors = new ArrayList<>();
             for (int j : list) {
                 newColors.add(j);
@@ -216,40 +216,40 @@ public class GearItemData {
             colors = newColors;
         }
         if(nbt.get("no_cape") != null){
-            noCape = nbt.getBoolean("no_cape").get();
+            noCape = nbt.getBoolean("no_cape");
         }
         if(nbt.get("cape") != null){
             cape = BackAttachmentsME.valueOf(nbt.getString("cape").toUpperCase());
 
-            if(nbt.getInt("cape_color").isPresent()){
-                capeColor = nbt.getInt("cape_color").get();
+            if(nbt.contains("cape_color")){
+                capeColor = nbt.getInt("cape_color");
             }
             else if(nbt.get("cape_colors") != null && NbtCompat.isList(nbt.get("cape_colors"))){
                 var capeElements = NbtCompat.list(nbt.get("cape_colors"));
                 List<Integer> newList = new ArrayList<>();
                 for (var element : capeElements){
-                    newList.add(element.asInt().get());
+                    newList.add(((net.minecraft.nbt.AbstractNbtNumber) element).intValue());
                 }
                 capeColors = newList;
             }
         }
 
         if(nbt.get("no_hood") != null){
-            noHood = nbt.getBoolean("no_hood").get();
+            noHood = nbt.getBoolean("no_hood");
         }
         if(nbt.get("hood") != null){
             hood = HelmetAttachmentsME.valueOf(nbt.getString("hood").toUpperCase());
             if(nbt.get("hood_is_down") != null)
-                isDown = nbt.getBoolean("hood_is_down").get();
+                isDown = nbt.getBoolean("hood_is_down");
 
             if(nbt.get("hood_color") != null){
-                hoodColor = nbt.getInt("hood_color").get();
+                hoodColor = nbt.getInt("hood_color");
             }
             else if(nbt.get("hood_colors") != null && NbtCompat.isList(nbt.get("hood_colors"))){
                 var hoodElements = NbtCompat.list(nbt.get("hood_colors"));
                 List<Integer> newList = new ArrayList<>();
                 for (var element : hoodElements){
-                    newList.add(element.asInt().get());
+                    newList.add(((net.minecraft.nbt.AbstractNbtNumber) element).intValue());
                 }
                 hoodColors = newList;
             }
@@ -301,7 +301,7 @@ public class GearItemData {
             if(hoodColors != null)
                 nbt.putIntArray("hood_colors", hoodColors);
         }
-        if(nbt.getKeys().size() == 1 && !nbt.getString("id").isEmpty()){
+        if(nbt.getKeys().size() == 1 && nbt.contains("id")){
             return NbtString.of(nbt.getString("id"));
         }
         return nbt;

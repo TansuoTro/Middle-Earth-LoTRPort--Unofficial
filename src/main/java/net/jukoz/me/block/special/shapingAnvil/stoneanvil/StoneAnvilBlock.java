@@ -30,7 +30,7 @@ public class StoneAnvilBlock extends AbstractShapingAnvilBlock {
 
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         switch (state.get(FACING)){
             case NORTH -> {
                 return Stream.of(
@@ -81,6 +81,6 @@ public class StoneAnvilBlock extends AbstractShapingAnvilBlock {
 
     @Nullable
     protected static <T extends BlockEntity> BlockEntityTicker<T> validateTicker(World world, BlockEntityType<T> givenType, BlockEntityType<StoneAnvilBlockEntity> expectedType) {
-        return world.isClient ? null : StoneAnvilBlock.validateTicker(givenType, expectedType, StoneAnvilBlockEntity::tick);
+        return world.isClient ? null : StoneAnvilBlock.checkType(givenType, expectedType, StoneAnvilBlockEntity::tick);
     }
 }

@@ -29,8 +29,8 @@ public class CustomDaggerWeaponItem extends ReachWeaponItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, ServerWorld world, Entity entity, @Nullable EquipmentSlot slot) {
-        super.inventoryTick(stack, world, entity, slot);
+    public void inventoryTick(ItemStack stack, net.minecraft.world.World world, Entity entity, int slot, boolean selected) {
+        super.inventoryTick(stack, world, entity, slot, selected);
         if(entity instanceof PlayerEntity playerEntity) {
             int timer = 0;
             SneakAttackDataComponent sneakAttackDataComponent = MEComponents.get(stack, MEComponents.SNEAK_ATTACK_DATA);
@@ -45,10 +45,11 @@ public class CustomDaggerWeaponItem extends ReachWeaponItem {
     }
 
     @Override
-    public void postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         super.postHit(stack, target, attacker);
         SneakAttackDataComponent sneakAttackDataComponent = MEComponents.get(stack, MEComponents.SNEAK_ATTACK_DATA);
         if(sneakAttackDataComponent != null) MEComponents.set(stack, MEComponents.SNEAK_ATTACK_DATA, new SneakAttackDataComponent(0));
+        return true;
     }
 
     public static boolean canSneakAttack(ItemStack stack) {

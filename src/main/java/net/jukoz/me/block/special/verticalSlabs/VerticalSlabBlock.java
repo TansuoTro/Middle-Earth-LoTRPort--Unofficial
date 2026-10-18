@@ -45,7 +45,7 @@ public class VerticalSlabBlock extends Block implements Waterloggable {
     }
 
     @Override
-    protected boolean canPathfindThrough(BlockState state, NavigationType type) {
+    public boolean canPathfindThrough(BlockState state, net.minecraft.world.BlockView world, BlockPos pos, NavigationType type) {
         return false;
     }
 

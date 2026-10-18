@@ -83,7 +83,7 @@ public class DroopingIciclesBlock extends Block {
             BlockPos blockPos = hit.getBlockPos();
             if (world instanceof ServerWorld) {
                 ServerWorld serverWorld = (ServerWorld)world;
-                if (projectile.canModifyAt(serverWorld, blockPos) && projectile.canBreakBlocks(serverWorld) && projectile instanceof TridentEntity && projectile.getVelocity().length() > 0.6) {
+                if (projectile.canModifyAt(serverWorld, blockPos) && projectile instanceof TridentEntity && projectile.getVelocity().length() > 0.6) {
                     world.breakBlock(blockPos, true);
                 }
             }

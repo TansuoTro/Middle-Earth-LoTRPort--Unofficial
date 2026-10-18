@@ -13,7 +13,7 @@ public class OakCofferBlockEntity extends ChestBlockEntity {
     public OakCofferBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.OAK_COFFER, pos, state);
 
-        this.setHeldStacks(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
+        this.setInvStackList(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
     }
 
     @Override

@@ -13,7 +13,7 @@ public class BeechCofferBlockEntity extends ChestBlockEntity {
     public BeechCofferBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.BEECH_COFFER, pos, state);
 
-        this.setHeldStacks(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
+        this.setInvStackList(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
     }
 
     @Override

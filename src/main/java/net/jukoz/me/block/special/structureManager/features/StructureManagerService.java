@@ -52,15 +52,15 @@ public class StructureManagerService {
                     .withNpcType(pool.getNpcIdentifier().get())
                     .build();
         } else {
-            entity = (LivingEntity) pool.getEntityType().create(world, SpawnReason.STRUCTURE);
+            entity = (LivingEntity) pool.getEntityType().create(world);
             if(entity instanceof MobEntity mob)
-                mob.initialize(world, world.getLocalDifficulty(pos), SpawnReason.STRUCTURE, null);
+                mob.initialize(world, world.getLocalDifficulty(pos), SpawnReason.STRUCTURE, null, null);
             entity.setPosition(chosenBlockPos.toCenterPos());
         }
 
-        if(entity instanceof LivingEntity livEntity){
+        if(entity != null){
             world.spawnEntity(entity);
-            return livEntity;
+            return entity;
         }
         return null;
     }

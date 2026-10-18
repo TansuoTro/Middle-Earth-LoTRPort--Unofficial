@@ -57,7 +57,8 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
         return SHAPE;
     }
 
-    protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        ItemStack stack = player.getStackInHand(hand);
         if (stack.isOf(Items.FLINT_AND_STEEL) || stack.isOf(Items.FIRE_CHARGE)) {
             if(canBeLit(state)) {
                 setLit(world, state, pos, true);
@@ -69,22 +70,17 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
                 extinguish(player, state, world, pos);
                 return ActionResult.SUCCESS;
             } else {
-                return super.onUseWithItem(stack, state, world, pos, player, hand, hit);
+                ActionResult actionResult = LayeredCakeBlock.tryEat(world, pos, ModBlocks.LAYERED_CAKE.getDefaultState(), player);
+                if (actionResult.isAccepted()) {
+                    dropStacks(state, world, pos);
+                }
+                return actionResult;
             }
         }
     }
 
     private static void setLit(WorldAccess world, BlockState state, BlockPos pos, boolean lit) {
         world.setBlockState(pos, state.with(LIT, lit), 11);
-    }
-
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        ActionResult actionResult = LayeredCakeBlock.tryEat(world, pos, ModBlocks.LAYERED_CAKE.getDefaultState(), player);
-        if (actionResult.isAccepted()) {
-            dropStacks(state, world, pos);
-        }
-
-        return actionResult;
     }
 
     private static boolean isHittingCandle(BlockHitResult hitResult) {
@@ -115,7 +111,7 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
         return true;
     }
 
-    protected boolean canPathfindThrough(BlockState state, NavigationType type) {
+    public boolean canPathfindThrough(BlockState state, net.minecraft.world.BlockView world, BlockPos pos, NavigationType type) {
         return false;
     }
 

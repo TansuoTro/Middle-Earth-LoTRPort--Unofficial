@@ -20,8 +20,8 @@ public class NpcTaskListProvider {
                 Pair.of(2, new RandomTask(
                         ImmutableList.of(
                                 Pair.of(FindEntityTask.create(EntitiesME.NPC, 8, MemoryModuleType.INTERACTION_TARGET, speed, 2), 2),
-                                Pair.of(GoToPointOfInterestTask.create(speed), 1),
-                                Pair.of(GoToLookTargetTask.create(speed, 2), 1),
+                                
+                                Pair.of(GoTowardsLookTargetTask.create(speed, 2), 1),
                                 Pair.of(new JumpInBedTask(speed), 1),
                                 Pair.of(new WaitTask(30, 60), 1)))),
                 Pair.of(3, FindInteractionTargetTask.create(EntityType.PLAYER, 4)),

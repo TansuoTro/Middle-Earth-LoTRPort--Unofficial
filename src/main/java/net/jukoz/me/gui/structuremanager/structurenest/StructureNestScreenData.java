@@ -57,9 +57,9 @@ public class StructureNestScreenData {
 
     static {
         PACKET_CODEC = PacketCodec.tuple(
-                BlockPos.PACKET_CODEC, StructureNestScreenData::getPos,
-                PacketCodecs.optional(Identifier.PACKET_CODEC), StructureNestScreenData::getStructureManagerIdOptional,
-                PacketCodecs.optional(Identifier.PACKET_CODEC), StructureNestScreenData::getStructureNestIdOptional,
+                PacketCodecs.BLOCK_POS, StructureNestScreenData::getPos,
+                PacketCodecs.optional(PacketCodecs.IDENTIFIER), StructureNestScreenData::getStructureManagerIdOptional,
+                PacketCodecs.optional(PacketCodecs.IDENTIFIER), StructureNestScreenData::getStructureNestIdOptional,
                 PacketCodecs.INTEGER, StructureNestScreenData::getSpawnRadius,
                 PacketCodecs.BOOLEAN, StructureNestScreenData::getIsEnabled,
                 StructureNestScreenData::new

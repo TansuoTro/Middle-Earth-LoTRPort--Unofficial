@@ -10,7 +10,7 @@ public class ArmorItem extends Item {
     private final ExtendedArmorMaterial material;
 
     public ArmorItem(ExtendedArmorMaterial material, Settings settings) {
-        super(settings.component(MEComponents.ARMOR_TIER_DATA, new ArmorTierDataComponent(material.tier())));
+        super(((net.jukoz.me.item.MESettings) settings).component(MEComponents.ARMOR_TIER_DATA, new ArmorTierDataComponent(material.tier())));
         this.material = material;
     }
 

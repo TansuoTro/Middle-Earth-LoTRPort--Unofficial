@@ -61,7 +61,7 @@ public class EarFeatureRenderer extends MEFeatureRenderer<NpcEntity, NpcEntityRe
     private void renderModel(Sprite sprite, MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay){
         if(sprite != null){
             VertexConsumer newLayerVertexConsumer = sprite.getTextureSpecificVertexConsumer(vertexConsumer);
-            earModel.render(matrices, newLayerVertexConsumer, light, overlay);
+            earModel.render(matrices, newLayerVertexConsumer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 }

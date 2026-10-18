@@ -13,7 +13,7 @@ public class WillowCofferBlockEntity extends ChestBlockEntity {
     public WillowCofferBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.WILLOW_COFFER, pos, state);
 
-        this.setHeldStacks(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
+        this.setInvStackList(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
     }
 
     @Override

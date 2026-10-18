@@ -3,7 +3,6 @@ import net.jukoz.me.item.MEComponents;
 import net.jukoz.me.entity.EntityAttributesME;
 
 
-import net.minecraft.component.type.UseCooldownComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -30,12 +29,12 @@ public class WoodlandRealmCrownItem extends CustomHelmetItem {
     private boolean initialized = false;
 
     public WoodlandRealmCrownItem(ExtendedArmorMaterial material, Settings settings) {
-        super(material, settings.armor(material.material(), ArmorItem.Type.HELMET).maxCount(1));
+        super(material, settings.maxCount(1));
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, ServerWorld world, Entity entity, @Nullable EquipmentSlot slot) {
-        super.inventoryTick(stack, world, entity, slot);
+    public void inventoryTick(ItemStack stack, net.minecraft.world.World world, Entity entity, int slot, boolean selected) {
+        super.inventoryTick(stack, world, entity, slot, selected);
         RegistryEntry<Biome> biomeEntry = world.getBiome(entity.getBlockPos());
 
         int cooldown = 5;
@@ -65,18 +64,16 @@ public class WoodlandRealmCrownItem extends CustomHelmetItem {
                 Vec3d pos = entity.getPos().add(0, 1.8f * scale, 0).add(0, -1.1f, 0);
 
                 if(season.equals(SeasonDataComponent.Season.DEAD) && !newSeason.equals(SeasonDataComponent.Season.WINTER)) {
-                    world.spawnParticles(ParticleTypes.COMPOSTER, pos.getX(), pos.getY(), pos.getZ(), 9, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 1);
+                    ((net.minecraft.server.world.ServerWorld) world).spawnParticles(ParticleTypes.COMPOSTER, pos.getX(), pos.getY(), pos.getZ(), 9, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 1);
                 } else if(season.equals(SeasonDataComponent.Season.SPRING)) {
-                    world.spawnParticles(ParticleTypes.CHERRY_LEAVES, pos.getX(), pos.getY(), pos.getZ(), 9, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 1);
+                    ((net.minecraft.server.world.ServerWorld) world).spawnParticles(ParticleTypes.CHERRY_LEAVES, pos.getX(), pos.getY(), pos.getZ(), 9, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 1);
                 } else if(season.equals(SeasonDataComponent.Season.SUMMER)) {
                     int leavesColor = world.getBiome(entity.getBlockPos()).value().getFoliageColor();
-                    TintedParticleEffect tintedParticleEffect = TintedParticleEffect.create(ParticleTypes.TINTED_LEAVES, leavesColor);
-                    world.spawnParticles((ParticleEffect)tintedParticleEffect, pos.getX(), pos.getY(), pos.getZ(), 9, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 1);
+                    ((net.minecraft.server.world.ServerWorld) world).spawnParticles(ParticleTypes.CHERRY_LEAVES, pos.getX(), pos.getY(), pos.getZ(), 9, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 1);
                 } else if(season.equals(SeasonDataComponent.Season.AUTUMN)) {
-                    TintedParticleEffect tintedParticleEffect = TintedParticleEffect.create(ParticleTypes.TINTED_LEAVES, 8930366);
-                    world.spawnParticles((ParticleEffect)tintedParticleEffect, pos.getX(), pos.getY(), pos.getZ(), 9, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 1);
+                    ((net.minecraft.server.world.ServerWorld) world).spawnParticles(ParticleTypes.CHERRY_LEAVES, pos.getX(), pos.getY(), pos.getZ(), 9, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 1);
                 } else if(season.equals(SeasonDataComponent.Season.WINTER)) {
-                    world.spawnParticles(ParticleTypes.SNOWFLAKE, pos.getX(), pos.getY(), pos.getZ(), 12, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 0.05f);
+                    ((net.minecraft.server.world.ServerWorld) world).spawnParticles(ParticleTypes.SNOWFLAKE, pos.getX(), pos.getY(), pos.getZ(), 12, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 0.05f);
                 }
 
                 String itemModelName = "woodland_realm_crown";

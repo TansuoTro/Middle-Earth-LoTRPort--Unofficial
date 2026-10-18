@@ -23,7 +23,7 @@ public class HangingCobwebBlock extends CustomHangingBlock {
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         Vec3d vec3d = new Vec3d(0.25, 0.05000000074505806, 0.25);
         if (entity instanceof LivingEntity livingEntity) {
-            if (livingEntity.hasStatusEffect(StatusEffects.WEAVING)) {
+            if (livingEntity.hasStatusEffect(StatusEffects.SLOWNESS)) {
                 vec3d = new Vec3d(0.5, 0.25, 0.5);
             }
         }
@@ -45,13 +45,4 @@ public class HangingCobwebBlock extends CustomHangingBlock {
         super.neighborUpdate(state, world, pos, sourceBlock, fromPos, notify);
     }
 
-    @Override
-    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean isClient) {
-        return false;
-    }
-
-    @Override
-    public boolean canGrow(World world, Random random, BlockPos pos, BlockState state) {
-        return false;
-    }
 }

@@ -33,7 +33,7 @@ public enum BroadhoofGoatBeads {
         return BEARD_MATERIALS.get(stack.getItem());
     }
 
-    private static final IntFunction<BroadhoofGoatBeads> INDEX_MAPPER = ValueLists.createIndexToValueFunction(
+    private static final IntFunction<BroadhoofGoatBeads> INDEX_MAPPER = ValueLists.createIdToValueFunction(
             BroadhoofGoatBeads::getIndex, values(), ValueLists.OutOfBoundsHandling.WRAP
     );
     private final int index;

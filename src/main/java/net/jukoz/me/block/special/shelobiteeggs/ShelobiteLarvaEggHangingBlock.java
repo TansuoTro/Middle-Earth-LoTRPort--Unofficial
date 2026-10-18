@@ -65,7 +65,7 @@ public class ShelobiteLarvaEggHangingBlock extends AbstractShelobiteLarvaEgg {
     }
 
     @Override
-    public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         if (!world.isClient) {
             if (state.get(BLOCK_HALF) == BlockHalf.BOTTOM){
                 world.setBlockState(pos.up(), Blocks.AIR.getDefaultState(), 35);
@@ -75,7 +75,7 @@ public class ShelobiteLarvaEggHangingBlock extends AbstractShelobiteLarvaEgg {
                 world.syncWorldEvent(player, 2001, pos.down(), Block.getRawIdFromState(state));
             }
         }
-        return super.onBreak(world, pos, state, player);
+        super.onBreak(world, pos, state, player);
     }
 
     @Override

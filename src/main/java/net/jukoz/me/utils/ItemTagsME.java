@@ -8,6 +8,9 @@ import net.jukoz.me.MiddleEarth;
 
 public class ItemTagsME {
     //TODO actually gen the tags
+    public static TagKey<Item> REPAIRS_LEATHER_ARMOR = TagKey.of(RegistryKeys.ITEM, new Identifier("minecraft", "leather"));
+    public static TagKey<Item> REPAIRS_IRON_ARMOR = TagKey.of(RegistryKeys.ITEM, new Identifier("minecraft", "iron_ingot"));
+
     public static TagKey<Item> REPAIRS_STRAW_ARMOR = TagKey.of(RegistryKeys.ITEM, MiddleEarth.of("repairs_straw_armor"));
     public static TagKey<Item> REPAIRS_WOOL_ARMOR = TagKey.of(RegistryKeys.ITEM, MiddleEarth.of("repairs_wool_armor"));
     public static TagKey<Item> REPAIRS_BONE_ARMOR = TagKey.of(RegistryKeys.ITEM, MiddleEarth.of("repairs_bone_armor"));

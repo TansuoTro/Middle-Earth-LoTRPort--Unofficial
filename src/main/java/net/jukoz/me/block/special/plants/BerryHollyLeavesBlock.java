@@ -20,11 +20,12 @@ public class BerryHollyLeavesBlock extends TintedParticleLeavesBlock {
     }
 
     @Override
-    protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        ItemStack stack = player.getStackInHand(hand);
         if (stack.isOf(Items.BONE_MEAL)) {
             world.setBlockState(pos, ModNatureBlocks.BERRY_HOLLY_LEAVES.getDefaultState());
             return ActionResult.SUCCESS;
         }
-        return super.onUseWithItem(stack, state, world, pos, player, hand, hit);
+        return super.onUse(state, world, pos, player, hand, hit);
     }
 }

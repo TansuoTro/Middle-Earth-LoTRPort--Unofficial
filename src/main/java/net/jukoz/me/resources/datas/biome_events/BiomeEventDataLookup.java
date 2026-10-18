@@ -27,7 +27,7 @@ public class BiomeEventDataLookup {
     public static HashMap<EntityType<?>, Set<UUID>> entities = new HashMap<>();
 
     public static BiomeEventData.ContextualizedBiomeData findNpcDataForBiome(World world, RegistryEntry<Biome> biome, NpcEntity entity) {
-        Identifier biomeEventId = new Identifier(biome.getIdAsString());
+        Identifier biomeEventId = biome.getKey().map(k -> k.getValue()).orElse(new Identifier("minecraft", "plains"));
         BiomeEventData eventData = world.getRegistryManager().get(DynamicRegistriesME.BIOME_EVENT).get(biomeEventId);
         if(eventData != null){
             var foundNpcData = eventData.findNpcData(world, entity);
@@ -64,7 +64,7 @@ public class BiomeEventDataLookup {
     }
 
     public static boolean canEntitySpawn(ServerWorld world, RegistryEntry<Biome> biome, BlockPos pos, EntityType<?> type, Random random) {
-        RegistryEntry.Reference<BiomeEventData> dataRef = world.getRegistryManager().get(DynamicRegistriesME.BIOME_EVENT).getEntry(MiddleEarth.fetchId(biome.getIdAsString())).orElse(null);
+        RegistryEntry.Reference<BiomeEventData> dataRef = world.getRegistryManager().get(DynamicRegistriesME.BIOME_EVENT).getEntry(net.minecraft.registry.RegistryKey.of(DynamicRegistriesME.BIOME_EVENT, biome.getKey().map(k -> k.getValue()).orElse(new Identifier("minecraft", "plains")))).orElse(null);
         if(dataRef == null)
             return true;
         BiomeEventData data = dataRef.value();

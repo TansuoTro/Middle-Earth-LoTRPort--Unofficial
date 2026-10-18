@@ -77,7 +77,7 @@ public class CaveTrollRenderer extends MEMobEntityRenderer<CaveTrollEntity, Cave
         state.variant = troll.getVariant();
         state.isTame = troll.isTame();
         state.conrollingPassenger = troll.getControllingPassenger();
-        state.saddle = troll.getEquippedStack(EquipmentSlot.SADDLE);
+        state.saddle = troll.getEquippedStack(EquipmentSlot.CHEST);
         state.tameness = troll.getTameness();
     }
 }

@@ -23,11 +23,11 @@ public class RangedCombatArchetypeData extends CombatArchetypeData {
 
     public RangedCombatArchetypeData(NbtCompound data) {
         super(data);
-        this.precisionModifier = data.getFloat("precision_modifier", 1.0f);
-        this.ammoCountMax = data.getInt("ammo_count_max", 5);
-        this.replenishmentRateInTicks = data.getInt("replenishment_rate", 10);
-        this.replenishmentDelayAfterHurt = data.getInt("replenishment_delay_after_hurt", 100);
-        this.replenishmentDelayAfterShooting = data.getInt("replenishment_delay_after_shooting", 40);
+        this.precisionModifier = data.getFloat("precision_modifier");
+        this.ammoCountMax = data.getInt("ammo_count_max");
+        this.replenishmentRateInTicks = data.getInt("replenishment_rate");
+        this.replenishmentDelayAfterHurt = data.getInt("replenishment_delay_after_hurt");
+        this.replenishmentDelayAfterShooting = data.getInt("replenishment_delay_after_shooting");
     }
 
     @Override

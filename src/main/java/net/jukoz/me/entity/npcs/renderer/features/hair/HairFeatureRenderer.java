@@ -27,7 +27,7 @@ import net.jukoz.me.registries.AtlasesME;
 
 @Environment(EnvType.CLIENT)
 public class HairFeatureRenderer extends MEFeatureRenderer<NpcEntity, NpcEntityRenderState, NpcEntityModel> {
-    private final EntityModel<NpcEntityRenderState> hairModel;
+    private final HairModel hairModel;
     private final SpriteAtlasTexture characterTexturesAtlas;
 
     public HairFeatureRenderer(FeatureRendererContext<NpcEntity, NpcEntityModel> context, LoadedEntityModelsCompat loader) {
@@ -38,7 +38,7 @@ public class HairFeatureRenderer extends MEFeatureRenderer<NpcEntity, NpcEntityR
 
     @Override
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, NpcEntityRenderState state, float limbAngle, float limbDistance) {
-        EntityModel<NpcEntityRenderState> entityModel = hairModel;
+        HairModel entityModel = hairModel;
 
         boolean isSimplified = ModClientConfigs.ENABLE_SIMPLIFIED_CHARACTER_RENDERING && state.simplifiedSkinId != null;
         Identifier hairAddonTextureId = (isSimplified) ? state.simplifiedHairAddonId : MiddleEarth.ofPrefix(state.hairAddonId, AtlasesME.HAIR_PREFIX);
@@ -51,10 +51,10 @@ public class HairFeatureRenderer extends MEFeatureRenderer<NpcEntity, NpcEntityR
          */
 
         if(hairAddonTextureId == null && beardAddonTextureId == null){
-            entityModel.getRootPart().visible = false;
+            entityModel.getPart().visible = false;
             return;
-        } else if (!entityModel.getRootPart().visible){
-            entityModel.getRootPart().visible = true;
+        } else if (!entityModel.getPart().visible){
+            entityModel.getPart().visible = true;
         }
         entityModel.setAngles(state);
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(ModTexturedRenderLayers.getCharacterTexturesRenderLayer());
@@ -74,7 +74,7 @@ public class HairFeatureRenderer extends MEFeatureRenderer<NpcEntity, NpcEntityR
     private void renderModel(Sprite sprite, MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay){
         if(sprite != null){
             VertexConsumer newLayerVertexConsumer = sprite.getTextureSpecificVertexConsumer(vertexConsumer);
-            hairModel.render(matrices, newLayerVertexConsumer, light, overlay);
+            hairModel.render(matrices, newLayerVertexConsumer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 

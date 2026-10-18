@@ -15,7 +15,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.particle.SimpleParticleType;
+import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -52,7 +52,7 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
     }
 
     @Override
-    protected void onStateReplaced(BlockState state, ServerWorld world, BlockPos pos, boolean moved) {
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if(blockEntity instanceof ForgeBlockEntity forgeBlockEntity) {
             if (state.get(PART) == ForgePart.BOTTOM){
@@ -71,7 +71,6 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
                 ItemScatterer.spawn(world, pos, forgeBlockEntity);
             }
         }
-        ItemScatterer.onStateReplaced(state, world, pos);
     }
 
     @Nullable
@@ -94,7 +93,7 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
     }
 
     @Override
-    public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         if (!world.isClient) {
             ForgePart forgePart = (ForgePart)state.get(PART);
             ForgePart forgePartOpposite = (ForgePart)state.get(PART).getOpposite(state.get(PART));
@@ -110,7 +109,7 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
                 world.syncWorldEvent(player, 2001, blockPos, Block.getRawIdFromState(blockState));
             }
         }
-        return super.onBreak(world, pos, state, player);
+        super.onBreak(world, pos, state, player);
     }
 
     @Override
@@ -131,7 +130,7 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.isClient) {
             return ActionResult.SUCCESS;
         } else {
@@ -161,7 +160,7 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
     protected static <T extends BlockEntity> BlockEntityTicker<T> validateTicker(World world, BlockEntityType<T> givenType, BlockEntityType<ForgeBlockEntity> expectedType) {
         BlockEntityTicker ticker;
         if (world instanceof ServerWorld serverWorld) {
-            ticker = validateTicker(givenType, expectedType, (worldx, pos, state, blockEntity) -> {
+            ticker = checkType(givenType, expectedType, (worldx, pos, state, blockEntity) -> {
                 ForgeBlockEntity.tick(serverWorld, pos, state, blockEntity);
             });
         } else {
@@ -181,7 +180,7 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
             double e = pos.getY();
             double f = (double)pos.getZ() + 0.5;
             if (random.nextDouble() < 0.1) {
-                world.playSoundClient(d, e, f, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0f, 1.0f, false);
+                world.playSound(d, e, f, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0f, 1.0f, false);
             }
             Direction direction = state.get(FACING);
             Direction.Axis axis = direction.getAxis();
@@ -193,8 +192,8 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
             world.addParticle(ParticleTypes.SMOKE, d + i, e + j, f + k, 0.0, 0.0, 0.0);
             world.addParticle(ParticleTypes.FLAME, d + i, e + j, f + k, 0.0, 0.0, 0.0);
         } else {
-            SimpleParticleType simpleParticleType = ParticleTypes.CAMPFIRE_COSY_SMOKE;
-            world.addImportantParticleClient(simpleParticleType, true, (double)pos.getX() + 0.5 + random.nextDouble() / 3.0 * (double)(random.nextBoolean() ? 1 : -1), (double)pos.getY() + random.nextDouble() + random.nextDouble(), (double)pos.getZ() + 0.5 + random.nextDouble() / 3.0 * (double)(random.nextBoolean() ? 1 : -1), 0.0, 0.07, 0.0);
+            DefaultParticleType simpleParticleType = ParticleTypes.CAMPFIRE_COSY_SMOKE;
+            world.addImportantParticle(simpleParticleType, true, (double)pos.getX() + 0.5 + random.nextDouble() / 3.0 * (double)(random.nextBoolean() ? 1 : -1), (double)pos.getY() + random.nextDouble() + random.nextDouble(), (double)pos.getZ() + 0.5 + random.nextDouble() / 3.0 * (double)(random.nextBoolean() ? 1 : -1), 0.0, 0.07, 0.0);
         }
     }
 }

@@ -56,7 +56,7 @@ public class ReinforcedChestBlockEntity extends ChestBlockEntity {
     public ReinforcedChestBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.REINFORCED_CHEST, pos, state);
 
-        this.setHeldStacks(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
+        this.setInvStackList(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
     }
 
     @Override

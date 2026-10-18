@@ -2,7 +2,6 @@ package net.jukoz.me.block.special.plate;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.model.loading.v1.ExtraModelKey;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.OverlayTexture;
@@ -10,7 +9,6 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.render.item.model.ItemModel;
 import net.minecraft.client.util.math.MatrixStack;
 
 import net.minecraft.item.Item;
@@ -20,6 +18,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
+import net.jukoz.me.item.MEComponents;
 import net.jukoz.me.block.special.forge.ForgeBlock;
 
 @Environment(value= EnvType.CLIENT)
@@ -32,7 +31,7 @@ public class PlateEntityRenderer implements BlockEntityRenderer<PlateBlockEntity
     }
 
     @Override
-    public void render(PlateBlockEntity entity, float tickProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, Vec3d cameraPos) {
+    public void render(PlateBlockEntity entity, float tickProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         ItemStack stack = entity.getStack();
 
         if(stack.isEmpty()) return;

@@ -7,6 +7,7 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.beds.CustomBedBlockEntity;
 import net.jukoz.me.block.special.bellows.BellowsBlockEntity;
 import net.jukoz.me.block.special.coffers.*;
+import net.jukoz.me.block.special.crockpot.CrockpotBlockEntity;
 import net.jukoz.me.block.special.fireBlocks.*;
 import net.jukoz.me.block.special.forge.ForgeBlockEntity;
 import net.jukoz.me.block.special.plate.PlateBlockEntity;
@@ -59,9 +60,9 @@ public class ModBlockEntities {
             ModDecorativeBlocks.REINFORCED_CHEST);
     public static BlockEntityType<BellowsBlockEntity> BELLOWS = register("bellows", BellowsBlockEntity::new,
             ModDecorativeBlocks.BELLOWS);
-    /*public static BlockEntityType<CrockpotBlockEntity> CROCKPOT = register("crockpot", CrockpotBlockEntity::new,
-            ModDecorativeBlocks.CERAMIC_CROCKPOT,
-            ModDecorativeBlocks.CROCKPOT);*/
+    public static BlockEntityType<CrockpotBlockEntity> CROCKPOT = register("crockpot", CrockpotBlockEntity::new);
+    public static BlockEntityType<net.jukoz.me.block.special.alloyfurnace.AlloyFurnaceEntity> ALLOY_FURNACE =
+            register("alloy_furnace", net.jukoz.me.block.special.alloyfurnace.AlloyFurnaceEntity::new);
     public static BlockEntityType<PlateBlockEntity> PLATE = register("plate", PlateBlockEntity::new,
             ModDecorativeBlocks.SILVER_PLATE, ModDecorativeBlocks.CERAMIC_PLATE, ModDecorativeBlocks.ROTTEN_PLATE);
     public static BlockEntityType<WoodPileBlockEntity> WOOD_PILE = register("wood_pile", WoodPileBlockEntity::new,
@@ -97,6 +98,6 @@ private static <T extends BlockEntity> BlockEntityType<T> register(String name,
         Identifier id = new Identifier(MiddleEarth.MOD_ID, name);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.BLOCK_ENTITY_TYPE, name));
 
-        return Registry.register(Registries.BLOCK_ENTITY_TYPE, id, FabricBlockEntityTypeBuilder.<T>create(entityFactory, blocks).build());
+        return Registry.register(Registries.BLOCK_ENTITY_TYPE, id, BlockEntityType.Builder.create(entityFactory, blocks).build(null));
     }
 }

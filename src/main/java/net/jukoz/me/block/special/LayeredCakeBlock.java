@@ -1,6 +1,7 @@
 package net.jukoz.me.block.special;
 
 import net.minecraft.block.*;
+import net.jukoz.me.compat.MEBlockShapes;
 import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -42,13 +43,14 @@ public class LayeredCakeBlock extends Block {
         return SHAPES_BY_BITES[state.get(BITES)];
     }
 
-    protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        ItemStack stack = player.getStackInHand(hand);
         Item item = stack.getItem();
         if (stack.isIn(ItemTags.CANDLES) && (Integer)state.get(BITES) == 0) {
             Block var10 = Block.getBlockFromItem(item);
             if (var10 instanceof CandleBlock) {
                 CandleBlock candleBlock = (CandleBlock)var10;
-                stack.decrementUnlessCreative(1, player);
+                if (!player.isCreative()) stack.decrement(1);
                 world.playSound(null, pos, SoundEvents.BLOCK_CAKE_ADD_CANDLE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 world.setBlockState(pos, CandleLayeredCakeBlock.getCandleCakeFromCandle(candleBlock));
                 world.emitGameEvent(player, GameEvent.BLOCK_CHANGE, pos);
@@ -57,10 +59,6 @@ public class LayeredCakeBlock extends Block {
             }
         }
 
-        return ActionResult.PASS;
-    }
-
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.isClient) {
             if (tryEat(world, pos, state, player).isAccepted()) {
                 return ActionResult.SUCCESS;
@@ -117,16 +115,16 @@ public class LayeredCakeBlock extends Block {
         return true;
     }
 
-    protected boolean canPathfindThrough(BlockState state, NavigationType type) {
+    public boolean canPathfindThrough(BlockState state, net.minecraft.world.BlockView world, BlockPos pos, NavigationType type) {
         return false;
     }
 
     static {
         BITES = IntProperty.of("bites", 0, MAX_BITES);;
         DEFAULT_COMPARATOR_OUTPUT = getComparatorOutput(0);
-        SHAPES_BY_BITES = Block.createShapeArray(MAX_BITES, (bites) -> {
-            return VoxelShapes.union(Block.createCuboidShape(0, 0.0, 0, 16.0, 8.0, 16.0 - (Math.clamp(bites - 4, 0, 4) * 4) + Math.clamp(bites - 4, 0, 1) * 2),
-                    Block.createCuboidShape(2, 8, 2, 14, 16, 14 - (Math.clamp(bites, 0, 4) * 3)));
+        SHAPES_BY_BITES = MEBlockShapes.createShapeArray(MAX_BITES, (bites) -> {
+            return VoxelShapes.union(Block.createCuboidShape(0, 0.0, 0, 16.0, 8.0, 16.0 - (Math.max(0, Math.min(4, bites - 4)) * 4) + Math.max(0, Math.min(1, bites - 4)) * 2),
+                    Block.createCuboidShape(2, 8, 2, 14, 16, 14 - (Math.max(0, Math.min(4, bites)) * 3)));
         });
     }
 }

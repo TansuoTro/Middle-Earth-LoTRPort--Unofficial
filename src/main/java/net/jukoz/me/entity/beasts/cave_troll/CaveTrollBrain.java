@@ -43,12 +43,6 @@ public class CaveTrollBrain {
     private static void addCoreActivities(Brain<CaveTrollEntity> brain) {
         brain.forget(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
         brain.setTaskList(Activity.CORE, 0, ImmutableList.of(
-                new MoveToTargetTask(),
-                new UpdateLookControlTask(45, 90),
-                new TickCooldownTask(MemoryModulesME.DIG_FOR_FOOD_COOLDOWN),
-                new TickCooldownTask(MemoryModulesME.ROAR_COOLDOWN),
-                new TickCooldownTask(MemoryModulesME.SMASH_COOLDOWN),
-                new TickCooldownTask(MemoryModulesME.ACTION_TIMEOUT)
         ));
     }
 
@@ -106,11 +100,11 @@ public class CaveTrollBrain {
         );
     }
 
-    private static Optional<? extends LivingEntity> getAttackTarget(ServerWorld world, CaveTrollEntity troll) {
+    private static Optional<? extends LivingEntity> getAttackTarget(CaveTrollEntity troll) {
         return (troll.isSleeping() || troll.isSitting()) ? troll.getBrain().getOptionalRegisteredMemory(MemoryModuleType.HURT_BY_ENTITY) : troll.getBrain().getOptionalRegisteredMemory(MemoryModuleType.NEAREST_ATTACKABLE);
     }
 
-    private static Optional<? extends LivingEntity> getHurtBy (ServerWorld world, CaveTrollEntity troll) {
+    private static Optional<? extends LivingEntity> getHurtBy(CaveTrollEntity troll) {
         return troll.getBrain().getOptionalRegisteredMemory(MemoryModuleType.HURT_BY_ENTITY);
     }
 

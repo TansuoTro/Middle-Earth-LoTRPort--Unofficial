@@ -92,7 +92,7 @@ public class StatueBlock extends Block implements Waterloggable {
         return super.mirror(state, mirror);
     }
 
-    public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         if (!world.isClient && (player.isCreative() || !player.canHarvest(state))) {
             DoubleBlockHalf doubleBlockHalf = (DoubleBlockHalf)state.get(HALF);
             if (doubleBlockHalf == DoubleBlockHalf.UPPER) {
@@ -114,7 +114,7 @@ public class StatueBlock extends Block implements Waterloggable {
             }
         }
 
-        return super.onBreak(world, pos, state, player);
+        super.onBreak(world, pos, state, player);
     }
 
     public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {

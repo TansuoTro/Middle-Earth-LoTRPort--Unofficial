@@ -19,7 +19,7 @@ public class EnshroudedData {
 
     public static int readEffect(IEntityDataSaver player) {
         NbtCompound nbt = player.getPersistentData();
-        return nbt.getInt(KEY).isPresent() ? nbt.getInt(KEY).get() : 0;
+        return nbt.contains(KEY) ? nbt.getInt(KEY) : 0;
     }
     public static void resetEffect(IEntityDataSaver player){
         NbtCompound nbt = player.getPersistentData();

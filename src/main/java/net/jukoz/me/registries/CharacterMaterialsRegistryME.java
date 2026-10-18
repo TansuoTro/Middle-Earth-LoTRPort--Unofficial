@@ -249,9 +249,9 @@ public class CharacterMaterialsRegistryME {
 
     public static RegistryKey<Registry<CharacterTextureMaterial>> getKey(CharacterMaterialTypes type){
         return switch (type) {
-            case CharacterMaterialTypes.SKIN -> DynamicRegistriesME.SKIN_MATERIAL;
-            case CharacterMaterialTypes.EYE -> DynamicRegistriesME.EYE_MATERIAL;
-            case CharacterMaterialTypes.HAIR -> DynamicRegistriesME.HAIR_MATERIAL;
+            case SKIN -> DynamicRegistriesME.SKIN_MATERIAL;
+            case EYE -> DynamicRegistriesME.EYE_MATERIAL;
+            case HAIR -> DynamicRegistriesME.HAIR_MATERIAL;
             default -> null;
         };
     }

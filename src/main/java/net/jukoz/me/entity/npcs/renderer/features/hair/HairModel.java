@@ -1,11 +1,13 @@
 package net.jukoz.me.entity.npcs.renderer.features.hair;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.client.render.entity.model.SinglePartEntityModel;
+import net.jukoz.me.entity.npcs.NpcEntity;
 import net.minecraft.util.math.MathHelper;
 import net.jukoz.me.entity.npcs.renderer.NpcEntityRenderState;
 
-public class HairModel extends EntityModel<NpcEntityRenderState> {
+public class HairModel extends SinglePartEntityModel<NpcEntity> {
+    private final ModelPart root;
     // https://i.pinimg.com/736x/9c/56/05/9c560508ceba0bc87b9d5beda7391adc.jpg
     public static final String BEARD = "beard";
     public final ModelPart hair;
@@ -14,7 +16,7 @@ public class HairModel extends EntityModel<NpcEntityRenderState> {
     public final ModelPart largeBeard;
 
     public HairModel(ModelPart modelPart) {
-        super(modelPart);
+        this.root = modelPart;
 
         this.hair = modelPart.getChild("hair");
         this.hairBase = hair.getChild("hairBase");
@@ -33,9 +35,7 @@ public class HairModel extends EntityModel<NpcEntityRenderState> {
         return TexturedModelData.of(modelData, 64, 64);
     }
 
-    @Override
     public void setAngles(NpcEntityRenderState state) {
-        super.setAngles(state);
 
         // Taken from BipedEntityModel.class
         float f = state.leaningPitch;
@@ -46,7 +46,16 @@ public class HairModel extends EntityModel<NpcEntityRenderState> {
         if (bl) {
             this.hair.pitch = -0.7853982F;
         } else if (f > 0.0F) {
-            this.hair.pitch = MathHelper.lerpAngleRadians(f, this.hair.pitch, -0.7853982F);
+            this.hair.pitch = net.jukoz.me.compat.MEAngles.lerpAngleRadians(f, this.hair.pitch, -0.7853982F);
         }
+    }
+
+    @Override
+    public ModelPart getPart() {
+        return this.root;
+    }
+
+    @Override
+    public void setAngles(NpcEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
     }
 }

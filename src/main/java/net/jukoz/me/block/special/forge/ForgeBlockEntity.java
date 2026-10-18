@@ -4,8 +4,6 @@ import net.jukoz.me.compat.NbtCompat;
 import net.jukoz.me.item.MEComponents;
 
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.component.type.ConsumableComponents;
-import net.minecraft.item.FoodComponent;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.item.trim.ArmorTrim;
 import net.minecraft.item.trim.ArmorTrimMaterial;
@@ -123,7 +121,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
             }
         };
 
-        this.matchGetter = RecipeManager.createCachedMatchGetter(RecipesME.FORGE);
+        this.matchGetter = (input, world) -> world.getRecipeManager().getFirstMatch(RecipesME.FORGE, input, world);
     }
 
     public ItemStack getRenderStack(ForgeBlockEntity entity) {
@@ -222,7 +220,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
         this.maxFuelTime = view.getInt(ID + ".max-fuel-time", 0);
         this.mode = view.getInt(ID + ".mode", 0);
         this.storage = view.getInt(ID + ".storage", 0);
-        this.currentMetal = MetalTypes.fromValue(NbtCompat.getString(view, ID + ".current-metal", "bronze").toLowerCase());
+        this.currentMetal = MetalTypes.fromValue(NbtCompat.getString(view.nbt(), ID + ".current-metal", "bronze").toLowerCase());
     }
 
     public void update() {
@@ -231,8 +229,8 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
-        return createNbt(registryLookup);
+    public NbtCompound toInitialChunkDataNbt() {
+        return createNbt();
     }
 
     public void setInventory(DefaultedList<ItemStack> inventory) {
@@ -242,7 +240,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
     }
 
     protected boolean isFuel(ItemStack stack) {
-        return this.world.getFuelRegistry().isFuel(stack);
+        return net.fabricmc.fabric.api.registry.FuelRegistry.INSTANCE.get(stack.getItem()) != null && net.fabricmc.fabric.api.registry.FuelRegistry.INSTANCE.get(stack.getItem()) > 0;
     }
 
     @Override
@@ -354,8 +352,8 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
 
             if (entity.getStack(OUTPUT_SLOT).getMaxCount() <= entity.getStack(OUTPUT_SLOT).getCount()) return;
 
-            RegistryWrapper.Impl<ArmorTrimMaterial>  armorTrimMaterialRegistry = entity.getWorld().getRegistryManager().get(RegistryKeys.TRIM_MATERIAL);
-            RegistryWrapper.Impl<ArmorTrimPattern>  armorTrimPatternRegistry = entity.getWorld().getRegistryManager().get(RegistryKeys.TRIM_PATTERN);
+            RegistryWrapper.Impl<ArmorTrimMaterial>  armorTrimMaterialRegistry = entity.getWorld().getRegistryManager().getWrapperOrThrow(RegistryKeys.TRIM_MATERIAL);
+            RegistryWrapper.Impl<ArmorTrimPattern>  armorTrimPatternRegistry = entity.getWorld().getRegistryManager().getWrapperOrThrow(RegistryKeys.TRIM_PATTERN);
 
             switch (amount){
                 case 16 -> {
@@ -414,7 +412,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
             }
 
             if (entity.getStack(OUTPUT_SLOT).isOf(itemstack.getItem()) && !itemstack.isEmpty()){
-                if (Objects.equals(entity.getStack(OUTPUT_SLOT).get(DataComponentTypes.TRIM), MEArmorTrim.get(itemstack))) {
+                if (Objects.equals(MEArmorTrim.get(entity.getStack(OUTPUT_SLOT), entity.getWorld().getRegistryManager()), MEArmorTrim.get(itemstack, entity.getWorld().getRegistryManager()))) {
                     if (amount <= entity.storage && amount > 0) {
                         itemstack.setCount(entity.getStack(OUTPUT_SLOT).getCount() + 1);
                         entity.storage = entity.storage - amount;
@@ -454,7 +452,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
     }
 
     private static void playFailedExtractSound(World world, BlockPos pos){
-        world.playSound(null, pos, SoundEvents.BLOCK_DECORATED_POT_INSERT_FAIL, SoundCategory.BLOCKS, 1.0f, 1.0f);
+        world.playSound(null, pos, SoundEvents.BLOCK_DECORATED_POT_PLACE, SoundCategory.BLOCKS, 1.0f, 1.0f);
     }
 
     public static void tick(ServerWorld world, BlockPos blockPos, BlockState blockState, ForgeBlockEntity entity) {
@@ -497,7 +495,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
                     entity.update();
                     if(entity.progress >= MAX_PROGRESS) {
                         for (int i = 1; i <= 4; i++) {
-                            entity.getStack(i).set(MEComponents.TEMPERATURE_DATA, new TemperatureDataComponent(100));
+                            MEComponents.set(entity.getStack(i), MEComponents.TEMPERATURE_DATA, new TemperatureDataComponent(100));
                         }
                         entity.progress = 0;
                         entity.update();
@@ -605,7 +603,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
                 } else if(!HotMetalsModel.nuggets.contains(item) && !HotMetalsModel.ingots.contains(item) && !HotMetalsModel.items.contains(item)) {
                     return false; // One of the items cannot be heated
                 } else {
-                    TemperatureDataComponent temperatureComponent = entity.getStack(i).get(MEComponents.TEMPERATURE_DATA);
+                    TemperatureDataComponent temperatureComponent = MEComponents.get(entity.getStack(i), MEComponents.TEMPERATURE_DATA);
                     if(temperatureComponent == null || temperatureComponent.temperature() < 100) {
                         hasColdItem = true;
                         inputs.add(entity.getStack(i));
@@ -635,7 +633,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
     }
 
     private void getFuel(ForgeBlockEntity entity, ItemStack fuelStack) {
-        fuelTime = Math.round((float) this.world.getFuelRegistry().getFuelTicks(fuelStack) / 16);
+        fuelTime = Math.round((float) net.fabricmc.fabric.api.registry.FuelRegistry.INSTANCE.get(fuelStack.getItem()) / 16);
         maxFuelTime = fuelTime;
         if(fuelStack.isOf(Items.LAVA_BUCKET)) {
             entity.removeStack(FUEL_SLOT);
@@ -657,7 +655,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
     }
 
     @Override
-    public Object getScreenOpeningData(ServerPlayerEntity player) {
-        return pos;
+    public void writeScreenOpeningData(net.minecraft.server.network.ServerPlayerEntity player, net.minecraft.network.PacketByteBuf buf) {
+        buf.writeBlockPos(this.pos);
     }
 }

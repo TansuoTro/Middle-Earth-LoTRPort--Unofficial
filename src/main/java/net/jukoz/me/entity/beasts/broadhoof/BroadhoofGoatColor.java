@@ -22,10 +22,10 @@ public enum BroadhoofGoatColor implements StringIdentifiable {
     BLACK(6, "black");
 
     public static final Codec<BroadhoofGoatColor> CODEC = StringIdentifiable.createCodec(BroadhoofGoatColor::values);
-    private static final IntFunction<BroadhoofGoatColor> INDEX_MAPPER = ValueLists.createIndexToValueFunction(
+    private static final IntFunction<BroadhoofGoatColor> INDEX_MAPPER = ValueLists.createIdToValueFunction(
             BroadhoofGoatColor::getIndex, values(), ValueLists.OutOfBoundsHandling.WRAP
     );
-    public static final PacketCodec<ByteBuf, BroadhoofGoatColor> PACKET_CODEC = PacketCodecs.indexed(INDEX_MAPPER, BroadhoofGoatColor::getIndex);
+    public static final PacketCodec<net.minecraft.network.PacketByteBuf, BroadhoofGoatColor> PACKET_CODEC = PacketCodecs.indexed(INDEX_MAPPER, BroadhoofGoatColor::getIndex);
     private final int index;
     private final String id;
 

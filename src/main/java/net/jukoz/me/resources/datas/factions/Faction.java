@@ -56,12 +56,12 @@ public class Faction {
             NbtCompound.CODEC.optionalFieldOf("npcs").forGetter(Faction::getNpcValues),
             NbtCompound.CODEC.optionalFieldOf("banner").forGetter(Faction::getBannerNbt),
             NbtCompound.CODEC.optionalFieldOf("spawns").forGetter(Faction::getSpawnDataNbt),
-            Codec.list(Codec.STRING, 0, 5).optionalFieldOf("command_join").forGetter(Faction::getJoinCommands),
-            Codec.list(Codec.STRING, 0, 5).optionalFieldOf("command_leave").forGetter(Faction::getLeaveCommands),
+            Codec.list(Codec.STRING).optionalFieldOf("command_join").forGetter(Faction::getJoinCommands),
+            Codec.list(Codec.STRING).optionalFieldOf("command_leave").forGetter(Faction::getLeaveCommands),
             Codec.list(InitialDiplomacy.CODEC).fieldOf("initial_diplomacy").forGetter(Faction::getInitialDiplomaciesNbtList)
     ).apply(instance, Faction::new));
 
-    public static final PacketCodec<ByteBuf, Faction> PACKET_CODEC = PacketCodecs.codec(CODEC);
+    public static final PacketCodec<net.minecraft.network.PacketByteBuf, Faction> PACKET_CODEC = PacketCodecs.codec(CODEC);
     public static final Codec<RegistryEntry<Faction>> ENTRY_CODEC = RegistryElementCodec.of(DynamicRegistriesME.FACTION, CODEC);
     public static final PacketCodec<PacketByteBuf, RegistryEntry<Faction>> ENTRY_PACKET_CODEC = PacketCodecs.registryEntry(DynamicRegistriesME.FACTION, PACKET_CODEC);
 
@@ -248,7 +248,7 @@ public class Faction {
         if(factionType != FactionType.SUBFACTION || parentFactionId == null)
             return null;
         try{
-            Faction test = lookup.getOrThrow(DynamicRegistriesME.FACTION).getOrThrow(RegistryKey.of(DynamicRegistriesME.FACTION, this.parentFactionId)).value();
+            Faction test = lookup.getWrapperOrThrow(DynamicRegistriesME.FACTION).getOrThrow(RegistryKey.of(DynamicRegistriesME.FACTION, this.parentFactionId)).value();
             return test;
         } catch (Exception e){
             return null;
@@ -460,7 +460,7 @@ public class Faction {
                 races = getRaces(world);
             for(Race race : races){
                 raceListStringBuilder.append(race.getFullName().getString());
-                if(race != races.getLast())
+                if(race != races.get(races.size()-1))
                     raceListStringBuilder.append(", ");
             }
             raceList = Text.literal(raceListStringBuilder.toString());

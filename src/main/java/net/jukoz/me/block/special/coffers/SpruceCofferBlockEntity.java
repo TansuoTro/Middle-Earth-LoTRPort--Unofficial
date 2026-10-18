@@ -13,7 +13,7 @@ public class SpruceCofferBlockEntity extends ChestBlockEntity {
     public SpruceCofferBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.SPRUCE_COFFER, pos, state);
 
-        this.setHeldStacks(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
+        this.setInvStackList(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
     }
 
     @Override

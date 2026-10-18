@@ -13,7 +13,7 @@ import net.jukoz.me.gui.ModScreenHandlers;
 import net.jukoz.me.item.*;
 import net.jukoz.me.item.utils.ModItemGroups;
 import net.jukoz.me.particles.ModParticleTypes;
-import net.jukoz.me.registries.ModRegistries;
+import net.jukoz.me.registries.RegistriesME;
 import net.jukoz.me.statusEffects.ModStatusEffects;
 import net.jukoz.me.recipe.ModRecipes;
 import net.jukoz.me.sound.ModSounds;
@@ -75,11 +75,15 @@ public class MiddleEarth implements ModInitializer {
 		ModNatureBlocks.registerModBlocks();
 		RoofBlockSets.registerModBlockSets();
 
-		ModRegistries.registerFuels();
-		ModRegistries.registerFlammableBlocks();
-		ModRegistries.registerAgingCopperBlocks();
-		ModRegistries.registerComposterBlocks();
-		ModRegistries.registerCauldronBehaviour();
+		RegistriesME.registerFuels();
+		RegistriesME.registerToolTipAppenders();
+		RegistriesME.registerFlammableBlocks();
+		RegistriesME.registerTillableBlocks();
+		RegistriesME.registerAgingCopperBlocks();
+		RegistriesME.registerComposterBlocks();
+		RegistriesME.registerCauldronBehaviour();
+		RegistriesME.registerLandPathNodeTypesBlocks();
+		RegistriesME.registerRegistryAliases();
 
 		ModBlockEntities.registerBlockEntities();
 

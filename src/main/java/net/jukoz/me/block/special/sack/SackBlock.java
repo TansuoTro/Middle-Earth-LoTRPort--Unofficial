@@ -57,13 +57,13 @@ public class SackBlock extends BlockWithEntity {
             NamedScreenHandlerFactory namedScreenHandlerFactory = this.createScreenHandlerFactory(state, world, pos);
             if (namedScreenHandlerFactory != null) {
                 player.openHandledScreen(namedScreenHandlerFactory);
-                PiglinBrain.onGuardedBlockInteracted(serverWorld, player, true);
+                PiglinBrain.onGuardedBlockInteracted(player, true);
             }
         }
         return ActionResult.SUCCESS;
     }
 
-    public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof SackBlockEntity sackBlockEntity) {
             if (!world.isClient && player.isCreative() && !sackBlockEntity.isEmpty()) {
@@ -78,7 +78,7 @@ public class SackBlock extends BlockWithEntity {
             }
         }
 
-        return super.onBreak(world, pos, state, player);
+        super.onBreak(world, pos, state, player);
     }
 
     @Override

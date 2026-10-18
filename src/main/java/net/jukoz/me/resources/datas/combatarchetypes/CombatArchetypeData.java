@@ -24,10 +24,10 @@ public abstract class CombatArchetypeData {
     public CombatArchetypeData(NbtCompound data) {
         setArchetype(getCombatArchetype());
 
-        this.fleeMovementSpeedModifier = data.getFloat("flee_movement_speed_modifier", 1f);
-        this.seekTargetMovementSpeedModifier = data.getFloat("seek_target_movement_speed_modifier", 1f);
-        this.optimalBlockRangeMinimum = data.getInt("optimal_block_range_minimum", 1);
-        this.optimalBlockRangeMaximum = data.getInt("optimal_block_range_maximum", 3);
+        this.fleeMovementSpeedModifier = data.getFloat("flee_movement_speed_modifier");
+        this.seekTargetMovementSpeedModifier = data.getFloat("seek_target_movement_speed_modifier");
+        this.optimalBlockRangeMinimum = data.getInt("optimal_block_range_minimum");
+        this.optimalBlockRangeMaximum = data.getInt("optimal_block_range_maximum");
     }
 
     public NbtCompound getNbt(){
