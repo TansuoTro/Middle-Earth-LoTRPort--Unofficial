@@ -170,6 +170,49 @@ def unwrap_call(text: str, prefix: str):
     return "".join(out), n
 
 
+COMP_CALL = re.compile(
+    r"(?P<recv>[A-Za-z_][\w.]*)\.(?P<op>getOrDefault|contains|remove|get|set)"
+    r"\(\s*DataComponentTypesME\.(?P<key>[A-Z0-9_]+)")
+
+
+def _split_rest(text: str, pos: int):
+    """Scan to the ')' that closes the call; text[pos] is just past the first argument."""
+    depth = 1
+    i = pos
+    while i < len(text) and depth:
+        if text[i] == "(":
+            depth += 1
+        elif text[i] == ")":
+            depth -= 1
+        i += 1
+    return text[pos:i - 1], i
+
+
+def rewrite_components(text: str):
+    """stack.set(DataComponentTypesME.X, v) -> MEComponents.set(stack, MEComponents.X, v)."""
+    out, i, n = [], 0, 0
+    while True:
+        m = COMP_CALL.search(text, i)
+        if not m:
+            out.append(text[i:])
+            break
+        rest, end = _split_rest(text, m.end())
+        recv, op, key = m.group("recv"), m.group("op"), m.group("key")
+        rest = rest.strip()
+        if rest.startswith(","):
+            rest = rest[1:].strip()
+        out.append(text[i:m.start()])
+        if op == "set":
+            out.append(f"MEComponents.set({recv}, MEComponents.{key}, {rest})")
+        elif op == "getOrDefault":
+            out.append(f"MEComponents.getOrDefault({recv}, MEComponents.{key}, {rest})")
+        else:
+            out.append(f"MEComponents.{op}({recv}, MEComponents.{key})")
+        i = end
+        n += 1
+    return "".join(out), n
+
+
 REWRITES = [
     ("package", "net.sevenstars.middleearth", "net.jukoz.me"),
     ("identifier", "Identifier.of(", "new Identifier("),
@@ -198,6 +241,9 @@ def rewrite(text: str):
         text, n = unwrap_call(text, prefix)
         if n:
             stats[name] = n
+    text, n = rewrite_components(text)
+    if n:
+        stats["components"] = n
     return text, dict(stats)
 
 

@@ -67,6 +67,38 @@
 
 新增的系統（1.20.1 完全沒有）：陣營 18、NPC 階級 100、種族 8、Artisan Table、Attachment、Inscription、15 個附魔、Structure Manager／巢穴、7 個自訂屬性、食物裝盤、三型盾牌。
 
+## MEComponents 墊片
+
+1.20.1 沒有 data component registry（1.20.5 才引入）。為了不讓 700+ 個呼叫點全部重寫，
+在 `net.jukoz.me.item` 建了一層 NBT 墊片：
+
+```
+MEComponent<T>   id + Codec + 預設值
+MEComponents     get / set / contains / remove / getOrDefault / defaultFor
+```
+
+- 存放位置：`ItemStack.tag.MEComponents.<id>`
+- 型別安全：`MEComponents.get(stack, MEComponents.FACTION_DATA)` 回傳 `FactionDataComponent`
+- 已移植 5 個 value class：Faction / Race / Temperature / Cooldown / SneakAttack（tooltip 先留空，等陣營 registry 到位）
+- `ComponentCodecs.alternative(...)` 補上 1.20.1 沒有的 `Codec.withAlternative`
+
+### 為什麼要有 `defaultFor`
+
+掃描後發現 donor 的 component 用法其實分成兩種：
+
+| 用法 | 次數 | 說明 |
+|---|---:|---|
+| `new Item.Settings().component(KEY, V)` | **961** | 物品定義期，集中在 2 個檔 |
+| `stack.set/get(KEY)` | ~90 | 執行期讀寫 |
+
+1.20.1 的 `Item.Settings` 沒有 `component(...)`，物品註冊後也不可變。
+所以 `MEComponents.defaultFor(item, key, value)` 把「物品預設 component」存進一張
+identity map，`get()` 在 stack 沒有覆寫時回落到物品預設值——不需要 mixin，
+也不需要改 `Item.Settings` 的鏈式 API。
+
+下一步：寫一支腳本把 961 個 `.component(KEY, V)` 從 Settings 鏈裡抽出來，
+產生對應的 `MEComponents.defaultFor(...)` 呼叫。
+
 ## 移植策略
 
 ### 重要修正：資料層不能先搬

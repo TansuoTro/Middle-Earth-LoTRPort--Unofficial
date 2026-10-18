@@ -1,0 +1,151 @@
+package net.jukoz.me.item;
+
+import com.mojang.serialization.Codec;
+import net.jukoz.me.MiddleEarth;
+import net.jukoz.me.item.dataComponents.CooldownDataComponent;
+import net.jukoz.me.item.dataComponents.FactionDataComponent;
+import net.jukoz.me.item.dataComponents.RaceDataComponent;
+import net.jukoz.me.item.dataComponents.SneakAttackDataComponent;
+import net.jukoz.me.item.dataComponents.TemperatureDataComponent;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.IdentityHashMap;
+import java.util.Map;
+
+/**
+ * NBT-backed replacement for 1.21's data component API.
+ *
+ * <p>Porting notes: the 1.21.8 donor stores per-stack state with
+ * {@code stack.set(DataComponentTypesME.X, value)} / {@code stack.get(...)}.
+ * 1.20.1 has no component registry, so the same values are kept in the stack's
+ * NBT under {@code MEComponents.<id>} and accessed through this class. Call sites
+ * keep their shape: {@code MEComponents.get(stack, MEComponents.FACTION_DATA)}.
+ */
+public final class MEComponents {
+    /** Root compound inside {@code ItemStack.tag}. */
+    public static final String ROOT = "MEComponents";
+
+    public static final MEComponent<CooldownDataComponent> COOLDOWN =
+            register("cooldown", CooldownDataComponent.CODEC);
+    public static final MEComponent<TemperatureDataComponent> TEMPERATURE_DATA =
+            register("temperature", TemperatureDataComponent.CODEC);
+    public static final MEComponent<SneakAttackDataComponent> SNEAK_ATTACK_DATA =
+            register("sneak_attack", SneakAttackDataComponent.CODEC);
+    public static final MEComponent<FactionDataComponent> FACTION_DATA =
+            register("faction", FactionDataComponent.CODEC);
+    public static final MEComponent<RaceDataComponent> RACE_DATA =
+            register("race", RaceDataComponent.CODEC);
+
+    // TODO: not ported yet - they need value classes that depend on donor enums:
+    //  ARMOR_VARIANT_DATA, ARTISAN_DATA, SEASON_DATA, ARMOR_TIER_DATA,
+    //  WEAPON_TYPE_DATA, BLOCK_AUTHOR_DATA, BACK_ATTACHMENT_DATA,
+    //  HELMET_ATTACHMENT_DATA, MOUNT_ARMOR_DATA
+
+    /**
+     * Components declared on the item itself (1.21's {@code Item.Settings#component}).
+     * Keyed by identity because {@link Item} has no equals() worth using.
+     */
+    private static final Map<Item, Map<MEComponent<?>, Object>> ITEM_DEFAULTS = new IdentityHashMap<>();
+
+    private MEComponents() {
+    }
+
+    /**
+     * Declares a component that every stack of {@code item} carries unless it overrides it.
+     *
+     * <p>Replaces the donor's {@code new Item.Settings().component(key, value)} calls, which
+     * have no 1.20.1 equivalent: 1.20.1 items are immutable once registered and carry no
+     * component map, so the template is kept here and consulted by {@link #get}.
+     */
+    public static <T> void defaultFor(Item item, MEComponent<T> key, T value) {
+        ITEM_DEFAULTS.computeIfAbsent(item, k -> new IdentityHashMap<>()).put(key, value);
+    }
+
+    private static <T> MEComponent<T> register(String path, Codec<T> codec) {
+        return new MEComponent<>(new Identifier(MiddleEarth.MOD_ID, path), codec);
+    }
+
+    // ------------------------------------------------------------------
+    // generic accessors
+    // ------------------------------------------------------------------
+
+    @Nullable
+    @SuppressWarnings("unchecked")
+    public static <T> T get(ItemStack stack, MEComponent<T> key) {
+        NbtCompound tag = stack.getNbt();
+        if (tag != null && tag.contains(ROOT, NbtElement.COMPOUND_TYPE)) {
+            NbtCompound root = tag.getCompound(ROOT);
+            String path = key.id().getPath();
+            if (root.contains(path)) {
+                T value = decode(key, root.get(path));
+                if (value != null) {
+                    return value;
+                }
+            }
+        }
+        Map<MEComponent<?>, Object> defaults = ITEM_DEFAULTS.get(stack.getItem());
+        return defaults == null ? null : (T) defaults.get(key);
+    }
+
+    public static <T> T getOrDefault(ItemStack stack, MEComponent<T> key) {
+        T value = get(stack, key);
+        return value != null ? value : key.defaultValue();
+    }
+
+    /** Mirrors 1.21's {@code ItemStack#getOrDefault(ComponentType, T)}. */
+    public static <T> T getOrDefault(ItemStack stack, MEComponent<T> key, T fallback) {
+        T value = get(stack, key);
+        return value != null ? value : fallback;
+    }
+
+    public static <T> boolean contains(ItemStack stack, MEComponent<T> key) {
+        return get(stack, key) != null;
+    }
+
+    public static <T> void set(ItemStack stack, MEComponent<T> key, @Nullable T value) {
+        if (value == null) {
+            remove(stack, key);
+            return;
+        }
+        NbtElement encoded = encode(key, value);
+        if (encoded == null) {
+            return;
+        }
+        stack.getOrCreateSubNbt(ROOT).put(key.id().getPath(), encoded);
+    }
+
+    public static <T> void remove(ItemStack stack, MEComponent<T> key) {
+        NbtCompound tag = stack.getNbt();
+        if (tag == null || !tag.contains(ROOT, NbtElement.COMPOUND_TYPE)) {
+            return;
+        }
+        NbtCompound root = tag.getCompound(ROOT);
+        root.remove(key.id().getPath());
+        if (root.isEmpty()) {
+            tag.remove(ROOT);
+        }
+        if (tag.isEmpty()) {
+            stack.setNbt(null);
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // codec plumbing (package-visible so it can be unit tested without a Bootstrap)
+    // ------------------------------------------------------------------
+
+    @Nullable
+    static <T> NbtElement encode(MEComponent<T> key, T value) {
+        return key.codec().encodeStart(NbtOps.INSTANCE, value).result().orElse(null);
+    }
+
+    @Nullable
+    static <T> T decode(MEComponent<T> key, NbtElement element) {
+        return key.codec().parse(NbtOps.INSTANCE, element).result().orElse(null);
+    }
+}
