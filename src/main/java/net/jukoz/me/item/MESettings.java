@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * {@link Item.Settings} that also carries data components, so the 1.21.8 donor's
- * {@code new Item.Settings().maxCount(1).component(KEY, VALUE)} chains port verbatim.
+ * {@code new MESettings().maxCount(1).component(KEY, VALUE)} chains port verbatim.
  *
  * <p>1.20.1's {@code Item.Settings} has no component support, and a mixin-added method
  * would be invisible to javac, so the whole fluent surface is re-declared here with

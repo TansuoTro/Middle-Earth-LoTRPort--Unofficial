@@ -1,6 +1,6 @@
 package net.jukoz.me.resources.datas.attributes;
-
 import net.jukoz.me.compat.NbtCompat;
+
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;

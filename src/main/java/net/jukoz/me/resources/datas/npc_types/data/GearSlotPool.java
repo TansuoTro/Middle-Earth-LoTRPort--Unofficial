@@ -1,6 +1,6 @@
 package net.jukoz.me.resources.datas.npc_types.data;
-
 import net.jukoz.me.compat.NbtCompat;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;

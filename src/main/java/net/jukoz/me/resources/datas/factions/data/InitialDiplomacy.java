@@ -1,6 +1,6 @@
 package net.jukoz.me.resources.datas.factions.data;
-
 import net.jukoz.me.compat.NbtCompat;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.NbtCompound;

@@ -1,6 +1,6 @@
 package net.jukoz.me.resources.datas.texture_presets;
-
 import net.jukoz.me.compat.NbtCompat;
+
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.Identifier;

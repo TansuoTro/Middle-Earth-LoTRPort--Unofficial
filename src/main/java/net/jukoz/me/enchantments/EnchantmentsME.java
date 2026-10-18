@@ -1,6 +1,6 @@
 package net.jukoz.me.enchantments;
-
 import net.jukoz.me.entity.EntityAttributesME;
+
 import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.enchantment.Enchantment;

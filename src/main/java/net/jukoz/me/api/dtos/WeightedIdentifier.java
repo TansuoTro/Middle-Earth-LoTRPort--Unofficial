@@ -1,6 +1,6 @@
 package net.jukoz.me.api.dtos;
-
 import net.jukoz.me.compat.NbtCompat;
+
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.registry.RegistryKey;

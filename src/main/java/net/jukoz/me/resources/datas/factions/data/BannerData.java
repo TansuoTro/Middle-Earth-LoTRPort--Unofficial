@@ -1,6 +1,6 @@
 package net.jukoz.me.resources.datas.factions.data;
-
 import net.jukoz.me.compat.NbtCompat;
+
 import com.google.gson.JsonParser;
 import net.minecraft.block.entity.BannerPattern;
 import net.minecraft.block.entity.BannerPatterns;

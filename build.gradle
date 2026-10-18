@@ -81,7 +81,7 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
     // During the 1.21 -> 1.20.1 port the tree is deliberately red; javac's default
     // 100-error cap hides almost all of the worklist, so raise it.
-    options.compilerArgs += ['-Xmaxerrs', '10000']
+    options.compilerArgs += ['-Xmaxerrs', '60000']
 }
 
 java {

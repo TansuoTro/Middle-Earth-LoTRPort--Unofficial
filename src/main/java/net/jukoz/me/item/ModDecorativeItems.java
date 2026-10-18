@@ -17,15 +17,15 @@ import net.minecraft.util.math.Direction;
 
 public class ModDecorativeItems {
     public static final Item DWARVEN_LANTERN = registerItem("dwarven_lantern",
-            new ModVerticallyAttachableBlockItem(ModDecorativeBlocks.DWARVEN_LANTERN, ModDecorativeBlocks.WALL_DWARVEN_LANTERN, new Item.Settings(), new Direction[]{Direction.DOWN, Direction.UP}));
+            new ModVerticallyAttachableBlockItem(ModDecorativeBlocks.DWARVEN_LANTERN, ModDecorativeBlocks.WALL_DWARVEN_LANTERN, new MESettings(), new Direction[]{Direction.DOWN, Direction.UP}));
     public static final Item SILVER_LANTERN = registerItem("silver_lantern",
-            new ModVerticallyAttachableBlockItem(ModDecorativeBlocks.SILVER_LANTERN, ModDecorativeBlocks.WALL_SILVER_LANTERN, new Item.Settings(), new Direction[]{Direction.DOWN, Direction.UP}));
+            new ModVerticallyAttachableBlockItem(ModDecorativeBlocks.SILVER_LANTERN, ModDecorativeBlocks.WALL_SILVER_LANTERN, new MESettings(), new Direction[]{Direction.DOWN, Direction.UP}));
     public static final Item ALLOY_FURNACE = registerItem("alloy_furnace",
-            new BlockItem(ModDecorativeBlocks.ALLOY_FURNACE, new Item.Settings()));
+            new BlockItem(ModDecorativeBlocks.ALLOY_FURNACE, new MESettings()));
     public static final Item ARTISAN_TABLE = registerItem("artisan_table",
-            new BlockItem(ModDecorativeBlocks.ARTISAN_TABLE, new Item.Settings()));
+            new BlockItem(ModDecorativeBlocks.ARTISAN_TABLE, new MESettings()));
     public static final Item WOOD_PILE = registerItem("wood_pile",
-            new BlockItem(ModDecorativeBlocks.WOOD_PILE, new Item.Settings()));
+            new BlockItem(ModDecorativeBlocks.WOOD_PILE, new MESettings()));
     public static final Item TROLL_STATUE = registerItem("troll_statue",
             new CustomSpawnEggItem(ModEntities.PETRIFIED_TROLL, new FabricItemSettings().maxCount(1)));
 

@@ -22,7 +22,7 @@ import java.util.Map;
  * NBT-backed replacement for 1.21's data component API.
  *
  * <p>Porting notes: the 1.21.8 donor stores per-stack state with
- * {@code stack.set(DataComponentTypesME.X, value)} / {@code stack.get(...)}.
+ * {@code MEComponents.set(stack, MEComponents.X, value)} / {@code stack.get(...)}.
  * 1.20.1 has no component registry, so the same values are kept in the stack's
  * NBT under {@code MEComponents.<id>} and accessed through this class. Call sites
  * keep their shape: {@code MEComponents.get(stack, MEComponents.FACTION_DATA)}.
@@ -59,7 +59,7 @@ public final class MEComponents {
     /**
      * Declares a component that every stack of {@code item} carries unless it overrides it.
      *
-     * <p>Replaces the donor's {@code new Item.Settings().component(key, value)} calls, which
+     * <p>Replaces the donor's {@code new MESettings().component(key, value)} calls, which
      * have no 1.20.1 equivalent: 1.20.1 items are immutable once registered and carry no
      * component map, so the template is kept here and consulted by {@link #get}.
      */

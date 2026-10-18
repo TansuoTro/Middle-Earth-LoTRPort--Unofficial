@@ -186,3 +186,82 @@ registry 對齊後才搬：
 ## 授權
 
 上游是 ARR（All Rights Reserved）。本移植已取得作者授權；授權證明請放在 `AUTHORIZATION.md`，並且不要使用 `net.jukoz` / `net.sevenstars` 當發布用的 group。
+
+---
+
+# 全樹匯入之後：現況與工作清單
+
+## 目前狀態（branch port/1.21-content）
+
+- donor middle-earth 1258 檔 + sevenstars-api 19 檔已全部匯入。
+- src/main/java 共 1473 檔：453 檔是原本 1.20.1 基準、1055 檔是 donor 改寫後搬入，
+  其餘是手寫的相容層。
+- **222 檔屬於「合併案」**：donor 有這個檔案、1.20.1 基準也有，兩邊內容不同。
+  這些沒有自動搬（promote 會跳過），1.21 新加的成員要手動併進舊檔。
+- 編譯現況：**18866 個錯誤 / 1432 個檔案**。這是真實數字（-Xmaxerrs 60000）。
+
+## 工具（tools/port.py）
+
+| 子命令 | 用途 |
+|---|---|
+| inventory | 掃 donor，產出 markdown 報告 |
+| import | 改寫 donor 檔並寫到目的樹；**不覆蓋已存在的檔** |
+| promote | 把 port-staging 裡改寫好的檔搬進 src/main/java；已存在的跳過（合併案） |
+| retouch | 對已搬入的樹重跑一次改寫規則（規則改版後必跑） |
+| errors | 編譯、解析 javac 輸出、按 symbol 分群，並把「只是還沒搬」的錯誤分開 |
+
+port-staging/ 是 gitignored 的暫存樹，可隨時用 import 重建。
+
+改寫規則的坑（都已修）：
+
+- 絕對路徑含冒號，用 [^:] 開頭的樣式永遠對不到 → 改成 .+? 再要求 .java。
+- Windows 上 ./gradlew.bat 不能執行（cmd 不認 ./）→ 用 gradlew.bat。
+- 這台機器 JVM locale 是 zh_CN，javac 講「错误」不是 error → 兩者都收，並在
+  gradle.properties 強制 -Duser.language=en。
+- Identifier.of( 用字串取代會吃到 CategoryIdentifier.of( → 規則改成帶邊界錨定的 regex。
+- unwrap_call 的括號起點與深度都算錯，會把外層宣告吃掉 → 已重寫。
+
+## 已完成的相容層
+
+| 位置 | 內容 |
+|---|---|
+| MiddleEarth | LOGGER、of/ofPrefix/ofPath/ofVanillaPath/append/createAggregate/compareId/fetchId（約 500 個呼叫點） |
+| compat/NbtCompat | 1.21.5 的 Optional 化 NBT 存取（asCompound / asNbtList / getCompound / getString 後面的 .get()） |
+| EntityAttributesME | 補 GENERIC_ 字首改名；1.20.5 才有的屬性（scale、entity_interaction_range…）註冊成 mod 屬性 |
+| item/MEComponents + MESettings | 1.21 data component 的 NBT 墊片，讓 Item.Settings.component(...) 連鎖原樣可用 |
+| pattern switch | 三處改成 instanceof 串（本 mod 目標 Java 17） |
+
+**註冊不等於生效**：scale、entity_interaction_range 在 1.20.1 沒有任何引擎程式會讀，
+數值存在但沒有行為。要真的生效得另外寫 mixin。
+
+## 錯誤分佈（按 package）
+
+| 錯誤數 | package | 說明 |
+|---|---|---|
+| 10928 | datageneration | **已延後**：46 個新 provider 先搬回 port-staging，讓 runtime 先綠 |
+| 3264 | block | 多為 ModelTransform.origin、SHORT_GRASS 之類的 1.21.2 改名 |
+| 2540 | client | 1.21.2 新 render pipeline（BipedEntityRenderState、LoadedEntityModels、TextureMap） |
+| 874 | entity | |
+| 550 | network | PacketCodec / RegistryByteBuf / PacketCodecs，1.20.5 的 codec 化網路層 |
+| 542 | item | DataComponentTypes、DyedColorComponent、AttributeModifierSlot |
+| 300 | recipe | ComponentsIngredient（1.20.5+ 的原版類別） |
+
+## 下一個工作順序
+
+1. **MEComponents 補齊 9 個缺的 component**（BACK_ATTACHMENT_DATA 234、
+   HELMET_ATTACHMENT_DATA 98…）——墊片已經在了，缺的是資料類別。
+2. **ModelTransform.origin → of**（2580 個錯誤、302 檔，全在 renderer/model）。
+   1.21.2 把 of(x,y,z,pitch,yaw,roll) 拆成 builder；1.20.1 沒有 scale 欄位。
+3. **DataComponentTypes（650）**：原版 component，1.20.1 沒有，要逐一對應到原生 API
+   （DYED_COLOR 對 DyeableItem、TRIM 對 ArmorTrim、LORE 對 NBT…）。
+4. **PacketCodec / PacketCodecs / RegistryByteBuf（約 700）**：整個網路層要重寫成 PacketByteBuf。
+5. **client 的 render state 體系**：這是最大的一塊，1.21.2 把 entity renderer 從
+   「直接拿 entity」改成「render state + model」，沒有捷徑。
+
+## 尚未決定的兩件事
+
+- **命名空間**：donor 用 middle-earth，1.20.1 基準用 me。目前 MOD_ID 仍是 me，
+  所以基準的資源照舊可用；但 donor 的資源全部是 middle-earth:。
+  匯入資源時要二選一：改 donor 的資源，或把基準的 assets/me、data/me 改名。
+- **of-beasts-and-wild-things**：donor 的第三個子專案（62 檔、自己的 mod id），
+  middle-earth 只從 4 個地方引用它。目前未匯入。

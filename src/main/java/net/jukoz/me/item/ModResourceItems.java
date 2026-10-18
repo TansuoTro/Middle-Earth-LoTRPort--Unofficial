@@ -174,21 +174,21 @@ public class ModResourceItems {
     public static final Item LETTUCE_SEEDS = registerItem("lettuce_seeds", new AliasedBlockItem(ModNatureBlocks.LETTUCE_CROP, new FabricItemSettings()));
 
     public static final Item GONDOR_BANNER_PATTERN = registerItem("gondor_banner_pattern",
-            new BannerPatternItem(ModBannerPatternTags.GONDOR_PATTERN_ITEM, new Item.Settings().maxCount(1).rarity(Rarity.RARE)));
+            new BannerPatternItem(ModBannerPatternTags.GONDOR_PATTERN_ITEM, new MESettings().maxCount(1).rarity(Rarity.RARE)));
     public static final Item ROHAN_BANNER_PATTERN = registerItem("rohan_banner_pattern",
-            new BannerPatternItem(ModBannerPatternTags.ROHAN_PATTERN_ITEM, new Item.Settings().maxCount(1).rarity(Rarity.RARE)));
+            new BannerPatternItem(ModBannerPatternTags.ROHAN_PATTERN_ITEM, new MESettings().maxCount(1).rarity(Rarity.RARE)));
     public static final Item LONGBEARD_BANNER_PATTERN = registerItem("longbeard_banner_pattern",
-            new BannerPatternItem(ModBannerPatternTags.LONGBEARD_PATTERN_ITEM, new Item.Settings().maxCount(1).rarity(Rarity.RARE)));
+            new BannerPatternItem(ModBannerPatternTags.LONGBEARD_PATTERN_ITEM, new MESettings().maxCount(1).rarity(Rarity.RARE)));
     public static final Item LOTHLORIEN_BANNER_PATTERN = registerItem("lothlorien_banner_pattern",
-            new BannerPatternItem(ModBannerPatternTags.LOTHLORIEN_PATTERN_ITEM, new Item.Settings().maxCount(1).rarity(Rarity.RARE)));
+            new BannerPatternItem(ModBannerPatternTags.LOTHLORIEN_PATTERN_ITEM, new MESettings().maxCount(1).rarity(Rarity.RARE)));
     public static final Item MORDOR_GREAT_EYE_BANNER_PATTERN = registerItem("mordor_great_eye_banner_pattern",
-            new BannerPatternItem(ModBannerPatternTags.MORDOR_GREAT_EYE_PATTERN_ITEM, new Item.Settings().maxCount(1).rarity(Rarity.RARE)));
+            new BannerPatternItem(ModBannerPatternTags.MORDOR_GREAT_EYE_PATTERN_ITEM, new MESettings().maxCount(1).rarity(Rarity.RARE)));
     public static final Item MORDOR_EYE_BANNER_PATTERN = registerItem("mordor_eye_banner_pattern",
-            new BannerPatternItem(ModBannerPatternTags.MORDOR_EYE_PATTERN_ITEM, new Item.Settings().maxCount(1).rarity(Rarity.RARE)));
+            new BannerPatternItem(ModBannerPatternTags.MORDOR_EYE_PATTERN_ITEM, new MESettings().maxCount(1).rarity(Rarity.RARE)));
     public static final Item MISTY_ORCS_EYE_BANNER_PATTERN = registerItem("misty_orcs_eye_banner_pattern",
-            new BannerPatternItem(ModBannerPatternTags.MISTY_ORCS_EYE_PATTERN_ITEM, new Item.Settings().maxCount(1).rarity(Rarity.RARE)));
+            new BannerPatternItem(ModBannerPatternTags.MISTY_ORCS_EYE_PATTERN_ITEM, new MESettings().maxCount(1).rarity(Rarity.RARE)));
     public static final Item MISTY_ORCS_PEAKS_BANNER_PATTERN = registerItem("misty_orcs_peaks_banner_pattern",
-            new BannerPatternItem(ModBannerPatternTags.MISTY_ORCS_PEAKS_PATTERN_ITEM, new Item.Settings().maxCount(1).rarity(Rarity.RARE)));
+            new BannerPatternItem(ModBannerPatternTags.MISTY_ORCS_PEAKS_PATTERN_ITEM, new MESettings().maxCount(1).rarity(Rarity.RARE)));
 
     public static Block registerBlock(String name, Block block, boolean absent) {
         if(!absent) registerBlockItem(name, block);

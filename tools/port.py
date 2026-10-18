@@ -149,22 +149,32 @@ def drop_call(text: str, needle: str):
 
 def unwrap_call(text: str, prefix: str):
     """Replace prefix(...) with its inner argument list: f(A, X) -> X for prefix 'f(A,'."""
+    open_offset = prefix.index("(")
     out, i, n = [], 0, 0
     while True:
         j = text.find(prefix, i)
         if j < 0:
             out.append(text[i:])
             break
-        open_idx = text.rfind("(", 0, j)
-        k, depth = j, 1
-        while k < len(text) and depth:
+        if j and (text[j - 1].isalnum() or text[j - 1] in "_$"):
+            # part of a longer identifier, e.g. BlockRegistryKey.of(...)
+            out.append(text[i:j + len(prefix)])
+            i = j + len(prefix)
+            continue
+        # Walk to the ')' that closes the prefix's own '('. Counting must start at the
+        # opening paren itself, and must start at zero: the scan begins on it.
+        k, depth = j + open_offset, 0
+        while k < len(text):
             if text[k] == "(":
                 depth += 1
             elif text[k] == ")":
                 depth -= 1
+                if depth == 0:
+                    k += 1
+                    break
             k += 1
-        out.append(text[i:open_idx])
-        out.append(text[j:k - 1])
+        out.append(text[i:j])
+        out.append(text[j + len(prefix):k - 1])
         i = k
         n += 1
     return "".join(out), n
@@ -226,12 +236,15 @@ def ensure_import(text: str, fqcn: str) -> str:
     return f"import {fqcn};\n" + text
 
 
+# Each entry is (name, pattern, replacement). The patterns are regexes anchored on a
+# non-identifier boundary: a plain string replace of "Identifier.of(" also matched
+# CategoryIdentifier.of( and produced "Categorynew Identifier(".
 REWRITES = [
-    ("package-api", "net.sevenstars.api", "net.jukoz.me.api"),
-    ("package", "net.sevenstars.middleearth", "net.jukoz.me"),
-    ("identifier", "Identifier.of(", "new Identifier("),
-    ("registrykey-type-block", "RegistryKey<Block>", "Identifier"),
-    ("registrykey-type-item", "RegistryKey<Item>", "Identifier"),
+    ("package-api", r"net[.]sevenstars[.]api", "net.jukoz.me.api"),
+    ("package", r"net[.]sevenstars[.]middleearth", "net.jukoz.me"),
+    ("identifier", r"(?<![A-Za-z0-9_$])Identifier[.]of[(]", "new Identifier("),
+    ("registrykey-type-block", r"(?<![A-Za-z0-9_$])RegistryKey<Block>", "Identifier"),
+    ("registrykey-type-item", r"(?<![A-Za-z0-9_$])RegistryKey<Item>", "Identifier"),
 ]
 
 # 1.21 wraps block/item ids in a RegistryKey; 1.20.1 registers by Identifier.
@@ -241,12 +254,12 @@ UNWRAPS = [
 ]
 
 
+
 def rewrite(text: str):
     stats = collections.Counter()
-    for name, old, new in REWRITES:
-        n = text.count(old)
+    for name, pattern, new in REWRITES:
+        text, n = re.subn(pattern, new, text)
         if n:
-            text = text.replace(old, new)
             stats[name] += n
     text, n = drop_call(text, "registryKey(")
     if n:
@@ -258,6 +271,14 @@ def rewrite(text: str):
     text, n = rewrite_components(text)
     if n:
         stats["components"] = n
+        # rewrite_components emits MEComponents.* call sites, which need the import
+        # just as much as the key renames below do.
+        text = ensure_import(text, "net.jukoz.me.item.MEComponents")
+
+    text, extra = rewrite_attributes(text)
+    stats.update(extra)
+    text, extra = rewrite_nbt(text)
+    stats.update(extra)
 
     # 1.21 items declare their components on Item.Settings; MESettings keeps that chain
     # intact and forwards the values to MEComponents when the Item is constructed.
@@ -275,6 +296,160 @@ def rewrite(text: str):
         text = ensure_import(text, "net.jukoz.me.item.MEComponents")
 
     return text, dict(stats)
+
+
+# --------------------------------------------------------------------------
+# 1.20.5 / 1.21 API drift
+# --------------------------------------------------------------------------
+
+# 1.21 renamed the vanilla attributes when it dropped the GENERIC_ prefix.
+ATTRIBUTE_RENAMES = [
+    ("MAX_HEALTH", "GENERIC_MAX_HEALTH"),
+    ("FOLLOW_RANGE", "GENERIC_FOLLOW_RANGE"),
+    ("KNOCKBACK_RESISTANCE", "GENERIC_KNOCKBACK_RESISTANCE"),
+    ("MOVEMENT_SPEED", "GENERIC_MOVEMENT_SPEED"),
+    ("FLYING_SPEED", "GENERIC_FLYING_SPEED"),
+    ("ATTACK_DAMAGE", "GENERIC_ATTACK_DAMAGE"),
+    ("ATTACK_KNOCKBACK", "GENERIC_ATTACK_KNOCKBACK"),
+    ("ATTACK_SPEED", "GENERIC_ATTACK_SPEED"),
+    ("ARMOR_TOUGHNESS", "GENERIC_ARMOR_TOUGHNESS"),
+    ("ARMOR", "GENERIC_ARMOR"),
+    ("JUMP_STRENGTH", "GENERIC_JUMP_STRENGTH"),
+    ("STEP_HEIGHT", "GENERIC_STEP_HEIGHT"),
+    ("MAX_ABSORPTION", "GENERIC_MAX_ABSORPTION"),
+    ("GRAVITY", "GENERIC_GRAVITY"),
+    ("LUCK", "GENERIC_LUCK"),
+]
+
+# These only exist from 1.20.5 on; EntityAttributesME registers them locally.
+ATTRIBUTE_LOCAL = [
+    "SCALE", "ENTITY_INTERACTION_RANGE", "BLOCK_INTERACTION_RANGE",
+    "SAFE_FALL_DISTANCE", "SNEAKING_SPEED", "MINING_EFFICIENCY",
+    "FALL_DAMAGE_MULTIPLIER", "WATER_MOVEMENT_EFFICIENCY",
+    "MOVEMENT_EFFICIENCY", "BURNING_TIME",
+]
+
+
+def rewrite_attributes(text):
+    stats = collections.Counter()
+    for new, old in sorted(ATTRIBUTE_RENAMES, key=lambda pair: -len(pair[0])):
+        needle = "EntityAttributes." + new
+        n = text.count(needle)
+        if n:
+            text = text.replace(needle, "EntityAttributes." + old)
+            stats["attribute-rename"] += n
+    for name in ATTRIBUTE_LOCAL:
+        needle = "EntityAttributes." + name
+        n = text.count(needle)
+        if n:
+            text = text.replace(needle, "EntityAttributesME." + name)
+            stats["attribute-local"] += n
+    if stats["attribute-local"]:
+        text = ensure_import(text, "net.jukoz.me.entity.EntityAttributesME")
+    return text, stats
+
+
+def _matching_paren(text, i):
+    depth = 0
+    while i < len(text):
+        if text[i] == "(":
+            depth += 1
+        elif text[i] == ")":
+            depth -= 1
+            if depth == 0:
+                return i
+        i += 1
+    return i
+
+
+def _receiver_start(text, dot):
+    """Start index of the expression ending at the '.' before a method call."""
+    i = dot - 1
+    while i >= 0 and text[i] in " \t":
+        i -= 1
+    while i >= 0:
+        c = text[i]
+        if c in ")]":
+            close, open_ = (")", "(") if c == ")" else ("]", "[")
+            depth = 0
+            while i >= 0:
+                if text[i] == close:
+                    depth += 1
+                elif text[i] == open_:
+                    depth -= 1
+                    if depth == 0:
+                        i -= 1
+                        break
+                i -= 1
+            continue
+        if c.isalnum() or c in "_$.":
+            i -= 1
+            continue
+        break
+    return i + 1
+
+
+def _rewrite_chain(text, method, on_get, on_present, on_if):
+    """Rewrite 'recv.method(args).get()/isPresent()/ifPresent()' in one pass."""
+    changed = 0
+    needle = "." + method + "("
+    pos = len(text)
+    while True:
+        pos = text.rfind(needle, 0, pos)
+        if pos < 0:
+            break
+        start = _receiver_start(text, pos)
+        close = _matching_paren(text, pos + len(needle) - 1)
+        recv = text[start:pos]
+        args = text[pos + len(needle):close]
+        after = close + 1
+        if text.startswith(".get()", after) and on_get:
+            end, repl = after + 6, on_get(recv, args)
+        elif text.startswith(".isPresent()", after) and on_present:
+            end, repl = after + 12, on_present(recv, args)
+        elif text.startswith(".ifPresent(", after) and on_if:
+            inner = _matching_paren(text, after + 10)
+            end, repl = inner + 1, on_if(recv, text[after + 11:inner])
+        else:
+            continue
+        text = text[:start] + repl + text[end:]
+        changed += 1
+        pos = start
+    return text, changed
+
+
+def rewrite_nbt(text):
+    """1.21.5 made the type-checked NBT accessors return Optionals."""
+    stats = collections.Counter()
+
+    def compound(recv, args):
+        return "NbtCompat.compound({})".format(recv)
+
+    def list_(recv, args):
+        return "NbtCompat.list({})".format(recv)
+
+    text, n = _rewrite_chain(text, "asCompound", compound,
+                             lambda r, a: "NbtCompat.isCompound({})".format(r),
+                             lambda r, a: "NbtCompat.ifCompound({}, {})".format(r, a))
+    stats["nbt-compound"] += n
+    text, n = _rewrite_chain(text, "asNbtList", list_,
+                             lambda r, a: "NbtCompat.isList({})".format(r),
+                             lambda r, a: "NbtCompat.ifList({}, {})".format(r, a))
+    stats["nbt-list"] += n
+
+    # 1.20.1 returns the value directly, and "" instead of an empty Optional.
+    for method in ("getCompound", "getList", "getString", "asString"):
+        text, n = _rewrite_chain(
+            text, method,
+            lambda r, a, m=method: "{}.{}({})".format(r, m, a),
+            (lambda r, a, m=method: "!{}.{}({}).isEmpty()".format(r, m, a))
+            if method in ("getString", "asString") else None,
+            None)
+        stats["nbt-unwrap"] += n
+
+    if stats["nbt-compound"] or stats["nbt-list"]:
+        text = ensure_import(text, "net.jukoz.me.compat.NbtCompat")
+    return text, stats
 
 
 def cmd_import(args) -> int:
@@ -322,6 +497,28 @@ def cmd_import(args) -> int:
     print(f"{'would copy' if args.dry_run else 'copied'} {copied} files, skipped {skipped} existing")
     for k, v in sorted(total.items()):
         print(f"  {k}: {v}")
+    return 0
+
+
+def cmd_retouch(args) -> int:
+    """Re-run the rewrite over an already-ported tree.
+
+    Needed after the rewrite rules themselves change: the tree was produced by an
+    older rule set and would otherwise keep the mistakes of that version.
+    """
+    root = (PROJECT / args.path).resolve()
+    changed = 0
+    totals = collections.Counter()
+    for path in sorted(iter_java(root)):
+        original = path.read_text(encoding="utf-8", errors="replace")
+        text, stats = rewrite(original)
+        if text != original:
+            path.write_text(text, encoding="utf-8")
+            changed += 1
+            totals.update(stats)
+    print("retouched {} of {} files".format(changed, len(list(iter_java(root)))))
+    for k, v in sorted(totals.items()):
+        print("  {}: {}".format(k, v))
     return 0
 
 
@@ -631,6 +828,10 @@ def main() -> int:
     p.add_argument("--dest", default="src/main/java",
                    help="destination source root, relative to the project")
     p.set_defaults(func=cmd_import)
+
+    p = sub.add_parser("retouch", help="re-apply the rewrite rules to an existing tree")
+    p.add_argument("path", nargs="?", default="src/main/java")
+    p.set_defaults(func=cmd_retouch)
 
     p = sub.add_parser("promote", help="move staged files into src/main/java")
     p.add_argument("paths", nargs="+", help="paths relative to the package root")
