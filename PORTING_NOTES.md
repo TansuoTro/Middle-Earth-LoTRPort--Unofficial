@@ -22,6 +22,27 @@
 
 上游原版是 loom 1.1-SNAPSHOT + Gradle 8.0.1 + Fabric API 0.92.0，已升級到與上游 1.21.8 分支同一代的工具鏈（他們用 Gradle 8.14 + loom 1.11）。
 
+## 狀態
+
+- [x] 基準工程可編譯（`gradlew build` 通過，產出 `Middle-earth-1.4.2-1.20.1-port.0.jar`）
+- [x] 開發客戶端可啟動到主選單（`gradlew runClient`）
+- [x] 修掉上游的啟動卡死（見下）
+- [ ] 方塊／物品註冊層
+- [ ] 世界生成資料
+- [ ] 程式系統
+
+## 已修復：上游的啟動卡死
+
+`MiddleEarthMapGeneration` 在 `generateBiomes` / `generateHeight` 裡先呼叫 `awaitTermination(...)` 才呼叫 `shutdown()`。
+`awaitTermination` 只會在 executor 被 shutdown 之後才回傳，所以它永遠等不到，只能等逾時：
+
+- biomes：卡 20 分鐘
+- heights：卡 15 分鐘
+
+也就是**全新安裝第一次啟動會卡 35 分鐘**。已改成先 `shutdown()` 再 `awaitTermination()`，逾時改走 `shutdownNow()`。
+
+實測（冷 `run/data`）：biome 生成 44 秒、height 生成約 4 分鐘，之後進入主選單。快取寫在 `run/data/me/alpha-1.4.0-1.20.1/`，第二次啟動直接跳過。
+
 ## 識別碼（尚未變更）
 
 | 項目 | 值 |
@@ -31,9 +52,8 @@
 | maven group | `net.jukoz` |
 | assets / data 命名空間 | `assets/me`, `data/me` |
 
-**待決**：上游 1.21.8 已改成 `middle-earth` / `net.sevenstars.middleearth`。
-從 `main` 搬資料時，每一份 JSON 的 `middle-earth:` 都要改寫成 `me:`，資料夾也要改名。
-目前刻意保持 `me` 不動，讓基準工程先能原封不動編譯；是否對齊上游命名留到資料搬遷前再決定。
+上游 1.21.8 已改成 `middle-earth` / `net.sevenstars.middleearth`。
+**決定：維持 `me`。** 改名要動 2800 個檔案、對功能零收益；搬資料時用腳本把 `middle-earth:` 改寫成 `me:` 即可。
 
 ## 與 1.21.8（`main`）的落差
 
@@ -49,18 +69,32 @@
 
 ## 移植策略
 
-### 階段 A：資料驅動層
-從 `main` 整批搬，幾乎不動程式：
+### 重要修正：資料層不能先搬
+
+原本以為可以先整批搬 `worldgen` / `structure` / `loot_table`，但這些資料全部引用方塊與物品的 registry id。
+1.20.1 只有 2397 個方塊，1.21.8 有 6597 個；先搬結構只會得到一堆 unknown block。
+
+**所以順序必須是：方塊／物品註冊 → datagen → 世界生成資料。**
+
+### 階段 A：方塊／物品註冊層
+
+- 從 `main` 搬 `block/registration/`、`item/`、`registries/`
+- 這一代的註冊是 Fabric 風格（`Registry.register`），概念上可直接對應 1.20.1
+- 主要 delta 在 MC API：`DataComponents`（1.20.5+）、`Item.Properties`、`BlockBehaviour`、`Holder<ArmorMaterial>`
+- 搬完跑 `runDatagen`，讓 blockstates / models / loot_table / recipe 重新生成
+
+### 階段 B：世界生成資料
+
+registry 對齊後才搬：
+
 - `worldgen`（biome / configured_feature / placed_feature / structure / structure_set / template_pool / processor_list）
 - `structure` 的 `.nbt`
-- `loot_table` / `recipe` / `advancement` / `tags`
-- `banner_pattern` / `painting_variant` / `trim_material` / `trim_pattern`
-- 全部 `assets/`
+- 注意 1.21 的格式漂移：`recipes`→`recipe`、`structures`→`structure`、`advancements`→`advancement`、`loot_tables`→`loot_table`、`IntProvider` 的 `value` 包裝、structure NBT 的 DataVersion
 
-注意 1.21 的格式漂移：`recipes`→`recipe`、`structures`→`structure`、`advancements`→`advancement`、`loot_tables`→`loot_table`、`IntProvider` 的 `value` 包裝、structure NBT 的 DataVersion。
+### 階段 C：程式系統
 
-### 階段 B：程式系統
 按價值排序，一個一個來：
+
 1. Artisan Table
 2. NPC 基礎（1 個 entity + 階級資料，先用 NBT 不用 components）
 3. 陣營 + 開局選擇
@@ -70,6 +104,7 @@
 7. 15 個附魔（1.20.1 是 code 註冊，不是 datapack）
 
 ### 不要做的事
+
 - 不要 `git merge main`：命名空間、套件、資料夾全變，只會產生上萬個衝突
 - 不要從 `main`(1.21.8) 直接降版：要同時吃 item model definition、render pipeline、equipment assets、data components 四顆炸彈
 
