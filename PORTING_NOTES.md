@@ -198,7 +198,7 @@ registry 對齊後才搬：
   其餘是手寫的相容層。
 - **222 檔屬於「合併案」**：donor 有這個檔案、1.20.1 基準也有，兩邊內容不同。
   這些沒有自動搬（promote 會跳過），1.21 新加的成員要手動併進舊檔。
-- 編譯現況：**18866 個錯誤 / 1432 個檔案**。這是真實數字（-Xmaxerrs 60000）。
+- 編譯現況：**13012 個錯誤 / 1164 個檔案**。這是真實數字（-Xmaxerrs 60000）。
 
 ## 工具（tools/port.py）
 
@@ -265,3 +265,39 @@ port-staging/ 是 gitignored 的暫存樹，可隨時用 import 重建。
   匯入資源時要二選一：改 donor 的資源，或把基準的 assets/me、data/me 改名。
 - **of-beasts-and-wild-things**：donor 的第三個子專案（62 檔、自己的 mod id），
   middle-earth 只從 4 個地方引用它。目前未匯入。
+
+## 本輪已清掉的家族（18866 → 13012）
+
+| 原錯誤數 | 家族 | 做法 |
+|---|---|---|
+| 2580 | ModelTransform.origin | → pivot(x,y,z)，同一個零旋轉 transform |
+| 482 | Transformation.Targets.MOVE_ORIGIN | → TRANSLATE |
+| 432 | NoteBlockInstrument | → Instrument（常數完全相同） |
+| 368 | DataComponentTypes.DYED_COLOR | → MEComponents.DYED_COLOR + DyeableItemMixin |
+| 332 | BACK/HELMET_ATTACHMENT_DATA | 補註冊到 MEComponents |
+| 268 | DyedColorComponent | compat 版本 + 讀取 mixin |
+| 236 | RenderPipelines | 去掉 drawTexture 的第一個參數 |
+| 194 | AnimationDefinition | → Animation |
+| 182 | ScheduledTickView | 改寫 44 個 getStateForNeighborUpdate |
+| 190 | Text.withColor(int) | → METext.withColor |
+| 152 | Blocks.SHORT_GRASS | → Blocks.GRASS |
+| 118 | AttributeModifierSlot | 尚未處理（1.20.5+ 概念） |
+| 102 | EquipmentType | → ArmorItem.Type（BODY 丟棄） |
+| 82 | Identifier.ofVanilla | → new Identifier("minecraft", x) |
+| 76 | Block.createColumnShape | → createCuboidShape(8-r, y1, 8-r, 8+r, y2, 8+r) |
+| 44 | ToolMaterial 抽象 | compat/SimpleToolMaterial（標籤→挖掘等級） |
+| 44 | NbtCompound.getString(k, d) | → NbtCompat.getString |
+| 38 | NbtCompound.getList(k) | 補上元素型別 9 |
+
+## 剩下的硬骨頭
+
+1. **網路層**（RegistryByteBuf 274、PacketCodecs 220、PacketCodec 294、Id 170
+   ≈ 960）：1.20.5 把封包改成 codec 化 + CustomPayload，1.20.1 是 PacketByteBuf
+   手寫序列化。41 個檔要重寫，沒有機械解。
+2. **DataComponentTypes 其餘 368**：WEAPON / TOOL / FOOD / EQUIPPABLE / CONSUMABLE /
+   BLOCKS_ATTACKS / TRIM / LORE 等，每一個都要對到 1.20.1 的 item 類別行為或 NBT。
+3. **client render state**（BipedEntityRenderState 84、LoadedEntityModels 84…）：
+   1.21.2 把 entity renderer 拆成 render state + model，這是整包重寫。
+4. **動畫**：1.20.1 沒有 Animation#createAnimation(ModelPart)，動畫要改成
+   AnimationHelper.animate(model, animation, age, speed, vector)，每個 model 都要動。
+5. **AttributeModifierSlot 118**：1.20.5+ 的欄位概念，1.20.1 靠 EquipmentSlot 傳遞。
