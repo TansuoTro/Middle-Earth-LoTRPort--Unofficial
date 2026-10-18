@@ -1,4 +1,6 @@
 package net.jukoz.me.entity.beasts.cave_troll.feature;
+import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntity;
+import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -12,7 +14,7 @@ import net.minecraft.util.math.RotationAxis;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntityModel;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntityRenderState;
 
-public class CaveTrollHeldItemFeatureRenderer extends FeatureRenderer<CaveTrollEntityRenderState, CaveTrollEntityModel> {
+public class CaveTrollHeldItemFeatureRenderer extends MEFeatureRenderer<CaveTrollEntity, CaveTrollEntityRenderState, CaveTrollEntityModel> {
     public CaveTrollHeldItemFeatureRenderer(FeatureRendererContext context) {
         super(context);
     }

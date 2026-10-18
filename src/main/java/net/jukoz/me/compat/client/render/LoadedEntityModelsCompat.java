@@ -5,9 +5,9 @@ import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.EntityModelLoader;
 
 /**
- * R1 shim for 1.21.8 {@code LoadedEntityModels}: 1.20.1 exposes the same model-part
+ * R1 shim for 1.21.8 {@code LoadedEntityModelsCompat}: 1.20.1 exposes the same model-part
  * lookup through {@link EntityModelLoader}. The donor package
- * ({@code net.minecraft.client.render.entity.model.LoadedEntityModels}) does not exist in
+ * ({@code net.minecraft.client.render.entity.model.LoadedEntityModelsCompat}) does not exist in
  * 1.20.1, so R2/R3 re-point the call sites at this class.
  */
 public class LoadedEntityModelsCompat {

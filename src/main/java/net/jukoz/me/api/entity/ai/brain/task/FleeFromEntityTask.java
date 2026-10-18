@@ -47,7 +47,7 @@ public class FleeFromEntityTask<E extends PathAwareEntity> extends MultiTickTask
     protected void run(ServerWorld serverWorld, E pathAwareEntity, long l) {
         pathAwareEntity.getBrain().remember(MemoryModuleType.IS_PANICKING, true);
         pathAwareEntity.getBrain().forget(MemoryModuleType.WALK_TARGET);
-        pathAwareEntity.setPose(EntityPose.SHOOTING);
+        pathAwareEntity.setPose(EntityPose.STANDING);
     }
 
     protected void finishRunning(ServerWorld serverWorld, E pathAwareEntity, long l) {
@@ -81,7 +81,7 @@ public class FleeFromEntityTask<E extends PathAwareEntity> extends MultiTickTask
             }
         }
         if(!fleeEntities.isEmpty()) {
-            return FuzzyTargeting.findFrom(entity, distance, 4, fleeEntities.getFirst().getPos());
+            return FuzzyTargeting.findFrom(entity, distance, 4, fleeEntities.get(0).getPos());
         }
 
         return FuzzyTargeting.findTo(entity, 7, 4, direction);

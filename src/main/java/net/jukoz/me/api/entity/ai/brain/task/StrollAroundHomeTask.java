@@ -41,7 +41,7 @@ public class StrollAroundHomeTask {
         Vec3d entityPos = entity.getPos();
 
         if(optional != null && optional.isPresent()) {
-            homePos = optional.get().pos().toBottomCenterPos();
+            homePos = Vec3d.ofBottomCenter(optional.get().getPos());
         }
         else {
             return null;

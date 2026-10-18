@@ -1,4 +1,6 @@
 package net.jukoz.me.entity.beasts.warg.features;
+import net.jukoz.me.entity.beasts.warg.WargEntity;
+import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
 import com.google.common.collect.Maps;
 import net.minecraft.client.render.OverlayTexture;
@@ -15,7 +17,7 @@ import net.jukoz.me.entity.beasts.warg.WargEntityRenderState;
 import net.jukoz.me.entity.beasts.warg.WargModel;
 import java.util.Map;
 
-public class WargEyesFeatureRenderer extends FeatureRenderer<WargEntityRenderState, WargModel> {
+public class WargEyesFeatureRenderer extends MEFeatureRenderer<WargEntity, WargEntityRenderState, WargModel> {
     private static final String PATH = "textures/entities/warg/eyes/";
     private static final Identifier EMISSIVE_TEXTURE = new Identifier(MiddleEarth.MOD_ID, PATH + "warg_eyes_emissive.png");
     private static final Map<WargEyeVariant, Identifier> LOCATION_BY_VARIANT =
@@ -26,7 +28,7 @@ public class WargEyesFeatureRenderer extends FeatureRenderer<WargEntityRenderSta
                         new Identifier(MiddleEarth.MOD_ID, PATH + "warg_eyes_orange.png"));
             });
 
-    public WargEyesFeatureRenderer(FeatureRendererContext<WargEntityRenderState, WargModel> featureRendererContext) {
+    public WargEyesFeatureRenderer(FeatureRendererContext<WargEntity, WargModel> featureRendererContext) {
         super(featureRendererContext);
     }
 

@@ -1,4 +1,6 @@
 package net.jukoz.me.entity.npcs.renderer.features.ear;
+import net.jukoz.me.entity.npcs.NpcEntity;
+import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -8,7 +10,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.render.entity.model.LoadedEntityModels;
+import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.jukoz.me.compat.client.render.state.LivingEntityRenderState;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
@@ -23,11 +25,11 @@ import net.jukoz.me.entity.npcs.renderer.NpcEntityRenderState;
 import net.jukoz.me.registries.AtlasesME;
 
 @Environment(EnvType.CLIENT)
-public class EarFeatureRenderer extends FeatureRenderer<NpcEntityRenderState, NpcEntityModel> {
+public class EarFeatureRenderer extends MEFeatureRenderer<NpcEntity, NpcEntityRenderState, NpcEntityModel> {
     private final EarModel earModel;
     private final SpriteAtlasTexture characterTexturesAtlas;
 
-    public EarFeatureRenderer(FeatureRendererContext<NpcEntityRenderState, NpcEntityModel> context, LoadedEntityModels loader) {
+    public EarFeatureRenderer(FeatureRendererContext<NpcEntity, NpcEntityModel> context, LoadedEntityModelsCompat loader) {
         super(context);
         this.earModel = new EarModel(loader.getModelPart(EntityModelLayersME.NPC_ENTITY_EAR));
         characterTexturesAtlas = AtlasesME.getAtlasFromPath(ModTexturedRenderLayers.CHARACTER_ATLAS_TEXTURES);

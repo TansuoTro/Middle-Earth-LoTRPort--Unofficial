@@ -1,4 +1,6 @@
 package net.jukoz.me.entity.beasts.cave_troll.feature;
+import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntity;
+import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
@@ -13,9 +15,9 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntityModel;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntityRenderState;
 
-public class CaveTrollDroolFeatureRenderer extends FeatureRenderer<CaveTrollEntityRenderState, CaveTrollEntityModel> {
+public class CaveTrollDroolFeatureRenderer extends MEFeatureRenderer<CaveTrollEntity, CaveTrollEntityRenderState, CaveTrollEntityModel> {
     private static final Identifier TEXTURE = new Identifier(MiddleEarth.MOD_ID, "textures/entities/trolls/cave/cave_troll_green_drooling.png");
-    public CaveTrollDroolFeatureRenderer(FeatureRendererContext<CaveTrollEntityRenderState, CaveTrollEntityModel> featureRendererContext) {
+    public CaveTrollDroolFeatureRenderer(FeatureRendererContext<CaveTrollEntity, CaveTrollEntityModel> featureRendererContext) {
         super(featureRendererContext);
     }
 

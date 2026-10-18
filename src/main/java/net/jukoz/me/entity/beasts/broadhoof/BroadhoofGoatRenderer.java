@@ -1,4 +1,6 @@
 package net.jukoz.me.entity.beasts.broadhoof;
+import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
+import net.jukoz.me.compat.client.render.MEMobEntityRenderer;
 
 import com.google.common.collect.Maps;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -20,7 +22,7 @@ import net.jukoz.me.entity.beasts.broadhoof.features.BroadhoofGoatSaddleFeatureR
 
 import java.util.Map;
 
-public class BroadhoofGoatRenderer extends MobEntityRenderer<BroadhoofGoatEntity, BroadhoofGoatEntityRenderState, BroadhoofGoatModel> {
+public class BroadhoofGoatRenderer extends MEMobEntityRenderer<BroadhoofGoatEntity, BroadhoofGoatEntityRenderState, BroadhoofGoatModel> {
     private static final String PATH = "textures/entities/broadhoof_goat/";
     private static final float SIZE = 1f;
 
@@ -38,7 +40,7 @@ public class BroadhoofGoatRenderer extends MobEntityRenderer<BroadhoofGoatEntity
 
                 )
         );
-        this.addFeature(new BroadhoofGoatSaddleFeatureRenderer(this, context.getEntityModels(), context.getEquipmentRenderer()));
+        this.addFeature(new BroadhoofGoatSaddleFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader()), context.getEquipmentRenderer()));
     }
 
     @Override

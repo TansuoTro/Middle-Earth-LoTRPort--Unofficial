@@ -20,13 +20,13 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.context.LootContextTypes;
-import net.minecraft.loot.context.LootWorldContext;
+import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.RegistryKey;
@@ -50,7 +50,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.profiler.Profiler;
-import net.minecraft.util.profiler.Profilers;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
@@ -72,7 +71,7 @@ import java.util.List;
 // TODO Add sounds
 public class CaveTrollEntity extends AbstractBeastEntity {
     public LootTable scavengeLootTable;
-    public LootWorldContext lootWorldContext;
+    public LootContextParameterSet lootWorldContext;
     private float smashingStrength; // Used in server-side only
     private float smashingTime; // Used in server-side only
     private float enragedTime; // Used in server-side only
@@ -95,12 +94,12 @@ public class CaveTrollEntity extends AbstractBeastEntity {
         if(scavengeLootTable == null && !world.isClient()) {
             if(world instanceof ServerWorld serverWorld) {
 
-                LootTable lootTable = serverWorld.getServer().getReloadableRegistries().getLootTable(RegistryKey.of(RegistryKeys.LOOT_TABLE, new Identifier(MiddleEarth.MOD_ID, "gameplay/cave_troll_scavenging")));
+                LootTable lootTable = serverWorld.getServer().getLootManager().getLootTable(new Identifier(MiddleEarth.MOD_ID, "gameplay/cave_troll_scavenging"));
 
                 if(lootTable != null) {
                     scavengeLootTable = lootTable;
 
-                    lootWorldContext = new LootWorldContext.Builder(serverWorld)
+                    lootWorldContext = new LootContextParameterSet.Builder(serverWorld)
                             .add(LootContextParameters.THIS_ENTITY, this)
                             .add(LootContextParameters.ORIGIN, this.getPos())
                             .build(LootContextTypes.CHEST);
@@ -111,49 +110,48 @@ public class CaveTrollEntity extends AbstractBeastEntity {
     }
 
     public static DefaultAttributeContainer.Builder setAttributes() {
-        return AnimalEntity.createAnimalAttributes()
+        return MobEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.1f)
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 120.0)
                 .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.8)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 0.65)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 28.0)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10.0)
-                .add(EntityAttributes.GENERIC_STEP_HEIGHT, 1.25)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 15.0);
     }
 
     @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
-        super.initDataTracker(builder);
-        builder.add(SCAVENGING, false);
-        builder.add(ROARING, false);
-        builder.add(SLEEPING, false);
-        builder.add(SMASHING, false);
-        builder.add(ENRAGED, false);
-        builder.add(VARIANT, 0);
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(SCAVENGING, false);
+        this.dataTracker.startTracking(ROARING, false);
+        this.dataTracker.startTracking(SLEEPING, false);
+        this.dataTracker.startTracking(SMASHING, false);
+        this.dataTracker.startTracking(ENRAGED, false);
+        this.dataTracker.startTracking(VARIANT, 0);
     }
 
     @Override
-    protected void writeCustomDataToNbt(NbtCompound nbt) {
+    public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         WriteView view = new WriteView(nbt);
         view.putInt("Variant", this.getTypeVariant());
     }
 
     @Override
-    protected void readCustomDataFromNbt(NbtCompound nbt) {
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+        super.readCustomDataFromNbt(nbt);
         ReadView view = new ReadView(nbt);
-        super.readCustomData(view);
         this.dataTracker.set(VARIANT, view.getInt("Variant", 0));
     }
 
 
     @Nullable
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound nbt) {
         CaveTrollVariant variant = Util.getRandom(CaveTrollVariant.values(), this.random);
         setVariant(variant);
-        return super.initialize(world, difficulty, spawnReason, entityData);
+        return super.initialize(world, difficulty, spawnReason, entityData, nbt);
     }
 
     public CaveTrollVariant getVariant() {
@@ -169,10 +167,10 @@ public class CaveTrollEntity extends AbstractBeastEntity {
     }
 
     @Override
-    protected void mobTick(ServerWorld world) {
-        Profiler profiler = Profilers.get();
+    protected void mobTick() {
+        Profiler profiler = this.getWorld().getProfiler();
         profiler.push("caveTrollBrain");
-        this.getBrain().tick(world, this);
+        this.getBrain().tick((ServerWorld) this.getWorld(), this);
         profiler.swap("caveTrollActivityUpdate");
         CaveTrollBrain.updateActivities(this);
         profiler.pop();
@@ -181,7 +179,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
             this.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 100));
         }
 
-        super.mobTick(world);
+        super.mobTick();
     }
 
     @Override
@@ -213,16 +211,16 @@ public class CaveTrollEntity extends AbstractBeastEntity {
 
                     if(isTrollWeapon(itemStack) && isOwner(player) && this.getMainHandStack().isEmpty()) { // Give the troll a weapon
                         this.equipStack(EquipmentSlot.MAINHAND, itemStack.copyAndEmpty());
-                        itemStack.decrementUnlessCreative(1, player);
-                        return ActionResult.SUCCESS_SERVER;
+                        if (!player.getAbilities().creativeMode) itemStack.decrement(1);
+                        return ActionResult.SUCCESS;
                     }
                     else if(player.isSneaking() && itemStack.isEmpty() && isOwner(player) && !this.getMainHandStack().isEmpty()) {  // Take weapon away from troll
-                        player.giveOrDropStack(this.getMainHandStack().copyAndEmpty());
-                        return ActionResult.SUCCESS_SERVER;
+                        player.giveItemStack(this.getMainHandStack().copyAndEmpty());
+                        return ActionResult.SUCCESS;
                     }
                     else if(canAddPassenger(player) && isTame() && itemStack.isEmpty()) { // Ride if player is compatible and hand is empty
                         putPlayerOnBack(player);
-                        return ActionResult.SUCCESS_SERVER;
+                        return ActionResult.SUCCESS;
                     }
                     else if(!itemStack.isEmpty()) {
                         return super.interactMob(player, hand);
@@ -240,7 +238,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
     }
 
     @Override
-    public boolean canBeLeashed() {
+    public boolean canBeLeashedBy(PlayerEntity player) {
         return false;
     }
 
@@ -282,7 +280,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
             this.getBrain().forget(MemoryModulesME.FOOD_EATEN_COUNT);
             this.getBrain().forget(MemoryModuleType.NEAREST_ATTACKABLE);
             this.getBrain().forget(MemoryModuleType.ATTACK_TARGET);
-            this.setOwner(livingEntity);
+            this.setOwnerUuid(livingEntity.getUuid());
         }
 
     }
@@ -319,7 +317,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
         if(this.isSitting()) {
             return false;
         }
-        return this.hasSaddleEquipped() ? getPassengerList().size() < 3 : getPassengerList().isEmpty();
+        return this.isSaddled() ? getPassengerList().size() < 3 : getPassengerList().isEmpty();
     }
 
     @Override
@@ -341,9 +339,10 @@ public class CaveTrollEntity extends AbstractBeastEntity {
     }
 
     @Override
-    protected Vec3d getPassengerAttachmentPos(Entity passenger, EntityDimensions dimensions, float scaleFactor)  {
+    protected void updatePassengerPosition(Entity passenger, Entity.PositionUpdater positionUpdater)  {
+        super.updatePassengerPosition(passenger, positionUpdater);
         List<Entity> passengerList = this.getPassengerList();
-        boolean saddled = this.hasSaddleEquipped();
+        boolean saddled = this.isSaddled();
         boolean sprinting = this.isCharging();
 
         if(this.getControllingPassenger() != null) {
@@ -351,7 +350,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
         }
 
         float animationSpeed = this.limbAnimator.getSpeed();
-        float animationProgress = this.limbAnimator.getAnimationProgress() * (MathHelper.PI / 180) * 18;
+        float animationProgress = this.limbAnimator.getPos() * (MathHelper.PI / 180) * 18;
         // frequency is calculated by dividing the speed of the animation by the duration of the animation.
         float frequency = sprinting ? (2f/1.25f) : (10f/1.75f);
 
@@ -388,7 +387,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
             double x = MathHelper.cos((float)Math.toRadians(this.getBodyYaw())) * side - MathHelper.sin((float)Math.toRadians(this.getBodyYaw())) * front;
             double z = MathHelper.sin((float)Math.toRadians(this.getBodyYaw())) * side + MathHelper.cos((float)Math.toRadians(this.getBodyYaw())) * front;
 
-            return super.getPassengerAttachmentPos(passenger, dimensions, scaleFactor).add(x, y, z);
+            passenger.setPos(passenger.getX() + x, passenger.getY() + y, passenger.getZ() + z);
         }
         else { // Passenger 2 or 3 - Side ==============================================================================
             double y = sprinting ?
@@ -424,7 +423,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
             double x = MathHelper.cos((float)Math.toRadians(this.getBodyYaw())) * side - MathHelper.sin((float)Math.toRadians(this.getBodyYaw())) * front;
             double z = MathHelper.sin((float)Math.toRadians(this.getBodyYaw())) * side + MathHelper.cos((float)Math.toRadians(this.getBodyYaw())) * front;
 
-            return super.getPassengerAttachmentPos(passenger, dimensions, scaleFactor).add(x, y, z);
+            passenger.setPos(passenger.getX() + x, passenger.getY() + y, passenger.getZ() + z);
         }
     }
 
@@ -524,7 +523,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
         for(Entity entity : entities) { // Check through all nearby entities
             if(entity != this.getOwner() && !this.getPassengerList().contains(entity)) { // Exclude passengers and owner
                 if(getWorld() instanceof ServerWorld serverWorld) {
-                    entity.damage(serverWorld, entity.getDamageSources().mobAttack(this), 10.0f + difficulty * 2);
+                    entity.damage(entity.getDamageSources().mobAttack(this), 10.0f + difficulty * 2);
                 }
 
             }
@@ -537,7 +536,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
         Box box = new Box(this.getPos().subtract(5,0,5), this.getPos().add(5,1,5));
 
         double weaponDamage = 0;
-        for (Map.Entry<EntityAttribute, EntityAttributeModifier> entry : this.getWeaponStack().getAttributeModifiers(EquipmentSlot.MAINHAND).entries()) {
+        for (Map.Entry<EntityAttribute, EntityAttributeModifier> entry : this.getMainHandStack().getAttributeModifiers(EquipmentSlot.MAINHAND).entries()) {
             if (entry.getKey() == EntityAttributes.GENERIC_ATTACK_DAMAGE) {
                 weaponDamage = entry.getValue().getValue();
             }
@@ -550,7 +549,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
         if(world instanceof ServerWorld serverWorld) {
             for(Entity entity : entities) {
                 if(this.isValidTarget(entity)) {
-                    entity.damage(serverWorld, this.getDamageSources().mobAttack(this),  (float)weaponDamage + (strength / 12.5f) + (difficulty * 2));
+                    entity.damage(this.getDamageSources().mobAttack(this),  (float)weaponDamage + (strength / 12.5f) + (difficulty * 2));
                 }
             }
 
@@ -566,11 +565,6 @@ public class CaveTrollEntity extends AbstractBeastEntity {
                 this.playSound(SoundEvents.BLOCK_ANVIL_LAND, 1, 0.1f);
             }
         }
-    }
-
-    @Override
-    public float getWeaponDisableBlockingForSeconds() {
-        return this.isCharging() || this.isSmashing() ? 10.0f : 0f;
     }
 
     @Override
@@ -674,6 +668,11 @@ public class CaveTrollEntity extends AbstractBeastEntity {
         this.dataTracker.set(ROARING, isRoaring);
     }
 
+    @Nullable
+    private LivingEntity getTargetInBrain() {
+        return this.getBrain().getOptionalMemory(MemoryModuleType.ATTACK_TARGET).orElse(null);
+    }
+
     protected Brain<?> deserializeBrain(Dynamic<?> dynamic) {
         return CaveTrollBrain.create(this, dynamic);
     }
@@ -759,7 +758,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
     }
 
     public void playRoarSound() {
-        this.playSound(this.getRoarSound());
+        this.playSound(this.getRoarSound(), 1.0f, 1.0f);
     }
 
     public static boolean canSpawn(EntityType<CaveTrollEntity> type, ServerWorldAccess serverWorldAccess, SpawnReason spawnReason, BlockPos blockPos, Random random) {

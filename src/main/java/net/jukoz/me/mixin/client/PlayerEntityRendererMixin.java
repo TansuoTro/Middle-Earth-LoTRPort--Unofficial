@@ -1,4 +1,5 @@
 package net.jukoz.me.mixin.client;
+import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.entity.*;
@@ -28,6 +29,6 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
     @Inject(at = @At("TAIL"), method = "<init>")
     public <S extends BipedEntityRenderState, M extends BipedEntityModel<S>>
     void PlayerEntityRenderer(EntityRendererFactory.Context ctx, boolean slim, CallbackInfo ci) {
-        this.addFeature(new EnwebbedFeatureRenderer<>(this, ctx.getEntityModels(), ctx.getEquipmentRenderer()));
+        this.addFeature(new EnwebbedFeatureRenderer<>(this, new LoadedEntityModelsCompat(ctx.getModelLoader()), ctx.getEquipmentRenderer()));
     }
 }

@@ -1,4 +1,6 @@
 package net.jukoz.me.mixin.client;
+import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
+import net.jukoz.me.compat.client.render.MEMAgeableMobEntityRenderer;
 
 import net.minecraft.client.item.ItemModelManager;
 import net.minecraft.client.render.entity.AgeableMobEntityRenderer;
@@ -25,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BipedEntityRenderer.class)
 public abstract class BipedEntityRendererMixin<T extends MobEntity, S extends BipedEntityRenderState, M extends BipedEntityModel<S>>
-        extends AgeableMobEntityRenderer<T, S, M> {
+        extends MEMAgeableMobEntityRenderer<T, S, M> {
 
 
     public BipedEntityRendererMixin(EntityRendererFactory.Context context, M model, M babyModel, float shadowRadius) {
@@ -37,7 +39,7 @@ public abstract class BipedEntityRendererMixin<T extends MobEntity, S extends Bi
     void BipedEntityRenderer(EntityRendererFactory.Context context, BipedEntityModel model, BipedEntityModel babyModel,
                              float scale, HeadFeatureRenderer.HeadTransformation headTransformation, CallbackInfo ci) {
 
-        this.addFeature(new EnwebbedFeatureRenderer<>(this, context.getEntityModels(), context.getEquipmentRenderer()));
+        this.addFeature(new EnwebbedFeatureRenderer<>(this, new LoadedEntityModelsCompat(context.getModelLoader()), context.getEquipmentRenderer()));
     }
 
 

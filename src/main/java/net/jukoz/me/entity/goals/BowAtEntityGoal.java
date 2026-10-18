@@ -42,9 +42,7 @@ public class BowAtEntityGoal extends Goal {
 		this.setControls(EnumSet.of(Control.LOOK));
 		if (targetType == PlayerEntity.class) {
 			Predicate<Entity> predicate = EntityPredicates.rides(mob);
-			this.targetPredicate = TargetPredicate.createNonAttackable().setBaseMaxDistance((double)range).setPredicate((entity, world) -> {
-				return targetSelector.test(entity);
-			});
+			this.targetPredicate = TargetPredicate.createNonAttackable().setBaseMaxDistance((double)range).setPredicate(targetSelector);
 		} else {
 			this.targetPredicate = TargetPredicate.createNonAttackable().setBaseMaxDistance((double)range);
 		}
@@ -55,7 +53,9 @@ public class BowAtEntityGoal extends Goal {
 			this.target = this.mob.getTarget();
 		}
 
-		ServerWorld serverWorld = getServerWorld(this.mob);
+		if (!(this.mob.getWorld() instanceof ServerWorld serverWorld)) {
+			return false;
+		}
 		if (this.targetType == PlayerEntity.class) {
 			this.target = serverWorld.getClosestPlayer(this.targetPredicate, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
 		} else {

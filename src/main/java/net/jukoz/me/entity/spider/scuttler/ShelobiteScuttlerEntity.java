@@ -275,7 +275,7 @@ public class ShelobiteScuttlerEntity extends HostileEntity implements Pouncer {
     }
 
     @Override
-    protected int getXpToDrop() {
+    public int getXpToDrop() {
         return 6 + this.random.nextInt(3);
     }
 

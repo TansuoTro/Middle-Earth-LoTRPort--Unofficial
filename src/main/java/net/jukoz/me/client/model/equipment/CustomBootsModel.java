@@ -1,4 +1,5 @@
 package net.jukoz.me.client.model.equipment;
+import net.jukoz.me.compat.client.render.MEBipedEntityModel;
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.RenderLayer;
@@ -7,7 +8,7 @@ import net.minecraft.client.render.entity.model.EntityModelPartNames;
 import net.jukoz.me.compat.client.render.state.BipedEntityRenderState;
 import net.minecraft.entity.LivingEntity;
 
-public class CustomBootsModel extends BipedEntityModel<BipedEntityRenderState> {
+public class CustomBootsModel extends MEBipedEntityModel<LivingEntity, BipedEntityRenderState> {
 
     public CustomBootsModel(ModelPart root) {
         super(root, RenderLayer::getArmorCutoutNoCull);

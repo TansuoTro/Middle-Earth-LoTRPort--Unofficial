@@ -1,4 +1,6 @@
 package net.jukoz.me.entity.beasts.cave_troll;
+import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
+import net.jukoz.me.compat.client.render.MEMobEntityRenderer;
 
 import com.google.common.collect.Maps;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -14,14 +16,14 @@ import net.jukoz.me.entity.beasts.cave_troll.feature.CaveTrollSaddleFeatureRende
 
 import java.util.Map;
 
-public class CaveTrollRenderer extends MobEntityRenderer<CaveTrollEntity, CaveTrollEntityRenderState, CaveTrollEntityModel> {
+public class CaveTrollRenderer extends MEMobEntityRenderer<CaveTrollEntity, CaveTrollEntityRenderState, CaveTrollEntityModel> {
     private static final String PATH = "textures/entities/trolls/cave/cave_troll_";
     private static final String TEXTURE_ANG = "textures/entities/trolls/cave/cave_troll_ang.png";
     private static final String TEXTURE_ANGRY_ANG = "textures/entities/trolls/cave/cave_troll_angry_ang.png";
     public CaveTrollRenderer(EntityRendererFactory.Context context) {
         super(context, new CaveTrollEntityModel(context.getPart(EntityModelLayersME.CAVE_TROLL)), 1.1f);
         this.addFeature(new CaveTrollDroolFeatureRenderer(this));
-        this.addFeature(new CaveTrollSaddleFeatureRenderer(this, context.getEntityModels(), context.getEquipmentRenderer()));
+        this.addFeature(new CaveTrollSaddleFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader()), context.getEquipmentRenderer()));
         this.addFeature(new CaveTrollHeldItemFeatureRenderer(this));
     }
 

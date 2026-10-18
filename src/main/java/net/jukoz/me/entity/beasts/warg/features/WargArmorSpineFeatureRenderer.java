@@ -1,4 +1,6 @@
 package net.jukoz.me.entity.beasts.warg.features;
+import net.jukoz.me.entity.beasts.warg.WargEntity;
+import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
@@ -7,7 +9,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.LoadedEntityModels;
+import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -18,10 +20,10 @@ import net.jukoz.me.entity.beasts.warg.WargEntityRenderState;
 import net.jukoz.me.entity.beasts.warg.WargModel;
 import net.jukoz.me.item.EquipmentItemsME;
 
-public class WargArmorSpineFeatureRenderer extends FeatureRenderer<WargEntityRenderState, WargModel> {
+public class WargArmorSpineFeatureRenderer extends MEFeatureRenderer<WargEntity, WargEntityRenderState, WargModel> {
     private final WargArmorBaseAddonsModel model;
 
-    public WargArmorSpineFeatureRenderer(FeatureRendererContext<WargEntityRenderState, WargModel> context, LoadedEntityModels loader, EquipmentRenderer equipmentRenderer) {
+    public WargArmorSpineFeatureRenderer(FeatureRendererContext<WargEntity, WargModel> context, LoadedEntityModelsCompat loader, EquipmentRenderer equipmentRenderer) {
         super(context);
         this.model = new WargArmorBaseAddonsModel(loader.getModelPart(EntityModelLayersME.WARG_ARMOR_ADDONS_SPINE));
     }

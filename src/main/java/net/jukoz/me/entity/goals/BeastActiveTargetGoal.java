@@ -31,7 +31,7 @@ public class BeastActiveTargetGoal<T extends LivingEntity> extends TrackTargetGo
         this(mob, targetClass, 10, checkVisibility, false, null);
     }
 
-    public BeastActiveTargetGoal(AbstractBeastEntity mob, Class<T> targetClass, boolean checkVisibility, TargetPredicate.EntityPredicate targetPredicate) {
+    public BeastActiveTargetGoal(AbstractBeastEntity mob, Class<T> targetClass, boolean checkVisibility, Predicate<LivingEntity> targetPredicate) {
         this(mob, targetClass, 10, checkVisibility, false, targetPredicate);
     }
 
@@ -39,7 +39,7 @@ public class BeastActiveTargetGoal<T extends LivingEntity> extends TrackTargetGo
         this(mob, targetClass, 10, checkVisibility, checkCanNavigate, null);
     }
 
-    public BeastActiveTargetGoal(AbstractBeastEntity mob, Class<T> targetClass, int reciprocalChance, boolean checkVisibility, boolean checkCanNavigate, @Nullable TargetPredicate.EntityPredicate targetPredicate) {
+    public BeastActiveTargetGoal(AbstractBeastEntity mob, Class<T> targetClass, int reciprocalChance, boolean checkVisibility, boolean checkCanNavigate, @Nullable Predicate<LivingEntity> targetPredicate) {
         super(mob, checkVisibility, checkCanNavigate);
         this.targetClass = targetClass;
         this.reciprocalChance = ActiveTargetGoal.toGoalTicks(reciprocalChance);

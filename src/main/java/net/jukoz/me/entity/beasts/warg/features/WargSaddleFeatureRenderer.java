@@ -1,10 +1,12 @@
 package net.jukoz.me.entity.beasts.warg.features;
+import net.jukoz.me.entity.beasts.warg.WargEntity;
+import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
-import net.minecraft.client.render.entity.model.LoadedEntityModels;
+import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
@@ -17,10 +19,10 @@ import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class WargSaddleFeatureRenderer extends FeatureRenderer<WargEntityRenderState, WargModel> {
+public class WargSaddleFeatureRenderer extends MEFeatureRenderer<WargEntity, WargEntityRenderState, WargModel> {
     private final WargSaddleModel model;
 
-    public WargSaddleFeatureRenderer(FeatureRendererContext<WargEntityRenderState, WargModel> context, LoadedEntityModels loader, EquipmentRenderer equipmentRenderer) {
+    public WargSaddleFeatureRenderer(FeatureRendererContext<WargEntity, WargModel> context, LoadedEntityModelsCompat loader, EquipmentRenderer equipmentRenderer) {
         super(context);
         this.model = new WargSaddleModel(loader.getModelPart(EntityModelLayersME.WARG_SADDLE));
     }

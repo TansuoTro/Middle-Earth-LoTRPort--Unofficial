@@ -1,4 +1,6 @@
 package net.jukoz.me.entity.beasts.broadhoof.features;
+import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatEntity;
+import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
 import com.google.common.collect.Maps;
 import net.minecraft.client.render.RenderLayer;
@@ -17,7 +19,7 @@ import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatPattern;
 
 import java.util.Map;
 
-public class BroadhoofGoatBeadsFeatureRenderer extends FeatureRenderer<BroadhoofGoatEntityRenderState, BroadhoofGoatModel> {
+public class BroadhoofGoatBeadsFeatureRenderer extends MEFeatureRenderer<BroadhoofGoatEntity, BroadhoofGoatEntityRenderState, BroadhoofGoatModel> {
     private static final String PATH = "textures/entities/broadhoof_goat/beads/";
     private static final Identifier INVISIBLE_ID = new Identifier("minecraft", "invisible");
 
@@ -38,7 +40,7 @@ public class BroadhoofGoatBeadsFeatureRenderer extends FeatureRenderer<Broadhoof
             )
     );
 
-    public BroadhoofGoatBeadsFeatureRenderer(FeatureRendererContext<BroadhoofGoatEntityRenderState, BroadhoofGoatModel> featureRendererContext) {
+    public BroadhoofGoatBeadsFeatureRenderer(FeatureRendererContext<BroadhoofGoatEntity, BroadhoofGoatModel> featureRendererContext) {
         super(featureRendererContext);
     }
 

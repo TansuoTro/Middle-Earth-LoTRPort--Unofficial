@@ -157,7 +157,7 @@ public class ShelobiteLarvaEntity extends HostileEntity {
     }
 
     @Override
-    protected int getXpToDrop() {
+    public int getXpToDrop() {
         return 1;
     }
 

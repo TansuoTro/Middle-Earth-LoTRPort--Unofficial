@@ -1,8 +1,10 @@
 package net.jukoz.me.entity.beasts.broadhoof.features;
+import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatEntity;
+import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
 import net.minecraft.client.render.entity.equipment.EquipmentModel;
 import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
-import net.minecraft.client.render.entity.model.LoadedEntityModels;
+import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 
 import net.minecraft.util.Identifier;
 import net.minecraft.registry.RegistryKey;
@@ -15,12 +17,12 @@ import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 
-public class BroadhoofGoatArmorFeatureRenderer extends FeatureRenderer<BroadhoofGoatEntityRenderState, BroadhoofGoatModel> {
+public class BroadhoofGoatArmorFeatureRenderer extends MEFeatureRenderer<BroadhoofGoatEntity, BroadhoofGoatEntityRenderState, BroadhoofGoatModel> {
 
     private final BroadhoofGoatArmorModel model;
     private final EquipmentRenderer equipmentRenderer;
 
-    public BroadhoofGoatArmorFeatureRenderer(FeatureRendererContext<BroadhoofGoatEntityRenderState, BroadhoofGoatModel> context, LoadedEntityModels loader, EquipmentRenderer equipmentRenderer) {
+    public BroadhoofGoatArmorFeatureRenderer(FeatureRendererContext<BroadhoofGoatEntity, BroadhoofGoatModel> context, LoadedEntityModelsCompat loader, EquipmentRenderer equipmentRenderer) {
         super(context);
         this.equipmentRenderer = equipmentRenderer;
         this.model = new BroadhoofGoatArmorModel(loader.getModelPart(EntityModelLayersME.BROADHOOF_GOAT_ARMOR));

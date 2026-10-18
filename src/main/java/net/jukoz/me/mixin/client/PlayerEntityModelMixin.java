@@ -1,4 +1,6 @@
 package net.jukoz.me.mixin.client;
+import net.minecraft.entity.player.PlayerEntity;
+import net.jukoz.me.compat.client.render.MEBipedEntityModel;
 
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -19,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntityModel.class)
-public abstract class PlayerEntityModelMixin extends BipedEntityModel<PlayerEntityRenderState> {
+public abstract class PlayerEntityModelMixin extends MEBipedEntityModel<PlayerEntity, PlayerEntityRenderState> {
 
     public PlayerEntityModelMixin(ModelPart modelPart) {
         super(modelPart);

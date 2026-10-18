@@ -1,11 +1,13 @@
 package net.jukoz.me.entity.beasts.warg.features;
+import net.jukoz.me.entity.beasts.warg.WargEntity;
+import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
 import net.jukoz.me.item.MEComponents;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
-import net.minecraft.client.render.entity.model.LoadedEntityModels;
+import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.util.Identifier;
 import net.jukoz.me.MiddleEarth;
@@ -20,10 +22,10 @@ import net.minecraft.item.ItemStack;
 import net.jukoz.me.item.EquipmentItemsME;
 import net.jukoz.me.item.dataComponents.MountArmorAddonComponent;
 
-public class WargArmorFrontSkullFeatureRenderer extends FeatureRenderer<WargEntityRenderState, WargModel> {
+public class WargArmorFrontSkullFeatureRenderer extends MEFeatureRenderer<WargEntity, WargEntityRenderState, WargModel> {
     private final WargArmorTopAddonsModel model;
 
-    public WargArmorFrontSkullFeatureRenderer(FeatureRendererContext<WargEntityRenderState, WargModel> context, LoadedEntityModels loader, EquipmentRenderer equipmentRenderer) {
+    public WargArmorFrontSkullFeatureRenderer(FeatureRendererContext<WargEntity, WargModel> context, LoadedEntityModelsCompat loader, EquipmentRenderer equipmentRenderer) {
         super(context);
         this.model = new WargArmorTopAddonsModel(loader.getModelPart(EntityModelLayersME.WARG_ARMOR_ADDONS_FRONT));
     }

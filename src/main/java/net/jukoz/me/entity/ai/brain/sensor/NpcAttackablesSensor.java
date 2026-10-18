@@ -8,7 +8,7 @@ import net.jukoz.me.entity.npcs.NpcEntity;
 
 public class NpcAttackablesSensor extends NearestVisibleLivingEntitySensor {
     @Override
-    protected boolean matches(ServerWorld world, LivingEntity entity, LivingEntity target) {
+    protected boolean matches(LivingEntity entity, LivingEntity target) {
         return NpcEntity.shouldTarget((NpcEntity) entity, target);
     }
 

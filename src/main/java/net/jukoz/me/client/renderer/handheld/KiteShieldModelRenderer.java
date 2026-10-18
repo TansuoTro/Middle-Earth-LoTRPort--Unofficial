@@ -8,7 +8,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.TexturedRenderLayers;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.model.LoadedEntityModels;
+import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.item.model.special.SpecialModelRenderer;
 import net.minecraft.client.render.model.ModelBaker;
@@ -96,7 +96,7 @@ public class KiteShieldModelRenderer implements SpecialModelRenderer<ComponentMa
 
 
 
-        public SpecialModelRenderer<?> bake(LoadedEntityModels entityModels) {
+        public SpecialModelRenderer<?> bake(LoadedEntityModelsCompat entityModels) {
             return new KiteShieldModelRenderer(new KiteShieldEntityModel(entityModels.getModelPart(MiddleEarthClient.KITE_SHIELD_LAYER)));
         }
 

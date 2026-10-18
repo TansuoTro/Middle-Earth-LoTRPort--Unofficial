@@ -1,7 +1,6 @@
 package net.jukoz.me.entity.ai.brain.task;
 
 import com.google.common.collect.ImmutableMap;
-import net.fabricmc.fabric.impl.loot.FabricLootTable;
 import net.fabricmc.fabric.mixin.loot.LootTableAccessor;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ai.brain.MemoryModuleState;
@@ -54,7 +53,7 @@ public class CaveTrollDigForFoodTask extends MultiTickTask<CaveTrollEntity> {
         List<ItemStack> items = entity.scavengeLootTable.generateLoot(entity.lootWorldContext);
 
         if(!items.isEmpty()) {
-            ItemStack itemStack = items.getFirst();
+            ItemStack itemStack = items.get(0);
             entity.equipStack(EquipmentSlot.MAINHAND, itemStack);
         }
 

@@ -13,10 +13,11 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.passive.*;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.spawn.SpawnContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.BiomeTags;
@@ -41,6 +42,7 @@ import net.minecraft.world.WorldAccess;
 import net.jukoz.me.config.ModServerConfigs;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.TrackedDataHandlerRegistryME;
+import net.jukoz.me.entity.VariantsME;
 import net.jukoz.me.entity.beasts.AbstractBeastEntity;
 import net.jukoz.me.entity.beasts.trolls.stone.StoneTrollEntity;
 import net.jukoz.me.entity.beasts.warg.WargEntity;
@@ -61,6 +63,7 @@ import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.DoubleSupplier;
 import java.util.function.IntUnaryOperator;
 
@@ -90,24 +93,23 @@ public class GreatHornEntity extends AbstractBeastEntity implements Evader {
     }
 
     public static DefaultAttributeContainer.Builder setAttributes() {
-        return AnimalEntity.createAnimalAttributes()
+        return MobEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3)
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 50.0d)
                 .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.3d)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 1.0d)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 38.0d)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 4.0d)
-                .add(EntityAttributesME.WATER_MOVEMENT_EFFICIENCY, 0.5f)
-                .add(EntityAttributes.GENERIC_STEP_HEIGHT, 1.15d)
-                .add(EntityAttributesME.SAFE_FALL_DISTANCE, 7.0d)
-                .add(EntityAttributes.GENERIC_JUMP_STRENGTH, 0.75d);
+                .add(EntityAttributesME.WATER_MOVEMENT_EFFICIENCY.value(), 0.5f)
+                .add(EntityAttributesME.SAFE_FALL_DISTANCE.value(), 7.0d)
+                .add(EntityAttributes.HORSE_JUMP_STRENGTH, 0.75d);
     }
 
     @Override
     protected void initAttributes(Random random) {
         this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(this.getChildHealthBonus(random::nextInt));
         this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(this.getChildMovementSpeedBonus(random::nextDouble));
-        this.getAttributeInstance(EntityAttributes.GENERIC_JUMP_STRENGTH).setBaseValue(this.getChildJumpStrengthBonus(random::nextDouble));
+        this.getAttributeInstance(EntityAttributes.HORSE_JUMP_STRENGTH).setBaseValue(this.getChildJumpStrengthBonus(random::nextDouble));
     }
 
 
@@ -117,44 +119,44 @@ public class GreatHornEntity extends AbstractBeastEntity implements Evader {
         this.goalSelector.add(2, new BowAtEntityGoal(this, PlayerEntity.class, 16, (livingEntity -> {
             return this.shouldBow((PlayerEntity) livingEntity);
         }) ));
-        this.goalSelector.add(3, new SmartFleeEntityGoal<>(this, (Evader) this,
+        this.goalSelector.add(3, new SmartFleeEntityGoal<PlayerEntity>(this, (Evader) this,
                 PlayerEntity.class, 20.0F, 1.6, 1.9, (entity) -> {
             return !this.canTrust((PlayerEntity)entity);
         }));
-        this.goalSelector.add(4, new SmartFleeEntityGoal<>(this, (Evader) this,
+        this.goalSelector.add(4, new SmartFleeEntityGoal<WargEntity>(this, (Evader) this,
                 WargEntity.class, 20.0F, 1.7, 2.0, (entity) -> true));
-        this.goalSelector.add(4, new ChargeAttackGoal(this, null, maxChargeCooldown()));
+        this.goalSelector.add(4, new ChargeAttackGoal(this, maxChargeCooldown()));
         this.goalSelector.add(5, new AnimalMateGoal(this, 1.5));
-        this.goalSelector.add(6, new TemptGoal(this, 1.0, (stack) -> stack.isIn(ItemTagsME.ELK_FOOD), false));
+        this.goalSelector.add(6, new TemptGoal(this, 1.0, Ingredient.fromTag(ItemTagsME.ELK_FOOD), false));
         this.goalSelector.add(7, new WanderAroundFarGoal(this, 1.0));
         this.goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 6.0f));
         this.goalSelector.add(9, new LookAroundGoal(this));
     }
 
     @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
-        super.initDataTracker(builder);
-        RegistryEntry<GreatHornVariant> greatHornVariantRegistryEntry = Variants.getOrDefaultOrThrow(this.getRegistryManager(), GreatHornVariantRegistry.DEFAULT);
-        builder.add(BOW, 0);
-        builder.add(BLUE_SADDLE, false);
-        builder.add(MOUNTABLE, true);
-        builder.add(EVADING, false);
-        builder.add(ATTACK, 0);
-        builder.add(VARIANT, greatHornVariantRegistryEntry);
+    protected void initDataTracker() {
+        super.initDataTracker();
+        RegistryEntry<GreatHornVariant> greatHornVariantRegistryEntry = VariantsME.getOrDefaultOrThrow(this.getWorld().getRegistryManager(), GreatHornVariantRegistry.DEFAULT);
+        this.dataTracker.startTracking(BOW, 0);
+        this.dataTracker.startTracking(BLUE_SADDLE, false);
+        this.dataTracker.startTracking(MOUNTABLE, true);
+        this.dataTracker.startTracking(EVADING, false);
+        this.dataTracker.startTracking(ATTACK, 0);
+        this.dataTracker.startTracking(VARIANT, greatHornVariantRegistryEntry);
     }
 
     @Override
-    protected void writeCustomDataToNbt(NbtCompound nbt) {
+    public void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
         WriteView view = new WriteView(nbt);
-        super.writeCustomData(view);
-        Variants.writeVariantToNbt(view, this.getRegistryVariant());
+        VariantsME.writeVariantToNbt(view, this.getRegistryVariant());
     }
 
     @Override
-    protected void readCustomDataFromNbt(NbtCompound nbt) {
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+        super.readCustomDataFromNbt(nbt);
         ReadView view = new ReadView(nbt);
-        super.readCustomData(view);
-        Variants.readVariantFromNbt(view, DynamicRegistriesME.GREAT_HORN_VARIANTS).ifPresent(this::setVariant);
+        VariantsME.readVariantFromNbt(view, this.getWorld().getRegistryManager(), DynamicRegistriesME.GREAT_HORN_VARIANTS).ifPresent(this::setVariant);
         this.dataTracker.set(MOUNTABLE, ModServerConfigs.ENABLE_MOUNT_BROADHOOF_GOAT);
     }
 
@@ -204,7 +206,7 @@ public class GreatHornEntity extends AbstractBeastEntity implements Evader {
         if(this.isTame() && this.isTamable(player)) {
             if (this.isBreedingItem(itemStack)) {
                 if(this.getHealth() < this.getMaxHealth()) {
-                    itemStack.decrementUnlessCreative(1, player);
+                    if (!player.getAbilities().creativeMode) itemStack.decrement(1);
                     FoodComponent foodComponent = itemStack.getItem().getFoodComponent();
                     float f = foodComponent != null ? (float)foodComponent.getHunger() : 1.0f;
                     this.heal(2.0f * f);
@@ -233,9 +235,10 @@ public class GreatHornEntity extends AbstractBeastEntity implements Evader {
     }
 
     @Override
-    protected Vec3d getPassengerAttachmentPos(Entity passenger, EntityDimensions dimensions, float scaleFactor) {
-        float f = this.limbAnimator.getAnimationProgress() / 20;
-        float g = this.limbAnimator.getAnimationProgress() * (MathHelper.PI / 180) * 18; // TODO : Fix,was using limbAnimator.getPos()
+    protected void updatePassengerPosition(Entity passenger, Entity.PositionUpdater positionUpdater) {
+        super.updatePassengerPosition(passenger, positionUpdater);
+        float f = this.limbAnimator.getPos() / 20;
+        float g = this.limbAnimator.getPos() * (MathHelper.PI / 180) * 18;
 
         double y = 0.45;
         if(gallopAnimationState.isRunning()) {
@@ -244,13 +247,13 @@ public class GreatHornEntity extends AbstractBeastEntity implements Evader {
             y += MathHelper.cos(g - MathHelper.PI) * 0.02 - 0.2;
         }
 
-        return super.getPassengerAttachmentPos(passenger, dimensions, scaleFactor).add(0, y,0);
+        passenger.setPos(passenger.getX(), passenger.getY() + y, passenger.getZ());
     }
 
     @Override
     @Nullable
     public PassiveEntity createChild(ServerWorld world, PassiveEntity entity) {
-        GreatHornEntity greatHornEntity2 = EntitiesME.GREAT_HORN.create(world, SpawnReason.BREEDING);
+        GreatHornEntity greatHornEntity2 = EntitiesME.GREAT_HORN.create(world);
         if (greatHornEntity2 != null) {
             this.setChildAttributes(entity, greatHornEntity2);
             if (this.random.nextBoolean()) {
@@ -269,8 +272,8 @@ public class GreatHornEntity extends AbstractBeastEntity implements Evader {
     }
 
     @Override
-    public EntityDimensions getBaseDimensions(EntityPose pose) {
-        return this.isBaby() ? BABY_BASE_DIMENSIONS : super.getBaseDimensions(pose);
+    public EntityDimensions getDimensions(EntityPose pose) {
+        return this.isBaby() ? BABY_BASE_DIMENSIONS : super.getDimensions(pose);
     }
 
     @Override
@@ -321,7 +324,7 @@ public class GreatHornEntity extends AbstractBeastEntity implements Evader {
                 for(Entity entity : entities) {
                     if(!this.getPassengerList().contains(entity)) {
                         if(!this.getWorld().isClient()) {
-                            entity.damage((ServerWorld) this.getWorld(), entity.getDamageSources().mobAttack(this), jumpPercentage * getAttackDamage());
+                            entity.damage(entity.getDamageSources().mobAttack(this), jumpPercentage * getAttackDamage());
                         }
                         double dx = entity.getX() - this.getX();
                         double dz = entity.getZ() - this.getZ();
@@ -340,11 +343,6 @@ public class GreatHornEntity extends AbstractBeastEntity implements Evader {
         else {
             super.startJumping(height);
         }
-    }
-
-    @Override
-    public boolean canUseSlot(EquipmentSlot slot) {
-        return true;
     }
 
     @Override
@@ -495,25 +493,27 @@ public class GreatHornEntity extends AbstractBeastEntity implements Evader {
     }
 
     @Override
-    public void setOwner(@Nullable LivingEntity entity) {
-        super.setOwner(entity);
-        this.dataTracker.set(BOW, 1);
-        bowAnimationTimeout = 80;
+    public void setOwnerUuid(@Nullable UUID uuid) {
+        super.setOwnerUuid(uuid);
+        if (uuid != null) {
+            this.dataTracker.set(BOW, 1);
+            bowAnimationTimeout = 80;
+        }
     }
 
     /* VARIANTS */
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason,
-                                 @Nullable EntityData entityData) {
+                                 @Nullable EntityData entityData, @Nullable NbtCompound nbt) {
         if (entityData instanceof GreatHornData greatHornData) {
             this.setVariant(greatHornData.variant);
         } else {
-            Optional<? extends RegistryEntry<GreatHornVariant>> optional = Variants.select(SpawnContext.of(world, this.getBlockPos()), DynamicRegistriesME.GREAT_HORN_VARIANTS);
+            Optional<RegistryEntry<GreatHornVariant>> optional = VariantsME.select(world, VariantsME.registry(world.toServerWorld().getRegistryManager(), DynamicRegistriesME.GREAT_HORN_VARIANTS));
             if (optional.isPresent()) {
                 this.setVariant(optional.get());
                 entityData = new GreatHornData(optional.get());
             }
         }
-        return super.initialize(world, difficulty, spawnReason, entityData);
+        return super.initialize(world, difficulty, spawnReason, entityData, nbt);
     }
 
     private void setVariant(RegistryEntry<GreatHornVariant> variant) {

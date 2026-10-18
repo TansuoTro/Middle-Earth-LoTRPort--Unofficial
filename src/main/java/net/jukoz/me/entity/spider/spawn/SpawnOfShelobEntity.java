@@ -263,7 +263,7 @@ public class SpawnOfShelobEntity extends HostileEntity implements Pouncer, Shiel
     }
 
     @Override
-    protected int getXpToDrop() {
+    public int getXpToDrop() {
         return 13 + this.random.nextInt(4);
     }
 

@@ -1,4 +1,6 @@
 package net.jukoz.me.entity.beasts.cave_troll.feature;
+import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntity;
+import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
@@ -7,7 +9,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.LoadedEntityModels;
+import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -17,10 +19,10 @@ import net.jukoz.me.entity.EntityModelLayersME;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntityModel;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntityRenderState;
 
-public class CaveTrollSaddleFeatureRenderer extends FeatureRenderer<CaveTrollEntityRenderState, CaveTrollEntityModel> {
+public class CaveTrollSaddleFeatureRenderer extends MEFeatureRenderer<CaveTrollEntity, CaveTrollEntityRenderState, CaveTrollEntityModel> {
     private final CaveTrollSaddleModel model;
 
-    public CaveTrollSaddleFeatureRenderer(FeatureRendererContext<CaveTrollEntityRenderState, CaveTrollEntityModel> context, LoadedEntityModels loader, EquipmentRenderer equipmentRenderer) {
+    public CaveTrollSaddleFeatureRenderer(FeatureRendererContext<CaveTrollEntity, CaveTrollEntityModel> context, LoadedEntityModelsCompat loader, EquipmentRenderer equipmentRenderer) {
         super(context);
 
         model = new CaveTrollSaddleModel(loader.getModelPart(EntityModelLayersME.CAVE_TROLL_SADDLE));

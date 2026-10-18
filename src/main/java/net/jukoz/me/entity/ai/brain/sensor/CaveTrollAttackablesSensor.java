@@ -8,7 +8,7 @@ import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntity;
 
 public class CaveTrollAttackablesSensor extends NearestVisibleLivingEntitySensor {
     @Override
-    protected boolean matches(ServerWorld world, LivingEntity entity, LivingEntity target) {
+    protected boolean matches(LivingEntity entity, LivingEntity target) {
         return CaveTrollEntity.shouldTarget(target) && !((CaveTrollEntity)entity).isTame() && !isPassenger(entity, target);
     }
 

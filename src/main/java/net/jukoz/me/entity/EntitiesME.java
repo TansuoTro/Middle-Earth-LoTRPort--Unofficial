@@ -1,15 +1,13 @@
 package net.jukoz.me.entity;
 
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.*;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Heightmap;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.fire_of_orthanc.FireOfOrthancEntity;
@@ -37,36 +35,41 @@ import net.jukoz.me.entity.spider.spawn.SpawnOfShelobEntity;
 import net.jukoz.me.item.ResourceItemsME;
 import net.jukoz.me.registries.RegistryAliasesME;
 
+import java.lang.reflect.Method;
 import java.util.function.Supplier;
 public class EntitiesME {
     // Npc
-    public static final EntityType<NpcEntity> NPC = register("npc", EntityType.Builder.create(NpcEntity::new, SpawnGroup.MONSTER).dimensions(0.8f, 1.8f));
+    public static final EntityType<NpcEntity> NPC = register("npc",
+            FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, NpcEntity::new).dimensions(EntityDimensions.fixed(0.8f, 1.8f)));
 
     // Mounts
-    public static final EntityType<WargEntity> WARG = register("warg", EntityType.Builder.create(WargEntity::new, SpawnGroup.CREATURE).dimensions(1.4f, 1.4f));
-    public static final EntityType<BroadhoofGoatEntity> BROADHOOF_GOAT = register("broadhoof_goat", EntityType.Builder.create(BroadhoofGoatEntity::new, SpawnGroup.CREATURE).dimensions(1.4f, 1.4f));
-    public static final EntityType<GreatHornEntity> GREAT_HORN = register("great_horn", EntityType.Builder.create(GreatHornEntity::new, SpawnGroup.CREATURE).dimensions(1.3f, 1.8f));
+    public static final EntityType<WargEntity> WARG = register("warg",
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, WargEntity::new).dimensions(EntityDimensions.fixed(1.4f, 1.4f)));
+    public static final EntityType<BroadhoofGoatEntity> BROADHOOF_GOAT = register("broadhoof_goat",
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, BroadhoofGoatEntity::new).dimensions(EntityDimensions.fixed(1.4f, 1.4f)));
+    public static final EntityType<GreatHornEntity> GREAT_HORN = register("great_horn",
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, GreatHornEntity::new).dimensions(EntityDimensions.fixed(1.3f, 1.8f)));
 
     public static final EntityType<BarrelEntity> REINFORCED_BARREL;
 
     // Spiders
     public static final EntityType<ShelobiteLarvaEntity> SHELOBITE_LARVA = register("shelobite_larva",
-            EntityType.Builder.create(ShelobiteLarvaEntity::new, SpawnGroup.MONSTER).dimensions(0.4f, 0.3f));
+            FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, ShelobiteLarvaEntity::new).dimensions(EntityDimensions.fixed(0.4f, 0.3f)));
     public static final EntityType<ShelobiteScuttlerEntity> SHELOBITE_SCUTTLER = register("shelobite_scuttler",
-            EntityType.Builder.create(ShelobiteScuttlerEntity::new, SpawnGroup.MONSTER).dimensions(1.15f, 0.9f));
+            FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, ShelobiteScuttlerEntity::new).dimensions(EntityDimensions.fixed(1.15f, 0.9f)));
     public static final EntityType<SpawnOfShelobEntity> SPAWN_OF_SHELOB = register("spawn_of_shelob",
-            EntityType.Builder.create(SpawnOfShelobEntity::new, SpawnGroup.MONSTER).dimensions(1.75f, 1.4f));
+            FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, SpawnOfShelobEntity::new).dimensions(EntityDimensions.fixed(1.75f, 1.4f)));
 
     // Trolls
     public static final EntityType<SnowTrollEntity> SNOW_TROLL = register("snow_troll",
-            EntityType.Builder.create(SnowTrollEntity::new, SpawnGroup.CREATURE).dimensions(2.2f, 2.5f));
-    public static final EntityType<CaveTrollEntity> CAVE_TROLL = register("cave_troll", EntityType.Builder.create(CaveTrollEntity::new, SpawnGroup.MONSTER).dimensions(2.2f, 3.5f)
-                    .passengerAttachments(new Vec3d(0, 3.825, -0.65), new Vec3d(-0.8, 3.4, -1.2), new Vec3d(0.8, 3.4, -1.2)));
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, SnowTrollEntity::new).dimensions(EntityDimensions.fixed(2.2f, 2.5f)));
+    public static final EntityType<CaveTrollEntity> CAVE_TROLL = register("cave_troll",
+            FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, CaveTrollEntity::new).dimensions(EntityDimensions.fixed(2.2f, 3.5f)));
 
     public static final EntityType<StoneTrollEntity> STONE_TROLL = register("stone_troll",
-            EntityType.Builder.create(StoneTrollEntity::new, SpawnGroup.CREATURE).dimensions(1.4f, 3.4f));
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, StoneTrollEntity::new).dimensions(EntityDimensions.fixed(1.4f, 3.4f)));
     public static final EntityType<PetrifiedTrollEntity> PETRIFIED_TROLL = register("petrified_troll",
-            EntityType.Builder.create(PetrifiedTrollEntity::new, SpawnGroup.CREATURE).dimensions(1.4f, 3.4f));
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, PetrifiedTrollEntity::new).dimensions(EntityDimensions.fixed(1.4f, 3.4f)));
 
     ///* Weapons *///
     public static final EntityType<FireOfOrthancEntity> FIRE_OF_ORTHANC = registerEntity("fire_of_orthanc", FireOfOrthancEntity::new, SpawnGroup.MISC, 0.65F, 0.65F);
@@ -82,31 +85,33 @@ public class EntitiesME {
     public static final EntityType<SpearEntity> SPEAR = registerEntity("spear", SpearEntity::new, SpawnGroup.MISC, 1f, 1f);
 
     // Seat
-    public static final EntityType<SeatEntity> SEAT_ENTITY = register("seat_entity", EntityType.Builder.create(SeatEntity::new, SpawnGroup.MISC).dimensions(0.1F, 0.1F));
+    public static final EntityType<SeatEntity> SEAT_ENTITY = register("seat_entity",
+            FabricEntityTypeBuilder.create(SpawnGroup.MISC, SeatEntity::new).dimensions(EntityDimensions.fixed(0.1F, 0.1F)));
 
 
     public static <T extends Entity> EntityType<T> registerEntity(String name, EntityType.EntityFactory<T> entity, SpawnGroup spawnGroup,
                                                                   float width, float height) {
-        return Registry.register(Registries.ENTITY_TYPE, MiddleEarth.of(name), EntityType.Builder.create(entity, spawnGroup).dimensions(width, height).build(keyOf("name")));
+        return Registry.register(Registries.ENTITY_TYPE, MiddleEarth.of(name),
+                FabricEntityTypeBuilder.create(spawnGroup, entity).dimensions(EntityDimensions.fixed(width, height)).build());
     }
 
-    private static <T extends Entity> EntityType<T> register(RegistryKey<EntityType<?>> key, EntityType.Builder<T> type) {
-        EntityType<T> entityType = Registry.register(Registries.ENTITY_TYPE, key, type.build(key));
+    private static <T extends Entity> EntityType<T> register(RegistryKey<EntityType<?>> key, EntityType<T> type) {
+        EntityType<T> entityType = Registry.register(Registries.ENTITY_TYPE, key, type);
         TranslationEntries.entityEntries.add(entityType);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ENTITY_TYPE, entityType.getUntranslatedName()));
         return entityType;
     }
 
-    private static EntityType.EntityFactory<BarrelEntity> getBoatFactory(Supplier<Item> itemSupplier) {
+    private static EntityType.EntityFactory<BarrelEntity> getBoatFactory(Supplier<net.minecraft.item.Item> itemSupplier) {
         return (type, world) -> new BarrelEntity(type, world, itemSupplier);
+    }
+
+    private static <T extends Entity> EntityType<T> register(String id, FabricEntityTypeBuilder<T> builder) {
+        return register(keyOf(id), builder.build());
     }
 
     private static RegistryKey<EntityType<?>> keyOf(String id) {
         return RegistryKey.of(RegistryKeys.ENTITY_TYPE, new Identifier(MiddleEarth.MOD_ID, id));
-    }
-
-    private static <T extends Entity> EntityType<T> register(String id, EntityType.Builder<T> type) {
-        return register(keyOf(id), type);
     }
 
 
@@ -126,31 +131,39 @@ public class EntitiesME {
         FabricDefaultAttributeRegistry.register(SHELOBITE_SCUTTLER, ShelobiteScuttlerEntity.setAttributes());
         FabricDefaultAttributeRegistry.register(SPAWN_OF_SHELOB, SpawnOfShelobEntity.setAttributes());
 
-        FabricDefaultAttributeRegistry.register(STONE_TROLL, StoneTrollEntity.setAttributes());
-        FabricDefaultAttributeRegistry.register(PETRIFIED_TROLL, PetrifiedTrollEntity.setAttributes());
-
-        FabricDefaultAttributeRegistry.register(SNOW_TROLL, SnowTrollEntity.setAttributes());
-
         FabricDefaultAttributeRegistry.register(NPC, NpcEntity.setAttributes());
         registerSpawnRestrictions();
     }
 
     private static void registerSpawnRestrictions(){
-        SpawnLocation onGroundLocation = SpawnLocationTypes.ON_GROUND;
+        SpawnRestriction.Location onGroundLocation = SpawnRestriction.Location.ON_GROUND;
         Heightmap.Type heightmapType = Heightmap.Type.MOTION_BLOCKING_NO_LEAVES;
 
-        SpawnRestriction.register(SHELOBITE_LARVA, onGroundLocation, heightmapType, ShelobiteLarvaEntity::canSpawn);
-        SpawnRestriction.register(SHELOBITE_SCUTTLER, onGroundLocation, heightmapType, ShelobiteScuttlerEntity::canSpawn);
-        SpawnRestriction.register(SPAWN_OF_SHELOB, onGroundLocation, heightmapType, SpawnOfShelobEntity::canSpawn);
+        registerSpawnRestriction(SHELOBITE_LARVA, onGroundLocation, heightmapType, ShelobiteLarvaEntity::canSpawn);
+        registerSpawnRestriction(SHELOBITE_SCUTTLER, onGroundLocation, heightmapType, ShelobiteScuttlerEntity::canSpawn);
+        registerSpawnRestriction(SPAWN_OF_SHELOB, onGroundLocation, heightmapType, SpawnOfShelobEntity::canSpawn);
 
-        SpawnRestriction.register(CAVE_TROLL, onGroundLocation, heightmapType, CaveTrollEntity::canSpawn);
-        SpawnRestriction.register(NPC, onGroundLocation, heightmapType, NpcEntity::canSpawn);
+        registerSpawnRestriction(CAVE_TROLL, onGroundLocation, heightmapType, CaveTrollEntity::canSpawn);
+        registerSpawnRestriction(NPC, onGroundLocation, heightmapType, NpcEntity::canSpawn);
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static <T extends MobEntity> void registerSpawnRestriction(EntityType<T> type, SpawnRestriction.Location location, Heightmap.Type heightmap,
+                                                                       SpawnRestriction.SpawnPredicate<T> predicate) {
+        try {
+            Method method = SpawnRestriction.class.getDeclaredMethod("register", EntityType.class,
+                    SpawnRestriction.Location.class, Heightmap.Type.class, SpawnRestriction.SpawnPredicate.class);
+            method.setAccessible(true);
+            method.invoke(null, type, location, heightmap, predicate);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException("Failed to register spawn restriction for " + type, e);
+        }
     }
 
     static {
-        REINFORCED_BARREL = register("reinforced_barrel", EntityType.Builder.create(getBoatFactory(() -> {
+        REINFORCED_BARREL = register("reinforced_barrel", FabricEntityTypeBuilder.create(SpawnGroup.MISC, getBoatFactory(() -> {
             return ResourceItemsME.REINFORCED_BARREL;
-        }), SpawnGroup.MISC).dropsNothing().dimensions(1.2F, 1.2F).eyeHeight(0.625F).maxTrackingRange(10));
+        })).dimensions(EntityDimensions.fixed(1.2F, 1.2F)).trackRangeChunks(10));
 
     }
 }

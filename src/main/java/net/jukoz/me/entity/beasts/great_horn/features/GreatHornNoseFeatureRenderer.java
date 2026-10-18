@@ -1,4 +1,6 @@
 package net.jukoz.me.entity.beasts.great_horn.features;
+import net.jukoz.me.entity.beasts.great_horn.GreatHornEntity;
+import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -8,7 +10,7 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.LoadedEntityModels;
+import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.jukoz.me.MiddleEarth;
@@ -20,11 +22,11 @@ import java.time.LocalDate;
 import java.time.Month;
 
 @Environment(EnvType.CLIENT)
-public class GreatHornNoseFeatureRenderer extends FeatureRenderer<GreatHornEntityRenderState, GreatHornModel> {
+public class GreatHornNoseFeatureRenderer extends MEFeatureRenderer<GreatHornEntity, GreatHornEntityRenderState, GreatHornModel> {
 	private final GreatHornModel model;
 	private final static Identifier TEXTURE = new Identifier(MiddleEarth.MOD_ID, "textures/entities/great_horn/feature/great_horn_red_nose.png");
 
-	public GreatHornNoseFeatureRenderer(FeatureRendererContext<GreatHornEntityRenderState, GreatHornModel> context, LoadedEntityModels loader) {
+	public GreatHornNoseFeatureRenderer(FeatureRendererContext<GreatHornEntity, GreatHornModel> context, LoadedEntityModelsCompat loader) {
 		super(context);
 		this.model = new GreatHornModel(loader.getModelPart(EntityModelLayersME.GREAT_HORN));
 	}

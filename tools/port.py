@@ -236,6 +236,88 @@ def ensure_import(text: str, fqcn: str) -> str:
     return f"import {fqcn};\n" + text
 
 
+_CLASS_INDEX = None
+_FQCN_INDEX = None
+
+
+def class_index():
+    """simple class name -> [packages], built from the ported tree.
+
+    Rewrites that synthesise a type name (e.g. deriving the entity from a donor
+    render-state name) need the entity's package to emit an import; the tree is the
+    authority for that.  Kept as a list because the tree contains a few duplicate simple
+    names (notably net.jukoz.me.entity.NpcEntity vs net.jukoz.me.entity.npcs.NpcEntity).
+    """
+    global _CLASS_INDEX, _FQCN_INDEX
+    if _CLASS_INDEX is None:
+        idx = collections.defaultdict(list)
+        fqcns = set()
+        for path in iter_java(PROJECT / "src/main/java"):
+            head = path.read_text(encoding="utf-8", errors="replace")[:4000]
+            m = re.search(r"package\s+([\w.]+)\s*;", head)
+            if m:
+                idx[path.stem].append(m.group(1))
+                fqcns.add(f"{m.group(1)}.{path.stem}")
+        _CLASS_INDEX = dict(idx)
+        _FQCN_INDEX = fqcns
+    return _CLASS_INDEX
+
+
+def full_fqcns():
+    class_index()
+    return _FQCN_INDEX
+
+
+VANILLA_TYPES = {
+    "PlayerEntity": "net.minecraft.entity.player.PlayerEntity",
+    "LivingEntity": "net.minecraft.entity.LivingEntity",
+    "MobEntity": "net.minecraft.entity.mob.MobEntity",
+    "Entity": "net.minecraft.entity.Entity",
+    "HorseEntity": "net.minecraft.entity.passive.HorseEntity",
+}
+
+
+def resolve_entity_fqcn(text: str, entity: str):
+    """Best-effort FQCN for an entity type synthesised from a donor state name.
+
+    Donor state classes live beside (or in a sub-package of) their entity, so prefer the
+    file's own package and the packages of any RenderState it already imports, walking up
+    parent packages.  Fall back to the tree index only when the simple name is
+    unambiguous, and to a small vanilla table for state names that map to vanilla types.
+    """
+    fqcns = full_fqcns()
+    bases = []
+    m = re.search(r"package\s+([\w.]+)\s*;", text)
+    if m:
+        bases.append(m.group(1))
+    for m in re.finditer(r"import\s+([\w.]+)\.\w+RenderState;", text):
+        bases.append(m.group(1))
+    for base in bases:
+        pkg = base
+        while pkg:
+            cand = f"{pkg}.{entity}"
+            if cand in fqcns:
+                return cand
+            if "." not in pkg:
+                break
+            pkg = pkg.rsplit(".", 1)[0]
+    pkgs = class_index().get(entity) or []
+    if len(pkgs) == 1:
+        return f"{pkgs[0]}.{entity}"
+    return VANILLA_TYPES.get(entity)
+
+
+def ensure_import_simple(text: str, simple: str) -> str:
+    """Import a class known only by its simple name (best effort)."""
+    fqcn = resolve_entity_fqcn(text, simple)
+    if not fqcn:
+        return text
+    for wrong in re.findall(r"import\s+([\w.]+)\." + re.escape(simple) + r";", text):
+        if f"{wrong}.{simple}" != fqcn:
+            text = text.replace(f"import {wrong}.{simple};\n", "")
+    return ensure_import(text, fqcn)
+
+
 # Each entry is (name, pattern, replacement). The patterns are regexes anchored on a
 # non-identifier boundary: a plain string replace of "Identifier.of(" also matched
 # CategoryIdentifier.of( and produced "Categorynew Identifier(".
@@ -304,7 +386,7 @@ REWRITES = [
     ("consumable-set", r"([A-Za-z_][A-Za-z0-9_]*)[.]set[(]DataComponentTypes[.]CONSUMABLE, ConsumableComponents[.]FOOD[)];?", ""),
     ("consumable-get", r"ConsumableComponent ([A-Za-z_][A-Za-z0-9_]*) = ([A-Za-z_][A-Za-z0-9_]*)[.]get[(]DataComponentTypes[.]CONSUMABLE[)];?", ""),
     ("consumable-null", r"consumableComponent != null[ ]*&&[ ]*", ""),
-    ("onconsume-1.20", r"([A-Za-z_][A-Za-z0-9_]*)[.]onConsume[(]([^,]+), ([^,]+), ([^,]+), [^)]+[)]", "\\1.onConsume(\\2, \\3, \\4)"),
+    ("onconsume-1.20", r"([A-Za-z_][A-Za-z0-9_]*)[.]onConsume[(]([^,\r\n]+), ([^,\r\n]+), ([^,\r\n]+), [^)\r\n]+[)]", "\\1.onConsume(\\2, \\3, \\4)"),
     ("charged-settings", r"[.]component[(]DataComponentTypes[.]CHARGED_PROJECTILES, ChargedProjectilesComponent[.]DEFAULT[)]", ""),
     ("charged-set", r"([A-Za-z_][A-Za-z0-9_]*)[.]set[(]DataComponentTypes[.]CHARGED_PROJECTILES, ChargedProjectilesComponent[.]of[(]([^)]*)[)][)]", "MECrossbow.setCharged(\\1, \\2)"),
     ("charged-default", r"([A-Za-z_][A-Za-z0-9_]*)[.]set[(]DataComponentTypes[.]CHARGED_PROJECTILES, ChargedProjectilesComponent[.]DEFAULT[)]", "MECrossbow.clear(\\1)"),
@@ -375,6 +457,40 @@ REWRITES = [
     # an x.hasGlint() call, so match a real argument list (nested parens allowed) and
     # refuse to touch sites that already have a 4th argument (negative lookahead).
     ("armor-glint-3arg", r"getArmorGlintConsumer\(([^,()]+),\s*(RenderLayer\.[A-Za-z_]\w*\((?:[^()]|\([^()]*\))*\)),\s*([^,()]+\.hasGlint\(\))\)(?!\s*,)", "getArmorGlintConsumer(\\1, \\2, true, \\3)"),
+    # --- render layer R2: donor-style state adapters (report: build/agents/render-r2-report.md) ---
+    # Donor 1.21.8 renderers carry a third type argument (the render state); 1.20.1
+    # MobEntityRenderer/BipedEntityRenderer take only <T, M>. Point them at the adapter
+    # bases, which recreate the donor state pipeline and are model-typed <T, S, M>.
+    # AgeableMobEntityRenderer does not exist in 1.20.1; MEMAgeableMobEntityRenderer
+    # emulates it on top of MEMobEntityRenderer.
+    ("me-renderer-ageable", r"extends AgeableMobEntityRenderer<([^,>]+), ([^,>]+), ([^,>]+)>", "extends MEMAgeableMobEntityRenderer<\\1, \\2, \\3>"),
+    ("me-renderer-mob", r"extends MobEntityRenderer<([^,>]+), ([^,>]+), ([^,>]+)>", "extends MEMobEntityRenderer<\\1, \\2, \\3>"),
+    ("me-renderer-biped", r"extends BipedEntityRenderer<([^,>]+), ([^,>]+), ([^,>]+)>", "extends MEBipedEntityRenderer<\\1, \\2, \\3>"),
+    ("me-renderer-entity", r"extends EntityRenderer<([^,>]+), ([^,>]+)>", "extends MEEntityRenderer<\\1, \\2>"),
+    # Donor models are parameterised by the render state; MESinglePartEntityModel bridges
+    # that onto 1.20.1's entity-typed SinglePartEntityModel via MEEntityRenderContext.
+    ("me-model-single", r"extends SinglePartEntityModel<([A-Za-z0-9_]*RenderState[^,>]*)>", "extends MESinglePartEntityModel<\\1>"),
+    # Biped models need the concrete entity type as well (MEBipedEntityModel<T, S>) so the
+    # renderer's M extends BipedEntityModel<T> bound is satisfied. The shared base state
+    # "BipedEntityRenderState" has no matching entity class, so it maps to LivingEntity.
+    ("me-model-biped-base", r"extends BipedEntityModel<BipedEntityRenderState>", "extends MEBipedEntityModel<net.minecraft.entity.LivingEntity, BipedEntityRenderState>"),
+    ("me-model-biped", r"extends BipedEntityModel<([A-Za-z0-9_]+)RenderState>", "extends MEBipedEntityModel<\\1, \\1RenderState>"),
+    # Donor features are FeatureRenderer<S, M>; 1.20.1 is FeatureRenderer<T, M>. Add the
+    # entity as the first argument (derived from the state name) and retarget both the
+    # superclass and the FeatureRendererContext constructor parameter.
+    ("me-feature-render", r"extends FeatureRenderer<([A-Za-z0-9_]+)RenderState, ([^,>]+)>", "extends MEFeatureRenderer<\\1, \\1RenderState, \\2>"),
+    ("me-feature-context", r"FeatureRendererContext<([A-Za-z0-9_]+)RenderState, ([^,>]+)>", "FeatureRendererContext<\\1, \\2>"),
+    # 1.21.8 LoadedEntityModels -> 1.20.1 EntityModelLoader, wrapped so the donor API
+    # (getModelPart) stays; EntityRendererFactory.Context has getModelLoader(), not
+    # getEntityModels().
+    ("loaded-entity-models-import", r"import net[.]minecraft[.]client[.]render[.]entity[.]model[.]LoadedEntityModels;", "import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;"),
+    ("loaded-entity-models-type", r"(?<![A-Za-z0-9_$])LoadedEntityModels(?![A-Za-z0-9_])", "LoadedEntityModelsCompat"),
+    ("entity-models-ctx", r"([A-Za-z_][A-Za-z0-9_]*)[.]getEntityModels[(][)]", "new LoadedEntityModelsCompat(\\1.getModelLoader())"),
+    # 1.21.8 AnimationState#copyFrom -> MEAnimationStates helper (fields live behind the
+    # AnimationStateAccessor mixin interface). Only receiver/argument chains of bare
+    # identifiers match, which keeps NBT .copyFrom(...) calls (whose receiver ends in a
+    # parenthesis) untouched.
+    ("anim-state-copyfrom", r"([A-Za-z0-9_$.]+)[.]copyFrom[(]([A-Za-z0-9_$.]+)[)]", "MEAnimationStates.copyFrom(\\1, \\2)"),
 ]
 
 # 1.21 wraps block/item ids in a RegistryKey; 1.20.1 registers by Identifier.
@@ -427,6 +543,22 @@ def rewrite(text: str):
         text = text.replace("DataComponentTypesME.", "MEComponents.")
         stats["component-keys"] = n
         text = ensure_import(text, "net.jukoz.me.item.MEComponents")
+
+    # render layer R2: the rules above rewrite donor superclasses to the compat adapters.
+    # Make the adapter classes resolvable, and pull in the entity type that the feature
+    # rules derived from a donor render-state name (features live in a sub-package, so
+    # they did not import the entity before).
+    adapters = (
+        "MEEntityRenderer", "MEMobEntityRenderer", "MEBipedEntityRenderer",
+        "MEMAgeableMobEntityRenderer", "MESinglePartEntityModel", "MEBipedEntityModel",
+        "MEFeatureRenderer", "MEAnimationStates", "LoadedEntityModelsCompat",
+    )
+    for cls in adapters:
+        if re.search(r"(?<![A-Za-z0-9_$])" + cls + r"(?![A-Za-z0-9_])", text):
+            text = ensure_import(text, "net.jukoz.me.compat.client.render." + cls)
+    for m in re.finditer(r"(?:MEFeatureRenderer|MEMobEntityRenderer|MEBipedEntityRenderer|"
+                         r"MEMAgeableMobEntityRenderer|MEBipedEntityModel|FeatureRendererContext)<([A-Za-z_][A-Za-z0-9_]*),", text):
+        text = ensure_import_simple(text, m.group(1))
 
     return text, dict(stats)
 

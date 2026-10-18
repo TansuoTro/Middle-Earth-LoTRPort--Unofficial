@@ -13,10 +13,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.TimeHelper;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
+import net.jukoz.me.compat.MECrossbow;
 import net.jukoz.me.entity.npcs.NpcEntity;
 import net.jukoz.me.utils.ItemTagsME;
 
 import java.util.EnumSet;
+import java.util.List;
 
 public class NpcCrossBowAttackGoal<T extends NpcEntity & RangedAttackMob & CrossbowUser> extends Goal {
     public static final UniformIntProvider COOLDOWN_RANGE = TimeHelper.betweenSeconds(1, 2);
@@ -122,7 +124,7 @@ public class NpcCrossBowAttackGoal<T extends NpcEntity & RangedAttackMob & Cross
                 this.actor.setCharging(true);
                 ItemStack itemStack = this.actor.getActiveItem();
                 this.actor.setNpcFlag(USING_ITEM_FLAG, true);
-                if (useTicks >= CrossbowItem.getPullTime(itemStack, this.actor)) {
+                if (useTicks >= CrossbowItem.getPullTime(itemStack)) {
                     this.actor.stopUsingItem();
                     this.stage = Stage.CHARGED;
                     this.chargedTicksLeft = 30 + this.actor.getRandom().nextInt(15);

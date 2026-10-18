@@ -1,4 +1,6 @@
 package net.jukoz.me.entity.beasts.warg;
+import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
+import net.jukoz.me.compat.client.render.MEMobEntityRenderer;
 
 import com.google.common.collect.Maps;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -16,7 +18,7 @@ import net.minecraft.util.Util;
 
 import java.util.Map;
 
-public class WargRenderer extends MobEntityRenderer<WargEntity, WargEntityRenderState, WargModel> {
+public class WargRenderer extends MEMobEntityRenderer<WargEntity, WargEntityRenderState, WargModel> {
     private static final String PATH = "textures/entities/warg/";
     private static final float SIZE = 1f;
     private static final int LIGHT_LEVEL_EMISSIVE_EYES = 8;
@@ -33,11 +35,11 @@ public class WargRenderer extends MobEntityRenderer<WargEntity, WargEntityRender
                         state -> state.armor
                 )
         );
-        this.addFeature(new WargArmorSpineFeatureRenderer(this, context.getEntityModels(), context.getEquipmentRenderer()));
-        this.addFeature(new WargArmorSideSkullsFeatureRenderer(this, context.getEntityModels(), context.getEquipmentRenderer()));
-        this.addFeature(new WargArmorFrontSkullFeatureRenderer(this, context.getEntityModels(), context.getEquipmentRenderer()));
-        this.addFeature(new WargArmorBackSkullFeatureRenderer(this, context.getEntityModels(), context.getEquipmentRenderer()));
-        this.addFeature(new WargSaddleFeatureRenderer(this, context.getEntityModels(), context.getEquipmentRenderer()));
+        this.addFeature(new WargArmorSpineFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader()), context.getEquipmentRenderer()));
+        this.addFeature(new WargArmorSideSkullsFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader()), context.getEquipmentRenderer()));
+        this.addFeature(new WargArmorFrontSkullFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader()), context.getEquipmentRenderer()));
+        this.addFeature(new WargArmorBackSkullFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader()), context.getEquipmentRenderer()));
+        this.addFeature(new WargSaddleFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader()), context.getEquipmentRenderer()));
     }
 
     @Override

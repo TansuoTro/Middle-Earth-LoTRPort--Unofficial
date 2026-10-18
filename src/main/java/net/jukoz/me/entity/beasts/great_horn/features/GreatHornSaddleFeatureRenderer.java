@@ -1,4 +1,6 @@
 package net.jukoz.me.entity.beasts.great_horn.features;
+import net.jukoz.me.entity.beasts.great_horn.GreatHornEntity;
+import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
@@ -7,7 +9,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.LoadedEntityModels;
+import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -17,11 +19,11 @@ import net.jukoz.me.entity.EntityModelLayersME;
 import net.jukoz.me.entity.beasts.great_horn.GreatHornEntityRenderState;
 import net.jukoz.me.entity.beasts.great_horn.GreatHornModel;
 
-public class GreatHornSaddleFeatureRenderer extends FeatureRenderer<GreatHornEntityRenderState, GreatHornModel> {
+public class GreatHornSaddleFeatureRenderer extends MEFeatureRenderer<GreatHornEntity, GreatHornEntityRenderState, GreatHornModel> {
     private final GreatHornSaddleModel model;
     private final static String PATH = "textures/entities/great_horn/feature/great_horn_saddle";
 
-    public GreatHornSaddleFeatureRenderer(FeatureRendererContext<GreatHornEntityRenderState, GreatHornModel> context, LoadedEntityModels loader, EquipmentRenderer equipmentRenderer) {
+    public GreatHornSaddleFeatureRenderer(FeatureRendererContext<GreatHornEntity, GreatHornModel> context, LoadedEntityModelsCompat loader, EquipmentRenderer equipmentRenderer) {
         super(context);
         this.model = new GreatHornSaddleModel(loader.getModelPart(EntityModelLayersME.GREAT_HORN_SADDLE));
     }

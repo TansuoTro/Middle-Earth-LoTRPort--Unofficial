@@ -1,4 +1,6 @@
 package net.jukoz.me.entity.npcs.renderer;
+import net.jukoz.me.entity.npcs.NpcEntity;
+import net.jukoz.me.compat.client.render.MEBipedEntityModel;
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.RenderLayer;
@@ -10,7 +12,7 @@ import net.minecraft.util.math.random.Random;
 
 import java.util.List;
 
-public class NpcEntityModel extends BipedEntityModel<NpcEntityRenderState> {
+public class NpcEntityModel extends MEBipedEntityModel<NpcEntity, NpcEntityRenderState> {
     private static final String LEFT_SLEEVE = "left_sleeve";
     private static final String RIGHT_SLEEVE = "right_sleeve";
     private static final String LEFT_PANTS = "left_pants";

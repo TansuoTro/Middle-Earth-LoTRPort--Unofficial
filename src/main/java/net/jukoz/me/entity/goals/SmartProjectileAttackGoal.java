@@ -109,7 +109,7 @@ public class SmartProjectileAttackGoal extends Goal {
 
 			float f = (float)Math.sqrt(d) / this.maxShootRange;
 			float g = MathHelper.clamp(f, 0.1F, 1.0F);
-			this.owner.shootAt(this.target, g);
+			this.owner.attack(this.target, g);
 			this.updateCountdownTicks = MathHelper.floor(f * (this.maxIntervalTicks - this.minIntervalTicks) + this.minIntervalTicks);
 		} else if (this.updateCountdownTicks < 0) {
 			this.updateCountdownTicks = MathHelper.floor(

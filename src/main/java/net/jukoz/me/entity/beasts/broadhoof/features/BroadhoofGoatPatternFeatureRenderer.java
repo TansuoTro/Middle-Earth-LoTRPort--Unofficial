@@ -1,4 +1,6 @@
 package net.jukoz.me.entity.beasts.broadhoof.features;
+import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatEntity;
+import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
 import com.google.common.collect.Maps;
 import net.fabricmc.api.EnvType;
@@ -22,7 +24,7 @@ import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatPattern;
 import java.util.Map;
 
 @Environment(EnvType.CLIENT)
-public class BroadhoofGoatPatternFeatureRenderer extends FeatureRenderer<BroadhoofGoatEntityRenderState, BroadhoofGoatModel> {
+public class BroadhoofGoatPatternFeatureRenderer extends MEFeatureRenderer<BroadhoofGoatEntity, BroadhoofGoatEntityRenderState, BroadhoofGoatModel> {
     private static final String PATH = "textures/entities/broadhoof_goat/patterns/";
     private static final Identifier INVISIBLE_ID = new Identifier("minecraft", "invisible");
 
@@ -70,7 +72,7 @@ public class BroadhoofGoatPatternFeatureRenderer extends FeatureRenderer<Broadho
             )
     );
 
-    public BroadhoofGoatPatternFeatureRenderer(FeatureRendererContext<BroadhoofGoatEntityRenderState, BroadhoofGoatModel> featureRendererContext) {
+    public BroadhoofGoatPatternFeatureRenderer(FeatureRendererContext<BroadhoofGoatEntity, BroadhoofGoatModel> featureRendererContext) {
         super(featureRendererContext);
     }
 

@@ -5,7 +5,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.ItemAsset;
 import net.minecraft.client.render.TexturedRenderLayers;
-import net.minecraft.client.render.entity.model.LoadedEntityModels;
+import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.minecraft.client.render.model.BakedSimpleModel;
 import net.minecraft.client.render.model.BlockStateModel;
 import net.minecraft.client.render.model.ModelBaker;
@@ -27,7 +27,7 @@ public class MEModelLoader extends ModelBaker {
     public static final SpriteIdentifier ROUND_SHIELD_BASE;
     public static final SpriteIdentifier ROUND_SHIELD_BASE_NO_PATTERN;
 
-    public MEModelLoader(LoadedEntityModels entityModels, Map<BlockState, BlockStateModel.UnbakedGrouped> blockModels, Map<Identifier, ItemAsset> itemModels, Map<Identifier, BakedSimpleModel> simpleModels, BakedSimpleModel missingModel) {
+    public MEModelLoader(LoadedEntityModelsCompat entityModels, Map<BlockState, BlockStateModel.UnbakedGrouped> blockModels, Map<Identifier, ItemAsset> itemModels, Map<Identifier, BakedSimpleModel> simpleModels, BakedSimpleModel missingModel) {
         super(entityModels, blockModels, itemModels, simpleModels, missingModel);
     }
 

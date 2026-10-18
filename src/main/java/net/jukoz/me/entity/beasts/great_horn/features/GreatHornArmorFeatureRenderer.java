@@ -1,4 +1,6 @@
 package net.jukoz.me.entity.beasts.great_horn.features;
+import net.jukoz.me.entity.beasts.great_horn.GreatHornEntity;
+import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.minecraft.client.render.OverlayTexture;
@@ -8,7 +10,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.LoadedEntityModels;
+import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -23,11 +25,11 @@ import net.jukoz.me.entity.beasts.great_horn.GreatHornEntityRenderState;
 import net.jukoz.me.entity.beasts.great_horn.GreatHornModel;
 import net.jukoz.me.item.utils.armor.DyeablePiecesME;
 
-public class GreatHornArmorFeatureRenderer extends FeatureRenderer<GreatHornEntityRenderState, GreatHornModel> {
+public class GreatHornArmorFeatureRenderer extends MEFeatureRenderer<GreatHornEntity, GreatHornEntityRenderState, GreatHornModel> {
     private final GreatHornArmorModel model;
     private final EquipmentRenderer equipmentRenderer;
 
-    public GreatHornArmorFeatureRenderer(FeatureRendererContext<GreatHornEntityRenderState, GreatHornModel> context, LoadedEntityModels loader, EquipmentRenderer equipmentRenderer) {
+    public GreatHornArmorFeatureRenderer(FeatureRendererContext<GreatHornEntity, GreatHornModel> context, LoadedEntityModelsCompat loader, EquipmentRenderer equipmentRenderer) {
         super(context);
         this.model = new GreatHornArmorModel(loader.getModelPart(EntityModelLayersME.GREAT_HORN_ARMOR));
         this.equipmentRenderer = equipmentRenderer;

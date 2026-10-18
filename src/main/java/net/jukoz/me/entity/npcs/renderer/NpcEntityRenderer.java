@@ -1,4 +1,6 @@
 package net.jukoz.me.entity.npcs.renderer;
+import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
+import net.jukoz.me.compat.client.render.MEBipedEntityRenderer;
 
 import net.jukoz.me.item.MEComponents;
 import net.fabricmc.api.EnvType;
@@ -42,7 +44,7 @@ import net.jukoz.me.registries.CharacterClothesRegistryME;
 import net.jukoz.me.utils.ItemTagsME;
 import org.jetbrains.annotations.Nullable;
 
-public class NpcEntityRenderer extends BipedEntityRenderer<NpcEntity, NpcEntityRenderState, NpcEntityModel> {
+public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntityRenderState, NpcEntityModel> {
     private final SpriteAtlasTexture characterTextureAtlas;
 
     public final static int HURT_COLOR = 0xff7e75;
@@ -59,10 +61,10 @@ public class NpcEntityRenderer extends BipedEntityRenderer<NpcEntity, NpcEntityR
         this.features.removeIf(x -> x.getClass() == HeadFeatureRenderer.class);
 
         this.addFeature(new ArmorFeatureRenderer<>(this, new ArmorEntityModel<>(context.getPart(EntityModelLayers.PLAYER_INNER_ARMOR)), new ArmorEntityModel<>(context.getPart(EntityModelLayers.PLAYER_OUTER_ARMOR)), context.getEquipmentRenderer()));
-        this.addFeature(new HairFeatureRenderer(this, context.getEntityModels()));
-        this.addFeature(new EarFeatureRenderer(this, context.getEntityModels()));
-        this.addFeature(new NoseFeatureRenderer(this, context.getEntityModels()));
-        this.addFeature(new FeetFeatureRenderer(this, context.getEntityModels()));
+        this.addFeature(new HairFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader())));
+        this.addFeature(new EarFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader())));
+        this.addFeature(new NoseFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader())));
+        this.addFeature(new FeetFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader())));
 
         characterTextureAtlas = AtlasesME.getAtlasFromPath(ModTexturedRenderLayers.CHARACTER_ATLAS_TEXTURES);
 

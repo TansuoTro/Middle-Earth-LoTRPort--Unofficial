@@ -1,4 +1,5 @@
 package net.jukoz.me.client.model.equipment;
+import net.jukoz.me.compat.client.render.MEBipedEntityModel;
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.RenderLayer;
@@ -7,7 +8,7 @@ import net.minecraft.client.render.entity.model.EntityModelPartNames;
 import net.jukoz.me.compat.client.render.state.BipedEntityRenderState;
 import net.minecraft.entity.LivingEntity;
 
-public class CustomChestplateModel extends BipedEntityModel<BipedEntityRenderState> {
+public class CustomChestplateModel extends MEBipedEntityModel<LivingEntity, BipedEntityRenderState> {
 
     public CustomChestplateModel(ModelPart root) {
         super(root, RenderLayer::getArmorCutoutNoCull);
