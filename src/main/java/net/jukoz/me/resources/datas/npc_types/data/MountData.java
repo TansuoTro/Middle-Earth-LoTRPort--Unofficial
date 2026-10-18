@@ -2,7 +2,7 @@ package net.jukoz.me.resources.datas.npc_types.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.component.DataComponentTypes;
+
 import net.jukoz.me.compat.DyedColorComponent;
 import net.minecraft.entity.*;
 import net.minecraft.entity.mob.MobEntity;

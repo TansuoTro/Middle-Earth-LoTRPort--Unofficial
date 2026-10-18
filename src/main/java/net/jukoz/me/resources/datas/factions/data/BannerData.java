@@ -4,7 +4,7 @@ import net.jukoz.me.compat.NbtCompat;
 import com.google.gson.JsonParser;
 import net.minecraft.block.entity.BannerPattern;
 import net.minecraft.block.entity.BannerPatterns;
-import net.minecraft.component.DataComponentTypes;
+
 import net.jukoz.me.compat.MEBannerPatterns;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;

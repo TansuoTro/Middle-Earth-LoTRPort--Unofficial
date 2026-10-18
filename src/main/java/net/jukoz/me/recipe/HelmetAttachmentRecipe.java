@@ -1,7 +1,6 @@
 package net.jukoz.me.recipe;
 
 import net.jukoz.me.item.MEComponents;
-import net.minecraft.component.DataComponentTypes;
 import net.jukoz.me.item.dataComponents.HelmetAttachmentDataComponent;
 import net.jukoz.me.item.items.armor.CustomHelmetItem;
 import net.jukoz.me.item.items.armor.HelmetAttachmentItem;
@@ -12,6 +11,7 @@ import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.util.Identifier;
 import net.minecraft.inventory.RecipeInputInventory;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.World;
 

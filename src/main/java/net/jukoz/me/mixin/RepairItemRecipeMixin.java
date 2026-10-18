@@ -1,7 +1,7 @@
 package net.jukoz.me.mixin;
 
 import net.jukoz.me.MiddleEarth;
-import net.minecraft.component.DataComponentTypes;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RepairItemRecipe;
 import net.minecraft.registry.RegistryKeys;

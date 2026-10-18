@@ -352,6 +352,7 @@ REWRITES = [
     ("mecomponents-get", r"([A-Za-z_][A-Za-z0-9_]*)[.]get[(](MEComponents[.][A-Z_]+[A-Za-z0-9_]*)[)]", "MEComponents.get(\\1, \\2)"),
     ("mecomponents-contains", r"([A-Za-z_][A-Za-z0-9_]*)[.]contains[(](MEComponents[.][A-Z_]+[A-Za-z0-9_]*)[)]", "MEComponents.contains(\\1, \\2)"),
     ("recipe-remainder-item", r"([A-Za-z_][A-Za-z0-9_]*)[.]getItem[(][)][.]getRecipeRemainder[(][)]", "\\1.getRecipeRemainder()"),
+    ("import-dct", r"import net[.]minecraft[.]component[.]DataComponentTypes;", ""),
 ]
 
 # 1.21 wraps block/item ids in a RegistryKey; 1.20.1 registers by Identifier.

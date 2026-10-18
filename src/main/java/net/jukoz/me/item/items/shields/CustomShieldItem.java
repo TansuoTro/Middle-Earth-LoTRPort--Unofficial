@@ -1,7 +1,7 @@
 package net.jukoz.me.item.items.shields;
 import net.jukoz.me.item.MEComponents;
 
-import net.minecraft.component.DataComponentTypes;
+
 import net.minecraft.component.type.BlocksAttacksComponent;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.Item;

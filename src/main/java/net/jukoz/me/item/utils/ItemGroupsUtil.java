@@ -1,7 +1,7 @@
 package net.jukoz.me.item.utils;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.component.DataComponentTypes;
+
 import net.jukoz.me.item.MEComponents;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.item.Item;

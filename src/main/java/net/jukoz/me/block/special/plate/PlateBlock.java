@@ -8,7 +8,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.component.DataComponentTypes;
+
 import net.minecraft.component.type.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -192,7 +192,7 @@ public class PlateBlock extends BlockWithEntity {
             }
         }
 
-        return super.onUseWithItem(stack, state, world, pos, player, hand, hit);
+        return super.onUseWithItem(stack);
     }
 
     @Override

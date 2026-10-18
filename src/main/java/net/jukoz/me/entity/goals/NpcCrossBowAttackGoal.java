@@ -1,6 +1,6 @@
 package net.jukoz.me.entity.goals;
 
-import net.minecraft.component.DataComponentTypes;
+
 
 import net.minecraft.entity.CrossbowUser;
 import net.minecraft.entity.EquipmentSlot;

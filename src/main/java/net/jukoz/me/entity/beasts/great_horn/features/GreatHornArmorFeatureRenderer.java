@@ -11,7 +11,7 @@ import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.LoadedEntityModels;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.component.DataComponentTypes;
+
 import net.jukoz.me.compat.DyedColorComponent;
 import net.minecraft.util.Identifier;
 import net.minecraft.item.ItemStack;

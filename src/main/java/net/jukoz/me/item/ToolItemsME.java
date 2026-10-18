@@ -1,6 +1,6 @@
 package net.jukoz.me.item;
 
-import net.minecraft.component.DataComponentTypes;
+
 import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;

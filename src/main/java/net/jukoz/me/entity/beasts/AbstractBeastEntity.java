@@ -2,7 +2,7 @@ package net.jukoz.me.entity.beasts;
 
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Blocks;
-import net.minecraft.component.DataComponentTypes;
+
 import net.minecraft.item.FoodComponent;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.pathing.EntityNavigation;

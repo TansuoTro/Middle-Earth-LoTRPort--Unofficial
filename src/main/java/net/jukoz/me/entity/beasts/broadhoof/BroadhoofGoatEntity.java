@@ -4,7 +4,7 @@ import net.jukoz.me.item.MEComponents;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.ComponentsAccess;
-import net.minecraft.component.DataComponentTypes;
+
 import net.minecraft.item.FoodComponent;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;

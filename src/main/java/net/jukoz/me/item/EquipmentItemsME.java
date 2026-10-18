@@ -1,6 +1,6 @@
 package net.jukoz.me.item;
 
-import net.minecraft.component.DataComponentTypes;
+
 import net.jukoz.me.compat.DyedColorComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ArmorItem;

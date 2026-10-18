@@ -23,7 +23,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.component.DataComponentTypes;
+
 import net.jukoz.me.compat.MEBannerPatterns;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DyeColor;

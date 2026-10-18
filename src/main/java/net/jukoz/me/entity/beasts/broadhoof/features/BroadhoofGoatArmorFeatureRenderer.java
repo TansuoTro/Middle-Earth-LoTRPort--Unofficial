@@ -3,7 +3,7 @@ package net.jukoz.me.entity.beasts.broadhoof.features;
 import net.minecraft.client.render.entity.equipment.EquipmentModel;
 import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
 import net.minecraft.client.render.entity.model.LoadedEntityModels;
-import net.minecraft.component.DataComponentTypes;
+
 import net.minecraft.util.Identifier;
 import net.minecraft.registry.RegistryKey;
 import net.jukoz.me.entity.EntityModelLayersME;

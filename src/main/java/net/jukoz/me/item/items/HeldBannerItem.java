@@ -1,6 +1,6 @@
 package net.jukoz.me.item.items;
 
-import net.minecraft.component.DataComponentTypes;
+
 import net.jukoz.me.compat.MEBannerPatterns;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

@@ -2,7 +2,6 @@ package net.jukoz.me.recipe;
 
 import net.jukoz.me.item.items.HeldBannerItem;
 import net.jukoz.me.item.items.shields.CustomBannerShieldItem;
-import net.minecraft.component.DataComponentTypes;
 import net.jukoz.me.compat.MEBannerPatterns;
 import net.minecraft.item.BannerItem;
 import net.minecraft.item.ItemStack;
@@ -11,6 +10,7 @@ import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.util.Identifier;
 import net.minecraft.inventory.RecipeInputInventory;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.World;
 

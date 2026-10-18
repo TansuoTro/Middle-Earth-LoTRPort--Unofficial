@@ -1,6 +1,6 @@
 package net.jukoz.me.item;
 
-import net.minecraft.component.DataComponentTypes;
+
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.block.registration.ModNatureBlocks;

@@ -2,7 +2,7 @@ package net.jukoz.me.entity.beasts.great_horn;
 import net.jukoz.me.entity.EntityAttributesME;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.component.DataComponentTypes;
+
 import net.minecraft.item.FoodComponent;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;

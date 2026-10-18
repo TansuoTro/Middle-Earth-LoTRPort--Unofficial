@@ -15,7 +15,7 @@ import net.minecraft.client.render.model.ModelBaker;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
+
 import net.jukoz.me.compat.MEBannerPatterns;
 import net.minecraft.item.ItemDisplayContext;
 import net.minecraft.item.ItemStack;

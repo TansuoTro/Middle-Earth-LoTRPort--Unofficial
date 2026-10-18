@@ -2,7 +2,7 @@ package net.jukoz.me.entity.npcs;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
-import net.minecraft.component.DataComponentTypes;
+
 import net.minecraft.component.type.BlocksAttacksComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;

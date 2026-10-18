@@ -2,7 +2,7 @@ package net.jukoz.me.entity.npcs.initializer;
 
 import net.jukoz.me.item.MEComponents;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.component.DataComponentTypes;
+
 import net.minecraft.component.type.CustomModelDataComponent;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.item.ItemStack;

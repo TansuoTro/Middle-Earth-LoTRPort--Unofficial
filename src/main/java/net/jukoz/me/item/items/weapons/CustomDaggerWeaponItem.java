@@ -1,7 +1,7 @@
 package net.jukoz.me.item.items.weapons;
 
 import net.jukoz.me.item.MEComponents;
-import net.minecraft.component.DataComponentTypes;
+
 import net.minecraft.component.type.UseCooldownComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;

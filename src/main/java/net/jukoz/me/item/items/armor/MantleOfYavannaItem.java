@@ -1,7 +1,7 @@
 package net.jukoz.me.item.items.armor;
 
 import net.jukoz.me.item.MEComponents;
-import net.minecraft.component.DataComponentTypes;
+
 import net.jukoz.me.compat.DyedColorComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
