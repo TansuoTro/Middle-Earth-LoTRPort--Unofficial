@@ -266,6 +266,8 @@ REWRITES = [
     # 1.21.2 renames on PlayerEntity / World.
     ("is-in-creative", r"(?<![A-Za-z0-9_$])isInCreativeMode[(]", "isCreative("),
     ("add-particle-client", r"(?<![A-Za-z0-9_$])addParticleClient[(]", "addParticle("),
+    # 1.21.2 split ActionResult.PASS into two; 1.20.1 only has PASS.
+    ("pass-to-default", r"ActionResult[.]PASS_TO_DEFAULT_BLOCK_ACTION", "ActionResult.PASS"),
 ]
 
 # 1.21 wraps block/item ids in a RegistryKey; 1.20.1 registers by Identifier.

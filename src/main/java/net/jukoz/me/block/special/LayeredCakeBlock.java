@@ -59,7 +59,7 @@ public class LayeredCakeBlock extends Block {
             }
         }
 
-        return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
+        return ActionResult.PASS;
     }
 
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {

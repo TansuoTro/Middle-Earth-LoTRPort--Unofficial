@@ -27,6 +27,12 @@ import net.jukoz.me.world.dimension.ModDimensions;
 
 public class MiddleEarth implements ModInitializer {
 	public static final String MOD_ID = "me";
+
+    /**
+     * The namespace the mod used before the port. {@code RegistriesME.registerAliases} rewrites
+     * every {@code middle-earth:} id in an existing world to its {@code me:} equivalent.
+     */
+    public static final String OLD_MOD_ID = "middle-earth";
 	public static final String MOD_VERSION = "alpha-1.4.0-1.20.1";
 	public static final boolean IS_DEBUG = true;
 

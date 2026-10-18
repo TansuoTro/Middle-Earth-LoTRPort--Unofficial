@@ -1,12 +1,10 @@
 package net.jukoz.me.registries;
 import net.jukoz.me.item.MEComponents;
 
-import net.fabricmc.fabric.api.item.v1.ComponentTooltipAppenderRegistry;
 import net.fabricmc.fabric.api.registry.*;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LeveledCauldronBlock;
 import net.minecraft.block.cauldron.CauldronBehavior;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.ai.pathing.PathNodeType;
 import net.minecraft.item.HoeItem;
 import net.minecraft.item.ItemStack;
@@ -112,15 +110,9 @@ public class RegistriesME {
     }
 
     public static void registerToolTipAppenders() {
-        ComponentTooltipAppenderRegistry.addAfter(DataComponentTypes.TRIM, MEComponents.ARTISAN_DATA);
-        ComponentTooltipAppenderRegistry.addAfter(DataComponentTypes.TRIM, MEComponents.TEMPERATURE_DATA);
-        ComponentTooltipAppenderRegistry.addAfter(DataComponentTypes.TRIM, MEComponents.ARMOR_TIER_DATA);
-        ComponentTooltipAppenderRegistry.addAfter(DataComponentTypes.TRIM, MEComponents.WEAPON_TYPE_DATA);
-        ComponentTooltipAppenderRegistry.addAfter(DataComponentTypes.TRIM, MEComponents.FACTION_DATA);
-        ComponentTooltipAppenderRegistry.addAfter(DataComponentTypes.TRIM, MEComponents.RACE_DATA);
-        ComponentTooltipAppenderRegistry.addAfter(DataComponentTypes.TRIM, MEComponents.HELMET_ATTACHMENT_DATA);
-        ComponentTooltipAppenderRegistry.addAfter(DataComponentTypes.TRIM, MEComponents.BACK_ATTACHMENT_DATA);
-        ComponentTooltipAppenderRegistry.addAfter(DataComponentTypes.TRIM, MEComponents.BLOCK_AUTHOR_DATA);
+        // 1.21 orders the ME components after TRIM through the Fabric component tooltip
+        // registry. 1.20.1 has no component registry; MEComponents.appendTooltips walks
+        // them in declaration order instead (see ItemStackTooltipMixin).
     }
 
     public static void registerFlammableBlocks() {
@@ -189,7 +181,7 @@ public class RegistriesME {
         FlammableBlockRegistry.getDefaultInstance().add(ModNatureBlocks.DRY_PINE_LEAVES, 30, 60);
         FlammableBlockRegistry.getDefaultInstance().add(ModNatureBlocks.PINE_BRANCHES, 30, 60);
 
-        LeavesSets.leaves.forEach(block -> {
+        LeavesSets.blocks.forEach(block -> {
             FlammableBlockRegistry.getDefaultInstance().add(block, 30, 60);
         });
     }
@@ -604,7 +596,7 @@ public class RegistriesME {
         registry.add(ModNatureBlocks.ASPEN_SAPLING, 0.3F);
         registry.add(ModNatureBlocks.BEECH_SAPLING, 0.3F);
 
-        LeavesSets.leaves.forEach(block -> {
+        LeavesSets.blocks.forEach(block -> {
             registry.add(block, 0.3F);
         });
 
@@ -696,36 +688,29 @@ public class RegistriesME {
     public static void registerCauldronBehaviour() {
 
         HotMetalsModel.items.forEach(item -> {
-            CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(item, COOL_DOWN_METAL);
+            CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(item, COOL_DOWN_METAL);
         });
 
         HotMetalsModel.ingots.forEach(item -> {
-            CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(item, COOL_DOWN_METAL);
+            CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(item, COOL_DOWN_METAL);
         });
 
         HotMetalsModel.nuggets.forEach(item -> {
-            CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(item, COOL_DOWN_METAL);
+            CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(item, COOL_DOWN_METAL);
         });
 
-        HotMetalsModel.nuggies.forEach(item -> {
-            CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(item, COOL_DOWN_METAL);
-        });
 
-        SimpleDyeableItemModel.items.forEach(item -> {
-            CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(item, CLEAN_EQUIPMENT);
-        });
+        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.BROADHOOF_GOAT_PADDED_ARMOR, CLEAN_EQUIPMENT);
+        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.BROADHOOF_GOAT_ORNAMENTED_PADDED_ARMOR, CLEAN_EQUIPMENT);
 
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(EquipmentItemsME.BROADHOOF_GOAT_PADDED_ARMOR, CLEAN_EQUIPMENT);
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(EquipmentItemsME.BROADHOOF_GOAT_ORNAMENTED_PADDED_ARMOR, CLEAN_EQUIPMENT);
+        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.WARG_LEATHER_ARMOR, CLEAN_EQUIPMENT);
+        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.WARG_REINFORCED_LEATHER_ARMOR, CLEAN_EQUIPMENT);
 
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(EquipmentItemsME.WARG_LEATHER_ARMOR, CLEAN_EQUIPMENT);
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(EquipmentItemsME.WARG_REINFORCED_LEATHER_ARMOR, CLEAN_EQUIPMENT);
+        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.GREAT_HORN_LIGHT_ARMOR, CLEAN_EQUIPMENT);
+        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.GREAT_HORN_LIGHT_GRAY_ARMOR, CLEAN_EQUIPMENT);
+        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.GREAT_HORN_LIGHT_GREEN_ARMOR, CLEAN_EQUIPMENT);
 
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(EquipmentItemsME.GREAT_HORN_LIGHT_ARMOR, CLEAN_EQUIPMENT);
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(EquipmentItemsME.GREAT_HORN_LIGHT_GRAY_ARMOR, CLEAN_EQUIPMENT);
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(EquipmentItemsME.GREAT_HORN_LIGHT_GREEN_ARMOR, CLEAN_EQUIPMENT);
-
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.map().put(ResourceItemsME.DIRTY_BONE, CLEAN_ITEM);
+        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(ResourceItemsME.DIRTY_BONE, CLEAN_ITEM);
     }
 
     //This not good but will do for now until more cases appear
@@ -745,7 +730,7 @@ public class RegistriesME {
         int bigSmokeAmount = random.nextInt(3) + 2;
 
         if (!MEComponents.contains(stack, MEComponents.TEMPERATURE_DATA)) {
-            return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
+            return ActionResult.PASS;
         }
         if (!world.isClient) {
             ItemStack originalStack = stack.copy();
@@ -781,13 +766,13 @@ public class RegistriesME {
     };
 
     public static final CauldronBehavior CLEAN_EQUIPMENT = (state, world, pos, player, hand, stack) -> {
-        if (!stack.isIn(ItemTags.DYEABLE)) {
-            return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
-        } else if (!stack.contains(MEComponents.DYED_COLOR)) {
-            return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
+        if (!(stack.getItem() instanceof net.minecraft.item.DyeableItem)) {
+            return ActionResult.PASS;
+        } else if (!MEComponents.contains(stack, MEComponents.DYED_COLOR)) {
+            return ActionResult.PASS;
         } else {
             if (!world.isClient) {
-                stack.remove(MEComponents.DYED_COLOR);
+                MEComponents.remove(stack, MEComponents.DYED_COLOR);
                 player.incrementStat(Stats.CLEAN_ARMOR);
                 LeveledCauldronBlock.decrementFluidLevel(state, world, pos);
             }
