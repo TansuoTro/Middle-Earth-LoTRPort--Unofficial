@@ -3,6 +3,11 @@ import net.jukoz.me.item.MESettings;
 
 import net.minecraft.block.piston.PistonBehavior;
 import net.jukoz.me.MiddleEarth;
+import net.jukoz.me.block.special.plants.CustomTallPlantBlock;
+import net.jukoz.me.block.special.plants.FlowerbedMushroomBlock;
+import net.jukoz.me.block.special.plants.TallMushroomBlock;
+import net.jukoz.me.block.special.plants.ToughBerryBushBlock;
+import net.jukoz.me.block.special.plants.WildCropBlock;
 import net.jukoz.me.block.special.*;
 import net.jukoz.me.block.special.crop.*;
 import net.jukoz.me.block.special.hangingstuff.CustomHangingBlock;
