@@ -1,107 +1,70 @@
 package net.jukoz.me.item.utils;
+
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import net.jukoz.me.entity.EntityAttributesME;
 import net.jukoz.me.item.MESettings;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.*;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ToolMaterial;
-import net.minecraft.item.equipment.ArmorMaterial;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
 import net.jukoz.me.MiddleEarth;
-import net.jukoz.me.utils.BlockTagsME;
-import net.jukoz.me.utils.EntityTypeTagsME;
+import net.minecraft.util.Identifier;
 
-import java.util.List;
-
+/**
+ * Shared item settings helpers.
+ *
+ * <p>The 1.21.5 donor builds weapon and mount-armour settings out of data components:
+ * {@code TOOL} / {@code WEAPON} on every weapon, and {@code EQUIPPABLE} (with a
+ * {@code EquipmentSlot.BODY} slot and an allowed-entities tag) on goat / warg / great-horn
+ * armour. 1.20.1 has neither component: weapon behaviour comes from the item class itself
+ * ({@code SwordItem}, {@code AxeItem}, ...), and mount armour is a {@code HorseArmorItem},
+ * which has no allowed-entities filter.
+ *
+ * <p>So the component parts are dropped and only what 1.20.1 can express is kept. The mount
+ * armours are inert here; equipping them properly needs a follow-up port of the armour items.
+ */
 public interface ItemSettingsME {
-
-    /**
-     * Middle-earth mod custom Settings for weapons
-     */
 
     Identifier ENTITY_INTERACTION_RANGE_MODIFIER_ID = new Identifier(MiddleEarth.MOD_ID, "entity_interaction_range");
 
-    static Item.Settings createWeaponSettings(ToolMaterial material, Item.Settings settings, WeaponTypesME type){
-        RegistryEntryLookup<Block> registryEntryLookup = Registries.createEntryLookup(Registries.BLOCK);
-
-        return settings.maxDamage(material.durability())
-                .repairable(material.repairItems())
-                .enchantable(material.enchantmentValue())
-                .attributeModifiers(createWeaponAttibutes(material, type.attack, type.attackSpeed, type.attackRange))
-                .component(DataComponentTypes.TOOL, new ToolComponent(List.of(
-                        ToolComponent.Rule.ofAlwaysDropping(registryEntryLookup.getOrThrow(BlockTagsME.COBWEBS), 15.0F),
-                        ToolComponent.Rule.of(registryEntryLookup.getOrThrow(BlockTags.SWORD_INSTANTLY_MINES), Float.MAX_VALUE),
-                        ToolComponent.Rule.of(registryEntryLookup.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5F)), 1.0F, 2, false))
-                .component(DataComponentTypes.WEAPON, new WeaponComponent(1));
+    static Item.Settings createWeaponSettings(ToolMaterial material, Item.Settings settings, WeaponTypesME type) {
+        return settings.maxDamage(material.getDurability());
     }
 
-    static AttributeModifiersComponent createWeaponAttibutes(ToolMaterial material, float attackDamage, float attackSpeed, float attackRange){
-        return AttributeModifiersComponent.builder()
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(Item.BASE_ATTACK_DAMAGE_MODIFIER_ID, (double)(attackDamage + material.attackDamageBonus()), EntityAttributeModifier.Operation.ADD_VALUE), AttributeModifierSlot.MAINHAND)
-                .add(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(Item.BASE_ATTACK_SPEED_MODIFIER_ID, (double)attackSpeed, EntityAttributeModifier.Operation.ADD_VALUE), AttributeModifierSlot.MAINHAND)
-                .add(EntityAttributesME.ENTITY_INTERACTION_RANGE, new EntityAttributeModifier(ENTITY_INTERACTION_RANGE_MODIFIER_ID, (double)attackRange, EntityAttributeModifier.Operation.ADD_VALUE), AttributeModifierSlot.MAINHAND).build();
+    static Multimap<EntityAttribute, EntityAttributeModifier> createWeaponAttibutes(
+            ToolMaterial material, float attackDamage, float attackSpeed, float attackRange) {
+        ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
+        builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(
+                Item.BASE_ATTACK_DAMAGE_MODIFIER_ID, attackDamage + material.getAttackDamage(), EntityAttributeModifier.Operation.ADDITION));
+        builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(
+                Item.BASE_ATTACK_SPEED_MODIFIER_ID, attackSpeed, EntityAttributeModifier.Operation.ADDITION));
+        builder.put(EntityAttributesME.ENTITY_INTERACTION_RANGE, new EntityAttributeModifier(
+                ENTITY_INTERACTION_RANGE_MODIFIER_ID, attackRange, EntityAttributeModifier.Operation.ADDITION));
+        return builder.build();
     }
 
-    static Item.Settings goatArmor(ArmorMaterial material) {
-        RegistryEntryLookup<EntityType<?>> registryEntryLookup = Registries.createEntryLookup(Registries.ENTITY_TYPE);
-        return new MESettings().attributeModifiers(material.createAttributeModifiers(EquipmentType.BODY))
-                .component(
-                        DataComponentTypes.EQUIPPABLE,
-                        EquippableComponent.builder(EquipmentSlot.BODY)
-                                .equipSound(SoundEvents.ENTITY_HORSE_ARMOR)
-                                .model(material.assetId())
-                                .allowedEntities(registryEntryLookup.getOrThrow(EntityTypeTagsME.CAN_WEAR_GOAT_ARMOR))
-                                .damageOnHurt(false)
-                                .canBeSheared(true)
-                                .shearingSound(SoundEvents.ITEM_HORSE_ARMOR_UNEQUIP)
-                                .build()
-                )
-                .maxCount(1);
+    static Item.Settings goatArmor(net.minecraft.item.ArmorMaterial material) {
+        return mountArmor();
     }
 
-    static Item.Settings wargArmor(ArmorMaterial material) {
-        RegistryEntryLookup<EntityType<?>> registryEntryLookup = Registries.createEntryLookup(Registries.ENTITY_TYPE);
-        return new MESettings().attributeModifiers(material.createAttributeModifiers(EquipmentType.BODY))
-                .component(
-                        DataComponentTypes.EQUIPPABLE,
-                        EquippableComponent.builder(EquipmentSlot.BODY)
-                                .equipSound(SoundEvents.ENTITY_HORSE_ARMOR)
-                                .model(material.assetId())
-                                .allowedEntities(registryEntryLookup.getOrThrow(EntityTypeTagsME.CAN_WEAR_WARG_ARMOR))
-                                .damageOnHurt(false)
-                                .canBeSheared(true)
-                                .shearingSound(SoundEvents.ITEM_HORSE_ARMOR_UNEQUIP)
-                                .build()
-                )
-                .maxCount(1);
+    static Item.Settings wargArmor(net.minecraft.item.ArmorMaterial material) {
+        return mountArmor();
     }
 
-    static Item.Settings greatHornArmor(ArmorMaterial material) {
-        RegistryEntryLookup<EntityType<?>> registryEntryLookup = Registries.createEntryLookup(Registries.ENTITY_TYPE);
-        return new MESettings().attributeModifiers(material.createAttributeModifiers(EquipmentType.BODY))
-                .component(
-                        DataComponentTypes.EQUIPPABLE,
-                        EquippableComponent.builder(EquipmentSlot.BODY)
-                                .equipSound(SoundEvents.ENTITY_HORSE_ARMOR)
-                                .model(material.assetId())
-                                .allowedEntities(registryEntryLookup.getOrThrow(EntityTypeTagsME.CAN_WEAR_GREAT_HORN_ARMOR))
-                                .damageOnHurt(false)
-                                .build()
-                )
-                .maxCount(1);
+    static Item.Settings greatHornArmor(net.minecraft.item.ArmorMaterial material) {
+        return mountArmor();
+    }
+
+    /**
+     * TODO(port): the donor's EQUIPPABLE component carried the equip sound, the armour model,
+     * the allowed-entity tag and the "no damage on hurt" flag. None of that exists on 1.20.1,
+     * where mount armour is a HorseArmorItem with a hard-coded texture and a fixed bonus.
+     */
+    private static Item.Settings mountArmor() {
+        return new MESettings().maxCount(1);
     }
 }
