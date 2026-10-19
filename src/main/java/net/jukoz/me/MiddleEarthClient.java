@@ -177,6 +177,11 @@ public class MiddleEarthClient implements ClientModInitializer {
 
         ModNetworks.registerS2CPackets();
 
+        // Port shim: initialise both entity model-layer registries during client init. A lazy
+        // <clinit> triggered from a renderer constructor runs after the EntityModelLoader has
+        // already baked its model map, which fails with "No model for layer me:xxx#main".
+        net.jukoz.me.entity.EntityModelLayersME.init();
+        net.jukoz.me.entity.model.ModEntityModelLayers.init();
         EntityModelLayerRegistry.registerModelLayer(INNER_ARMOR_MODEL_LAYER, InnerArmorModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(HELMET_ADDON_MODEL_LAYER, RohirricHelmetArmorModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(CAPE_MODEL_LAYER, CloakCapeModel::getTexturedModelData);

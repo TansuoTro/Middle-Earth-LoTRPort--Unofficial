@@ -74,10 +74,10 @@ public class MEModels {
         COLUMN_WALL_SIDE_TALL = block("template_column_wall_side_tall", "_side_tall", TextureKey.TOP, TextureKey.BOTTOM, TextureKey.WALL, TextureKey.PARTICLE);
         COLUMN_WALL_INVENTORY = block("template_column_wall_inventory", "_inventory", TextureKey.TOP, TextureKey.BOTTOM, TextureKey.WALL, TextureKey.PARTICLE);
 
-        WOOD_STOOL = block("wood_stool_template", TextureKey.ALL, TextureKey.PARTICLE);
+        WOOD_STOOL = block("wood_stool", TextureKey.TOP, TextureKey.SIDE, TextureKey.PARTICLE);
         WOOD_BENCH = block("wood_bench_template", TextureKey.ALL, TextureKey.PARTICLE);
-        WOOD_TABLE = block("wood_table_template", TextureKey.ALL, TextureKey.PARTICLE);
-        WOOD_CHAIR = block("wood_chair_template", TextureKey.ALL, TextureKey.PARTICLE);
+        WOOD_TABLE = block("wood_table", TextureKey.TOP, TextureKey.SIDE, TextureKey.PARTICLE);
+        WOOD_CHAIR = block("wood_chair", TextureKey.TOP, TextureKey.SIDE, TextureKey.PARTICLE);
 
         STONE_STOOL = block("stone_stool_template", TextureKey.ALL, TextureKey.PARTICLE);
         STONE_TABLE = block("stone_table_template", TextureKey.ALL, TextureKey.PARTICLE);

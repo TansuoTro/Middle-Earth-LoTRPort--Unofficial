@@ -57,9 +57,16 @@ public final class ModEntityModelLayers {
     /**
      * The modelData is used to know the UV map to use for the 3D model
      * **/
+    /** Forces this class's static initialiser to run (see MiddleEarthClient#onInitializeClient). */
+    public static void init() {
+    }
+
     private static EntityModelLayer registerEntityModelLayer(String registryName, TexturedModelData modelData) {
-        EntityModelLayer entityModelLayer = new EntityModelLayer(new Identifier(MiddleEarth.MOD_ID, registryName), MAIN);
-        EntityModelLayerRegistry.registerModelLayer(entityModelLayer, () -> modelData);
-        return entityModelLayer;
+        // Port shim: EntityModelLayersME declares the same layer ids for a second, newer renderer
+        // family (render-state based). Sharing an id means whichever class initialises first wins
+        // the TexturedModelData, and the other family's model constructor then explodes with
+        // "Can't find part <x>". Keep this family on its own id namespace.
+        EntityModelLayer entityModelLayer = new EntityModelLayer(new Identifier(MiddleEarth.MOD_ID, "legacy_" + registryName), MAIN);
+        return net.jukoz.me.compat.client.MEModelLayers.register(entityModelLayer, () -> modelData);
     }
 }

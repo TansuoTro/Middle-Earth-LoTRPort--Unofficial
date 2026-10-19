@@ -95,10 +95,13 @@ public final class EntityModelLayersME {
     /**
      * The modelData is used to know the UV map to use for the 3D model
      * **/
+    /** Forces this class's static initialiser to run (see MiddleEarthClient#onInitializeClient). */
+    public static void init() {
+    }
+
     private static EntityModelLayer registerEntityModelLayer(String registryName, TexturedModelData modelData) {
         EntityModelLayer entityModelLayer = new EntityModelLayer(new Identifier(MiddleEarth.MOD_ID, registryName), MAIN);
-        EntityModelLayerRegistry.registerModelLayer(entityModelLayer, () -> modelData);
-        return entityModelLayer;
+        return net.jukoz.me.compat.client.MEModelLayers.register(entityModelLayer, () -> modelData);
     }
 
     /**
