@@ -16,18 +16,13 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 
 public class ModDecorativeItems {
-    public static final Item DWARVEN_LANTERN = registerItem("dwarven_lantern",
-            new ModVerticallyAttachableBlockItem(ModDecorativeBlocks.DWARVEN_LANTERN, ModDecorativeBlocks.WALL_DWARVEN_LANTERN, new MESettings(), new Direction[]{Direction.DOWN, Direction.UP}));
-    public static final Item SILVER_LANTERN = registerItem("silver_lantern",
-            new ModVerticallyAttachableBlockItem(ModDecorativeBlocks.SILVER_LANTERN, ModDecorativeBlocks.WALL_SILVER_LANTERN, new MESettings(), new Direction[]{Direction.DOWN, Direction.UP}));
+    public static final Item DWARVEN_LANTERN = DecorativeItemsME.DWARVEN_LANTERN;
+    public static final Item SILVER_LANTERN = DecorativeItemsME.SILVER_LANTERN;
     public static final Item ALLOY_FURNACE = registerItem("alloy_furnace",
             new BlockItem(net.jukoz.me.compat.MEBlocksLegacy.ALLOY_FURNACE, new MESettings()));
-    public static final Item ARTISAN_TABLE = registerItem("artisan_table",
-            new BlockItem(ModDecorativeBlocks.ARTISAN_TABLE, new MESettings()));
-    public static final Item WOOD_PILE = registerItem("wood_pile",
-            new BlockItem(ModDecorativeBlocks.WOOD_PILE, new MESettings()));
-    public static final Item TROLL_STATUE = registerItem("troll_statue",
-            new CustomSpawnEggItem(ModEntities.PETRIFIED_TROLL, new FabricItemSettings().maxCount(1)));
+    public static final Item ARTISAN_TABLE = DecorativeItemsME.ARTISAN_TABLE;
+    public static final Item WOOD_PILE = DecorativeItemsME.WOOD_PILE;
+    public static final Item TROLL_STATUE = DecorativeItemsME.TROLL_STATUE;
 
     private static Item registerItem(String name, Item item) {
         ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(item.getDefaultStack());

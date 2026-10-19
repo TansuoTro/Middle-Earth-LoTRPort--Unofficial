@@ -18,41 +18,26 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 
 public class ModResourceItems {
-    public static final Item MIDDLE_EARTH_MAP = registerItem("middle_earth_map",
-            new MiddleEarthMapItem(new FabricItemSettings().maxCount(1)));
+    public static final Item MIDDLE_EARTH_MAP = ResourceItemsME.MIDDLE_EARTH_MAP;
 
-    public static final Item EMPTY_PHIAL = registerItem("empty_phial",
-            new EmptyPhialItem(new FabricItemSettings()));
-    public static final Item WATER_PHIAL = registerItem("water_phial",
-            new Item(new FabricItemSettings().maxCount(1)));
-    public static final Item STARLIGHT_PHIAL = registerItem("starlight_phial",
-            new StarlightPhialItem(new FabricItemSettings().maxCount(1)));
+    public static final Item EMPTY_PHIAL = ResourceItemsME.EMPTY_PHIAL;
+    public static final Item WATER_PHIAL = ResourceItemsME.WATER_PHIAL;
+    public static final Item STARLIGHT_PHIAL = ResourceItemsME.STARLIGHT_PHIAL;
 
-    public static final Item RAW_TIN = registerItem("raw_tin",
-            new Item(new FabricItemSettings()));
-    public static final Item TIN_INGOT = registerItem("tin_ingot",
-            new Item(new FabricItemSettings()));
-    public static final Item TIN_NUGGET = registerItem("tin_nugget",
-            new Item(new FabricItemSettings()));
+    public static final Item RAW_TIN = ResourceItemsME.RAW_TIN;
+    public static final Item TIN_INGOT = ResourceItemsME.TIN_INGOT;
+    public static final Item TIN_NUGGET = ResourceItemsME.TIN_NUGGET;
 
-    public static final Item RAW_LEAD = registerItem("raw_lead",
-            new Item(new FabricItemSettings()));
-    public static final Item LEAD_INGOT = registerItem("lead_ingot",
-            new Item(new FabricItemSettings()));
-    public static final Item LEAD_NUGGET = registerItem("lead_nugget",
-            new Item(new FabricItemSettings()));
+    public static final Item RAW_LEAD = ResourceItemsME.RAW_LEAD;
+    public static final Item LEAD_INGOT = ResourceItemsME.LEAD_INGOT;
+    public static final Item LEAD_NUGGET = ResourceItemsME.LEAD_NUGGET;
 
-    public static final Item BRONZE_INGOT = registerItem("bronze_ingot",
-            new Item(new FabricItemSettings()));
-    public static final Item BRONZE_NUGGET = registerItem("bronze_nugget",
-            new Item(new FabricItemSettings()));
+    public static final Item BRONZE_INGOT = ResourceItemsME.BRONZE_INGOT;
+    public static final Item BRONZE_NUGGET = ResourceItemsME.BRONZE_NUGGET;
 
-    public static final Item RAW_SILVER = registerItem("raw_silver",
-            new Item(new FabricItemSettings()));
-    public static final Item SILVER_INGOT = registerItem("silver_ingot",
-            new Item(new FabricItemSettings()));
-    public static final Item SILVER_NUGGET = registerItem("silver_nugget",
-            new Item(new FabricItemSettings()));
+    public static final Item RAW_SILVER = ResourceItemsME.RAW_SILVER;
+    public static final Item SILVER_INGOT = ResourceItemsME.SILVER_INGOT;
+    public static final Item SILVER_NUGGET = ResourceItemsME.SILVER_NUGGET;
 
     public static final Item ORC_STEEL_INGOT = registerItem("orc_steel_ingot",
             new Item(new FabricItemSettings()));
@@ -64,10 +49,8 @@ public class ModResourceItems {
     public static final Item URUK_STEEL_NUGGET = registerItem("uruk_steel_nugget",
             new Item(new FabricItemSettings()));
 
-    public static final Item STEEL_INGOT = registerItem("steel_ingot",
-            new Item(new FabricItemSettings()));
-    public static final Item STEEL_NUGGET = registerItem("steel_nugget",
-            new Item(new FabricItemSettings()));
+    public static final Item STEEL_INGOT = ResourceItemsME.STEEL_INGOT;
+    public static final Item STEEL_NUGGET = ResourceItemsME.STEEL_NUGGET;
 
     public static final Item ELVEN_STEEL_INGOT = registerItem("elven_steel_ingot",
             new Item(new FabricItemSettings()));
@@ -85,12 +68,9 @@ public class ModResourceItems {
             new Item(new FabricItemSettings()));
 
 
-    public static final Item RAW_MITHRIL = registerItem("raw_mithril",
-            new Item(new FabricItemSettings().fireproof()));
-    public static final Item MITHRIL_INGOT = registerItem("mithril_ingot",
-            new Item(new FabricItemSettings().fireproof()));
-    public static final Item MITHRIL_NUGGET = registerItem("mithril_nugget",
-            new Item(new FabricItemSettings().fireproof()));
+    public static final Item RAW_MITHRIL = ResourceItemsME.RAW_MITHRIL;
+    public static final Item MITHRIL_INGOT = ResourceItemsME.MITHRIL_INGOT;
+    public static final Item MITHRIL_NUGGET = ResourceItemsME.MITHRIL_NUGGET;
 
     public static final Item COPPER_ROD = registerItem("copper_rod",
             new Item(new FabricItemSettings()));
@@ -124,63 +104,49 @@ public class ModResourceItems {
     public static final Item IRON_CHAINMAIL = registerItem("iron_chainmail",
             new Item(new FabricItemSettings()));
 
-    public static final Item RED_AGATE_SHARD = registerItem("red_agate_shard",
-            new Item(new FabricItemSettings()));
-    public static final Item CITRINE_SHARD = registerItem("citrine_shard",
-            new Item(new FabricItemSettings()));
-    public static final Item QUARTZ_SHARD = registerItem("quartz_shard",
-            new Item(new FabricItemSettings()));
+    public static final Item RED_AGATE_SHARD = ResourceItemsME.RED_AGATE_SHARD;
+    public static final Item CITRINE_SHARD = ResourceItemsME.CITRINE_SHARD;
+    public static final Item QUARTZ_SHARD = ResourceItemsME.QUARTZ_SHARD;
 
     public static final Item ORC_BONE = registerItem("orc_bone",
             new Item(new FabricItemSettings()));
     public static final Item WARG_BONE = registerItem("warg_bone",
             new Item(new FabricItemSettings()));
 
-    public static final Item ASH = registerItem("ash",
-            new Item(new FabricItemSettings()));
+    public static final Item ASH = ResourceItemsME.ASH;
 
-    public static final Item PEBBLE = registerItem("pebble",
-            new PebbleItem(new FabricItemSettings()));
-    public static final Item PINECONE = registerItem("pinecone",
-            new PineconeItem(new FabricItemSettings()));
-    public static final Item LIT_PINECONE = registerItem("lit_pinecone",
-            new LitPineconeItem(new FabricItemSettings().maxCount(16)));
+    public static final Item PEBBLE = ResourceItemsME.PEBBLE;
+    public static final Item PINECONE = ResourceItemsME.PINECONE;
+    public static final Item LIT_PINECONE = ResourceItemsME.LIT_PINECONE;
 
-    public static final Item STRAW = registerItem("straw",
-            new Item(new FabricItemSettings()));
+    public static final Item STRAW = ResourceItemsME.STRAW;
     public static final Block REEDS = registerBlock("reeds",
             new CustomTallPlantBlock(FabricBlockSettings.copyOf(Blocks.TALL_GRASS).breakInstantly(), false), false);
 
     public static final Item DUCK_FEATHER = registerItem("duck_feather",
             new Item(new FabricItemSettings()));
-    public static final Item SWAN_FEATHER = registerItem("swan_feather",
-            new Item(new FabricItemSettings()));
+    public static final Item SWAN_FEATHER = ResourceItemsME.SWAN_FEATHER;
             
-    public static final Item GLOWWORM_BOTTLE = registerItem("glowworm_bottle",
-            new GlowwormBottle(new FabricItemSettings().maxCount(1).food(
-                    new FoodComponent.Builder().hunger(2).saturationModifier(0.3f).alwaysEdible().build()).recipeRemainder(Items.GLASS_BOTTLE)));
+    public static final Item GLOWWORM_BOTTLE = ResourceItemsME.GLOWWORM_BOTTLE;
 
-    public static final Item COPPER_COIN = registerItem("copper_coin", new Item(new FabricItemSettings()));
-    public static final Item SILVER_COIN = registerItem("silver_coin", new Item(new FabricItemSettings()));
+    public static final Item COPPER_COIN = ResourceItemsME.COPPER_COIN;
+    public static final Item SILVER_COIN = ResourceItemsME.SILVER_COIN;
 
 
-    public static final Item FLAX = registerItem("flax", new Item(new FabricItemSettings()));
-    public static final Item FLAX_SEEDS = registerItem("flax_seeds", new AliasedBlockItem(ModNatureBlocks.FLAX_CROP, new FabricItemSettings()));
-    public static final Item PIPEWEED = registerItem("pipeweed", new Item(new FabricItemSettings()));
-    public static final Item PIPEWEED_SEEDS = registerItem("pipeweed_seeds", new AliasedBlockItem(ModNatureBlocks.PIPEWEED_CROP, new FabricItemSettings()));
-    public static final Item TOMATO_SEEDS = registerItem("tomato_seeds", new AliasedBlockItem(ModNatureBlocks.TOMATO_CROP, new FabricItemSettings()));
-    public static final Item BELL_PEPPER_SEEDS = registerItem("bell_pepper_seeds", new AliasedBlockItem(ModNatureBlocks.BELL_PEPPER_CROP, new FabricItemSettings()));
-    public static final Item CUCUMBER_SEEDS = registerItem("cucumber_seeds", new AliasedBlockItem(ModNatureBlocks.CUCUMBER_CROP, new FabricItemSettings()));
-    public static final Item LETTUCE_SEEDS = registerItem("lettuce_seeds", new AliasedBlockItem(ModNatureBlocks.LETTUCE_CROP, new FabricItemSettings()));
+    public static final Item FLAX = ResourceItemsME.FLAX;
+    public static final Item FLAX_SEEDS = ResourceItemsME.FLAX_SEEDS;
+    public static final Item PIPEWEED = ResourceItemsME.PIPEWEED;
+    public static final Item PIPEWEED_SEEDS = ResourceItemsME.PIPEWEED_SEEDS;
+    public static final Item TOMATO_SEEDS = ResourceItemsME.TOMATO_SEEDS;
+    public static final Item BELL_PEPPER_SEEDS = ResourceItemsME.BELL_PEPPER_SEEDS;
+    public static final Item CUCUMBER_SEEDS = ResourceItemsME.CUCUMBER_SEEDS;
+    public static final Item LETTUCE_SEEDS = ResourceItemsME.LETTUCE_SEEDS;
 
-    public static final Item GONDOR_BANNER_PATTERN = registerItem("gondor_banner_pattern",
-            new BannerPatternItem(ModBannerPatternTags.GONDOR_PATTERN_ITEM, new MESettings().maxCount(1).rarity(Rarity.RARE)));
-    public static final Item ROHAN_BANNER_PATTERN = registerItem("rohan_banner_pattern",
-            new BannerPatternItem(ModBannerPatternTags.ROHAN_PATTERN_ITEM, new MESettings().maxCount(1).rarity(Rarity.RARE)));
+    public static final Item GONDOR_BANNER_PATTERN = ResourceItemsME.GONDOR_BANNER_PATTERN;
+    public static final Item ROHAN_BANNER_PATTERN = ResourceItemsME.ROHAN_BANNER_PATTERN;
     public static final Item LONGBEARD_BANNER_PATTERN = registerItem("longbeard_banner_pattern",
             new BannerPatternItem(ModBannerPatternTags.LONGBEARD_PATTERN_ITEM, new MESettings().maxCount(1).rarity(Rarity.RARE)));
-    public static final Item LOTHLORIEN_BANNER_PATTERN = registerItem("lothlorien_banner_pattern",
-            new BannerPatternItem(ModBannerPatternTags.LOTHLORIEN_PATTERN_ITEM, new MESettings().maxCount(1).rarity(Rarity.RARE)));
+    public static final Item LOTHLORIEN_BANNER_PATTERN = ResourceItemsME.LOTHLORIEN_BANNER_PATTERN;
     public static final Item MORDOR_GREAT_EYE_BANNER_PATTERN = registerItem("mordor_great_eye_banner_pattern",
             new BannerPatternItem(ModBannerPatternTags.MORDOR_GREAT_EYE_PATTERN_ITEM, new MESettings().maxCount(1).rarity(Rarity.RARE)));
     public static final Item MORDOR_EYE_BANNER_PATTERN = registerItem("mordor_eye_banner_pattern",
