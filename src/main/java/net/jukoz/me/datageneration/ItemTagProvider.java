@@ -47,11 +47,11 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
         TagKey<Item> shingles = TagKey.of(RegistryKeys.ITEM, new Identifier("me", "shingles"));
 
         TagKey<Item> mod_stripped_logs = TagKey.of(RegistryKeys.ITEM, new Identifier("me", "mod_stripped_logs"));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.ITEM, new Identifier("me", "mod_planks"))).add(Planks.getItemPlanks().toArray(new Item[0]));
+        getOrCreateTagBuilder(TagKey.of(RegistryKeys.ITEM, new Identifier("me", "mod_planks"))).add(notNullItems(Planks.getItemPlanks()));
 
 
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.ITEM, new Identifier("minecraft", "planks"))).add(Planks.getItemPlanks().toArray(new Item[0]));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.ITEM, new Identifier("minecraft", "logs"))).add(Logs.getItemLogs().toArray(new Item[0]));
+        getOrCreateTagBuilder(TagKey.of(RegistryKeys.ITEM, new Identifier("minecraft", "planks"))).add(notNullItems(Planks.getItemPlanks()));
+        getOrCreateTagBuilder(TagKey.of(RegistryKeys.ITEM, new Identifier("minecraft", "logs"))).add(notNullItems(Logs.getItemLogs()));
 
 
         bones.add(Items.BONE);
@@ -107,30 +107,40 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
         }
 
         WoodenSlabs.woodenSlabs.forEach(block -> {
+            if (block == null) { return; }
             getOrCreateTagBuilder(wooden_slabs).add(block.asItem());
         });
 
         ModdedStrippedLogs.strippedLogs.forEach(block -> {
+            if (block == null) { return; }
             getOrCreateTagBuilder(mod_stripped_logs).add(block.asItem());
         });
 
         Shingles.shingles.forEach(block -> {
+            if (block == null) { return; }
             getOrCreateTagBuilder(shingles).add(block.asItem());
         });
 
         Saplings.saplings.forEach(sapling -> {
+            if (sapling == null) { return; }
             getOrCreateTagBuilder(saplings).add(sapling.asItem());
         });
 
         LogsThatBurn.logsThatBurn.forEach(log -> {
+            if (log == null) { return; }
             getOrCreateTagBuilder(logs_that_burn).add(log.asItem());
         });
 
         Stones.stones.forEach(stone -> {
+            if (stone == null) { return; }
             getOrCreateTagBuilder(stone_crafting_materials).add(stone.asItem());
             if(!stone.asItem().toString().contains("jadeite")){
                 getOrCreateTagBuilder(stone_tool_materials).add(stone.asItem());
             }
         });
     }
+    private static Item[] notNullItems(java.util.List<Item> values) {
+        return values.stream().filter(java.util.Objects::nonNull).toArray(Item[]::new);
+    }
 }
+

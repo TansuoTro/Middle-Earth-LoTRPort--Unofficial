@@ -48,6 +48,9 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
     @Override
     public void generate() {
         for (Block block : BlockDrops.blocks) {
+            if (block == null) {
+                continue;   // port-only block sets leave null parts behind
+            }
             if(Registries.BLOCK.getId(block).getPath().equals("diftomin")){
                 cobbleDrops(block, StoneBlockSets.COBBLED_DIFTOMIN.base());
             }else if(Registries.BLOCK.getId(block).getPath().equals("epmosto")){

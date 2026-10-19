@@ -44,26 +44,26 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         var cobwebs = getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("me", "cobwebs")));
 
-        mineableAxe.add(MineableAxe.blocks.toArray(new Block[0]));
-        mineablePickaxe.add(MineablePickaxe.blocks.toArray(new Block[0]));
+        mineableAxe.add(notNullBlocks(MineableAxe.blocks));
+        mineablePickaxe.add(notNullBlocks(MineablePickaxe.blocks));
 
-        leaves.add(LeavesSets.blocks.toArray(new Block[0]));
-        mineableHoe.add(MineableHoe.blocks.toArray(new Block[0]));
+        leaves.add(notNullBlocks(LeavesSets.blocks));
+        mineableHoe.add(notNullBlocks(MineableHoe.blocks));
 
-        swordEfficient.add(LeavesSets.blocks.toArray(new Block[0]));
+        swordEfficient.add(notNullBlocks(LeavesSets.blocks));
 
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "saplings"))).add(Saplings.saplings.toArray(new Block[0]));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "doors"))).add(Doors.doors.toArray(new Block[0]));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "trapdoors"))).add(Trapdoors.trapdoors.toArray(new Block[0]));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "buttons"))).add(Buttons.buttons.toArray(new Block[0]));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "fences"))).add(Fences.fences.toArray(new Block[0]));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "wooden_fences"))).add(Fences.fences.toArray(new Block[0]));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "fence_gates"))).add(FenceGates.fenceGates.toArray(new Block[0]));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "logs"))).add(Logs.logs.toArray(new Block[0]));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "pressure_plates"))).add(PressurePlates.pressurePlates.toArray(new Block[0]));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "walls"))).add(Walls.walls.toArray(new Block[0]));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "planks"))).add(Planks.planks.toArray(new Block[0]));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "crops"))).add(Crops.crops.toArray(new Block[0]));
+        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "saplings"))).add(notNullBlocks(Saplings.saplings));
+        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "doors"))).add(notNullBlocks(Doors.doors));
+        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "trapdoors"))).add(notNullBlocks(Trapdoors.trapdoors));
+        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "buttons"))).add(notNullBlocks(Buttons.buttons));
+        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "fences"))).add(notNullBlocks(Fences.fences));
+        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "wooden_fences"))).add(notNullBlocks(Fences.fences));
+        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "fence_gates"))).add(notNullBlocks(FenceGates.fenceGates));
+        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "logs"))).add(notNullBlocks(Logs.logs));
+        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "pressure_plates"))).add(notNullBlocks(PressurePlates.pressurePlates));
+        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "walls"))).add(notNullBlocks(Walls.walls));
+        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "planks"))).add(notNullBlocks(Planks.planks));
+        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "crops"))).add(notNullBlocks(Crops.crops));
 
         //Ores
         TagKey<Block> iron_ores = TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "iron_ores"));
@@ -169,29 +169,29 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         cobwebs.add(net.jukoz.me.compat.MEBlocksLegacy.HANGING_COBWEB);
         cobwebs.add(ModNatureBlocks.CORNER_COBWEB);
 
-        SimpleStoneStoolModel.stools.forEach(seat::add);
+        java.util.Arrays.stream(notNullBlocks(SimpleStoneStoolModel.stools)).forEach(seat::add);
         SimpleStoneStoolModel.vanillaStools.forEach(block -> {
-            seat.add(block.base());
+            if (block.base() != null) seat.add(block.base());
         });
-        SimpleStoneChairModel.chairs.forEach(seat::add);
+        java.util.Arrays.stream(notNullBlocks(SimpleStoneChairModel.chairs)).forEach(seat::add);
         SimpleStoneChairModel.vanillaChairs.forEach(block -> {
-            seat.add(block.base());
+            if (block.base() != null) seat.add(block.base());
         });
-        SimpleStoneTableModel.tables.forEach(table::add);
+        java.util.Arrays.stream(notNullBlocks(SimpleStoneTableModel.tables)).forEach(table::add);
         SimpleStoneTableModel.vanillaTables.forEach(block -> {
-            table.add(block.base());
+            if (block.base() != null) table.add(block.base());
         });
-        SimpleWoodStoolModel.stools.forEach(seat::add);
+        java.util.Arrays.stream(notNullBlocks(SimpleWoodStoolModel.stools)).forEach(seat::add);
         SimpleWoodStoolModel.vanillaStools.forEach(block -> {
-            seat.add(block.base());
+            if (block.base() != null) seat.add(block.base());
         });
-        SimpleWoodChairModel.chairs.forEach(seat::add);
+        java.util.Arrays.stream(notNullBlocks(SimpleWoodChairModel.chairs)).forEach(seat::add);
         SimpleWoodChairModel.vanillaChairs.forEach(block -> {
-            seat.add(block.base());
+            if (block.base() != null) seat.add(block.base());
         });
-        SimpleWoodTableModel.tables.forEach(table::add);
+        java.util.Arrays.stream(notNullBlocks(SimpleWoodTableModel.tables)).forEach(table::add);
         SimpleWoodTableModel.vanillaTables.forEach(block -> {
-            table.add(block.base());
+            if (block.base() != null) table.add(block.base());
         });
 
         needsStoneTools.add(OreRockSets.GONLUIN.copper_ore());
@@ -428,4 +428,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         mineablePickaxe.add(net.jukoz.me.compat.MEBlocksLegacy.ALLOY_FURNACE);
     }
+    private static Block[] notNullBlocks(java.util.List<Block> values) {
+        return values.stream().filter(java.util.Objects::nonNull).toArray(Block[]::new);
+    }
 }
+

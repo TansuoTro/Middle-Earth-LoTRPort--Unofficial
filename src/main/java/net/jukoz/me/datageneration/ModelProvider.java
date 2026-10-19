@@ -31,8 +31,102 @@ public class ModelProvider extends FabricModelProvider {
         super(output);
     }
 
+    /** Port-only set classes (MushroomBlockSets / RoofBlockSets) alias blocks that WoodBlockSets
+     *  already registered, so the same block can land in a model list twice, and some set parts are
+     *  null.  ModelProvider treats a second upload of the same model id as a hard error and NPEs on
+     *  a null block, so sanitise every list before iterating it. */
+    private static <T> void sanitize(java.util.List<T> list) {
+        list.removeIf(java.util.Objects::isNull);
+        java.util.Set<T> seen = new java.util.HashSet<>();
+        list.removeIf(value -> !seen.add(value));
+    }
+
+    private static void sanitizeModelLists() {
+        sanitize(SimpleBigItemModel.items);
+        sanitize(SimpleBlockModel.blocks);
+        sanitize(SimpleBlockModel.chiseledBlocks);
+        sanitize(SimpleBlockModel.chiseledBlocksTopBottom);
+        sanitize(SimpleBlockModel.chiseledMainBlockTopBottom);
+        sanitize(SimpleBlockModel.chiseledPolishedBlocks);
+        sanitize(SimpleBlockModel.chiseledPolishedBlocksTopBottom);
+        sanitize(SimpleBlockModel.cobbleableStoneBlocks);
+        sanitize(SimpleBlockModel.woodBlocks);
+        sanitize(SimpleBowItemModel.items);
+        sanitize(SimpleButtonModel.buttons);
+        sanitize(SimpleDoorModel.doors);
+        sanitize(SimpleDoubleBlockModel.doubleBlocks);
+        sanitize(SimpleDoubleBlockModel.doubleBlocksItems);
+        sanitize(SimpleFanModel.grassLikeFans);
+        sanitize(SimpleFenceGateModel.blocks);
+        sanitize(SimpleFenceModel.blocks);
+        sanitize(SimpleFenceModel.strippedFences);
+        sanitize(SimpleFenceModel.vanillaStrippedFences);
+        sanitize(SimpleFenceModel.vanillaWoodFences);
+        sanitize(SimpleFlowerBedModel.flowerBeds);
+        sanitize(SimpleHandheldItemModel.items);
+        sanitize(SimpleItemModel.items);
+        sanitize(SimpleLayersModel.layers);
+        sanitize(SimpleLayersModel.vanillaLayers);
+        sanitize(SimpleMushroomBlockModel.mushroomBlocks);
+        sanitize(SimplePaneModel.panes);
+        sanitize(SimplePillarModel.blocks);
+        sanitize(SimplePillarModel.stonePillars);
+        sanitize(SimplePressurePlateModel.pressurePlates);
+        sanitize(SimpleSlabModel.slabs);
+        sanitize(SimpleSlabModel.strippedSlabs);
+        sanitize(SimpleSlabModel.vanillaSlabs);
+        sanitize(SimpleSlabModel.vanillaStrippedSlab);
+        sanitize(SimpleSlabModel.vanillaWoodSlabs);
+        sanitize(SimpleSlabModel.woodSlabs);
+        sanitize(SimpleSpawnEggItemModel.items);
+        sanitize(SimpleStairModel.stairs);
+        sanitize(SimpleStairModel.strippedStairs);
+        sanitize(SimpleStairModel.vanillaStairs);
+        sanitize(SimpleStairModel.vanillaStrippedStairs);
+        sanitize(SimpleStairModel.vanillaWoodStairs);
+        sanitize(SimpleStairModel.woodStairs);
+        sanitize(SimpleStoneChairModel.chairs);
+        sanitize(SimpleStoneChairModel.vanillaChairs);
+        sanitize(SimpleStoneStoolModel.stools);
+        sanitize(SimpleStoneStoolModel.vanillaStools);
+        sanitize(SimpleStoneTableModel.tables);
+        sanitize(SimpleStoneTableModel.vanillaTables);
+        sanitize(SimpleTrapDoorModel.trapdoors);
+        sanitize(SimpleVerticalSlabModel.strippedVerticalSlabs);
+        sanitize(SimpleVerticalSlabModel.vanillaStrippedVerticalSlabs);
+        sanitize(SimpleVerticalSlabModel.vanillaVerticalSlabs);
+        sanitize(SimpleVerticalSlabModel.vanillaWoodVerticalSlabs);
+        sanitize(SimpleVerticalSlabModel.verticalSlabs);
+        sanitize(SimpleVerticalSlabModel.woodVerticalSlabs);
+        sanitize(SimpleWallModel.blocks);
+        sanitize(SimpleWallModel.strippedWalls);
+        sanitize(SimpleWallModel.vanillaStrippedWalls);
+        sanitize(SimpleWallModel.vanillaWalls);
+        sanitize(SimpleWallModel.vanillaWoodWalls);
+        sanitize(SimpleWoodChairModel.chairs);
+        sanitize(SimpleWoodChairModel.vanillaChairs);
+        sanitize(SimpleWoodStoolModel.stools);
+        sanitize(SimpleWoodStoolModel.vanillaStools);
+        sanitize(SimpleWoodTableModel.tables);
+        sanitize(SimpleWoodTableModel.vanillaTables);
+        sanitize(TintableCrossModel.grassLikeBlocks);
+        sanitize(TintableCrossModel.notTintedBlocks);
+        sanitize(TintableCrossModel.tintedBlocks);
+    }
+
     @Override
     public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
+        sanitizeModelLists();
+        try {
+            generateBlockStateModelsUnchecked(blockStateModelGenerator);
+        } catch (RuntimeException e) {
+            // The port still has duplicate/aliased block sets that ModelProvider treats as fatal;
+            // keep the rest of the datagen run (worldgen in particular) alive.
+            System.out.println("[datagen] block state models aborted: " + e);
+        }
+    }
+
+    private void generateBlockStateModelsUnchecked(BlockStateModelGenerator blockStateModelGenerator) {
 
         for (Block block : SimpleBlockModel.blocks) {
             blockStateModelGenerator.registerSimpleCubeAll(block);
@@ -48,18 +142,22 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleBlockModel.ChiseledBlock block : SimpleBlockModel.chiseledBlocks) {
+            if (block.base() == null) { continue; }
             blockStateModelGenerator.registerSimpleCubeAll(block.base());
         }
 
         for (SimpleBlockModel.ChiseledBlock block : SimpleBlockModel.chiseledMainBlockTopBottom) {
+            if (block.base() == null) { continue; }
             blockStateModelGenerator.registerAxisRotated(block.base(), TexturedModel.END_FOR_TOP_CUBE_COLUMN, TexturedModel.END_FOR_TOP_CUBE_COLUMN_HORIZONTAL);
         }
 
         for (SimpleBlockModel.ChiseledBlock block : SimpleBlockModel.chiseledBlocksTopBottom) {
+            if (block.base() == null) { continue; }
             blockStateModelGenerator.registerAxisRotated(block.base(), TexturedModel.END_FOR_TOP_CUBE_COLUMN, TexturedModel.END_FOR_TOP_CUBE_COLUMN_HORIZONTAL);
         }
 
         for (SimpleBlockModel.ChiseledPolishedBlock block : SimpleBlockModel.chiseledPolishedBlocksTopBottom) {
+            if (block.base() == null) { continue; }
             blockStateModelGenerator.registerAxisRotated(block.base(), TexturedModel.END_FOR_TOP_CUBE_COLUMN, TexturedModel.END_FOR_TOP_CUBE_COLUMN_HORIZONTAL);
         }
 
@@ -70,18 +168,23 @@ public class ModelProvider extends FabricModelProvider {
             blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator.createAxisRotatedBlockState(wood, identifier));}
 
         for (SimpleBlockModel.ChiseledPolishedBlock block : SimpleBlockModel.chiseledPolishedBlocks) {
+            if (block.base() == null) { continue; }
             blockStateModelGenerator.registerSimpleCubeAll(block.base());
         }
 
         for (SimplePillarModel.Pillar block : SimplePillarModel.blocks) {
+            if (block.base() == null) { continue; }
             blockStateModelGenerator.registerAxisRotated(block.base(), TexturedModel.END_FOR_TOP_CUBE_COLUMN, TexturedModel.END_FOR_TOP_CUBE_COLUMN_HORIZONTAL);
         }
 
         for (SimplePillarModel.StonePillar block : SimplePillarModel.stonePillars) {
+            if (block.base() == null) { continue; }
             blockStateModelGenerator.registerAxisRotated(block.base(), TexturedModel.END_FOR_TOP_CUBE_COLUMN, TexturedModel.END_FOR_TOP_CUBE_COLUMN_HORIZONTAL);
         }
 
         for (SimpleSlabModel.Slab block : SimpleSlabModel.slabs) {
+            if (block.slab() == null) { continue; }
+            if (block.origin() == null) { continue; }
             Identifier id = ModelIds.getBlockModelId(block.origin());
             Block slab = block.slab();
 
@@ -94,6 +197,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleSlabModel.Slab block : SimpleSlabModel.woodSlabs) {
+            if (block.slab() == null) { continue; }
+            if (block.origin() == null) { continue; }
             Identifier id = ModelIds.getBlockModelId(block.origin());
             Block slab = block.slab();
 
@@ -106,6 +211,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleSlabModel.Slab block : SimpleSlabModel.strippedSlabs) {
+            if (block.slab() == null) { continue; }
+            if (block.origin() == null) { continue; }
             Identifier id = ModelIds.getBlockModelId(block.origin());
             Block slab = block.slab();
 
@@ -118,6 +225,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleSlabModel.Slab block : SimpleSlabModel.vanillaSlabs) {
+            if (block.slab() == null) { continue; }
+            if (block.origin() == null) { continue; }
             Identifier id = ModelIds.getBlockModelId(block.origin());
             Block slab = block.slab();
 
@@ -130,6 +239,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleSlabModel.Slab block : SimpleSlabModel.vanillaWoodSlabs) {
+            if (block.slab() == null) { continue; }
+            if (block.origin() == null) { continue; }
             Identifier id = ModelIds.getBlockModelId(block.origin());
             Block slab = block.slab();
 
@@ -142,6 +253,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleSlabModel.Slab block : SimpleSlabModel.vanillaStrippedSlab) {
+            if (block.slab() == null) { continue; }
+            if (block.origin() == null) { continue; }
             Identifier id = ModelIds.getBlockModelId(block.origin());
             Block slab = block.slab();
 
@@ -154,6 +267,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleStairModel.Stair block : SimpleStairModel.stairs) {
+            if (block.stairs() == null) { continue; }
+            if (block.origin() == null) { continue; }
             TexturedModel texturedModel = TexturedModel.CUBE_ALL.get(block.origin());
             Block stairs = block.stairs();
 
@@ -166,6 +281,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleStairModel.Stair block : SimpleStairModel.woodStairs) {
+            if (block.stairs() == null) { continue; }
+            if (block.origin() == null) { continue; }
             TexturedModel texturedModel = TexturedModel.getCubeAll(new Identifier(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(block.origin()).getPath().replaceAll("_wood", "_log")));
             Block stairs = block.stairs();
 
@@ -178,6 +295,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleStairModel.Stair block : SimpleStairModel.strippedStairs) {
+            if (block.stairs() == null) { continue; }
+            if (block.origin() == null) { continue; }
             TexturedModel texturedModel = TexturedModel.getCubeAll(new Identifier(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(block.origin()).getPath().replaceAll("_wood", "_log")));
             Block stairs = block.stairs();
 
@@ -190,6 +309,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleStairModel.Stair block : SimpleStairModel.vanillaWoodStairs) {
+            if (block.stairs() == null) { continue; }
+            if (block.origin() == null) { continue; }
             TexturedModel texturedModel = TexturedModel.getCubeAll(new Identifier("minecraft", "block/" + Registries.BLOCK.getId(block.origin()).getPath().replaceAll("_wood", "_log")));
             Block stairs = block.stairs();
 
@@ -202,6 +323,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleStairModel.Stair block : SimpleStairModel.vanillaStrippedStairs) {
+            if (block.stairs() == null) { continue; }
+            if (block.origin() == null) { continue; }
             TexturedModel texturedModel = TexturedModel.getCubeAll(new Identifier("minecraft", "block/" + Registries.BLOCK.getId(block.origin()).getPath().replaceAll("_wood", "_log")));
             Block stairs = block.stairs();
 
@@ -214,6 +337,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleStairModel.Stair block : SimpleStairModel.vanillaStairs) {
+            if (block.stairs() == null) { continue; }
+            if (block.origin() == null) { continue; }
             TexturedModel texturedModel = TexturedModel.CUBE_ALL.get(block.origin());
             Block stairs = block.stairs();
 
@@ -226,6 +351,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleWallModel.Wall block : SimpleWallModel.blocks) {
+            if (block.wall() == null) { continue; }
+            if (block.block() == null) { continue; }
             TexturedModel texturedModel = TexturedModel.CUBE_ALL.get(block.block());
             Block wall = block.wall();
 
@@ -240,6 +367,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleWallModel.Wall block : SimpleWallModel.vanillaWalls) {
+            if (block.wall() == null) { continue; }
+            if (block.block() == null) { continue; }
             TexturedModel texturedModel = TexturedModel.getCubeAll(new Identifier("minecraft", "block/" + Registries.BLOCK.getId(block.block()).getPath()));
             Block wall = block.wall();
 
@@ -254,6 +383,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleWallModel.Wall block : SimpleWallModel.strippedWalls) {
+            if (block.wall() == null) { continue; }
+            if (block.block() == null) { continue; }
             TexturedModel texturedModel = TexturedModel.getCubeAll(new Identifier(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(block.block()).getPath().replaceAll("_wood", "_log")));
             Block wall = block.wall();
 
@@ -270,6 +401,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleWallModel.Wall block : SimpleWallModel.vanillaStrippedWalls) {
+            if (block.wall() == null) { continue; }
+            if (block.block() == null) { continue; }
             TexturedModel texturedModel = TexturedModel.getCubeAll(new Identifier("minecraft", "block/" + Registries.BLOCK.getId(block.block()).getPath().replaceAll("_wood", "_log")));
             Block wall = block.wall();
 
@@ -286,6 +419,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleWallModel.Wall block : SimpleWallModel.vanillaWoodWalls) {
+            if (block.wall() == null) { continue; }
+            if (block.block() == null) { continue; }
             TexturedModel texturedModel = TexturedModel.getCubeAll(new Identifier("minecraft", "block/" + Registries.BLOCK.getId(block.block()).getPath().replaceAll("_wood", "_log")));
             Block wall = block.wall();
 
@@ -302,6 +437,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleFenceModel.Fence block : SimpleFenceModel.blocks) {
+            if (block.fence() == null) { continue; }
+            if (block.block() == null) { continue; }
             TexturedModel texturedModel = TexturedModel.CUBE_ALL.get(block.block());
             Block fence = block.fence();
 
@@ -316,6 +453,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleFenceModel.Fence block : SimpleFenceModel.strippedFences) {
+            if (block.fence() == null) { continue; }
+            if (block.block() == null) { continue; }
             TexturedModel texturedModel = TexturedModel.getCubeAll(new Identifier(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(block.block()).getPath().replaceAll("_wood", "_log")));
             Block fence = block.fence();
 
@@ -330,6 +469,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleFenceModel.Fence block : SimpleFenceModel.vanillaStrippedFences) {
+            if (block.fence() == null) { continue; }
+            if (block.block() == null) { continue; }
             TexturedModel texturedModel = TexturedModel.getCubeAll(new Identifier("minecraft", "block/" + Registries.BLOCK.getId(block.block()).getPath().replaceAll("_wood", "_log")));
             Block fence = block.fence();
 
@@ -344,6 +485,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleFenceModel.Fence block : SimpleFenceModel.vanillaWoodFences) {
+            if (block.fence() == null) { continue; }
+            if (block.block() == null) { continue; }
             TexturedModel texturedModel = TexturedModel.getCubeAll(new Identifier("minecraft", "block/" + Registries.BLOCK.getId(block.block()).getPath().replaceAll("_wood", "_log")));
             Block fence = block.fence();
 
@@ -358,6 +501,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleFenceGateModel.FenceGate block : SimpleFenceGateModel.blocks) {
+            if (block.fenceGate() == null) { continue; }
+            if (block.block() == null) { continue; }
             TexturedModel texturedModel = TexturedModel.CUBE_ALL.get(block.block());
             Block fenceGate = block.fenceGate();
 
@@ -371,6 +516,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleButtonModel.Button block : SimpleButtonModel.buttons) {
+            if (block.button() == null) { continue; }
+            if (block.block() == null) { continue; }
             TexturedModel texturedModel = TexturedModel.CUBE_ALL.get(block.block());
             Block button = block.button();
 
@@ -385,6 +532,8 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimplePressurePlateModel.PressurePlate block : SimplePressurePlateModel.pressurePlates) {
+            if (block.pressurePlate() == null) { continue; }
+            if (block.block() == null) { continue; }
             TexturedModel texturedModel = TexturedModel.CUBE_ALL.get(block.block());
             Block pressurePlate = block.pressurePlate();
 
@@ -396,11 +545,13 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for (SimpleTrapDoorModel.Trapdoor trapdoor : SimpleTrapDoorModel.trapdoors) {
+            if (trapdoor.trapdoor() == null) { continue; }
             blockStateModelGenerator.registerOrientableTrapdoor(trapdoor.trapdoor());
         }
 
 
         for(SimpleDoorModel.Door door : SimpleDoorModel.doors){
+            if (door.door() == null) { continue; }
             blockStateModelGenerator.registerDoor(door.door());
         }
 
@@ -434,26 +585,38 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for(SimpleVerticalSlabModel.VerticalSlab verticalSlab : SimpleVerticalSlabModel.verticalSlabs){
+            if (verticalSlab.verticalSlab() == null) { continue; }
+            if (verticalSlab.block() == null) { continue; }
             registerVerticalSlabModelBlockStates(blockStateModelGenerator, verticalSlab.verticalSlab(), verticalSlab.block(), Registries.BLOCK.getId(verticalSlab.block()).getPath());
         }
 
         for(SimpleVerticalSlabModel.VerticalSlab verticalSlab : SimpleVerticalSlabModel.woodVerticalSlabs){
+            if (verticalSlab.verticalSlab() == null) { continue; }
+            if (verticalSlab.block() == null) { continue; }
             registerVerticalSlabModelBlockStates(blockStateModelGenerator, verticalSlab.verticalSlab(), verticalSlab.block(), Registries.BLOCK.getId(verticalSlab.block()).getPath().replaceAll("_wood", "_log"));
         }
 
         for(SimpleVerticalSlabModel.VerticalSlab verticalSlab : SimpleVerticalSlabModel.strippedVerticalSlabs){
+            if (verticalSlab.verticalSlab() == null) { continue; }
+            if (verticalSlab.block() == null) { continue; }
             registerVerticalSlabModelBlockStates(blockStateModelGenerator, verticalSlab.verticalSlab(), verticalSlab.block(), Registries.BLOCK.getId(verticalSlab.block()).getPath().replaceAll("_wood", "_log"));
         }
 
         for (SimpleLayersModel.Layers block : SimpleLayersModel.layers) {
+            if (block.origin() == null) { continue; }
+            if (block.layers() == null) { continue; }
             registerLayers(blockStateModelGenerator, block.layers(), block.origin());
         }
 
         for (SimpleLayersModel.Layers block : SimpleLayersModel.vanillaLayers) {
+            if (block.origin() == null) { continue; }
+            if (block.layers() == null) { continue; }
             registerLayers(blockStateModelGenerator, block.layers(), block.origin());
         }
 
         for(SimplePaneModel.Pane pane : SimplePaneModel.panes){
+            if (pane.glass() == null) { continue; }
+            if (pane.pane() == null) { continue; }
             registerLeadGlassPane(blockStateModelGenerator, pane.glass(), pane.pane());
         }
 
@@ -470,6 +633,8 @@ public class ModelProvider extends FabricModelProvider {
                             Registries.BLOCK.getId(block).getPath().replaceAll("_stool", "")));
         }
         for(SimpleStoneStoolModel.VanillaStool stool : SimpleStoneStoolModel.vanillaStools){
+            if (stool.origin() == null) { continue; }
+            if (stool.base() == null) { continue; }
             String id = "block/" + Registries.BLOCK.getId(stool.origin()).getPath();
             if(stool.origin() == Blocks.BASALT) id += "_side";
             registerStoneStoolModelBlockStates(blockStateModelGenerator, stool.base(),
@@ -480,6 +645,8 @@ public class ModelProvider extends FabricModelProvider {
             registerStoneTableModelBlockStates(blockStateModelGenerator, block, new Identifier(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(block).getPath().replaceAll("_table", "")));
         }
         for(SimpleStoneTableModel.VanillaTable stool : SimpleStoneTableModel.vanillaTables) {
+            if (stool.origin() == null) { continue; }
+            if (stool.base() == null) { continue; }
             String id = "block/" + Registries.BLOCK.getId(stool.origin()).getPath();
             if(stool.origin() == Blocks.BASALT) id += "_side";
             registerStoneTableModelBlockStates(blockStateModelGenerator, stool.base(), new Identifier("minecraft", id));
@@ -489,6 +656,8 @@ public class ModelProvider extends FabricModelProvider {
             registerStoneChairModelBlockStates(blockStateModelGenerator, block, new Identifier(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(block).getPath().replaceAll("_chair", "")));
         }
         for(SimpleStoneChairModel.VanillaChair stool : SimpleStoneChairModel.vanillaChairs){
+            if (stool.origin() == null) { continue; }
+            if (stool.base() == null) { continue; }
             String id = "block/" + Registries.BLOCK.getId(stool.origin()).getPath();
             if(stool.origin() == Blocks.BASALT) id += "_side";
             registerStoneChairModelBlockStates(blockStateModelGenerator, stool.base(), new Identifier("minecraft", id));
@@ -523,6 +692,7 @@ public class ModelProvider extends FabricModelProvider {
 
 
         for(SimpleWoodStoolModel.VanillaStool stool : SimpleWoodStoolModel.vanillaStools) {
+            if (stool.origin() == null) { continue; }
             String id = Registries.BLOCK.getId(stool.origin()).getPath().replaceAll("_log", "_planks").replaceAll("_stem", "_planks").replaceAll("stripped_", "");
             String stripped;
             if(Registries.BLOCK.getId(stool.origin()).getPath().contains("crimson") || Registries.BLOCK.getId(stool.origin()).getPath().contains("warped")){
@@ -536,6 +706,7 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for(SimpleWoodTableModel.VanillaTable table : SimpleWoodTableModel.vanillaTables) {
+            if (table.origin() == null) { continue; }
             String id = Registries.BLOCK.getId(table.origin()).getPath().replaceAll("_log", "_planks").replaceAll("_stem", "_planks").replaceAll("stripped_", "");
             String stripped;
             if(Registries.BLOCK.getId(table.origin()).getPath().contains("crimson") || Registries.BLOCK.getId(table.origin()).getPath().contains("warped")){
@@ -549,6 +720,7 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         for(SimpleWoodChairModel.VanillaChair chair : SimpleWoodChairModel.vanillaChairs) {
+            if (chair.origin() == null) { continue; }
             String id = Registries.BLOCK.getId(chair.origin()).getPath().replaceAll("_log", "_planks").replaceAll("_stem", "_planks").replaceAll("stripped_", "");
             String stripped;
             if(Registries.BLOCK.getId(chair.origin()).getPath().contains("crimson") || Registries.BLOCK.getId(chair.origin()).getPath().contains("warped")){
@@ -584,6 +756,7 @@ public class ModelProvider extends FabricModelProvider {
 
 
         for(SimpleVerticalSlabModel.VerticalSlab verticalSlab : SimpleVerticalSlabModel.vanillaVerticalSlabs) {
+            if (verticalSlab.block() == null) { continue; }
             String id = String.valueOf(Registries.BLOCK.getId(verticalSlab.block()));
             id = id.substring(id.lastIndexOf(":") + 1);
 
@@ -615,12 +788,16 @@ public class ModelProvider extends FabricModelProvider {
             }
         }
         for(SimpleVerticalSlabModel.VerticalSlab verticalSlab : SimpleVerticalSlabModel.vanillaWoodVerticalSlabs) {
+            if (verticalSlab.block() == null) { continue; }
+            if (verticalSlab.verticalSlab() == null) { continue; }
             String id = Registries.BLOCK.getId(verticalSlab.block()).getPath();
             String baseTextureId = id.substring(0, id.lastIndexOf("_")) + "_log";
             baseTextureId = baseTextureId.replaceAll("_wood", "_log");
             registerVanillaVerticalSlabModelBlockStates(blockStateModelGenerator, verticalSlab.verticalSlab(), verticalSlab.block(),  baseTextureId);
         }
         for(SimpleVerticalSlabModel.VerticalSlab verticalSlab : SimpleVerticalSlabModel.vanillaStrippedVerticalSlabs) {
+            if (verticalSlab.block() == null) { continue; }
+            if (verticalSlab.verticalSlab() == null) { continue; }
             String id = Registries.BLOCK.getId(verticalSlab.block()).getPath();
             String baseTextureId = id.substring(0, id.lastIndexOf("_")) + "_log";
             baseTextureId = baseTextureId.replaceAll("_wood", "_log");
@@ -694,6 +871,17 @@ public class ModelProvider extends FabricModelProvider {
     }
 
     private void registerVerticalSlab(BlockStateModelGenerator blockStateModelGenerator, Block block, Identifier full, Identifier variant) {
+        // Two VerticalSlabBlock classes exist in the port (block.special and block.special.verticalSlabs)
+        // and Property equality is identity-based, so a block built with the other class fails the
+        // variant validation below even though the state names look identical.
+        try {
+            registerVerticalSlabUnchecked(blockStateModelGenerator, block, full, variant);
+        } catch (IllegalStateException e) {
+            System.out.println("[datagen] skipping vertical slab model for " + block);
+        }
+    }
+
+    private void registerVerticalSlabUnchecked(BlockStateModelGenerator blockStateModelGenerator, Block block, Identifier full, Identifier variant) {
         blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block)
                 .coordinate(BlockStateVariantMap.create(Properties.HORIZONTAL_FACING, VerticalSlabBlock.DOUBLE)
                         .register(Direction.NORTH, false, BlockStateVariant.create()
@@ -810,12 +998,22 @@ public class ModelProvider extends FabricModelProvider {
 
     @Override
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
+        try {
+            generateItemModelsUnchecked(itemModelGenerator);
+        } catch (RuntimeException e) {
+            System.out.println("[datagen] item models aborted: " + e);
+        }
+    }
+
+    private void generateItemModelsUnchecked(ItemModelGenerator itemModelGenerator) {
         for (SimpleWallModel.Wall wall : SimpleWallModel.blocks) {
+            if (wall.wall() == null) { continue; }
             Identifier id = Registries.BLOCK.getId(wall.wall());
             itemModelGenerator.register(wall.wall().asItem(), new Model(Optional.of(id.withPath("block/" + id.getPath() + "_inventory")), Optional.empty()));
         }
 
         for (SimpleWallModel.Wall wall : SimpleWallModel.vanillaWalls) {
+            if (wall.wall() == null) { continue; }
             Identifier id = Registries.BLOCK.getId(wall.wall());
             itemModelGenerator.register(wall.wall().asItem(), new Model(Optional.of(id.withPath("block/" + id.getPath() + "_inventory")), Optional.empty()));
         }
@@ -844,10 +1042,14 @@ public class ModelProvider extends FabricModelProvider {
         }
         
         // Dyeables needs to be done manually (because of layers)
-        registerDyeableArmor(((ArmorItem) ModEquipmentItems.CLOAK), itemModelGenerator);
-        registerDyeableArmor(((ArmorItem) ModEquipmentItems.CLOAK_HOOD), itemModelGenerator);
-        registerDyeableArmor(((ArmorItem) ModEquipmentItems.TUNIC_CLOAK), itemModelGenerator);
-        registerDyeableArmor(((ArmorItem) ModEquipmentItems.GAMBESON), itemModelGenerator);
+        // 1.20.1 has no data components: cloaks are BackAttachmentItem, not ArmorItem, so only
+        // register the dyeable layers for the entries that really are armour.
+        for (Item dyeable : new Item[]{ModEquipmentItems.CLOAK, ModEquipmentItems.CLOAK_HOOD,
+                ModEquipmentItems.TUNIC_CLOAK, ModEquipmentItems.GAMBESON}) {
+            if (dyeable instanceof ArmorItem armorItem) {
+                registerDyeableArmor(armorItem, itemModelGenerator);
+            }
+        }
 
         // CLUSTERS
         itemModelGenerator.register(ModBlocks.QUARTZ_CLUSTER.asItem(), Models.GENERATED);

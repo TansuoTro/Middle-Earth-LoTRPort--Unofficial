@@ -36,8 +36,16 @@ public class DataGeneration implements DataGeneratorEntrypoint {
         pack.addProvider(DataWorldGenerator::new);
     }
 
+    /** Fabric re-creates the registry wrapper for later providers, which would replay every
+     *  bootstrap on the same builder and trip "Duplicate registration" for all biomes/features. */
+    private static boolean registriesBuilt = false;
+
     @Override
     public void buildRegistry(RegistryBuilder registryBuilder) {
+        if (registriesBuilt) {
+            return;
+        }
+        registriesBuilt = true;
         DataGeneratorEntrypoint.super.buildRegistry(registryBuilder);
         registryBuilder.addRegistry(RegistryKeys.BIOME, ModBiomes::bootstrap);
         registryBuilder.addRegistry(RegistryKeys.BIOME, ModCaveBiomes::bootstrap);

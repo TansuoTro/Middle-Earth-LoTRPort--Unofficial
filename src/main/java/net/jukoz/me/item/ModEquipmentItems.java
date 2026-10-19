@@ -17,14 +17,12 @@ import java.util.List;
 
 public class ModEquipmentItems {
 
-    public static final Item GAMBESON = registerItem("gambeson",
-            new CustomChestplateItem(ModArmorMaterials.GAMBESON, ArmorItem.Type.CHESTPLATE, new FabricItemSettings(), List.of(CustomChestplateItem.Customizations.DYEABLE)));
+    public static final Item GAMBESON = EquipmentItemsME.GAMBESON;
 
     // Dyeable cloaks
     public static final Item CLOAK_HOOD = registerItem("cloak_hood",
             new CustomHelmetItem(ModArmorMaterials.CLOAK, ArmorItem.Type.HELMET, new FabricItemSettings(), List.of(CustomHelmetItem.Customizations.HOOD)));
-    public static final Item CLOAK = registerItem("cloak",
-            new CustomChestplateItem(ModArmorMaterials.CLOAK, ArmorItem.Type.CHESTPLATE, new FabricItemSettings(), List.of(CustomChestplateItem.Customizations.CAPE)));
+    public static final Item CLOAK = EquipmentItemsME.CLOAK;
 
     // Tunic cloak
     public static final Item TUNIC_CLOAK = registerItem("tunic_cloak",
@@ -42,8 +40,7 @@ public class ModEquipmentItems {
 
     public static final Item RUSTY_KETTLE_HAT = registerGeneratedItem("rusty_kettle_hat",
             new CustomHelmetItem(ModArmorMaterials.RUSTY_KETTLE_HAT, ArmorItem.Type.HELMET, new FabricItemSettings()));
-    public static final Item KETTLE_HAT = registerGeneratedItem("kettle_hat",
-            new CustomHelmetItem(ModArmorMaterials.KETTLE_HAT, ArmorItem.Type.HELMET, new FabricItemSettings()));
+    public static final Item KETTLE_HAT = EquipmentItemsME.KETTLE_HAT;
 
     public static final Item HOBBIT_SHIRRIFF_HAT_GREEN = registerGeneratedItem("hobbit_shirriff_hat_green",
             new CustomHelmetItem(ModArmorMaterials.HOBBIT_SHIRRIFF_HAT, ArmorItem.Type.HELMET, new FabricItemSettings(),  List.of(CustomHelmetItem.Customizations.FEATHER)));
@@ -69,38 +66,24 @@ public class ModEquipmentItems {
     public static final Item GONDORIAN_REINFORCED_MAIL_BOOTS = registerGeneratedItem("gondorian_reinforced_mail_boots",
             new CustomBootsItem(ModArmorMaterials.GONDORIAN_REINFORCED_MAIL_ARMOR, ArmorItem.Type.BOOTS, new FabricItemSettings()));
 
-    public static final Item GONDORIAN_PLATE_HELMET = registerGeneratedItem("gondorian_plate_helmet",
-            new CustomHelmetItem(ModArmorMaterials.GONDORIAN_PLATE_ARMOR, ArmorItem.Type.HELMET, new FabricItemSettings()));
-    public static final Item GONDORIAN_PLATE_CHESTPLATE = registerGeneratedItem("gondorian_plate_chestplate",
-            new CustomChestplateItem(ModArmorMaterials.GONDORIAN_PLATE_ARMOR, ArmorItem.Type.CHESTPLATE, new FabricItemSettings()));
-    public static final Item GONDORIAN_PLATE_LEGGINGS = registerGeneratedItem("gondorian_plate_leggings",
-            new CustomLeggingsItem(ModArmorMaterials.GONDORIAN_PLATE_ARMOR, ArmorItem.Type.LEGGINGS, new FabricItemSettings()));
-    public static final Item GONDORIAN_PLATE_BOOTS = registerGeneratedItem("gondorian_plate_boots",
-            new CustomBootsItem(ModArmorMaterials.GONDORIAN_PLATE_ARMOR, ArmorItem.Type.BOOTS, new FabricItemSettings()));
+    public static final Item GONDORIAN_PLATE_HELMET = EquipmentItemsME.GONDORIAN_PLATE_HELMET;
+    public static final Item GONDORIAN_PLATE_CHESTPLATE = EquipmentItemsME.GONDORIAN_PLATE_CHESTPLATE;
+    public static final Item GONDORIAN_PLATE_LEGGINGS = EquipmentItemsME.GONDORIAN_PLATE_LEGGINGS;
+    public static final Item GONDORIAN_PLATE_BOOTS = EquipmentItemsME.GONDORIAN_PLATE_BOOTS;
 
-    public static final Item GONDORIAN_CITADEL_GUARD_HELMET = registerGeneratedItem("gondorian_citadel_guard_helmet",
-            new CustomHelmetItem(ModArmorMaterials.GONDORIAN_CITADEL_GUARD_ARMOR, ArmorItem.Type.HELMET, new FabricItemSettings()));
-    public static final Item GONDORIAN_CITADEL_GUARD_CHESTPLATE = registerGeneratedItem("gondorian_citadel_guard_chestplate",
-            new CustomChestplateItem(ModArmorMaterials.GONDORIAN_CITADEL_GUARD_ARMOR, ArmorItem.Type.CHESTPLATE, new FabricItemSettings(), List.of(CustomChestplateItem.Customizations.CAPE)));
-    public static final Item GONDORIAN_CITADEL_GUARD_LEGGINGS = registerGeneratedItem("gondorian_citadel_guard_leggings",
-            new CustomLeggingsItem(ModArmorMaterials.GONDORIAN_CITADEL_GUARD_ARMOR, ArmorItem.Type.LEGGINGS, new FabricItemSettings()));
-    public static final Item GONDORIAN_CITADEL_GUARD_BOOTS = registerGeneratedItem("gondorian_citadel_guard_boots",
-            new CustomBootsItem(ModArmorMaterials.GONDORIAN_CITADEL_GUARD_ARMOR, ArmorItem.Type.BOOTS, new FabricItemSettings()));
+    public static final Item GONDORIAN_CITADEL_GUARD_HELMET = EquipmentItemsME.GONDORIAN_CITADEL_GUARD_HELMET;
+    public static final Item GONDORIAN_CITADEL_GUARD_CHESTPLATE = EquipmentItemsME.GONDORIAN_CITADEL_GUARD_CHESTPLATE;
+    public static final Item GONDORIAN_CITADEL_GUARD_LEGGINGS = EquipmentItemsME.GONDORIAN_CITADEL_GUARD_LEGGINGS;
+    public static final Item GONDORIAN_CITADEL_GUARD_BOOTS = EquipmentItemsME.GONDORIAN_CITADEL_GUARD_BOOTS;
     
-    public static final Item GONDORIAN_FOUNTAIN_GUARD_HELMET = registerGeneratedItem("gondorian_fountain_guard_helmet",
-            new CustomHelmetItem(ModArmorMaterials.GONDORIAN_FOUNTAIN_GUARD_ARMOR, ArmorItem.Type.HELMET, new FabricItemSettings()));
-    public static final Item GONDORIAN_FOUNTAIN_GUARD_CHESTPLATE = registerGeneratedItem("gondorian_fountain_guard_chestplate",
-            new CustomChestplateItem(ModArmorMaterials.GONDORIAN_FOUNTAIN_GUARD_ARMOR, ArmorItem.Type.CHESTPLATE, new FabricItemSettings(), List.of(CustomChestplateItem.Customizations.CAPE)));
-    public static final Item GONDORIAN_FOUNTAIN_GUARD_LEGGINGS = registerGeneratedItem("gondorian_fountain_guard_leggings",
-            new CustomLeggingsItem(ModArmorMaterials.GONDORIAN_FOUNTAIN_GUARD_ARMOR, ArmorItem.Type.LEGGINGS, new FabricItemSettings()));
-    public static final Item GONDORIAN_FOUNTAIN_GUARD_BOOTS = registerGeneratedItem("gondorian_fountain_guard_boots",
-            new CustomBootsItem(ModArmorMaterials.GONDORIAN_FOUNTAIN_GUARD_ARMOR, ArmorItem.Type.BOOTS, new FabricItemSettings()));
+    public static final Item GONDORIAN_FOUNTAIN_GUARD_HELMET = EquipmentItemsME.GONDORIAN_FOUNTAIN_GUARD_HELMET;
+    public static final Item GONDORIAN_FOUNTAIN_GUARD_CHESTPLATE = EquipmentItemsME.GONDORIAN_FOUNTAIN_GUARD_CHESTPLATE;
+    public static final Item GONDORIAN_FOUNTAIN_GUARD_LEGGINGS = EquipmentItemsME.GONDORIAN_FOUNTAIN_GUARD_LEGGINGS;
+    public static final Item GONDORIAN_FOUNTAIN_GUARD_BOOTS = EquipmentItemsME.GONDORIAN_FOUNTAIN_GUARD_BOOTS;
 
-    public static final Item GONDORIAN_SHIELD = registerItem("gondorian_shield",
-            new CustomShieldItem(new FabricItemSettings().maxCount(1).maxDamage(450), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".gondor")));
+    public static final Item GONDORIAN_SHIELD = WeaponItemsME.GONDORIAN_SHIELD;
 
-    public static final Item GONDORIAN_HORSE_ARMOR = registerGeneratedItem("gondorian_horse_armor",
-            new CustomHorseArmorItem(6, "gondorian", new FabricItemSettings().maxCount(1), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".gondor")));
+    public static final Item GONDORIAN_HORSE_ARMOR = EquipmentItemsME.GONDORIAN_HORSE_ARMOR;
 
     //ROHAN
     public static final Item ROHIRRIC_MAIL_HELMET = registerGeneratedItem("rohirric_mail_helmet",
@@ -121,8 +104,7 @@ public class ModEquipmentItems {
     public static final Item ROHIRRIC_SCALE_BOOTS = registerGeneratedItem("rohirric_scale_boots",
             new CustomBootsItem(ModArmorMaterials.ROHIRRIC_SCALE_ARMOR, ArmorItem.Type.BOOTS, new FabricItemSettings()));
 
-    public static final Item ROHIRRIC_ROYAL_GUARD_HELMET = registerGeneratedItem("rohirric_royal_guard_helmet",
-            new CustomHelmetItem(ModArmorMaterials.ROHIRRIC_ROYAL_GUARD_ARMOR, ArmorItem.Type.HELMET, new FabricItemSettings()));
+    public static final Item ROHIRRIC_ROYAL_GUARD_HELMET = EquipmentItemsME.ROHIRRIC_ROYAL_GUARD_HELMET;
     public static final Item ROHIRRIC_ROYAL_GUARD_CHESTPLATE = registerGeneratedItem("rohirric_royal_guard_chestplate",
             new CustomChestplateItem(ModArmorMaterials.ROHIRRIC_ROYAL_GUARD_ARMOR, ArmorItem.Type.CHESTPLATE, new FabricItemSettings(), List.of(CustomChestplateItem.Customizations.CAPE)));
     public static final Item ROHIRRIC_ROYAL_GUARD_LEGGINGS = registerGeneratedItem("rohirric_royal_guard_leggings",
@@ -139,20 +121,14 @@ public class ModEquipmentItems {
     public static final Item EORLING_MARSHALL_BOOTS = registerGeneratedItem("eorling_marshall_boots",
             new CustomBootsItem(ModArmorMaterials.EORLING_MARSHALL_ARMOR, ArmorItem.Type.BOOTS, new FabricItemSettings()));
 
-    public static final Item HORSE_LORD_HELMET = registerGeneratedItem("horse_lord_helmet",
-            new CustomHelmetItem(ModArmorMaterials.HORSE_LORD_ARMOR, ArmorItem.Type.HELMET, new FabricItemSettings()));
-    public static final Item HORSE_LORD_CHESTPLATE = registerGeneratedItem("horse_lord_chestplate",
-            new CustomChestplateItem(ModArmorMaterials.HORSE_LORD_ARMOR, ArmorItem.Type.CHESTPLATE, new FabricItemSettings(), List.of(CustomChestplateItem.Customizations.CAPE)));
-    public static final Item HORSE_LORD_LEGGINGS = registerGeneratedItem("horse_lord_leggings",
-            new CustomLeggingsItem(ModArmorMaterials.HORSE_LORD_ARMOR, ArmorItem.Type.LEGGINGS, new FabricItemSettings()));
-    public static final Item HORSE_LORD_BOOTS = registerGeneratedItem("horse_lord_boots",
-            new CustomBootsItem(ModArmorMaterials.HORSE_LORD_ARMOR, ArmorItem.Type.BOOTS, new FabricItemSettings()));
+    public static final Item HORSE_LORD_HELMET = EquipmentItemsME.HORSE_LORD_HELMET;
+    public static final Item HORSE_LORD_CHESTPLATE = EquipmentItemsME.HORSE_LORD_CHESTPLATE;
+    public static final Item HORSE_LORD_LEGGINGS = EquipmentItemsME.HORSE_LORD_LEGGINGS;
+    public static final Item HORSE_LORD_BOOTS = EquipmentItemsME.HORSE_LORD_BOOTS;
 
-    public static final Item ROHIRRIC_SHIELD = registerItem("rohirric_shield",
-            new CustomShieldItem(new FabricItemSettings().maxCount(1).maxDamage(450), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".rohan")));
+    public static final Item ROHIRRIC_SHIELD = WeaponItemsME.ROHIRRIC_SHIELD;
 
-    public static final Item ROHIRRIC_HORSE_ARMOR = registerGeneratedItem("rohirric_horse_armor",
-            new CustomHorseArmorItem(6, "rohirric", new FabricItemSettings().maxCount(1), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".rohan")));
+    public static final Item ROHIRRIC_HORSE_ARMOR = EquipmentItemsME.ROHIRRIC_HORSE_ARMOR;
 
 
     //DWARVES
@@ -168,8 +144,7 @@ public class ModEquipmentItems {
             new CustomHelmetItem(ModArmorMaterials.EREBOR_MAIL_ARMOR, ArmorItem.Type.HELMET, new FabricItemSettings()));
     public static final Item EREBOR_MAIL_CHESTPLATE = registerGeneratedItem("erebor_mail_chestplate",
             new CustomChestplateItem(ModArmorMaterials.EREBOR_MAIL_ARMOR, ArmorItem.Type.CHESTPLATE, new FabricItemSettings(), List.of(CustomChestplateItem.Customizations.CAPE)));
-    public static final Item EREBOR_MAIL_LEGGINGS = registerGeneratedItem("erebor_mail_leggings",
-            new CustomLeggingsItem(ModArmorMaterials.EREBOR_MAIL_ARMOR, ArmorItem.Type.LEGGINGS, new FabricItemSettings()));
+    public static final Item EREBOR_MAIL_LEGGINGS = EquipmentItemsME.EREBOR_MAIL_LEGGINGS;
     public static final Item EREBOR_MAIL_BOOTS = registerGeneratedItem("erebor_mail_boots",
             new CustomBootsItem(ModArmorMaterials.EREBOR_MAIL_ARMOR, ArmorItem.Type.BOOTS, new FabricItemSettings()));
 
@@ -177,19 +152,14 @@ public class ModEquipmentItems {
             new CustomHelmetItem(ModArmorMaterials.EREBOR_SCALE_ARMOR, ArmorItem.Type.HELMET, new FabricItemSettings()));
     public static final Item EREBOR_SCALE_CHESTPLATE = registerGeneratedItem("erebor_scale_chestplate",
             new CustomChestplateItem(ModArmorMaterials.EREBOR_SCALE_ARMOR, ArmorItem.Type.CHESTPLATE, new FabricItemSettings(), List.of(CustomChestplateItem.Customizations.POUCH)));
-    public static final Item EREBOR_SCALE_LEGGINGS = registerGeneratedItem("erebor_scale_leggings",
-            new CustomLeggingsItem(ModArmorMaterials.EREBOR_SCALE_ARMOR, ArmorItem.Type.LEGGINGS, new FabricItemSettings()));
+    public static final Item EREBOR_SCALE_LEGGINGS = EquipmentItemsME.EREBOR_SCALE_LEGGINGS;
     public static final Item EREBOR_SCALE_BOOTS = registerGeneratedItem("erebor_scale_boots",
             new CustomBootsItem(ModArmorMaterials.EREBOR_SCALE_ARMOR, ArmorItem.Type.BOOTS, new FabricItemSettings()));
 
-    public static final Item EREBOR_PLATE_HELMET = registerGeneratedItem("erebor_plate_helmet",
-            new CustomHelmetItem(ModArmorMaterials.EREBOR_PLATE_ARMOR, ArmorItem.Type.HELMET, new FabricItemSettings()));
-    public static final Item EREBOR_PLATE_CHESTPLATE = registerGeneratedItem("erebor_plate_chestplate",
-            new CustomChestplateItem(ModArmorMaterials.EREBOR_PLATE_ARMOR, ArmorItem.Type.CHESTPLATE, new FabricItemSettings(), List.of(CustomChestplateItem.Customizations.POUCH)));
-    public static final Item EREBOR_PLATE_LEGGINGS = registerGeneratedItem("erebor_plate_leggings",
-            new CustomLeggingsItem(ModArmorMaterials.EREBOR_PLATE_ARMOR, ArmorItem.Type.LEGGINGS, new FabricItemSettings()));
-    public static final Item EREBOR_PLATE_BOOTS = registerGeneratedItem("erebor_plate_boots",
-            new CustomBootsItem(ModArmorMaterials.EREBOR_PLATE_ARMOR, ArmorItem.Type.BOOTS, new FabricItemSettings()));
+    public static final Item EREBOR_PLATE_HELMET = EquipmentItemsME.EREBOR_PLATE_HELMET;
+    public static final Item EREBOR_PLATE_CHESTPLATE = EquipmentItemsME.EREBOR_PLATE_CHESTPLATE;
+    public static final Item EREBOR_PLATE_LEGGINGS = EquipmentItemsME.EREBOR_PLATE_LEGGINGS;
+    public static final Item EREBOR_PLATE_BOOTS = EquipmentItemsME.EREBOR_PLATE_BOOTS;
 
     public static final Item EREBOR_COMMANDER_HELMET = registerGeneratedItem("erebor_commander_helmet",
             new CustomHelmetItem(ModArmorMaterials.EREBOR_COMMANDER_ARMOR, ArmorItem.Type.HELMET, new FabricItemSettings()));
@@ -203,8 +173,7 @@ public class ModEquipmentItems {
     public static final Item LONGBEARD_SHIELD = registerItem("longbeard_shield",
             new CustomShieldItem(new FabricItemSettings().maxCount(1).maxDamage(450), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".longbeards")));
 
-    public static final Item LORIEN_HORSE_ARMOR = registerGeneratedItem("lorien_horse_armor",
-            new CustomHorseArmorItem(6, "lorien", new FabricItemSettings().maxCount(1), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".lothlorien")));
+    public static final Item LORIEN_HORSE_ARMOR = EquipmentItemsME.LORIEN_HORSE_ARMOR;
 
     //LOTHLORIEN
     public static final Item LORIEN_MAIL_HELMET = registerGeneratedItem("lorien_mail_helmet",
@@ -243,8 +212,7 @@ public class ModEquipmentItems {
     public static final Item LORIEN_COMMANDER_BOOTS = registerGeneratedItem("lorien_commander_boots",
             new CustomBootsItem(ModArmorMaterials.LORIEN_COMMANDER_ARMOR, ArmorItem.Type.BOOTS, new FabricItemSettings()));
 
-    public static final Item LORIEN_SHIELD = registerItem("lorien_shield",
-            new CustomShieldItem(new FabricItemSettings().maxCount(1).maxDamage(450), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".lothlorien")));
+    public static final Item LORIEN_SHIELD = WeaponItemsME.LORIEN_SHIELD;
 
     //MORDOR
     public static final Item MORDOR_ORC_MAIL_HELMET = registerGeneratedItem("mordor_orc_mail_helmet",

@@ -51,6 +51,10 @@ test {
 }
 
 processResources {
+    // src/main/resources is listed before src/main/generated, so EXCLUDE lets the handful of
+    // hand-written datapack files (e.g. data/me/loot_tables/blocks/maple_leaves.json) win over
+    // the datagen output instead of failing the build on a duplicate entry.
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     inputs.property 'version', project.version
     filesMatching('fabric.mod.json') {
         expand(version: project.version)

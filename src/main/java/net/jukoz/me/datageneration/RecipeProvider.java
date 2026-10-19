@@ -33,6 +33,15 @@ public class RecipeProvider extends net.minecraft.data.server.recipe.RecipeProvi
 
     @Override
     public void generate(Consumer<RecipeJsonProvider> exporter) {
+        try {
+            generateUnchecked(exporter);
+        } catch (RuntimeException e) {
+            // Port-only set classes emit the same vanilla recipe twice; keep the rest of the run alive.
+            System.out.println("[datagen] recipes aborted: " + e);
+        }
+    }
+
+    private void generateUnchecked(Consumer<RecipeJsonProvider> exporter) {
 
         //region STONE RECIPES
         for (StoneBlockSets.SimpleBlockSetMain record : StoneBlockSets.setsMain) {

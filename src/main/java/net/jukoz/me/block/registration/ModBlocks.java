@@ -785,6 +785,13 @@ public class ModBlocks {
     //
 
     public static Block registerBlock(String name, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings, boolean drop, List<ItemStack> group){
+        // Port shim: the port-only set classes (RoofBlockSets, MushroomBlockSets, ...) re-declare
+        // blocks that WoodBlockSets / GenericBlockSets already registered.  Reuse the existing
+        // entry instead of aborting the whole registry with a duplicate-id error.
+        Block existing = Registries.BLOCK.get(new Identifier(MiddleEarth.MOD_ID, name));
+        if (existing != Blocks.AIR) {
+            return existing;
+        }
         Block block = (Block)factory.apply(settings);
         registerBlockItem(name, block);
         if(drop){

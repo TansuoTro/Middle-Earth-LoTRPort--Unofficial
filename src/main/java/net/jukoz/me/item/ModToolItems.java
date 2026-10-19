@@ -36,14 +36,10 @@ public class ModToolItems {
     public static final Item JADE_HOE = registerItemHandheld("jade_hoe",
             new HoeItem(ModToolMaterials.JADE, IRON_HOE_DAMAGE, IRON_HOE_ATTACK_SPEED, new FabricItemSettings()));
     
-    public static final Item BRONZE_PICKAXE = registerItemHandheld("bronze_pickaxe",
-            new PickaxeItem(ModToolMaterials.BRONZE, IRON_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings()));
-    public static final Item BRONZE_AXE = registerItemHandheld("bronze_axe",
-            new AxeItem(ModToolMaterials.BRONZE, IRON_AXE_DAMAGE, IRON_AXE_ATTACK_SPEED, new FabricItemSettings()));
-    public static final Item BRONZE_SHOVEL = registerItemHandheld("bronze_shovel",
-            new ShovelItem(ModToolMaterials.BRONZE, IRON_PICKAXE_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings()));
-    public static final Item BRONZE_HOE = registerItemHandheld("bronze_hoe",
-            new HoeItem(ModToolMaterials.BRONZE, IRON_HOE_DAMAGE, IRON_HOE_ATTACK_SPEED, new FabricItemSettings()));
+    public static final Item BRONZE_PICKAXE = ToolItemsME.BRONZE_PICKAXE;
+    public static final Item BRONZE_AXE = ToolItemsME.BRONZE_AXE;
+    public static final Item BRONZE_SHOVEL = ToolItemsME.BRONZE_SHOVEL;
+    public static final Item BRONZE_HOE = ToolItemsME.BRONZE_HOE;
 
     public static final Item ORC_STEEL_PICKAXE = registerItemHandheld("orc_steel_pickaxe",
             new PickaxeItem(ModToolMaterials.ORC_STEEL, IRON_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings()));
@@ -54,14 +50,10 @@ public class ModToolItems {
     public static final Item ORC_STEEL_HOE = registerItemHandheld("orc_steel_hoe",
             new HoeItem(ModToolMaterials.ORC_STEEL, IRON_HOE_DAMAGE, IRON_HOE_ATTACK_SPEED, new FabricItemSettings()));
 
-    public static final Item STEEL_PICKAXE = registerItemHandheld("steel_pickaxe",
-            new PickaxeItem(ModToolMaterials.STEEL, IRON_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings()));
-    public static final Item STEEL_AXE = registerItemHandheld("steel_axe",
-            new AxeItem(ModToolMaterials.STEEL, IRON_AXE_DAMAGE, IRON_AXE_ATTACK_SPEED, new FabricItemSettings()));
-    public static final Item STEEL_SHOVEL = registerItemHandheld("steel_shovel",
-            new ShovelItem(ModToolMaterials.STEEL, IRON_PICKAXE_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings()));
-    public static final Item STEEL_HOE = registerItemHandheld("steel_hoe",
-            new HoeItem(ModToolMaterials.STEEL, IRON_HOE_DAMAGE, IRON_HOE_ATTACK_SPEED, new FabricItemSettings()));
+    public static final Item STEEL_PICKAXE = ToolItemsME.STEEL_PICKAXE;
+    public static final Item STEEL_AXE = ToolItemsME.STEEL_AXE;
+    public static final Item STEEL_SHOVEL = ToolItemsME.STEEL_SHOVEL;
+    public static final Item STEEL_HOE = ToolItemsME.STEEL_HOE;
 
     public static final Item URUK_STEEL_PICKAXE = registerItemHandheld("uruk_steel_pickaxe",
             new PickaxeItem(ModToolMaterials.URUK_STEEL, IRON_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings()));
@@ -90,14 +82,10 @@ public class ModToolItems {
     public static final Item DWARVEN_STEEL_HOE = registerItemHandheld("dwarven_steel_hoe",
             new HoeItem(ModToolMaterials.DWARVEN_STEEL, IRON_HOE_DAMAGE, IRON_HOE_ATTACK_SPEED, new FabricItemSettings()));
 
-    public static final Item MITHRIL_PICKAXE = registerItemHandheld("mithril_pickaxe",
-            new PickaxeItem(ModToolMaterials.MITHRIL, IRON_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings().fireproof()));
-    public static final Item MITHRIL_AXE = registerItemHandheld("mithril_axe",
-            new AxeItem(ModToolMaterials.MITHRIL, IRON_AXE_DAMAGE, IRON_AXE_ATTACK_SPEED, new FabricItemSettings().fireproof()));
-    public static final Item MITHRIL_SHOVEL = registerItemHandheld("mithril_shovel",
-            new ShovelItem(ModToolMaterials.MITHRIL, IRON_PICKAXE_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings().fireproof()));
-    public static final Item MITHRIL_HOE = registerItemHandheld("mithril_hoe",
-            new HoeItem(ModToolMaterials.MITHRIL, IRON_HOE_DAMAGE, IRON_HOE_ATTACK_SPEED, new FabricItemSettings().fireproof()));
+    public static final Item MITHRIL_PICKAXE = ToolItemsME.MITHRIL_PICKAXE;
+    public static final Item MITHRIL_AXE = ToolItemsME.MITHRIL_AXE;
+    public static final Item MITHRIL_SHOVEL = ToolItemsME.MITHRIL_SHOVEL;
+    public static final Item MITHRIL_HOE = ToolItemsME.MITHRIL_HOE;
 /*
     public static final Item BRONZE_BUCKET = registerItemGenerated("bronze_bucket",
             new BronzeBucketItem(Fluids.EMPTY, new FabricItemSettings().maxCount(16)));

@@ -292,15 +292,15 @@ public class MEBiomeKeys extends BiomeKeys {
     public static final RegistryKey<Biome> ICE_CAVE = MEBiomeKeys.register("ice_cave");
 
     // Aliases for the older worldgen call sites.
-    public static final RegistryKey<Biome> ERIADOR = ENEDWAITH;
-    public static final RegistryKey<Biome> IRON_HILLS_FOOTHILLS = IRON_HILLS_BASE;
-    public static final RegistryKey<Biome> IRON_HILLS_FRONTIER = IRON_HILLS_PLAINS;
-    public static final RegistryKey<Biome> MISTY_FOOTHILLS = MISTY_MOUNTAINS_BASE;
-    public static final RegistryKey<Biome> NORTHERN_DUNLAND = DUNLAND;
-    public static final RegistryKey<Biome> RIVENDELL = EREGION;
-    public static final RegistryKey<Biome> RIVENDELL_FOOTHILLS = EREGION_GLADE;
-    public static final RegistryKey<Biome> SOUTHERN_DUNLAND = DUNLAND_HILLS;
-    public static final RegistryKey<Biome> WHITE_MOUNTAINS_FOOTHILLS = WHITE_MOUNTAINS_BASE;
+    public static final RegistryKey<Biome> ERIADOR = MEBiomeKeys.register("eriador");
+    public static final RegistryKey<Biome> IRON_HILLS_FOOTHILLS = MEBiomeKeys.register("iron_hills_foothills");
+    public static final RegistryKey<Biome> IRON_HILLS_FRONTIER = MEBiomeKeys.register("iron_hills_frontier");
+    public static final RegistryKey<Biome> MISTY_FOOTHILLS = MEBiomeKeys.register("misty_foothills");
+    public static final RegistryKey<Biome> NORTHERN_DUNLAND = MEBiomeKeys.register("northern_dunland");
+    public static final RegistryKey<Biome> RIVENDELL = MEBiomeKeys.register("rivendell");
+    public static final RegistryKey<Biome> RIVENDELL_FOOTHILLS = MEBiomeKeys.register("rivendell_foothills");
+    public static final RegistryKey<Biome> SOUTHERN_DUNLAND = MEBiomeKeys.register("southern_dunland");
+    public static final RegistryKey<Biome> WHITE_MOUNTAINS_FOOTHILLS = MEBiomeKeys.register("white_mountains_foothills");
 
     // endregion
 

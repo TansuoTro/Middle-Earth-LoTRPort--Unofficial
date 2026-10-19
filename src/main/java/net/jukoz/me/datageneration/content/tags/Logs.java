@@ -17,7 +17,9 @@ public class Logs {
     public static List<Item> getItemLogs() {
         ArrayList<Item> newList = new ArrayList<>();
         for (Block block : logs) {
-            newList.add(block.asItem());
+            if (block != null) {
+                newList.add(block.asItem());
+            }
         }
         return newList;
     }

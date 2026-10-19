@@ -39,8 +39,9 @@ public class RegistriesME {
     public static final HashMap<String, String> specialAliases = new HashMap<>();
 
     public static void registerRegistryAliases() {
-        specialAliases.put("khagalaban", "gonluin");
-
+        // me:gonluin is now a real block, so the legacy khagalaban->gonluin rewrite would
+        // produce a duplicate alias source (middle-earth:gonluin).  Legacy khagalaban ids
+        // alias straight to the still-registered me:khagalaban set instead.
         specialAliases.put("chiseled_blackstone_bricks", "chiseled_polished_blackstone_bricks");
 
         specialAliases.put("carved_window_vertical_slab", "carved_window_pane");

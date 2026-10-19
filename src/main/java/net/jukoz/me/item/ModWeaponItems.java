@@ -50,23 +50,17 @@ public class ModWeaponItems {
     public static final Item ANDUIN_PIKE = registerItemWithModel("anduin_pike",
             new ReachWeaponItem(ModToolMaterials.STEEL, PIKE_DAMAGE, PIKE_ATTACKS_SPEED, PIKE_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".anduin"), new FabricItemSettings()), true);
 
-    public static final Item BRONZE_SWORD = registerItemWithModel("bronze_sword",
-            new CustomSwordWeaponItem(ModToolMaterials.BRONZE, SWORD_DAMAGE, SWORD_ATTACKS_SPEED, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), new FabricItemSettings()), false);
-    public static final Item BRONZE_DAGGER = registerItemWithModel("bronze_dagger",
-            new ReachWeaponItem(ModToolMaterials.BRONZE, DAGGER_DAMAGE, DAGGER_ATTACKS_SPEED, DAGGER_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), new FabricItemSettings()), false);
-    public static final Item BRONZE_SPEAR = registerItemWithModel("bronze_spear",
-            new ReachWeaponItem(ModToolMaterials.BRONZE, SPEAR_DAMAGE, SPEAR_ATTACKS_SPEED, TWO_HAND_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), new FabricItemSettings()), true);
+    public static final Item BRONZE_SWORD = WeaponItemsME.BRONZE_SWORD;
+    public static final Item BRONZE_DAGGER = WeaponItemsME.BRONZE_DAGGER;
+    public static final Item BRONZE_SPEAR = WeaponItemsME.BRONZE_SPEAR;
     public static final Item BRONZE_PIKE = registerItemWithModel("bronze_pike",
             new ReachWeaponItem(ModToolMaterials.BRONZE, PIKE_DAMAGE, PIKE_ATTACKS_SPEED, PIKE_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), new FabricItemSettings()), true);
 
-    public static final Item DALISH_SWORD = registerItemWithModel("dalish_sword",
-            new CustomSwordWeaponItem(ModToolMaterials.STEEL, SWORD_DAMAGE, SWORD_ATTACKS_SPEED, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".dale"), new FabricItemSettings()), false);
-    public static final Item DALISH_DAGGER = registerItemWithModel("dalish_dagger",
-            new ReachWeaponItem(ModToolMaterials.STEEL, DAGGER_DAMAGE, DAGGER_ATTACKS_SPEED, DAGGER_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".dale"), new FabricItemSettings()), false);
+    public static final Item DALISH_SWORD = WeaponItemsME.DALISH_SWORD;
+    public static final Item DALISH_DAGGER = WeaponItemsME.DALISH_DAGGER;
     public static final Item DALISH_POLEARM = registerItemWithModel("dalish_polearm",
             new ReachWeaponItem(ModToolMaterials.STEEL, BATTLEAXE_DAMAGE, POLEARM_ATTACKS_SPEED, PIKE_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".dale"), new FabricItemSettings()), true);
-    public static final Item DALISH_SPEAR = registerItemWithModel("dalish_spear",
-            new ReachWeaponItem(ModToolMaterials.STEEL, SPEAR_DAMAGE, SPEAR_ATTACKS_SPEED, TWO_HAND_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".dale"), new FabricItemSettings()), true);
+    public static final Item DALISH_SPEAR = WeaponItemsME.DALISH_SPEAR;
     public static final Item DALISH_TRIDENT = registerItemWithModel("dalish_trident",
             new ReachWeaponItem(ModToolMaterials.STEEL, SPEAR_DAMAGE, SPEAR_ATTACKS_SPEED, TWO_HAND_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".dale"), new FabricItemSettings()), true);
     public static final Item DALISH_PIKE = registerItemWithModel("dalish_pike",
@@ -96,47 +90,36 @@ public class ModWeaponItems {
     public static final Item LONGBEARD_PIKE = registerItemWithModel("longbeard_pike",
             new ReachWeaponItem(ModToolMaterials.DWARVEN_STEEL, PIKE_DAMAGE, PIKE_ATTACKS_SPEED, PIKE_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".longbeards"), new FabricItemSettings()), true);
 
-    public static final Item GONDOR_SWORD = registerItemWithModel("gondorian_sword",
-            new CustomSwordWeaponItem(ModToolMaterials.STEEL, SWORD_DAMAGE, SWORD_ATTACKS_SPEED, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".gondor"), new FabricItemSettings()), true);
-    public static final Item GONDOR_LONGSWORD = registerItemWithModel("gondorian_longsword",
-            new ReachWeaponItem(ModToolMaterials.STEEL, SWORD_DAMAGE, SWORD_ATTACKS_SPEED - 0.2f, TWO_HAND_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".gondor"), new FabricItemSettings()), true);
-    public static final Item GONDOR_DAGGER = registerItemWithModel("gondorian_dagger",
-            new ReachWeaponItem(ModToolMaterials.STEEL, DAGGER_DAMAGE, DAGGER_ATTACKS_SPEED, DAGGER_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".gondor"), new FabricItemSettings()), false);
+    public static final Item GONDOR_SWORD = WeaponItemsME.GONDORIAN_SWORD;
+    public static final Item GONDOR_LONGSWORD = WeaponItemsME.GONDORIAN_LONGSWORD;
+    public static final Item GONDOR_DAGGER = WeaponItemsME.GONDORIAN_DAGGER;
     public static final Item GONDOR_BATTLEAXE = registerItemWithModel("gondorian_battleaxe",
             new CustomAxeWeaponItem(ModToolMaterials.STEEL, BATTLEAXE_DAMAGE, BATTLEAXE_ATTACKS_SPEED, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".gondor"), new FabricItemSettings()), true);
-    public static final Item GONDOR_SPEAR = registerItemWithModel("gondorian_spear",
-            new ReachWeaponItem(ModToolMaterials.STEEL, SPEAR_DAMAGE, SPEAR_ATTACKS_SPEED, TWO_HAND_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".gondor"), new FabricItemSettings()), true);
+    public static final Item GONDOR_SPEAR = WeaponItemsME.GONDORIAN_SPEAR;
     public static final Item GONDOR_PIKE = registerItemWithModel("gondorian_pike",
             new ReachWeaponItem(ModToolMaterials.STEEL, PIKE_DAMAGE, PIKE_ATTACKS_SPEED, PIKE_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".gondor"), new FabricItemSettings()), true);
-    public static final Item GONDOR_BOW = registerBowItem("gondorian_bow",
-            new CustomBowWeaponItem(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".gondor"), new FabricItemSettings().maxDamage(640)));
+    public static final Item GONDOR_BOW = WeaponItemsME.GONDORIAN_BOW;
 
     public static final Item GUNDABAD_SCIMITAR = registerItemWithModel("gundabad_scimitar",
             new CustomSwordWeaponItem(ModToolMaterials.ORC_STEEL, SWORD_DAMAGE, SWORD_ATTACKS_SPEED, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".misty_orcs"), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".gundabad"), new FabricItemSettings()), false);
-     public static final Item GUNDABAD_FALCHION = registerItemWithModel("gundabad_falchion",
-            new CustomSwordWeaponItem(ModToolMaterials.ORC_STEEL, SWORD_DAMAGE, SWORD_ATTACKS_SPEED, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".misty_orcs"), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".gundabad"), new FabricItemSettings()), false);
+     public static final Item GUNDABAD_FALCHION = WeaponItemsME.GUNDABAD_FALCHION;
     public static final Item GUNDABAD_DAGGER = registerItemWithModel("gundabad_dagger",
             new ReachWeaponItem(ModToolMaterials.ORC_STEEL, DAGGER_DAMAGE, DAGGER_ATTACKS_SPEED, DAGGER_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".misty_orcs"), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".gundabad"), new FabricItemSettings()), false);
-    public static final Item GUNDABAD_SPEAR = registerItemWithModel("gundabad_spear",
-            new ReachWeaponItem(ModToolMaterials.ORC_STEEL, SPEAR_DAMAGE, SPEAR_ATTACKS_SPEED, TWO_HAND_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".misty_orcs"), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".gundabad"), new FabricItemSettings()), true);
+    public static final Item GUNDABAD_SPEAR = WeaponItemsME.GUNDABAD_SPEAR;
     public static final Item GUNDABAD_BARDICHE = registerItemWithModel("gundabad_bardiche",
             new ReachWeaponItem(ModToolMaterials.ORC_STEEL, BATTLEAXE_DAMAGE, POLEARM_ATTACKS_SPEED, PIKE_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".misty_orcs"), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".gundabad"), new FabricItemSettings()), true);
 
-    public static final Item LORIEN_SWORD = registerItemWithModel("lorien_sword",
-            new CustomSwordWeaponItem(ModToolMaterials.ELVEN_STEEL, SWORD_DAMAGE, SWORD_ATTACKS_SPEED, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".lothlorien"), new FabricItemSettings()), false);
+    public static final Item LORIEN_SWORD = WeaponItemsME.LORIEN_SWORD;
     public static final Item LORIEN_LONGSWORD = registerItemWithModel("lorien_longsword",
             new ReachWeaponItem(ModToolMaterials.ELVEN_STEEL, SWORD_DAMAGE, SWORD_ATTACKS_SPEED - 0.2f, TWO_HAND_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".lothlorien"), new FabricItemSettings()), true);
-    public static final Item LORIEN_DAGGER = registerItemWithModel("lorien_dagger",
-            new ReachWeaponItem(ModToolMaterials.ELVEN_STEEL, DAGGER_DAMAGE, DAGGER_ATTACKS_SPEED, DAGGER_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".lothlorien"), new FabricItemSettings()), false);
-    public static final Item LORIEN_SPEAR = registerItemWithModel("lorien_spear",
-            new ReachWeaponItem(ModToolMaterials.ELVEN_STEEL, SPEAR_DAMAGE, SPEAR_ATTACKS_SPEED, TWO_HAND_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".lothlorien"), new FabricItemSettings()), true);
+    public static final Item LORIEN_DAGGER = WeaponItemsME.LORIEN_DAGGER;
+    public static final Item LORIEN_SPEAR = WeaponItemsME.LORIEN_SPEAR;
     public static final Item LORIEN_BATTLESTAFF = registerItemWithModel("lorien_battlestaff",
             new ReachWeaponItem(ModToolMaterials.ELVEN_STEEL, 0, SPEAR_ATTACKS_SPEED, PIKE_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".lothlorien"), new FabricItemSettings()), true);
     public static final Item LORIEN_PIKE = registerItemWithModel("lorien_pike",
             new ReachWeaponItem(ModToolMaterials.ELVEN_STEEL, PIKE_DAMAGE, PIKE_ATTACKS_SPEED, PIKE_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".lothlorien"), new FabricItemSettings()), true);
 
-    public static final Item LORIEN_BOW = registerBowItem("lorien_bow",
-            new CustomBowWeaponItem(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".lothlorien"), new FabricItemSettings().maxDamage(640)));
+    public static final Item LORIEN_BOW = WeaponItemsME.LORIEN_BOW;
 
     public static final Item MORDOR_ORC_SCIMITAR = registerItemWithModel("mordor_orc_scimitar",
             new CustomSwordWeaponItem(ModToolMaterials.ORC_STEEL, SWORD_DAMAGE, SWORD_ATTACKS_SPEED, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".mordor"), new FabricItemSettings()), false);
@@ -152,20 +135,15 @@ public class ModWeaponItems {
     public static final Item MORGUL_BLADE = registerItemWithModel("morgul_blade",
             new CustomSwordWeaponItem(ModToolMaterials.MORGUL_STEEL, SWORD_DAMAGE, SWORD_ATTACKS_SPEED + 0.1f, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".mordor"), new FabricItemSettings()), false);
 
-    public static final Item ROHIRRIC_SWORD = registerItemWithModel("rohirric_sword",
-            new CustomSwordWeaponItem(ModToolMaterials.STEEL, SWORD_DAMAGE, SWORD_ATTACKS_SPEED, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".rohan"), new FabricItemSettings()), true);
-    public static final Item ROHIRRIC_LONGSWORD = registerItemWithModel("rohirric_longsword",
-            new ReachWeaponItem(ModToolMaterials.STEEL, SWORD_DAMAGE, SWORD_ATTACKS_SPEED - 0.2f, TWO_HAND_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".rohan"), new FabricItemSettings()), true);
-    public static final Item ROHIRRIC_DAGGER = registerItemWithModel("rohirric_dagger",
-            new ReachWeaponItem(ModToolMaterials.STEEL, DAGGER_DAMAGE, DAGGER_ATTACKS_SPEED, DAGGER_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".rohan"), new FabricItemSettings()), false);
+    public static final Item ROHIRRIC_SWORD = WeaponItemsME.ROHIRRIC_SWORD;
+    public static final Item ROHIRRIC_LONGSWORD = WeaponItemsME.ROHIRRIC_LONGSWORD;
+    public static final Item ROHIRRIC_DAGGER = WeaponItemsME.ROHIRRIC_DAGGER;
     public static final Item ROHIRRIC_BATTLEAXE = registerItemWithModel("rohirric_battleaxe",
             new CustomAxeWeaponItem(ModToolMaterials.STEEL, BATTLEAXE_DAMAGE, BATTLEAXE_ATTACKS_SPEED, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".rohan"), new FabricItemSettings()), true);
-    public static final Item ROHIRRIC_SPEAR = registerItemWithModel("rohirric_spear",
-            new ReachWeaponItem(ModToolMaterials.STEEL, SPEAR_DAMAGE, SPEAR_ATTACKS_SPEED, TWO_HAND_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".rohan"), new FabricItemSettings()), true);
+    public static final Item ROHIRRIC_SPEAR = WeaponItemsME.ROHIRRIC_SPEAR;
     public static final Item ROHIRRIC_PIKE = registerItemWithModel("rohirric_pike",
             new ReachWeaponItem(ModToolMaterials.STEEL, PIKE_DAMAGE, PIKE_ATTACKS_SPEED, PIKE_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".rohan"), new FabricItemSettings()), true);
-    public static final Item ROHIRRIC_BOW = registerBowItem("rohirric_bow",
-            new CustomBowWeaponItem(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".rohan"), new FabricItemSettings().maxDamage(640)));
+    public static final Item ROHIRRIC_BOW = WeaponItemsME.ROHIRRIC_BOW;
 
     public static final Item UMBAR_SCIMITAR = registerItemWithModel("umbar_scimitar",
             new CustomSwordWeaponItem(ModToolMaterials.STEEL, SWORD_DAMAGE, SWORD_ATTACKS_SPEED, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".umbar"), new FabricItemSettings()), false);
@@ -180,15 +158,11 @@ public class ModWeaponItems {
     public static final Item UMBAR_BOW = registerBowItem("umbar_bow",
             new CustomBowWeaponItem(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".umbar"), new FabricItemSettings().maxDamage(640)));
 
-    public static final Item STING = registerItemWithModel("sting",
-            new ReachWeaponItem(ModToolMaterials.ELVEN_STEEL, SWORD_DAMAGE, SWORD_ATTACKS_SPEED + 1, DAGGER_REACH, new FabricItemSettings()), false);
+    public static final Item STING = WeaponItemsME.STING;
 
-    public static final Item IRON_DAGGER = registerItemWithModel("iron_dagger",
-            new ReachWeaponItem(ToolMaterials.IRON, DAGGER_DAMAGE, DAGGER_ATTACKS_SPEED - 0.1f, DAGGER_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), new FabricItemSettings()), false);
-    public static final Item STONE_DAGGER = registerItemWithModel("stone_dagger",
-            new ReachWeaponItem(ToolMaterials.STONE, DAGGER_DAMAGE, DAGGER_ATTACKS_SPEED, DAGGER_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), new FabricItemSettings()), false);
-    public static final Item WOODEN_DAGGER = registerItemWithModel("wooden_dagger",
-            new ReachWeaponItem(ToolMaterials.WOOD, DAGGER_DAMAGE, DAGGER_ATTACKS_SPEED, DAGGER_REACH, Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), new FabricItemSettings()), false);
+    public static final Item IRON_DAGGER = WeaponItemsME.IRON_DAGGER;
+    public static final Item STONE_DAGGER = WeaponItemsME.STONE_DAGGER;
+    public static final Item WOODEN_DAGGER = WeaponItemsME.WOODEN_DAGGER;
 
     private static Item registerItemWithModel(String name, Item item, boolean isDualModel) {
         ModItemGroups.WEAPONS_CONTENTS.add(item.getDefaultStack());

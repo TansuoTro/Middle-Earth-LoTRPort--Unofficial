@@ -38,10 +38,16 @@ public class OreRockSets {
     public static OreRockSet TRAVERTINE = registerOreSet("travertine_", STONE_STRENGTH,
             Arrays.asList(ORES.COAL_ORE, ORES.COPPER_ORE, ORES.TIN_ORE), StoneBlockSets.TRAVERTINE_SET.baseBlocks.base());
 
-    public static OreRockSet GONLUIN = STONE;
-    public static OreRockSet DIFTOMIN = STONE;
-    public static OreRockSet EPMOSTO = STONE;
-    public static OreRockSet FROZEN = STONE;
+    public static OreRockSet GONLUIN = registerOreSet("gonluin_", STONE_STRENGTH,
+            Arrays.asList(ORES.COAL_ORE, ORES.COPPER_ORE, ORES.TIN_ORE), StoneBlockSets.GALONN_SET.baseBlocks.base());
+    public static OreRockSet DIFTOMIN = registerOreSet("diftomin_", STONE_STRENGTH,
+            Arrays.asList(ORES.TIN_ORE, ORES.LEAD_ORE, ORES.SILVER_ORE, ORES.GOLD_ORE, ORES.IRON_ORE),
+            StoneBlockSets.ZIGILABAN_SET.baseBlocks.base());
+    public static OreRockSet EPMOSTO = registerOreSet("epmosto_", STONE_STRENGTH,
+            Arrays.asList(ORES.LEAD_ORE, ORES.SILVER_ORE, ORES.GOLD_ORE, ORES.IRON_ORE, ORES.MITHRIL_ORE),
+            StoneBlockSets.IZHERABAN_SET.baseBlocks.base());
+    public static OreRockSet FROZEN = registerOreSet("frozen_", STONE_STRENGTH,
+            Arrays.asList(ORES.COAL_ORE, ORES.COPPER_ORE, ORES.TIN_ORE), StoneBlockSets.FROZEN_STONE.baseBlocks.base());
 
     public static OreRockSet DEEPSLATE = registerOreSet("deepslate_", DEEPSLATE_STRENGTH,
             Arrays.asList(ORES.TIN_ORE, ORES.LEAD_ORE), Blocks.DEEPSLATE);

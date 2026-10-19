@@ -1,6 +1,5 @@
 package net.jukoz.me.compat.client.gui;
 
-import net.jukoz.me.mixin.client.ClickableWidgetAccess;
 import net.minecraft.client.gui.widget.ClickableWidget;
 
 /** 1.20.1 bridge for the 1.21.x widget {@code setDimensions}/{@code setDimensionsAndPosition} helpers. */

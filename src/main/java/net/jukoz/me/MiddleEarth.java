@@ -79,7 +79,10 @@ public class MiddleEarth implements ModInitializer {
 		ModBlocks.registerModBlocks();
 		ModDecorativeBlocks.registerModBlocks();
 		ModNatureBlocks.registerModBlocks();
-		RoofBlockSets.registerModBlockSets();
+// RoofBlockSets still owns content that WoodBlockSets/GenericBlockSets do not create
+// (charred shingles, tiling, thatch). ModBlocks.registerBlock now reuses an already
+// registered id instead of throwing, so loading it is safe.
+        RoofBlockSets.registerModBlockSets();
 
 		RegistriesME.registerFuels();
 		RegistriesME.registerToolTipAppenders();
