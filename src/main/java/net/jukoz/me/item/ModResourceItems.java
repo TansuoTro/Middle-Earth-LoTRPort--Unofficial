@@ -120,8 +120,7 @@ public class ModResourceItems {
     public static final Item LIT_PINECONE = ResourceItemsME.LIT_PINECONE;
 
     public static final Item STRAW = ResourceItemsME.STRAW;
-    public static final Block REEDS = registerBlock("reeds",
-            new CustomTallPlantBlock(FabricBlockSettings.copyOf(Blocks.TALL_GRASS).breakInstantly(), false), false);
+    public static final Block REEDS = ResourceItemsME.REEDS;
 
     public static final Item DUCK_FEATHER = registerItem("duck_feather",
             new Item(new FabricItemSettings()));

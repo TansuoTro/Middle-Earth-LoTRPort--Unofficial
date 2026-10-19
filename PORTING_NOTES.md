@@ -387,13 +387,16 @@ port-staging/ 是 gitignored 的暫存樹，可隨時用 import 重建。
   只先覆蓋 `content/**`（純資料清單）是安全的。
 - Gradle 會把每個診斷印兩次（一次路徑帶前導空白），統計時要除以二。
 
-### 尚未解決的結構性問題（編譯過了也會出事）
-
-`item/` 底下同時存在兩套註冊類：donor 的 `*ItemsME`（`ResourceItemsME`、`WeaponItemsME`…）與舊版
-1.20.1 的 `Mod*Items`（`ModResourceItems`、`ModWeaponItems`…），**兩邊都真的呼叫 `Registry.register`**，
-而且 ID 一樣。目前兩邊都被各自的呼叫點引用（舊 entity / 舊 datagen 用 `Mod*`，registries 用 `*ME`），
-所以還不能刪。真正跑起來會 duplicate registry id 直接 crash。
-
-要收尾得選一邊：把 `Mod*Items` 改成純 alias（`public static final Item X = ResourceItemsME.X;`），
-欄位對不上的（donor 已移除的方塊/物品）就連呼叫點一起刪。方塊那邊 `ModBlocks` 已經是 donor 版，
-沒有這個問題。
+### 已解決：重複註冊崩潰（2026-10-19）
+`item/` 底下同時存在 donor 的 `*ItemsME` 與舊版 `Mod*Items`，兩邊都用 `registerItem(...)` 靜態初始化自我註冊，
+且 ID 重疊 → 開機 duplicate registry id crash。已用「保留唯一 ID、重疊改別名」處理：
+- 掃出 74 個 `Mod*Items` 欄位與某個 `*ItemsME` 類別共用同一個 registry id（同 id、同宣告型別），
+  把它們從 `registerItem("id", ...)` 改成 `= <XItemsME>.<FIELD>;`，只讓 canonical 的 `*ItemsME` 註冊一次。
+- 只存在於舊版的 105 個 id（orc/uruk/elven/dwarven/morgul 鋼、各種 rod、crystal shard、
+  大部分 spawn egg、crab/goose/duck/swan/rat 食物、banner pattern…）維持原本 `registerItem` 自註冊。
+- 另外 `ModResourceItems.REEDS` 與 `ResourceItemsME.REEDS` 都註冊方塊 `reeds`（且各自再註冊 block item）→
+  改成 `ModResourceItems.REEDS = ResourceItemsME.REEDS;`（canonical 用 donor 的 waterloggable 版本）。
+- 驗證：`registerItem`/直接 ITEM 註冊共 345 個 id、方塊 317 個 id，**重複數皆為 0**；`compileJava` 仍 0 錯誤。
+- entity / recipe / sound / creative tab 的重複疑慮已排除：`EntitiesME`/`RecipesME`/`SoundsME`/`ItemGroupsME`
+  沒有靜態自我註冊，其 `register*()` 也沒被 init 呼叫（init 只呼叫舊版 `Mod*` 的方法），所以單一路徑。
+- 尚未做「實際開機」驗證；真正的 boot 測試要走 DEV test client + Rosetta bridge（runClient 會在 mixin init 掛掉）。
