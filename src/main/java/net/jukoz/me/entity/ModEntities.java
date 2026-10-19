@@ -28,7 +28,7 @@ import net.jukoz.me.entity.projectile.spear.SpearEntity;
 import net.jukoz.me.entity.snail.SnailEntity;
 import net.jukoz.me.entity.spider.MirkwoodSpiderEntity;
 import net.jukoz.me.entity.swan.SwanEntity;
-import net.jukoz.me.entity.beasts.trolls.cave.CaveTrollEntity;
+import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntity;
 import net.jukoz.me.entity.beasts.trolls.snow.SnowTrollEntity;
 import net.jukoz.me.entity.uruks.misties.MistyHobgoblinEntity;
 import net.jukoz.me.entity.uruks.mordor.MordorBlackUrukEntity;
@@ -112,17 +112,17 @@ public class ModEntities {
     public static final EntityType<MirkwoodSpiderEntity> MIRKWOOD_SPIDER = registerEntity("mirkwood_spider", MirkwoodSpiderEntity::new, SpawnGroup.CREATURE, 1.15f, 0.9f);
 
     // Trolls
-    public static final EntityType<CaveTrollEntity> CAVE_TROLL = registerEntity("cave_troll", CaveTrollEntity::new, SpawnGroup.CREATURE, 1.4f, 3.4f);
-    public static final EntityType<SnowTrollEntity> SNOW_TROLL = registerEntity("snow_troll", SnowTrollEntity::new, SpawnGroup.CREATURE, 2.2f, 2.5f);
-    public static final EntityType<StoneTrollEntity> STONE_TROLL = registerEntity("stone_troll", StoneTrollEntity::new, SpawnGroup.CREATURE, 1.4f, 3.4f);
-    public static final EntityType<PetrifiedTrollEntity> PETRIFIED_TROLL = registerEntity("petrified_troll", PetrifiedTrollEntity::new, SpawnGroup.CREATURE, 1.4f, 3.4f);
+    public static final EntityType<CaveTrollEntity> CAVE_TROLL = EntitiesME.CAVE_TROLL;
+    public static final EntityType<SnowTrollEntity> SNOW_TROLL = EntitiesME.SNOW_TROLL;
+    public static final EntityType<StoneTrollEntity> STONE_TROLL = EntitiesME.STONE_TROLL;
+    public static final EntityType<PetrifiedTrollEntity> PETRIFIED_TROLL = EntitiesME.PETRIFIED_TROLL;
 
     ///* Weapons *///
-    public static final EntityType<PebbleEntity> PEBBLE = registerEntity("pebble", PebbleEntity::new, SpawnGroup.MISC, 0.25F, 0.25F);
-    public static final EntityType<PineconeEntity> PINECONE = registerEntity("pinecone", PineconeEntity::new, SpawnGroup.MISC, 0.25F, 0.25F);
-    public static final EntityType<LitPineconeEntity> LIT_PINECONE = registerEntity("lit_pinecone", LitPineconeEntity::new, SpawnGroup.MISC, 0.25F, 0.25F);
-    public static final EntityType<BoulderEntity> BOULDER = registerEntity("boulder", BoulderEntity::new, SpawnGroup.MISC, 1f, 1f);
-    public static final EntityType<SpearEntity> SPEAR = registerEntity("spear", SpearEntity::new, SpawnGroup.MISC, 0.5F, 0.5F);
+    public static final EntityType<PebbleEntity> PEBBLE = EntitiesME.PEBBLE;
+    public static final EntityType<PineconeEntity> PINECONE = EntitiesME.PINECONE;
+    public static final EntityType<LitPineconeEntity> LIT_PINECONE = EntitiesME.LIT_PINECONE;
+    public static final EntityType<BoulderEntity> BOULDER = EntitiesME.BOULDER;
+    public static final EntityType<SpearEntity> SPEAR = EntitiesME.SPEAR;
 
     ///* Animals *///
     public static final EntityType<CrabEntity> CRAB = registerEntity("crab", CrabEntity::new, SpawnGroup.CREATURE, 0.4f, 0.4f);

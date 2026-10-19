@@ -29,11 +29,12 @@ dependencies {
     // server thread, over a local TCP control plane. Dev-only, never shipped.
     modRuntimeOnly files('libs/rosetta_remote_debug_bridge-1.0.0-fabric.jar')
 
-    // 0.4.1 is published against 1.21.6 and imports its Fabric API BOM as a strict
-    // platform, which would drag the 1.20.1 Fabric API up to 0.127.0 and leak 1.21
-    // injected interfaces into the remapped Minecraft jar. Drop that platform; the
-    // library's own class files are version-agnostic.
-    modImplementation("me.lucko:fabric-permissions-api:0.4.1") {
+    // 0.4.1 declares `depends: minecraft >=1.21.6` in its fabric.mod.json, so Fabric
+    // Loader refuses to start it on 1.20.1. 0.3.3 has no minecraft version constraint
+    // and the same Permissions API. Both POMs import a 1.21.x Fabric API BOM as a strict
+    // platform; exclude it so the 1.20.1 Fabric API isn't dragged up (which would leak
+    // 1.21 injected interfaces into the remapped jar).
+    modImplementation("me.lucko:fabric-permissions-api:0.3.3") {
         exclude group: 'net.fabricmc.fabric-api', module: 'fabric-api-bom'
     }
 

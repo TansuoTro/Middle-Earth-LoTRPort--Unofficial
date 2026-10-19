@@ -33,6 +33,14 @@ public final class MEComponents {
     /** Root compound inside {@code ItemStack.tag}. */
     public static final String ROOT = "MEComponents";
 
+    /**
+     * Every registered component, in declaration order; used when building tooltips.
+     * Declared before the component fields below because their initializers call
+     * {@link #register}, which appends to this list (Java initializes statics in
+     * textual order).
+     */
+    private static final java.util.List<MEComponent<?>> ALL = new java.util.ArrayList<>();
+
     public static final MEComponent<CooldownDataComponent> COOLDOWN =
             register("cooldown", CooldownDataComponent.CODEC);
     public static final MEComponent<TemperatureDataComponent> TEMPERATURE_DATA =
@@ -112,9 +120,6 @@ public final class MEComponents {
     public static void clearDefaults() {
         ITEM_DEFAULTS.clear();
     }
-
-    /** Every registered component, in declaration order; used when building tooltips. */
-    private static final java.util.List<MEComponent<?>> ALL = new java.util.ArrayList<>();
 
     private static <T> MEComponent<T> register(String path, Codec<T> codec) {
         MEComponent<T> component = new MEComponent<>(new Identifier(MiddleEarth.MOD_ID, path), codec);

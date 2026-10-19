@@ -44,7 +44,7 @@ import net.jukoz.me.entity.projectile.spear.JavelinEntityRenderer;
 import net.jukoz.me.entity.snail.SnailRenderer;
 import net.jukoz.me.entity.spider.MirkwoodSpiderRenderer;
 import net.jukoz.me.entity.swan.SwanRenderer;
-import net.jukoz.me.entity.beasts.trolls.cave.CaveTrollRenderer;
+import net.jukoz.me.entity.beasts.cave_troll.CaveTrollRenderer;
 import net.jukoz.me.entity.beasts.trolls.snow.SnowTrollRenderer;
 import net.jukoz.me.entity.uruks.misties.MistyHobgoblinRenderer;
 import net.jukoz.me.entity.uruks.mordor.MordorBlackUrukRenderer;
