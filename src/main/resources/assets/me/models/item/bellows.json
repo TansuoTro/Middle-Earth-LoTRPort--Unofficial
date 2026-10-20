@@ -1,8 +1,8 @@
 {
 	"texture_size": [48, 48],
 	"textures": {
-		"1": "me:model/bellows/bellows_2",
-		"particle": "me:model/bellows/bellows_2"
+		"1": "me:item/bellows_model",
+		"particle": "me:item/bellows_model"
 	},
 	"elements": [
 		{

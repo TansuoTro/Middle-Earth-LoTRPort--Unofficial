@@ -5,7 +5,7 @@
     64
   ],
   "textures": {
-    "0": "me:model/reinforced_chest",
+    "0": "me:item/reinforced_chest_model",
     "particle": "block/dark_oak_planks"
   },
   "elements": [
