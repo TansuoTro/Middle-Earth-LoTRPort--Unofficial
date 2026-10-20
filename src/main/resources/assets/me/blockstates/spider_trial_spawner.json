@@ -1,40 +1,7 @@
 {
   "variants": {
-    "ominous=false,trial_spawner_state=active": {
-      "model": "me:block/spider_trial_spawner_active"
-    },
-    "ominous=false,trial_spawner_state=cooldown": {
+    "": {
       "model": "me:block/spider_trial_spawner"
-    },
-    "ominous=false,trial_spawner_state=ejecting_reward": {
-      "model": "me:block/spider_trial_spawner_inactive"
-    },
-    "ominous=false,trial_spawner_state=inactive": {
-      "model": "me:block/spider_trial_spawner_inactive"
-    },
-    "ominous=false,trial_spawner_state=waiting_for_players": {
-      "model": "me:block/spider_trial_spawner_active"
-    },
-    "ominous=false,trial_spawner_state=waiting_for_reward_ejection": {
-      "model": "me:block/spider_trial_spawner_active"
-    },
-    "ominous=true,trial_spawner_state=active": {
-      "model": "me:block/spider_trial_spawner_active"
-    },
-    "ominous=true,trial_spawner_state=cooldown": {
-      "model": "me:block/spider_trial_spawner_inactive"
-    },
-    "ominous=true,trial_spawner_state=ejecting_reward": {
-      "model": "me:block/spider_trial_spawner_inactive"
-    },
-    "ominous=true,trial_spawner_state=inactive": {
-      "model": "me:block/spider_trial_spawner_inactive"
-    },
-    "ominous=true,trial_spawner_state=waiting_for_players": {
-      "model": "me:block/spider_trial_spawner_active"
-    },
-    "ominous=true,trial_spawner_state=waiting_for_reward_ejection": {
-      "model": "me:block/spider_trial_spawner_active"
     }
   }
 }
