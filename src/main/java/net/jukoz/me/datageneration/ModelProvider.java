@@ -148,6 +148,11 @@ public class ModelProvider extends FabricModelProvider {
     private static int skippedModels = 0;
     private static final java.util.Set<String> loggedSkips = new java.util.HashSet<>();
     private static void logSkipped(RuntimeException e) {
+        // A duplicate means an explicit registration already claimed the id, which is the
+        // intended outcome of the fallbacks below - not a missing model.
+        if (e.getMessage() != null && e.getMessage().startsWith("Duplicate model definition")) {
+            return;
+        }
         skippedModels++;
         String msg = e.toString();
         Throwable c = e.getCause();
@@ -1547,6 +1552,7 @@ public class ModelProvider extends FabricModelProvider {
             }
         }
         blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(largeDoor).coordinate(statesMap));
+        blockStateModelGenerator.registerParentedItemModel(largeDoor, ModelIds.getBlockSubModelId(largeDoor, "_left_0"));
     }
 
     public final void registerThickLargeDoor(BlockStateModelGenerator blockStateModelGenerator, LargeDoorBlock largeDoor, IntProperty part) {
@@ -1582,6 +1588,7 @@ public class ModelProvider extends FabricModelProvider {
             }
         }
         blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(largeDoor).coordinate(statesMap));
+        blockStateModelGenerator.registerParentedItemModel(largeDoor, ModelIds.getBlockSubModelId(largeDoor, "_left_0"));
     }
 
     private static BlockStateVariant rotateY(Identifier model, int rot) {
@@ -1727,7 +1734,8 @@ public class ModelProvider extends FabricModelProvider {
     }
 
     private void registerLayers(BlockStateModelGenerator blockStateModelGenerator, Block layers, Block origin) {
-        TextureMap textureMap = TextureMap.all(new Identifier("minecraft", Registries.BLOCK.getId(layers).getPath().replaceAll("_layers", "")));
+        Identifier originId = Registries.BLOCK.getId(origin);
+        TextureMap textureMap = TextureMap.all(originId);
         blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(layers).coordinate(BlockStateVariantMap.create(Properties.LAYERS).register((height) -> {
             BlockStateVariant var10000 = BlockStateVariant.create();
             VariantSetting var10001 = VariantSettings.MODEL;
@@ -1737,7 +1745,7 @@ public class ModelProvider extends FabricModelProvider {
                 int var10003 = height;
                 var2 = ModelIds.getBlockSubModelId(var10002, "_height" + var10003 * 2);
             } else {
-                var2 = new Identifier("minecraft", "block/" + Registries.BLOCK.getId(origin).getPath());
+                var2 = originId.withPath("block/" + originId.getPath());
             }
             return var10000.put(var10001, var2);
         })));
