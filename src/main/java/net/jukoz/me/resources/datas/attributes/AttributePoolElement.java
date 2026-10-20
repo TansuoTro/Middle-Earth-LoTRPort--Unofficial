@@ -7,6 +7,7 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.Registries;
@@ -51,7 +52,7 @@ public class AttributePoolElement {
             newElement.withMinMaxValue(nbtCompound.getDouble("min"), nbtCompound.getDouble("max"));
 
         if(nbtCompound.contains("modifiers")){
-            newElement.withModifiers(nbtCompound.getList("modifiers", 9));
+            newElement.withModifiers(nbtCompound.getList("modifiers", NbtElement.COMPOUND_TYPE));
         }
 
         return newElement;
@@ -163,7 +164,7 @@ public class AttributePoolElement {
     public static List<AttributePoolElement> obtainAttributeList(NbtCompound nbtCompound) {
         List<AttributePoolElement> attributePoolElementList = new ArrayList<>();
 
-        NbtList nbtList = nbtCompound.getList("attributes", 9);
+        NbtList nbtList = nbtCompound.getList("attributes", NbtElement.COMPOUND_TYPE);
 
         nbtList.forEach(attribute -> {
             attributePoolElementList.add(AttributePoolElement.createFromNbt(NbtCompat.compound(attribute)));

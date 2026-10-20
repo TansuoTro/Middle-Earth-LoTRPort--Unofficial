@@ -1,6 +1,7 @@
 package net.jukoz.me.resources.datas.factions.data;
 
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -30,7 +31,7 @@ public class SpawnDataHandler {
     }
 
     private void deserializeNbt(NbtCompound nbtCompound) {
-        NbtList compoundList = nbtCompound.getList("data", 9);
+        NbtList compoundList = nbtCompound.getList("data", NbtElement.COMPOUND_TYPE);
         spawns = new HashMap<>();
         for(int i = 0; i < compoundList.size(); i++){
             SpawnData spawnData = SpawnData.deserialize(compoundList.getCompound(i));

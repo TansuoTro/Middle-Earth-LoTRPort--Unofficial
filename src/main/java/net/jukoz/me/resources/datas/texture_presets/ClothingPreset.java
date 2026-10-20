@@ -24,21 +24,21 @@ public class ClothingPreset {
         extras = new WeightedPool<>();
 
         if(source.contains("bases")){
-            NbtList baseList = source.getList("bases", 9);
+            NbtList baseList = source.getList("bases", NbtElement.COMPOUND_TYPE);
             baseList.forEach( x -> {
                 bases.add(new WeightedIdentifier(x));
             });
         }
 
         if(source.contains("overs")){
-            NbtList overList = source.getList("overs", 9);
+            NbtList overList = source.getList("overs", NbtElement.COMPOUND_TYPE);
             overList.forEach( x -> {
                 overs.add(new WeightedIdentifier(x));
             });
         }
 
         if(source.contains("extras")){
-            NbtList extraList = source.getList("extras", 9);
+            NbtList extraList = source.getList("extras", NbtElement.COMPOUND_TYPE);
             extraList.forEach( x -> {
                 extras.add(new WeightedIdentifier(x));
             });

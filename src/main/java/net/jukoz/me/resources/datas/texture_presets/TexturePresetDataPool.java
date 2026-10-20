@@ -3,6 +3,7 @@ package net.jukoz.me.resources.datas.texture_presets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
 import net.jukoz.me.api.dtos.WeightedPool;
@@ -26,7 +27,7 @@ public class TexturePresetDataPool {
         presetsByCategory = new HashMap<>();
 
         for(EntityCategories category : EntityCategories.values()){
-            var optList = categories.getList(category.name(), 9);
+            var optList = categories.getList(category.name(), NbtElement.COMPOUND_TYPE);
             if(optList.isEmpty()) continue;
             NbtList nbtListPresets = optList;
             WeightedPool<WeightedTexturePresetHolder> dataPresetList = new WeightedPool<>();

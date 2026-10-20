@@ -236,7 +236,7 @@ public class TexturePreset {
     private void fetchClothes(NbtCompound compound){
         if(compound.contains(CLOTHES)){
             if(compound.contains(CLOTHES)){
-                NbtList listClothePresets = compound.getList(CLOTHES, 9);
+                NbtList listClothePresets = compound.getList(CLOTHES, NbtElement.COMPOUND_TYPE);
 
                 listClothePresets.forEach(x -> {
                     if(NbtCompat.isCompound(x)){
@@ -250,7 +250,7 @@ public class TexturePreset {
 
     private void fetchSimplifiedTextures(NbtCompound compound) {
         if(compound.contains(SIMPLIFIED)){
-            var simplifiedList = compound.getList(SIMPLIFIED, 9);
+            var simplifiedList = compound.getList(SIMPLIFIED, NbtElement.COMPOUND_TYPE);
             simplifiedList.forEach(x -> {
                 if (NbtCompat.isCompound(x)) {
                     this.simplifiedTextures.add(new WeightedSimplifiedTexturePresetHolder(NbtCompat.compound(x)));

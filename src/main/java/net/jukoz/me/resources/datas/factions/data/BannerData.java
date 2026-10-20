@@ -76,7 +76,7 @@ public class BannerData {
 
         baseBannerColor = DyeColor.byName(compound.getString("base_color"), DEFAULT_DYE);
 
-        NbtList patterns = compound.getList("patterns", 9);
+        NbtList patterns = compound.getList("patterns", NbtElement.COMPOUND_TYPE);
         this.bannerPatternWithColors = new ArrayList<>();
 
         JsonParser jsonParser = new JsonParser();

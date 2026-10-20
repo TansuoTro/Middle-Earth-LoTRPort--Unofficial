@@ -3,6 +3,7 @@ package net.jukoz.me.resources.datas.npc_types;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
@@ -61,7 +62,7 @@ public class NpcType {
         this.factionId = factionId;
         this.npcTextureKey = npcTextureKey;
 
-        NbtList npcGears = gearDatas.getList("pool", 9);
+        NbtList npcGears = gearDatas.getList("pool", NbtElement.COMPOUND_TYPE);
         List<WeightedGearData> weightedGearData = new ArrayList<>();
         for(int j = 0; j < npcGears.size(); j++) {
             NbtCompound compound = npcGears.getCompound(j);
