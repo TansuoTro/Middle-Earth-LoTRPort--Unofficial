@@ -1,10 +1,13 @@
 package net.jukoz.me.block.special.artisantable;
 
 import com.google.common.collect.ImmutableMap;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.util.Hand;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import net.jukoz.me.block.special.alloyfurnace.AlloyFurnaceEntity;
 import net.jukoz.me.gui.artisantable.ArtisanTableScreenHandler;
+import net.jukoz.me.resources.datas.common.DispositionType;
+import net.jukoz.me.resources.persistent_datas.PlayerDataService;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -14,11 +17,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.screen.StonecutterScreenHandler;
 import net.minecraft.stat.Stats;
 import net.minecraft.state.StateManager;
@@ -26,6 +30,8 @@ import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.state.property.Property;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.function.BooleanBiFunction;
@@ -142,9 +148,31 @@ public class ArtisanTable extends HorizontalFacingBlock {
 
     @Nullable
     public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
-        return new SimpleNamedScreenHandlerFactory((syncId, playerInventory, player) -> {
-            return new ArtisanTableScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, pos));
-        }, TITLE);
+        return new ExtendedScreenHandlerFactory() {
+            @Override
+            public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
+                buf.writeString(getDispositionData(player, world));
+            }
+
+            @Override
+            public Text getDisplayName() {
+                return TITLE;
+            }
+
+            @Override
+            public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+                return new ArtisanTableScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, pos), getDispositionData(player, world));
+            }
+        };
+    }
+
+    /** Donor opens the artisan table with "{disposition}/{isCreative}", used to filter the recipe list. */
+    private static String getDispositionData(PlayerEntity player, World world) {
+        DispositionType dispositionType = PlayerDataService.getPlayerDisposition(player, world);
+        if (dispositionType == null) {
+            dispositionType = DispositionType.NEUTRAL;
+        }
+        return dispositionType + "/" + player.isCreative();
     }
 
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {

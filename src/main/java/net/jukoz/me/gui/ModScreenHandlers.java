@@ -32,7 +32,8 @@ public class ModScreenHandlers {
 
     public static void registerAllScreenHandlers() {
         ALLOY_SCREEN_HANDLER = new ScreenHandlerType<>(AlloyFurnaceScreenHandler::new, FeatureFlags.VANILLA_FEATURES);
-        ARTISAN_SCREEN_HANDLER = new ScreenHandlerType<>(ArtisanTableScreenHandler::new, FeatureFlags.VANILLA_FEATURES);
+        ARTISAN_SCREEN_HANDLER = new ExtendedScreenHandlerType<>(
+                (syncId, inventory, buf) -> new ArtisanTableScreenHandler(syncId, inventory, buf.readString()));
         WOOD_PILE_SCREEN_HANDLER = new ScreenHandlerType<>(WoodPileScreenHandler::new, FeatureFlags.VANILLA_FEATURES);
         INSCRIPTION_SCREEN_HANDLER = new ScreenHandlerType<>(InscriptionTableScreenHandler::new, FeatureFlags.VANILLA_FEATURES);
 
