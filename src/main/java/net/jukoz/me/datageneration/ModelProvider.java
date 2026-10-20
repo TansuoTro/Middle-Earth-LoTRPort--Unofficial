@@ -18,6 +18,19 @@ import net.minecraft.block.*;
 import net.minecraft.block.enums.Thickness;
 import net.minecraft.block.enums.WallMountLocation;
 import net.jukoz.me.block.special.RocksBlock;
+import net.jukoz.me.block.special.LargeDoorBlock;
+import net.jukoz.me.block.special.doors.LargeDoor1x2;
+import net.jukoz.me.block.special.doors.LargeDoor2x2;
+import net.jukoz.me.block.special.doors.LargeDoor3x1;
+import net.jukoz.me.block.special.doors.LargeDoor4x2;
+import net.jukoz.me.block.special.doors.LargeDoor5x2;
+import net.jukoz.me.block.special.doors.LargeDoor5x3;
+import net.jukoz.me.block.special.doors.LargeDoor6x2;
+import net.jukoz.me.block.special.doors.LargeDoor10x4;
+import net.jukoz.me.block.special.doors.LargeDoor10x5;
+import net.jukoz.me.block.special.doors.LargeThickDoor3x2;
+import net.minecraft.state.property.IntProperty;
+import net.minecraft.block.enums.DoorHinge;
 import net.jukoz.me.block.special.hangingstuff.CustomHangingBlock;
 import java.util.Objects;
 import net.minecraft.data.client.*;
@@ -884,6 +897,79 @@ public class ModelProvider extends FabricModelProvider {
             registerOrientableThickLadder(blockStateModelGenerator, ModDecorativeBlocks.ROPE_LADDER);
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
 
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.BLUE_HOBBIT_DOOR, LargeDoor2x2.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.GREEN_HOBBIT_DOOR, LargeDoor2x2.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.LIGHT_BLUE_HOBBIT_DOOR, LargeDoor2x2.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.RED_HOBBIT_DOOR, LargeDoor2x2.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.YELLOW_HOBBIT_DOOR, LargeDoor2x2.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.LARCH_HOBBIT_DOOR, LargeDoor2x2.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.SPRUCE_HOBBIT_DOOR, LargeDoor2x2.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.TALL_BLACK_PINE_DOOR, LargeDoor3x1.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.TALL_FIR_DOOR, LargeDoor3x1.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.OAK_STABLE_DOOR, LargeDoor4x2.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.REINFORCED_SPRUCE_DOOR, LargeDoor4x2.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.REINFORCED_BLACK_PINE_DOOR, LargeDoor4x2.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.RICKETY_SIMPLE_LARCH_DOOR, LargeDoor4x2.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.SIMPLE_LARCH_GATE, LargeDoor4x2.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.SPRUCE_STABLE_DOOR, LargeDoor4x2.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.LARGE_STURDY_DOOR, LargeDoor5x3.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.LARGE_BEECH_FENCE_GATE, LargeDoor1x2.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.GREAT_GONDORIAN_GATE, LargeDoor10x5.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.GREAT_DWARVEN_GATE, LargeDoor5x2.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.VARNISHED_DWARVEN_DOOR, LargeDoor4x2.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.RUINED_DWARVEN_DOOR, LargeDoor4x2.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerThickLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.HIDDEN_DWARVEN_DOOR, LargeThickDoor3x2.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.GREAT_ELVEN_GATE, LargeDoor6x2.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        try {
+            registerLargeDoor(blockStateModelGenerator, (LargeDoorBlock) ModDecorativeBlocks.GREAT_ORCISH_GATE, LargeDoor10x4.PART);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+
         for(SimpleLadderModel.Ladder ladder : SimpleLadderModel.ladders) {
             try {
             registerOrientableThickLadder(blockStateModelGenerator, ladder.ladder());
@@ -1426,6 +1512,86 @@ public class ModelProvider extends FabricModelProvider {
                 .coordinate(BlockStateVariantMap.create(CustomHangingBlock.TIP)
                         .register(false, BlockStateVariant.create().put(VariantSettings.MODEL, base))
                         .register(true, BlockStateVariant.create().put(VariantSettings.MODEL, tip))));
+    }
+
+    public final void registerLargeDoor(BlockStateModelGenerator blockStateModelGenerator, LargeDoorBlock largeDoor, IntProperty part) {
+        BlockStateVariantMap.QuadrupleProperty<Direction, Boolean, DoorHinge, Integer> statesMap =
+                BlockStateVariantMap.create(Properties.HORIZONTAL_FACING, Properties.OPEN, Properties.DOOR_HINGE, part);
+        for (int i = 0; i < largeDoor.getDoorWidth() * largeDoor.getDoorHeight(); i++) {
+            for (int k = 2; k < 6; k++) {
+                int rot = switch (k) {
+                    case 3 -> 180;
+                    case 4 -> 270;
+                    case 5 -> 90;
+                    default -> 0;
+                };
+                Identifier left = new Identifier(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_left_" + i);
+                Identifier leftOpen = new Identifier(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_left_open_" + i);
+                Identifier right = new Identifier(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_right_" + i);
+                Identifier rightOpen = new Identifier(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_right_open_" + i);
+
+                statesMap.register(Direction.values()[k], false, DoorHinge.LEFT, i, rotateY(left, rot));
+                statesMap.register(Direction.values()[k], true, DoorHinge.LEFT, i, rotateY(leftOpen, rot));
+                statesMap.register(Direction.values()[k], false, DoorHinge.RIGHT, i, rotateY(right, rot));
+                statesMap.register(Direction.values()[k], true, DoorHinge.RIGHT, i, rotateY(rightOpen, rot));
+
+                if (k == 2) {
+                    TextureMap textures = (new TextureMap())
+                            .put(TextureKey.ALL, new Identifier(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_" + i))
+                            .put(TextureKey.PARTICLE, new Identifier(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_" + i));
+                    MEModels.LARGE_DOOR_LEFT.upload(largeDoor, "_left_" + i, textures, blockStateModelGenerator.modelCollector);
+                    MEModels.LARGE_DOOR_LEFT_OPEN.upload(largeDoor, "_left_open_" + i, textures, blockStateModelGenerator.modelCollector);
+                    MEModels.LARGE_DOOR_RIGHT.upload(largeDoor, "_right_" + i, textures, blockStateModelGenerator.modelCollector);
+                    MEModels.LARGE_DOOR_RIGHT_OPEN.upload(largeDoor, "_right_open_" + i, textures, blockStateModelGenerator.modelCollector);
+                }
+            }
+        }
+        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(largeDoor).coordinate(statesMap));
+    }
+
+    public final void registerThickLargeDoor(BlockStateModelGenerator blockStateModelGenerator, LargeDoorBlock largeDoor, IntProperty part) {
+        BlockStateVariantMap.QuadrupleProperty<Direction, Boolean, DoorHinge, Integer> statesMap =
+                BlockStateVariantMap.create(Properties.HORIZONTAL_FACING, Properties.OPEN, Properties.DOOR_HINGE, part);
+        for (int i = 0; i < largeDoor.getDoorWidth() * largeDoor.getDoorHeight(); i++) {
+            for (int k = 2; k < 6; k++) {
+                int rot = switch (k) {
+                    case 3 -> 180;
+                    case 4 -> 270;
+                    case 5 -> 90;
+                    default -> 0;
+                };
+                Identifier left = new Identifier(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_left_" + i);
+                Identifier leftOpen = new Identifier(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_left_open_" + i);
+                Identifier right = new Identifier(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_right_" + i);
+                Identifier rightOpen = new Identifier(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_right_open_" + i);
+
+                statesMap.register(Direction.values()[k], false, DoorHinge.LEFT, i, rotateY(left, rot));
+                statesMap.register(Direction.values()[k], true, DoorHinge.LEFT, i, rotateY(leftOpen, rot));
+                statesMap.register(Direction.values()[k], false, DoorHinge.RIGHT, i, rotateY(right, rot));
+                statesMap.register(Direction.values()[k], true, DoorHinge.RIGHT, i, rotateY(rightOpen, rot));
+
+                if (k == 2) {
+                    TextureMap textures = (new TextureMap())
+                            .put(TextureKey.ALL, new Identifier(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_" + i))
+                            .put(TextureKey.PARTICLE, new Identifier(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_" + i));
+                    MEModels.LARGE_THICK_DOOR_LEFT.upload(largeDoor, "_left_" + i, textures, blockStateModelGenerator.modelCollector);
+                    MEModels.LARGE_THICK_DOOR_LEFT_OPEN.upload(largeDoor, "_left_open_" + i, textures, blockStateModelGenerator.modelCollector);
+                    MEModels.LARGE_THICK_DOOR_RIGHT.upload(largeDoor, "_right_" + i, textures, blockStateModelGenerator.modelCollector);
+                    MEModels.LARGE_THICK_DOOR_RIGHT_OPEN.upload(largeDoor, "_right_open_" + i, textures, blockStateModelGenerator.modelCollector);
+                }
+            }
+        }
+        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(largeDoor).coordinate(statesMap));
+    }
+
+    private static BlockStateVariant rotateY(Identifier model, int rot) {
+        BlockStateVariant variant = BlockStateVariant.create().put(VariantSettings.MODEL, model);
+        return switch (rot) {
+            case 90 -> variant.put(VariantSettings.Y, VariantSettings.Rotation.R90);
+            case 180 -> variant.put(VariantSettings.Y, VariantSettings.Rotation.R180);
+            case 270 -> variant.put(VariantSettings.Y, VariantSettings.Rotation.R270);
+            default -> variant;
+        };
     }
 
     public void registerWoodBenchModelBlockStates(BlockStateModelGenerator blockStateModelGenerator, Block block){
