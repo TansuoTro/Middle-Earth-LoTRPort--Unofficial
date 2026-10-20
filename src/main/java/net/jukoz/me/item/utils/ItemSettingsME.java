@@ -26,12 +26,21 @@ import net.minecraft.util.Identifier;
  *
  * <p>So the component parts are dropped and only what 1.20.1 can express is kept. The mount
  * armours are inert here; equipping them properly needs a follow-up port of the armour items.
+ *
+ * <p>The weapon half of the donor's settings is served from the weapon item classes instead:
+ * {@link net.jukoz.me.item.items.weapons.ReachWeaponItem} overrides
+ * {@code getAttributeModifiers(EquipmentSlot)} (built by {@link #createWeaponAttibutes}),
+ * {@code canRepair(ItemStack, ItemStack)} ({@code repairable(material.repairItems())}) and
+ * {@code getEnchantability()} ({@code enchantable(material.enchantmentValue())}).
  */
 public interface ItemSettingsME {
 
     String ENTITY_INTERACTION_RANGE_MODIFIER_ID = "me.entity_interaction_range";
 
     static MESettings createWeaponSettings(ToolMaterial material, Item.Settings settings, WeaponTypesME type) {
+        // Donor: maxDamage + repairable + enchantable + attributeModifiers + TOOL/WEAPON components.
+        // 1.20.1's Item.Settings only holds maxDamage; the rest is served from the weapon classes
+        // (see the interface javadoc).
         return settings instanceof MESettings meSettings ? meSettings.maxDamage(material.getDurability()) : new MESettings().maxDamage(material.getDurability());
     }
 
@@ -44,6 +53,23 @@ public interface ItemSettingsME {
                 "me.weapon_speed", attackSpeed, EntityAttributeModifier.Operation.ADDITION));
         builder.put(EntityAttributesME.ENTITY_INTERACTION_RANGE.value(), new EntityAttributeModifier(
                 ENTITY_INTERACTION_RANGE_MODIFIER_ID, attackRange, EntityAttributeModifier.Operation.ADDITION));
+        return builder.build();
+    }
+
+    /**
+     * The donor's "blunted" swap: one point before breaking, an artefact weapon replaces its
+     * modifiers with 0 damage, -3.0 speed and 0 range (see {@code MorgulKnifeItem} in the donor).
+     * The modifier names match {@link #createWeaponAttibutes} so the equipped weapon's live
+     * modifiers are replaced rather than left behind.
+     */
+    static Multimap<EntityAttribute, EntityAttributeModifier> createBluntedWeaponAttibutes() {
+        ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
+        builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(
+                "me.weapon_damage", 0.0F, EntityAttributeModifier.Operation.ADDITION));
+        builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(
+                "me.weapon_speed", -3.0F, EntityAttributeModifier.Operation.ADDITION));
+        builder.put(EntityAttributesME.ENTITY_INTERACTION_RANGE.value(), new EntityAttributeModifier(
+                ENTITY_INTERACTION_RANGE_MODIFIER_ID, 0.0F, EntityAttributeModifier.Operation.ADDITION));
         return builder.build();
     }
 

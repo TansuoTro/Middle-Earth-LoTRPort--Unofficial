@@ -1,8 +1,12 @@
 package net.jukoz.me.item.items.weapons;
+import com.google.common.collect.Multimap;
 import net.jukoz.me.item.MEComponents;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
@@ -23,10 +27,38 @@ public class ReachWeaponItem extends Item {
 
     public WeaponTypesME type;
 
+    private final ToolMaterial material;
+    private final Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
+
     public ReachWeaponItem(ToolMaterial toolMaterial, WeaponTypesME type, Item.Settings settings) {
         super(ItemSettingsME.createWeaponSettings(toolMaterial, settings, type)
                 .component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(type.name)));
         this.type = type;
+        this.material = toolMaterial;
+        this.attributeModifiers = ItemSettingsME.createWeaponAttibutes(
+                toolMaterial, type.attack, type.attackSpeed, type.attackRange);
+    }
+
+    /**
+     * Donor's {@code attributeModifiers(createWeaponAttibutes(material, type.attack, type.attackSpeed,
+     * type.attackRange))}: attack damage = type attack + material bonus, the type's attack speed and
+     * entity-interaction-range modifier.
+     */
+    @Override
+    public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
+        return slot == EquipmentSlot.MAINHAND ? this.attributeModifiers : super.getAttributeModifiers(slot);
+    }
+
+    /** Donor's {@code repairable(material.repairItems())}. */
+    @Override
+    public boolean canRepair(ItemStack stack, ItemStack ingredient) {
+        return this.material.getRepairIngredient().test(ingredient) || super.canRepair(stack, ingredient);
+    }
+
+    /** Donor's {@code enchantable(material.enchantmentValue())}. */
+    @Override
+    public int getEnchantability() {
+        return this.material.getEnchantability();
     }
 
     public boolean canMine(ItemStack stack, BlockState state, World world, BlockPos pos, LivingEntity user) {

@@ -10,6 +10,7 @@ import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.datageneration.content.TranslationEntries;
 import net.jukoz.me.datageneration.content.models.SimpleBigItemModel;
 import net.jukoz.me.datageneration.content.models.SimpleHandheldItemModel;
+import net.jukoz.me.item.items.CustomPickaxeItem;
 import net.jukoz.me.item.items.PipeItem;
 import net.jukoz.me.item.items.SmithingHammerItem;
 import net.jukoz.me.item.items.weapons.CustomAxeWeaponItem;
@@ -77,7 +78,7 @@ public class ToolItemsME {
             Item::new, new MESettings().maxCount(1));
 
     public static final Item BRONZE_PICKAXE = registerItemHandheld("bronze_pickaxe",
-            (settings) -> new PickaxeItem(ToolMaterialsME.BRONZE, 0, -2.8f, settings), new MESettings());
+            (settings) -> new CustomPickaxeItem(ToolMaterialsME.BRONZE, 0.5f, -2.8f, settings), new MESettings());
     public static final Item BRONZE_AXE = registerItemHandheld("bronze_axe",
             (settings) -> new CustomAxeWeaponItem(ToolMaterialsME.BRONZE, settings), new MESettings());
     public static final Item BRONZE_SHOVEL = registerItemHandheld("bronze_shovel",
@@ -86,7 +87,7 @@ public class ToolItemsME {
             (settings) -> new HoeItem(ToolMaterialsME.BRONZE, -2, -1.0f, settings), new MESettings());
 
     public static final Item CRUDE_PICKAXE = registerItemHandheld("crude_pickaxe",
-            (settings) -> new PickaxeItem(ToolMaterialsME.CRUDE, 0, -2.8f, settings), new MESettings());
+            (settings) -> new CustomPickaxeItem(ToolMaterialsME.CRUDE, 0.5f, -2.8f, settings), new MESettings());
     public static final Item CRUDE_AXE = registerItemDualModel("crude_axe",
             (settings) -> new AxeItem(ToolMaterialsME.CRUDE, 6.0f, -3.0f, settings), new MESettings());
     public static final Item CRUDE_SHOVEL = registerItemHandheld("crude_shovel",
