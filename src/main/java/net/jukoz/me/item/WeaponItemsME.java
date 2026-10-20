@@ -1103,6 +1103,9 @@ public class WeaponItemsME {
         ItemGroupsME.WEAPONS_CONTENTS.add(item.getDefaultStack());
         SimpleBigItemModel.bigBows.add(item);
         Bows.bows.add(item);
+        // Every big bow ships _pulling_0..2 textures, so it also needs the three draw-stage
+        // models plus a base model that overrides into them.
+        SimpleBowItemModel.items.add(item);
         return registerItem(item, name);
     }
 

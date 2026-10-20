@@ -1,5 +1,7 @@
 package net.jukoz.me.datageneration;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.jukoz.me.MiddleEarth;
@@ -1283,6 +1285,15 @@ public class ModelProvider extends FabricModelProvider {
 
     public void registerVerticalSlabModelBlockStates(BlockStateModelGenerator blockStateModelGenerator, Block block, Block origin, String slabPath){
         Identifier fullBlockId = ModelIds.getBlockModelId(origin);
+        // Vanilla ships no waxed_* block models or textures at all: a waxed copper block simply
+        // points at its unwaxed counterpart, so the slab has to do the same or it renders as a
+        // missing model over a missing texture.
+        Identifier originId = Registries.BLOCK.getId(origin);
+        if (originId.getNamespace().equals("minecraft") && originId.getPath().startsWith("waxed_")) {
+            String unwaxed = originId.getPath().substring("waxed_".length());
+            fullBlockId = originId.withPath("block/" + unwaxed);
+            slabPath = unwaxed;
+        }
         Identifier variantId = MEModels.VERTICAL_SLAB.upload(block,
                 TextureMap.of(TextureKey.ALL, new Identifier(MiddleEarth.MOD_ID, "block/" + slabPath)),
                 blockStateModelGenerator.modelCollector);
@@ -1800,9 +1811,7 @@ public class ModelProvider extends FabricModelProvider {
 
         for (Item item : SimpleBowItemModel.items) {
             try {
-            for(int i = 0; i < 3; i++) {
-                itemModelGenerator.register(item, "_pulling_" + i, CustomItemModels.BOW);
-            }
+            registerBowModels(itemModelGenerator, item);
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
@@ -1876,13 +1885,45 @@ public class ModelProvider extends FabricModelProvider {
         if (skippedModels > 0) { System.out.println("[datagen] skipped " + skippedModels + " model registrations"); }
     }
 
+    /**
+     * Bows need three draw stages plus a base model that points at them. The donor got this from
+     * 1.21's item-model API; here the overrides have to be written by hand, and each stage needs
+     * its own *_pulling_N texture rather than the undrawn one.
+     */
+    private static void registerBowModels(ItemModelGenerator itemModelGenerator, Item item) {
+        Identifier base = ModelIds.getItemModelId(item);
+        float[] pull = {0.0F, 0.65F, 0.9F};
+        JsonArray overrides = new JsonArray();
+        for (int i = 0; i < 3; i++) {
+            Identifier stage = base.withSuffixedPath("_pulling_" + i);
+            CustomItemModels.BOW.upload(stage, (new TextureMap()).put(TextureKey.LAYER0, stage), itemModelGenerator.writer);
+
+            JsonObject predicate = new JsonObject();
+            predicate.addProperty("pulling", 1);
+            if (i > 0) {
+                predicate.addProperty("pull", pull[i]);
+            }
+            JsonObject override = new JsonObject();
+            override.add("predicate", predicate);
+            override.addProperty("model", stage.toString());
+            overrides.add(override);
+        }
+        JsonObject textures = new JsonObject();
+        textures.addProperty("layer0", base.toString());
+        JsonObject json = new JsonObject();
+        json.addProperty("parent", MiddleEarth.of("item/bow").toString());
+        json.add("textures", textures);
+        json.add("overrides", overrides);
+        itemModelGenerator.writer.accept(base, () -> json);
+    }
+
     public final void registerDyeableArmor(ArmorItem armor, ItemModelGenerator itemModelGenerator) {
         Identifier identifier = ModelIds.getItemModelId(armor);
         Identifier identifier2 = TextureMap.getId(armor);
         Identifier identifier3 = TextureMap.getSubId(armor, "_overlay");
-        Models.GENERATED_TWO_LAYERS.upload(identifier, TextureMap.layered(identifier2, identifier3), itemModelGenerator.writer, (id, textures) -> {
-                    return itemModelGenerator.createArmorJson(id, textures, armor.getMaterial());
-                }
-        );
+        // createArmorJson would append ten trim overrides (tunic_cloak_quartz_trim and friends),
+        // but the mod ships no trim textures, so those models can never be generated and the
+        // inventory icon would fall back to the missing-model placeholder.
+        Models.GENERATED_TWO_LAYERS.upload(identifier, TextureMap.layered(identifier2, identifier3), itemModelGenerator.writer);
     }
 }
