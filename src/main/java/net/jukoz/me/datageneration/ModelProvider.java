@@ -1219,6 +1219,17 @@ public class ModelProvider extends FabricModelProvider {
         itemModelGenerator.register(ModBlocks.MEDIUM_GLOWSTONE_BUD.asItem(), Models.GENERATED);
         itemModelGenerator.register(ModBlocks.LARGE_GLOWSTONE_BUD.asItem(), Models.GENERATED);
     
+        // Fallback: every block item that no explicit list covered still needs an inventory model.
+        for (Block block : Registries.BLOCK) {
+            Identifier blockId = Registries.BLOCK.getId(block);
+            if (!blockId.getNamespace().equals(net.jukoz.me.MiddleEarth.MOD_ID)) { continue; }
+            Item blockItem = block.asItem();
+            if (blockItem == net.minecraft.item.Items.AIR) { continue; }
+            try {
+                itemModelGenerator.register(blockItem, new Model(java.util.Optional.of(blockId.withPath("block/" + blockId.getPath())), java.util.Optional.empty()));
+            } catch (RuntimeException __modelError) { skippedModels++; }
+        }
+
         if (skippedModels > 0) { System.out.println("[datagen] skipped " + skippedModels + " model registrations"); }
     }
 

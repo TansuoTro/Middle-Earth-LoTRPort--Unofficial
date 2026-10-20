@@ -32,6 +32,7 @@ public class DataGeneration implements DataGeneratorEntrypoint {
         pack.addProvider(ItemTagProvider::new);
         pack.addProvider(ModelProvider::new);
         pack.addProvider(RecipeProvider::new);
+        pack.addProvider(LanguageProvider::new);
 
         pack.addProvider(DataWorldGenerator::new);
     }
