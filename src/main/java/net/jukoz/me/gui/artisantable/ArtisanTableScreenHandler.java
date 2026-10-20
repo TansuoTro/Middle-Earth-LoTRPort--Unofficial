@@ -3,6 +3,9 @@ package net.jukoz.me.gui.artisantable;
 import com.google.common.collect.Lists;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.gui.ModScreenHandlers;
+import net.jukoz.me.item.MEComponents;
+import net.jukoz.me.item.MEDurability;
+import net.jukoz.me.item.dataComponents.ArtisanDataComponent;
 import net.jukoz.me.recipe.ArtisanRecipe;
 import net.jukoz.me.recipe.ModRecipes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -38,6 +41,7 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
     Runnable contentsChangedListener;
     public final Inventory input;
     final CraftingResultInventory output;
+    private PlayerEntity playerEntity;
 
     public ArtisanTableScreenHandler(int syncId, PlayerInventory playerInventory) {
         this(syncId, playerInventory, ScreenHandlerContext.EMPTY);
@@ -75,6 +79,7 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
 
             @Override
             public void onTakeItem(PlayerEntity player, ItemStack itemStack) {
+                ArtisanTableScreenHandler.this.playerEntity = player;
                 itemStack.onCraft(player.getWorld(), player, itemStack.getCount());
                 ArtisanTableScreenHandler.this.output.unlockLastRecipe(player, this.getInputStacks());
                 itemStack = ArtisanTableScreenHandler.this.inputSlot0.takeStack(1);
@@ -141,10 +146,12 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
     }
 
     public boolean canUse(PlayerEntity player) {
+        this.playerEntity = player;
         return canUse(this.context, player, ModDecorativeBlocks.ARTISAN_TABLE);
     }
 
     public boolean onButtonClick(PlayerEntity player, int id) {
+        this.playerEntity = player;
         if (this.isInBounds(id)) {
             this.selectedRecipe.set(id);
             this.populateResult();
@@ -175,6 +182,14 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
         if (!this.availableRecipes.isEmpty() && this.isInBounds(this.selectedRecipe.get())) {
             ArtisanRecipe artisanRecipe = (ArtisanRecipe)this.availableRecipes.get(this.selectedRecipe.get());
             ItemStack itemStack = artisanRecipe.craft(this.input, this.world.getRegistryManager());
+            // Donor populateResult: stamp the crafter for the tooltip and give crafted tools
+            // +25% durability.
+            if (this.playerEntity != null) {
+                MEComponents.set(itemStack, MEComponents.ARTISAN_DATA, new ArtisanDataComponent(this.playerEntity.getUuid()));
+            }
+            if (itemStack.getMaxDamage() > 0) {
+                MEDurability.set(itemStack, (int) (itemStack.getMaxDamage() * 1.25));
+            }
             if (itemStack.isItemEnabled(this.world.getEnabledFeatures())) {
                 this.output.setLastRecipe(artisanRecipe);
                 this.outputSlot.setStackNoCallbacks(itemStack);
