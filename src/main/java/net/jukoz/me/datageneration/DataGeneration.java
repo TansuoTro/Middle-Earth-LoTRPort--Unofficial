@@ -3,6 +3,7 @@ package net.jukoz.me.datageneration;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.jukoz.me.datageneration.recipes.AlloyAndAnvilRecipeProvider;
 import net.jukoz.me.datageneration.recipes.ArtisanTableArmorRecipeProvider;
 import net.jukoz.me.datageneration.recipes.ArtisanTableGenericArmorRecipeProvider;
 import net.jukoz.me.datageneration.recipes.ArtisanTableHandheldRecipeProvider;
@@ -41,6 +42,7 @@ public class DataGeneration implements DataGeneratorEntrypoint {
         pack.addProvider((FabricDataOutput output) -> new ArtisanTableGenericArmorRecipeProvider(output));
         pack.addProvider((FabricDataOutput output) -> new ArtisanTableHandheldRecipeProvider(output));
         pack.addProvider((FabricDataOutput output) -> new InscriptionRecipeProvider(output));
+        pack.addProvider((FabricDataOutput output) -> new AlloyAndAnvilRecipeProvider(output));
         pack.addProvider(LanguageProvider::new);
 
         pack.addProvider(DataWorldGenerator::new);
