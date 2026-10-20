@@ -10,14 +10,8 @@ public class WeightedIdentifier extends WeightedItem<Identifier> {
     public WeightedIdentifier(NbtElement element){
         super(element);
 
-        if(!element.asString().isEmpty()){
-            this.item = new Identifier(element.asString());
-        } else if(NbtCompat.isCompound(element)) {
-            String potentialId = NbtCompat.compound(element).getString("id");
-            if (!potentialId.isEmpty()) {
-                this.item = new Identifier(potentialId);
-            }
-        }
+        // asString() stringifies any element in 1.20.1, so a compound would asString() to its whole JSON form.
+        if(NbtCompat.isCompound(element)) { this.item = new Identifier(NbtCompat.compound(element).getString("id")); } else { this.item = new Identifier(element.asString()); }
     }
     public WeightedIdentifier(Identifier value) {
         super(value);
