@@ -10,7 +10,7 @@ import net.jukoz.me.block.registration.StoneBlockSets;
 import net.jukoz.me.block.registration.WoodBlockSets;
 import net.jukoz.me.block.special.OxidizableVerticalSlabBlock;
 import net.jukoz.me.block.special.OxidizableWallBlock;
-import net.jukoz.me.block.special.VerticalSlabBlock;
+import net.jukoz.me.block.special.verticalSlabs.VerticalSlabBlock;
 import net.jukoz.me.utils.LoggerUtil;
 import net.minecraft.block.*;
 import net.minecraft.registry.Registries;

@@ -8,7 +8,7 @@ import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.jukoz.me.block.MushroomBlockSets;
 import net.jukoz.me.block.crop.*;
-import net.jukoz.me.block.special.VerticalSlabBlock;
+import net.jukoz.me.block.special.verticalSlabs.VerticalSlabBlock;
 import net.jukoz.me.datageneration.content.CustomItemModels;
 import net.jukoz.me.datageneration.content.MEModels;
 import net.jukoz.me.datageneration.content.models.*;
