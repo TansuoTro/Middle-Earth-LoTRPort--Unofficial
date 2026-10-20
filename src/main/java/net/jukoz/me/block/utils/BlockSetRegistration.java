@@ -328,7 +328,7 @@ public class BlockSetRegistration {
         Block wall = getVanillaOrCreateNew(name + "_wall", WallBlock::new,
                 AbstractBlock.Settings.copy(base), group);
 
-        Block pressurePlate = getVanillaOrCreateNew(name + "_pressure_plate", (settings) -> new PressurePlateBlock(PressurePlateBlock.ActivationRule.EVERYTHING, settings, BlockSetType.STONE), AbstractBlock.Settings.copy(base).noCollision(), group);
+        Block pressurePlate = getVanillaOrCreateNew(name + "_pressure_plate", (settings) -> new PressurePlateBlock(PressurePlateBlock.ActivationRule.MOBS, settings, BlockSetType.STONE), AbstractBlock.Settings.copy(base).noCollision(), group);
 
         Block button = getVanillaOrCreateNew(name + "_button", (settings) -> new ButtonBlock(settings, BlockSetType.STONE, 20, false), AbstractBlock.Settings.copy(base).noCollision(), group);
 
