@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "me:silver_ingot",
+    "me:silver_nugget",
+    "me:raw_silver"
+  ]
+}

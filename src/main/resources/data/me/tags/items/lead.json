@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "me:lead_ingot",
+    "me:lead_nugget",
+    "me:raw_lead"
+  ]
+}
