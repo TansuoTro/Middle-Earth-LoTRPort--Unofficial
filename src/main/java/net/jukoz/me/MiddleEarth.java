@@ -105,7 +105,7 @@ public class MiddleEarth implements ModInitializer {
 		ModScreenHandlers.registerAllScreenHandlers();
 		ModRecipes.registerRecipes();
 
-		ModEntities.registerModEntities();net.jukoz.me.entity.ai.brain.SensorsME.registerModSensors();net.jukoz.me.entity.ai.brain.ActivitiesME.registerModActivities();net.jukoz.me.entity.ai.brain.MemoryModulesME.registerModMemoryModules();
+		ModEntities.registerModEntities();net.jukoz.me.entity.EntitiesME.registerModEntities();net.jukoz.me.entity.ai.brain.SensorsME.registerModSensors();net.jukoz.me.entity.ai.brain.ActivitiesME.registerModActivities();net.jukoz.me.entity.ai.brain.MemoryModulesME.registerModMemoryModules();
 		ModEntitySpawning.addSpawns();
 
 		ModSounds.registerModSounds();net.jukoz.me.sound.SoundsME.registerModSounds();
