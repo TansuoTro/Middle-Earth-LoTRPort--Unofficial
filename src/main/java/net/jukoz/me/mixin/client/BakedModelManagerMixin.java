@@ -26,8 +26,10 @@ public class BakedModelManagerMixin{
     @Shadow @Final
     private static Map<Identifier, Identifier> LAYERS_TO_LOADERS;
 
+    // HEAD of a constructor lands before the super() call, and Mixin requires those handlers to
+    // be static - which is what we want anyway, since LAYERS_TO_LOADERS is a static field.
     @Inject(method = "<init>", at=@At("HEAD"))
-    private void addNewAtlas(TextureManager textureManager, BlockColors colorMap, int mipmap, CallbackInfo ci)
+    private static void addNewAtlas(TextureManager textureManager, BlockColors colorMap, int mipmap, CallbackInfo ci)
     {
         HashMap<Identifier, Identifier> map = new HashMap<>(LAYERS_TO_LOADERS);
         map.put(ModTexturedRenderLayers.CHARACTER_ATLAS_TEXTURES, AtlasesME.CHARACTER_TEXTURES);
