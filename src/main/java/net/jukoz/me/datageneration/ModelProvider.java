@@ -18,6 +18,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.enums.Thickness;
 import net.minecraft.block.enums.WallMountLocation;
 import net.jukoz.me.block.special.RocksBlock;
+import net.jukoz.me.block.special.hangingstuff.CustomHangingBlock;
 import java.util.Objects;
 import net.minecraft.data.client.*;
 import net.minecraft.item.ArmorItem;
@@ -114,6 +115,7 @@ public class ModelProvider extends FabricModelProvider {
         sanitize(SimpleWoodTableModel.tables);
         sanitize(SimpleWoodTableModel.vanillaTables);
         sanitize(TintableCrossModel.grassLikeBlocks);
+        sanitize(TintableCrossModel.largePlants);
         sanitize(TintableCrossModel.notTintedBlocks);
         sanitize(TintableCrossModel.tintedBlocks);
     }
@@ -824,6 +826,50 @@ public class ModelProvider extends FabricModelProvider {
             } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
+        for (Block[] farmlandPair : new Block[][]{
+                {ModBlocks.CHALKSOIL, ModBlocks.CHALKSOIL_FARMLAND},
+                {ModBlocks.LOAM, ModBlocks.LOAM_FARMLAND},
+                {ModBlocks.PEAT, ModBlocks.PEAT_FARMLAND},
+                {ModBlocks.SILT, ModBlocks.SILT_FARMLAND}}) {
+            try {
+                registerFarmland(blockStateModelGenerator, farmlandPair[0], farmlandPair[1]);
+            } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        }
+
+        for (Block[] pathPair : new Block[][]{
+                {ModBlocks.CHALKSOIL, ModBlocks.CHALKSOIL_PATH},
+                {ModBlocks.LOAM, ModBlocks.LOAM_PATH},
+                {ModBlocks.PEAT, ModBlocks.PEAT_PATH},
+                {ModBlocks.SILT, ModBlocks.SILT_PATH}}) {
+            try {
+                registerDirtPath(blockStateModelGenerator, pathPair[0], pathPair[1]);
+            } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        }
+
+        for (Block block : TintableCrossModel.largePlants) {
+            try {
+                if (block == null) { continue; }
+                registerLargePlant(blockStateModelGenerator, block);
+            } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        }
+
+        for (Block block : new Block[]{ModNatureBlocks.LARGE_BUSH, ModNatureBlocks.WILD_GRASS}) {
+            try {
+                registerTintableLargePlant(blockStateModelGenerator, block);
+            } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        }
+
+        for (Block block : new Block[]{ModNatureBlocks.WILLOW_VINES, ModNatureBlocks.MIRKWOOD_VINES, ModNatureBlocks.HANGING_WEBS}) {
+            try {
+                registerHangingVine(blockStateModelGenerator, block);
+            } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        }
+
+        try {
+            blockStateModelGenerator.registerPlantPart(ModNatureBlocks.GLOWWORM_WEBBING, ModNatureBlocks.GLOWWORM_MAIN,
+                    BlockStateModelGenerator.TintType.NOT_TINTED);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+
         for(SimpleLadderModel.Ladder ladder : SimpleLadderModel.ladders) {
             try {
             registerOrientableThickLadder(blockStateModelGenerator, ladder.ladder());
@@ -1310,6 +1356,62 @@ public class ModelProvider extends FabricModelProvider {
                 .with(When.create().set(Properties.WEST, true), west).with(noFace, west)
                 .with(When.create().set(Properties.UP, true), up).with(noFace, up)
                 .with(When.create().set(Properties.DOWN, true), down).with(noFace, down));
+    }
+
+    private void registerFarmland(BlockStateModelGenerator blockStateModelGenerator, Block dirtBlock, Block farmland) {
+        Identifier dirtTexture = TextureMap.getId(dirtBlock);
+        Identifier dryModel = Models.TEMPLATE_FARMLAND.upload(farmland, (new TextureMap())
+                        .put(TextureKey.DIRT, dirtTexture)
+                        .put(TextureKey.TOP, TextureMap.getId(farmland)),
+                blockStateModelGenerator.modelCollector);
+        Identifier moistModel = Models.TEMPLATE_FARMLAND.upload(TextureMap.getSubId(farmland, "_moist"), (new TextureMap())
+                        .put(TextureKey.DIRT, dirtTexture)
+                        .put(TextureKey.TOP, TextureMap.getSubId(farmland, "_moist")),
+                blockStateModelGenerator.modelCollector);
+        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(farmland)
+                .coordinate(BlockStateModelGenerator.createValueFencedModelMap(Properties.MOISTURE, 7, moistModel, dryModel)));
+    }
+
+    private void registerDirtPath(BlockStateModelGenerator blockStateModelGenerator, Block dirtBlock, Block pathBlock) {
+        Identifier dirtTexture = TextureMap.getId(dirtBlock);
+        Identifier model = MEModels.PATH_BLOCK.upload(pathBlock, (new TextureMap())
+                        .put(TextureKey.PARTICLE, dirtTexture)
+                        .put(TextureKey.TOP, TextureMap.getId(pathBlock).withSuffixedPath("_top"))
+                        .put(TextureKey.SIDE, TextureMap.getId(pathBlock).withSuffixedPath("_side"))
+                        .put(TextureKey.BOTTOM, dirtTexture),
+                blockStateModelGenerator.modelCollector);
+        blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(pathBlock, model));
+    }
+
+    public final void registerLargePlant(BlockStateModelGenerator blockStateModelGenerator, Block plantBlock) {
+        Identifier id = Registries.BLOCK.getId(plantBlock);
+        Identifier texture = new Identifier(id.getNamespace(), "block/" + id.getPath());
+        Identifier model = MEModels.LARGE_PLANT.upload(plantBlock, (new TextureMap())
+                        .put(TextureKey.ALL, texture)
+                        .put(TextureKey.PARTICLE, texture),
+                blockStateModelGenerator.modelCollector);
+        blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(plantBlock, model));
+    }
+
+    public final void registerTintableLargePlant(BlockStateModelGenerator blockStateModelGenerator, Block plantBlock) {
+        Identifier id = Registries.BLOCK.getId(plantBlock);
+        Identifier texture = new Identifier(id.getNamespace(), "block/" + id.getPath());
+        Identifier model = MEModels.TINTED_LARGE_PLANT.upload(plantBlock, (new TextureMap())
+                        .put(TextureKey.ALL, texture)
+                        .put(TextureKey.PARTICLE, texture),
+                blockStateModelGenerator.modelCollector);
+        blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(plantBlock, model));
+    }
+
+    public void registerHangingVine(BlockStateModelGenerator blockStateModelGenerator, Block block) {
+        Identifier base = MEModels.CROP_VINE.upload(block, TextureMap.crop(TextureMap.getId(block)),
+                blockStateModelGenerator.modelCollector);
+        Identifier tip = MEModels.CROP_VINE.upload(block, "_tip", TextureMap.crop(TextureMap.getSubId(block, "_tip")),
+                blockStateModelGenerator.modelCollector);
+        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block)
+                .coordinate(BlockStateVariantMap.create(CustomHangingBlock.TIP)
+                        .register(false, BlockStateVariant.create().put(VariantSettings.MODEL, base))
+                        .register(true, BlockStateVariant.create().put(VariantSettings.MODEL, tip))));
     }
 
     public void registerWoodBenchModelBlockStates(BlockStateModelGenerator blockStateModelGenerator, Block block){
