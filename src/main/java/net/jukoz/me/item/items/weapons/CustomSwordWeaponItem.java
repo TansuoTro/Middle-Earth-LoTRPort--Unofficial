@@ -13,9 +13,24 @@ import net.jukoz.me.item.utils.WeaponTypesME;
 
 public class CustomSwordWeaponItem extends SwordItem {
 
+    private final ToolMaterial material;
+
     public CustomSwordWeaponItem(ToolMaterial toolMaterial, Item.Settings settings) {
         super(toolMaterial, (int) WeaponTypesME.SWORD.attack, WeaponTypesME.SWORD.attackSpeed,
                 ((net.jukoz.me.item.MESettings) settings).component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(WeaponTypesME.SWORD.name)));
+        this.material = toolMaterial;
+    }
+
+    /** Donor repairable(material.repairItems()). */
+    @Override
+    public boolean canRepair(ItemStack stack, ItemStack ingredient) {
+        return this.material.getRepairIngredient().test(ingredient) || super.canRepair(stack, ingredient);
+    }
+
+    /** Donor enchantable(material.enchantmentValue()). */
+    @Override
+    public int getEnchantability() {
+        return this.material.getEnchantability();
     }
 
     @Override

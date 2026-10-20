@@ -7,6 +7,7 @@ import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ToolMaterial;
 
@@ -22,10 +23,24 @@ import java.util.Map;
 public class CustomPickaxeItem extends PickaxeItem {
 
     private final double extraAttackDamage;
+    private final ToolMaterial material;
 
     public CustomPickaxeItem(ToolMaterial material, float attackDamage, float attackSpeed, Item.Settings settings) {
         super(material, (int) attackDamage, attackSpeed, settings);
         this.extraAttackDamage = attackDamage - (int) attackDamage;
+        this.material = material;
+    }
+
+    /** Donor repairable(material.repairItems()). */
+    @Override
+    public boolean canRepair(ItemStack stack, ItemStack ingredient) {
+        return this.material.getRepairIngredient().test(ingredient) || super.canRepair(stack, ingredient);
+    }
+
+    /** Donor enchantable(material.enchantmentValue()). */
+    @Override
+    public int getEnchantability() {
+        return this.material.getEnchantability();
     }
 
     @Override

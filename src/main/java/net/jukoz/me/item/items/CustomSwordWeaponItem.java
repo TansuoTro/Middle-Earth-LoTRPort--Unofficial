@@ -17,30 +17,46 @@ import java.util.List;
 public class CustomSwordWeaponItem extends SwordItem {
     private final MutableText faction;
     private final MutableText subFaction;
+    private final ToolMaterial material;
+
     public CustomSwordWeaponItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings) {
-        super(toolMaterial, attackDamage, attackSpeed, settings);
+        super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getDurability()));
         this.faction = null;
         this.subFaction = null;
+        this.material = toolMaterial;
     }
 
     public CustomSwordWeaponItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, MutableText faction, Settings settings) {
-        super(toolMaterial, attackDamage, attackSpeed, settings);
+        super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getDurability()));
         this.faction = faction;
         this.subFaction = null;
+        this.material = toolMaterial;
     }
 
     public CustomSwordWeaponItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, MutableText faction, MutableText subFaction, Settings settings) {
-        super(toolMaterial, attackDamage, attackSpeed, settings);
+        super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getDurability()));
         this.faction = faction;
         this.subFaction = subFaction;
+        this.material = toolMaterial;
     }
 
+    /** Donor repairable(material.repairItems()). */
+    @Override
+    public boolean canRepair(ItemStack stack, ItemStack ingredient) {
+        return this.material.getRepairIngredient().test(ingredient) || super.canRepair(stack, ingredient);
+    }
+
+    /** Donor enchantable(material.enchantmentValue()). */
+    @Override
+    public int getEnchantability() {
+        return this.material.getEnchantability();
+    }
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         tooltip.add(Text.of(""));
         if (Screen.hasShiftDown()) {
-            if(this.faction != null){
+            if (this.faction != null) {
                 tooltip.add(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".faction").append(this.faction));
             }
             if (this.subFaction != null) {

@@ -28,13 +28,13 @@ public class ModToolItems {
     private static final float IRON_HOE_ATTACK_SPEED = -2f;
 
     public static final Item JADE_PICKAXE = registerItemHandheld("jade_pickaxe",
-            new PickaxeItem(ModToolMaterials.JADE, IRON_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings()));
+            new PickaxeItem(ModToolMaterials.JADE, IRON_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings().maxDamage(ModToolMaterials.JADE.getDurability())));
     public static final Item JADE_AXE = registerItemHandheld("jade_axe",
-            new AxeItem(ModToolMaterials.JADE, IRON_AXE_DAMAGE, IRON_AXE_ATTACK_SPEED, new FabricItemSettings()));
+            new AxeItem(ModToolMaterials.JADE, IRON_AXE_DAMAGE, IRON_AXE_ATTACK_SPEED, new FabricItemSettings().maxDamage(ModToolMaterials.JADE.getDurability())));
     public static final Item JADE_SHOVEL = registerItemHandheld("jade_shovel",
-            new ShovelItem(ModToolMaterials.JADE, IRON_PICKAXE_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings()));
+            new ShovelItem(ModToolMaterials.JADE, IRON_PICKAXE_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings().maxDamage(ModToolMaterials.JADE.getDurability())));
     public static final Item JADE_HOE = registerItemHandheld("jade_hoe",
-            new HoeItem(ModToolMaterials.JADE, IRON_HOE_DAMAGE, IRON_HOE_ATTACK_SPEED, new FabricItemSettings()));
+            new HoeItem(ModToolMaterials.JADE, IRON_HOE_DAMAGE, IRON_HOE_ATTACK_SPEED, new FabricItemSettings().maxDamage(ModToolMaterials.JADE.getDurability())));
     
     public static final Item BRONZE_PICKAXE = ToolItemsME.BRONZE_PICKAXE;
     public static final Item BRONZE_AXE = ToolItemsME.BRONZE_AXE;
@@ -42,13 +42,13 @@ public class ModToolItems {
     public static final Item BRONZE_HOE = ToolItemsME.BRONZE_HOE;
 
     public static final Item ORC_STEEL_PICKAXE = registerItemHandheld("orc_steel_pickaxe",
-            new PickaxeItem(ModToolMaterials.ORC_STEEL, IRON_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings()));
+            new PickaxeItem(ModToolMaterials.ORC_STEEL, IRON_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings().maxDamage(ModToolMaterials.ORC_STEEL.getDurability())));
     public static final Item ORC_STEEL_AXE = registerItemHandheld("orc_steel_axe",
-            new AxeItem(ModToolMaterials.ORC_STEEL, IRON_AXE_DAMAGE, IRON_AXE_ATTACK_SPEED, new FabricItemSettings()));
+            new AxeItem(ModToolMaterials.ORC_STEEL, IRON_AXE_DAMAGE, IRON_AXE_ATTACK_SPEED, new FabricItemSettings().maxDamage(ModToolMaterials.ORC_STEEL.getDurability())));
     public static final Item ORC_STEEL_SHOVEL = registerItemHandheld("orc_steel_shovel",
-            new ShovelItem(ModToolMaterials.ORC_STEEL, IRON_PICKAXE_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings()));
+            new ShovelItem(ModToolMaterials.ORC_STEEL, IRON_PICKAXE_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings().maxDamage(ModToolMaterials.ORC_STEEL.getDurability())));
     public static final Item ORC_STEEL_HOE = registerItemHandheld("orc_steel_hoe",
-            new HoeItem(ModToolMaterials.ORC_STEEL, IRON_HOE_DAMAGE, IRON_HOE_ATTACK_SPEED, new FabricItemSettings()));
+            new HoeItem(ModToolMaterials.ORC_STEEL, IRON_HOE_DAMAGE, IRON_HOE_ATTACK_SPEED, new FabricItemSettings().maxDamage(ModToolMaterials.ORC_STEEL.getDurability())));
 
     public static final Item STEEL_PICKAXE = ToolItemsME.STEEL_PICKAXE;
     public static final Item STEEL_AXE = ToolItemsME.STEEL_AXE;
@@ -56,31 +56,31 @@ public class ModToolItems {
     public static final Item STEEL_HOE = ToolItemsME.STEEL_HOE;
 
     public static final Item URUK_STEEL_PICKAXE = registerItemHandheld("uruk_steel_pickaxe",
-            new PickaxeItem(ModToolMaterials.URUK_STEEL, IRON_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings()));
+            new PickaxeItem(ModToolMaterials.URUK_STEEL, IRON_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings().maxDamage(ModToolMaterials.URUK_STEEL.getDurability())));
     public static final Item URUK_STEEL_AXE = registerItemHandheld("uruk_steel_axe",
-            new AxeItem(ModToolMaterials.URUK_STEEL, IRON_AXE_DAMAGE, IRON_AXE_ATTACK_SPEED, new FabricItemSettings()));
+            new AxeItem(ModToolMaterials.URUK_STEEL, IRON_AXE_DAMAGE, IRON_AXE_ATTACK_SPEED, new FabricItemSettings().maxDamage(ModToolMaterials.URUK_STEEL.getDurability())));
     public static final Item URUK_STEEL_SHOVEL = registerItemHandheld("uruk_steel_shovel",
-            new ShovelItem(ModToolMaterials.URUK_STEEL, IRON_PICKAXE_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings()));
+            new ShovelItem(ModToolMaterials.URUK_STEEL, IRON_PICKAXE_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings().maxDamage(ModToolMaterials.URUK_STEEL.getDurability())));
     public static final Item URUK_STEEL_HOE = registerItemHandheld("uruk_steel_hoe",
-            new HoeItem(ModToolMaterials.URUK_STEEL, IRON_HOE_DAMAGE, IRON_HOE_ATTACK_SPEED, new FabricItemSettings()));
+            new HoeItem(ModToolMaterials.URUK_STEEL, IRON_HOE_DAMAGE, IRON_HOE_ATTACK_SPEED, new FabricItemSettings().maxDamage(ModToolMaterials.URUK_STEEL.getDurability())));
 
     public static final Item ELVEN_STEEL_PICKAXE = registerItemHandheld("elven_steel_pickaxe",
-            new PickaxeItem(ModToolMaterials.ELVEN_STEEL, IRON_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings()));
+            new PickaxeItem(ModToolMaterials.ELVEN_STEEL, IRON_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings().maxDamage(ModToolMaterials.ELVEN_STEEL.getDurability())));
     public static final Item ELVEN_STEEL_AXE = registerItemHandheld("elven_steel_axe",
-            new AxeItem(ModToolMaterials.ELVEN_STEEL, IRON_AXE_DAMAGE, IRON_AXE_ATTACK_SPEED, new FabricItemSettings()));
+            new AxeItem(ModToolMaterials.ELVEN_STEEL, IRON_AXE_DAMAGE, IRON_AXE_ATTACK_SPEED, new FabricItemSettings().maxDamage(ModToolMaterials.ELVEN_STEEL.getDurability())));
     public static final Item ELVEN_STEEL_SHOVEL = registerItemHandheld("elven_steel_shovel",
-            new ShovelItem(ModToolMaterials.ELVEN_STEEL, IRON_PICKAXE_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings()));
+            new ShovelItem(ModToolMaterials.ELVEN_STEEL, IRON_PICKAXE_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings().maxDamage(ModToolMaterials.ELVEN_STEEL.getDurability())));
     public static final Item ELVEN_STEEL_HOE = registerItemHandheld("elven_steel_hoe",
-            new HoeItem(ModToolMaterials.ELVEN_STEEL, IRON_HOE_DAMAGE, IRON_HOE_ATTACK_SPEED, new FabricItemSettings()));
+            new HoeItem(ModToolMaterials.ELVEN_STEEL, IRON_HOE_DAMAGE, IRON_HOE_ATTACK_SPEED, new FabricItemSettings().maxDamage(ModToolMaterials.ELVEN_STEEL.getDurability())));
     
     public static final Item DWARVEN_STEEL_PICKAXE = registerItemHandheld("dwarven_steel_pickaxe",
-            new PickaxeItem(ModToolMaterials.DWARVEN_STEEL, IRON_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings()));
+            new PickaxeItem(ModToolMaterials.DWARVEN_STEEL, IRON_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings().maxDamage(ModToolMaterials.DWARVEN_STEEL.getDurability())));
     public static final Item DWARVEN_STEEL_AXE = registerItemHandheld("dwarven_steel_axe",
-            new AxeItem(ModToolMaterials.DWARVEN_STEEL, IRON_AXE_DAMAGE, IRON_AXE_ATTACK_SPEED, new FabricItemSettings()));
+            new AxeItem(ModToolMaterials.DWARVEN_STEEL, IRON_AXE_DAMAGE, IRON_AXE_ATTACK_SPEED, new FabricItemSettings().maxDamage(ModToolMaterials.DWARVEN_STEEL.getDurability())));
     public static final Item DWARVEN_STEEL_SHOVEL = registerItemHandheld("dwarven_steel_shovel",
-            new ShovelItem(ModToolMaterials.DWARVEN_STEEL, IRON_PICKAXE_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings()));
+            new ShovelItem(ModToolMaterials.DWARVEN_STEEL, IRON_PICKAXE_DAMAGE, IRON_ATTACK_SPEED, new FabricItemSettings().maxDamage(ModToolMaterials.DWARVEN_STEEL.getDurability())));
     public static final Item DWARVEN_STEEL_HOE = registerItemHandheld("dwarven_steel_hoe",
-            new HoeItem(ModToolMaterials.DWARVEN_STEEL, IRON_HOE_DAMAGE, IRON_HOE_ATTACK_SPEED, new FabricItemSettings()));
+            new HoeItem(ModToolMaterials.DWARVEN_STEEL, IRON_HOE_DAMAGE, IRON_HOE_ATTACK_SPEED, new FabricItemSettings().maxDamage(ModToolMaterials.DWARVEN_STEEL.getDurability())));
 
     public static final Item MITHRIL_PICKAXE = ToolItemsME.MITHRIL_PICKAXE;
     public static final Item MITHRIL_AXE = ToolItemsME.MITHRIL_AXE;
