@@ -16,6 +16,7 @@ import net.jukoz.me.datageneration.content.MEModels;
 import net.jukoz.me.datageneration.content.models.*;
 import net.jukoz.me.datageneration.content.tags.LeavesSets;
 import net.jukoz.me.item.ModEquipmentItems;
+import net.jukoz.me.item.ResourceItemsME;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.Thickness;
 import net.minecraft.block.enums.WallMountLocation;
@@ -1903,6 +1904,9 @@ public class ModelProvider extends FabricModelProvider {
 
     private void generateItemModelsUnchecked(ItemModelGenerator itemModelGenerator) {
         DedupingModelCollector.install(itemModelGenerator);
+        // Hot metals have to be registered before the generic loops: the writer rejects a second
+        // registration of the same id, and the override-bearing base model has to win.
+        registerHotMetalModels(itemModelGenerator);
         for (SimpleWallModel.Wall wall : SimpleWallModel.blocks) {
             try {
             if (wall.wall() == null) { continue; }
@@ -2013,6 +2017,56 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         if (skippedModels > 0) { System.out.println("[datagen] skipped " + skippedModels + " model registrations"); }
+    }
+
+    /**
+     * The donor swapped hot metals to a glowing model with 1.21.4's item-model condition API
+     * ({@code ItemModels.condition(new HotComponentProperty(), ...)}). 1.20.1 has no such API, so
+     * the same effect is done with a {@code custom_model_data} override: MEComponents.set mirrors
+     * the temperature into that tag, and the base model switches to the {@code _hot} variant.
+     */
+    private void registerHotMetalModels(ItemModelGenerator itemModelGenerator) {
+        for (Item item : HotMetalsModel.ingots) {
+            registerHotModel(itemModelGenerator, item, hotIngotTexture(item));
+        }
+        for (Item item : HotMetalsModel.nuggets) {
+            registerHotModel(itemModelGenerator, item, "nugget_hot");
+        }
+        for (Item item : HotMetalsModel.nuggies) {
+            registerHotModel(itemModelGenerator, item, Registries.ITEM.getId(item).getPath() + "_hot");
+        }
+    }
+
+    private static String hotIngotTexture(Item item) {
+        if (item == ResourceItemsME.BRONZE_INGOT) { return "medium_ingot_hot"; }
+        if (item == ResourceItemsME.TIN_INGOT) { return "cube_ingot_hot"; }
+        if (item == ResourceItemsME.LEAD_INGOT) { return "tall_small_ingot_hot"; }
+        if (item == ResourceItemsME.EDHEL_STEEL_INGOT || item == ResourceItemsME.MITHRIL_INGOT) { return "small_ingot_hot"; }
+        if (item == ResourceItemsME.KHAZAD_STEEL_INGOT) { return "tall_ingot_hot"; }
+        if (item == ResourceItemsME.BURZUM_STEEL_INGOT) { return "thick_ingot_hot"; }
+        return "ingot_hot";
+    }
+
+    private void registerHotModel(ItemModelGenerator itemModelGenerator, Item item, String hotTexture) {
+        Identifier base = ModelIds.getItemModelId(item);
+        Identifier hot = base.withSuffixedPath("_hot");
+        try {
+            Models.GENERATED.upload(hot, TextureMap.layer0(new Identifier(MiddleEarth.MOD_ID, "item/" + hotTexture)), itemModelGenerator.writer);
+            JsonObject textures = new JsonObject();
+            textures.addProperty("layer0", base.toString());
+            JsonObject json = new JsonObject();
+            json.addProperty("parent", "minecraft:item/generated");
+            json.add("textures", textures);
+            JsonObject predicate = new JsonObject();
+            predicate.addProperty("custom_model_data", 1);
+            JsonObject override = new JsonObject();
+            override.add("predicate", predicate);
+            override.addProperty("model", hot.toString());
+            JsonArray overrides = new JsonArray();
+            overrides.add(override);
+            json.add("overrides", overrides);
+            itemModelGenerator.writer.accept(base, () -> json);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
     }
 
     /**

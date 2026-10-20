@@ -190,6 +190,25 @@ public final class MEComponents {
             return;
         }
         stack.getOrCreateSubNbt(ROOT).put(key.id().getPath(), encoded);
+        syncCustomModelData(stack, key, value);
+    }
+
+    /**
+     * 1.21.4+ swaps hot-metal item models through an item-model condition keyed on the temperature
+     * component; 1.20.1 item models can only key overrides off CustomModelData, so the temperature
+     * is mirrored into that tag whenever it changes. The generated item models carry the matching
+     * {@code custom_model_data} override (see ModelProvider#registerHotMetalModels).
+     */
+    private static void syncCustomModelData(ItemStack stack, MEComponent<?> key, @Nullable Object value) {
+        if (key != TEMPERATURE_DATA) {
+            return;
+        }
+        boolean hot = value instanceof TemperatureDataComponent temperature && temperature.temperature() > 0;
+        if (hot) {
+            stack.getOrCreateNbt().putInt("CustomModelData", 1);
+        } else if (stack.hasNbt()) {
+            stack.getNbt().remove("CustomModelData");
+        }
     }
 
     public static <T> void remove(ItemStack stack, MEComponent<T> key) {
@@ -199,6 +218,7 @@ public final class MEComponents {
         }
         NbtCompound root = tag.getCompound(ROOT);
         root.remove(key.id().getPath());
+        syncCustomModelData(stack, key, null);
         if (root.isEmpty()) {
             tag.remove(ROOT);
         }
