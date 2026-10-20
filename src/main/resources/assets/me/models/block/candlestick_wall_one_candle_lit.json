@@ -1,0 +1,8 @@
+{
+	"parent": "me:block/candlestick_wall_one_candle",
+	"textures": {
+		"1": "me:block/candlestick_wall_floor_all_lit",
+		"3": "me:block/candlestick_wall_floor_all_lit",
+		"particle": "me:block/candlestick_wall_floor_all_lit"
+	}
+}

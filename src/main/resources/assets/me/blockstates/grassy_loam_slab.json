@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "me:block/grassy_loam_slab"
+    },
+    "type=double": {
+      "model": "me:block/grassy_loam"
+    },
+    "type=top": {
+      "model": "me:block/grassy_loam_slab_top"
+    }
+  }
+}

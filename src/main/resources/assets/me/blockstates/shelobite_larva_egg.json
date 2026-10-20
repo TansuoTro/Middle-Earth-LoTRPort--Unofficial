@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=south": {
+      "model": "me:block/shelobite_larva_egg"
+    },
+    "facing=west": {
+      "model": "me:block/shelobite_larva_egg",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "me:block/shelobite_larva_egg",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "me:block/shelobite_larva_egg",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "me:block/template_layered_cake_with_candles",
+  "textures": {
+    "0": "me:block/layered_cake",
+    "candle": "minecraft:block/orange_candle_lit",
+    "particle": "me:block/layered_cake"
+  }
+}

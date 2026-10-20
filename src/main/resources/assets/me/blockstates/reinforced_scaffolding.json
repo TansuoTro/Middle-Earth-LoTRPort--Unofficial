@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "bottom=false": {
+      "model": "me:block/reinforced_scaffolding_base"
+    },
+    "bottom=true": {
+      "model": "me:block/reinforced_scaffolding_extension"
+    }
+  }
+}

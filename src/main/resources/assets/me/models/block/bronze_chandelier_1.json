@@ -1,0 +1,7 @@
+{
+	"parent": "me:block/chandelier_1",
+	"textures": {
+		"0": "me:block/bronze_chandelier_1",
+		"particle": "me:block/bronze_chandelier_1"
+	}
+}

@@ -1,0 +1,7 @@
+{
+	"parent": "me:block/small_red_curtain",
+	"textures": {
+		"0": "me:block/small_black_curtain",
+		"particle": "me:block/small_black_curtain"
+	}
+}

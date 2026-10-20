@@ -1,0 +1,7 @@
+{
+	"parent": "me:block/drooping_icicles",
+	"textures": {
+		"crop": "me:block/drooping_icicles_end",
+		"particle": "me:block/drooping_icicles_end"
+	}
+}

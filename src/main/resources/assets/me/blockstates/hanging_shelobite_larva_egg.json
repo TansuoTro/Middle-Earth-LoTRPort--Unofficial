@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=bottom": {
+      "model": "me:block/hanging_shelobite_larva_egg_bottom"
+    },
+    "half=top": {
+      "model": "me:block/hanging_shelobite_larva_egg_top"
+    }
+  }
+}

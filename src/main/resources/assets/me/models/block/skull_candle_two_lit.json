@@ -1,0 +1,7 @@
+{
+	"parent": "me:block/skull_candle_two",
+	"textures": {
+		"0": "me:block/skullcandle_lit",
+		"particle": "me:block/skullcandle_lit"
+	}
+}

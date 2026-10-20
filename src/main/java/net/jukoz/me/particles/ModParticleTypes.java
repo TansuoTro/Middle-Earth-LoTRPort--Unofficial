@@ -8,13 +8,15 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 public class ModParticleTypes {
-
     public static final DefaultParticleType MALLORN_LEAVES_PARTICLE = FabricParticleTypes.simple();
     public static final DefaultParticleType MIRKWOOD_LEAVES_PARTICLE = FabricParticleTypes.simple();
+    public static final DefaultParticleType ANVIL_SPARK_PARTICLE = FabricParticleTypes.simple();
+    public static final DefaultParticleType BIOME_FOG_PARTICLE = FabricParticleTypes.simple(true);
 
-    public static void registerParticleTypes(){
+    public static void registerParticleTypes() {
         Registry.register(Registries.PARTICLE_TYPE, new Identifier(MiddleEarth.MOD_ID, "mallorn_leaves_particles"), MALLORN_LEAVES_PARTICLE);
         Registry.register(Registries.PARTICLE_TYPE, new Identifier(MiddleEarth.MOD_ID, "mirkwood_leaves_particles"), MIRKWOOD_LEAVES_PARTICLE);
+        Registry.register(Registries.PARTICLE_TYPE, new Identifier(MiddleEarth.MOD_ID, "anvil_spark_particles"), ANVIL_SPARK_PARTICLE);
+        Registry.register(Registries.PARTICLE_TYPE, new Identifier(MiddleEarth.MOD_ID, "biome_fog_particles"), BIOME_FOG_PARTICLE);
     }
-
 }

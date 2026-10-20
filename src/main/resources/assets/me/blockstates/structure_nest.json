@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "enabled=true": {
+      "model": "me:block/structure_nest"
+    },
+    "enabled=false": {
+      "model": "me:block/structure_nest_disabled"
+    }
+  }
+}

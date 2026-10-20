@@ -106,7 +106,7 @@ public class MiddleEarth implements ModInitializer {
 		ModParticleTypes.registerParticleTypes();
 
 		ModDimensions.register();
-		MEBiomeKeys.registerModBiomes();
+		net.jukoz.me.world.biomes.surface.MapBiomeData.loadBiomes();MEBiomeKeys.registerModBiomes();
 		EnchantmentsME.register();
 		MEBiomesData.loadBiomes();
 		ModWorldGeneration.generateModWorldGen();

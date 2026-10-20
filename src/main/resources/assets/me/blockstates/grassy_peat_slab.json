@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "me:block/grassy_peat_slab"
+    },
+    "type=double": {
+      "model": "me:block/grassy_peat"
+    },
+    "type=top": {
+      "model": "me:block/grassy_peat_slab_top"
+    }
+  }
+}

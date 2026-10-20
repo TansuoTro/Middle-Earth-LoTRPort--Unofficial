@@ -1,0 +1,7 @@
+{
+	"parent": "me:block/candle_holder",
+	"textures": {
+		"0": "me:block/candle_holder_lit",
+		"particle": "me:block/candle_holder_lit"
+	}
+}

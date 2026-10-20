@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "me:block/orc_structure_manager",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "me:block/orc_structure_manager"
+    },
+    "facing=south": {
+      "model": "me:block/orc_structure_manager",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "me:block/orc_structure_manager",
+      "y": 270
+    }
+  }
+}

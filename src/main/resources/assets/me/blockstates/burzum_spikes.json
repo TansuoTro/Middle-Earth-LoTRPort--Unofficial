@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=upper": {
+      "model": "me:block/burzum_spikes_end"
+    },
+    "half=lower": {
+      "model": "me:block/burzum_spikes"
+    }
+  }
+}

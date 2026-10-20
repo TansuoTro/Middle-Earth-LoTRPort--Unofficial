@@ -1,0 +1,36 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "me:block/pink_large_flowering_lily_pad"
+      },
+      {
+        "model": "me:block/pink_large_flowering_lily_pad",
+        "y": 90
+      },
+      {
+        "model": "me:block/pink_large_flowering_lily_pad",
+        "y": 180
+      },
+      {
+        "model": "me:block/pink_large_flowering_lily_pad",
+        "y": 270
+      },
+      {
+        "model": "me:block/white_large_flowering_lily_pad"
+      },
+      {
+        "model": "me:block/white_large_flowering_lily_pad",
+        "y": 90
+      },
+      {
+        "model": "me:block/white_large_flowering_lily_pad",
+        "y": 180
+      },
+      {
+        "model": "me:block/white_large_flowering_lily_pad",
+        "y": 270
+      }
+    ]
+  }
+}

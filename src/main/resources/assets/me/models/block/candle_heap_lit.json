@@ -1,0 +1,7 @@
+{
+	"parent": "me:block/candle_heap",
+	"textures": {
+		"0": "me:block/candle_heap_lit",
+		"particle": "me:block/candle_heap_lit"
+	}
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top_inner_faces",
+  "textures": {
+    "bottom": "me:block/foul_dirt",
+    "side": "me:block/spider_trial_spawner",
+    "top": "me:block/spider_trial_spawner"
+  }
+}

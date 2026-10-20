@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top_inner_faces",
+  "textures": {
+    "bottom": "me:block/brigand_vault_bottom",
+    "side": "me:block/brigand_vault_side",
+    "top": "me:block/brigand_vault_top_inactive"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "me:block/inner_stairs_overlay_tint",
+  "textures": {
+    "bottom": "me:block/grassy_silt",
+    "side": "me:block/grassy_silt",
+    "top": "me:block/grassy_silt",
+    "overlay": "me:block/grassy_silt_overlay"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "me:block/grassy_silt_slab"
+    },
+    "type=double": {
+      "model": "me:block/grassy_silt"
+    },
+    "type=top": {
+      "model": "me:block/grassy_silt_slab_top"
+    }
+  }
+}

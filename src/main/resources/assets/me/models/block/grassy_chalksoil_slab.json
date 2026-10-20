@@ -1,0 +1,9 @@
+{
+  "parent": "me:block/slab_overlay_tint",
+  "textures": {
+    "bottom": "me:block/grassy_chalksoil",
+    "side": "me:block/grassy_chalksoil",
+    "top": "me:block/grassy_chalksoil",
+    "overlay": "me:block/grassy_chalksoil_overlay"
+  }
+}

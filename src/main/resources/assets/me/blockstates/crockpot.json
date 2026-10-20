@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "me:block/crockpot",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "me:block/crockpot"
+    },
+    "facing=south": {
+      "model": "me:block/crockpot",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "me:block/crockpot",
+      "y": 270
+    },
+    "facing=east,hanging=true": {
+      "model": "me:block/crockpot_hanging",
+      "y": 90
+    },
+    "facing=north,hanging=true": {
+      "model": "me:block/crockpot_hanging"
+    },
+    "facing=south,hanging=true": {
+      "model": "me:block/crockpot_hanging",
+      "y": 180
+    },
+    "facing=west,hanging=true": {
+      "model": "me:block/crockpot_hanging",
+      "y": 270
+    }
+  }
+}

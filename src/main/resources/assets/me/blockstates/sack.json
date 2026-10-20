@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "open=false": {
+      "model": "me:block/sack"
+    },
+    "open=true": {
+      "model": "me:block/sack_open"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "me:block/cyan_candles_layered_cake"
+    },
+    "lit=true": {
+      "model": "me:block/cyan_candles_layered_cake_lit"
+    }
+  }
+}

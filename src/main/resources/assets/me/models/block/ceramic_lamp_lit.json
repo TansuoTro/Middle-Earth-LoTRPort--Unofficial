@@ -1,0 +1,7 @@
+{
+	"parent": "me:block/ceramic_lamp",
+	"textures": {
+		"0": "me:block/ceramic_lamp_lit",
+		"particle": "me:block/ceramic_lamp_lit"
+	}
+}
