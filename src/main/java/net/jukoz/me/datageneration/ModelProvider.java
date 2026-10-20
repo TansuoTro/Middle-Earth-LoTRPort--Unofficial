@@ -1841,7 +1841,27 @@ public class ModelProvider extends FabricModelProvider {
             Item blockItem = block.asItem();
             if (blockItem == net.minecraft.item.Items.AIR) { continue; }
             try {
-                itemModelGenerator.register(blockItem, new Model(java.util.Optional.of(blockId.withPath("block/" + blockId.getPath())), java.util.Optional.empty()));
+                // Composite shapes have no plain <block> model: point the item at the shape's
+                // own inventory model, otherwise the icon references a model nobody uploaded.
+                String path = blockId.getPath();
+                Model itemModel;
+                if (block instanceof WallBlock || block instanceof FenceBlock) {
+                    itemModel = new Model(java.util.Optional.of(blockId.withPath("block/" + path + "_inventory")), java.util.Optional.empty());
+                } else if (block instanceof TrapdoorBlock || block instanceof DoorBlock) {
+                    itemModel = new Model(java.util.Optional.of(blockId.withPath("block/" + path + "_bottom")), java.util.Optional.empty());
+                } else {
+                    itemModel = new Model(java.util.Optional.of(blockId.withPath("block/" + path)), java.util.Optional.empty());
+                }
+                itemModelGenerator.register(blockItem, itemModel);
+            } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+        }
+
+        // Fallback 2: every mod item that no explicit list covered still needs an inventory icon.
+        for (Item item : Registries.ITEM) {
+            Identifier itemId = Registries.ITEM.getId(item);
+            if (!itemId.getNamespace().equals(net.jukoz.me.MiddleEarth.MOD_ID)) { continue; }
+            try {
+                itemModelGenerator.register(item, Models.GENERATED);
             } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
