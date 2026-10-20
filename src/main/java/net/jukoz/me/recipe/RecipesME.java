@@ -13,8 +13,10 @@ import net.jukoz.me.recipe.inscription.InscriptionRecipe;
 import java.util.function.Supplier;
 
 public class RecipesME {
-    public static final Supplier<RecipeType<ArtisanRecipe>> ARTISAN_TABLE_SUPPLIER = regRecipe("artisan_table", () ->
-            registerRecipeType(ArtisanRecipe.Type.ID, ArtisanRecipe.Type.INSTANCE), ArtisanRecipe.Type.ID, ArtisanRecipe.Serializer.INSTANCE);
+    /** Lazy: ModRecipes.registerRecipes() already owns the artisan type + serializer, and this
+     *  class's static initialiser used to re-register the same objects, which SimpleRegistry
+     *  rejects ("Attempted to register object ... twice"). */
+    public static final Supplier<RecipeType<ArtisanRecipe>> ARTISAN_TABLE_SUPPLIER = () -> ModRecipes.ARTISAN_TABLE;
 
     public static <T extends Recipe<?>> RecipeType<T> registerRecipeType(final String identifier, RecipeType<T> recipeType) {
         return Registry.register(Registries.RECIPE_TYPE,
