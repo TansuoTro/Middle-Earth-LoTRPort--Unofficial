@@ -56,6 +56,9 @@ public class ArtefactCustomGlowingDaggerWeaponItem extends CustomDaggerWeaponIte
 
     @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        // donor's WEAPON component damagePerHit = 1 (Item.postHit does not damage on 1.20.1), so the
+        // blunted trigger below can actually see the stack reach maxDamage - 1
+        super.postHit(stack, target, attacker);
         if (stack.getDamage() == stack.getMaxDamage() - 1) {
             BluntWeapon.blunt(stack);
         }

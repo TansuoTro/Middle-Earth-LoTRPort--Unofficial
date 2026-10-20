@@ -1,7 +1,10 @@
 package net.jukoz.me.item.items.weapons;
 
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.jukoz.me.compat.BluntWeapon;
 import net.jukoz.me.item.utils.WeaponTypesME;
 import net.minecraft.item.ToolMaterial;
 
@@ -16,6 +19,17 @@ public class CustomSpearWeaponItem extends ReachWeaponItem {
     public CustomSpearWeaponItem(ToolMaterial toolMaterial, Item.Settings settings) {
         super(toolMaterial, WeaponTypesME.SPEAR, settings);
         this.type = WeaponTypesME.SPEAR;
+    }
+
+    @Override
+    public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        super.postHit(stack, target, attacker);
+        if (!BluntWeapon.isBlunted(stack)) {
+            // The donor's WEAPON component carries damagePerHit = 1; 1.20.1's Item.postHit does not
+            // damage the stack, so the per-hit durability loss lives here.
+            stack.damage(1, attacker, e -> e.sendEquipmentBreakStatus(net.minecraft.entity.EquipmentSlot.MAINHAND));
+        }
+        return true;
     }
 
     /*public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {

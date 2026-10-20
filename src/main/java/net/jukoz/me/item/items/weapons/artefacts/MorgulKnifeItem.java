@@ -6,7 +6,6 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.jukoz.me.compat.BluntWeapon;
 import net.minecraft.item.ToolMaterial;
 
 public class MorgulKnifeItem extends ArtefactCustomDaggerWeaponItem {
@@ -17,10 +16,12 @@ public class MorgulKnifeItem extends ArtefactCustomDaggerWeaponItem {
 
     @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if (stack.getDamage() == stack.getMaxDamage() - 1) {
-            BluntWeapon.blunt(stack);
+        // donor postDamageEntity: the curse lands while the knife is not blunted yet
+        if (stack.getDamage() < stack.getMaxDamage() - 1) {
+            target.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 6000));
+            target.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 6000));
         }
-    
-        return true;
+        // per-hit damage + the blunted trigger at maxDamage - 1 (ArtefactCustomDaggerWeaponItem)
+        return super.postHit(stack, target, attacker);
     }
 }

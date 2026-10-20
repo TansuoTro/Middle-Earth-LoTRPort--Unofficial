@@ -12,6 +12,7 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.jukoz.me.MiddleEarth;
+import net.jukoz.me.compat.BluntWeapon;
 import net.jukoz.me.item.dataComponents.SneakAttackDataComponent;
 import net.jukoz.me.item.utils.WeaponTypesME;
 import org.jetbrains.annotations.Nullable;
@@ -46,6 +47,11 @@ public class CustomDaggerWeaponItem extends ReachWeaponItem {
     @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         super.postHit(stack, target, attacker);
+        if (!BluntWeapon.isBlunted(stack)) {
+            // The donor's WEAPON component carries damagePerHit = 1; 1.20.1's Item.postHit does not
+            // damage the stack, so the per-hit durability loss lives here.
+            stack.damage(1, attacker, e -> e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
+        }
         SneakAttackDataComponent sneakAttackDataComponent = MEComponents.get(stack, MEComponents.SNEAK_ATTACK_DATA);
         if(sneakAttackDataComponent != null) MEComponents.set(stack, MEComponents.SNEAK_ATTACK_DATA, new SneakAttackDataComponent(0));
         return true;

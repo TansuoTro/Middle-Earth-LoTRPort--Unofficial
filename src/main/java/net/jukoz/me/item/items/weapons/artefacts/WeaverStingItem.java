@@ -15,10 +15,13 @@ public class WeaverStingItem extends CustomDaggerWeaponItem {
 
     @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        // donor postDamageEntity: poison on every hit
+        target.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 50));
+        // per-hit damage (donor's WEAPON component damagePerHit = 1)
+        super.postHit(stack, target, attacker);
         if (stack.getDamage() == stack.getMaxDamage() - 1) {
             BluntWeapon.blunt(stack);
         }
-    
         return true;
     }
 }

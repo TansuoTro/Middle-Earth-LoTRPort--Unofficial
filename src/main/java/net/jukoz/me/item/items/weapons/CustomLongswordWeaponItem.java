@@ -1,6 +1,9 @@
 package net.jukoz.me.item.items.weapons;
 
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.jukoz.me.compat.BluntWeapon;
 import net.jukoz.me.item.utils.WeaponTypesME;
 import net.minecraft.item.ToolMaterial;
 
@@ -15,5 +18,16 @@ public class CustomLongswordWeaponItem extends ReachWeaponItem {
                                 Optional.of(SoundEvents.ITEM_SHIELD_BLOCK), Optional.of(SoundEvents.ITEM_SHIELD_BREAK)))
                 .component(DataComponentTypes.BREAK_SOUND, SoundEvents.ITEM_SHIELD_BREAK)*/
         this.type = WeaponTypesME.LONGSWORD;
+    }
+
+    @Override
+    public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        super.postHit(stack, target, attacker);
+        if (!BluntWeapon.isBlunted(stack)) {
+            // The donor's WEAPON component carries damagePerHit = 1; 1.20.1's Item.postHit does not
+            // damage the stack, so the per-hit durability loss lives here.
+            stack.damage(1, attacker, e -> e.sendEquipmentBreakStatus(net.minecraft.entity.EquipmentSlot.MAINHAND));
+        }
+        return true;
     }
 }
