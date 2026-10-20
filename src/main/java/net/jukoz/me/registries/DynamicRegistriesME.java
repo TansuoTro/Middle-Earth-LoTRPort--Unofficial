@@ -83,6 +83,15 @@ public class DynamicRegistriesME extends net.jukoz.me.api.registries.DynamicRegi
 
         registryBuilder.addRegistry(SPIDER_VARIANTS, SpiderVariantRegistry::bootstrap);
         registryBuilder.addRegistry(GREAT_HORN_VARIANTS, GreatHornVariantRegistry::bootstrap);
+
+        // Character appearance: skin/eye/hair materials and patterns. Without these the six
+        // registries stay empty and the NPC generator can only use the presets' inline materials.
+        registryBuilder.addRegistry(SKIN_MATERIAL, net.jukoz.me.registries.CharacterMaterialsRegistryME::bootstrapSkins);
+        registryBuilder.addRegistry(EYE_MATERIAL, net.jukoz.me.registries.CharacterMaterialsRegistryME::bootstrapEyes);
+        registryBuilder.addRegistry(HAIR_MATERIAL, net.jukoz.me.registries.CharacterMaterialsRegistryME::bootstrapHairs);
+        registryBuilder.addRegistry(SKIN_PATTERN, net.jukoz.me.registries.CharacterPatternsRegistryME::bootstrapSkins);
+        registryBuilder.addRegistry(EYE_PATTERN, net.jukoz.me.registries.CharacterPatternsRegistryME::bootstrapEyes);
+        registryBuilder.addRegistry(HAIR_PATTERN, net.jukoz.me.registries.CharacterPatternsRegistryME::bootstrapHairs);
     }
 
     public static void addProviders(FabricDataGenerator.Pack pack) {

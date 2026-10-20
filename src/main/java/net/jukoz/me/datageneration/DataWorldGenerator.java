@@ -28,6 +28,12 @@ public class DataWorldGenerator extends FabricDynamicRegistryProvider {
         entries.addAll(registries.getWrapperOrThrow(net.jukoz.me.registries.DynamicRegistriesME.TEXTURE_PRESETS));
         entries.addAll(registries.getWrapperOrThrow(net.jukoz.me.registries.DynamicRegistriesME.SPIDER_VARIANTS));
         entries.addAll(registries.getWrapperOrThrow(net.jukoz.me.registries.DynamicRegistriesME.GREAT_HORN_VARIANTS));
+        entries.addAll(registries.getWrapperOrThrow(net.jukoz.me.registries.DynamicRegistriesME.SKIN_MATERIAL));
+        entries.addAll(registries.getWrapperOrThrow(net.jukoz.me.registries.DynamicRegistriesME.EYE_MATERIAL));
+        entries.addAll(registries.getWrapperOrThrow(net.jukoz.me.registries.DynamicRegistriesME.HAIR_MATERIAL));
+        entries.addAll(registries.getWrapperOrThrow(net.jukoz.me.registries.DynamicRegistriesME.SKIN_PATTERN));
+        entries.addAll(registries.getWrapperOrThrow(net.jukoz.me.registries.DynamicRegistriesME.EYE_PATTERN));
+        entries.addAll(registries.getWrapperOrThrow(net.jukoz.me.registries.DynamicRegistriesME.HAIR_PATTERN));
     }
 
     @Override
