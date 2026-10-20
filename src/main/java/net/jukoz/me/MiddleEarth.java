@@ -103,7 +103,7 @@ public class MiddleEarth implements ModInitializer {
 		ModBlockEntities.registerBlockEntities();
 
 		ModScreenHandlers.registerAllScreenHandlers();
-		ModRecipes.registerRecipes();
+		ModRecipes.registerRecipes();net.jukoz.me.recipe.RecipesME.registerRecipes();
 
 		ModEntities.registerModEntities();net.jukoz.me.entity.EntitiesME.registerModEntities();net.jukoz.me.entity.ai.brain.SensorsME.registerModSensors();net.jukoz.me.entity.ai.brain.ActivitiesME.registerModActivities();net.jukoz.me.entity.ai.brain.MemoryModulesME.registerModMemoryModules();
 		ModEntitySpawning.addSpawns();
