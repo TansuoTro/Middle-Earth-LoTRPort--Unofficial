@@ -71,10 +71,12 @@ public class GearSlotPool {
             NbtList list = nbtCompound.getList("pool", NbtElement.COMPOUND_TYPE);
             GearSlotPool gearSlotPool = GearSlotPool.create();
             for(int i = 0; i < list.size(); i++){
-                if(!list.getString(i).isEmpty()){
+                // getString() stringifies compound elements in 1.20.1, so the compound form
+                // has to be tested first.
+                if(list.get(i) instanceof NbtCompound compound){
+                    gearSlotPool.add(new WeightedItemData(compound));
+                } else if(!list.getString(i).isEmpty()){
                     gearSlotPool.add(new WeightedItemData(MiddleEarth.fetchId(list.getString(i))));
-                } else if(!list.getCompound(i).isEmpty()){
-                    gearSlotPool.add(new WeightedItemData(list.getCompound(i)));
                 }
             }
             return gearSlotPool;
