@@ -231,9 +231,6 @@ public class TranslationEntries {
             put("block."+ MiddleEarth.MOD_ID +".elven_lantern", "Elven Lantern");
 
             put("block."+ MiddleEarth.MOD_ID +".forge", "Forge");
-            put("block."+ MiddleEarth.MOD_ID +".dwarven_forge", "Dwarven Forge");
-            put("block."+ MiddleEarth.MOD_ID +".elven_forge", "Elven Forge");
-            put("block."+ MiddleEarth.MOD_ID +".orcish_forge", "Orcish Forge");
             put("block."+ MiddleEarth.MOD_ID +".bellows", "Bellows");
             put("block."+ MiddleEarth.MOD_ID +".treated_anvil", "Treated Anvil");
             put("block."+ MiddleEarth.MOD_ID +".dwarven_treated_anvil", "Dwarven Treated Anvil");
