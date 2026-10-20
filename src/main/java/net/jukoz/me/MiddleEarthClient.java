@@ -20,6 +20,7 @@ import net.jukoz.me.datageneration.content.models.SimpleDoubleBlockModel;
 import net.jukoz.me.datageneration.content.models.SimpleFlowerBedModel;
 import net.jukoz.me.datageneration.content.models.TintableCrossModel;
 import net.jukoz.me.datageneration.content.tags.Crops;
+import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.ModEntities;
 import net.jukoz.me.entity.barrow_wights.BarrowWightEntityRenderer;
 import net.jukoz.me.entity.beasts.trolls.petrified.PetrifiedTrollRenderer;
@@ -35,10 +36,17 @@ import net.jukoz.me.entity.humans.bandit.BanditHumanRenderer;
 import net.jukoz.me.entity.humans.gondor.GondorHumanRenderer;
 import net.jukoz.me.entity.humans.rohan.RohanHumanRenderer;
 import net.jukoz.me.entity.model.ModEntityModels;
+import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatRenderer;
+import net.jukoz.me.entity.beasts.great_horn.GreatHornRenderer;
+import net.jukoz.me.entity.beasts.warg.WargRenderer;
 import net.jukoz.me.entity.nazguls.NazgulRenderer;
+import net.jukoz.me.entity.npcs.renderer.NpcEntityRenderer;
 import net.jukoz.me.entity.orcs.misties.MistyGoblinRenderer;
 import net.jukoz.me.entity.orcs.mordor.MordorOrcRenderer;
 import net.jukoz.me.entity.pheasant.PheasantRenderer;
+import net.jukoz.me.entity.spider.larva.ShelobiteLarvaRenderer;
+import net.jukoz.me.entity.spider.scuttler.ShelobiteScuttlerRenderer;
+import net.jukoz.me.entity.spider.spawn.SpawnOfShelobRenderer;
 import net.jukoz.me.entity.projectile.boulder.BoulderEntityRenderer;
 import net.jukoz.me.entity.projectile.spear.JavelinEntityRenderer;
 import net.jukoz.me.entity.snail.SnailRenderer;
@@ -139,6 +147,16 @@ public class MiddleEarthClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.NAZGUL, NazgulRenderer::new);
 
         EntityRendererRegistry.register(ModEntities.MIRKWOOD_SPIDER, MirkwoodSpiderRenderer::new);
+        // Donor entities. The 1.16 tree registered a renderer per faction-specific NPC type, and
+        // the 1.21 tree replaced all of them with a single NPC type, so the entities that survive
+        // in the port had no client-side registration at all.
+        EntityRendererRegistry.register(EntitiesME.NPC, NpcEntityRenderer::new);
+        EntityRendererRegistry.register(EntitiesME.GREAT_HORN, GreatHornRenderer::new);
+        EntityRendererRegistry.register(EntitiesME.WARG, WargRenderer::new);
+        EntityRendererRegistry.register(EntitiesME.BROADHOOF_GOAT, BroadhoofGoatRenderer::new);
+        EntityRendererRegistry.register(EntitiesME.SHELOBITE_LARVA, ShelobiteLarvaRenderer::new);
+        EntityRendererRegistry.register(EntitiesME.SHELOBITE_SCUTTLER, ShelobiteScuttlerRenderer::new);
+        EntityRendererRegistry.register(EntitiesME.SPAWN_OF_SHELOB, SpawnOfShelobRenderer::new);
         EntityRendererRegistry.register(ModEntities.SNOW_TROLL, SnowTrollRenderer::new);
         //EntityRendererRegistry.register(ModEntities.BALROG, BalrogRenderer::new);
 
