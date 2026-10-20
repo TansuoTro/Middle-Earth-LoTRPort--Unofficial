@@ -32,6 +32,13 @@ import net.minecraft.loot.entry.LootPoolEntry;
 import net.minecraft.loot.function.SetCountLootFunction;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.predicate.item.ItemPredicate;
+import net.minecraft.predicate.StatePredicate;
+import net.minecraft.block.SlabBlock;
+import net.minecraft.block.enums.SlabType;
+import net.minecraft.loot.condition.BlockStatePropertyLootCondition;
+import net.jukoz.me.block.registration.ModDecorativeBlocks;
+import net.jukoz.me.block.special.LargeDoorBlock;
+import net.jukoz.me.block.special.verticalSlabs.VerticalSlabBlock;
 
 public class BlockLootTableProvider extends FabricBlockLootTableProvider {
     protected static final LootCondition.Builder WITH_SILK_TOUCH = MatchToolLootCondition.builder(ItemPredicate.Builder.create()
@@ -56,7 +63,7 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
             }else if(Registries.BLOCK.getId(block).getPath().equals("epmosto")){
                 cobbleDrops(block, StoneBlockSets.COBBLED_EPMOSTO.base());
             }else if(Registries.BLOCK.getId(block).getPath().equals("gonluin")){
-                cobbleDrops(block, StoneBlockSets.COBBLED_GONLUIN.base());
+                cobbleDrops(block, StoneBlockSets.GALONN_SET.cobblestoneBlocks.base());
             }else if(Registries.BLOCK.getId(block).getPath().equals("limestone")){
                 cobbleDrops(block, StoneBlockSets.COBBLED_LIMESTONE.base());
             }else if(Registries.BLOCK.getId(block).getPath().equals("dolomite")){
@@ -67,8 +74,34 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 cobbleDrops(block, StoneBlockSets.FROZEN_COBBLESTONE.base());
             }else if(Registries.BLOCK.getId(block).getPath().equals("ashen_stone")){
                 cobbleDrops(block, StoneBlockSets.ASHEN_COBBLESTONE.base());
+            }else if(Registries.BLOCK.getId(block).getPath().equals("nurgon")){
+                cobbleDrops(block, StoneBlockSets.NURGON_SET.cobblestoneBlocks.base());
+            }else if(Registries.BLOCK.getId(block).getPath().equals("medgon")){
+                cobbleDrops(block, StoneBlockSets.MEDGON_SET.cobblestoneBlocks.base());
+            }else if(Registries.BLOCK.getId(block).getPath().equals("khagalaban")){
+                cobbleDrops(block, StoneBlockSets.KHAGALABAN_SET.cobblestoneBlocks.base());
+            }else if(Registries.BLOCK.getId(block).getPath().equals("jadeite")){
+                cobbleDrops(block, StoneBlockSets.JADEITE_SET.cobblestoneBlocks.base());
+            }else if(Registries.BLOCK.getId(block).getPath().equals("ironstone")){
+                cobbleDrops(block, StoneBlockSets.IRONSTONE_SET.cobblestoneBlocks.base());
+            }else if(Registries.BLOCK.getId(block).getPath().equals("hematite")){
+                cobbleDrops(block, StoneBlockSets.HEMATITE_SET.cobblestoneBlocks.base());
+            }else if(Registries.BLOCK.getId(block).getPath().equals("gneiss")){
+                cobbleDrops(block, StoneBlockSets.GNEISS_SET.cobblestoneBlocks.base());
+            }else if(Registries.BLOCK.getId(block).getPath().equals("izheraban")){
+                cobbleDrops(block, StoneBlockSets.IZHERABAN_SET.cobblestoneBlocks.base());
+            }else if(Registries.BLOCK.getId(block).getPath().equals("schist")){
+                cobbleDrops(block, StoneBlockSets.SCHIST_SET.cobblestoneBlocks.base());
+            }else if(Registries.BLOCK.getId(block).getPath().equals("slate")){
+                cobbleDrops(block, StoneBlockSets.SLATE_SET.cobblestoneBlocks.base());
+            }else if(Registries.BLOCK.getId(block).getPath().equals("blue_tuff")){
+                cobbleDrops(block, StoneBlockSets.BLUE_TUFF_SET.cobblestoneBlocks.base());
             }else if(Registries.BLOCK.getId(block).getPath().contains("_door")){
                 addDrop(block, doorDrops(block));
+            }else if(Registries.BLOCK.getId(block).getPath().contains("vertical_slab")){
+                addDrop(block, verticalSlabDrops(block));
+            }else if(Registries.BLOCK.getId(block).getPath().contains("slab")){
+                addDrop(block, slabDrops(block));
             } else {
                 addDrop(block);
             }
@@ -132,19 +165,36 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
         }
 
         cobbleDrops(ModBlocks.STONE_MYCELIUM, Blocks.COBBLESTONE);
+
+        largeDoorDrop(ModDecorativeBlocks.LARCH_HOBBIT_DOOR);
+        largeDoorDrop(ModDecorativeBlocks.SPRUCE_HOBBIT_DOOR);
+        largeDoorDrop(ModDecorativeBlocks.BLUE_HOBBIT_DOOR);
+        largeDoorDrop(ModDecorativeBlocks.GREEN_HOBBIT_DOOR);
+        largeDoorDrop(ModDecorativeBlocks.LIGHT_BLUE_HOBBIT_DOOR);
+        largeDoorDrop(ModDecorativeBlocks.RED_HOBBIT_DOOR);
+        largeDoorDrop(ModDecorativeBlocks.YELLOW_HOBBIT_DOOR);
+        largeDoorDrop(ModDecorativeBlocks.TALL_BLACK_PINE_DOOR);
+        largeDoorDrop(ModDecorativeBlocks.TALL_FIR_DOOR);
+        largeDoorDrop(ModDecorativeBlocks.OAK_STABLE_DOOR);
+        largeDoorDrop(ModDecorativeBlocks.REINFORCED_SPRUCE_DOOR);
+        largeDoorDrop(ModDecorativeBlocks.REINFORCED_BLACK_PINE_DOOR);
+        largeDoorDrop(ModDecorativeBlocks.SIMPLE_LARCH_GATE);
+        largeDoorDrop(ModDecorativeBlocks.RICKETY_SIMPLE_LARCH_DOOR);
+        largeDoorDrop(ModDecorativeBlocks.SPRUCE_STABLE_DOOR);
+        largeDoorDrop(ModDecorativeBlocks.LARGE_STURDY_DOOR);
+        largeDoorDrop(ModDecorativeBlocks.LARGE_BEECH_FENCE_GATE);
+        largeDoorDrop(ModDecorativeBlocks.GREAT_GONDORIAN_GATE);
+        largeDoorDrop(ModDecorativeBlocks.GREAT_DWARVEN_GATE);
+        largeDoorDrop(ModDecorativeBlocks.VARNISHED_DWARVEN_DOOR);
+        largeDoorDrop(ModDecorativeBlocks.RUINED_DWARVEN_DOOR);
+        largeDoorDrop(ModDecorativeBlocks.HIDDEN_DWARVEN_DOOR);
+        largeDoorDrop(ModDecorativeBlocks.GREAT_ELVEN_GATE);
+        largeDoorDrop(ModDecorativeBlocks.GREAT_ORCISH_GATE);
     }
 
     public void cobbleDrops(Block stoneBlock, Block cobbledBlock){
-        addDrop(stoneBlock,
-                LootTable.builder()
-                        .pool(LootPool.builder()
-                                .conditionally(WITH_SILK_TOUCH)
-                                .rolls(ConstantLootNumberProvider.create(1.0F))
-                                .with(ItemEntry.builder(stoneBlock)))
-                        .pool(LootPool.builder()
-                                .conditionally(WITH_SILK_TOUCH.invert())
-                                .rolls(ConstantLootNumberProvider.create(1.0F))
-                                .with(ItemEntry.builder(cobbledBlock))));
+        addDrop(stoneBlock, BlockLootTableGenerator.dropsWithSilkTouch(stoneBlock,
+                this.applyExplosionDecay(cobbledBlock, ItemEntry.builder(cobbledBlock))));
     }
 
     public LootTable.Builder leavesDrops(Block leaves, Block drop, float ... chance) {
@@ -153,5 +203,21 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 .conditionally(WITHOUT_SILK_TOUCH_NOR_SHEARS).with((LootPoolEntry.Builder<?>)((LeafEntry.Builder)this.applyExplosionDecay(leaves, ItemEntry.builder(Items.STICK)
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 2.0f)))))
                 .conditionally(TableBonusLootCondition.builder(Enchantments.FORTUNE, LEAVES_STICK_DROP_CHANCE))));
+    }
+
+    public LootTable.Builder slabDrops(Block drop) {
+        return LootTable.builder().pool(
+                LootPool.builder().rolls(ConstantLootNumberProvider.create(1.0F))
+                        .with(this.applyExplosionDecay(drop, ItemEntry.builder(drop).apply(SetCountLootFunction.builder(ConstantLootNumberProvider.create(2.0F)).conditionally(BlockStatePropertyLootCondition.builder(drop).properties(StatePredicate.Builder.create().exactMatch(SlabBlock.TYPE, SlabType.DOUBLE)))))));
+    }
+
+    public LootTable.Builder verticalSlabDrops(Block drop) {
+        return LootTable.builder().pool(
+                LootPool.builder().rolls(ConstantLootNumberProvider.create(1.0F))
+                        .with(this.applyExplosionDecay(drop, ItemEntry.builder(drop).apply(SetCountLootFunction.builder(ConstantLootNumberProvider.create(2.0F)).conditionally(BlockStatePropertyLootCondition.builder(drop).properties(StatePredicate.Builder.create().exactMatch(VerticalSlabBlock.DOUBLE, true)))))));
+    }
+
+    public void largeDoorDrop(Block doorblock) {
+        addDrop(doorblock, LootTable.builder().pool(this.addSurvivesExplosionCondition(doorblock, LootPool.builder().rolls(ConstantLootNumberProvider.create(1.0F)).with(ItemEntry.builder(doorblock).conditionally(BlockStatePropertyLootCondition.builder(doorblock).properties(StatePredicate.Builder.create().exactMatch(LargeDoorBlock.PART, 0)))))));
     }
 }
