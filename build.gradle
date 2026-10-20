@@ -121,7 +121,7 @@ publishing {
 // mod's own dynamic registries (me:race, me:spider_variants, ...) land in data/me/me/<registry>/
 // while vanilla-keyed ones (minecraft:worldgen/biome, ...) land in data/me/<registry>/. Datapack
 // loading looks for data/<registry namespace>/<registry path>/, so the stray level has to go.
-tasks.matching { it.name == 'runDatagen' }.configureEach {
+tasks.matching { it.name.toLowerCase().startsWith('rundatagen') }.configureEach {
     doLast {
         def stray = file('src/main/generated/data/me/me')
         if (stray.isDirectory()) {
