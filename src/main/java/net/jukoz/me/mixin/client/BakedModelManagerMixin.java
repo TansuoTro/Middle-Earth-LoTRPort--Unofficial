@@ -27,7 +27,7 @@ public class BakedModelManagerMixin{
     private static Map<Identifier, Identifier> LAYERS_TO_LOADERS;
 
     @Inject(method = "<init>", at=@At("HEAD"))
-    private static void addNewAtlas(TextureManager textureManager, BlockColors colorMap, int mipmap, CallbackInfo ci)
+    private void addNewAtlas(TextureManager textureManager, BlockColors colorMap, int mipmap, CallbackInfo ci)
     {
         HashMap<Identifier, Identifier> map = new HashMap<>(LAYERS_TO_LOADERS);
         map.put(ModTexturedRenderLayers.CHARACTER_ATLAS_TEXTURES, AtlasesME.CHARACTER_TEXTURES);

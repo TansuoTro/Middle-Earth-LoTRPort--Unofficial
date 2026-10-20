@@ -26,6 +26,7 @@
   "client": [
     "IntegratedServerLoaderMixin",
     "client.AnimationStateAccessor",
+    "client.BakedModelManagerMixin",
     "client.BipedEntityModelMixin",
     "client.PlayerEntityRendererMixin",
     "client.AbstractClientPlayerEntityMixin",
