@@ -10,6 +10,9 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
+
 /**
  * Middle-earth mod enchantment registry.
  *
@@ -41,6 +44,16 @@ public class EnchantmentsME {
     public static final RegistryKey<Enchantment> TREE_FELLER = of("tree_feller");
     public static final RegistryKey<Enchantment> VANTAGE = of("vantage");
 
+    /**
+     * Ids of the by-hand attribute modifiers {@code PlayerMixin} applies for the four
+     * {@code ATTRIBUTES} effects of the donor (1.21's {@code AttributeEnchantmentEffect} ids).
+     * They are derived from the donor's modifier identifiers so both sides stay addressable.
+     */
+    public static final UUID CELERITY_MODIFIER_ID = modifierId("enchantment.celerity");
+    public static final UUID GROUNDED_MODIFIER_ID = modifierId("enchantment.grounded");
+    public static final UUID STALWART_MODIFIER_ID = modifierId("enchantment.stalwart");
+    public static final UUID VANTAGE_MODIFIER_ID = modifierId("enchantment.vantage");
+
     private static final EquipmentSlot[] ARMOR_SLOTS = {
             EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
     private static final EquipmentSlot[] HAND_SLOT = {EquipmentSlot.MAINHAND};
@@ -51,6 +64,16 @@ public class EnchantmentsME {
     private static RegistryKey<Enchantment> of(String path) {
         Identifier id = MiddleEarth.of(path);
         return RegistryKey.of(RegistryKeys.ENCHANTMENT, id);
+    }
+
+    private static UUID modifierId(String path) {
+        return UUID.nameUUIDFromBytes(MiddleEarth.of(path).toString().getBytes(StandardCharsets.UTF_8));
+    }
+
+    /** The registered enchantment behind a key; {@code null} only when it is not registered yet. */
+    @org.jetbrains.annotations.Nullable
+    public static Enchantment get(RegistryKey<Enchantment> key) {
+        return Registries.ENCHANTMENT.get(key.getValue());
     }
 
     public static void register() {
