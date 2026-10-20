@@ -21,22 +21,9 @@ public class ArtisanTableDisplay extends BasicDisplay {
 
     private static List<EntryIngredient> getInputs(ArtisanRecipe recipe) {
         if (recipe == null) return Collections.emptyList();
-        List<EntryIngredient> list = new ArrayList<>(6);
-        list.add(EntryIngredients.ofIngredient(recipe.getIngredients().get(0)));
-        if(recipe.getIngredients().size() > 1){
-            list.add(EntryIngredients.ofIngredient(recipe.getIngredients().get(1)));
-        }
-        if(recipe.getIngredients().size() > 2){
-            list.add(EntryIngredients.ofIngredient(recipe.getIngredients().get(2)));
-        }
-        if(recipe.getIngredients().size() > 3){
-            list.add(EntryIngredients.ofIngredient(recipe.getIngredients().get(3)));
-        }
-        if(recipe.getIngredients().size() > 4){
-            list.add(EntryIngredients.ofIngredient(recipe.getIngredients().get(4)));
-        }
-        if(recipe.getIngredients().size() > 5){
-            list.add(EntryIngredients.ofIngredient(recipe.getIngredients().get(5)));
+        List<EntryIngredient> list = new ArrayList<>();
+        for (net.minecraft.recipe.Ingredient ingredient : recipe.getIngredients()) {
+            list.add(EntryIngredients.ofIngredient(ingredient));
         }
         return list;
     }
