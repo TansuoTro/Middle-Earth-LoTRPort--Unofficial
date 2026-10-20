@@ -30,10 +30,11 @@ public class WeightedItemData extends WeightedItem<GearItemData> {
         super(element);
         if(element == null)
             return;
-        if(!element.asString().isEmpty())
-            this.item = new GearItemData(new Identifier(element.asString()));
-        else if(NbtCompat.isCompound(element))
+        // asString() stringifies any element in 1.20.1, so the compound form must be tested first.
+        if(NbtCompat.isCompound(element))
             this.item = new GearItemData(NbtCompat.compound(element));
+        else if(!element.asString().isEmpty())
+            this.item = new GearItemData(new Identifier(element.asString()));
     }
 
     public static WeightedItemData create() {
