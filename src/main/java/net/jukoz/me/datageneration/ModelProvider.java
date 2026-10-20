@@ -777,6 +777,9 @@ public class ModelProvider extends FabricModelProvider {
             if (block.origin() == null) { continue; }
             if (block.layers() == null) { continue; }
             registerLayers(blockStateModelGenerator, block.layers(), block.origin());
+            if (Objects.equals(Registries.BLOCK.getId(block.origin()).getNamespace(), MiddleEarth.MOD_ID)) {
+                blockStateModelGenerator.registerSimpleCubeAll(block.origin());
+            }
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
@@ -868,6 +871,17 @@ public class ModelProvider extends FabricModelProvider {
         try {
             blockStateModelGenerator.registerPlantPart(ModNatureBlocks.GLOWWORM_WEBBING, ModNatureBlocks.GLOWWORM_MAIN,
                     BlockStateModelGenerator.TintType.NOT_TINTED);
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+
+        try {
+            if (ModNatureBlocks.FLOATING_ICE != null) {
+                blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(
+                        ModNatureBlocks.FLOATING_ICE, ModelIds.getBlockModelId(ModNatureBlocks.FLOATING_ICE)));
+            }
+        } catch (RuntimeException __modelError) { logSkipped(__modelError); }
+
+        try {
+            registerOrientableThickLadder(blockStateModelGenerator, ModDecorativeBlocks.ROPE_LADDER);
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
 
         for(SimpleLadderModel.Ladder ladder : SimpleLadderModel.ladders) {
