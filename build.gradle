@@ -117,35 +117,9 @@ publishing {
     repositories {}
 }
 
-// FabricDynamicRegistryProvider folds the registry's namespace into the output directory, so the
-// mod's own dynamic registries (me:race, me:spider_variants, ...) land in data/me/me/<registry>/
-// while vanilla-keyed ones (minecraft:worldgen/biome, ...) land in data/me/<registry>/. Datapack
-// loading looks for data/<registry namespace>/<registry path>/, so the stray level has to go.
-tasks.matching { it.name.toLowerCase().startsWith('rundatagen') }.configureEach {
-    doLast {
-        def stray = file('src/main/generated/data/me/me')
-        if (stray.isDirectory()) {
-            stray.listFiles().each { entry ->
-                def target = file("src/main/generated/data/me/${entry.name}")
-                if (target.exists()) {
-                    target.deleteDir()
-                }
-                if (!entry.renameTo(target)) {
-                    target.mkdirs()
-                    entry.eachFileRecurse { f ->
-                        def rel = entry.toPath().relativize(f.toPath()).toString()
-                        def out = new File(target, rel)
-                        if (f.isDirectory()) {
-                            out.mkdirs()
-                        } else {
-                            out.parentFile.mkdirs()
-                            out.bytes = f.bytes
-                        }
-                    }
-                    entry.deleteDir()
-                }
-            }
-            stray.deleteDir()
-        }
-    }
-}
+// FabricDynamicRegistryProvider writes mod dynamic registries to data/<modid>/<registry>/ and
+// that doubled level is CORRECT, not a bug: for a Fabric-registered dynamic registry the loader
+// scans data/<registry namespace>/<registry path>/ with the registry namespace folded into the
+// starting path (see RegistryLoaderMixin#prependDirectoryWithNamespace), so me:spider_variants
+// must stay at data/me/me/spider_variants/. Flattening it to data/me/spider_variants/ leaves the
+// registry empty at runtime and every shelobite crash-loads the server tick.
