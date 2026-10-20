@@ -116,3 +116,36 @@ publishing {
     }
     repositories {}
 }
+
+// FabricDynamicRegistryProvider folds the registry's namespace into the output directory, so the
+// mod's own dynamic registries (me:race, me:spider_variants, ...) land in data/me/me/<registry>/
+// while vanilla-keyed ones (minecraft:worldgen/biome, ...) land in data/me/<registry>/. Datapack
+// loading looks for data/<registry namespace>/<registry path>/, so the stray level has to go.
+tasks.matching { it.name == 'runDatagen' }.configureEach {
+    doLast {
+        def stray = file('src/main/generated/data/me/me')
+        if (stray.isDirectory()) {
+            stray.listFiles().each { entry ->
+                def target = file("src/main/generated/data/me/${entry.name}")
+                if (target.exists()) {
+                    target.deleteDir()
+                }
+                if (!entry.renameTo(target)) {
+                    target.mkdirs()
+                    entry.eachFileRecurse { f ->
+                        def rel = entry.toPath().relativize(f.toPath()).toString()
+                        def out = new File(target, rel)
+                        if (f.isDirectory()) {
+                            out.mkdirs()
+                        } else {
+                            out.parentFile.mkdirs()
+                            out.bytes = f.bytes
+                        }
+                    }
+                    entry.deleteDir()
+                }
+            }
+            stray.deleteDir()
+        }
+    }
+}

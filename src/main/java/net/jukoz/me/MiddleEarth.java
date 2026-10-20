@@ -59,9 +59,15 @@ public class MiddleEarth implements ModInitializer {
 		loggerUtil = LoggerUtil.getInstance();
 
 		loggerUtil.logInfoMsg("");
-		loggerUtil.logInfoMsg("================ MiddleEarth ================");
+                loggerUtil.logInfoMsg("================ MiddleEarth ================");
 
-		ModCommandRegistry.register();
+                // Custom tracked-data handlers and dynamic registries have to exist before any
+                // entity class initialises, otherwise the 1.21 donor's variant lookups and the
+                // entity tracker serialisers have nothing to resolve against.
+                net.jukoz.me.entity.TrackedDataHandlerRegistryME.register();
+                net.jukoz.me.registries.DynamicRegistriesME.register();
+
+                ModCommandRegistry.register();
 		ModStatusEffects.registerStatusEffects();
 		OreRockSets.registerModBlockSets();
 		ModWeaponItems.registerModItems();

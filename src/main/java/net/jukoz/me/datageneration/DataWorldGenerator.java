@@ -18,6 +18,16 @@ public class DataWorldGenerator extends FabricDynamicRegistryProvider {
         entries.addAll(registries.getWrapperOrThrow(RegistryKeys.BIOME));
         entries.addAll(registries.getWrapperOrThrow(RegistryKeys.CONFIGURED_FEATURE));
         entries.addAll(registries.getWrapperOrThrow(RegistryKeys.PLACED_FEATURE));
+
+        entries.addAll(registries.getWrapperOrThrow(net.jukoz.me.registries.DynamicRegistriesME.RACE));
+        entries.addAll(registries.getWrapperOrThrow(net.jukoz.me.registries.DynamicRegistriesME.NPC_TYPE));
+        entries.addAll(registries.getWrapperOrThrow(net.jukoz.me.registries.DynamicRegistriesME.FACTION));
+        entries.addAll(registries.getWrapperOrThrow(net.jukoz.me.registries.DynamicRegistriesME.BIOME_EVENT));
+        entries.addAll(registries.getWrapperOrThrow(net.jukoz.me.registries.DynamicRegistriesME.STRUCTURE_EVENT));
+        entries.addAll(registries.getWrapperOrThrow(net.jukoz.me.registries.DynamicRegistriesME.STRUCTURE_MANAGER_DATA));
+        entries.addAll(registries.getWrapperOrThrow(net.jukoz.me.registries.DynamicRegistriesME.TEXTURE_PRESETS));
+        entries.addAll(registries.getWrapperOrThrow(net.jukoz.me.registries.DynamicRegistriesME.SPIDER_VARIANTS));
+        entries.addAll(registries.getWrapperOrThrow(net.jukoz.me.registries.DynamicRegistriesME.GREAT_HORN_VARIANTS));
     }
 
     @Override

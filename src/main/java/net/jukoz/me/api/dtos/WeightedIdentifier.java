@@ -1,8 +1,8 @@
 package net.jukoz.me.api.dtos;
 import net.jukoz.me.compat.NbtCompat;
 
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtString;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 
@@ -40,9 +40,12 @@ public class WeightedIdentifier extends WeightedItem<Identifier> {
 
     @Override
     public NbtElement getNbt(){
+        // Always a compound: a weighted pool serialises into a single NbtList, and NbtList
+        // refuses to mix tag types, so the bare-string form used for weight==1 corrupted every
+        // pool that held both weighted and unweighted entries.
         NbtElement newNbt = super.getNbt();
         if(newNbt == null)
-            return NbtString.of(item.toString());
+            newNbt = new NbtCompound();
 
         NbtCompat.compound(newNbt).putString("id", this.item.toString());
         return newNbt;

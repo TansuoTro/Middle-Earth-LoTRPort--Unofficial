@@ -301,9 +301,8 @@ public class GearItemData {
             if(hoodColors != null)
                 nbt.putIntArray("hood_colors", hoodColors);
         }
-        if(nbt.getKeys().size() == 1 && nbt.contains("id")){
-            return NbtString.of(nbt.getString("id"));
-        }
+        // Always a compound: gear pools serialise into one NbtList, which cannot mix a bare
+        // string with the compound form used by items that carry colour/cape/hood data.
         return nbt;
     }
 }

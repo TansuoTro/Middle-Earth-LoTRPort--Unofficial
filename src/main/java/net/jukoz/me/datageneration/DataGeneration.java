@@ -63,5 +63,8 @@ public class DataGeneration implements DataGeneratorEntrypoint {
         registryBuilder.addRegistry(RegistryKeys.PLACED_FEATURE, OrePlacedFeatures::bootstrap);
         registryBuilder.addRegistry(RegistryKeys.PLACED_FEATURE, CavesPlacedFeatures::bootstrap);
         registryBuilder.addRegistry(RegistryKeys.PLACED_FEATURE, ModMiscPlacedFeatures::bootstrap);
+        // The mod's own dynamic registries (races, factions, npc types, spider/great-horn
+        // variants, ...) are bootstrapped here so DataWorldGenerator can emit their JSON.
+        net.jukoz.me.registries.DynamicRegistriesME.prepareBoostrap(registryBuilder);
     }
 }
