@@ -39,9 +39,12 @@ public final class DedupingModelCollector {
             if (!(original instanceof BiConsumer)) {
                 return;
             }
-            Set<Identifier> seen = new HashSet<>();
-            BiConsumer<Identifier, Supplier<JsonElement>> wrapper = (id, supplier) -> {
-                if (seen.add(id)) {
+        Set<Identifier> seen = new HashSet<>();
+        BiConsumer<Identifier, Supplier<JsonElement>> wrapper = (id, supplier) -> {
+            // Remember what got uploaded so ModelProvider's item fallback can tell a real block
+            // model from one that only exists as sub-models.
+            net.jukoz.me.datageneration.ModelProvider.UPLOADED_BLOCK_MODELS.add(id);
+            if (seen.add(id)) {
                     //noinspection unchecked
                     ((BiConsumer<Identifier, Supplier<JsonElement>>) original).accept(id, supplier);
                 }
