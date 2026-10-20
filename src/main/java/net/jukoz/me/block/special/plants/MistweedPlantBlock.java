@@ -6,7 +6,6 @@ import net.minecraft.block.Fertilizable;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -45,7 +44,7 @@ public class MistweedPlantBlock extends CustomPlantBlock implements Fertilizable
             double d = (double)pos.getX() + random.nextDouble() * 16.0 - 8.0;
             double e = (double)pos.getY() + random.nextDouble() * 5.0;
             double f = (double)pos.getZ() + random.nextDouble() * 16.0 - 8.0;
-            world.addImportantParticle(net.minecraft.particle.ParticleTypes.CLOUD, true, d, e, f, 0.0, 0.0, 0.0);
+            world.addImportantParticle(ModParticleTypes.BIOME_FOG_PARTICLE, true, d, e, f, 0.0, 0.0, 0.0);
         }
         super.randomDisplayTick(state, world, pos, random);
     }

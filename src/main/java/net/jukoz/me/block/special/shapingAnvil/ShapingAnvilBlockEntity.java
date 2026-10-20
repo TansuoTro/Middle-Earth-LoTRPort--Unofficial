@@ -183,7 +183,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
 
             World serverWorld = this.getWorld();
             if (serverWorld instanceof ServerWorld) {
-                ((ServerWorld)serverWorld).spawnParticles(net.minecraft.particle.ParticleTypes.CRIT, pos.getX()+ 0.5f, pos.getY() + 1.0f, pos.getZ() + 0.5f, Math.max(temperature / 10, 3), 0.0, 0.0, 0.0, 0.0);
+                ((ServerWorld)serverWorld).spawnParticles(ModParticleTypes.ANVIL_SPARK_PARTICLE, pos.getX()+ 0.5f, pos.getY() + 1.0f, pos.getZ() + 0.5f, Math.max(temperature / 10, 3), 0.0, 0.0, 0.0, 0.0);
             }
 
             int minRandTemperature = 10;
@@ -236,7 +236,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
         } else {
             World serverWorld = this.getWorld();
             if (serverWorld instanceof ServerWorld) {
-                ((ServerWorld)serverWorld).spawnParticles(net.minecraft.particle.ParticleTypes.CRIT, pos.getX()+ 0.5f, pos.getY() + 1.0f, pos.getZ() + 0.5f, 2, 0.0, 0.0, 0.0, 0.0);
+                ((ServerWorld)serverWorld).spawnParticles(ModParticleTypes.ANVIL_SPARK_PARTICLE, pos.getX()+ 0.5f, pos.getY() + 1.0f, pos.getZ() + 0.5f, 2, 0.0, 0.0, 0.0, 0.0);
             }
             entity.getWorld().playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.5f, 1.0f);
         }
