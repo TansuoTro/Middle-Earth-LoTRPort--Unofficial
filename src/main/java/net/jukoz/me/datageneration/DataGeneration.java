@@ -1,7 +1,12 @@
 package net.jukoz.me.datageneration;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.jukoz.me.datageneration.recipes.ArtisanTableArmorRecipeProvider;
+import net.jukoz.me.datageneration.recipes.ArtisanTableGenericArmorRecipeProvider;
+import net.jukoz.me.datageneration.recipes.ArtisanTableHandheldRecipeProvider;
+import net.jukoz.me.datageneration.recipes.InscriptionRecipeProvider;
 import net.jukoz.me.world.biomes.surface.ModBiomes;
 import net.jukoz.me.world.biomes.caves.ModCaveBiomes;
 import net.jukoz.me.world.features.boulder.BoulderConfiguredFeatures;
@@ -32,6 +37,10 @@ public class DataGeneration implements DataGeneratorEntrypoint {
         pack.addProvider(ItemTagProvider::new);
         pack.addProvider(ModelProvider::new);
         pack.addProvider(RecipeProvider::new);
+        pack.addProvider((FabricDataOutput output) -> new ArtisanTableArmorRecipeProvider(output));
+        pack.addProvider((FabricDataOutput output) -> new ArtisanTableGenericArmorRecipeProvider(output));
+        pack.addProvider((FabricDataOutput output) -> new ArtisanTableHandheldRecipeProvider(output));
+        pack.addProvider((FabricDataOutput output) -> new InscriptionRecipeProvider(output));
         pack.addProvider(LanguageProvider::new);
 
         pack.addProvider(DataWorldGenerator::new);
