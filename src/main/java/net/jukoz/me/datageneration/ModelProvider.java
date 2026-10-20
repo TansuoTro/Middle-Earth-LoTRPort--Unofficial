@@ -14,8 +14,10 @@ import net.jukoz.me.datageneration.content.MEModels;
 import net.jukoz.me.datageneration.content.models.*;
 import net.jukoz.me.datageneration.content.tags.LeavesSets;
 import net.jukoz.me.item.ModEquipmentItems;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.*;
+import net.minecraft.block.enums.WallMountLocation;
+import net.jukoz.me.block.special.RocksBlock;
+import java.util.Objects;
 import net.minecraft.data.client.*;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
@@ -771,6 +773,53 @@ public class ModelProvider extends FabricModelProvider {
         } catch (RuntimeException __modelError) { skippedModels++; }
         }
 
+        for(SimpleLadderModel.Ladder ladder : SimpleLadderModel.ladders) {
+            try {
+            registerOrientableThickLadder(blockStateModelGenerator, ladder.ladder());
+        } catch (RuntimeException __modelError) { skippedModels++; }
+        }
+        for(SimpleLadderModel.Ladder ladder : SimpleLadderModel.vanillaLadders) {
+            try {
+            registerOrientableThickLadder(blockStateModelGenerator, ladder.ladder());
+        } catch (RuntimeException __modelError) { skippedModels++; }
+        }
+
+        for(Block block : SimpleWoodBenchModel.benchs){
+            try {
+            registerWoodBenchModelBlockStates(blockStateModelGenerator, block);
+        } catch (RuntimeException __modelError) { skippedModels++; }
+        }
+        for(SimpleWoodBenchModel.VanillaBench bench : SimpleWoodBenchModel.vanillaBenchs){
+            try {
+            if (bench.base() == null) { continue; }
+            registerWoodBenchModelBlockStates(blockStateModelGenerator, bench.base());
+        } catch (RuntimeException __modelError) { skippedModels++; }
+        }
+
+        for(SimpleRocksModel.Rocks rocks : SimpleRocksModel.rocks){
+            try {
+            if (rocks.rocks() == null || rocks.block() == null) { continue; }
+            registerRocksBlock(blockStateModelGenerator, rocks.rocks(), rocks.block());
+        } catch (RuntimeException __modelError) { skippedModels++; }
+        }
+        for(SimpleRocksModel.Rocks rocks : SimpleRocksModel.vanillaRocks){
+            try {
+            if (rocks.rocks() == null || rocks.block() == null) { continue; }
+            registerRocksBlock(blockStateModelGenerator, rocks.rocks(), rocks.block());
+        } catch (RuntimeException __modelError) { skippedModels++; }
+        }
+
+        for(SimpleWallModel.Wall wall : SimpleWallModel.columnWalls){
+            try {
+            if (wall.wall() == null) { continue; }
+            Identifier identifier = Registries.BLOCK.getId(wall.wall());
+            String sidePath = identifier.getPath().replaceAll("_wall", "");
+            String topBottomPath = identifier.withSuffixedPath("_top").getPath().replaceAll("_wall", "");
+            registerColumnWallModelBlockStates(blockStateModelGenerator, wall.wall(), wall.block(),
+                    identifier.getNamespace(), topBottomPath, topBottomPath, sidePath);
+        } catch (RuntimeException __modelError) { skippedModels++; }
+        }
+
         for(Block block : SimpleWoodStoolModel.stools){
             try {
             registerWoodStoolModelBlockStates(blockStateModelGenerator, block,
@@ -1139,6 +1188,118 @@ public class ModelProvider extends FabricModelProvider {
                                         .put(TextureKey.PARTICLE, texture),
                                 blockStateModelGenerator.modelCollector)).put(VariantSettings.UVLOCK, false))
                 .coordinate(BlockStateModelGenerator.createNorthDefaultHorizontalRotationStates()));
+    }
+
+    public void registerWoodBenchModelBlockStates(BlockStateModelGenerator blockStateModelGenerator, Block block){
+        Identifier texture = new Identifier(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(block).getPath());
+        Identifier model = MEModels.WOOD_BENCH.upload(block,
+                (new TextureMap()).put(TextureKey.ALL, texture).put(TextureKey.PARTICLE, texture),
+                blockStateModelGenerator.modelCollector);
+        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block,
+                        BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, false))
+                .coordinate(BlockStateModelGenerator.createNorthDefaultHorizontalRotationStates()));
+        blockStateModelGenerator.registerParentedItemModel(block, ModelIds.getBlockModelId(block));
+    }
+
+    public void registerRocksBlock(BlockStateModelGenerator blockStateModelGenerator, Block rocksBlock, Block origin){
+        Identifier id = new Identifier(Registries.BLOCK.getId(origin).getNamespace(), "block/" + Registries.BLOCK.getId(origin).getPath());
+        if (origin == Blocks.BASALT || origin == Blocks.POLISHED_BASALT) {
+            id = id.withSuffixedPath("_side");
+        }
+        TextureMap textures = TextureMap.of(TextureKey.ALL, id);
+        Identifier stage0 = MEModels.ROCKS_STAGE_0.upload(rocksBlock, textures, blockStateModelGenerator.modelCollector);
+        Identifier stage1 = MEModels.ROCKS_STAGE_1.upload(rocksBlock, textures, blockStateModelGenerator.modelCollector);
+        Identifier stage2 = MEModels.ROCKS_STAGE_2.upload(rocksBlock, textures, blockStateModelGenerator.modelCollector);
+        Identifier stage3 = MEModels.ROCKS_STAGE_3.upload(rocksBlock, textures, blockStateModelGenerator.modelCollector);
+
+        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(rocksBlock)
+                .coordinate(BlockStateVariantMap.create(Properties.HORIZONTAL_FACING, RocksBlock.STAGE)
+                        .register(Direction.NORTH, 0, BlockStateVariant.create().put(VariantSettings.MODEL, stage0).put(VariantSettings.UVLOCK, true))
+                        .register(Direction.EAST, 0, BlockStateVariant.create().put(VariantSettings.MODEL, stage0).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R90))
+                        .register(Direction.SOUTH, 0, BlockStateVariant.create().put(VariantSettings.MODEL, stage0).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R180))
+                        .register(Direction.WEST, 0, BlockStateVariant.create().put(VariantSettings.MODEL, stage0).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R270))
+                        .register(Direction.NORTH, 1, BlockStateVariant.create().put(VariantSettings.MODEL, stage1).put(VariantSettings.UVLOCK, true))
+                        .register(Direction.EAST, 1, BlockStateVariant.create().put(VariantSettings.MODEL, stage1).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R90))
+                        .register(Direction.SOUTH, 1, BlockStateVariant.create().put(VariantSettings.MODEL, stage1).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R180))
+                        .register(Direction.WEST, 1, BlockStateVariant.create().put(VariantSettings.MODEL, stage1).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R270))
+                        .register(Direction.NORTH, 2, BlockStateVariant.create().put(VariantSettings.MODEL, stage2).put(VariantSettings.UVLOCK, true))
+                        .register(Direction.EAST, 2, BlockStateVariant.create().put(VariantSettings.MODEL, stage2).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R90))
+                        .register(Direction.SOUTH, 2, BlockStateVariant.create().put(VariantSettings.MODEL, stage2).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R180))
+                        .register(Direction.WEST, 2, BlockStateVariant.create().put(VariantSettings.MODEL, stage2).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R270))
+                        .register(Direction.NORTH, 3, BlockStateVariant.create().put(VariantSettings.MODEL, stage3).put(VariantSettings.UVLOCK, true))
+                        .register(Direction.EAST, 3, BlockStateVariant.create().put(VariantSettings.MODEL, stage3).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R90))
+                        .register(Direction.SOUTH, 3, BlockStateVariant.create().put(VariantSettings.MODEL, stage3).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R180))
+                        .register(Direction.WEST, 3, BlockStateVariant.create().put(VariantSettings.MODEL, stage3).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R270))
+                ));
+        blockStateModelGenerator.registerParentedItemModel(rocksBlock, ModelIds.getBlockModelId(rocksBlock));
+    }
+
+    public void registerOrientableThickLadder(BlockStateModelGenerator blockStateModelGenerator, Block ladderBlock){
+        Identifier texture = new Identifier(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(ladderBlock).getPath());
+        Identifier model = MEModels.THICK_LADDER.upload(ladderBlock, TextureMap.of(TextureKey.TEXTURE, texture), blockStateModelGenerator.modelCollector);
+
+        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(ladderBlock)
+                .coordinate(BlockStateVariantMap.create(WallMountedBlock.FACE, Properties.HORIZONTAL_FACING)
+                        .register(WallMountLocation.FLOOR, Direction.NORTH, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true))
+                        .register(WallMountLocation.FLOOR, Direction.EAST, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R90))
+                        .register(WallMountLocation.FLOOR, Direction.SOUTH, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R180))
+                        .register(WallMountLocation.FLOOR, Direction.WEST, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R270))
+                        .register(WallMountLocation.WALL, Direction.NORTH, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.X, VariantSettings.Rotation.R90))
+                        .register(WallMountLocation.WALL, Direction.EAST, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.X, VariantSettings.Rotation.R90).put(VariantSettings.Y, VariantSettings.Rotation.R90))
+                        .register(WallMountLocation.WALL, Direction.SOUTH, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.X, VariantSettings.Rotation.R90).put(VariantSettings.Y, VariantSettings.Rotation.R180))
+                        .register(WallMountLocation.WALL, Direction.WEST, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.X, VariantSettings.Rotation.R90).put(VariantSettings.Y, VariantSettings.Rotation.R270))
+                        .register(WallMountLocation.CEILING, Direction.SOUTH, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.X, VariantSettings.Rotation.R180))
+                        .register(WallMountLocation.CEILING, Direction.WEST, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.X, VariantSettings.Rotation.R180).put(VariantSettings.Y, VariantSettings.Rotation.R90))
+                        .register(WallMountLocation.CEILING, Direction.NORTH, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.X, VariantSettings.Rotation.R180).put(VariantSettings.Y, VariantSettings.Rotation.R180))
+                        .register(WallMountLocation.CEILING, Direction.EAST, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.X, VariantSettings.Rotation.R180).put(VariantSettings.Y, VariantSettings.Rotation.R270))
+                ));
+        blockStateModelGenerator.registerParentedItemModel(ladderBlock, ModelIds.getBlockModelId(ladderBlock));
+    }
+
+    public void registerColumnWallModelBlockStates(BlockStateModelGenerator blockStateModelGenerator, Block block, Block origin,
+                                                   String modId, String topTexturePath, String bottomTexturePath, String sideTexturePath){
+        String modIdTopBottom = modId;
+        if (sideTexturePath.contains("deepslate_carved_window")){
+            modIdTopBottom = "minecraft";
+        }
+        if (sideTexturePath.contains("basalt_carved_window")){
+            topTexturePath = topTexturePath.concat("_top");
+            modIdTopBottom = "minecraft";
+        }
+        if (Objects.equals(topTexturePath, "stone") ||
+                Objects.equals(topTexturePath, "blackstone") ||
+                Objects.equals(topTexturePath, "tuff")){
+            modIdTopBottom = "minecraft";
+        }
+        if (Objects.equals(sideTexturePath, "chiseled_tuff") ||
+                Objects.equals(sideTexturePath, "chiseled_tuff_bricks")){
+            modId = "minecraft";
+            modIdTopBottom = "minecraft";
+        }
+        if (Objects.equals(sideTexturePath, "chiseled_stone_bricks") ||
+                Objects.equals(sideTexturePath, "chiseled_deepslate") ||
+                Objects.equals(sideTexturePath, "chiseled_polished_blackstone")){
+            modId = "minecraft";
+            modIdTopBottom = "minecraft";
+            topTexturePath = sideTexturePath;
+            bottomTexturePath = sideTexturePath;
+        }
+        Identifier sideTexture = new Identifier(modId, "block/" + sideTexturePath);
+        TextureMap textures = (new TextureMap())
+                .put(TextureKey.TOP, new Identifier(modIdTopBottom, "block/" + topTexturePath))
+                .put(TextureKey.BOTTOM, new Identifier(modIdTopBottom, "block/" + bottomTexturePath))
+                .put(TextureKey.WALL, sideTexture)
+                .put(TextureKey.PARTICLE, sideTexture);
+
+        Identifier post = MEModels.COLUMN_WALL_POST.upload(block, textures, blockStateModelGenerator.modelCollector);
+        Identifier low = MEModels.COLUMN_WALL_SIDE.upload(block, textures, blockStateModelGenerator.modelCollector);
+        Identifier tall = MEModels.COLUMN_WALL_SIDE_TALL.upload(block, textures, blockStateModelGenerator.modelCollector);
+
+        blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+                .createWallBlockState(block, post, low, tall));
+
+        Identifier inventory = MEModels.COLUMN_WALL_INVENTORY.upload(block, textures, blockStateModelGenerator.modelCollector);
+        blockStateModelGenerator.registerParentedItemModel(block, inventory);
     }
 
     public final void registerDoubleBlock(BlockStateModelGenerator blockStateModelGenerator, Block doubleBlock, BlockStateModelGenerator.TintType tintType) {
