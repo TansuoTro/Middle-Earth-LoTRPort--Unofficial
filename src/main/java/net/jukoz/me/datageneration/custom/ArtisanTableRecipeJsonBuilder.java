@@ -31,11 +31,10 @@ import net.minecraft.util.Identifier;
 /**
  * Datagen builder for {@link ArtisanRecipe}.
  *
- * <p>Emits exactly the JSON the runtime serializer parses: {@code output} (item stack,
- * NBT kept for trimmed outputs) and {@code ingredients}. The donor's 1.21.5 variant
- * carried {@code tab}/{@code disposition}/{@code xp}; the port's
- * {@code ArtisanRecipe.Serializer#read} has no fields for them, so they are kept as
- * datagen-side metadata only.
+ * <p>Emits the JSON the runtime serializer parses: {@code output} (item stack,
+ * NBT kept for trimmed outputs), {@code ingredients} and the donor's
+ * {@code category}/{@code disposition}/{@code xp} fields. The serializer treats those
+ * three as optional, so previously generated JSON stays loadable.
  */
 public class ArtisanTableRecipeJsonBuilder {
     private final RecipeCategory category;
@@ -158,6 +157,11 @@ public class ArtisanTableRecipeJsonBuilder {
     }
 
     private void writeRecipeJson(JsonObject json) {
+        json.addProperty("category", this.tab);
+        json.addProperty("disposition", this.dispositionType == null
+                ? DispositionType.NEUTRAL.toString().toLowerCase()
+                : this.dispositionType.toString().toLowerCase());
+        json.addProperty("xp", this.xp);
         json.add("output", itemStackJson(this.output));
         JsonArray ingredients = new JsonArray();
         for (JsonElement input : this.inputs) {

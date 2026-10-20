@@ -17,11 +17,23 @@ public class ArtisanRecipe implements Recipe<Inventory> {
     public final Identifier id;
     public final ItemStack output;
     public final DefaultedList<Ingredient> inputs;
+    /** Tab id this recipe is listed under (e.g. "sword"); null matches every tab. */
+    public final String category;
+    /** Faction disposition gate; null is treated as "neutral" (craftable by everyone). */
+    public final String disposition;
+    public final int xp;
 
     public ArtisanRecipe(Identifier id, ItemStack output, DefaultedList<Ingredient> recipeItems) {
+        this(id, output, recipeItems, null, null, 0);
+    }
+
+    public ArtisanRecipe(Identifier id, ItemStack output, DefaultedList<Ingredient> recipeItems, String category, String disposition, int xp) {
         this.id = id;
         this.output = output;
         this.inputs = recipeItems;
+        this.category = category;
+        this.disposition = disposition;
+        this.xp = xp;
     }
 
     public ItemStack createIcon() {
@@ -46,7 +58,6 @@ public class ArtisanRecipe implements Recipe<Inventory> {
 
     @Override
     public ItemStack craft(Inventory inventory, DynamicRegistryManager registryManager) {
-        System.out.println("Crafted");
         return this.output.copy();
     }
 
@@ -64,6 +75,18 @@ public class ArtisanRecipe implements Recipe<Inventory> {
         DefaultedList<Ingredient> defaultedList = DefaultedList.of();
         defaultedList.addAll(this.inputs);
         return defaultedList;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public String getDisposition() {
+        return disposition;
+    }
+
+    public int getXp() {
+        return xp;
     }
 
     @Override
@@ -107,27 +130,44 @@ public class ArtisanRecipe implements Recipe<Inventory> {
                 inputs.set(i, ingredient);
             }
 
-            return new ArtisanRecipe(id, output, inputs);
+            String category = JsonHelper.getString(json, "category", null);
+            String disposition = JsonHelper.getString(json, "disposition", null);
+            int xp = JsonHelper.getInt(json, "xp", 0);
+            return new ArtisanRecipe(id, output, inputs, category, disposition, xp);
         }
 
         @Override
         public ArtisanRecipe read(Identifier id, PacketByteBuf buf) {
+            String category = readNullableString(buf);
+            ItemStack output = buf.readItemStack();
             DefaultedList<Ingredient> inputs = DefaultedList.ofSize(buf.readInt(), Ingredient.EMPTY);
             for (int i = 0; i < inputs.size(); i++) {
                 inputs.set(i, Ingredient.fromPacket(buf));
             }
-
-            ItemStack output = buf.readItemStack();
-            return new ArtisanRecipe(id, output, inputs);
+            String disposition = readNullableString(buf);
+            int xp = buf.readVarInt();
+            return new ArtisanRecipe(id, output, inputs, category, disposition, xp);
         }
 
         @Override
         public void write(PacketByteBuf buf, ArtisanRecipe recipe) {
+            writeNullableString(buf, recipe.category);
+            buf.writeItemStack(recipe.output);
             buf.writeInt(recipe.getIngredients().size());
             for (Ingredient ingredient : recipe.getIngredients()) {
                 ingredient.write(buf);
             }
-            buf.writeItemStack(recipe.getOutput(null));
+            writeNullableString(buf, recipe.disposition);
+            buf.writeVarInt(recipe.xp);
+        }
+
+        private static String readNullableString(PacketByteBuf buf) {
+            String value = buf.readString();
+            return value.isEmpty() ? null : value;
+        }
+
+        private static void writeNullableString(PacketByteBuf buf, String value) {
+            buf.writeString(value == null ? "" : value);
         }
     }
 }
