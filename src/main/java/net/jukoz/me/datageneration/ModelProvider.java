@@ -12,6 +12,7 @@ import net.jukoz.me.block.special.VerticalSlabBlock;
 import net.jukoz.me.datageneration.content.CustomItemModels;
 import net.jukoz.me.datageneration.content.MEModels;
 import net.jukoz.me.datageneration.content.models.*;
+import net.jukoz.me.datageneration.content.tags.LeavesSets;
 import net.jukoz.me.item.ModEquipmentItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -695,6 +696,55 @@ public class ModelProvider extends FabricModelProvider {
             if (verticalSlab.block() == null) { continue; }
             registerVerticalSlabModelBlockStates(blockStateModelGenerator, verticalSlab.verticalSlab(), verticalSlab.block(), Registries.BLOCK.getId(verticalSlab.block()).getPath().replaceAll("_wood", "_log"));
         } catch (RuntimeException __modelError) { skippedModels++; }
+        }
+
+        for (SimpleVerticalSlabModel.VerticalSlab verticalSlab : SimpleVerticalSlabModel.plansVerticalSlabs) {
+            try {
+                if (verticalSlab.verticalSlab() == null || verticalSlab.block() == null) { continue; }
+                registerVerticalSlabModelBlockStates(blockStateModelGenerator, verticalSlab.verticalSlab(), verticalSlab.block(), Registries.BLOCK.getId(verticalSlab.block()).getPath());
+            } catch (RuntimeException __modelError) { skippedModels++; }
+        }
+
+        for (SimpleVerticalSlabModel.VerticalSlab verticalSlab : SimpleVerticalSlabModel.columnVerticalSlabs) {
+            try {
+                if (verticalSlab.verticalSlab() == null || verticalSlab.block() == null) { continue; }
+                Identifier columnId = Registries.BLOCK.getId(verticalSlab.verticalSlab());
+                String sidePath = columnId.getPath().replaceAll("_vertical_slab", "");
+                String topBottomPath = columnId.withSuffixedPath("_top").getPath().replaceAll("_vertical_slab", "").replaceAll("_carved_window_top", "");
+                registerColumnVerticalSlabModelBlockStates(blockStateModelGenerator, verticalSlab.verticalSlab(), verticalSlab.block(),
+                        columnId.getNamespace(), topBottomPath, topBottomPath, sidePath);
+            } catch (RuntimeException __modelError) { skippedModels++; }
+        }
+
+        for (SimpleBlockModel.ChiseledPolishedBlock block : SimpleBlockModel.chiseledSmoothBlocksTopBottom) {
+            try {
+                blockStateModelGenerator.registerAxisRotated(block.base(), TexturedModel.END_FOR_TOP_CUBE_COLUMN, TexturedModel.END_FOR_TOP_CUBE_COLUMN_HORIZONTAL);
+            } catch (RuntimeException __modelError) { skippedModels++; }
+        }
+
+        for (SimpleBlockModel.ChiseledPolishedBlock block : SimpleBlockModel.chiseledTilesBlocksTopBottom) {
+            try {
+                blockStateModelGenerator.registerAxisRotated(block.base(), TexturedModel.END_FOR_TOP_CUBE_COLUMN, TexturedModel.END_FOR_TOP_CUBE_COLUMN_HORIZONTAL);
+            } catch (RuntimeException __modelError) { skippedModels++; }
+        }
+
+        for (SimplePillarModel.StonePillar block : SimplePillarModel.carvedWindows) {
+            try {
+                blockStateModelGenerator.registerAxisRotated(block.base(), TexturedModel.END_FOR_TOP_CUBE_COLUMN);
+            } catch (RuntimeException __modelError) { skippedModels++; }
+        }
+
+        for (SimpleFlowerPotModel.FlowerPot flowerPot : SimpleFlowerPotModel.pots) {
+            try {
+                if (flowerPot.plant() == null || flowerPot.pottedPlant() == null) { continue; }
+                blockStateModelGenerator.registerFlowerPotPlant(flowerPot.plant(), flowerPot.pottedPlant(), BlockStateModelGenerator.TintType.NOT_TINTED);
+            } catch (RuntimeException __modelError) { skippedModels++; }
+        }
+
+        for (Block block : LeavesSets.grayscaleLeaves) {
+            try {
+                blockStateModelGenerator.registerSimpleCubeAll(block);
+            } catch (RuntimeException __modelError) { skippedModels++; }
         }
 
         for (SimpleLayersModel.Layers block : SimpleLayersModel.layers) {

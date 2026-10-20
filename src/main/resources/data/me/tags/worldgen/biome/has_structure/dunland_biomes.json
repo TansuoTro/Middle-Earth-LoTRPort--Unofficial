@@ -1,7 +1,8 @@
 {
   "replace": false,
   "values": [
-	"me:northern_dunland",
-	"me:southern_dunland"
+    "me:dunland",
+    "me:dunland_foothills",
+    "me:dunland_hills"
   ]
 }

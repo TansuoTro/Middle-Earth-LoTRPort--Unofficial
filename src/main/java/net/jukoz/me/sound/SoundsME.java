@@ -37,6 +37,10 @@ public class SoundsME {
 
     private static SoundEvent registerSoundEvent(String name) {
         Identifier id = new Identifier(MiddleEarth.MOD_ID, name);
+        SoundEvent existing = Registries.SOUND_EVENT.get(id);
+        if (existing != null) {
+            return existing;
+        }
         return Registry.register(Registries.SOUND_EVENT, id, SoundEvent.of(id));
     }
 
