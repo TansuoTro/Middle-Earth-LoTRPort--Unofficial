@@ -6,6 +6,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.WorldAccess;
+import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.compat.nbt.ReadView;
 import net.jukoz.me.compat.nbt.WriteView;
 
@@ -36,7 +37,22 @@ public final class VariantsME {
         if (registry == null) {
             return null;
         }
-        return registry.getEntry(key).orElse(null);
+        RegistryEntry<T> entry = registry.getEntry(key).orElse(null);
+        if (entry != null) {
+            return entry;
+        }
+        // A tracked data must never be initialised with null: DataTracker.Entry.isUnchanged()
+        // dereferences the initial value the first time the entity is tracked, which takes the
+        // whole server tick down. Fall back to whatever the registry does hold.
+        Optional<RegistryEntry.Reference<T>> any = registry.getRandom(net.minecraft.util.math.random.Random.create());
+        if (any.isEmpty()) {
+            MiddleEarth.LOGGER.logError("VariantsME: registry " + key.getRegistry() + " holds no entry at all, "
+                    + key.getValue() + " cannot be resolved");
+            return null;
+        }
+        MiddleEarth.LOGGER.logError("VariantsME: " + key.getValue() + " is missing from " + key.getRegistry()
+                + ", falling back to " + any.get().getKey().map(k -> k.getValue().toString()).orElse("?"));
+        return any.get();
     }
 
     public static <T> Optional<RegistryEntry<T>> getEntry(DynamicRegistryManager manager, RegistryKey<T> key) {
