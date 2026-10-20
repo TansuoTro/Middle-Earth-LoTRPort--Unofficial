@@ -8,6 +8,7 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.jukoz.me.datageneration.content.TranslationEntries;
+import net.jukoz.me.item.items.BottledDrinkItem;
 import net.jukoz.me.item.items.OrcishFoodItem;
 import net.jukoz.me.item.utils.ItemGroupsME;
 import net.minecraft.item.FoodComponent;
@@ -15,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.jukoz.me.registries.RegistryAliasesME;
 
@@ -48,13 +50,17 @@ public class FoodItemsME {
             (settings) -> new BlockItem(ModNatureBlocks.STRAWBERRY_BUSH, settings), new MESettings()
                     .food(new FoodComponent.Builder().hunger(2).saturationModifier(0.1f).build()));
 
+    // Donor: drink consumable (2s), useRemainder(GLASS_BOTTLE); maple syrup drinks with the
+    // honey-bottle sound, birch water cures poison (RemoveEffectsConsumeEffect(POISON)).
     public static final Item MAPLE_SYRUP = registerItem("maple_syrup",
-            Item::new,new MESettings()
-                    .recipeRemainder(Items.GLASS_BOTTLE).recipeRemainder(Items.GLASS_BOTTLE)
+            (settings) -> new BottledDrinkItem(settings, false, SoundEvents.ITEM_HONEY_BOTTLE_DRINK),
+            new MESettings()
+                    .recipeRemainder(Items.GLASS_BOTTLE)
                     .food(FoodComponents.HONEY_BOTTLE).maxCount(16));
     public static final Item BIRCH_WATER = registerItem("birch_water",
-            Item::new,new MESettings()
-                    .recipeRemainder(Items.GLASS_BOTTLE).recipeRemainder(Items.GLASS_BOTTLE)
+            (settings) -> new BottledDrinkItem(settings, true, null),
+            new MESettings()
+                    .recipeRemainder(Items.GLASS_BOTTLE)
                     .food(FoodComponents.HONEY_BOTTLE).maxCount(16));
 
     public static final Item TOMATO = registerItem("tomato",
