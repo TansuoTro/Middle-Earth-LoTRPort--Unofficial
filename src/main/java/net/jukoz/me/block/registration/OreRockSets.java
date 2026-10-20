@@ -78,6 +78,10 @@ public class OreRockSets {
             NURGON,
 
             MEDGON,
+            GONLUIN,
+            DIFTOMIN,
+            EPMOSTO,
+            FROZEN,
     };
 
     public record OreRockSet(Block coal_ore, Block copper_ore, Block tin_ore, Block lead_ore, Block silver_ore, Block gold_ore, Block iron_ore, 
