@@ -19,6 +19,7 @@ import net.jukoz.me.item.ModEquipmentItems;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.Thickness;
 import net.minecraft.block.enums.WallMountLocation;
+import net.jukoz.me.block.special.CustomWaterloggableTallPlantBlock;
 import net.jukoz.me.block.special.RocksBlock;
 import net.jukoz.me.block.special.LargeDoorBlock;
 import net.jukoz.me.block.special.doors.LargeDoor1x2;
@@ -46,6 +47,12 @@ import net.minecraft.util.math.Direction;
 import java.util.Optional;
 
 public class ModelProvider extends FabricModelProvider {
+    /**
+     * Every model id the block phase uploaded. 1.20.1's {@link net.minecraft.data.client.Model}
+     * has no "does this exist" query, and the item fallback needs one to tell a block whose shape
+     * is a single {@code <name>} model from one that only exists as sub-models.
+     */
+    public static final java.util.Set<Identifier> UPLOADED_BLOCK_MODELS = new java.util.HashSet<>();
 
     public ModelProvider(FabricDataOutput output) {
         super(output);
@@ -149,6 +156,122 @@ public class ModelProvider extends FabricModelProvider {
 
     private static int skippedModels = 0;
     private static final java.util.Set<String> loggedSkips = new java.util.HashSet<>();
+    /**
+     * The model a hand-written (non-datagen) blockstate uses for its first variant, or null when
+     * the block has no hand-written blockstate. Used to give block items whose shape is modelled by
+     * several differently named sub-models an icon that actually exists.
+     */
+    /** Project root, found by walking up from the datagen run directory (build/datagen). */
+    private static java.io.File projectRoot() {
+        java.io.File dir = new java.io.File("").getAbsoluteFile();
+        for (int i = 0; i < 6 && dir != null; i++) {
+            if (new java.io.File(dir, "build.gradle").isFile()) {
+                return dir;
+            }
+            dir = dir.getParentFile();
+        }
+        return null;
+    }
+
+    private static boolean hasBlockTexture(String name) {
+        java.io.File root = projectRoot();
+        return root != null && new java.io.File(root, "src/main/resources/assets/me/textures/block/" + name + ".png").isFile();
+    }
+
+    /**
+     * The model a hand-written (non-datagen) blockstate uses for its first entry, or null when the
+     * block has no hand-written blockstate. Gives block items whose shape is modelled by several
+     * differently named sub-models (plates, the skeleton decorations, the vaults) an icon that
+     * actually exists.
+     */
+    private static Identifier handWrittenBlockStateModel(String path) {
+        java.io.File root = projectRoot();
+        if (root == null) {
+            return null;
+        }
+        java.io.File file = new java.io.File(root, "src/main/resources/assets/me/blockstates/" + path + ".json");
+        if (!file.isFile()) {
+            return null;
+        }
+        try (java.io.Reader reader = new java.io.FileReader(file, java.nio.charset.StandardCharsets.UTF_8)) {
+            com.google.gson.JsonObject json = com.google.gson.JsonParser.parseReader(reader).getAsJsonObject();
+            java.util.List<com.google.gson.JsonElement> entries = new java.util.ArrayList<>();
+            com.google.gson.JsonObject variants = json.getAsJsonObject("variants");
+            if (variants != null) {
+                for (String key : variants.keySet()) {
+                    entries.add(variants.get(key));
+                }
+            }
+            com.google.gson.JsonArray multipart = json.getAsJsonArray("multipart");
+            if (multipart != null) {
+                for (com.google.gson.JsonElement element : multipart) {
+                    entries.add(element.getAsJsonObject().get("apply"));
+                }
+            }
+            for (com.google.gson.JsonElement element : entries) {
+                if (element == null || !element.isJsonObject()) { continue; }
+                com.google.gson.JsonElement model = element.getAsJsonObject().get("model");
+                if (model == null || !model.isJsonPrimitive()) { continue; }
+                String id = model.getAsString();
+                if (!id.isEmpty()) {
+                    return id.contains(":") ? new Identifier(id) : new Identifier(net.jukoz.me.MiddleEarth.MOD_ID, id);
+                }
+            }
+        } catch (Exception ignored) {
+            return null;
+        }
+        return null;
+    }
+
+    /**
+     * Which model a block item's icon should parent to. Walls/fences/doors/panes/slabs-in-layers
+     * have a canonical part; everything else parents to its own {@code <name>} model when the block
+     * phase uploaded one, and otherwise to the most representative sub-model it did upload (the
+     * upward tip of a pointed dripstone, the top half of a double plant).
+     */
+    private static Identifier itemIconParent(Block block, Identifier blockId) {
+        String path = blockId.getPath();
+        if (block instanceof WallBlock || block instanceof FenceBlock) {
+            return blockId.withPath("block/" + path + "_inventory");
+        }
+        if (block instanceof LargeDoorBlock) {
+            return blockId.withPath("block/" + path + "_left_0");
+        }
+        if (block instanceof DoorBlock) {
+            return blockId.withPath("block/" + path + "_bottom_left");
+        }
+        if (block instanceof TrapdoorBlock) {
+            return blockId.withPath("block/" + path + "_bottom");
+        }
+        if (block instanceof PaneBlock) {
+            return blockId.withPath("block/" + path + "_post");
+        }
+        if (block.getStateManager().getProperty("layers") != null) {
+            return blockId.withPath("block/" + path + "_height2");
+        }
+        Identifier plain = blockId.withPath("block/" + path);
+        if (UPLOADED_BLOCK_MODELS.contains(plain)) {
+            return plain;
+        }
+        String prefix = "block/" + path + "_";
+        Identifier best = null;
+        for (Identifier uploaded : UPLOADED_BLOCK_MODELS) {
+            if (!uploaded.getNamespace().equals(blockId.getNamespace())) { continue; }
+            if (!uploaded.getPath().startsWith(prefix)) { continue; }
+            String suffix = uploaded.getPath().substring(prefix.length());
+            if (suffix.equals("up_tip") || suffix.equals("top")) {
+                return uploaded;
+            }
+            if (best == null || uploaded.getPath().compareTo(best.getPath()) < 0) {
+                best = uploaded;
+            }
+        }
+        if (best != null) {
+            return best;
+        }
+        return handWrittenBlockStateModel(path);
+    }
+
     private static void logSkipped(RuntimeException e) {
         // A duplicate means an explicit registration already claimed the id, which is the
         // intended outcome of the fallbacks below - not a missing model.
@@ -1277,6 +1400,12 @@ public class ModelProvider extends FabricModelProvider {
 
     public void registerVanillaVerticalSlabModelBlockStates(BlockStateModelGenerator blockStateModelGenerator, Block block, Block origin, String slabPath){
         Identifier fullBlockId = ModelIds.getBlockModelId(origin);
+        // Vanilla ships no waxed_* block models: a waxed copper block points at its unwaxed
+        // counterpart, and so must the slab's double variant.
+        Identifier vanillaOriginId = Registries.BLOCK.getId(origin);
+        if (vanillaOriginId.getPath().startsWith("waxed_")) {
+            fullBlockId = vanillaOriginId.withPath("block/" + vanillaOriginId.getPath().substring("waxed_".length()));
+        }
         Identifier variantId = MEModels.VERTICAL_SLAB.upload(block,
                 TextureMap.of(TextureKey.ALL,new Identifier("minecraft","block/" + slabPath)),
                 blockStateModelGenerator.modelCollector);
@@ -1860,16 +1989,17 @@ public class ModelProvider extends FabricModelProvider {
             try {
                 // Composite shapes have no plain <block> model: point the item at the shape's
                 // own inventory model, otherwise the icon references a model nobody uploaded.
-                String path = blockId.getPath();
-                Model itemModel;
-                if (block instanceof WallBlock || block instanceof FenceBlock) {
-                    itemModel = new Model(java.util.Optional.of(blockId.withPath("block/" + path + "_inventory")), java.util.Optional.empty());
-                } else if (block instanceof TrapdoorBlock || block instanceof DoorBlock) {
-                    itemModel = new Model(java.util.Optional.of(blockId.withPath("block/" + path + "_bottom")), java.util.Optional.empty());
-                } else {
-                    itemModel = new Model(java.util.Optional.of(blockId.withPath("block/" + path)), java.util.Optional.empty());
+                Identifier parent = itemIconParent(block, blockId);
+                if (parent != null) {
+                    itemModelGenerator.register(blockItem, new Model(java.util.Optional.of(parent), java.util.Optional.empty()));
+                    continue;
                 }
-                itemModelGenerator.register(blockItem, itemModel);
+                // Nothing to parent to: a flat icon over the block's own texture, which for a
+                // double-height plant is the texture of its top half.
+                String texturePath = hasBlockTexture(blockId.getPath() + "_top")
+                        ? blockId.getPath() + "_top" : blockId.getPath();
+                Models.GENERATED.upload(ModelIds.getItemModelId(blockItem),
+                        TextureMap.layer0(blockId.withPath("block/" + texturePath)), itemModelGenerator.writer);
             } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
