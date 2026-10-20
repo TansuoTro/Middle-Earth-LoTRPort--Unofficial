@@ -13,15 +13,16 @@ public class StarlightPhialItem extends Item {
         super(settings);
     }
 
+    /**
+     * Donor: the phial opens the onboarding flow through a server-authoritative packet and is
+     * never consumed. The port keeps its direct teleport, but only from the server side of the
+     * vanilla interact packet ({@code use} runs there too) and without spending the item.
+     */
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        if(!ModDimensions.isInMiddleEarth(world)) {
-            if (!user.isCreative()) {
-                //user.getInventory().removeStack(user.getActiveHand().ordinal());
-                user.getStackInHand(hand).decrement(1);
-            }
+        if (!ModDimensions.isInMiddleEarth(world) && !world.isClient) {
             ModDimensions.teleportPlayerToME(user);
         }
-        return super.use(world, user, hand);
+        return TypedActionResult.success(user.getStackInHand(hand));
     }
 }
