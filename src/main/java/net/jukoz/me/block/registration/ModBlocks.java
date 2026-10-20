@@ -498,11 +498,11 @@ public class ModBlocks {
     public static final Block AGED_WOOD_DOOR = registerMiscBlock("aged_wood_door",
             (settings) -> new DoorBlock(settings, BlockSetType.DARK_OAK), AbstractBlock.Settings.copy(Blocks.DARK_OAK_DOOR), true);
     public static final Block BRONZE_DOOR = registerMiscBlock("bronze_door",
-            (settings) -> new DoorBlock(settings, BlockSetType.IRON), AbstractBlock.Settings.copy(Blocks.IRON_DOOR), true);
+            (settings) -> new DoorBlock(settings, BlockSetType.OAK), AbstractBlock.Settings.copy(Blocks.IRON_DOOR), true);
     public static final Block CRUDE_DOOR = registerMiscBlock("crude_door",
-            (settings) -> new DoorBlock(settings, BlockSetType.IRON), AbstractBlock.Settings.copy(Blocks.IRON_DOOR), true);
+            (settings) -> new DoorBlock(settings, BlockSetType.OAK), AbstractBlock.Settings.copy(Blocks.IRON_DOOR), true);
     public static final Block TREATED_STEEL_DOOR = registerMiscBlock("treated_steel_door",
-            (settings) -> new DoorBlock(settings, BlockSetType.IRON), AbstractBlock.Settings.copy(Blocks.IRON_DOOR), true);
+            (settings) -> new DoorBlock(settings, BlockSetType.OAK), AbstractBlock.Settings.copy(Blocks.IRON_DOOR), true);
     public static final Block AGED_WOOD_TRAPDOOR = registerMiscBlock("aged_wood_trapdoor",
             (settings) -> new TrapdoorBlock(settings, BlockSetType.DARK_OAK), AbstractBlock.Settings.copy(Blocks.DARK_OAK_TRAPDOOR), true);
     public static final Block BRONZE_TRAPDOOR = registerMiscBlock("bronze_trapdoor",
