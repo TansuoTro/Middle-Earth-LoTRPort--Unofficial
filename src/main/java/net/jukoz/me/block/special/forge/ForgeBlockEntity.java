@@ -121,7 +121,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
             }
         };
 
-        this.matchGetter = (input, world) -> world.getRecipeManager().getFirstMatch(RecipesME.FORGE, input, world);
+        this.matchGetter = RecipeManager.createCachedMatchGetter(RecipesME.FORGE);
     }
 
     public ItemStack getRenderStack(ForgeBlockEntity entity) {
