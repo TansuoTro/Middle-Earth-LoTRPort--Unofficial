@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#me:ingot_shaping",
+      "required": true
+    },
+    "me:rod",
+    "me:large_rod"
+  ]
+}

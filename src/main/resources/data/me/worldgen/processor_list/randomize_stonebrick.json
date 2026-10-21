@@ -41,7 +41,7 @@
           "output_state": {
             "Name": "minecraft:deepslate_redstone_ore",
             "Properties": {
-              "lit": false
+              "lit": 0
             }
           }
         }

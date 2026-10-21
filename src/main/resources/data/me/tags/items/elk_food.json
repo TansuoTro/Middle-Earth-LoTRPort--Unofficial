@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:sweet_berries",
+    "minecraft:dandelion",
+    "me:green_shrub",
+    "me:clovers",
+    "me:morsel",
+    "me:brown_bolete"
+  ]
+}

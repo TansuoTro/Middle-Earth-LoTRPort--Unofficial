@@ -12,6 +12,7 @@
     "me:khazad_steel_nugget",
     "me:edhel_steel_nugget",
     "me:burzum_steel_nugget",
-    "me:mithril_nugget"
+    "me:mithril_nugget",
+    "#me:ported_nugget_shaping"
   ]
 }

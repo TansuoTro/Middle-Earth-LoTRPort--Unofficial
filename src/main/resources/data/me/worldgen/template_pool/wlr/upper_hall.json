@@ -1,0 +1,26 @@
+{
+  "name": "me:upper_hall",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:wlr/hall/stables",
+        "projection": "rigid",
+        "processors": "me:randomize_wlr_walls",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:wlr/hall/trading_hall",
+        "projection": "rigid",
+        "processors": "me:randomize_wlr_walls",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "name": "me:house",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:dale/village/twin_house",
+        "projection": "rigid",
+        "processors": "me:randomize_dale_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:dale/village/peasant_house",
+        "projection": "rigid",
+        "processors": "me:randomize_dale_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:dale/village/bakery_house",
+        "projection": "rigid",
+        "processors": "me:randomize_dale_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:dale/village/lumber_house",
+        "projection": "rigid",
+        "processors": "me:randomize_dale_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:dale/village/house",
+        "projection": "rigid",
+        "processors": "me:randomize_dale_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:dale/village/house_1",
+        "projection": "rigid",
+        "processors": "me:randomize_dale_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:dale/village/great_house",
+        "projection": "rigid",
+        "processors": "me:randomize_dale_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:dale/village/smith_house",
+        "projection": "rigid",
+        "processors": "me:randomize_dale_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:dale/village/stables_house",
+        "projection": "rigid",
+        "processors": "me:randomize_dale_road"
+      }
+    }
+  ]
+}

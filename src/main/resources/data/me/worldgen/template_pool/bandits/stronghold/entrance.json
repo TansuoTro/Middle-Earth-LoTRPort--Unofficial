@@ -1,0 +1,16 @@
+{
+  "name": "me:bandits_stronghold_entrance",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:bandits/stronghold/entrance",
+        "projection": "rigid",
+        "processors": "me:randomize_dolomite_tiles",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    }
+  ]
+}

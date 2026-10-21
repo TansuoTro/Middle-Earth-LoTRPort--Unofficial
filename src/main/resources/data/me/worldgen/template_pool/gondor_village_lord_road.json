@@ -1,0 +1,15 @@
+{
+  "name": "me:gondor_village_lord_road",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:gondor/gondor_village_lord_road",
+        "projection": "terrain_matching",
+        "processors": "me:randomize_gondor_road"
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:brown_mushroom",
+    "minecraft:red_mushroom",
+    "me:white_mushroom",
+    "me:white_mushroom_tiller",
+    "me:ghostshroom",
+    "me:ghostshroom_tiller",
+    "me:cave_amanita",
+    "me:cave_amanita_tiller",
+    "me:yellow_amanita",
+    "me:yellow_amanita_tiller",
+    "me:deep_firecap",
+    "me:deep_firecap_tiller",
+    "me:sky_firecap",
+    "me:sky_firecap_tiller",
+    "me:morsel",
+    "me:morsel_tiller",
+    "me:violet_caps",
+    "me:violet_caps_tiller",
+    "me:brown_bolete",
+    "me:brown_bolete_tiller",
+    "me:trumpet_shroom",
+    "me:tall_trumpet_shroom",
+    "me:tubeshroom",
+    "me:tall_tubeshroom"
+  ]
+}

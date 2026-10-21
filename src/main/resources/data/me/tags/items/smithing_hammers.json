@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "me:copper_smithing_hammer",
+    "me:bronze_smithing_hammer",
+    "me:crude_smithing_hammer",
+    "me:smithing_hammer",
+    "me:noble_smithing_hammer",
+    "me:dwarven_smithing_hammer",
+    "me:dwarven_noble_smithing_hammer",
+    "me:elven_smithing_hammer",
+    "me:elven_noble_smithing_hammer",
+    "me:orcish_smithing_hammer",
+    "me:orcish_elite_smithing_hammer",
+    "me:mithril_smithing_hammer"
+  ]
+}

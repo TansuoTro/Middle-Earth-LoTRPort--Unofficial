@@ -1,0 +1,24 @@
+{
+  "name": "me:shire_village",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 4,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:shire/center_place",
+        "projection": "rigid",
+        "processors": "me:randomize_gondor_road"
+      }
+    },
+    {
+      "weight": 3,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:shire/center_place_1",
+        "projection": "rigid",
+        "processors": "me:randomize_gondor_road"
+      }
+    }
+  ]
+}

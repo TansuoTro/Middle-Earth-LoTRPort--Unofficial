@@ -41,7 +41,7 @@
           "output_state": {
             "Name": "minecraft:mossy_cobblestone",
             "Properties": {
-              "lit": false
+              "lit": 0
             }
           }
         },
@@ -57,7 +57,7 @@
           "output_state": {
             "Name": "minecraft:andesite",
             "Properties": {
-              "lit": false
+              "lit": 0
             }
           }
         }

@@ -1,0 +1,30 @@
+{
+  "replace": false,
+  "values": [
+    "me:harad_desert",
+    "me:harad",
+    "me:harad_woods",
+    "me:umbar",
+    "me:umbar_woods",
+    "me:corsair_coasts",
+    "me:harondor",
+    "me:ethir_anduin",
+    "me:ethir_anduin_river_delta",
+    "me:lebennin",
+    "me:lebennin_hills",
+    "me:lebennin_shores",
+    "me:tolfalas",
+    "me:belfalas",
+    "me:belfalas_forest",
+    "me:belfalas_hills",
+    "me:belfalas_beach",
+    "me:nurn",
+    "me:nurn_forest",
+    "me:nurn_hill",
+    "me:nurn_edge",
+    "me:nurn_edge_woods",
+    "me:eastern_nurn",
+    "me:torogwaith",
+    "me:gorgoroth"
+  ]
+}

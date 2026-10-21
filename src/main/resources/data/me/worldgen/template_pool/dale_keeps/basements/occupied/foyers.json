@@ -1,0 +1,17 @@
+{
+  "name": "me:dale_keeps/basements/occupied/foyers",
+  "fallback": "me:dale_keeps/all_fallback",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:dale_keeps/basements/occupied/main_foyer",
+        "projection": "rigid",
+        "processors": {
+          "processors": []
+        }
+      }
+    }
+  ]
+}

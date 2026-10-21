@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "me:turf",
+    "me:chalksoil_grass_block",
+    "me:loam_grass_block",
+    "me:peat_grass_block",
+    "me:silt_grass_block"
+  ]
+}

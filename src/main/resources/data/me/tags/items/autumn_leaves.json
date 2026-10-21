@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "me:maple_leaves",
+    "me:yellow_maple_leaves",
+    "me:orange_maple_leaves",
+    "me:red_maple_leaves",
+    "me:mallorn_leaves"
+  ]
+}

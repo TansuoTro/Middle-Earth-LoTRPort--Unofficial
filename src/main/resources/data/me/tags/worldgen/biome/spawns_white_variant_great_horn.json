@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "me:eregion_forest",
+    "me:fangorn",
+    "me:mirkwood",
+    "me:lothlorien_blossom",
+    "me:lothlorien_glade",
+    "me:woodland_realm",
+    "me:woodland_glade"
+  ]
+}

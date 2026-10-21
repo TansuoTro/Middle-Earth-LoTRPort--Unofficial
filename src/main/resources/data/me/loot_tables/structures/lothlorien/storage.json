@@ -1,6 +1,63 @@
 {
   "pools": [
     {
+      "bonus_rolls": 0.5,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bundle"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:lothlorien_banner_pattern",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:lorien_bow",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:lorien_leather_helmet"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:lorien_diadem"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:lorien_arming_coat"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:lorien_marchwarden_hood"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:lorien_marchwarden_cape"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:lorien_shield"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:elven_lantern"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:elven_boots",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 2
+        }
+      ],
+      "rolls": 2
+    },
+    {
       "rolls": 1,
       "bonus_rolls": {
         "min": 1,
@@ -16,7 +73,7 @@
     {
       "rolls": {
         "min": 1,
-        "max": 5
+        "max": 3
       },
       "entries": [
         {
@@ -28,7 +85,7 @@
     {
       "rolls": {
         "min": 0,
-        "max": 3
+        "max": 2
       },
       "entries": [
         {
@@ -45,7 +102,31 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "name": "me:canvas"
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 0,
+        "max": 2
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
           "name": "me:copper_coin"
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 0,
+        "max": 2
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "me:flax_seeds"
         }
       ]
     },
@@ -75,13 +156,25 @@
     },
     {
       "rolls": {
-        "min": 1,
-        "max": 3
+        "min": 0,
+        "max": 1
       },
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "me:mallos"
+          "name": "me:fabric"
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 0,
+        "max": 2
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "me:elanor"
         }
       ]
     },
@@ -106,18 +199,6 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:lead"
-        }
-      ]
-    },
-    {
-      "rolls": {
-        "min": 0,
-        "max": 1
-      },
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "me:lothlorien_banner_pattern"
         }
       ]
     }

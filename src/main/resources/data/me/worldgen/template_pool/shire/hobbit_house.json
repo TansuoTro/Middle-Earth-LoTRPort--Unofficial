@@ -1,0 +1,105 @@
+{
+  "name": "me:hobbit_house",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 5,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:shire/house",
+        "projection": "rigid",
+        "processors": "me:randomize_shire_road"
+      }
+    },
+    {
+      "weight": 5,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:shire/house_1",
+        "projection": "rigid",
+        "processors": "me:randomize_shire_road"
+      }
+    },
+    {
+      "weight": 4,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:shire/small_hobbit_hole",
+        "projection": "rigid",
+        "processors": "me:randomize_shire_road"
+      }
+    },
+    {
+      "weight": 4,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:shire/small_hobbit_hole_1",
+        "projection": "rigid",
+        "processors": "me:randomize_shire_road"
+      }
+    },
+    {
+      "weight": 4,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:shire/small_hobbit_hole_2",
+        "projection": "rigid",
+        "processors": "me:randomize_shire_road"
+      }
+    },
+    {
+      "weight": 4,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:shire/small_hobbit_hole_3",
+        "projection": "rigid",
+        "processors": "me:randomize_shire_road"
+      }
+    },
+    {
+      "weight": 4,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:shire/small_hobbit_hole_4",
+        "projection": "rigid",
+        "processors": "me:randomize_shire_road"
+      }
+    },
+    {
+      "weight": 4,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:shire/small_hobbit_hole_5",
+        "projection": "rigid",
+        "processors": "me:randomize_shire_road"
+      }
+    },
+    {
+      "weight": 4,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:shire/bakery_house",
+        "projection": "rigid",
+        "processors": "me:randomize_shire_road"
+      }
+    },
+    {
+      "weight": 4,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:shire/beekeeper_house",
+        "projection": "rigid",
+        "processors": "me:randomize_shire_road"
+      }
+    },
+    {
+      "weight": 3,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:shire/poor_hobbit_hole",
+        "projection": "rigid",
+        "processors": "me:randomize_shire_road"
+      }
+    }
+  ]
+}

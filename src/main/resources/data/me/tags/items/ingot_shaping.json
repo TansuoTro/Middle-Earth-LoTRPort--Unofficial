@@ -14,6 +14,7 @@
     "me:khazad_steel_ingot",
     "me:edhel_steel_ingot",
     "me:burzum_steel_ingot",
-    "me:mithril_ingot"
+    "me:mithril_ingot",
+    "#me:ported_ingot_shaping"
   ]
 }

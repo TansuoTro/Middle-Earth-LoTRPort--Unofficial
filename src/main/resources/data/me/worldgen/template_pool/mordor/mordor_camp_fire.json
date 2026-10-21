@@ -1,0 +1,24 @@
+{
+  "name": "me:mordor_firecamp_fire",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:mordor/mordor_camp_fire",
+        "projection": "terrain_matching",
+        "processors": "me:randomize_mordor_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:mordor/mordor_camp_fire_1",
+        "projection": "terrain_matching",
+        "processors": "me:randomize_mordor_road"
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "me:dale_keeps/basements/occupied/entrance_stairs",
+  "fallback": "me:dale_keeps/all_fallback",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:dale_keeps/basements/occupied/entrance/simple_stairs",
+        "projection": "rigid",
+        "processors": {
+          "processors": []
+        }
+      }
+    }
+  ]
+}

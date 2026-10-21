@@ -1,0 +1,33 @@
+{
+  "name": "me:hobbit_major_build",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 3,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:shire/inn_tavern",
+        "projection": "rigid",
+        "processors": "me:randomize_shire_road"
+      }
+    },
+    {
+      "weight": 5,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:shire/big_hobbit_hole",
+        "projection": "rigid",
+        "processors": "me:randomize_shire_road"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:shire/smith_house",
+        "projection": "rigid",
+        "processors": "me:randomize_shire_road"
+      }
+    }
+  ]
+}

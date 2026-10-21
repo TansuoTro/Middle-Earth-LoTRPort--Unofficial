@@ -1,0 +1,23 @@
+{
+  "replace": false,
+  "values": [
+    "me:black_curtain",
+    "me:blue_curtain",
+    "me:brown_curtain",
+    "me:burnt_curtain",
+    "me:dark_blue_curtain",
+    "me:dark_brown_curtain",
+    "me:dark_green_curtain",
+    "me:dark_red_curtain",
+    "me:fancy_blue_curtain",
+    "me:fancy_red_curtain",
+    "me:fancy_green_curtain",
+    "me:gray_curtain",
+    "me:green_curtain",
+    "me:purple_curtain",
+    "me:red_curtain",
+    "me:rotten_curtain",
+    "me:white_curtain",
+    "me:yellow_curtain"
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "name": "me:hamlet_house",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:wlr/hamlet/house",
+        "projection": "rigid",
+        "processors": "me:randomize_wlr_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:wlr/hamlet/house_1",
+        "projection": "rigid",
+        "processors": "me:randomize_wlr_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:wlr/hamlet/house_2",
+        "projection": "rigid",
+        "processors": "me:randomize_wlr_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:wlr/hamlet/house_3",
+        "projection": "rigid",
+        "processors": "me:randomize_wlr_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:wlr/hamlet/house_4",
+        "projection": "rigid",
+        "processors": "me:randomize_wlr_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:wlr/hamlet/house_5",
+        "projection": "rigid",
+        "processors": "me:randomize_wlr_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:wlr/hamlet/house_6",
+        "projection": "rigid",
+        "processors": "me:randomize_wlr_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:wlr/hamlet/dinner_house",
+        "projection": "rigid",
+        "processors": "me:randomize_wlr_road"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:wlr/hamlet/statue_fountain",
+        "projection": "rigid",
+        "processors": "me:randomize_wlr_road"
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:ender_dragon",
+    "minecraft:wither",
+    "minecraft:warden",
+    "minecraft:ravager",
+    "minecraft:elder_guardian",
+    "me:stone_troll",
+    "me:snow_troll",
+    "me:cave_troll"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "me:hobbit_village",
+      "weight": 7
+    },
+    {
+      "structure": "me:hobbit_windmill_andesite",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 18,
+    "separation": 8,
+    "salt": 137345924
+  }
+}

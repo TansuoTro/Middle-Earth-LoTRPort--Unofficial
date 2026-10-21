@@ -1,0 +1,23 @@
+{
+  "replace": false,
+  "values": [
+    "me:forodwaith",
+    "me:southern_forochel",
+    "me:northern_wastelands",
+    "me:old_angmar",
+    "me:old_angmar_forest",
+    "me:old_angmar_cold_hill",
+    "me:old_angmar_frozen_hill",
+    "me:withered_heath",
+    "me:gundabad_plains",
+    "me:grey_plains",
+    "me:grey_ashen_woods",
+    "me:desolated_lands",
+    "me:lonely_mountain_taiga",
+    "me:northern_rhovanion_forest",
+    "me:northern_rhovanion_hills",
+    "me:lonely_mountain_foothills",
+    "me:iron_hills_frontier",
+    "me:iron_foothills"
+  ]
+}

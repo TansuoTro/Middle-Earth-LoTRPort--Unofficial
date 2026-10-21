@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:farmland",
+    "me:loam_farmland",
+    "me:peat_farmland",
+    "me:silt_farmland",
+    "me:chalksoil_farmland"
+  ]
+}

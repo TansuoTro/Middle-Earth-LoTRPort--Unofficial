@@ -1,16 +1,51 @@
 {
   "pools": [
     {
-      "rolls": {
-        "min": 1,
-        "max": 3
-      },
+      "bonus_rolls": 0.5,
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:rotten_flesh"
+          "name": "minecraft:bundle"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:misty_mountains_orcs_banner_pattern",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:gundabad_bone_pauldron"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:gundabad_leather_scale_coat"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:crude_spear"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:crude_dagger"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:orcish_leather_skirt"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:gundabad_peaks_painted_wooden_shield"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:gundabad_bow"
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 3
         }
-      ]
+      ],
+      "rolls": 1
     },
     {
       "rolls": {
@@ -20,7 +55,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "me:orc_bone"
+          "name": "me:dirty_bone"
         }
       ]
     },
@@ -56,30 +91,6 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "me:misty_orcs_eye_banner_pattern"
-        }
-      ]
-    },
-    {
-      "rolls": {
-        "min": 0,
-        "max": 1
-      },
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "me:misty_orcs_peaks_banner_pattern"
-        }
-      ]
-    },
-	{
-      "rolls": {
-        "min": 0,
-        "max": 1
-      },
-      "entries": [
-        {
-          "type": "minecraft:item",
           "name": "minecraft:skeleton_skull"
         }
       ]
@@ -93,6 +104,30 @@
         {
           "type": "minecraft:item",
           "name": "me:ash_block"
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 1,
+        "max": 3
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "me:fur"
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 1,
+        "max": 3
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "me:fang"
         }
       ]
     }

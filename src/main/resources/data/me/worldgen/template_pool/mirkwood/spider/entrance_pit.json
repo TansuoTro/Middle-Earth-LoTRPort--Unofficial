@@ -1,0 +1,16 @@
+{
+  "name": "me:mirkwood/spider/entrance_pit",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:mirkwood/spider/burrow_entrance_pit",
+        "projection": "rigid",
+        "processors": "minecraft:empty",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    }
+  ]
+}

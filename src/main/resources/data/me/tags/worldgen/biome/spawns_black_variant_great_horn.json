@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "me:northern_mirkwood_marshes",
+    "me:mirkwood",
+    "me:dark_mirkwood",
+    "me:fangorn",
+    "me:woodland_realm",
+    "me:trollshaws"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "replace": false,
+  "values": [
+    "me:blue_mountains_peaks",
+    "me:caradhras",
+    "me:caradhras_peaks",
+    "me:celebdil",
+    "me:celebdil_peaks",
+    "me:fanuidhol",
+    "me:fanuidhol_peaks",
+    "me:forodwaith",
+    "me:frozen_ocean",
+    "me:frozen_pond",
+    "me:grey_mountains_peaks",
+    "me:ice_cave",
+    "me:lonely_mountain_peaks",
+    "me:misty_mountains",
+    "me:misty_mountains_peaks",
+    "me:mount_gundabad_peaks",
+    "me:northern_wastelands",
+    "me:old_angmar_cold_hill",
+    "me:old_angmar_frozen_hill",
+    "me:southern_forochel",
+    "me:white_mountains_peaks"
+  ]
+}

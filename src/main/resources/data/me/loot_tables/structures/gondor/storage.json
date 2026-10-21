@@ -1,6 +1,78 @@
 {
   "pools": [
     {
+      "bonus_rolls": 0.5,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bundle"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:gondor_banner_pattern",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:gondorian_leather_cuirass",
+          "functions": [
+            {
+              "add": false,
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 0.9,
+                "min": 0.5
+              },
+              "function": "minecraft:set_damage"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:gambeson",
+          "functions": [
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{display: {color: 4671304}}"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:gondorian_bow"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:gondorian_boots"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "me:heater_shield",
+          "functions": [
+            {
+              "function": "minecraft:set_banner_pattern",
+              "patterns": [
+                {
+                  "pattern": "minecraft:base",
+                  "color": "black"
+                },
+                {
+                  "pattern": "me:tree",
+                  "color": "white"
+                }
+              ],
+              "append": true
+            }
+          ]
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 2
+        }
+      ],
+      "rolls": 1
+    },
+    {
       "rolls": {
         "min": 0,
         "max": 2
@@ -24,7 +96,7 @@
         }
       ]
     },
-	{
+    {
       "rolls": {
         "min": 1,
         "max": 3
@@ -60,7 +132,7 @@
         }
       ]
     },
-	{
+    {
       "rolls": {
         "min": 0,
         "max": 1
@@ -81,18 +153,6 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:lead"
-        }
-      ]
-    },
-    {
-      "rolls": {
-        "min": 0,
-        "max": 1
-      },
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "me:gondor_banner_pattern"
         }
       ]
     }

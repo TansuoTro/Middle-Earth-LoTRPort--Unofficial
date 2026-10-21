@@ -1,0 +1,24 @@
+{
+  "name": "me:watchtower",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:dale/village/watchtower",
+        "projection": "rigid",
+        "processors": "me:randomize_dale_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:dale/village/wooden_watchtower",
+        "projection": "rigid",
+        "processors": "me:randomize_dale_road"
+      }
+    }
+  ]
+}

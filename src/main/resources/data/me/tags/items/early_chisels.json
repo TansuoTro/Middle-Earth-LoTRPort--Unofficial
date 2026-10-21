@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#me:late_chisels",
+    "#me:mid_chisels",
+    "me:iron_chisel"
+  ]
+}

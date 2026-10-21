@@ -1,0 +1,15 @@
+{
+  "name": "me:dale/wheat_field",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:dale/wheat_field",
+        "projection": "terrain_matching",
+        "processors": "me:randomize_dale_road"
+      }
+    }
+  ]
+}

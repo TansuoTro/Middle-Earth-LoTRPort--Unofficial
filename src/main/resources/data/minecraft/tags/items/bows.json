@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "me:rohirric_bow",
-    "me:umbar_bow"
+    "me:umbar_bow",
+    "#me:ported_bows"
   ]
 }

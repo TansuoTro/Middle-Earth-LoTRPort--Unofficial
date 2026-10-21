@@ -1,0 +1,14 @@
+{
+  "name": "me:mega_mallorn_tree",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "element": {
+        "element_type": "minecraft:feature_pool_element",
+        "feature": "me:mega_mallorn_structure_tree",
+        "projection": "rigid"
+      },
+      "weight": 1
+    }
+  ]
+}

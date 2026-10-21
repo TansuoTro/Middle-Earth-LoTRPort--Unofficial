@@ -1,0 +1,42 @@
+{
+  "name": "me:hamlet_road",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:wlr/hamlet/road",
+        "projection": "terrain_matching",
+        "processors": "me:randomize_wlr_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:wlr/hamlet/road_1",
+        "projection": "terrain_matching",
+        "processors": "me:randomize_wlr_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:wlr/hamlet/road_2",
+        "projection": "terrain_matching",
+        "processors": "me:randomize_wlr_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:wlr/hamlet/road_3",
+        "projection": "terrain_matching",
+        "processors": "me:randomize_wlr_road"
+      }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "me:village_main_road",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:shire/village_end_road",
+        "projection": "terrain_matching",
+        "processors": "me:randomize_shire_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:shire/village_end_road_1",
+        "projection": "terrain_matching",
+        "processors": "me:randomize_shire_road"
+      }
+    }
+  ]
+}

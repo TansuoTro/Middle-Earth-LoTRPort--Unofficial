@@ -1,0 +1,26 @@
+{
+  "name": "me:mirkwood/spider/treasure_room",
+  "fallback": "me:mirkwood/spider/lower_dead_end",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:mirkwood/spider/burrow_treasure_room",
+        "projection": "rigid",
+        "processors": "minecraft:empty",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:mirkwood/spider/burrow_looted_treasure_room",
+        "projection": "rigid",
+        "processors": "minecraft:empty",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    }
+  ]
+}

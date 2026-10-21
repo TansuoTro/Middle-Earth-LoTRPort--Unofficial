@@ -12,6 +12,10 @@
     "me:steel_pickaxe",
     "me:jade_pickaxe",
     "me:bronze_pickaxe",
-    "me:mithril_pickaxe"
+    "me:mithril_pickaxe",
+    "me:khazad_steel_pickaxe",
+    "me:crude_pickaxe",
+    "me:burzum_steel_pickaxe",
+    "me:edhel_steel_pickaxe"
   ]
 }

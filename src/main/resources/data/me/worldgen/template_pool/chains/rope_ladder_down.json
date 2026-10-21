@@ -1,0 +1,14 @@
+{
+  "name": "me:rope_ladder_down",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "element": {
+        "element_type": "minecraft:feature_pool_element",
+        "feature": "me:rope_ladder_down",
+        "projection": "rigid"
+      },
+      "weight": 1
+    }
+  ]
+}

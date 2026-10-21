@@ -1,0 +1,32 @@
+{
+  "replace": false,
+  "values": [
+    "me:dorwinion",
+    "me:dorwinion_lavender_field",
+    "me:corsair_coasts",
+    "me:dale_meadow",
+    "me:northern_dunland_glade",
+    "me:eregion_glade",
+    "me:harad",
+    "me:harad_woods",
+    "me:harondor",
+    "me:ithilien_glade",
+    "me:lebennin",
+    "me:lebennin_shores",
+    "me:lindon_hidden_blossom",
+    "me:lindon_meadow",
+    "me:lindon_shores",
+    "me:lindon_shores_cliffs",
+    "me:lorien_edge",
+    "me:lossarnach",
+    "me:lothlorien_blossom",
+    "me:lush_cave",
+    "me:oasis",
+    "me:old_arthedain_meadow",
+    "me:rhun_field",
+    "me:rhun_hidden_blossom",
+    "me:umbar",
+    "me:umbar_woods",
+    "me:woodland_glade"
+  ]
+}

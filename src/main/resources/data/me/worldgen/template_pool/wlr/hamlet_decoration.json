@@ -1,0 +1,33 @@
+{
+  "name": "me:hamlet_decoration",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:wlr/hamlet/decoration",
+        "projection": "rigid",
+        "processors": "me:randomize_wlr_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:wlr/hamlet/decoration_1",
+        "projection": "rigid",
+        "processors": "me:randomize_wlr_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:wlr/hamlet/decoration_1",
+        "projection": "terrain_matching",
+        "processors": "me:randomize_wlr_road"
+      }
+    }
+  ]
+}

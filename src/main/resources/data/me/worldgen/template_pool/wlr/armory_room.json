@@ -1,0 +1,16 @@
+{
+  "name": "me:armory_room",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:wlr/hall/armory_room",
+        "projection": "rigid",
+        "processors": "me:randomize_wlr_walls",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    }
+  ]
+}

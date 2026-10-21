@@ -1,0 +1,24 @@
+{
+  "name": "me:dale_keep_side_ward",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:dale/keep/side_ward_stables",
+        "projection": "rigid",
+        "processors": "me:randomize_dale_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:dale/keep/side_ward_storage",
+        "projection": "rigid",
+        "processors": "me:randomize_dale_road"
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "me:center_place_well",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:shire/center_place_well",
+        "projection": "rigid",
+        "processors": "me:randomize_shire_road"
+      }
+    }
+  ]
+}

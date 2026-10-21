@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "me:basic_cave",
+    "me:lush_cave",
+    "me:dripstone_cave",
+    "me:dolomite_cave",
+    "me:galonn_cave",
+    "me:gilded_cave",
+    "me:izheraban_cave",
+    "me:limestone_cave",
+    "me:mountain_cave",
+    "me:mud_cave",
+    "me:fungus_cave",
+    "me:basalt_cave",
+    "me:magma_cave",
+    "me:mithril_cave",
+    "me:dry_cave",
+    "me:ice_cave"
+  ]
+}

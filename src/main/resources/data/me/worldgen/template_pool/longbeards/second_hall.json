@@ -1,0 +1,16 @@
+{
+  "name": "me:longbeards_second_hall",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:longbeards/hall_well",
+        "projection": "rigid",
+        "processors": "minecraft:empty",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    }
+  ]
+}

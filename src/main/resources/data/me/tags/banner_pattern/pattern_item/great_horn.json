@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "me:elk",
+    "me:elk_antlers",
+    "me:elk_shed",
+    "me:stag",
+    "me:stag_antlers",
+    "me:stag_shed"
+  ]
+}

@@ -1,17 +1,25 @@
 {
   "structures": [
-	{
+    {
+      "structure": "me:lothlorien_houses",
+      "weight": 3
+    },
+    {
+      "structure": "me:lothlorien_tree_talan",
+      "weight": 2
+    },
+    {
       "structure": "me:lorien_house",
       "weight": 3
     },
-	{
+    {
       "structure": "me:lorien_temple",
       "weight": 2
     }
   ],
   "placement": {
     "type": "minecraft:random_spread",
-    "spacing": 9,
+    "spacing": 10,
     "separation": 5,
     "salt": 13238135
   }

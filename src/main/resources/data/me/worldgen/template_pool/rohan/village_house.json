@@ -1,0 +1,114 @@
+{
+  "name": "me:village_house",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 3,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:rohan/village/farm_house",
+        "projection": "rigid",
+        "processors": "me:randomize_rohan_road"
+      }
+    },
+    {
+      "weight": 3,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:rohan/village/farm_house_1",
+        "projection": "rigid",
+        "processors": "me:randomize_rohan_road"
+      }
+    },
+    {
+      "weight": 3,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:rohan/village/peasant_house",
+        "projection": "rigid",
+        "processors": "me:randomize_rohan_road"
+      }
+    },
+    {
+      "weight": 3,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:rohan/village/peasant_house_1",
+        "projection": "rigid",
+        "processors": "me:randomize_rohan_road"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:rohan/village/storage_house",
+        "projection": "rigid",
+        "processors": "me:randomize_rohan_road"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:rohan/village/storage_house_1",
+        "projection": "rigid",
+        "processors": "me:randomize_rohan_road"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:rohan/village/beekeeper_house",
+        "projection": "rigid",
+        "processors": "me:randomize_rohan_road"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:rohan/village/beekeeper_house_house_1",
+        "projection": "rigid",
+        "processors": "me:randomize_rohan_road"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:rohan/village/tower_house",
+        "projection": "rigid",
+        "processors": "me:randomize_rohan_road"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:rohan/village/tower_house_1",
+        "projection": "rigid",
+        "processors": "me:randomize_rohan_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:rohan/village/smith_house",
+        "projection": "rigid",
+        "processors": "me:randomize_rohan_road"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:rohan/village/smith_house_1",
+        "projection": "rigid",
+        "processors": "me:randomize_rohan_road"
+      }
+    }
+  ]
+}

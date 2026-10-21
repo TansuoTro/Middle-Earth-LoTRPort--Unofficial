@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "me:mordor",
+    "me:mordor_ashen_forest",
+    "me:mordor_hill",
+    "me:mordor_wastes",
+    "me:morgul_forest",
+    "me:morgul_river",
+    "me:morgul_vale",
+    "me:gorgoroth",
+    "me:gorgoroth_ashen_woods",
+    "me:gorgoroth_delta",
+    "me:udun",
+    "me:ered_lithui_base",
+    "me:ered_lithui",
+    "me:ered_lithui_peaks",
+    "me:torogwaith",
+    "me:mount_doom",
+    "me:mount_doom_pit"
+  ]
+}

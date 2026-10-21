@@ -1,6 +1,14 @@
 {
   "structures": [
-	{
+    {
+      "structure": "me:gondor_watch_tower",
+      "weight": 3
+    },
+    {
+      "structure": "me:gondor_village",
+      "weight": 3
+    },
+    {
       "structure": "me:gondor_house",
       "weight": 1
     }

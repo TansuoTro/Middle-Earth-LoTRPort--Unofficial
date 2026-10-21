@@ -1,0 +1,15 @@
+{
+  "name": "me:village_right_road",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:rohan/village/right_road",
+        "projection": "terrain_matching",
+        "processors": "me:randomize_rohan_road"
+      }
+    }
+  ]
+}

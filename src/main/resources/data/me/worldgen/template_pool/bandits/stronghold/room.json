@@ -1,0 +1,146 @@
+{
+  "name": "me:bandits_stronghold_room",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:bandits/stronghold/room",
+        "projection": "rigid",
+        "processors": "me:randomize_dolomite_tiles",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:bandits/stronghold/feast_room",
+        "projection": "rigid",
+        "processors": "me:randomize_dolomite_tiles",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:bandits/stronghold/corridor",
+        "projection": "rigid",
+        "processors": "me:randomize_dolomite_tiles",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:bandits/stronghold/corridor_prison",
+        "projection": "rigid",
+        "processors": "me:randomize_dolomite_tiles",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:bandits/stronghold/corridor_split",
+        "projection": "rigid",
+        "processors": "me:randomize_dolomite_tiles",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:bandits/stronghold/corridor_storage",
+        "projection": "rigid",
+        "processors": "me:randomize_dolomite_tiles",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:bandits/stronghold/cross_junction",
+        "projection": "rigid",
+        "processors": "me:randomize_dolomite_tiles",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:bandits/stronghold/cross_junction_prison",
+        "projection": "rigid",
+        "processors": "me:randomize_dolomite_tiles",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:bandits/stronghold/corridor_prison_library",
+        "projection": "rigid",
+        "processors": "me:randomize_dolomite_tiles",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:bandits/stronghold/double_floor_junction",
+        "projection": "rigid",
+        "processors": "me:randomize_dolomite_tiles",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:bandits/stronghold/double_floor_long_stairs",
+        "projection": "rigid",
+        "processors": "me:randomize_dolomite_tiles",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:bandits/stronghold/double_floor_prison",
+        "projection": "rigid",
+        "processors": "me:randomize_dolomite_tiles",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:bandits/stronghold/double_floor_ruins",
+        "projection": "rigid",
+        "processors": "me:randomize_dolomite_tiles",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "me:bandits/stronghold/double_floor_tjunction",
+        "projection": "rigid",
+        "processors": "me:randomize_dolomite_tiles",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    }
+  ]
+}
