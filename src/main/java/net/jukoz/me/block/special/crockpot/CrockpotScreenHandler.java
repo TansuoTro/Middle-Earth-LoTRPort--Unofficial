@@ -1,29 +1,28 @@
 package net.jukoz.me.block.special.crockpot;
 
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.core.BlockPos;
 import net.jukoz.me.gui.ModScreenHandlers;
 
-public class CrockpotScreenHandler extends ScreenHandler {
+public class CrockpotScreenHandler extends AbstractContainerMenu {
     final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+    private final ContainerData propertyDelegate;
     protected BlockPos pos;
 
-    public CrockpotScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos blockPos) {
-        this(syncId, playerInventory, new SimpleInventory(5), new ArrayPropertyDelegate(1));
+    public CrockpotScreenHandler(int syncId, Inventory playerInventory, BlockPos blockPos) {
+        this(syncId, playerInventory, new SimpleContainer(5), new SimpleContainerData(1));
         this.pos = blockPos;
     }
 
-    public CrockpotScreenHandler(int syncId, PlayerInventory playerInventory,
-                                 Inventory inventory, PropertyDelegate propertyDelegate) {
+    public CrockpotScreenHandler(int syncId, Inventory playerInventory,
+                                 Inventory inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.CROCKPOT_SCREEN_HANDLER, syncId);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
@@ -85,7 +84,7 @@ public class CrockpotScreenHandler extends ScreenHandler {
         return this.inventory.canPlayerUse(player);
     }
 
-    private void addPlayerInventory(PlayerInventory playerInventory) {
+    private void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
@@ -93,7 +92,7 @@ public class CrockpotScreenHandler extends ScreenHandler {
         }
     }
 
-    private void addPlayerHotbar(PlayerInventory playerInventory) {
+    private void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
         }

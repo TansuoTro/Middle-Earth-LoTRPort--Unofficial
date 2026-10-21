@@ -1,16 +1,17 @@
 package net.jukoz.me.entity.spider.scuttler;
+
 import net.jukoz.me.compat.client.render.MEAnimationStates;
 import net.jukoz.me.compat.client.render.MEMobEntityRenderer;
-
 import net.minecraft.client.renderer.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.model.EntityModelLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.entity.EntityModelLayersME;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 public class ShelobiteScuttlerRenderer extends MEMobEntityRenderer<ShelobiteScuttlerEntity, ShelobiteScuttlerRenderState, ShelobiteScuttlerModel> {
 
-    public ShelobiteScuttlerRenderer(EntityRendererFactory.Context context) {
+    public ShelobiteScuttlerRenderer(EntityRendererProvider.Context context) {
         this(context, 0.45F, EntityModelLayersME.SHELOBITE_SCUTTLER);
     }
 
@@ -19,7 +20,7 @@ public class ShelobiteScuttlerRenderer extends MEMobEntityRenderer<ShelobiteScut
         return new ShelobiteScuttlerRenderState();
     }
 
-    protected ShelobiteScuttlerRenderer(EntityRendererFactory.Context ctx, float shadowRadius, EntityModelLayer layer) {
+    protected ShelobiteScuttlerRenderer(EntityRendererProvider.Context ctx, float shadowRadius, ModelLayerLocation layer) {
         super(ctx, new ShelobiteScuttlerModel(ctx.getPart(layer)), shadowRadius);
     }
 

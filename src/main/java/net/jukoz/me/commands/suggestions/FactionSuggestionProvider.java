@@ -7,14 +7,13 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.jukoz.me.resources.datas.common.FactionType;
 import net.jukoz.me.resources.datas.factions.Faction;
 import net.jukoz.me.resources.datas.factions.FactionLookup;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.resources.ResourceLocation;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class FactionSuggestionProvider implements SuggestionProvider<ServerCommandSource> {
+public class FactionSuggestionProvider implements SuggestionProvider<CommandSourceStack> {
     boolean onlyJoinable = true;
     public FactionSuggestionProvider(){
 
@@ -23,7 +22,7 @@ public class FactionSuggestionProvider implements SuggestionProvider<ServerComma
         this.onlyJoinable = onlyJoinable;
     }
     @Override
-    public CompletableFuture<Suggestions> getSuggestions(CommandContext<ServerCommandSource> context, SuggestionsBuilder builder) {
+    public CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
         List<Faction> candidates = FactionLookup.getAllJoinableFaction(context.getSource().getWorld());
         List<ResourceLocation> identifiers = new ArrayList<>();
         for(Faction faction : candidates){

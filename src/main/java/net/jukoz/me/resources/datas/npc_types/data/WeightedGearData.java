@@ -1,14 +1,13 @@
 package net.jukoz.me.resources.datas.npc_types.data;
-import net.jukoz.me.compat.NbtCompat;
 
+import net.jukoz.me.compat.NbtCompat;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.Tag;
 import net.jukoz.me.api.dtos.WeightedItem;
 import net.jukoz.me.MiddleEarth;
-
 import java.util.HashMap;
 
 public class WeightedGearData extends WeightedItem<HashMap<EquipmentSlot, GearSlotPool>> {
@@ -34,7 +33,7 @@ public class WeightedGearData extends WeightedItem<HashMap<EquipmentSlot, GearSl
     private void addSlot(CompoundTag gearNbt, EquipmentSlot equipmentSlot) {
         if(gearNbt.get(equipmentSlot.getName().toLowerCase()) != null){
             if(gearNbt.get(equipmentSlot.getName().toLowerCase()) != null){
-                NbtElement element = gearNbt.get(equipmentSlot.getName());
+                Tag element = gearNbt.get(equipmentSlot.getName());
                 this.item.put(equipmentSlot, GearSlotPool.readNbt(element));
             }
         }
@@ -62,8 +61,8 @@ public class WeightedGearData extends WeightedItem<HashMap<EquipmentSlot, GearSl
     }
 
     @Override
-    public NbtElement getNbt(){
-        NbtElement nbt = super.getNbt();
+    public Tag getNbt(){
+        Tag nbt = super.getNbt();
         if(nbt == null)
             nbt = new CompoundTag();
 

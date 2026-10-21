@@ -1,7 +1,7 @@
 package net.jukoz.me.commands.custom;
+
 import net.jukoz.me.compat.NbtCompat;
 import net.jukoz.me.compat.METext;
-
 import net.jukoz.me.item.MEComponents;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -21,15 +21,13 @@ import net.jukoz.me.item.utils.armor.backAttachments.BackAttachmentsME;
 import net.jukoz.me.item.utils.armor.helmetAttachments.HelmetAttachmentsStatesME;
 import net.jukoz.me.item.utils.armor.helmetAttachments.HelmetAttachmentsME;
 import net.jukoz.me.utils.ModColors;
-import net.minecraft.command.CommandRegistryAccess;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
-
 import java.util.Objects;
-
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
@@ -40,7 +38,7 @@ public class CommandCustomEquipment {
     private static final String BACK_ATTACHMENT_VALUE = "back_attachment_value";
     private static final String HELMENT_ATTACHMENT_VALUE = "helmet_attachment_value";
 
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandRegistryAccess, Commands.RegistrationEnvironment registrationEnvironment) {
 
         dispatcher.register(literal(ModCommands.BASE_COMMAND)
                 .requires(source -> source.hasPermissionLevel(2))
@@ -59,7 +57,7 @@ public class CommandCustomEquipment {
                                 .executes(CommandCustomEquipment::setHelmetAttachment)))));
     }
 
-    private static int setBackAttachment(CommandContext<ServerCommandSource> context) {
+    private static int setBackAttachment(CommandContext<CommandSourceStack> context) {
         BackAttachmentsME backAttachment = BackAttachmentsME.valueOf(StringArgumentType.getString(context, BACK_ATTACHMENT_VALUE).toUpperCase());
 
         ItemStack handStack = Objects.requireNonNull(context.getSource().getPlayer()).getInventory().getMainHandStack();
@@ -82,7 +80,7 @@ public class CommandCustomEquipment {
         }
     }
 
-    private static int setHelmetAttachment(CommandContext<ServerCommandSource> context) {
+    private static int setHelmetAttachment(CommandContext<CommandSourceStack> context) {
         HelmetAttachmentsME helmetAttachment = HelmetAttachmentsME.valueOf(StringArgumentType.getString(context, HELMENT_ATTACHMENT_VALUE).toUpperCase());
 
         ItemStack handStack = Objects.requireNonNull(context.getSource().getPlayer()).getInventory().getMainHandStack();

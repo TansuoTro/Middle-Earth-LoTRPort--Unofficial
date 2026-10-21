@@ -1,15 +1,14 @@
 package net.jukoz.me.gui.sack;
 
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 
-public class SackScreenHandler extends ScreenHandler {
+public class SackScreenHandler extends AbstractContainerMenu {
 	private static final int CONTAINER_SIZE = 9;
 	private static final int INVENTORY_START = 9;
 	private static final int INVENTORY_END = 36;
@@ -17,12 +16,12 @@ public class SackScreenHandler extends ScreenHandler {
 	private static final int HOTBAR_END = 45;
 	private final Inventory inventory;
 
-	public SackScreenHandler(int syncId, PlayerInventory playerInventory) {
-		this(syncId, playerInventory, new SimpleInventory(9));
+	public SackScreenHandler(int syncId, Inventory playerInventory) {
+		this(syncId, playerInventory, new SimpleContainer(9));
 	}
 
-	public SackScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory) {
-		super(ScreenHandlerType.GENERIC_3X3, syncId);
+	public SackScreenHandler(int syncId, Inventory playerInventory, Inventory inventory) {
+		super(MenuType.GENERIC_3X3, syncId);
 		checkSize(inventory, CONTAINER_SIZE);
 		this.inventory = inventory;
 		inventory.onOpen(playerInventory.player);
@@ -31,7 +30,7 @@ public class SackScreenHandler extends ScreenHandler {
 		this.addPlayerHotbar(playerInventory);
 	}
 
-	private void addPlayerInventory(PlayerInventory playerInventory) {
+	private void addPlayerInventory(Inventory playerInventory) {
 		for (int i = 0; i < 3; ++i) {
 			for (int j = 0; j < 9; ++j) {
 				this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
@@ -39,7 +38,7 @@ public class SackScreenHandler extends ScreenHandler {
 		}
 	}
 
-	private void addPlayerHotbar(PlayerInventory playerInventory) {
+	private void addPlayerHotbar(Inventory playerInventory) {
 		for (int i = 0; i < 9; ++i) {
 			this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
 		}

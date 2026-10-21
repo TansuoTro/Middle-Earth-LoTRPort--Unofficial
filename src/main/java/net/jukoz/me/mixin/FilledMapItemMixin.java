@@ -2,7 +2,7 @@ package net.jukoz.me.mixin;
 
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraft.item.FilledMapItem;
+import net.minecraft.world.item.MapItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.jukoz.me.MiddleEarth;
@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(FilledMapItem.class)
+@Mixin(MapItem.class)
 public class FilledMapItemMixin {
     @Redirect(
             method = "updateColors",

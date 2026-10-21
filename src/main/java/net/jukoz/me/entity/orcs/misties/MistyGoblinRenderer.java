@@ -3,24 +3,25 @@ package net.jukoz.me.entity.orcs.misties;
 import com.google.common.collect.Maps;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.BipedEntityRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
+import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.model.EntityModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
-
 import java.util.Map;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
-public class MistyGoblinRenderer extends BipedEntityRenderer<MistyGoblinEntity, MistyGoblinModel<MistyGoblinEntity>> {
+public class MistyGoblinRenderer extends HumanoidMobRenderer<MistyGoblinEntity, MistyGoblinModel<MistyGoblinEntity>> {
     private static final String PATH = "textures/entities/orcs/misties/";
 
-    public MistyGoblinRenderer(EntityRendererFactory.Context ctx) {
+    public MistyGoblinRenderer(EntityRendererProvider.Context ctx) {
         super(ctx, new MistyGoblinModel<>(ctx.getPart(ModEntityModelLayers.ORC)), 0.5f);
-        this.addFeature(new ArmorFeatureRenderer<>(this, new MistyGoblinModel(ctx.getPart(EntityModelLayers.PLAYER_INNER_ARMOR)),
-                new MistyGoblinModel(ctx.getPart(EntityModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
+        this.addFeature(new HumanoidArmorLayer<>(this, new MistyGoblinModel(ctx.getPart(ModelLayers.PLAYER_INNER_ARMOR)),
+                new MistyGoblinModel(ctx.getPart(ModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
 
     }
 
@@ -41,7 +42,7 @@ public class MistyGoblinRenderer extends BipedEntityRenderer<MistyGoblinEntity, 
 
     @Override
     public void render(MistyGoblinEntity entity, float entityYaw, float partialTick, PoseStack poseStack,
-                       VertexConsumerProvider bufferSource, int packedLight) {
+                       MultiBufferSource bufferSource, int packedLight) {
 
         poseStack.scale(0.75f, 0.75f, 0.75f);
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);

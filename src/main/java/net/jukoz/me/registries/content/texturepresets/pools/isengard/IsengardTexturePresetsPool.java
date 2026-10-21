@@ -13,7 +13,6 @@ import net.jukoz.me.resources.datas.texture_presets.TexturePresetDataPool;
 import net.jukoz.me.resources.datas.common.EntityCategories;
 import net.jukoz.me.api.dtos.WeightedIdentifier;
 import net.jukoz.me.resources.datas.texture_presets.WeightedTexturePresetHolder;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,7 +25,6 @@ public class IsengardTexturePresetsPool {
     public final static TexturePresetDataPool HUMAN;
     public final static TexturePresetDataPool ORC;
     public final static TexturePresetDataPool URUK_HAI;
-
 
     public static List<TexturePresetsRegistry.RegisterableNpcTextureData> fetchAll() {
         return List.of(
@@ -77,7 +75,6 @@ public class IsengardTexturePresetsPool {
                                 )
                         }
                 ));
-
 
         BLACK_NUMENOREAN_PRESET = new WeightedTexturePresetHolder()
                 .withMaterials(CharacterMaterialTypes.EYE, List.of(

@@ -5,9 +5,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.jukoz.me.statusEffects.ModStatusEffects;
 import net.jukoz.me.utils.HallucinationData;
 import net.jukoz.me.utils.IEntityDataSaver;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.Item;
@@ -21,13 +21,13 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @OnlyIn(Dist.CLIENT)
-@Mixin(AbstractClientPlayerEntity.class)
+@Mixin(AbstractClientPlayer.class)
 public abstract class AbstractClientPlayerEntityMixin {
 
-    @Shadow @Final public ClientWorld clientWorld;
+    @Shadow @Final public ClientLevel clientWorld;
     @Inject(method = "getFovMultiplier()F", at =@At("TAIL"), cancellable = true)
     private void injected(CallbackInfoReturnable<Float> cir) {
-    Player player = MinecraftClient.getInstance().player;
+    Player player = Minecraft.getInstance().player;
         assert player != null;
         if(player.hasStatusEffect(ModStatusEffects.HALLUCINATION)){
             float intensity = (float) HallucinationData.readHallucination((IEntityDataSaver) player) / 100f;

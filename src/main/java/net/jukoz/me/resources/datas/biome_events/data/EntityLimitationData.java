@@ -2,7 +2,6 @@ package net.jukoz.me.resources.datas.biome_events.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
 import java.util.Optional;
 
 public class EntityLimitationData {

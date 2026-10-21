@@ -3,25 +3,25 @@ package net.jukoz.me.entity.crab;
 import com.google.common.collect.Maps;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.model.EntityModelLayer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
-
 import java.util.Map;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
-public class CrabRenderer extends MobEntityRenderer<CrabEntity, CrabModel> {
+public class CrabRenderer extends MobRenderer<CrabEntity, CrabModel> {
     private static final String PATH = "textures/entities/crabs/";
     private static final float SIZE = 1f;
 
-    public CrabRenderer(EntityRendererFactory.Context context) {
+    public CrabRenderer(EntityRendererProvider.Context context) {
         this(context, 0.35F, ModEntityModelLayers.CRAB);
     }
 
-    protected CrabRenderer(EntityRendererFactory.Context ctx, float shadowRadius, EntityModelLayer layer) {
+    protected CrabRenderer(EntityRendererProvider.Context ctx, float shadowRadius, ModelLayerLocation layer) {
         super(ctx, new CrabModel(ctx.getPart(layer)), shadowRadius);
     }
 
@@ -43,7 +43,7 @@ public class CrabRenderer extends MobEntityRenderer<CrabEntity, CrabModel> {
 
     @Override
     public void render(CrabEntity entity, float entityYaw, float partialTick, PoseStack poseStack,
-                       VertexConsumerProvider bufferSource, int packedLight) {
+                       MultiBufferSource bufferSource, int packedLight) {
         if(entity.isBaby()) {
             float initialBabySize = (SIZE / 4);
             float size = initialBabySize + ((SIZE - initialBabySize) / 24000) * entity.age;

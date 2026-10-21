@@ -5,17 +5,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.recipe.inscription.InscriptionRecipe;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancement.CriterionMerger;
-import net.minecraft.advancement.criterion.CriterionConditions;
-import net.minecraft.advancement.criterion.RecipeUnlockedCriterion;
-import net.minecraft.data.server.recipe.RecipeJsonProvider;
+import net.minecraft.advancements.RequirementsStrategy;
+import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.Item;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -23,6 +22,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.Ingredient;
 
 /**
  * Datagen builder for {@link InscriptionRecipe}.
@@ -37,7 +37,7 @@ public class InscriptionRecipeJsonBuilder {
     private final List<String> inputWords = new ArrayList<>();
     private net.minecraft.world.item.crafting.Ingredient chiselInput;
     private int levelCost;
-    private final Map<String, CriterionConditions> criteria = new LinkedHashMap<>();
+    private final Map<String, CriterionTriggerInstance> criteria = new LinkedHashMap<>();
 
     private InscriptionRecipeJsonBuilder(RecipeCategory category, Holder<Enchantment> enchant, int level, int levelCost) {
         this.category = category;
@@ -69,25 +69,25 @@ public class InscriptionRecipeJsonBuilder {
         return this;
     }
 
-    public InscriptionRecipeJsonBuilder criterion(String name, CriterionConditions conditions) {
+    public InscriptionRecipeJsonBuilder criterion(String name, CriterionTriggerInstance conditions) {
         this.criteria.put(name, conditions);
         return this;
     }
 
-    public void offerTo(Consumer<RecipeJsonProvider> exporter) {
+    public void offerTo(Consumer<FinishedRecipe> exporter) {
         this.offerTo(exporter, Registries.ITEM.getId(this.getOutputItem()).getPath());
     }
 
-    public void offerTo(Consumer<RecipeJsonProvider> exporter, String path) {
+    public void offerTo(Consumer<FinishedRecipe> exporter, String path) {
         this.offerTo(exporter, new ResourceLocation(MiddleEarth.MOD_ID, path));
     }
 
-    public void offerTo(Consumer<RecipeJsonProvider> exporter, ResourceLocation recipeId) {
+    public void offerTo(Consumer<FinishedRecipe> exporter, ResourceLocation recipeId) {
         this.validate(recipeId);
         Advancement.Builder advancement = Advancement.Builder.createUntelemetered()
-                .criterion("has_the_recipe", RecipeUnlockedCriterion.create(recipeId))
+                .criterion("has_the_recipe", RecipeUnlockedTrigger.create(recipeId))
                 .rewards(AdvancementRewards.Builder.recipe(recipeId))
-                .criteriaMerger(CriterionMerger.OR);
+                .criteriaMerger(RequirementsStrategy.OR);
         this.criteria.forEach(advancement::criterion);
         exporter.accept(new CustomRecipeJsonProvider(recipeId, InscriptionRecipe.Serializer.INSTANCE,
                 this::writeRecipeJson, advancement, recipeId.withPrefixedPath("recipes/")));

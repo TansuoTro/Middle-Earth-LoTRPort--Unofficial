@@ -4,20 +4,20 @@ import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.item.FoodItemsME;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.block.Fertilizable;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.ai.pathing.NavigationType;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.state.property.IntProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
@@ -32,9 +32,9 @@ import net.minecraft.world.level.LevelView;
 import net.minecraft.world.level.gameevent.GameEvent;
 
 public class ToughBerryBushBlock extends CustomPlantBlock
-        implements Fertilizable {
+        implements BonemealableBlock {
     public static final int MAX_AGE = 3;
-    public static final IntProperty AGE = BlockStateProperties.AGE_3;
+    public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
     private static final VoxelShape SMALL_SHAPE = Block.createCuboidShape(3.0, 0.0, 3.0, 13.0, 8.0, 13.0);
     private static final VoxelShape LARGE_SHAPE = Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 16.0, 15.0);
 
@@ -44,7 +44,7 @@ public class ToughBerryBushBlock extends CustomPlantBlock
     }
 
     @Override
-    public boolean canPathfindThrough(BlockState state, BlockGetter world, BlockPos pos, NavigationType type) {
+    public boolean canPathfindThrough(BlockState state, BlockGetter world, BlockPos pos, PathComputationType type) {
         return false;
     }
 
@@ -110,7 +110,7 @@ public class ToughBerryBushBlock extends CustomPlantBlock
         if (i > 1) {
             int j = 1 + world.random.nextInt(2);
             ToughBerryBushBlock.dropStack(world, pos, new ItemStack(FoodItemsME.TOUGH_BERRIES, j + (bl ? 1 : 0)));
-            world.playSound(null, pos, SoundEvents.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, SoundCategory.BLOCKS, 1.0f, 0.8f + world.random.nextFloat() * 0.4f);
+            world.playSound(null, pos, SoundEvents.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0f, 0.8f + world.random.nextFloat() * 0.4f);
             BlockState blockState = (BlockState) state.with(AGE, 1);
             world.setBlockState(pos, blockState, Block.NOTIFY_LISTENERS);
             world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(player, blockState));
@@ -125,7 +125,7 @@ public class ToughBerryBushBlock extends CustomPlantBlock
     }
 
     @Override
-    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isFertilizable(LevelReader world, BlockPos pos, BlockState state, boolean isClient) {
         return state.get(AGE) < MAX_AGE;
     }
 

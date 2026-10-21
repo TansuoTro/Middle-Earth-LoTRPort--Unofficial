@@ -1,11 +1,10 @@
 package net.jukoz.me.block.special.fire_of_orthanc;
 
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.entity.*;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -16,10 +15,15 @@ import net.minecraft.world.level.Level;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.entity.EntitiesME;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.TraceableEntity;
 
-public class FireOfOrthancEntity extends Entity implements Ownable {
-    private static final TrackedData<Integer> FUSE;
-    private static final TrackedData<BlockState> BLOCK_STATE;
+public class FireOfOrthancEntity extends Entity implements TraceableEntity {
+    private static final EntityDataAccessor<Integer> FUSE;
+    private static final EntityDataAccessor<BlockState> BLOCK_STATE;
     private static final int DEFAULT_FUSE = 16;
     public static final float EXPLOSION_FORCE = 12.31f;
     public static final BlockState DEFAULT_BLOCK_STATE = ModDecorativeBlocks.FIRE_OF_ORTHANC.getDefaultState();
@@ -100,7 +104,7 @@ public class FireOfOrthancEntity extends Entity implements Ownable {
 
     public void tick() {
         this.setVelocity(this.getVelocity().add(0.0, -this.getGravity(), 0.0));
-        this.move(MovementType.SELF, this.getVelocity());
+        this.move(MoverType.SELF, this.getVelocity());
         this.setVelocity(this.getVelocity().multiply(0.98));
         if (this.isOnGround()) {
             this.setVelocity(this.getVelocity().multiply(0.7, -0.5, 0.7));
@@ -147,7 +151,7 @@ public class FireOfOrthancEntity extends Entity implements Ownable {
     }
 
     static {
-        FUSE = DataTracker.registerData(FireOfOrthancEntity.class, TrackedDataHandlerRegistry.INTEGER);
-        BLOCK_STATE = DataTracker.registerData(FireOfOrthancEntity.class, TrackedDataHandlerRegistry.BLOCK_STATE);
+        FUSE = SynchedEntityData.registerData(FireOfOrthancEntity.class, EntityDataSerializers.INTEGER);
+        BLOCK_STATE = SynchedEntityData.registerData(FireOfOrthancEntity.class, EntityDataSerializers.BLOCK_STATE);
     }
 }

@@ -2,7 +2,7 @@ package net.jukoz.me.network.packets.S2C;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.network.FriendlyByteBuf;
@@ -14,7 +14,6 @@ import net.jukoz.me.network.contexts.ClientPacketContext;
 import net.jukoz.me.network.handlers.OnboardingScreenHandler;
 import net.jukoz.me.network.packets.ServerToClientPacket;
 import net.jukoz.me.world.dimension.ModDimensions;
-
 import java.util.List;
 
 public class InscriptionEnchantInfoPacket extends ServerToClientPacket<InscriptionEnchantInfoPacket> {
@@ -36,7 +35,7 @@ public class InscriptionEnchantInfoPacket extends ServerToClientPacket<Inscripti
     @Override
     @OnlyIn(Dist.CLIENT)
     public void process(ClientPacketContext context) {
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
         InscriptionTableScreen screen = (InscriptionTableScreen)client.currentScreen;
         if (screen != null) screen.updateInfo(this.enchant, this.level, this.maxLevel);
 
@@ -64,6 +63,5 @@ public class InscriptionEnchantInfoPacket extends ServerToClientPacket<Inscripti
         buf.writeInt(this.maxLevel);
         buf.writeByteArray(this.words);
     }
-
 
 }

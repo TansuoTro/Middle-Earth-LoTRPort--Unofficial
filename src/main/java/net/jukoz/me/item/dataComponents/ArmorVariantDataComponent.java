@@ -9,7 +9,6 @@ import net.jukoz.me.compat.TooltipAppender;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.network.chat.Component;
-
 import java.util.List;
 
 public record ArmorVariantDataComponent(Integer id) implements TooltipAppender {
@@ -23,7 +22,7 @@ public record ArmorVariantDataComponent(Integer id) implements TooltipAppender {
             ArmorVariantDataComponent::new);
 
     @Override
-    public void appendTooltip(ItemStack stack, net.minecraft.client.item.TooltipContext context, List<Component> tooltip) {
+    public void appendTooltip(ItemStack stack, net.minecraft.world.item.TooltipFlag context, List<Component> tooltip) {
     }
 
     @Override

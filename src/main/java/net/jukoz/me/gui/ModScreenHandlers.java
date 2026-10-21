@@ -16,26 +16,26 @@ import net.jukoz.me.gui.wood_pile.WoodPileScreenHandler;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.world.flag.FeatureFlags;
-import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.resources.ResourceLocation;
 
 public class ModScreenHandlers {
-    public static ScreenHandlerType<AlloyFurnaceScreenHandler> ALLOY_SCREEN_HANDLER;
-    public static ScreenHandlerType<ArtisanTableScreenHandler> ARTISAN_SCREEN_HANDLER;
-    public static ScreenHandlerType<WoodPileScreenHandler> WOOD_PILE_SCREEN_HANDLER;
-    public static ScreenHandlerType<InscriptionTableScreenHandler> INSCRIPTION_SCREEN_HANDLER;
-    public static ScreenHandlerType<CrockpotScreenHandler> CROCKPOT_SCREEN_HANDLER;
-    public static ScreenHandlerType<ForgeAlloyingScreenHandler> FORGE_ALLOYING_SCREEN_HANDLER;
-    public static ScreenHandlerType<ShapingAnvilScreenHandler> TREATED_ANVIL_SCREEN_HANDLER;
-    public static ScreenHandlerType<StructureManagerScreenHandler> STRUCTURE_MANAGER_SCREEN_HANDLER;
-    public static ScreenHandlerType<StructureNestScreenHandler> STRUCTURE_NEST_SCREEN_HANDLER;
+    public static MenuType<AlloyFurnaceScreenHandler> ALLOY_SCREEN_HANDLER;
+    public static MenuType<ArtisanTableScreenHandler> ARTISAN_SCREEN_HANDLER;
+    public static MenuType<WoodPileScreenHandler> WOOD_PILE_SCREEN_HANDLER;
+    public static MenuType<InscriptionTableScreenHandler> INSCRIPTION_SCREEN_HANDLER;
+    public static MenuType<CrockpotScreenHandler> CROCKPOT_SCREEN_HANDLER;
+    public static MenuType<ForgeAlloyingScreenHandler> FORGE_ALLOYING_SCREEN_HANDLER;
+    public static MenuType<ShapingAnvilScreenHandler> TREATED_ANVIL_SCREEN_HANDLER;
+    public static MenuType<StructureManagerScreenHandler> STRUCTURE_MANAGER_SCREEN_HANDLER;
+    public static MenuType<StructureNestScreenHandler> STRUCTURE_NEST_SCREEN_HANDLER;
 
     public static void registerAllScreenHandlers() {
-        ALLOY_SCREEN_HANDLER = new ScreenHandlerType<>(AlloyFurnaceScreenHandler::new, FeatureFlags.VANILLA_FEATURES);
+        ALLOY_SCREEN_HANDLER = new MenuType<>(AlloyFurnaceScreenHandler::new, FeatureFlags.VANILLA_FEATURES);
         ARTISAN_SCREEN_HANDLER = new ExtendedScreenHandlerType<>(
                 (syncId, inventory, buf) -> new ArtisanTableScreenHandler(syncId, inventory, buf.readString()));
-        WOOD_PILE_SCREEN_HANDLER = new ScreenHandlerType<>(WoodPileScreenHandler::new, FeatureFlags.VANILLA_FEATURES);
-        INSCRIPTION_SCREEN_HANDLER = new ScreenHandlerType<>(InscriptionTableScreenHandler::new, FeatureFlags.VANILLA_FEATURES);
+        WOOD_PILE_SCREEN_HANDLER = new MenuType<>(WoodPileScreenHandler::new, FeatureFlags.VANILLA_FEATURES);
+        INSCRIPTION_SCREEN_HANDLER = new MenuType<>(InscriptionTableScreenHandler::new, FeatureFlags.VANILLA_FEATURES);
 
         CROCKPOT_SCREEN_HANDLER = new ExtendedScreenHandlerType<>(
                 (syncId, inventory, buf) -> new CrockpotScreenHandler(syncId, inventory, buf.readBlockPos()));

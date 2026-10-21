@@ -12,15 +12,14 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.StructureWorldAccess;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.gen.feature.LargeDripstoneFeature;
-import net.minecraft.world.gen.feature.util.CaveSurface;
-import net.minecraft.world.gen.feature.util.DripstoneHelper;
-import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.world.level.levelgen.feature.LargeDripstoneFeature;
+import net.minecraft.world.level.levelgen.Column;
+import net.minecraft.world.level.levelgen.feature.DripstoneUtils;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.Optional;
 
 public class PillarFeature extends Feature<PillarFeatureConfig> {
@@ -29,15 +28,15 @@ public class PillarFeature extends Feature<PillarFeatureConfig> {
     }
 
     @Override
-    public boolean generate(FeatureContext<PillarFeatureConfig> context) {
-        StructureWorldAccess structureWorldAccess = context.getWorld();
+    public boolean generate(FeaturePlaceContext<PillarFeatureConfig> context) {
+        WorldGenLevel structureWorldAccess = context.getWorld();
         BlockPos blockPos = context.getOrigin();
         PillarFeatureConfig largeDripstoneFeatureConfig = context.getConfig();
         RandomSource random = context.getRandom();
         if (!canGenerate(structureWorldAccess, blockPos)) {
             return false;
         }
-        Optional<CaveSurface> optional = CaveSurface.create(structureWorldAccess, blockPos, largeDripstoneFeatureConfig.floorToCeilingSearchRange, DripstoneHelper::canGenerate, DripstoneHelper::canReplaceOrLava);
+        Optional<CaveSurface> optional = CaveSurface.create(structureWorldAccess, blockPos, largeDripstoneFeatureConfig.floorToCeilingSearchRange, DripstoneUtils::canGenerate, DripstoneUtils::canReplaceOrLava);
         if (!optional.isPresent() || !(optional.get() instanceof CaveSurface.Bounded)) {
             return false;
         }
@@ -99,7 +98,7 @@ public class PillarFeature extends Feature<PillarFeatureConfig> {
             return this.pos.getY() + this.getBaseScale();
         }
 
-        boolean canGenerate(StructureWorldAccess world, WindModifier wind) {
+        boolean canGenerate(WorldGenLevel world, WindModifier wind) {
             while (this.scale > 1) {
                 BlockPos.Mutable mutable = this.pos.mutableCopy();
                 int i = Math.min(10, this.getBaseScale());
@@ -122,7 +121,7 @@ public class PillarFeature extends Feature<PillarFeatureConfig> {
             return (int)scaleHeightFromRadius(height, this.scale, this.heightScale, this.bluntness);
         }
 
-        void generate(StructureWorldAccess world, RandomSource random, WindModifier wind, BlockState blockState) {
+        void generate(WorldGenLevel world, RandomSource random, WindModifier wind, BlockState blockState) {
             for (int i = -this.scale; i <= this.scale; ++i) {
                 block1: for (int j = -this.scale; j <= this.scale; ++j) {
                     int k;
@@ -151,10 +150,10 @@ public class PillarFeature extends Feature<PillarFeatureConfig> {
         }
     }
 
-    protected static boolean canGenerate(WorldAccess world, BlockPos pos) {
-        return world.testBlockState(pos, DripstoneHelper::canGenerate);
+    protected static boolean canGenerate(LevelAccessor world, BlockPos pos) {
+        return world.testBlockState(pos, DripstoneUtils::canGenerate);
     }
-    protected static boolean canGenerateBase(StructureWorldAccess world, BlockPos pos, int height) {
+    protected static boolean canGenerateBase(WorldGenLevel world, BlockPos pos, int height) {
         if (canGenerateOrLava(world, pos)) {
             return false;
         }
@@ -183,8 +182,8 @@ public class PillarFeature extends Feature<PillarFeatureConfig> {
         return i / 0.384 * scale;
     }
 
-    protected static boolean canGenerateOrLava(WorldAccess world, BlockPos pos) {
-        return world.testBlockState(pos, DripstoneHelper::canGenerateOrLava);
+    protected static boolean canGenerateOrLava(LevelAccessor world, BlockPos pos) {
+        return world.testBlockState(pos, DripstoneUtils::canGenerateOrLava);
     }
 
     static final class WindModifier {
@@ -218,4 +217,3 @@ public class PillarFeature extends Feature<PillarFeatureConfig> {
         }
     }
 }
-

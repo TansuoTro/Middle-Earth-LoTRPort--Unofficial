@@ -4,7 +4,7 @@ import net.jukoz.me.entity.projectile.pinecone.PineconeEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.level.Level;
@@ -36,7 +36,7 @@ public class PineconeItem extends PebbleItem {
             pineconeEntity.setVelocity(playerEntity, playerEntity.getPitch(), playerEntity.getYaw(), 0.0f, BASE_STRENGTH + (CHARGE_STRENGTH * percentage), 1.0f);
 
             world.spawnEntity(pineconeEntity);
-            world.playSoundFromEntity(null, pineconeEntity, SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.PLAYERS, 1.0f, 0.7f);
+            world.playSoundFromEntity(null, pineconeEntity, SoundEvents.ENTITY_SNOWBALL_THROW, SoundSource.PLAYERS, 1.0f, 0.7f);
             if (!playerEntity.getAbilities().creativeMode) {
                 stack.decrement(1);
             }

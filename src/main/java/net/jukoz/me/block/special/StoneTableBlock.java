@@ -3,14 +3,14 @@ package net.jukoz.me.block.special;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.block.Waterloggable;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.util.function.BooleanBiFunction;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -18,8 +18,9 @@ import net.minecraft.world.phys.shapes.VoxelShapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccess;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.phys.shapes.Shapes;
 
-public class StoneTableBlock extends Block implements Waterloggable {
+public class StoneTableBlock extends Block implements SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public StoneTableBlock(Settings settings) {
@@ -37,7 +38,7 @@ public class StoneTableBlock extends Block implements Waterloggable {
         return this.getDefaultState().with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
     }
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (state.get(WATERLOGGED)) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
@@ -52,7 +53,7 @@ public class StoneTableBlock extends Block implements Waterloggable {
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return VoxelShapes.combineAndSimplify(Block.createCuboidShape(1, 12, 1, 15, 16, 15),
-                Block.createCuboidShape(4, 0, 4, 12, 12, 12), BooleanBiFunction.OR);
+        return Shapes.combineAndSimplify(Block.createCuboidShape(1, 12, 1, 15, 16, 15),
+                Block.createCuboidShape(4, 0, 4, 12, 12, 12), BooleanOp.OR);
     }
 }

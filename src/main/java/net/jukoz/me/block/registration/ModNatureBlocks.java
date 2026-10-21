@@ -1,7 +1,7 @@
 package net.jukoz.me.block.registration;
-import net.jukoz.me.item.MESettings;
 
-import net.minecraft.block.piston.PistonBehavior;
+import net.jukoz.me.item.MESettings;
+import net.minecraft.world.level.material.PushReaction;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.plants.CustomTallPlantBlock;
 import net.jukoz.me.block.special.plants.FlowerbedMushroomBlock;
@@ -24,140 +24,151 @@ import net.jukoz.me.item.utils.ModItemGroups;
 import net.jukoz.me.registries.RegistryAliasesME;
 import net.jukoz.me.world.features.tree.ModTreeConfiguredFeatures;
 import net.jukoz.me.world.features.tree.MushroomTreeConfiguredFeatures;
-import net.minecraft.block.*;
-import net.minecraft.block.sapling.SaplingGenerator;
+import net.minecraft.world.level.block.grower.AbstractTreeGrower;
 import net.jukoz.me.compat.MESaplingGenerator;
-import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-
 import static net.jukoz.me.block.registration.WoodBlockSets.LEAVES_STRENGTH;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CarpetBlock;
+import net.minecraft.world.level.block.DoublePlantBlock;
+import net.minecraft.world.level.block.FlowerBlock;
+import net.minecraft.world.level.block.GlowLichenBlock;
+import net.minecraft.world.level.block.HangingRootsBlock;
+import net.minecraft.world.level.block.HugeMushroomBlock;
+import net.minecraft.world.level.block.MangroveRootsBlock;
+import net.minecraft.world.level.block.MushroomBlock;
+import net.minecraft.world.level.block.PinkPetalsBlock;
+import net.minecraft.world.level.block.SaplingBlock;
+import net.minecraft.world.level.block.WaterlilyBlock;
+import net.minecraft.world.level.material.MapColor;
 
 public class ModNatureBlocks {
 
     public static final Block MORGUL_IVY = registerBlock("morgul_ivy",
-            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(BlockSoundGroup.GLOW_LICHEN)
+            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(SoundType.GLOW_LICHEN)
                     .mapColor(DyeColor.GREEN).luminance(GlowLichenBlock.getLuminanceSupplier(5)).burnable(), true);
 
     public static final Block CORRUPTED_MOSS_CARPET = registerBlock("corrupted_moss_carpet",
-            CarpetBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.GREEN).strength(0.1f).sounds(BlockSoundGroup.MOSS_CARPET), true);
+            CarpetBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.GREEN).strength(0.1f).sounds(SoundType.MOSS_CARPET), true);
 
     public static final Block CORRUPTED_MOSS_BLOCK = registerBlock("corrupted_moss_block",
-            Block::new, BlockBehaviour.Settings.create().mapColor(MapColor.GREEN).strength(0.1f).sounds(BlockSoundGroup.MOSS_BLOCK), true);
+            Block::new, BlockBehaviour.Settings.create().mapColor(MapColor.GREEN).strength(0.1f).sounds(SoundType.MOSS_BLOCK), true);
 
     public static final Block CORRUPTED_MOSS = registerBlock("corrupted_moss",
-            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(BlockSoundGroup.GLOW_LICHEN)
+            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(SoundType.GLOW_LICHEN)
                     .mapColor(DyeColor.GREEN).burnable(), true);
 
     public static final Block MOSS = registerBlock("moss",
-            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(BlockSoundGroup.GLOW_LICHEN)
+            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(SoundType.GLOW_LICHEN)
                     .mapColor(DyeColor.GREEN).burnable(), true);
 
     public static final Block FOREST_MOSS = registerBlock("forest_moss",
-            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(BlockSoundGroup.GLOW_LICHEN)
+            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(SoundType.GLOW_LICHEN)
                     .mapColor(DyeColor.GREEN).burnable(), true);
 
     public static final Block FOREST_MOSS_CARPET = registerBlock("forest_moss_carpet",
-            CarpetBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.GREEN).strength(0.1f).sounds(BlockSoundGroup.MOSS_CARPET), true);
+            CarpetBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.GREEN).strength(0.1f).sounds(SoundType.MOSS_CARPET), true);
 
     public static final Block FOREST_MOSS_BLOCK = registerBlock("forest_moss_block",
-            Block::new, BlockBehaviour.Settings.create().mapColor(MapColor.GREEN).strength(0.1f).sounds(BlockSoundGroup.MOSS_BLOCK), true);
+            Block::new, BlockBehaviour.Settings.create().mapColor(MapColor.GREEN).strength(0.1f).sounds(SoundType.MOSS_BLOCK), true);
 
     public static final Block OLD_PODZOL = registerBlock("old_podzol",
-            Block::new, BlockBehaviour.Settings.create().mapColor(MapColor.SPRUCE_BROWN).strength(0.5F).sounds(BlockSoundGroup.GRAVEL), true);
+            Block::new, BlockBehaviour.Settings.create().mapColor(MapColor.SPRUCE_BROWN).strength(0.5F).sounds(SoundType.GRAVEL), true);
 
     public static final Block LORIEN_PODZOL = registerBlock("lorien_podzol",
-            Block::new, BlockBehaviour.Settings.create().mapColor(MapColor.SPRUCE_BROWN).strength(0.5F).sounds(BlockSoundGroup.GRAVEL), true);
+            Block::new, BlockBehaviour.Settings.create().mapColor(MapColor.SPRUCE_BROWN).strength(0.5F).sounds(SoundType.GRAVEL), true);
 
     public static final Block BLUE_FESCUE = registerBlock("blue_fescue",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block BROWN_GRASS = registerBlock("brown_grass",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block DYING_GRASS = registerBlock("dying_grass",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block GRIM_GRASS = registerBlock("grim_grass",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block MEADOWGRASS = registerBlock("meadowgrass",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block SPARSE_GRASS = registerBlock("sparse_grass",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block TEMPERATE_GRASS = registerBlock("temperate_grass",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block GRASS_TUFT = registerBlock("grass_tuft",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block HEATHER = registerBlock("heather",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block RED_HEATHER = registerBlock("red_heather",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block DEAD_HEATHER = registerBlock("dead_heather",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block DRY_HEATHER = registerBlock("dry_heather",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block HEATH = registerBlock("heath",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
 
     public static final Block WHEATGRASS = registerBlock("wheatgrass",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block WILDERGRASS = registerBlock("wildergrass",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
 
     public static final Block MISTWEED = registerBlock("mistweed",
-            MistweedPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            MistweedPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
 
     public static final Block SEDUM = registerBlock("sedum",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block ORANGE_SEDUM = registerBlock("orange_sedum",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block RED_SEDUM = registerBlock("red_sedum",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block YELLOW_SEDUM = registerBlock("yellow_sedum",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
 
     public static final Block GREEN_SHRUB = registerBlock("green_shrub",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block SMALL_DRY_SHRUB = registerBlock("small_dry_shrub",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
 
     public static final Block BEACH_GRASS = registerBlock("beach_grass",
-            DesertPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            DesertPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block COASTAL_PANIC_GRASS = registerBlock("coastal_panic_grass",
-            DesertPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            DesertPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
 
     public static final Block SHRIVELED_SHRUB = registerBlock("shriveled_shrub",
@@ -207,138 +218,138 @@ public class ModNatureBlocks {
             CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.BROWN), true);
     public static final Block WILD_GRASS = registerBlock("wild_grass",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
 
     public static final Block BRACKEN = registerBlock("bracken",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block GIANT_BUTTERBUR = registerBlock("giant_butterbur",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XZ)
                     .mapColor(DyeColor.GREEN), true);
 
     public static final Block NETTLES = registerBlock("nettles",
-            PricklyPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            PricklyPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block THISTLE = registerBlock("thistle",
-            PricklyPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            PricklyPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
 
     public static final Block ATHELAS = registerBlock("athelas",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block BRAMBLES_OF_MORDOR = registerBlock("brambles_of_mordor",
-            MordorPricklyPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            MordorPricklyPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block ELANOR = registerBlock("elanor",
-            (settings) -> new FlowerBlock(StatusEffects.GLOWING, 3, settings), BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly()
-                    .sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ).mapColor(DyeColor.GREEN), true);
+            (settings) -> new FlowerBlock(MobEffects.GLOWING, 3, settings), BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly()
+                    .sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ).mapColor(DyeColor.GREEN), true);
     public static final Block MALLOS = registerBlock("mallos",
-            (settings) -> new FlowerBlock(StatusEffects.GLOWING, 3, settings), BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly()
-                    .sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ).mapColor(DyeColor.GREEN), true);
+            (settings) -> new FlowerBlock(MobEffects.GLOWING, 3, settings), BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly()
+                    .sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ).mapColor(DyeColor.GREEN), true);
     public static final Block NIPHREDIL = registerBlock("niphredil",
-            (settings) -> new FlowerBlock(StatusEffects.GLOWING, 3, settings), BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly()
-                    .sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ).mapColor(DyeColor.GREEN), true);
+            (settings) -> new FlowerBlock(MobEffects.GLOWING, 3, settings), BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly()
+                    .sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ).mapColor(DyeColor.GREEN), true);
     public static final Block SIMBELMYNE = registerBlock("simbelmyne",
-            (settings) -> new FlowerBlock(StatusEffects.GLOWING, 3, settings), BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly()
-                    .sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ).mapColor(DyeColor.GREEN), true);
+            (settings) -> new FlowerBlock(MobEffects.GLOWING, 3, settings), BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly()
+                    .sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ).mapColor(DyeColor.GREEN), true);
 
     public static final Block TAN_SHRUB = registerBlock("tan_shrub",
-            DesertPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            DesertPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
 
     public static final Block BLUE_GENTIAN = registerBlock("blue_gentian",
-            (settings) -> new FlowerBlock(StatusEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
+            (settings) -> new FlowerBlock(MobEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
     public static final Block GREEN_JEWEL_CORNFLOWER = registerBlock("green_jewel_cornflower",
-            (settings) -> new FlowerBlock(StatusEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
+            (settings) -> new FlowerBlock(MobEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
     public static final Block NOBLEWHITE = registerBlock("noblewhite",
-            (settings) -> new FlowerBlock(StatusEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
+            (settings) -> new FlowerBlock(MobEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
     public static final Block YELLOW_FLOWER = registerBlock("yellow_flower",
-            (settings) -> new FlowerBlock(StatusEffects.FIRE_RESISTANCE, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
+            (settings) -> new FlowerBlock(MobEffects.FIRE_RESISTANCE, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
 
     public static final Block LIGHT_BLUE_FLOWERS = registerBlock("light_blue_flowers",
-            (settings) -> new FlowerBlock(StatusEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
+            (settings) -> new FlowerBlock(MobEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
     public static final Block MAGENTA_FLOWERS = registerBlock("magenta_flowers",
-            (settings) -> new FlowerBlock(StatusEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
+            (settings) -> new FlowerBlock(MobEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
     public static final Block ORANGE_FLOWERS = registerBlock("orange_flowers",
-            (settings) -> new FlowerBlock(StatusEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
+            (settings) -> new FlowerBlock(MobEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
     public static final Block PINK_FLOWERS = registerBlock("pink_flowers",
-            (settings) -> new FlowerBlock(StatusEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
+            (settings) -> new FlowerBlock(MobEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
     public static final Block PURPLE_FLOWERS = registerBlock("purple_flowers",
-            (settings) -> new FlowerBlock(StatusEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
+            (settings) -> new FlowerBlock(MobEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
     public static final Block RED_FLOWERS = registerBlock("red_flowers",
-            (settings) -> new FlowerBlock(StatusEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
+            (settings) -> new FlowerBlock(MobEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
     public static final Block WHITE_FLOWERS = registerBlock("white_flowers",
-            (settings) -> new FlowerBlock(StatusEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
+            (settings) -> new FlowerBlock(MobEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
     public static final Block YELLOW_FLOWERS = registerBlock("yellow_flowers",
-            (settings) -> new FlowerBlock(StatusEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
+            (settings) -> new FlowerBlock(MobEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
 
     public static final Block BLUE_LAVENDER = registerBlock("blue_lavender",
-            (settings) -> new FlowerBlock(StatusEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
+            (settings) -> new FlowerBlock(MobEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
     public static final Block LAVENDER = registerBlock("lavender",
-            (settings) -> new FlowerBlock(StatusEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
+            (settings) -> new FlowerBlock(MobEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
     public static final Block WHITE_LAVENDER = registerBlock("white_lavender",
-            (settings) -> new FlowerBlock(StatusEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
+            (settings) -> new FlowerBlock(MobEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
     public static final Block YELLOW_TROLLIUS = registerBlock("yellow_trollius",
-            (settings) -> new FlowerBlock(StatusEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
+            (settings) -> new FlowerBlock(MobEffects.SATURATION, 0, settings), BlockBehaviour.Settings.copy(Blocks.DANDELION), true);
 
     public static final Block HOBBIT_SUNFLOWERS = registerBlock("hobbit_sunflowers",
             RotatableTallFlowerBlock::new, BlockBehaviour.Settings.copy(Blocks.SUNFLOWER), true);
 
     public static final Block HOGWEED = registerBlock("hogweed",
-            TallPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.TALL_GRASS).breakInstantly(), true);
+            DoublePlantBlock::new, BlockBehaviour.Settings.copy(Blocks.TALL_GRASS).breakInstantly(), true);
     public static final Block SHORT_HOGWEED = registerBlock("short_hogweed",
             CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS), true);
 
     public static final Block AZALEA_FLOWER_GROWTH = registerBlock("azalea_flower_growth",
-            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(BlockSoundGroup.GLOW_LICHEN)
+            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(SoundType.GLOW_LICHEN)
                     .mapColor(DyeColor.GREEN).burnable(), true);
     public static final Block DRY_GROWTH = registerBlock("dry_growth",
-            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(BlockSoundGroup.GLOW_LICHEN)
+            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(SoundType.GLOW_LICHEN)
                     .mapColor(DyeColor.GREEN).burnable(), true);
     public static final Block GREEN_GROWTH = registerBlock("green_growth",
-            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(BlockSoundGroup.GLOW_LICHEN)
+            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(SoundType.GLOW_LICHEN)
                     .mapColor(DyeColor.GREEN).burnable(), true);
     public static final Block IVY_GROWTH = registerBlock("ivy_growth",
-            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(BlockSoundGroup.GLOW_LICHEN)
+            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(SoundType.GLOW_LICHEN)
                     .mapColor(DyeColor.GREEN).burnable(), true);
     public static final Block LILAC_FLOWER_GROWTH = registerBlock("lilac_flower_growth",
-            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(BlockSoundGroup.GLOW_LICHEN)
+            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(SoundType.GLOW_LICHEN)
                     .mapColor(DyeColor.GREEN).burnable(), true);
     public static final Block PINK_FLOWER_GROWTH = registerBlock("pink_flower_growth",
-            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(BlockSoundGroup.GLOW_LICHEN)
+            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(SoundType.GLOW_LICHEN)
                     .mapColor(DyeColor.GREEN).burnable(), true);
     public static final Block RED_FLOWER_GROWTH = registerBlock("red_flower_growth",
-            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(BlockSoundGroup.GLOW_LICHEN)
+            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(SoundType.GLOW_LICHEN)
                     .mapColor(DyeColor.GREEN).burnable(), true);
     public static final Block THORNY_GROWTH = registerBlock("thorny_growth",
-            ThornyGrowthBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(BlockSoundGroup.GLOW_LICHEN)
+            ThornyGrowthBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(SoundType.GLOW_LICHEN)
                     .mapColor(DyeColor.GREEN).burnable(), true);
     public static final Block WHITE_FLOWER_GROWTH = registerBlock("white_flower_growth",
-            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(BlockSoundGroup.GLOW_LICHEN)
+            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(SoundType.GLOW_LICHEN)
                     .mapColor(DyeColor.GREEN).burnable(), true);
     public static final Block YELLOW_FLOWER_GROWTH = registerBlock("yellow_flower_growth",
-            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(BlockSoundGroup.GLOW_LICHEN)
+            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(SoundType.GLOW_LICHEN)
                     .mapColor(DyeColor.GREEN).burnable(), true);
 
     public static final Block CLOVERS = registerBlock("clovers",
-            FlowerbedBlock::new, BlockBehaviour.Settings.copy(Blocks.PINK_PETALS), true);
+            PinkPetalsBlock::new, BlockBehaviour.Settings.copy(Blocks.PINK_PETALS), true);
 
     public static final Block SHORT_DEAD_RUSHES = registerBlock("short_dead_rushes",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block SHORT_RUSHES = registerBlock("short_rushes",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block SHORT_REEDS = registerBlock("short_reeds",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
 
     public static final Block SHORT_CATTAILS = registerBlock("short_cattails",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(MapColor.TERRACOTTA_BROWN), true);
     public static final Block SHORT_BULRUSH = registerBlock("short_bulrush",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(MapColor.TERRACOTTA_BROWN), true);
 
     public static final Block TALL_CATTAILS = registerBlock("tall_cattails",
@@ -347,88 +358,88 @@ public class ModNatureBlocks {
             (settings) -> new CustomWaterloggableTallPlantBlock(settings, false), BlockBehaviour.Settings.copy(Blocks.TALL_GRASS).breakInstantly(), true);
 
     public static final Block SMALL_LILY_PADS = registerBlock("small_lily_pads",
-            LilyPadBlock::new, BlockBehaviour.Settings.copy(Blocks.LILY_PAD).noCollision(), false);
+            WaterlilyBlock::new, BlockBehaviour.Settings.copy(Blocks.LILY_PAD).noCollision(), false);
     public static final Block SMALL_FLOWERING_LILY_PADS = registerBlock("small_flowering_lily_pads",
-            LilyPadBlock::new, BlockBehaviour.Settings.copy(Blocks.LILY_PAD).noCollision(), false);
+            WaterlilyBlock::new, BlockBehaviour.Settings.copy(Blocks.LILY_PAD).noCollision(), false);
     public static final Block LILY_PADS = registerBlock("lily_pads",
-            LilyPadBlock::new, BlockBehaviour.Settings.copy(Blocks.LILY_PAD).noCollision(), false);
+            WaterlilyBlock::new, BlockBehaviour.Settings.copy(Blocks.LILY_PAD).noCollision(), false);
     public static final Block FLOWERING_LILY_PADS = registerBlock("flowering_lily_pads",
-            LilyPadBlock::new, BlockBehaviour.Settings.copy(Blocks.LILY_PAD).noCollision(), false);
+            WaterlilyBlock::new, BlockBehaviour.Settings.copy(Blocks.LILY_PAD).noCollision(), false);
     public static final Block LARGE_LILY_PAD = registerBlock("large_lily_pad",
-            LilyPadBlock::new, BlockBehaviour.Settings.copy(Blocks.LILY_PAD), false);
+            WaterlilyBlock::new, BlockBehaviour.Settings.copy(Blocks.LILY_PAD), false);
     public static final Block LARGE_FLOWERING_LILY_PAD = registerBlock("large_flowering_lily_pad",
-            LilyPadBlock::new, BlockBehaviour.Settings.copy(Blocks.LILY_PAD), false);
+            WaterlilyBlock::new, BlockBehaviour.Settings.copy(Blocks.LILY_PAD), false);
 
     public static final Block DUCKWEED = registerBlock("duckweed",
-            LilyPadBlock::new, BlockBehaviour.Settings.copy(Blocks.LILY_PAD).noCollision(), false);
+            WaterlilyBlock::new, BlockBehaviour.Settings.copy(Blocks.LILY_PAD).noCollision(), false);
 
     public static final Block FROZEN_GRASS = registerBlock("frozen_grass",
-            DesertPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            DesertPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block FROZEN_TUFT = registerBlock("frozen_tuft",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block FROZEN_SHRUB = registerBlock("frozen_shrub",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
 
     public static final Block FROZEN_GROWTH = registerBlock("frozen_growth",
-            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(BlockSoundGroup.GLOW_LICHEN)
+            GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LICHEN_GREEN).replaceable().noCollision().strength(0.2f).sounds(SoundType.GLOW_LICHEN)
                     .mapColor(DyeColor.GREEN).burnable(), true);
 
     public static final Block STICKY_SNOW = registerBlock("sticky_snow",
             GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.WHITE).replaceable().noCollision()
-                    .strength(0.2f).sounds(BlockSoundGroup.SNOW), true);
+                    .strength(0.2f).sounds(SoundType.SNOW), true);
     public static final Block STICKY_ICE = registerBlock("sticky_ice",
             GlowLichenBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LIGHT_BLUE).replaceable().noCollision()
-                    .strength(0.2f).sounds(BlockSoundGroup.GLASS), true);
+                    .strength(0.2f).sounds(SoundType.GLASS), true);
 
     public static final Block SHORT_ICICLES = registerBlock("short_icicles",
             ShortIciclesBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LIGHT_BLUE).noCollision()
-                    .strength(0.2f).sounds(BlockSoundGroup.GLASS), true);
+                    .strength(0.2f).sounds(SoundType.GLASS), true);
     public static final Block DROOPING_ICICLES = registerBlock("drooping_icicles",
             DroopingIciclesBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.LIGHT_BLUE).noCollision()
-                    .strength(0.2f).sounds(BlockSoundGroup.GLASS), true);
+                    .strength(0.2f).sounds(SoundType.GLASS), true);
 
     public static final Block FLOATING_ICE = registerBlock("floating_ice",
             FloatingIceBlock::new, BlockBehaviour.Settings.copy(Blocks.ICE), false);
 
     public static final Block SCORCHED_GRASS = registerBlock("scorched_grass",
-            DesertPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            DesertPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block SCORCHED_TUFT = registerBlock("scorched_tuft",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
     public static final Block SCORCHED_SHRUB = registerBlock("scorched_shrub",
-            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
+            CustomPlantBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).noCollision().breakInstantly().sounds(SoundType.GRASS).offset(BlockBehaviour.OffsetType.XYZ)
                     .mapColor(DyeColor.GREEN), true);
 
     public static final Block BROWN_BOLETE = registerBlock("brown_bolete",
-            (settings) -> new MushroomPlantBlock(settings, MushroomTreeConfiguredFeatures.BROWN_BOLETTE_TREE_KEY), BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM), true);
+            (settings) -> new MushroomBlock(settings, MushroomTreeConfiguredFeatures.BROWN_BOLETTE_TREE_KEY), BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM), true);
     public static final Block CAVE_AMANITA = registerBlock("cave_amanita",
-            (settings) -> new MushroomPlantBlock(settings, MushroomTreeConfiguredFeatures.CAVE_AMANITA_TREE_KEY), BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM), true);
+            (settings) -> new MushroomBlock(settings, MushroomTreeConfiguredFeatures.CAVE_AMANITA_TREE_KEY), BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM), true);
     public static final Block DEEP_FIRECAP = registerBlock("deep_firecap",
-            (settings) -> new MushroomPlantBlock(settings, MushroomTreeConfiguredFeatures.DEEP_FIRECAP_TREE_KEY), BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM), true);
+            (settings) -> new MushroomBlock(settings, MushroomTreeConfiguredFeatures.DEEP_FIRECAP_TREE_KEY), BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM), true);
     public static final Block GHOSTSHROOM = registerBlock("ghostshroom",
-            (settings) -> new MushroomPlantBlock(settings, null), BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM).luminance(state -> 4), true);
+            (settings) -> new MushroomBlock(settings, null), BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM).luminance(state -> 4), true);
     public static final Block MORSEL = registerBlock("morsel",
-            (settings) -> new MushroomPlantBlock(settings, null), BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM), true);
+            (settings) -> new MushroomBlock(settings, null), BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM), true);
     public static final Block SKY_FIRECAP = registerBlock("sky_firecap",
-            (settings) -> new MushroomPlantBlock(settings, MushroomTreeConfiguredFeatures.SKY_FIRECAP_TREE_KEY), BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM), true);
+            (settings) -> new MushroomBlock(settings, MushroomTreeConfiguredFeatures.SKY_FIRECAP_TREE_KEY), BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM), true);
     public static final Block TRUMPET_SHROOM = registerBlock("trumpet_shroom",
-            (settings) -> new MushroomPlantBlock(settings, null), BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM), true);
+            (settings) -> new MushroomBlock(settings, null), BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM), true);
     public static final Block TALL_TRUMPET_SHROOM = registerBlock("tall_trumpet_shroom",
             TallMushroomBlock::new, BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM), true);
     public static final Block TUBESHRROM = registerBlock("tubeshroom",
-            (settings) -> new MushroomPlantBlock(settings, null), BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM).luminance(state -> 4), true);
+            (settings) -> new MushroomBlock(settings, null), BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM).luminance(state -> 4), true);
     public static final Block TALL_TUBESHROOM = registerBlock("tall_tubeshroom",
             TallMushroomBlock::new, BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM).luminance(state -> 5), true);
     public static final Block VIOLET_CAPS = registerBlock("violet_caps",
-            (settings) -> new MushroomPlantBlock(settings, null),BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM), true);
+            (settings) -> new MushroomBlock(settings, null),BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM), true);
     public static final Block WHITE_MUSHROOM = registerBlock("white_mushroom",
-            (settings) -> new MushroomPlantBlock(settings, null),BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM), true);
+            (settings) -> new MushroomBlock(settings, null),BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM), true);
     public static final Block YELLOW_AMANITA = registerBlock("yellow_amanita",
-            (settings) -> new MushroomPlantBlock(settings, MushroomTreeConfiguredFeatures.YELLOW_AMANITA_TREE_KEY), BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM), true);
+            (settings) -> new MushroomBlock(settings, MushroomTreeConfiguredFeatures.YELLOW_AMANITA_TREE_KEY), BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM), true);
 
     public static final Block BROWN_BOLETE_TILLER = registerBlock("brown_bolete_tiller",
             FlowerbedMushroomBlock::new, BlockBehaviour.Settings.copy(Blocks.BROWN_MUSHROOM), true);
@@ -486,81 +497,81 @@ public class ModNatureBlocks {
     public static final Block WILLOW_SAPLING = registerSimpleSapling("willow_sapling", ModTreeConfiguredFeatures.WILLOW_TREE_KEY);
 
     public static final Block LEBETHRON_LEAVES = registerBlock("lebethron_leaves",
-            (settings) -> new TintedParticleLeavesBlock(0.01F, settings), BlockBehaviour.Settings.copy(Blocks.OAK_LEAVES).strength(LEAVES_STRENGTH).sounds(BlockSoundGroup.GRASS).burnable(), true);
+            (settings) -> new TintedParticleLeavesBlock(0.01F, settings), BlockBehaviour.Settings.copy(Blocks.OAK_LEAVES).strength(LEAVES_STRENGTH).sounds(SoundType.GRASS).burnable(), true);
 
     public static final Block BERRY_HOLLY_LEAVES = registerBlock("berry_holly_leaves",
-            (settings) -> new TintedParticleLeavesBlock(0.01F, settings), BlockBehaviour.Settings.copy(Blocks.OAK_LEAVES).strength(LEAVES_STRENGTH).sounds(BlockSoundGroup.GRASS).burnable(), true);
+            (settings) -> new TintedParticleLeavesBlock(0.01F, settings), BlockBehaviour.Settings.copy(Blocks.OAK_LEAVES).strength(LEAVES_STRENGTH).sounds(SoundType.GRASS).burnable(), true);
 
     public static final Block DRY_LARCH_LEAVES = registerBlock("dry_larch_leaves",
             (settings) -> new TintedParticleLeavesBlock(0.01F, settings), BlockBehaviour.Settings.copy(Blocks.OAK_LEAVES)
-                    .strength(LEAVES_STRENGTH).mapColor(MapColor.PALE_YELLOW).sounds(BlockSoundGroup.GRASS).burnable(), true);
+                    .strength(LEAVES_STRENGTH).mapColor(MapColor.PALE_YELLOW).sounds(SoundType.GRASS).burnable(), true);
 
     public static final Block FLOWERING_MALLORN_LEAVES = registerBlock("flowering_mallorn_leaves",
             (settings) -> new TintedParticleLeavesBlock(0.01F, settings), BlockBehaviour.Settings.copy(Blocks.OAK_LEAVES)
-                    .strength(LEAVES_STRENGTH).mapColor(MapColor.PALE_YELLOW).sounds(BlockSoundGroup.GRASS), true);
+                    .strength(LEAVES_STRENGTH).mapColor(MapColor.PALE_YELLOW).sounds(SoundType.GRASS), true);
 
     public static final Block ORANGE_MAPLE_LEAVES = registerBlock("orange_maple_leaves",
             (settings) -> new TintedParticleLeavesBlock(0.01F, settings), BlockBehaviour.Settings.copy(Blocks.OAK_LEAVES)
-                    .strength(LEAVES_STRENGTH).mapColor(MapColor.ORANGE).sounds(BlockSoundGroup.GRASS).burnable(), true);
+                    .strength(LEAVES_STRENGTH).mapColor(MapColor.ORANGE).sounds(SoundType.GRASS).burnable(), true);
     public static final Block RED_MAPLE_LEAVES = registerBlock("red_maple_leaves",
             (settings) -> new TintedParticleLeavesBlock(0.01F, settings), BlockBehaviour.Settings.copy(Blocks.OAK_LEAVES)
-                    .strength(LEAVES_STRENGTH).mapColor(MapColor.RED).sounds(BlockSoundGroup.GRASS).burnable(), true);
+                    .strength(LEAVES_STRENGTH).mapColor(MapColor.RED).sounds(SoundType.GRASS).burnable(), true);
     public static final Block YELLOW_MAPLE_LEAVES = registerBlock("yellow_maple_leaves",
             (settings) -> new TintedParticleLeavesBlock(0.01F, settings), BlockBehaviour.Settings.copy(Blocks.OAK_LEAVES)
-                    .strength(LEAVES_STRENGTH).mapColor(MapColor.YELLOW).sounds(BlockSoundGroup.GRASS).burnable(), true);
+                    .strength(LEAVES_STRENGTH).mapColor(MapColor.YELLOW).sounds(SoundType.GRASS).burnable(), true);
 
     public static final Block DRY_PINE_LEAVES = registerBlock("dry_pine_leaves",
             (settings) -> new TintedParticleLeavesBlock(0.01F, settings), BlockBehaviour.Settings.copy(Blocks.OAK_LEAVES)
-                    .strength(LEAVES_STRENGTH).mapColor(MapColor.PALE_GREEN).sounds(BlockSoundGroup.GRASS).burnable(), true);
+                    .strength(LEAVES_STRENGTH).mapColor(MapColor.PALE_GREEN).sounds(SoundType.GRASS).burnable(), true);
     public static final Block PINE_BRANCHES = registerBlock("pine_branches",
-            Block::new, BlockBehaviour.Settings.copy(Blocks.OAK_LEAVES).strength(LEAVES_STRENGTH).sounds(BlockSoundGroup.GRASS).burnable(), true);
+            Block::new, BlockBehaviour.Settings.copy(Blocks.OAK_LEAVES).strength(LEAVES_STRENGTH).sounds(SoundType.GRASS).burnable(), true);
 
     public static final Block FALLEN_LEAVES = registerBlock("fallen_leaves",
-            FallenLeavesBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.GREEN).strength(0.1f).sounds(BlockSoundGroup.MOSS_CARPET).nonOpaque().replaceable().noCollision(), true);
+            FallenLeavesBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.GREEN).strength(0.1f).sounds(SoundType.MOSS_CARPET).nonOpaque().replaceable().noCollision(), true);
     public static final Block FALLEN_MALLORN_LEAVES = registerBlock("fallen_mallorn_leaves",
             FallenLeavesBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.GREEN).strength(0.1f)
-                    .sounds(BlockSoundGroup.MOSS_CARPET).mapColor(MapColor.YELLOW).nonOpaque().replaceable().noCollision(), true);
+                    .sounds(SoundType.MOSS_CARPET).mapColor(MapColor.YELLOW).nonOpaque().replaceable().noCollision(), true);
     public static final Block FALLEN_MIRKWOOD_LEAVES = registerBlock("fallen_mirkwood_leaves",
             FallenLeavesBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.DARK_GREEN).strength(0.1f)
-                    .sounds(BlockSoundGroup.MOSS_CARPET).nonOpaque().replaceable().noCollision(), true);
+                    .sounds(SoundType.MOSS_CARPET).nonOpaque().replaceable().noCollision(), true);
 
     public static final Block WILLOW_VINES = registerBlock("willow_vines",
             CustomHangingBlock::new, BlockBehaviour.Settings.copy(Blocks.WEEPING_VINES_PLANT), true);
 
     public static final Block TOUGH_BERRY_BUSH = registerBlock("tough_berry_bush",
             ToughBerryBushBlock::new, BlockBehaviour.Settings.copy(Blocks.SWEET_BERRY_BUSH).ticksRandomly().noCollision().breakInstantly()
-                    .sounds(BlockSoundGroup.SWEET_BERRY_BUSH), false);
+                    .sounds(SoundType.SWEET_BERRY_BUSH), false);
     public static final Block STRAWBERRY_BUSH = registerBlock("strawberry_bush",
-            StrawBerryBushBlock::new, BlockBehaviour.Settings.copy(Blocks.SWEET_BERRY_BUSH).ticksRandomly().noCollision().breakInstantly().sounds(BlockSoundGroup.SWEET_BERRY_BUSH), false);
+            StrawBerryBushBlock::new, BlockBehaviour.Settings.copy(Blocks.SWEET_BERRY_BUSH).ticksRandomly().noCollision().breakInstantly().sounds(SoundType.SWEET_BERRY_BUSH), false);
 
     public static final Block WILD_WHEAT = registerCrossBlock("wild_wheat",
-            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(BlockSoundGroup.CROP), true);
+            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(SoundType.CROP), true);
     public static final Block TALL_WILD_WHEAT = registerBlock("tall_wild_wheat",
-            (settings) -> new CustomTallPlantBlock(settings, true), BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(BlockSoundGroup.CROP), true);
+            (settings) -> new CustomTallPlantBlock(settings, true), BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(SoundType.CROP), true);
     public static final Block WILD_PIPEWEED = registerBlock("wild_pipeweed",
-            (settings) -> new CustomTallPlantBlock(settings, true), BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(BlockSoundGroup.CROP),true);
+            (settings) -> new CustomTallPlantBlock(settings, true), BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(SoundType.CROP),true);
     public static final Block WILD_FLAX = registerCrossBlock("wild_flax",
-            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(BlockSoundGroup.CROP), true);
+            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(SoundType.CROP), true);
     public static final Block WILD_TOMATO = registerCrossBlock("wild_tomato",
-            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(BlockSoundGroup.CROP), true);
+            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(SoundType.CROP), true);
     public static final Block WILD_BELL_PEPPER = registerCrossBlock("wild_bell_pepper",
-            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(BlockSoundGroup.CROP), true);
+            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(SoundType.CROP), true);
     public static final Block WILD_CUCUMBER = registerCrossBlock("wild_cucumber",
-            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(BlockSoundGroup.CROP), true);
+            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(SoundType.CROP), true);
     public static final Block WILD_GARLIC = registerCrossBlock("wild_garlic",
-            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(BlockSoundGroup.CROP), true);
+            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(SoundType.CROP), true);
     public static final Block WILD_ONION = registerCrossBlock("wild_onion",
-            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(BlockSoundGroup.CROP), true);
+            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(SoundType.CROP), true);
     public static final Block WILD_LETTUCE = registerCrossBlock("wild_lettuce",
-            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(BlockSoundGroup.CROP), true);
+            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(SoundType.CROP), true);
     public static final Block WILD_LEEK = registerCrossBlock("wild_leek",
-            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(BlockSoundGroup.CROP), true);
+            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(SoundType.CROP), true);
     public static final Block WILD_POTATO = registerBlock("wild_potato",
-            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(BlockSoundGroup.CROP), true);
+            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(SoundType.CROP), true);
     public static final Block WILD_CARROT = registerBlock("wild_carrot",
-            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(BlockSoundGroup.CROP), true);
+            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(SoundType.CROP), true);
     public static final Block WILD_BEETROOT = registerBlock("wild_beetroot",
-            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(BlockSoundGroup.CROP), true);
+            WildCropBlock::new, BlockBehaviour.Settings.copy(Blocks.GRASS).sounds(SoundType.CROP), true);
 
     public static final Block TOMATO_CROP = registerBlock("tomato_crop",
             TomatoCropBlock::new, BlockBehaviour.Settings.copy(Blocks.POTATOES), false);
@@ -593,11 +604,11 @@ public class ModNatureBlocks {
             HangingCobwebBlock::new, BlockBehaviour.Settings.copy(Blocks.COBWEB), true);
 
     public static final Block CORNER_COBWEB = registerBlock("corner_cobweb",
-            CornerCobwebBlock::new, BlockBehaviour.Settings.copy(Blocks.COBWEB).noCollision().pistonBehavior(PistonBehavior.DESTROY), true);
+            CornerCobwebBlock::new, BlockBehaviour.Settings.copy(Blocks.COBWEB).noCollision().pistonBehavior(PushReaction.DESTROY), true);
 
     public static final Block WEBBING = registerBlock("webbing",
             WebbingBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.WHITE).replaceable().noCollision().strength(0.2f)
-                    .pistonBehavior(PistonBehavior.DESTROY).sounds(BlockSoundGroup.WOOL).burnable().ticksRandomly(), true);
+                    .pistonBehavior(PushReaction.DESTROY).sounds(SoundType.WOOL).burnable().ticksRandomly(), true);
 
     public static final Block SHELOBITE_LARVA_EGG = registerBlock("shelobite_larva_egg",
             ShelobiteLarvaEggBlock::new, BlockBehaviour.Settings.copy(Blocks.TURTLE_EGG), true);
@@ -630,7 +641,7 @@ public class ModNatureBlocks {
     }
 
     public static Block registerVariantSapling(String name, List<ResourceKey<ConfiguredFeature<?, ?>>> treeFeatures) {
-        List<SaplingGenerator> saplingGenerators = new ArrayList<>();
+        List<AbstractTreeGrower> saplingGenerators = new ArrayList<>();
         for(ResourceKey<ConfiguredFeature<?,?>> treeFeature : treeFeatures) {
             saplingGenerators.add(new MESaplingGenerator(name, Optional.empty(), Optional.ofNullable(treeFeature),
                             Optional.empty()));

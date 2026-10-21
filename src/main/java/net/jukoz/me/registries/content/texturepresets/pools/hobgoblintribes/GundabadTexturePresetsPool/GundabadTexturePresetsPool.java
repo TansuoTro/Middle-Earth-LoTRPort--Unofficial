@@ -11,7 +11,6 @@ import net.jukoz.me.resources.datas.texture_presets.TexturePresetDataPool;
 import net.jukoz.me.resources.datas.common.EntityCategories;
 import net.jukoz.me.api.dtos.WeightedIdentifier;
 import net.jukoz.me.resources.datas.texture_presets.WeightedTexturePresetHolder;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,7 +21,6 @@ public class GundabadTexturePresetsPool {
 
     public final static TexturePresetDataPool GOBLIN;
     public final static TexturePresetDataPool HOBGOBLIN;
-
 
     public static List<TexturePresetsRegistry.RegisterableNpcTextureData> fetchAll() {
         return List.of(

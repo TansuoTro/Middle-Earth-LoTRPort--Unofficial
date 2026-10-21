@@ -6,7 +6,6 @@ import net.jukoz.me.item.dataComponents.WeaponTypeDataComponent;
 import net.jukoz.me.item.utils.ShieldTypesME;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ShieldItem;
-
 import java.util.HashSet;
 
 public class CustomShieldItem extends ShieldItem {

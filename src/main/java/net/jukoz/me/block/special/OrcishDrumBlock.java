@@ -4,7 +4,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.core.BlockPos;
@@ -24,7 +24,7 @@ public class OrcishDrumBlock extends Block {
         if (world.getBlockState(pos.up()).isAir()) {
             RandomSource random = world.getRandom();
             world.addSyncedBlockEvent(pos, this, 0, 0);
-            world.playSound(player, pos, SoundsME.ORC_DRUM, SoundCategory.BLOCKS, 1.0F + random.nextFloat(), (float)(0.75F + (random.nextFloat() * 0.4)));
+            world.playSound(player, pos, SoundsME.ORC_DRUM, SoundSource.BLOCKS, 1.0F + random.nextFloat(), (float)(0.75F + (random.nextFloat() * 0.4)));
             world.emitGameEvent(player, GameEvent.BLOCK_ACTIVATE, pos);
             return InteractionResult.SUCCESS;
         }

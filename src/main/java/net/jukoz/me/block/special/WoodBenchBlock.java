@@ -3,13 +3,14 @@ package net.jukoz.me.block.special;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.block.Waterloggable;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.VoxelShapes;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.phys.shapes.Shapes;
 
-public class WoodBenchBlock extends SeatBlock implements Waterloggable {
+public class WoodBenchBlock extends SeatBlock implements SimpleWaterloggedBlock {
 
     public WoodBenchBlock(Settings settings) {
         super(settings);
@@ -20,7 +21,7 @@ public class WoodBenchBlock extends SeatBlock implements Waterloggable {
         return switch(state.get(FACING)) {
             case WEST, EAST -> Block.createCuboidShape(2, 0, 0, 14, 9, 16);
             case SOUTH, NORTH -> Block.createCuboidShape(0, 0, 2, 16, 9, 14);
-            default -> VoxelShapes.cuboid(1,1,1,1,1,1);
+            default -> Shapes.cuboid(1,1,1,1,1,1);
         };
     }
 }

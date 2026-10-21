@@ -1,15 +1,14 @@
 package net.jukoz.me.resources.datas.texture_presets;
-import net.jukoz.me.compat.NbtCompat;
 
+import net.jukoz.me.compat.NbtCompat;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.api.dtos.WeightedIdentifier;
 import net.jukoz.me.api.dtos.WeightedPool;
 import net.jukoz.me.resources.datas.common.CharacterMaterialTypes;
 import net.jukoz.me.resources.datas.common.CharacterPatternTypes;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +88,6 @@ public class TexturePreset {
         fetchSimplifiedTextures(compound);
     }
 
-
     public CompoundTag getNbt(CompoundTag nbt) {
 
         if(skinMaterials.isFilled()){
@@ -165,8 +163,7 @@ public class TexturePreset {
         return nbt;
     }
 
-
-    private NbtList createTextureElementList(WeightedPool<WeightedIdentifier> values){
+    private ListTag createTextureElementList(WeightedPool<WeightedIdentifier> values){
         return values.getNbt();
     }
 
@@ -177,9 +174,9 @@ public class TexturePreset {
             if(value.contains(MATERIALS)){
                 var materials = value.get(MATERIALS);
                 if(materials != null){
-                    NbtList nbtList = NbtCompat.list(materials);
+                    ListTag nbtList = NbtCompat.list(materials);
 
-                    List<NbtElement> fetchedValues = nbtList.stream().toList();
+                    List<Tag> fetchedValues = nbtList.stream().toList();
                     List<WeightedIdentifier> weightedList = new ArrayList<>();
 
                     for(var fetchedValue : fetchedValues){
@@ -196,16 +193,15 @@ public class TexturePreset {
         }
     }
 
-
     private void fetchPatterns(CompoundTag compound, CharacterPatternTypes type){
         if(compound.contains(type.name())){
             CompoundTag value = compound.getCompound(type.name());
             if(value.contains(PATTERNS)){
                 var patterns = value.get(PATTERNS);
                 if(patterns != null){
-                    NbtList nbtList = NbtCompat.list(patterns);
+                    ListTag nbtList = NbtCompat.list(patterns);
 
-                    List<NbtElement> fetchedValues = nbtList.stream().toList();
+                    List<Tag> fetchedValues = nbtList.stream().toList();
                     List<WeightedIdentifier> weightedIdentifiers = new ArrayList<>();
 
                     for(var fetchedValue : fetchedValues){
@@ -236,7 +232,7 @@ public class TexturePreset {
     private void fetchClothes(CompoundTag compound){
         if(compound.contains(CLOTHES)){
             if(compound.contains(CLOTHES)){
-                NbtList listClothePresets = compound.getList(CLOTHES, NbtElement.COMPOUND_TYPE);
+                ListTag listClothePresets = compound.getList(CLOTHES, Tag.COMPOUND_TYPE);
 
                 listClothePresets.forEach(x -> {
                     if(NbtCompat.isCompound(x)){
@@ -247,10 +243,9 @@ public class TexturePreset {
         }
     }
 
-
     private void fetchSimplifiedTextures(CompoundTag compound) {
         if(compound.contains(SIMPLIFIED)){
-            var simplifiedList = compound.getList(SIMPLIFIED, NbtElement.COMPOUND_TYPE);
+            var simplifiedList = compound.getList(SIMPLIFIED, Tag.COMPOUND_TYPE);
             simplifiedList.forEach(x -> {
                 if (NbtCompat.isCompound(x)) {
                     this.simplifiedTextures.add(new WeightedSimplifiedTexturePresetHolder(NbtCompat.compound(x)));
@@ -381,7 +376,5 @@ public class TexturePreset {
     public Boolean haveEmissiveEyes() {
         return haveEmissiveEyes;
     }
-
-
 
 }

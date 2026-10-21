@@ -1,9 +1,8 @@
 package net.jukoz.me.block.special.structureManager.nest;
+
 import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.InteractionHand;
-
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -11,7 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -26,8 +25,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelView;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class StructureNestBlock extends BlockWithEntity implements BlockEntityProvider, Waterloggable {
+public class StructureNestBlock extends BaseEntityBlock implements EntityBlock, SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final BooleanProperty ENABLED = BooleanProperty.of("enabled");
 
@@ -36,14 +41,12 @@ public class StructureNestBlock extends BlockWithEntity implements BlockEntityPr
         setDefaultState(getDefaultState().with(ENABLED, false));
     }
 
-
-
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (world.isClient) {
             return InteractionResult.SUCCESS;
         } else {
-            NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+            MenuProvider screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
             if(screenHandlerFactory != null) {
                 player.openHandledScreen(screenHandlerFactory);
             }
@@ -61,15 +64,15 @@ public class StructureNestBlock extends BlockWithEntity implements BlockEntityPr
         return state.getFluidState().isEmpty();
     }
 
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderType(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     public float getAmbientOcclusionLightLevel(BlockState state, BlockGetter world, BlockPos pos) {
         return 1.0F;
     }
 
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if ((Boolean)state.get(WATERLOGGED)) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }

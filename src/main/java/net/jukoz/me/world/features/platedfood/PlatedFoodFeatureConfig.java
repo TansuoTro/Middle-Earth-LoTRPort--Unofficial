@@ -22,4 +22,3 @@ public class PlatedFoodFeatureConfig implements FeatureConfiguration {
         this.lootTable = lootTable;
     }
 }
-

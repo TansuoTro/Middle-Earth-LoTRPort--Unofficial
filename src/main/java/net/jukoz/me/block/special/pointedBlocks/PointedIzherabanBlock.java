@@ -4,25 +4,23 @@ import com.google.common.annotations.VisibleForTesting;
 import com.mojang.serialization.MapCodec;
 import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.block.registration.StoneBlockSets;
-import net.minecraft.block.*;
-import net.minecraft.block.enums.Thickness;
+import net.minecraft.world.level.block.state.properties.DripstoneThickness;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.FallingBlockEntity;
-import net.minecraft.entity.ai.pathing.NavigationType;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.entity.projectile.TridentEntity;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.particle.ParticleEffect;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.state.property.*;
-import net.minecraft.util.function.BooleanBiFunction;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -36,15 +34,26 @@ import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.level.LevelView;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.AbstractCauldronBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import com.mojang.math.Axis;
+import net.minecraft.world.phys.shapes.Shapes;
 
-public class PointedIzherabanBlock extends Block implements Waterloggable {
+public class PointedIzherabanBlock extends Block implements SimpleWaterloggedBlock {
     public static final EnumProperty<Direction> VERTICAL_DIRECTION;
-    public static final EnumProperty<Thickness> THICKNESS;
+    public static final EnumProperty<DripstoneThickness> THICKNESS;
     public static final BooleanProperty WATERLOGGED;
     private static final VoxelShape TIP_MERGE_SHAPE;
     private static final VoxelShape UP_TIP_SHAPE;
@@ -56,22 +65,20 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
     private static final float MAX_HORIZONTAL_MODEL_OFFSET;
     private static final VoxelShape DRIP_COLLISION_SHAPE;
 
-
-
     public PointedIzherabanBlock(BlockBehaviour.Settings settings) {
         super(settings);
-        this.setDefaultState((BlockState)((BlockState)((BlockState)((BlockState)this.stateManager.getDefaultState()).with(VERTICAL_DIRECTION, Direction.UP)).with(THICKNESS, Thickness.TIP)).with(WATERLOGGED, false));
+        this.setDefaultState((BlockState)((BlockState)((BlockState)((BlockState)this.stateManager.getDefaultState()).with(VERTICAL_DIRECTION, Direction.UP)).with(THICKNESS, DripstoneThickness.TIP)).with(WATERLOGGED, false));
     }
 
     protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(new Property[]{VERTICAL_DIRECTION, THICKNESS, WATERLOGGED});
     }
 
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
         return canPlaceAtWithDirection(world, pos, (Direction)state.get(VERTICAL_DIRECTION));
     }
 
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if ((Boolean)state.get(WATERLOGGED)) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
@@ -91,19 +98,19 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
 
                 return state;
             } else {
-                boolean bl = state.get(THICKNESS) == Thickness.TIP_MERGE;
-                Thickness thickness = getThickness(world, pos, direction2, bl);
+                boolean bl = state.get(THICKNESS) == DripstoneThickness.TIP_MERGE;
+                DripstoneThickness thickness = getThickness(world, pos, direction2, bl);
                 return (BlockState)state.with(THICKNESS, thickness);
             }
         }
     }
 
-    public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
+    public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
         if (!world.isClient) {
             BlockPos blockPos = hit.getBlockPos();
             if (world instanceof ServerLevel) {
                 ServerLevel serverWorld = (ServerLevel)world;
-                if (projectile.canModifyAt(serverWorld, blockPos) && projectile instanceof TridentEntity && projectile.getVelocity().length() > 0.6) {
+                if (projectile.canModifyAt(serverWorld, blockPos) && projectile instanceof ThrownTrident && projectile.getVelocity().length() > 0.6) {
                     world.breakBlock(blockPos, true);
                 }
             }
@@ -112,7 +119,7 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
     }
 
     public void onLandedUpon(Level world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
-        if (state.get(VERTICAL_DIRECTION) == Direction.UP && state.get(THICKNESS) == Thickness.TIP) {
+        if (state.get(VERTICAL_DIRECTION) == Direction.UP && state.get(THICKNESS) == DripstoneThickness.TIP) {
             entity.handleFallDamage((float)(fallDistance + 2.5), 2.0F, world.getDamageSources().stalagmite());
         } else {
             super.onLandedUpon(world, state, pos, entity, fallDistance);
@@ -196,7 +203,7 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        WorldAccess worldAccess = ctx.getWorld();
+        LevelAccessor worldAccess = ctx.getWorld();
         BlockPos blockPos = ctx.getBlockPos();
         Direction direction = ctx.getVerticalPlayerLookDirection().getOpposite();
         Direction direction2 = getDirectionToPlaceAt(worldAccess, blockPos, direction);
@@ -204,7 +211,7 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
             return null;
         } else {
             boolean bl = !ctx.shouldCancelInteraction();
-            Thickness thickness = getThickness(worldAccess, blockPos, direction2, bl);
+            DripstoneThickness thickness = getThickness(worldAccess, blockPos, direction2, bl);
             return thickness == null ? null : (BlockState)((BlockState)((BlockState)this.getDefaultState().with(VERTICAL_DIRECTION, direction2)).with(THICKNESS, thickness)).with(WATERLOGGED, worldAccess.getFluidState(blockPos).getFluid() == Fluids.WATER);
         }
     }
@@ -214,12 +221,12 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
     }
 
     protected VoxelShape getCullingShape(BlockState state) {
-        return VoxelShapes.empty();
+        return Shapes.empty();
     }
 
-    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         VoxelShape var10000;
-        switch ((Thickness)state.get(THICKNESS)) {
+        switch ((DripstoneThickness)state.get(THICKNESS)) {
             case TIP_MERGE -> var10000 = TIP_MERGE_SHAPE;
             case TIP -> var10000 = state.get(VERTICAL_DIRECTION) == Direction.DOWN ? DOWN_TIP_SHAPE : UP_TIP_SHAPE;
             case FRUSTUM -> var10000 = BASE_SHAPE;
@@ -322,17 +329,17 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
         if (isTip(blockState, direction.getOpposite())) {
             growMerged(blockState, world, blockPos);
         } else if (blockState.isAir() || blockState.isOf(Blocks.WATER)) {
-            place(world, blockPos, direction, Thickness.TIP);
+            place(world, blockPos, direction, DripstoneThickness.TIP);
         }
 
     }
 
-    private static void place(WorldAccess world, BlockPos pos, Direction direction, Thickness thickness) {
+    private static void place(LevelAccessor world, BlockPos pos, Direction direction, DripstoneThickness thickness) {
         BlockState blockState = (BlockState)((BlockState)((BlockState)ModBlocks.POINTED_IZHERABAN.getDefaultState().with(VERTICAL_DIRECTION, direction)).with(THICKNESS, thickness)).with(WATERLOGGED, world.getFluidState(pos).getFluid() == Fluids.WATER);
         world.setBlockState(pos, blockState, 3);
     }
 
-    private static void growMerged(BlockState state, WorldAccess world, BlockPos pos) {
+    private static void growMerged(BlockState state, LevelAccessor world, BlockPos pos) {
         BlockPos blockPos2;
         BlockPos blockPos;
         if (state.get(VERTICAL_DIRECTION) == Direction.UP) {
@@ -343,8 +350,8 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
             blockPos = pos.down();
         }
 
-        place(world, blockPos2, Direction.DOWN, Thickness.TIP_MERGE);
-        place(world, blockPos, Direction.UP, Thickness.TIP_MERGE);
+        place(world, blockPos2, Direction.DOWN, DripstoneThickness.TIP_MERGE);
+        place(world, blockPos, Direction.UP, DripstoneThickness.TIP_MERGE);
     }
 
     public static void createParticle(Level world, BlockPos pos, BlockState state) {
@@ -360,12 +367,12 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
         double f = (double)pos.getY() + DOWN_TIP_Y - 0.0625;
         double g = (double)pos.getZ() + 0.5 + vec3d.z;
         Fluid fluid2 = getDripFluid(world, fluid);
-        ParticleEffect particleEffect = fluid2.isIn(FluidTags.LAVA) ? ParticleTypes.DRIPPING_DRIPSTONE_LAVA : ParticleTypes.DRIPPING_DRIPSTONE_WATER;
+        ParticleOptions particleEffect = fluid2.isIn(FluidTags.LAVA) ? ParticleTypes.DRIPPING_DRIPSTONE_LAVA : ParticleTypes.DRIPPING_DRIPSTONE_WATER;
         world.addParticle(particleEffect, e, f, g, 0.0, 0.0, 0.0);
     }
 
     @Nullable
-    private static BlockPos getTipPos(BlockState state, WorldAccess world, BlockPos pos, int range, boolean allowMerged) {
+    private static BlockPos getTipPos(BlockState state, LevelAccessor world, BlockPos pos, int range, boolean allowMerged) {
         if (isTip(state, allowMerged)) {
             return pos;
         } else {
@@ -380,7 +387,7 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
     }
 
     @Nullable
-    private static Direction getDirectionToPlaceAt(WorldView world, BlockPos pos, Direction direction) {
+    private static Direction getDirectionToPlaceAt(LevelReader world, BlockPos pos, Direction direction) {
         Direction direction2;
         if (canPlaceAtWithDirection(world, pos, direction)) {
             direction2 = direction;
@@ -395,26 +402,26 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
         return direction2;
     }
 
-    private static Thickness getThickness(WorldView world, BlockPos pos, Direction direction, boolean tryMerge) {
+    private static DripstoneThickness getThickness(LevelReader world, BlockPos pos, Direction direction, boolean tryMerge) {
         Direction direction2 = direction.getOpposite();
         BlockState blockState = world.getBlockState(pos.offset(direction));
         if (isPointedDripstoneFacingDirection(blockState, direction2)) {
-            return !tryMerge && blockState.get(THICKNESS) != Thickness.TIP_MERGE ? Thickness.TIP : Thickness.TIP_MERGE;
+            return !tryMerge && blockState.get(THICKNESS) != DripstoneThickness.TIP_MERGE ? DripstoneThickness.TIP : DripstoneThickness.TIP_MERGE;
         } else if (!isPointedDripstoneFacingDirection(blockState, direction)) {
-            return Thickness.TIP;
+            return DripstoneThickness.TIP;
         } else {
-            Thickness thickness = (Thickness)blockState.get(THICKNESS);
-            if (thickness != Thickness.TIP && thickness != Thickness.TIP_MERGE) {
+            DripstoneThickness thickness = (DripstoneThickness)blockState.get(THICKNESS);
+            if (thickness != DripstoneThickness.TIP && thickness != DripstoneThickness.TIP_MERGE) {
                 BlockState blockState2 = world.getBlockState(pos.offset(direction2));
-                return !isPointedDripstoneFacingDirection(blockState2, direction) ? Thickness.BASE : Thickness.MIDDLE;
+                return !isPointedDripstoneFacingDirection(blockState2, direction) ? DripstoneThickness.BASE : DripstoneThickness.MIDDLE;
             } else {
-                return Thickness.FRUSTUM;
+                return DripstoneThickness.FRUSTUM;
             }
         }
     }
 
     public static boolean canDrip(BlockState state) {
-        return isPointingDown(state) && state.get(THICKNESS) == Thickness.TIP && !(Boolean)state.get(WATERLOGGED);
+        return isPointingDown(state) && state.get(THICKNESS) == DripstoneThickness.TIP && !(Boolean)state.get(WATERLOGGED);
     }
 
     private static boolean canGrow(BlockState state, ServerLevel world, BlockPos pos) {
@@ -438,7 +445,7 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
         }, range);
     }
 
-    private static boolean canPlaceAtWithDirection(WorldView world, BlockPos pos, Direction direction) {
+    private static boolean canPlaceAtWithDirection(LevelReader world, BlockPos pos, Direction direction) {
         BlockPos blockPos = pos.offset(direction.getOpposite());
         BlockState blockState = world.getBlockState(blockPos);
         return blockState.isSideSolidFullSquare(world, blockPos, direction) || isPointedDripstoneFacingDirection(blockState, direction);
@@ -448,8 +455,8 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
         if (!state.isOf(ModBlocks.POINTED_IZHERABAN)) {
             return false;
         } else {
-            Thickness thickness = (Thickness)state.get(THICKNESS);
-            return thickness == Thickness.TIP || allowMerged && thickness == Thickness.TIP_MERGE;
+            DripstoneThickness thickness = (DripstoneThickness)state.get(THICKNESS);
+            return thickness == DripstoneThickness.TIP || allowMerged && thickness == DripstoneThickness.TIP_MERGE;
         }
     }
 
@@ -465,11 +472,11 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
         return isPointedDripstoneFacingDirection(state, Direction.UP);
     }
 
-    private static boolean isHeldByPointedDripstone(BlockState state, WorldView world, BlockPos pos) {
+    private static boolean isHeldByPointedDripstone(BlockState state, LevelReader world, BlockPos pos) {
         return isPointingDown(state) && !world.getBlockState(pos.up()).isOf(ModBlocks.POINTED_IZHERABAN);
     }
 
-    public boolean canPathfindThrough(BlockState state, net.minecraft.world.level.BlockGetter world, BlockPos pos, NavigationType type) {
+    public boolean canPathfindThrough(BlockState state, net.minecraft.world.level.BlockGetter world, BlockPos pos, PathComputationType type) {
         return false;
     }
 
@@ -533,7 +540,7 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
         }
     }
 
-    private static Optional<BlockPos> searchInDirection(WorldAccess world, BlockPos pos, Direction.AxisDirection direction, BiPredicate<BlockPos, BlockState> continuePredicate, Predicate<BlockState> stopPredicate, int range) {
+    private static Optional<BlockPos> searchInDirection(LevelAccessor world, BlockPos pos, Direction.AxisDirection direction, BiPredicate<BlockPos, BlockState> continuePredicate, Predicate<BlockState> stopPredicate, int range) {
         Direction direction2 = Direction.get(direction, Direction.Axis.Y);
         BlockPos.Mutable mutable = pos.mutableCopy();
 
@@ -561,14 +568,14 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
             return false;
         } else {
             VoxelShape voxelShape = state.getCollisionShape(world, pos);
-            return !VoxelShapes.matchesAnywhere(DRIP_COLLISION_SHAPE, voxelShape, BooleanBiFunction.AND);
+            return !Shapes.matchesAnywhere(DRIP_COLLISION_SHAPE, voxelShape, BooleanOp.AND);
         }
     }
 
     static {
-        VERTICAL_DIRECTION = Properties.VERTICAL_DIRECTION;
-        THICKNESS = Properties.THICKNESS;
-        WATERLOGGED = Properties.WATERLOGGED;
+        VERTICAL_DIRECTION = BlockStateProperties.VERTICAL_DIRECTION;
+        THICKNESS = BlockStateProperties.THICKNESS;
+        WATERLOGGED = BlockStateProperties.WATERLOGGED;
         TIP_MERGE_SHAPE = Block.createCuboidShape(8.0 - (6.0), 0.0, 8.0 - (6.0), 8.0 + (6.0), 16.0, 8.0 + (6.0));
         UP_TIP_SHAPE = Block.createCuboidShape(8.0 - (6.0), 0.0, 8.0 - (6.0), 8.0 + (6.0), 11.0, 8.0 + (6.0));
         DOWN_TIP_SHAPE = Block.createCuboidShape(8.0 - (6.0), 5.0, 8.0 - (6.0), 8.0 + (6.0), 16.0, 8.0 + (6.0));

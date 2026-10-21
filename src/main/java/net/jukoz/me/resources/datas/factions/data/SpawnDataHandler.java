@@ -1,12 +1,11 @@
 package net.jukoz.me.resources.datas.factions.data;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import org.joml.Vector2i;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +30,7 @@ public class SpawnDataHandler {
     }
 
     private void deserializeNbt(CompoundTag nbtCompound) {
-        NbtList compoundList = nbtCompound.getList("data", NbtElement.COMPOUND_TYPE);
+        ListTag compoundList = nbtCompound.getList("data", Tag.COMPOUND_TYPE);
         spawns = new HashMap<>();
         for(int i = 0; i < compoundList.size(); i++){
             SpawnData spawnData = SpawnData.deserialize(compoundList.getCompound(i));
@@ -44,7 +43,7 @@ public class SpawnDataHandler {
             return Optional.empty();
 
         CompoundTag nbt = new CompoundTag();
-        NbtList spawnDataList = new NbtList();
+        ListTag spawnDataList = new ListTag();
         for(SpawnData spawnData : spawns.values()){
             spawnDataList.add(SpawnData.serialize(spawnData));
         }

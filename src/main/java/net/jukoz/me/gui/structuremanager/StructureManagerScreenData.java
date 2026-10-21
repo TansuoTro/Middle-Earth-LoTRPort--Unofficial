@@ -5,7 +5,6 @@ import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
-
 import java.util.Optional;
 
 public class StructureManagerScreenData{

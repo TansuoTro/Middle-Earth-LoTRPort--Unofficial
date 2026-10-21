@@ -20,23 +20,34 @@ import net.minecraft.resources.RegistryOps;
 import net.minecraft.core.Holder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.util.math.random.CheckedRandom;
-import net.minecraft.util.math.random.ChunkRandom;
+import net.minecraft.world.level.levelgen.LegacyRandomSource;
+import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.util.RandomSourceSeed;
 import net.minecraft.world.*;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.biome.source.BiomeAccess;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.level.biome.BiomeManager;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.gen.StructureAccessor;
-import net.minecraft.world.gen.chunk.*;
-import net.minecraft.world.gen.noise.NoiseConfig;
-
+import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.levelgen.RandomState;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import net.minecraft.server.level.WorldGenRegion;
+import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.level.NaturalSpawner;
+import net.minecraft.world.level.NoiseColumn;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.blending.Blender;
+import net.minecraft.world.level.levelgen.structure.StructureSet;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
+import net.minecraft.world.level.levelgen.RandomSupport;
 
 public class MiddleEarthChunkGenerator extends ChunkGenerator {
     public static final int MEDGON_LEVEL = -32;
@@ -59,12 +70,12 @@ public class MiddleEarthChunkGenerator extends ChunkGenerator {
     private static final int CAVE_STRETCH_V = 50;
     private static float minNoise = 10000;
     private static float maxNoise = -10000;
-    RegistryEntryLookup<Biome> biomeRegistry;
+    HolderGetter<Biome> biomeRegistry;
     public static final Codec<MiddleEarthChunkGenerator> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(RegistryOps.getEntryLookupCodec(Registries.BIOME))
                     .apply(instance, instance.stable(MiddleEarthChunkGenerator::new)));
 
-    public MiddleEarthChunkGenerator(RegistryEntryLookup<Biome> biomeRegistry) {
+    public MiddleEarthChunkGenerator(HolderGetter<Biome> biomeRegistry) {
         super(new ModBiomeSource(
                 new ArrayList<>(Arrays.asList(
                     biomeRegistry.getOrThrow(MEBiomeKeys.OCEAN),
@@ -352,16 +363,14 @@ public class MiddleEarthChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public void carve(ChunkRegion chunkRegion, long seed, NoiseConfig noiseConfig,
-                      BiomeAccess biomeAccess, StructureAccessor structureAccessor,
-                      Chunk chunk2, GenerationStep.Carver carverStep) {
+    public void carve(WorldGenRegion chunkRegion, long seed, RandomState noiseConfig,
+                      BiomeManager biomeAccess, StructureManager structureAccessor,
+                      ChunkAccess chunk2, GenerationStep.WorldCarver carverStep) {
 
     }
 
-
-
     @Override
-    public void buildSurface(ChunkRegion region, StructureAccessor structures, NoiseConfig noiseConfig, Chunk chunk) {
+    public void buildSurface(WorldGenRegion region, StructureManager structures, RandomState noiseConfig, ChunkAccess chunk) {
         int bottomY = chunk.getBottomY();
         for(int x = 0; x < 16; x++) {
             for(int z = 0; z < 16; z++) {
@@ -428,7 +437,7 @@ public class MiddleEarthChunkGenerator extends ChunkGenerator {
 
     }
 
-    private void trySetBlock(Chunk chunk, BlockPos blockPos, BlockState blockState) {
+    private void trySetBlock(ChunkAccess chunk, BlockPos blockPos, BlockState blockState) {
         float noise = 0;
         if(blockPos.getY() < WATER_HEIGHT) {
             noise =(float) SimplexNoise.noise(
@@ -446,27 +455,27 @@ public class MiddleEarthChunkGenerator extends ChunkGenerator {
     }
     
     @Override
-    public void generateFeatures(StructureWorldAccess world, Chunk chunk, StructureAccessor structureAccessor) {
+    public void generateFeatures(WorldGenLevel world, ChunkAccess chunk, StructureManager structureAccessor) {
         super.generateFeatures(world, chunk, structureAccessor);
     }
 
     @Override
-    public void populateEntities(ChunkRegion region) {
+    public void populateEntities(WorldGenRegion region) {
         ChunkPos chunkPos = region.getCenterPos();
         Holder<Biome> registryEntry = region.getBiome(chunkPos.getStartPos().withY(region.getTopY() - 1));
-        ChunkRandom chunkRandom = new ChunkRandom(new CheckedRandom(RandomSeed.getSeed()));
+        WorldgenRandom chunkRandom = new WorldgenRandom(new LegacyRandomSource(RandomSupport.getSeed()));
         chunkRandom.setPopulationSeed(region.getSeed(), chunkPos.getStartX(), chunkPos.getStartZ());
-        SpawnHelper.populateEntities(region, registryEntry, chunkPos, chunkRandom);
+        NaturalSpawner.populateEntities(region, registryEntry, chunkPos, chunkRandom);
     }
 
     @Override
-    public net.minecraft.world.gen.chunk.placement.StructurePlacementCalculator createStructurePlacementCalculator(
-            net.minecraft.core.RegistryWrapper<net.minecraft.structure.StructureSet> structureSetRegistry,
-            NoiseConfig noiseConfig, long seed) {
-        // The base ChunkGenerator returns StructurePlacementCalculator.EMPTY, which silently
+    public net.minecraft.world.level.chunk.ChunkGeneratorStructureState createStructurePlacementCalculator(
+            net.minecraft.core.HolderLookup<net.minecraft.world.level.levelgen.structure.StructureSet> structureSetRegistry,
+            RandomState noiseConfig, long seed) {
+        // The base ChunkGenerator returns ChunkGeneratorStructureState.EMPTY, which silently
         // disables every structure set (and makes /locate structure throw). A custom generator
         // has to build the real calculator from its biome source.
-        return net.minecraft.world.gen.chunk.placement.StructurePlacementCalculator.create(
+        return net.minecraft.world.gen.chunk.placement.ChunkGeneratorStructureState.create(
                 noiseConfig, seed, this.getBiomeSource(), structureSetRegistry);
     }
 
@@ -474,9 +483,8 @@ public class MiddleEarthChunkGenerator extends ChunkGenerator {
         return 384;
     }
 
-
     @Override
-    public CompletableFuture<Chunk> populateNoise(Executor executor, Blender blender, NoiseConfig noiseConfig, StructureAccessor structureAccessor, Chunk chunk) {
+    public CompletableFuture<ChunkAccess> populateNoise(Executor executor, Blender blender, RandomState noiseConfig, StructureManager structureAccessor, ChunkAccess chunk) {
 
         return CompletableFuture.completedFuture(chunk);
     }
@@ -492,18 +500,18 @@ public class MiddleEarthChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public int getHeight(int x, int z, Heightmap.Type heightmap, HeightLimitView world, NoiseConfig noiseConfig) {
+    public int getHeight(int x, int z, Heightmap.Type heightmap, LevelHeightAccessor world, RandomState noiseConfig) {
         float worldHeight = 1 + DIRT_HEIGHT + MiddleEarthHeightMap.getHeight(x, z);
         return (int)worldHeight;
     }
 
     @Override
-    public VerticalBlockSample getColumnSample(int x, int z, HeightLimitView world, NoiseConfig noiseConfig) {
-        return new VerticalBlockSample(0, new BlockState[0]);
+    public NoiseColumn getColumnSample(int x, int z, LevelHeightAccessor world, RandomState noiseConfig) {
+        return new NoiseColumn(0, new BlockState[0]);
     }
 
     @Override
-    public void getDebugHudText(List<String> text, NoiseConfig noiseConfig, BlockPos pos) {
+    public void getDebugHudText(List<String> text, RandomState noiseConfig, BlockPos pos) {
 
     }
 }

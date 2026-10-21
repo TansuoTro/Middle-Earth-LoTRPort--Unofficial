@@ -3,24 +3,25 @@ package net.jukoz.me.entity.humans.rohan;
 import com.google.common.collect.Maps;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.BipedEntityRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
+import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.model.EntityModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
-
 import java.util.Map;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
-public class RohanHumanRenderer extends BipedEntityRenderer<RohanHumanEntity, RohanHumanModel<RohanHumanEntity>> {
+public class RohanHumanRenderer extends HumanoidMobRenderer<RohanHumanEntity, RohanHumanModel<RohanHumanEntity>> {
     private static final String PATH = "textures/entities/humans/rohan/";
 
-    public RohanHumanRenderer(EntityRendererFactory.Context ctx) {
+    public RohanHumanRenderer(EntityRendererProvider.Context ctx) {
         super(ctx, new RohanHumanModel<>(ctx.getPart(ModEntityModelLayers.HUMAN)), 0.5f);
-        this.addFeature(new ArmorFeatureRenderer<>(this, new RohanHumanModel(ctx.getPart(EntityModelLayers.PLAYER_INNER_ARMOR)),
-                new RohanHumanModel(ctx.getPart(EntityModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
+        this.addFeature(new HumanoidArmorLayer<>(this, new RohanHumanModel(ctx.getPart(ModelLayers.PLAYER_INNER_ARMOR)),
+                new RohanHumanModel(ctx.getPart(ModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
 
     }
 
@@ -41,7 +42,7 @@ public class RohanHumanRenderer extends BipedEntityRenderer<RohanHumanEntity, Ro
 
     @Override
     public void render(RohanHumanEntity entity, float entityYaw, float partialTick, PoseStack poseStack,
-                       VertexConsumerProvider bufferSource, int packedLight) {
+                       MultiBufferSource bufferSource, int packedLight) {
 
         poseStack.scale(0.95f, 0.95f, 0.95f);
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);

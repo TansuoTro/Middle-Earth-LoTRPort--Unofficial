@@ -1,9 +1,9 @@
 package net.jukoz.me.mixin.client;
 
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.item.DecorativeItemsME;
 import net.jukoz.me.item.WeaponItemsME;
@@ -18,10 +18,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * R3: 1.20.1 rewrite of the donor 1.21.8 render-state mixin. 1.20.1's
- * BipedEntityModel.positionRightArm/positionLeftArm take the entity directly,
+ * HumanoidModel.positionRightArm/positionLeftArm take the entity directly,
  * so the state access interfaces are not needed here.
  */
-@Mixin(BipedEntityModel.class)
+@Mixin(HumanoidModel.class)
 public class BipedEntityModelMixin {
 
     @Shadow @Final
@@ -51,7 +51,7 @@ public class BipedEntityModelMixin {
     }
 
     private static boolean isRestrained(LivingEntity entity) {
-        StatusEffectInstance effect = entity.getStatusEffect(ModStatusEffects.RESTRAINED);
+        MobEffectInstance effect = entity.getStatusEffect(ModStatusEffects.RESTRAINED);
         return effect != null && effect.getDuration() > 0;
     }
 

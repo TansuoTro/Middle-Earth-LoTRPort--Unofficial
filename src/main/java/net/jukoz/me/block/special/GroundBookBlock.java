@@ -3,7 +3,7 @@ package net.jukoz.me.block.special;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.block.HorizontalFacingBlock;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -12,8 +12,8 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,9 +22,11 @@ import net.minecraft.world.phys.shapes.VoxelShapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+import com.mojang.math.Axis;
+import net.minecraft.world.phys.shapes.Shapes;
 
 public class GroundBookBlock extends Block {
-    public static final EnumProperty<Direction> HORIZONTAL_FACING = HorizontalFacingBlock.FACING;
+    public static final EnumProperty<Direction> HORIZONTAL_FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty OPEN = BooleanProperty.of("open");
 
     public GroundBookBlock(Settings settings) {
@@ -50,21 +52,21 @@ public class GroundBookBlock extends Block {
     }
 
     @Override
-    public BlockState rotate(BlockState state, BlockRotation rotation) {
+    public BlockState rotate(BlockState state, Rotation rotation) {
         return state.with(HORIZONTAL_FACING, rotation.rotate(state.get(HORIZONTAL_FACING)));
     }
 
     @Override
-    public BlockState mirror(BlockState state, BlockMirror mirror) {
+    public BlockState mirror(BlockState state, Mirror mirror) {
         Direction direction = state.get(HORIZONTAL_FACING);
         switch (mirror) {
             case LEFT_RIGHT -> {
                 if (direction.getAxis() != Direction.Axis.Z) break;
-                return state.rotate(BlockRotation.CLOCKWISE_180);
+                return state.rotate(Rotation.CLOCKWISE_180);
             }
             case FRONT_BACK -> {
                 if (direction.getAxis() != Direction.Axis.X) break;
-                return state.rotate(BlockRotation.CLOCKWISE_180);
+                return state.rotate(Rotation.CLOCKWISE_180);
             }
         }
         return super.mirror(state, mirror);
@@ -76,13 +78,13 @@ public class GroundBookBlock extends Block {
             return switch(state.get(BlockStateProperties.HORIZONTAL_FACING)) {
                 case WEST, EAST -> Block.createCuboidShape(2, 0, 0, 14, 5, 16);
                 case SOUTH, NORTH -> Block.createCuboidShape(0, 0, 2, 16, 5, 14);
-                default -> VoxelShapes.cuboid(1,1,1,1,1,1);
+                default -> Shapes.cuboid(1,1,1,1,1,1);
             };
         } else {
             return switch(state.get(BlockStateProperties.HORIZONTAL_FACING)) {
                 case WEST, EAST -> Block.createCuboidShape(3, 0, 4, 13, 3, 12);
                 case SOUTH, NORTH -> Block.createCuboidShape(4, 0, 3, 12, 3, 13);
-                default -> VoxelShapes.cuboid(1,1,1,1,1,1);
+                default -> Shapes.cuboid(1,1,1,1,1,1);
             };
         }
 

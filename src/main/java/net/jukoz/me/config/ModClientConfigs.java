@@ -2,6 +2,7 @@ package net.jukoz.me.config;
 
 import com.mojang.datafixers.util.Pair;
 import net.jukoz.me.MiddleEarth;
+import net.minecraft.util.Tuple;
 
 public class ModClientConfigs {
     public static SimpleConfig CONFIG;
@@ -33,21 +34,21 @@ public class ModClientConfigs {
         configs.addLineJump();
         configs.addComment("GUI configurations");
         configs.addDescription("Should you see the map overlay button in the middle-earth map gui?");
-        configs.addKeyValuePair(new Pair<>("enableMapOverlay", false), "boolean");
+        configs.addKeyValuePair(new Tuple<>("enableMapOverlay", false), "boolean");
         configs.addLineJump();
         configs.addComment("NPC simplified model");
         configs.addDescription("Should you see the experimental npc visuals, or use the simplified version.");
-        configs.addKeyValuePair(new Pair<>("enableSimplifiedCharacterRendering", false), "boolean");
+        configs.addKeyValuePair(new Tuple<>("enableSimplifiedCharacterRendering", false), "boolean");
         configs.addLineJump();
         configs.addComment("LOD distance for NPCs");
         configs.addDescription("Distance of rendering armor on NPCs");
-        configs.addKeyValuePair(new Pair<>("npcsArmorDistanceLOD", 48), "int");
+        configs.addKeyValuePair(new Tuple<>("npcsArmorDistanceLOD", 48), "int");
         configs.addDescription("Distance of rendering NPCs features (long hair, ears, etc.)");
-        configs.addKeyValuePair(new Pair<>("npcsFeaturesDistanceLOD", 24), "int");
+        configs.addKeyValuePair(new Tuple<>("npcsFeaturesDistanceLOD", 24), "int");
         configs.addLineJump();
         configs.addComment("Glint config");
         configs.addDescription("Should glint be disabled in middle-earth");
-        configs.addKeyValuePair(new Pair<>("disableGlint", true), "boolean");
+        configs.addKeyValuePair(new Tuple<>("disableGlint", true), "boolean");
     }
 
     private static void assignClientConfigs() {

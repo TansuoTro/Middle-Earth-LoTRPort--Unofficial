@@ -7,13 +7,15 @@ import net.jukoz.me.item.items.*;
 import net.jukoz.me.item.utils.ModArmorMaterials;
 import net.jukoz.me.item.utils.ModItemGroups;
 import net.jukoz.me.utils.LoggerUtil;
-import net.minecraft.item.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-
 import java.util.List;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Equipable;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 
 public class ModEquipmentItems {
 
@@ -129,7 +131,6 @@ public class ModEquipmentItems {
     public static final Item ROHIRRIC_SHIELD = WeaponItemsME.ROHIRRIC_SHIELD;
 
     public static final Item ROHIRRIC_HORSE_ARMOR = EquipmentItemsME.ROHIRRIC_HORSE_ARMOR;
-
 
     //DWARVES
     public static final Item DWARVEN_PARTISAN_CHESTPLATE = registerGeneratedItem("dwarven_partisan_chestplate",
@@ -308,6 +309,6 @@ public class ModEquipmentItems {
     }
 
     public static void registerModItems() {
-        LoggerUtil.getInstance().logDebugMsg("Registering Mod Equipment Items for " + MiddleEarth.MOD_ID);
+        LoggerUtil.getInstance().logDebugMsg("Registering Mod Equipable Items for " + MiddleEarth.MOD_ID);
     }
 }

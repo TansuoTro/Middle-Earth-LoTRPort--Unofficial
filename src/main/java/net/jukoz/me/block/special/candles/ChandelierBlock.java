@@ -4,9 +4,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.entity.ai.pathing.NavigationType;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -14,11 +14,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.state.property.IntProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
@@ -34,12 +34,11 @@ import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.level.LevelView;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.function.ToIntFunction;
 
 public class ChandelierBlock extends Block {
     private static final int MAX_VARIANT = 2;
-    public static final IntProperty VARIANT = IntProperty.of("variant", 1, MAX_VARIANT);
+    public static final IntegerProperty VARIANT = IntegerProperty.of("variant", 1, MAX_VARIANT);
     public static final BooleanProperty LIT;
 
     public static final ToIntFunction<BlockState> STATE_TO_LUMINANCE;
@@ -65,13 +64,13 @@ public class ChandelierBlock extends Block {
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         return !state.canPlaceAt(world, pos) ?
                 Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
     @Override
-    public boolean canPathfindThrough(BlockState state, net.minecraft.world.level.BlockGetter world, BlockPos pos, NavigationType type) {
+    public boolean canPathfindThrough(BlockState state, net.minecraft.world.level.BlockGetter world, BlockPos pos, PathComputationType type) {
         return false;
     }
 
@@ -122,28 +121,28 @@ public class ChandelierBlock extends Block {
         if (f < 0.3F) {
             world.addParticle(ParticleTypes.SMOKE, vec3d.x - 0.5f, vec3d.y - 0.5f, vec3d.z - 0.5f, 0.0, 0.0, 0.0);
             if (f < 0.17F) {
-                world.playSound(vec3d.x, vec3d.y, vec3d.z, SoundEvents.BLOCK_CANDLE_AMBIENT, SoundCategory.BLOCKS, 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
+                world.playSound(vec3d.x, vec3d.y, vec3d.z, SoundEvents.BLOCK_CANDLE_AMBIENT, SoundSource.BLOCKS, 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
             }
         }
         world.addParticle(ParticleTypes.SMALL_FLAME, vec3d.x - 0.5f, vec3d.y - 0.5f, vec3d.z - 0.5f, 0.0, 0.0, 0.0);
     }
 
-    protected static void setLit(WorldAccess world, BlockState state, BlockPos pos, boolean lit) {
+    protected static void setLit(LevelAccessor world, BlockState state, BlockPos pos, boolean lit) {
         world.setBlockState(pos, state.with(LIT, lit), 2 | 3);
         if(lit){
-            world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.5F, 1.0F);
+            world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.5F, 1.0F);
         }
     }
 
-    protected static void extinguish(@Nullable Player player, BlockState state, WorldAccess world, BlockPos pos) {
+    protected static void extinguish(@Nullable Player player, BlockState state, LevelAccessor world, BlockPos pos) {
         setLit(world, state, pos, false);
 
-        world.playSound(null, pos, SoundEvents.BLOCK_CANDLE_EXTINGUISH, SoundCategory.BLOCKS, 1.5F, 1.0F);
+        world.playSound(null, pos, SoundEvents.BLOCK_CANDLE_EXTINGUISH, SoundSource.BLOCKS, 1.5F, 1.0F);
         world.emitGameEvent(player, GameEvent.BLOCK_CHANGE, pos);
     }
 
     @Override
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
         return Block.sideCoversSmallSquare(world, pos.up(), Direction.DOWN);
     }
 
@@ -152,7 +151,7 @@ public class ChandelierBlock extends Block {
         return Fluids.EMPTY.getDefaultState();
     }
 
-    public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
+    public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
         if (!world.isClient && projectile.isOnFire() && !state.get(LIT)) {
             world.setBlockState(hit.getBlockPos(), state.with(LIT, true), STATE_TO_LUMINANCE.applyAsInt(state));
         }

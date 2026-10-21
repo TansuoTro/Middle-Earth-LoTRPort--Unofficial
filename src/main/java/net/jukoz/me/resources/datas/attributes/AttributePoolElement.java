@@ -1,21 +1,20 @@
 package net.jukoz.me.resources.datas.attributes;
-import net.jukoz.me.compat.NbtCompat;
 
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.jukoz.me.compat.NbtCompat;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
-
 import java.util.*;
+import net.minecraft.util.RandomSource;
 
 public class AttributePoolElement {
     private ResourceLocation identifier;
@@ -23,22 +22,22 @@ public class AttributePoolElement {
     private Double valueMax;
     private List<AttributeModifierElement> modifiers;
 
-    public static AttributePoolElement create(EntityAttribute attribute, double defineValue){
+    public static AttributePoolElement create(Attribute attribute, double defineValue){
         return new AttributePoolElement()
                 .withIdentifier(Registries.ATTRIBUTE.getId(attribute))
                 .withDefineValue(defineValue);
     }
 
-    public static AttributePoolElement create(Holder<EntityAttribute> attributeEntry, double defineValue){
+    public static AttributePoolElement create(Holder<Attribute> attributeEntry, double defineValue){
         return create(attributeEntry.value(), defineValue);
     }
-    public static AttributePoolElement create(EntityAttribute attribute, double min, double max){
+    public static AttributePoolElement create(Attribute attribute, double min, double max){
         return new AttributePoolElement()
                 .withIdentifier(Registries.ATTRIBUTE.getId(attribute))
                 .withMinMaxValue(min, max);
     }
 
-    public static AttributePoolElement create(Holder<EntityAttribute> attributeEntry, double min, double max){
+    public static AttributePoolElement create(Holder<Attribute> attributeEntry, double min, double max){
         return create(attributeEntry.value(), min, max);
     }
 
@@ -52,13 +51,13 @@ public class AttributePoolElement {
             newElement.withMinMaxValue(nbtCompound.getDouble("min"), nbtCompound.getDouble("max"));
 
         if(nbtCompound.contains("modifiers")){
-            newElement.withModifiers(nbtCompound.getList("modifiers", NbtElement.COMPOUND_TYPE));
+            newElement.withModifiers(nbtCompound.getList("modifiers", Tag.COMPOUND_TYPE));
         }
 
         return newElement;
     }
 
-    private void withModifiers(NbtList modifierList) {
+    private void withModifiers(ListTag modifierList) {
         this.modifiers = new ArrayList<>();
         modifierList.forEach(modifierNbt -> {
             modifiers.add(new AttributeModifierElement(NbtCompat.compound(modifierNbt)));
@@ -77,7 +76,7 @@ public class AttributePoolElement {
         }
 
         if(this.modifiers != null && !this.modifiers.isEmpty()){
-            NbtList modifiersList = new NbtList();
+            ListTag modifiersList = new ListTag();
             for(AttributeModifierElement modifier : this.modifiers){
                 modifiersList.add(modifier.toNbt());
             }
@@ -103,11 +102,11 @@ public class AttributePoolElement {
     }
 
     public AttributePoolElement withModifier(ResourceLocation identifier, double value) {
-        withModifier(identifier, value, EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
+        withModifier(identifier, value, AttributeModifier.Operation.MULTIPLY_TOTAL);
         return this;
     }
 
-    public AttributePoolElement withModifier(ResourceLocation identifier, double value, EntityAttributeModifier.Operation operation) {
+    public AttributePoolElement withModifier(ResourceLocation identifier, double value, AttributeModifier.Operation operation) {
         if(modifiers == null)
             modifiers = new ArrayList<>();
 
@@ -123,7 +122,7 @@ public class AttributePoolElement {
         if(this.valueMax == null){
             return this.value;
         }
-        Random random = new Random();
+        RandomSource random = new RandomSource();
         return random.nextDouble(value, valueMax);
     }
 
@@ -138,12 +137,12 @@ public class AttributePoolElement {
     }
 
     public static CompoundTag createAttributeNbtListFromPlayer(Player player) {
-        NbtList attributeList = new NbtList();
+        ListTag attributeList = new ListTag();
         var registry = player.getWorld().getRegistryManager().getOptional(Registries.ATTRIBUTE).get();
-        Collection<EntityAttributeInstance> attributes = new ArrayList<>();
+        Collection<AttributeInstance> attributes = new ArrayList<>();
         var entries = registry.streamEntries().toList();
         for(var entry : entries){
-            EntityAttributeInstance instance = player.getAttributeInstance(entry.value());
+            AttributeInstance instance = player.getAttributeInstance(entry.value());
             if(instance == null)
                 continue;
             attributes.add(instance);
@@ -164,7 +163,7 @@ public class AttributePoolElement {
     public static List<AttributePoolElement> obtainAttributeList(CompoundTag nbtCompound) {
         List<AttributePoolElement> attributePoolElementList = new ArrayList<>();
 
-        NbtList nbtList = nbtCompound.getList("attributes", NbtElement.COMPOUND_TYPE);
+        ListTag nbtList = nbtCompound.getList("attributes", Tag.COMPOUND_TYPE);
 
         nbtList.forEach(attribute -> {
             attributePoolElementList.add(AttributePoolElement.createFromNbt(NbtCompat.compound(attribute)));

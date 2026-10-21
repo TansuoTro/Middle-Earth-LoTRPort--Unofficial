@@ -15,10 +15,10 @@ import net.jukoz.me.entity.npcs.NpcEntity;
 import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.resources.datas.common.EntityCategories;
 import net.jukoz.me.resources.datas.npc_types.NpcType;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class NpcInitializationData {
     public static final Codec<NpcInitializationData> CODEC;
@@ -39,7 +39,6 @@ public class NpcInitializationData {
                 NpcInitializationData::new);
     }
 
-
     public NpcInitializationData(Optional<String> type, Optional<Boolean> isRandom) {
         this.type = type.map(MiddleEarth::fetchId).orElse(null);
         this.isRandom = isRandom == null || isRandom.isEmpty() || isRandom.get() == false ? null : isRandom.get();
@@ -59,16 +58,13 @@ public class NpcInitializationData {
         return new NpcInitializationData(newType, this.isRandom);
     }
 
-
     private Optional<String> getOptionalType() {
         return type != null ? Optional.of(type.toString()) : Optional.empty();
     }
 
-
     private Optional<Boolean> getOptionalRandom() {
         return isRandom != null ? Optional.of(isRandom) : Optional.empty();
     }
-
 
     public boolean tryToInitialize(NpcEntity entity) {
         Level world = entity.getWorld();
@@ -78,7 +74,7 @@ public class NpcInitializationData {
         if(isRandom != null && isRandom){
             Registry<NpcType> registry = world.getRegistryManager().get(DynamicRegistriesME.NPC_TYPE);
             List<ResourceKey<NpcType>> entryList =  registry.getKeys().stream().toList();
-            Random random = new Random();
+            RandomSource random = new RandomSource();
             ResourceKey<NpcType> randomKey = entryList.get(random.nextInt(entryList.size()));
             this.type = randomKey.getValue();
             this.isRandom = false;

@@ -3,7 +3,6 @@ package net.jukoz.me.datageneration.content.loot_tables;
 import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.jukoz.me.block.registration.WoodBlockSets;
 import net.minecraft.world.level.block.Block;
-
 import java.util.ArrayList;
 import java.util.List;
 

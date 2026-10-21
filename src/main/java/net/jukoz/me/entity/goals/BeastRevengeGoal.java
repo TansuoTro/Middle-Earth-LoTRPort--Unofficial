@@ -4,20 +4,20 @@ import net.minecraft.server.level.ServerLevel;
 import net.jukoz.me.entity.beasts.AbstractBeastEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.ai.TargetPredicate;
-import net.minecraft.entity.ai.goal.TrackTargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.predicate.entity.EntityPredicates;
-import net.minecraft.util.math.Box;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.level.GameRules;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.EnumSet;
 import java.util.List;
+import net.minecraft.world.entity.ai.control.Control;
 
-public class BeastRevengeGoal extends TrackTargetGoal {
-    private static final TargetPredicate VALID_AVOIDABLES_PREDICATE = TargetPredicate.createAttackable().ignoreVisibility().ignoreDistanceScalingFactor();
+public class BeastRevengeGoal extends TargetGoal {
+    private static final TargetingConditions VALID_AVOIDABLES_PREDICATE = TargetingConditions.createAttackable().ignoreVisibility().ignoreDistanceScalingFactor();
     private static final int BOX_VERTICAL_EXPANSION = 10;
     private boolean groupRevenge;
     private int lastAttackedTime;
@@ -71,10 +71,10 @@ public class BeastRevengeGoal extends TrackTargetGoal {
 
     protected void callSameTypeForRevenge() {
         double d = this.getFollowRange();
-        Box box = Box.from(this.mob.getPos()).expand(d, 10.0, d);
-        List<Mob> list = (List<Mob>)this.mob.getWorld().getEntitiesByClass(this.mob.getClass(), box, EntityPredicates.EXCEPT_SPECTATOR);
+        AABB box = AABB.from(this.mob.getPos()).expand(d, 10.0, d);
+        List<Mob> list = (List<Mob>)this.mob.getWorld().getEntitiesByClass(this.mob.getClass(), box, EntitySelector.EXCEPT_SPECTATOR);
         for (Mob mobEntity : list) {
-            if (this.mob == mobEntity || mobEntity.getTarget() != null || this.mob instanceof TameableEntity && ((TameableEntity)this.mob).getOwner() != ((TameableEntity)mobEntity).getOwner() || mobEntity.isTeammate(this.mob.getAttacker())) continue;
+            if (this.mob == mobEntity || mobEntity.getTarget() != null || this.mob instanceof TamableAnimal && ((TamableAnimal)this.mob).getOwner() != ((TamableAnimal)mobEntity).getOwner() || mobEntity.isTeammate(this.mob.getAttacker())) continue;
             if (this.noHelpTypes != null) {
                 boolean bl = false;
                 for (Class<?> class_ : this.noHelpTypes) {

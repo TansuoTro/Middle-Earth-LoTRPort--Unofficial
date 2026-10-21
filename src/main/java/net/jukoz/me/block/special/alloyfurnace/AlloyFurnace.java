@@ -2,22 +2,21 @@ package net.jukoz.me.block.special.alloyfurnace;
 
 import net.jukoz.me.block.registration.ModBlockEntities;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.util.*;
-import net.minecraft.util.function.BooleanBiFunction;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,10 +26,22 @@ import net.minecraft.world.phys.shapes.VoxelShapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import com.mojang.math.Axis;
+import net.minecraft.world.phys.shapes.Shapes;
 
-public class AlloyFurnace extends BlockWithEntity implements BlockEntityProvider {
+public class AlloyFurnace extends BaseEntityBlock implements EntityBlock {
     private static final VoxelShape RAYCAST_SHAPE = createCuboidShape(2.0, 12.0, 2.0, 14.0, 16.0, 14.0);
-    protected static final VoxelShape OUTLINE_SHAPE = VoxelShapes.combineAndSimplify(VoxelShapes.fullCube(), RAYCAST_SHAPE, BooleanBiFunction.ONLY_FIRST);
+    protected static final VoxelShape OUTLINE_SHAPE = Shapes.combineAndSimplify(Shapes.fullCube(), RAYCAST_SHAPE, BooleanOp.ONLY_FIRST);
     public static final DirectionProperty FACING = BlockStateProperties.HOPPER_FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     public AlloyFurnace(Settings settings) {
@@ -39,8 +50,8 @@ public class AlloyFurnace extends BlockWithEntity implements BlockEntityProvider
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderType(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
@@ -48,7 +59,7 @@ public class AlloyFurnace extends BlockWithEntity implements BlockEntityProvider
         if(state.getBlock() != newState.getBlock()) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if(blockEntity instanceof AlloyFurnaceEntity alloyBlockEntity) {
-                ItemScatterer.spawn(world, pos, alloyBlockEntity);
+                Containers.spawn(world, pos, alloyBlockEntity);
             }
             super.onStateReplaced(state, world, pos, newState, moved);
         }
@@ -61,12 +72,12 @@ public class AlloyFurnace extends BlockWithEntity implements BlockEntityProvider
     }
 
     @Override
-    public BlockState rotate(BlockState state, BlockRotation rotation) {
+    public BlockState rotate(BlockState state, Rotation rotation) {
         return state.with(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override
-    public BlockState mirror(BlockState state, BlockMirror mirror) {
+    public BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.get(FACING)));
     }
 
@@ -77,14 +88,14 @@ public class AlloyFurnace extends BlockWithEntity implements BlockEntityProvider
     }
 
     @Override
-    public ActionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if(!world.isClient) {
-            NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+            MenuProvider screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
             if(screenHandlerFactory != null) {
                 player.openHandledScreen(screenHandlerFactory);
             }
         }
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Nullable
@@ -100,7 +111,7 @@ public class AlloyFurnace extends BlockWithEntity implements BlockEntityProvider
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return OUTLINE_SHAPE;
     }
 
@@ -113,7 +124,7 @@ public class AlloyFurnace extends BlockWithEntity implements BlockEntityProvider
         double e = pos.getY();
         double f = (double)pos.getZ() + 0.5;
         if (random.nextDouble() < 0.1) {
-            world.playSound(d, e, f, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0f, 1.0f, false);
+            world.playSound(d, e, f, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundSource.BLOCKS, 1.0f, 1.0f, false);
         }
         Direction direction = state.get(FACING);
         Direction.Axis axis = direction.getAxis();

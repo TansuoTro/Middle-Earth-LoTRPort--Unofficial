@@ -3,8 +3,8 @@ package net.jukoz.me.resources.datas.npc_types;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
@@ -27,7 +27,6 @@ import net.jukoz.me.resources.datas.texture_presets.TexturePresetDataPool;
 import net.jukoz.me.resources.datas.races.Race;
 import net.jukoz.me.resources.datas.races.RaceLookup;
 import net.jukoz.me.resources.datas.common.EntityCategories;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,7 +61,7 @@ public class NpcType {
         this.factionId = factionId;
         this.npcTextureKey = npcTextureKey;
 
-        NbtList npcGears = gearDatas.getList("pool", NbtElement.COMPOUND_TYPE);
+        ListTag npcGears = gearDatas.getList("pool", Tag.COMPOUND_TYPE);
         List<WeightedGearData> weightedGearData = new ArrayList<>();
         for(int j = 0; j < npcGears.size(); j++) {
             CompoundTag compound = npcGears.getCompound(j);
@@ -122,10 +121,9 @@ public class NpcType {
         return lootData;
     }
 
-
     private CompoundTag getGearDataValues() {
         CompoundTag nbt = new CompoundTag();
-        NbtList gears = new NbtList();
+        ListTag gears = new ListTag();
         for(WeightedGearData weightedGearData : this.gearDatas.elements){
             gears.add(weightedGearData.getNbt());
         }
@@ -159,7 +157,6 @@ public class NpcType {
     public TexturePresetDataPool getNpcTextureData(Level world) {
         return world.getRegistryManager().get(DynamicRegistriesME.TEXTURE_PRESETS).get(npcTextureKey);
     }
-
 
     public void applyAttributes(NpcEntity npcEntity) {
         AttributePool.reverse(npcEntity);

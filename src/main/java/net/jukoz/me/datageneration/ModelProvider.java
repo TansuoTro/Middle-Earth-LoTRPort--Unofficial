@@ -17,9 +17,8 @@ import net.jukoz.me.datageneration.content.models.*;
 import net.jukoz.me.datageneration.content.tags.LeavesSets;
 import net.jukoz.me.item.ModEquipmentItems;
 import net.jukoz.me.item.ResourceItemsME;
-import net.minecraft.block.*;
-import net.minecraft.block.enums.Thickness;
-import net.minecraft.block.enums.WallMountLocation;
+import net.minecraft.world.level.block.state.properties.DripstoneThickness;
+import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.jukoz.me.block.special.CustomWaterloggableTallPlantBlock;
 import net.jukoz.me.block.special.RocksBlock;
 import net.jukoz.me.block.special.LargeDoorBlock;
@@ -33,23 +32,48 @@ import net.jukoz.me.block.special.doors.LargeDoor6x2;
 import net.jukoz.me.block.special.doors.LargeDoor10x4;
 import net.jukoz.me.block.special.doors.LargeDoor10x5;
 import net.jukoz.me.block.special.doors.LargeThickDoor3x2;
-import net.minecraft.state.property.IntProperty;
-import net.minecraft.block.enums.DoorHinge;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import net.jukoz.me.block.special.hangingstuff.CustomHangingBlock;
 import java.util.Objects;
-import net.minecraft.data.client.*;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.Direction;
-
 import java.util.Optional;
+import net.minecraft.data.models.BlockModelGenerators;
+import net.minecraft.data.models.ItemModelGenerators;
+import net.minecraft.data.models.ModelProvider;
+import net.minecraft.data.models.blockstates.Condition;
+import net.minecraft.data.models.blockstates.MultiPartGenerator;
+import net.minecraft.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.data.models.blockstates.PropertyDispatch;
+import net.minecraft.data.models.blockstates.Variant;
+import net.minecraft.data.models.blockstates.VariantProperties;
+import net.minecraft.data.models.blockstates.VariantProperty;
+import net.minecraft.data.models.model.ModelLocationUtils;
+import net.minecraft.data.models.model.ModelTemplate;
+import net.minecraft.data.models.model.ModelTemplates;
+import net.minecraft.data.models.model.TextureMapping;
+import net.minecraft.data.models.model.TextureSlot;
+import net.minecraft.data.models.model.TexturedModel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock;
+import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.IronBarsBlock;
+import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.world.level.block.WallBlock;
+import net.minecraft.world.item.Items;
+import net.minecraft.client.model.Model;
+import net.minecraft.world.level.block.Rotation;
 
 public class ModelProvider extends FabricModelProvider {
     /**
-     * Every model id the block phase uploaded. 1.20.1's {@link net.minecraft.data.client.Model}
+     * Every model id the block phase uploaded. 1.20.1's {@link net.minecraft.data.models.model.ModelTemplate}
      * has no "does this exist" query, and the item fallback needs one to tell a block whose shape
      * is a single {@code <name>} model from one that only exists as sub-models.
      */
@@ -144,7 +168,7 @@ public class ModelProvider extends FabricModelProvider {
     }
 
     @Override
-    public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
+    public void generateBlockStateModels(BlockModelGenerators blockStateModelGenerator) {
         sanitizeModelLists();
         try {
             generateBlockStateModelsUnchecked(blockStateModelGenerator);
@@ -241,10 +265,10 @@ public class ModelProvider extends FabricModelProvider {
         if (block instanceof DoorBlock) {
             return blockId.withPath("block/" + path + "_bottom_left");
         }
-        if (block instanceof TrapdoorBlock) {
+        if (block instanceof TrapDoorBlock) {
             return blockId.withPath("block/" + path + "_bottom");
         }
-        if (block instanceof PaneBlock) {
+        if (block instanceof IronBarsBlock) {
             return blockId.withPath("block/" + path + "_post");
         }
         if (block.getStateManager().getProperty("layers") != null) {
@@ -288,8 +312,7 @@ public class ModelProvider extends FabricModelProvider {
         }
     }
 
-
-    private void generateBlockStateModelsUnchecked(BlockStateModelGenerator blockStateModelGenerator) {
+    private void generateBlockStateModelsUnchecked(BlockModelGenerators blockStateModelGenerator) {
         DedupingModelCollector.install(blockStateModelGenerator);
 
         for (Block block : SimpleBlockModel.blocks) {
@@ -301,10 +324,10 @@ public class ModelProvider extends FabricModelProvider {
         for (Block block : SimpleBlockModel.cobbleableStoneBlocks) {
             try {
             TexturedModel texturedModel = TexturedModel.CUBE_ALL.get(block);
-            ResourceLocation identifier = Models.CUBE_MIRRORED_ALL.upload(block, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation identifier2 = Models.CUBE_ALL.upload(block, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation identifier = ModelTemplates.CUBE_MIRRORED_ALL.upload(block, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation identifier2 = ModelTemplates.CUBE_ALL.upload(block, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createBlockStateWithTwoModelAndRandomInversion(block, identifier, identifier2));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
@@ -339,9 +362,9 @@ public class ModelProvider extends FabricModelProvider {
 
         for (Block wood : SimpleBlockModel.woodBlocks) {
             try {
-            TextureMap textureMap = new TextureMap().put(TextureKey.ALL, new ResourceLocation(MiddleEarth.MOD_ID,"block/" + Registries.BLOCK.getId(wood).getPath().replaceAll("_wood", "_log")));
-            ResourceLocation identifier = Models.CUBE_COLUMN.upload(wood, textureMap, blockStateModelGenerator.modelCollector);
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator.createAxisRotatedBlockState(wood, identifier));} catch (RuntimeException __modelError) { logSkipped(__modelError); }
+            TextureMapping textureMap = new TextureMapping().put(TextureSlot.ALL, new ResourceLocation(MiddleEarth.MOD_ID,"block/" + Registries.BLOCK.getId(wood).getPath().replaceAll("_wood", "_log")));
+            ResourceLocation identifier = ModelTemplates.CUBE_COLUMN.upload(wood, textureMap, blockStateModelGenerator.modelCollector);
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators.createAxisRotatedBlockState(wood, identifier));} catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
         for (SimpleBlockModel.ChiseledPolishedBlock block : SimpleBlockModel.chiseledPolishedBlocks) {
@@ -369,14 +392,14 @@ public class ModelProvider extends FabricModelProvider {
             try {
             if (block.slab() == null) { continue; }
             if (block.origin() == null) { continue; }
-            ResourceLocation id = ModelIds.getBlockModelId(block.origin());
+            ResourceLocation id = ModelLocationUtils.getBlockModelId(block.origin());
             Block slab = block.slab();
 
             TexturedModel texturedModel = TexturedModel.CUBE_ALL.get(block.origin());
-            ResourceLocation bottom = Models.SLAB.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation top = Models.SLAB_TOP.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation bottom = ModelTemplates.SLAB.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation top = ModelTemplates.SLAB_TOP.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createSlabBlockState(slab, bottom, top, id));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
@@ -385,14 +408,14 @@ public class ModelProvider extends FabricModelProvider {
             try {
             if (block.slab() == null) { continue; }
             if (block.origin() == null) { continue; }
-            ResourceLocation id = ModelIds.getBlockModelId(block.origin());
+            ResourceLocation id = ModelLocationUtils.getBlockModelId(block.origin());
             Block slab = block.slab();
 
             TexturedModel texturedModel = TexturedModel.getCubeAll(new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(block.origin()).getPath().replaceAll("_wood", "_log")));
-            ResourceLocation bottom = Models.SLAB.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation top = Models.SLAB_TOP.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation bottom = ModelTemplates.SLAB.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation top = ModelTemplates.SLAB_TOP.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createSlabBlockState(slab, bottom, top, id));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
@@ -401,14 +424,14 @@ public class ModelProvider extends FabricModelProvider {
             try {
             if (block.slab() == null) { continue; }
             if (block.origin() == null) { continue; }
-            ResourceLocation id = ModelIds.getBlockModelId(block.origin());
+            ResourceLocation id = ModelLocationUtils.getBlockModelId(block.origin());
             Block slab = block.slab();
 
             TexturedModel texturedModel = TexturedModel.getCubeAll(new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(block.origin()).getPath().replaceAll("_wood", "_log")));
-            ResourceLocation bottom = Models.SLAB.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation top = Models.SLAB_TOP.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation bottom = ModelTemplates.SLAB.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation top = ModelTemplates.SLAB_TOP.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createSlabBlockState(slab, bottom, top, id));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
@@ -417,14 +440,14 @@ public class ModelProvider extends FabricModelProvider {
             try {
             if (block.slab() == null) { continue; }
             if (block.origin() == null) { continue; }
-            ResourceLocation id = ModelIds.getBlockModelId(block.origin());
+            ResourceLocation id = ModelLocationUtils.getBlockModelId(block.origin());
             Block slab = block.slab();
 
             TexturedModel texturedModel = TexturedModel.getCubeAll(new ResourceLocation("minecraft", "block/" + Registries.BLOCK.getId(block.origin()).getPath().replaceAll("_wood", "_log")));
-            ResourceLocation bottom = Models.SLAB.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation top = Models.SLAB_TOP.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation bottom = ModelTemplates.SLAB.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation top = ModelTemplates.SLAB_TOP.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createSlabBlockState(slab, bottom, top, id));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
@@ -433,14 +456,14 @@ public class ModelProvider extends FabricModelProvider {
             try {
             if (block.slab() == null) { continue; }
             if (block.origin() == null) { continue; }
-            ResourceLocation id = ModelIds.getBlockModelId(block.origin());
+            ResourceLocation id = ModelLocationUtils.getBlockModelId(block.origin());
             Block slab = block.slab();
 
             TexturedModel texturedModel = TexturedModel.getCubeAll(new ResourceLocation("minecraft", "block/" + Registries.BLOCK.getId(block.origin()).getPath().replaceAll("_wood", "_log")));
-            ResourceLocation bottom = Models.SLAB.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation top = Models.SLAB_TOP.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation bottom = ModelTemplates.SLAB.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation top = ModelTemplates.SLAB_TOP.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createSlabBlockState(slab, bottom, top, id));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
@@ -449,14 +472,14 @@ public class ModelProvider extends FabricModelProvider {
             try {
             if (block.slab() == null) { continue; }
             if (block.origin() == null) { continue; }
-            ResourceLocation id = ModelIds.getBlockModelId(block.origin());
+            ResourceLocation id = ModelLocationUtils.getBlockModelId(block.origin());
             Block slab = block.slab();
 
             TexturedModel texturedModel = TexturedModel.getCubeAll(new ResourceLocation("minecraft", "block/" + Registries.BLOCK.getId(block.origin()).getPath().replaceAll("_wood", "_log")));
-            ResourceLocation bottom = Models.SLAB.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation top = Models.SLAB_TOP.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation bottom = ModelTemplates.SLAB.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation top = ModelTemplates.SLAB_TOP.upload(slab, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createSlabBlockState(slab, bottom, top, id));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
@@ -468,11 +491,11 @@ public class ModelProvider extends FabricModelProvider {
             TexturedModel texturedModel = TexturedModel.CUBE_ALL.get(block.origin());
             Block stairs = block.stairs();
 
-            ResourceLocation inner = Models.INNER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation regular = Models.STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation outer = Models.OUTER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation inner = ModelTemplates.INNER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation regular = ModelTemplates.STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation outer = ModelTemplates.OUTER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createStairsBlockState(stairs, inner, regular, outer));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
@@ -484,11 +507,11 @@ public class ModelProvider extends FabricModelProvider {
             TexturedModel texturedModel = TexturedModel.getCubeAll(new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(block.origin()).getPath().replaceAll("_wood", "_log")));
             Block stairs = block.stairs();
 
-            ResourceLocation inner = Models.INNER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation regular = Models.STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation outer = Models.OUTER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation inner = ModelTemplates.INNER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation regular = ModelTemplates.STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation outer = ModelTemplates.OUTER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createStairsBlockState(stairs, inner, regular, outer));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
@@ -500,11 +523,11 @@ public class ModelProvider extends FabricModelProvider {
             TexturedModel texturedModel = TexturedModel.getCubeAll(new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(block.origin()).getPath().replaceAll("_wood", "_log")));
             Block stairs = block.stairs();
 
-            ResourceLocation inner = Models.INNER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation regular = Models.STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation outer = Models.OUTER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation inner = ModelTemplates.INNER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation regular = ModelTemplates.STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation outer = ModelTemplates.OUTER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createStairsBlockState(stairs, inner, regular, outer));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
@@ -516,11 +539,11 @@ public class ModelProvider extends FabricModelProvider {
             TexturedModel texturedModel = TexturedModel.getCubeAll(new ResourceLocation("minecraft", "block/" + Registries.BLOCK.getId(block.origin()).getPath().replaceAll("_wood", "_log")));
             Block stairs = block.stairs();
 
-            ResourceLocation inner = Models.INNER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation regular = Models.STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation outer = Models.OUTER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation inner = ModelTemplates.INNER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation regular = ModelTemplates.STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation outer = ModelTemplates.OUTER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createStairsBlockState(stairs, inner, regular, outer));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
@@ -532,11 +555,11 @@ public class ModelProvider extends FabricModelProvider {
             TexturedModel texturedModel = TexturedModel.getCubeAll(new ResourceLocation("minecraft", "block/" + Registries.BLOCK.getId(block.origin()).getPath().replaceAll("_wood", "_log")));
             Block stairs = block.stairs();
 
-            ResourceLocation inner = Models.INNER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation regular = Models.STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation outer = Models.OUTER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation inner = ModelTemplates.INNER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation regular = ModelTemplates.STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation outer = ModelTemplates.OUTER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createStairsBlockState(stairs, inner, regular, outer));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
@@ -548,11 +571,11 @@ public class ModelProvider extends FabricModelProvider {
             TexturedModel texturedModel = TexturedModel.CUBE_ALL.get(block.origin());
             Block stairs = block.stairs();
 
-            ResourceLocation inner = Models.INNER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation regular = Models.STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation outer = Models.OUTER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation inner = ModelTemplates.INNER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation regular = ModelTemplates.STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation outer = ModelTemplates.OUTER_STAIRS.upload(stairs, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createStairsBlockState(stairs, inner, regular, outer));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
@@ -564,13 +587,13 @@ public class ModelProvider extends FabricModelProvider {
             TexturedModel texturedModel = TexturedModel.CUBE_ALL.get(block.block());
             Block wall = block.wall();
 
-            Models.WALL_INVENTORY.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ModelTemplates.WALL_INVENTORY.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            ResourceLocation post = Models.TEMPLATE_WALL_POST.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation low = Models.TEMPLATE_WALL_SIDE.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation tall = Models.TEMPLATE_WALL_SIDE_TALL.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation post = ModelTemplates.TEMPLATE_WALL_POST.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation low = ModelTemplates.TEMPLATE_WALL_SIDE.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation tall = ModelTemplates.TEMPLATE_WALL_SIDE_TALL.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createWallBlockState(wall, post, low, tall));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
@@ -582,13 +605,13 @@ public class ModelProvider extends FabricModelProvider {
             TexturedModel texturedModel = TexturedModel.getCubeAll(new ResourceLocation("minecraft", "block/" + Registries.BLOCK.getId(block.block()).getPath()));
             Block wall = block.wall();
 
-            Models.WALL_INVENTORY.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ModelTemplates.WALL_INVENTORY.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            ResourceLocation post = Models.TEMPLATE_WALL_POST.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation low = Models.TEMPLATE_WALL_SIDE.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation tall = Models.TEMPLATE_WALL_SIDE_TALL.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation post = ModelTemplates.TEMPLATE_WALL_POST.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation low = ModelTemplates.TEMPLATE_WALL_SIDE.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation tall = ModelTemplates.TEMPLATE_WALL_SIDE_TALL.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createWallBlockState(wall, post, low, tall));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
@@ -600,15 +623,15 @@ public class ModelProvider extends FabricModelProvider {
             TexturedModel texturedModel = TexturedModel.getCubeAll(new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(block.block()).getPath().replaceAll("_wood", "_log")));
             Block wall = block.wall();
 
-            ResourceLocation inventory = Models.WALL_INVENTORY.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation inventory = ModelTemplates.WALL_INVENTORY.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
             blockStateModelGenerator.registerParentedItemModel(wall, inventory);
 
-            ResourceLocation post = Models.TEMPLATE_WALL_POST.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation low = Models.TEMPLATE_WALL_SIDE.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation tall = Models.TEMPLATE_WALL_SIDE_TALL.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation post = ModelTemplates.TEMPLATE_WALL_POST.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation low = ModelTemplates.TEMPLATE_WALL_SIDE.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation tall = ModelTemplates.TEMPLATE_WALL_SIDE_TALL.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createWallBlockState(wall, post, low, tall));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
@@ -620,15 +643,15 @@ public class ModelProvider extends FabricModelProvider {
             TexturedModel texturedModel = TexturedModel.getCubeAll(new ResourceLocation("minecraft", "block/" + Registries.BLOCK.getId(block.block()).getPath().replaceAll("_wood", "_log")));
             Block wall = block.wall();
 
-            ResourceLocation inventory = Models.WALL_INVENTORY.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation inventory = ModelTemplates.WALL_INVENTORY.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
             blockStateModelGenerator.registerParentedItemModel(wall, inventory);
 
-            ResourceLocation post = Models.TEMPLATE_WALL_POST.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation low = Models.TEMPLATE_WALL_SIDE.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation tall = Models.TEMPLATE_WALL_SIDE_TALL.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation post = ModelTemplates.TEMPLATE_WALL_POST.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation low = ModelTemplates.TEMPLATE_WALL_SIDE.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation tall = ModelTemplates.TEMPLATE_WALL_SIDE_TALL.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createWallBlockState(wall, post, low, tall));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
@@ -640,15 +663,15 @@ public class ModelProvider extends FabricModelProvider {
             TexturedModel texturedModel = TexturedModel.getCubeAll(new ResourceLocation("minecraft", "block/" + Registries.BLOCK.getId(block.block()).getPath().replaceAll("_wood", "_log")));
             Block wall = block.wall();
 
-            ResourceLocation inventory = Models.WALL_INVENTORY.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation inventory = ModelTemplates.WALL_INVENTORY.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
             blockStateModelGenerator.registerParentedItemModel(wall, inventory);
 
-            ResourceLocation post = Models.TEMPLATE_WALL_POST.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation low = Models.TEMPLATE_WALL_SIDE.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation tall = Models.TEMPLATE_WALL_SIDE_TALL.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation post = ModelTemplates.TEMPLATE_WALL_POST.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation low = ModelTemplates.TEMPLATE_WALL_SIDE.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation tall = ModelTemplates.TEMPLATE_WALL_SIDE_TALL.upload(wall, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createWallBlockState(wall, post, low, tall));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
@@ -660,11 +683,11 @@ public class ModelProvider extends FabricModelProvider {
             TexturedModel texturedModel = TexturedModel.CUBE_ALL.get(block.block());
             Block fence = block.fence();
 
-            ResourceLocation post = Models.FENCE_POST.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation side = Models.FENCE_SIDE.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation inventory = Models.FENCE_INVENTORY.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation post = ModelTemplates.FENCE_POST.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation side = ModelTemplates.FENCE_SIDE.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation inventory = ModelTemplates.FENCE_INVENTORY.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createFenceBlockState(fence, post, side));
 
             blockStateModelGenerator.registerParentedItemModel(fence, inventory);
@@ -678,11 +701,11 @@ public class ModelProvider extends FabricModelProvider {
             TexturedModel texturedModel = TexturedModel.getCubeAll(new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(block.block()).getPath().replaceAll("_wood", "_log")));
             Block fence = block.fence();
 
-            ResourceLocation post = Models.FENCE_POST.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation side = Models.FENCE_SIDE.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation inventory = Models.FENCE_INVENTORY.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation post = ModelTemplates.FENCE_POST.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation side = ModelTemplates.FENCE_SIDE.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation inventory = ModelTemplates.FENCE_INVENTORY.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createFenceBlockState(fence, post, side));
 
             blockStateModelGenerator.registerParentedItemModel(fence, inventory);
@@ -696,11 +719,11 @@ public class ModelProvider extends FabricModelProvider {
             TexturedModel texturedModel = TexturedModel.getCubeAll(new ResourceLocation("minecraft", "block/" + Registries.BLOCK.getId(block.block()).getPath().replaceAll("_wood", "_log")));
             Block fence = block.fence();
 
-            ResourceLocation post = Models.FENCE_POST.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation side = Models.FENCE_SIDE.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation inventory = Models.FENCE_INVENTORY.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation post = ModelTemplates.FENCE_POST.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation side = ModelTemplates.FENCE_SIDE.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation inventory = ModelTemplates.FENCE_INVENTORY.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createFenceBlockState(fence, post, side));
 
             blockStateModelGenerator.registerParentedItemModel(fence, inventory);
@@ -714,11 +737,11 @@ public class ModelProvider extends FabricModelProvider {
             TexturedModel texturedModel = TexturedModel.getCubeAll(new ResourceLocation("minecraft", "block/" + Registries.BLOCK.getId(block.block()).getPath().replaceAll("_wood", "_log")));
             Block fence = block.fence();
 
-            ResourceLocation post = Models.FENCE_POST.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation side = Models.FENCE_SIDE.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation inventory = Models.FENCE_INVENTORY.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation post = ModelTemplates.FENCE_POST.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation side = ModelTemplates.FENCE_SIDE.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation inventory = ModelTemplates.FENCE_INVENTORY.upload(fence, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createFenceBlockState(fence, post, side));
 
             blockStateModelGenerator.registerParentedItemModel(fence, inventory);
@@ -732,12 +755,12 @@ public class ModelProvider extends FabricModelProvider {
             TexturedModel texturedModel = TexturedModel.CUBE_ALL.get(block.block());
             Block fenceGate = block.fenceGate();
 
-            ResourceLocation open = Models.TEMPLATE_CUSTOM_FENCE_GATE_OPEN.upload(fenceGate, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation closed = Models.TEMPLATE_CUSTOM_FENCE_GATE.upload(fenceGate, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation openWall = Models.TEMPLATE_CUSTOM_FENCE_GATE_WALL_OPEN.upload(fenceGate, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation closedWall = Models.TEMPLATE_CUSTOM_FENCE_GATE_WALL.upload(fenceGate, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation open = ModelTemplates.TEMPLATE_CUSTOM_FENCE_GATE_OPEN.upload(fenceGate, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation closed = ModelTemplates.TEMPLATE_CUSTOM_FENCE_GATE.upload(fenceGate, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation openWall = ModelTemplates.TEMPLATE_CUSTOM_FENCE_GATE_WALL_OPEN.upload(fenceGate, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation closedWall = ModelTemplates.TEMPLATE_CUSTOM_FENCE_GATE_WALL.upload(fenceGate, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createFenceGateBlockState(fenceGate, open, closed, openWall, closedWall, false));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
@@ -749,11 +772,11 @@ public class ModelProvider extends FabricModelProvider {
             TexturedModel texturedModel = TexturedModel.CUBE_ALL.get(block.block());
             Block button = block.button();
 
-            ResourceLocation unpressed = Models.BUTTON.upload(button, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation pressed = Models.BUTTON_PRESSED.upload(button, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation inventory = Models.BUTTON_INVENTORY.upload(button, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation unpressed = ModelTemplates.BUTTON.upload(button, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation pressed = ModelTemplates.BUTTON_PRESSED.upload(button, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation inventory = ModelTemplates.BUTTON_INVENTORY.upload(button, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createButtonBlockState(button, unpressed, pressed));
 
             blockStateModelGenerator.registerParentedItemModel(button, inventory);
@@ -767,10 +790,10 @@ public class ModelProvider extends FabricModelProvider {
             TexturedModel texturedModel = TexturedModel.CUBE_ALL.get(block.block());
             Block pressurePlate = block.pressurePlate();
 
-            ResourceLocation up = Models.PRESSURE_PLATE_UP.upload(pressurePlate, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
-            ResourceLocation down = Models.PRESSURE_PLATE_DOWN.upload(pressurePlate, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation up = ModelTemplates.PRESSURE_PLATE_UP.upload(pressurePlate, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
+            ResourceLocation down = ModelTemplates.PRESSURE_PLATE_DOWN.upload(pressurePlate, texturedModel.getTextures(), blockStateModelGenerator.modelCollector);
 
-            blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+            blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                     .createPressurePlateBlockState(pressurePlate, up, down));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
@@ -782,7 +805,6 @@ public class ModelProvider extends FabricModelProvider {
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
-
         for(SimpleDoorModel.Door door : SimpleDoorModel.doors){
             try {
             if (door.door() == null) { continue; }
@@ -792,20 +814,20 @@ public class ModelProvider extends FabricModelProvider {
 
         for(Block block : TintableCrossModel.notTintedBlocks) {
             try {
-            if(block != null) blockStateModelGenerator.registerTintableCross(block, BlockStateModelGenerator.TintType.NOT_TINTED);
+            if(block != null) blockStateModelGenerator.registerTintableCross(block, BlockModelGenerators.TintType.NOT_TINTED);
 
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
         for(Block block : TintableCrossModel.tintedBlocks) {
             try {
-            blockStateModelGenerator.registerTintableCross(block, BlockStateModelGenerator.TintType.TINTED);
+            blockStateModelGenerator.registerTintableCross(block, BlockModelGenerators.TintType.TINTED);
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
         for(Block block : TintableCrossModel.grassLikeBlocks) {
             try {
-            blockStateModelGenerator.registerTintableCross(block, BlockStateModelGenerator.TintType.NOT_TINTED);
+            blockStateModelGenerator.registerTintableCross(block, BlockModelGenerators.TintType.NOT_TINTED);
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
@@ -817,13 +839,13 @@ public class ModelProvider extends FabricModelProvider {
 
         for(Block block : SimpleDoubleBlockModel.doubleBlocks){
             try {
-            blockStateModelGenerator.registerDoubleBlock(block, BlockStateModelGenerator.TintType.NOT_TINTED);
+            blockStateModelGenerator.registerDoubleBlock(block, BlockModelGenerators.TintType.NOT_TINTED);
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
         for(Block block : SimpleDoubleBlockModel.doubleBlocksItems){
             try {
-            registerDoubleBlock(blockStateModelGenerator, block, BlockStateModelGenerator.TintType.NOT_TINTED);
+            registerDoubleBlock(blockStateModelGenerator, block, BlockModelGenerators.TintType.NOT_TINTED);
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
@@ -893,19 +915,19 @@ public class ModelProvider extends FabricModelProvider {
                 // Upstream renders carved windows as a CUBE_COLUMN whose side is the window
                 // texture and whose top/bottom are the base stone's textures (no _top texture
                 // exists for carved windows).
-                TextureMap textureMap = (new TextureMap())
-                        .put(TextureKey.SIDE, TextureMap.getId(block.base()))
-                        .put(TextureKey.END, block.origin() == Blocks.BASALT || block.origin() == Blocks.DEEPSLATE
-                                ? TextureMap.getSubId(block.origin(), "_top") : TextureMap.getId(block.origin()));
-                ResourceLocation model = Models.CUBE_COLUMN.upload(block.base(), textureMap, blockStateModelGenerator.modelCollector);
-                blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(block.base(), model));
+                TextureMapping textureMap = (new TextureMapping())
+                        .put(TextureSlot.SIDE, TextureMapping.getId(block.base()))
+                        .put(TextureSlot.END, block.origin() == Blocks.BASALT || block.origin() == Blocks.DEEPSLATE
+                                ? TextureMapping.getSubId(block.origin(), "_top") : TextureMapping.getId(block.origin()));
+                ResourceLocation model = ModelTemplates.CUBE_COLUMN.upload(block.base(), textureMap, blockStateModelGenerator.modelCollector);
+                blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators.createSingletonBlockState(block.base(), model));
             } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
         for (SimpleFlowerPotModel.FlowerPot flowerPot : SimpleFlowerPotModel.pots) {
             try {
                 if (flowerPot.plant() == null || flowerPot.pottedPlant() == null) { continue; }
-                blockStateModelGenerator.registerFlowerPotPlant(flowerPot.plant(), flowerPot.pottedPlant(), BlockStateModelGenerator.TintType.NOT_TINTED);
+                blockStateModelGenerator.registerFlowerPotPlant(flowerPot.plant(), flowerPot.pottedPlant(), BlockModelGenerators.TintType.NOT_TINTED);
             } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
@@ -1013,13 +1035,13 @@ public class ModelProvider extends FabricModelProvider {
 
         try {
             blockStateModelGenerator.registerPlantPart(ModNatureBlocks.GLOWWORM_WEBBING, ModNatureBlocks.GLOWWORM_MAIN,
-                    BlockStateModelGenerator.TintType.NOT_TINTED);
+                    BlockModelGenerators.TintType.NOT_TINTED);
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
 
         try {
             if (ModNatureBlocks.FLOATING_ICE != null) {
-                blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(
-                        ModNatureBlocks.FLOATING_ICE, ModelIds.getBlockModelId(ModNatureBlocks.FLOATING_ICE)));
+                blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators.createSingletonBlockState(
+                        ModNatureBlocks.FLOATING_ICE, ModelLocationUtils.getBlockModelId(ModNatureBlocks.FLOATING_ICE)));
             }
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
 
@@ -1155,7 +1177,6 @@ public class ModelProvider extends FabricModelProvider {
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
-
         for(Block block : SimpleStoneStoolModel.stools){
             try {
             registerStoneStoolModelBlockStates(blockStateModelGenerator, block,
@@ -1220,7 +1241,6 @@ public class ModelProvider extends FabricModelProvider {
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
-
         for(Block block : SimpleFanModel.grassLikeFans){
             try {
             registerFanModel(blockStateModelGenerator, block);
@@ -1236,7 +1256,6 @@ public class ModelProvider extends FabricModelProvider {
         registerWoodStoolModelBlockStates(blockStateModelGenerator, MushroomBlockSets.GRAY_MUSHROOM.stool(),
                 new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(MushroomBlockSets.GRAY_MUSHROOM.stool()).getPath().replaceAll("_stool", "_stem")),
                 new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(MushroomBlockSets.GRAY_MUSHROOM.stool()).getPath().replaceAll("_stool", "_planks")));
-
 
         for(SimpleWoodStoolModel.VanillaStool stool : SimpleWoodStoolModel.vanillaStools) {
             try {
@@ -1296,7 +1315,6 @@ public class ModelProvider extends FabricModelProvider {
                 new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(MushroomBlockSets.GRAY_MUSHROOM.chair()).getPath().replaceAll("_chair", "_stem")),
                 new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(MushroomBlockSets.GRAY_MUSHROOM.chair()).getPath().replaceAll("_chair", "_planks")));
 
-
         registerWoodTableModelBlockStates(blockStateModelGenerator, MushroomBlockSets.MUSHROOM.table(),
                 new ResourceLocation("minecraft", "block/mushroom_stem"),
                 new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(MushroomBlockSets.MUSHROOM.table()).getPath().replaceAll("_table", "_planks")));
@@ -1306,7 +1324,6 @@ public class ModelProvider extends FabricModelProvider {
         registerWoodTableModelBlockStates(blockStateModelGenerator, MushroomBlockSets.GRAY_MUSHROOM.table(),
                 new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(MushroomBlockSets.GRAY_MUSHROOM.table()).getPath().replaceAll("_table", "_stem")),
                 new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(MushroomBlockSets.GRAY_MUSHROOM.table()).getPath().replaceAll("_table", "_planks")));
-
 
         for(SimpleVerticalSlabModel.VerticalSlab verticalSlab : SimpleVerticalSlabModel.vanillaVerticalSlabs) {
             try {
@@ -1391,15 +1408,15 @@ public class ModelProvider extends FabricModelProvider {
         blockStateModelGenerator.registerAmethyst(ModBlocks.LARGE_QUARTZ_BUD);
     }
 
-    public final void registerFanModel(BlockStateModelGenerator blockStateCollector, Block coralFanBlock) {
+    public final void registerFanModel(BlockModelGenerators blockStateCollector, Block coralFanBlock) {
         TexturedModel texturedModel = TexturedModel.CORAL_FAN.get(coralFanBlock);
         ResourceLocation identifier = texturedModel.upload(coralFanBlock, blockStateCollector.modelCollector);
         blockStateCollector.blockStateCollector.accept(blockStateCollector.createSingletonBlockState(coralFanBlock, identifier));
         blockStateCollector.registerItemModel(coralFanBlock);
     }
 
-    public void registerVanillaVerticalSlabModelBlockStates(BlockStateModelGenerator blockStateModelGenerator, Block block, Block origin, String slabPath){
-        ResourceLocation fullBlockId = ModelIds.getBlockModelId(origin);
+    public void registerVanillaVerticalSlabModelBlockStates(BlockModelGenerators blockStateModelGenerator, Block block, Block origin, String slabPath){
+        ResourceLocation fullBlockId = ModelLocationUtils.getBlockModelId(origin);
         // Vanilla ships no waxed_* block models: a waxed copper block points at its unwaxed
         // counterpart, and so must the slab's double variant.
         ResourceLocation vanillaOriginId = Registries.BLOCK.getId(origin);
@@ -1407,13 +1424,13 @@ public class ModelProvider extends FabricModelProvider {
             fullBlockId = vanillaOriginId.withPath("block/" + vanillaOriginId.getPath().substring("waxed_".length()));
         }
         ResourceLocation variantId = MEModels.VERTICAL_SLAB.upload(block,
-                TextureMap.of(TextureKey.ALL,new ResourceLocation("minecraft","block/" + slabPath)),
+                TextureMapping.of(TextureSlot.ALL,new ResourceLocation("minecraft","block/" + slabPath)),
                 blockStateModelGenerator.modelCollector);
         registerVerticalSlab(blockStateModelGenerator, block, fullBlockId, variantId);
     }
 
-    public void registerVerticalSlabModelBlockStates(BlockStateModelGenerator blockStateModelGenerator, Block block, Block origin, String slabPath){
-        ResourceLocation fullBlockId = ModelIds.getBlockModelId(origin);
+    public void registerVerticalSlabModelBlockStates(BlockModelGenerators blockStateModelGenerator, Block block, Block origin, String slabPath){
+        ResourceLocation fullBlockId = ModelLocationUtils.getBlockModelId(origin);
         // Vanilla ships no waxed_* block models or textures at all: a waxed copper block simply
         // points at its unwaxed counterpart, so the slab has to do the same or it renders as a
         // missing model over a missing texture.
@@ -1424,27 +1441,27 @@ public class ModelProvider extends FabricModelProvider {
             slabPath = unwaxed;
         }
         ResourceLocation variantId = MEModels.VERTICAL_SLAB.upload(block,
-                TextureMap.of(TextureKey.ALL, new ResourceLocation(MiddleEarth.MOD_ID, "block/" + slabPath)),
+                TextureMapping.of(TextureSlot.ALL, new ResourceLocation(MiddleEarth.MOD_ID, "block/" + slabPath)),
                 blockStateModelGenerator.modelCollector);
         registerVerticalSlab(blockStateModelGenerator, block, fullBlockId, variantId);
     }
 
-    public void registerColumnVerticalSlabModelBlockStates(BlockStateModelGenerator blockStateModelGenerator, Block block, Block origin,
+    public void registerColumnVerticalSlabModelBlockStates(BlockModelGenerators blockStateModelGenerator, Block block, Block origin,
                                                            String modId, String topTexturePath, String bottomTexturePath, String sideTexturePath){
-        ResourceLocation fullBlockId = ModelIds.getBlockModelId(origin);
+        ResourceLocation fullBlockId = ModelLocationUtils.getBlockModelId(origin);
         ResourceLocation sideTexture = new ResourceLocation(modId, "block/" + sideTexturePath);
 
-        ResourceLocation variantId = MEModels.VERTICAL_COLUMN_SLAB.upload(block, (new TextureMap())
-                        .put(TextureKey.TOP, new ResourceLocation(modId, "block/" + topTexturePath))
-                        .put(TextureKey.BOTTOM, new ResourceLocation(modId, "block/" + bottomTexturePath))
-                        .put(TextureKey.SIDE, sideTexture)
-                        .put(TextureKey.PARTICLE, sideTexture),
+        ResourceLocation variantId = MEModels.VERTICAL_COLUMN_SLAB.upload(block, (new TextureMapping())
+                        .put(TextureSlot.TOP, new ResourceLocation(modId, "block/" + topTexturePath))
+                        .put(TextureSlot.BOTTOM, new ResourceLocation(modId, "block/" + bottomTexturePath))
+                        .put(TextureSlot.SIDE, sideTexture)
+                        .put(TextureSlot.PARTICLE, sideTexture),
                 blockStateModelGenerator.modelCollector);
 
         registerVerticalSlab(blockStateModelGenerator, block, fullBlockId, variantId);
     }
 
-    private void registerVerticalSlab(BlockStateModelGenerator blockStateModelGenerator, Block block, ResourceLocation full, ResourceLocation variant) {
+    private void registerVerticalSlab(BlockModelGenerators blockStateModelGenerator, Block block, ResourceLocation full, ResourceLocation variant) {
         // Two VerticalSlabBlock classes exist in the port (block.special and block.special.verticalSlabs)
         // and Property equality is identity-based, so a block built with the other class fails the
         // variant validation below even though the state names look identical.
@@ -1455,213 +1472,213 @@ public class ModelProvider extends FabricModelProvider {
         }
     }
 
-    private void registerVerticalSlabUnchecked(BlockStateModelGenerator blockStateModelGenerator, Block block, ResourceLocation full, ResourceLocation variant) {
-        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block)
-                .coordinate(BlockStateVariantMap.create(BlockStateProperties.HORIZONTAL_FACING, VerticalSlabBlock.DOUBLE)
-                        .register(Direction.NORTH, false, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, variant).put(VariantSettings.UVLOCK, true))
-                        .register(Direction.EAST, false, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, variant).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-                        .register(Direction.SOUTH, false, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, variant).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R180))
-                        .register(Direction.WEST, false, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, variant).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R270))
-                        .register(Direction.NORTH, true, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, full).put(VariantSettings.UVLOCK, true))
-                        .register(Direction.EAST, true, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, full).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-                        .register(Direction.SOUTH, true, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, full).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R180))
-                        .register(Direction.WEST, true, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, full).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R270))
+    private void registerVerticalSlabUnchecked(BlockModelGenerators blockStateModelGenerator, Block block, ResourceLocation full, ResourceLocation variant) {
+        blockStateModelGenerator.blockStateCollector.accept(MultiVariantGenerator.create(block)
+                .coordinate(PropertyDispatch.create(BlockStateProperties.HORIZONTAL_FACING, VerticalSlabBlock.DOUBLE)
+                        .register(Direction.NORTH, false, Variant.create()
+                                .put(VariantProperties.MODEL, variant).put(VariantProperties.UVLOCK, true))
+                        .register(Direction.EAST, false, Variant.create()
+                                .put(VariantProperties.MODEL, variant).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R90))
+                        .register(Direction.SOUTH, false, Variant.create()
+                                .put(VariantProperties.MODEL, variant).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R180))
+                        .register(Direction.WEST, false, Variant.create()
+                                .put(VariantProperties.MODEL, variant).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R270))
+                        .register(Direction.NORTH, true, Variant.create()
+                                .put(VariantProperties.MODEL, full).put(VariantProperties.UVLOCK, true))
+                        .register(Direction.EAST, true, Variant.create()
+                                .put(VariantProperties.MODEL, full).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R90))
+                        .register(Direction.SOUTH, true, Variant.create()
+                                .put(VariantProperties.MODEL, full).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R180))
+                        .register(Direction.WEST, true, Variant.create()
+                                .put(VariantProperties.MODEL, full).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R270))
                 ));
     }
 
-    public void registerWoodStoolModelBlockStates(BlockStateModelGenerator blockStateModelGenerator, Block block, ResourceLocation logTexture, ResourceLocation plankTexture){
-        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block,
-                BlockStateVariant.create().put(VariantSettings.MODEL, MEModels.WOOD_STOOL.upload(block,
-                        (new TextureMap()).put(TextureKey.TOP, plankTexture)
-                                .put(TextureKey.SIDE, logTexture)
-                                .put(TextureKey.PARTICLE, logTexture),
-                        blockStateModelGenerator.modelCollector)).put(VariantSettings.UVLOCK, false))
-                .coordinate(BlockStateModelGenerator.createNorthDefaultHorizontalRotationStates()));
+    public void registerWoodStoolModelBlockStates(BlockModelGenerators blockStateModelGenerator, Block block, ResourceLocation logTexture, ResourceLocation plankTexture){
+        blockStateModelGenerator.blockStateCollector.accept(MultiVariantGenerator.create(block,
+                Variant.create().put(VariantProperties.MODEL, MEModels.WOOD_STOOL.upload(block,
+                        (new TextureMapping()).put(TextureSlot.TOP, plankTexture)
+                                .put(TextureSlot.SIDE, logTexture)
+                                .put(TextureSlot.PARTICLE, logTexture),
+                        blockStateModelGenerator.modelCollector)).put(VariantProperties.UVLOCK, false))
+                .coordinate(BlockModelGenerators.createNorthDefaultHorizontalRotationStates()));
     }
 
-    public void registerWoodTableModelBlockStates(BlockStateModelGenerator blockStateModelGenerator, Block block, ResourceLocation logTexture, ResourceLocation plankTexture){
-        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block,
-                        BlockStateVariant.create().put(VariantSettings.MODEL, MEModels.WOOD_TABLE.upload(block,
-                                (new TextureMap()).put(TextureKey.TOP, plankTexture)
-                                        .put(TextureKey.SIDE, logTexture)
-                                        .put(TextureKey.PARTICLE, logTexture),
-                                blockStateModelGenerator.modelCollector)).put(VariantSettings.UVLOCK, false)));
+    public void registerWoodTableModelBlockStates(BlockModelGenerators blockStateModelGenerator, Block block, ResourceLocation logTexture, ResourceLocation plankTexture){
+        blockStateModelGenerator.blockStateCollector.accept(MultiVariantGenerator.create(block,
+                        Variant.create().put(VariantProperties.MODEL, MEModels.WOOD_TABLE.upload(block,
+                                (new TextureMapping()).put(TextureSlot.TOP, plankTexture)
+                                        .put(TextureSlot.SIDE, logTexture)
+                                        .put(TextureSlot.PARTICLE, logTexture),
+                                blockStateModelGenerator.modelCollector)).put(VariantProperties.UVLOCK, false)));
     }
 
-    public void registerWoodChairModelBlockStates(BlockStateModelGenerator blockStateModelGenerator, Block block, ResourceLocation logTexture, ResourceLocation plankTexture){
-        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block,
-                        BlockStateVariant.create().put(VariantSettings.MODEL, MEModels.WOOD_CHAIR.upload(block,
-                                (new TextureMap()).put(TextureKey.TOP, plankTexture)
-                                        .put(TextureKey.SIDE, logTexture)
-                                        .put(TextureKey.PARTICLE, logTexture),
-                                blockStateModelGenerator.modelCollector)).put(VariantSettings.UVLOCK, false))
-                .coordinate(BlockStateModelGenerator.createNorthDefaultHorizontalRotationStates()));
+    public void registerWoodChairModelBlockStates(BlockModelGenerators blockStateModelGenerator, Block block, ResourceLocation logTexture, ResourceLocation plankTexture){
+        blockStateModelGenerator.blockStateCollector.accept(MultiVariantGenerator.create(block,
+                        Variant.create().put(VariantProperties.MODEL, MEModels.WOOD_CHAIR.upload(block,
+                                (new TextureMapping()).put(TextureSlot.TOP, plankTexture)
+                                        .put(TextureSlot.SIDE, logTexture)
+                                        .put(TextureSlot.PARTICLE, logTexture),
+                                blockStateModelGenerator.modelCollector)).put(VariantProperties.UVLOCK, false))
+                .coordinate(BlockModelGenerators.createNorthDefaultHorizontalRotationStates()));
     }
 
-    public void registerStoneStoolModelBlockStates(BlockStateModelGenerator blockStateModelGenerator, Block block, ResourceLocation texture){
-        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block,
-                        BlockStateVariant.create().put(VariantSettings.MODEL, MEModels.STONE_STOOL.upload(block,
-                                (new TextureMap()).put(TextureKey.ALL, texture)
-                                        .put(TextureKey.PARTICLE, texture),
-                                blockStateModelGenerator.modelCollector)).put(VariantSettings.UVLOCK, false))
-                .coordinate(BlockStateModelGenerator.createNorthDefaultHorizontalRotationStates()));
+    public void registerStoneStoolModelBlockStates(BlockModelGenerators blockStateModelGenerator, Block block, ResourceLocation texture){
+        blockStateModelGenerator.blockStateCollector.accept(MultiVariantGenerator.create(block,
+                        Variant.create().put(VariantProperties.MODEL, MEModels.STONE_STOOL.upload(block,
+                                (new TextureMapping()).put(TextureSlot.ALL, texture)
+                                        .put(TextureSlot.PARTICLE, texture),
+                                blockStateModelGenerator.modelCollector)).put(VariantProperties.UVLOCK, false))
+                .coordinate(BlockModelGenerators.createNorthDefaultHorizontalRotationStates()));
     }
 
-    public void registerStoneTableModelBlockStates(BlockStateModelGenerator blockStateModelGenerator, Block block, ResourceLocation texture){
-        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block,
-                BlockStateVariant.create().put(VariantSettings.MODEL, MEModels.STONE_TABLE.upload(block,
-                        (new TextureMap()).put(TextureKey.ALL, texture)
-                                .put(TextureKey.PARTICLE, texture),
-                        blockStateModelGenerator.modelCollector)).put(VariantSettings.UVLOCK, false)));
+    public void registerStoneTableModelBlockStates(BlockModelGenerators blockStateModelGenerator, Block block, ResourceLocation texture){
+        blockStateModelGenerator.blockStateCollector.accept(MultiVariantGenerator.create(block,
+                Variant.create().put(VariantProperties.MODEL, MEModels.STONE_TABLE.upload(block,
+                        (new TextureMapping()).put(TextureSlot.ALL, texture)
+                                .put(TextureSlot.PARTICLE, texture),
+                        blockStateModelGenerator.modelCollector)).put(VariantProperties.UVLOCK, false)));
     }
 
-    public void registerStoneChairModelBlockStates(BlockStateModelGenerator blockStateModelGenerator, Block block, ResourceLocation texture){
-        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block,
-                        BlockStateVariant.create().put(VariantSettings.MODEL, MEModels.STONE_CHAIR.upload(block,
-                                (new TextureMap()).put(TextureKey.ALL, texture)
-                                        .put(TextureKey.PARTICLE, texture),
-                                blockStateModelGenerator.modelCollector)).put(VariantSettings.UVLOCK, false))
-                .coordinate(BlockStateModelGenerator.createNorthDefaultHorizontalRotationStates()));
+    public void registerStoneChairModelBlockStates(BlockModelGenerators blockStateModelGenerator, Block block, ResourceLocation texture){
+        blockStateModelGenerator.blockStateCollector.accept(MultiVariantGenerator.create(block,
+                        Variant.create().put(VariantProperties.MODEL, MEModels.STONE_CHAIR.upload(block,
+                                (new TextureMapping()).put(TextureSlot.ALL, texture)
+                                        .put(TextureSlot.PARTICLE, texture),
+                                blockStateModelGenerator.modelCollector)).put(VariantProperties.UVLOCK, false))
+                .coordinate(BlockModelGenerators.createNorthDefaultHorizontalRotationStates()));
     }
 
     /** 1.20.1 port of the donor's registerPaneModel: single-texture pane (bars / net). */
-    public final void registerPaneModel(BlockStateModelGenerator blockStateModelGenerator, Block pane) {
-        TextureMap textureMap = TextureMap.paneAndTopForEdge(pane, pane);
-        ResourceLocation post = Models.TEMPLATE_GLASS_PANE_POST.upload(pane, textureMap, blockStateModelGenerator.modelCollector);
-        ResourceLocation side = Models.TEMPLATE_GLASS_PANE_SIDE.upload(pane, textureMap, blockStateModelGenerator.modelCollector);
-        ResourceLocation sideAlt = Models.TEMPLATE_GLASS_PANE_SIDE_ALT.upload(pane, textureMap, blockStateModelGenerator.modelCollector);
-        ResourceLocation noSide = Models.TEMPLATE_GLASS_PANE_NOSIDE.upload(pane, textureMap, blockStateModelGenerator.modelCollector);
-        ResourceLocation noSideAlt = Models.TEMPLATE_GLASS_PANE_NOSIDE_ALT.upload(pane, textureMap, blockStateModelGenerator.modelCollector);
-        blockStateModelGenerator.blockStateCollector.accept(MultipartBlockStateSupplier.create(pane)
-                .with(BlockStateVariant.create().put(VariantSettings.MODEL, post))
-                .with(When.create().set(BlockStateProperties.NORTH, true), BlockStateVariant.create().put(VariantSettings.MODEL, side))
-                .with(When.create().set(BlockStateProperties.EAST, true), BlockStateVariant.create().put(VariantSettings.MODEL, side).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-                .with(When.create().set(BlockStateProperties.SOUTH, true), BlockStateVariant.create().put(VariantSettings.MODEL, sideAlt))
-                .with(When.create().set(BlockStateProperties.WEST, true), BlockStateVariant.create().put(VariantSettings.MODEL, sideAlt).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-                .with(When.create().set(BlockStateProperties.NORTH, false), BlockStateVariant.create().put(VariantSettings.MODEL, noSide))
-                .with(When.create().set(BlockStateProperties.EAST, false), BlockStateVariant.create().put(VariantSettings.MODEL, noSideAlt))
-                .with(When.create().set(BlockStateProperties.SOUTH, false), BlockStateVariant.create().put(VariantSettings.MODEL, noSideAlt).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-                .with(When.create().set(BlockStateProperties.WEST, false), BlockStateVariant.create().put(VariantSettings.MODEL, noSide).put(VariantSettings.Y, VariantSettings.Rotation.R270)));
-        Models.GENERATED.upload(ModelIds.getItemModelId(pane.asItem()), TextureMap.layer0(pane), blockStateModelGenerator.modelCollector);
+    public final void registerPaneModel(BlockModelGenerators blockStateModelGenerator, Block pane) {
+        TextureMapping textureMap = TextureMapping.paneAndTopForEdge(pane, pane);
+        ResourceLocation post = ModelTemplates.TEMPLATE_GLASS_PANE_POST.upload(pane, textureMap, blockStateModelGenerator.modelCollector);
+        ResourceLocation side = ModelTemplates.TEMPLATE_GLASS_PANE_SIDE.upload(pane, textureMap, blockStateModelGenerator.modelCollector);
+        ResourceLocation sideAlt = ModelTemplates.TEMPLATE_GLASS_PANE_SIDE_ALT.upload(pane, textureMap, blockStateModelGenerator.modelCollector);
+        ResourceLocation noSide = ModelTemplates.TEMPLATE_GLASS_PANE_NOSIDE.upload(pane, textureMap, blockStateModelGenerator.modelCollector);
+        ResourceLocation noSideAlt = ModelTemplates.TEMPLATE_GLASS_PANE_NOSIDE_ALT.upload(pane, textureMap, blockStateModelGenerator.modelCollector);
+        blockStateModelGenerator.blockStateCollector.accept(MultiPartGenerator.create(pane)
+                .with(Variant.create().put(VariantProperties.MODEL, post))
+                .with(Condition.create().set(BlockStateProperties.NORTH, true), Variant.create().put(VariantProperties.MODEL, side))
+                .with(Condition.create().set(BlockStateProperties.EAST, true), Variant.create().put(VariantProperties.MODEL, side).put(VariantProperties.Y, VariantProperties.Rotation.R90))
+                .with(Condition.create().set(BlockStateProperties.SOUTH, true), Variant.create().put(VariantProperties.MODEL, sideAlt))
+                .with(Condition.create().set(BlockStateProperties.WEST, true), Variant.create().put(VariantProperties.MODEL, sideAlt).put(VariantProperties.Y, VariantProperties.Rotation.R90))
+                .with(Condition.create().set(BlockStateProperties.NORTH, false), Variant.create().put(VariantProperties.MODEL, noSide))
+                .with(Condition.create().set(BlockStateProperties.EAST, false), Variant.create().put(VariantProperties.MODEL, noSideAlt))
+                .with(Condition.create().set(BlockStateProperties.SOUTH, false), Variant.create().put(VariantProperties.MODEL, noSideAlt).put(VariantProperties.Y, VariantProperties.Rotation.R90))
+                .with(Condition.create().set(BlockStateProperties.WEST, false), Variant.create().put(VariantProperties.MODEL, noSide).put(VariantProperties.Y, VariantProperties.Rotation.R270)));
+        ModelTemplates.GENERATED.upload(ModelLocationUtils.getItemModelId(pane.asItem()), TextureMapping.layer0(pane), blockStateModelGenerator.modelCollector);
     }
 
     /** 1.20.1 port of the donor's registerPointedBlock. Vanilla's
-     *  BlockStateModelGenerator#registerPointedDripstone is private and hard-wired to
+     *  BlockModelGenerators#registerPointedDripstone is private and hard-wired to
      *  Blocks.POINTED_DRIPSTONE, so the 10 variants are built here instead. */
-    public void registerPointedBlock(BlockStateModelGenerator blockStateModelGenerator, Block pointedBlock) {
-        Models.GENERATED.upload(ModelIds.getItemModelId(pointedBlock.asItem()),
-                TextureMap.layer0(pointedBlock.asItem()), blockStateModelGenerator.modelCollector);
+    public void registerPointedBlock(BlockModelGenerators blockStateModelGenerator, Block pointedBlock) {
+        ModelTemplates.GENERATED.upload(ModelLocationUtils.getItemModelId(pointedBlock.asItem()),
+                TextureMapping.layer0(pointedBlock.asItem()), blockStateModelGenerator.modelCollector);
 
-        BlockStateVariantMap.DoubleProperty<Direction, Thickness> variants =
-                BlockStateVariantMap.create(BlockStateProperties.VERTICAL_DIRECTION, BlockStateProperties.THICKNESS);
-        for (Thickness thickness : Thickness.values()) {
+        PropertyDispatch.DoubleProperty<Direction, DripstoneThickness> variants =
+                PropertyDispatch.create(BlockStateProperties.VERTICAL_DIRECTION, BlockStateProperties.THICKNESS);
+        for (DripstoneThickness thickness : DripstoneThickness.values()) {
             for (Direction direction : new Direction[]{Direction.UP, Direction.DOWN}) {
                 String suffix = "_" + direction.asString() + "_" + thickness.asString();
-                TextureMap textures = TextureMap.cross(TextureMap.getSubId(pointedBlock, suffix));
-                ResourceLocation model = Models.POINTED_DRIPSTONE.upload(pointedBlock, suffix, textures,
+                TextureMapping textures = TextureMapping.cross(TextureMapping.getSubId(pointedBlock, suffix));
+                ResourceLocation model = ModelTemplates.POINTED_DRIPSTONE.upload(pointedBlock, suffix, textures,
                         blockStateModelGenerator.modelCollector);
                 variants.register(direction, thickness,
-                        BlockStateVariant.create().put(VariantSettings.MODEL, model));
+                        Variant.create().put(VariantProperties.MODEL, model));
             }
         }
 
         blockStateModelGenerator.blockStateCollector.accept(
-                VariantsBlockStateSupplier.create(pointedBlock).coordinate(variants));
+                MultiVariantGenerator.create(pointedBlock).coordinate(variants));
     }
 
-    /** 1.20.1 stand-in for 1.21's BlockStateModelGenerator#registerMultifaceBlock(Model):
+    /** 1.20.1 stand-in for 1.21's BlockModelGenerators#registerMultifaceBlock(Model):
      *  emits the vanilla glow_lichen multipart blockstate against the block's own
      *  (hand-written) flat multiface model. */
-    public void registerMultifaceBlock(BlockStateModelGenerator blockStateModelGenerator, Block block) {
-        ResourceLocation model = ModelIds.getBlockModelId(block);
+    public void registerMultifaceBlock(BlockModelGenerators blockStateModelGenerator, Block block) {
+        ResourceLocation model = ModelLocationUtils.getBlockModelId(block);
 
-        BlockStateVariant north = BlockStateVariant.create().put(VariantSettings.MODEL, model);
-        BlockStateVariant east = BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R90);
-        BlockStateVariant south = BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R180);
-        BlockStateVariant west = BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R270);
-        BlockStateVariant up = BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.X, VariantSettings.Rotation.R270);
-        BlockStateVariant down = BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.X, VariantSettings.Rotation.R90);
+        Variant north = Variant.create().put(VariantProperties.MODEL, model);
+        Variant east = Variant.create().put(VariantProperties.MODEL, model).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R90);
+        Variant south = Variant.create().put(VariantProperties.MODEL, model).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R180);
+        Variant west = Variant.create().put(VariantProperties.MODEL, model).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R270);
+        Variant up = Variant.create().put(VariantProperties.MODEL, model).put(VariantProperties.UVLOCK, true).put(VariantProperties.X, VariantProperties.Rotation.R270);
+        Variant down = Variant.create().put(VariantProperties.MODEL, model).put(VariantProperties.UVLOCK, true).put(VariantProperties.X, VariantProperties.Rotation.R90);
 
-        When noFace = When.create()
+        Condition noFace = Condition.create()
                 .set(BlockStateProperties.NORTH, false).set(BlockStateProperties.EAST, false).set(BlockStateProperties.SOUTH, false)
                 .set(BlockStateProperties.WEST, false).set(BlockStateProperties.UP, false).set(BlockStateProperties.DOWN, false);
 
-        blockStateModelGenerator.blockStateCollector.accept(MultipartBlockStateSupplier.create(block)
-                .with(When.create().set(BlockStateProperties.NORTH, true), north).with(noFace, north)
-                .with(When.create().set(BlockStateProperties.EAST, true), east).with(noFace, east)
-                .with(When.create().set(BlockStateProperties.SOUTH, true), south).with(noFace, south)
-                .with(When.create().set(BlockStateProperties.WEST, true), west).with(noFace, west)
-                .with(When.create().set(BlockStateProperties.UP, true), up).with(noFace, up)
-                .with(When.create().set(BlockStateProperties.DOWN, true), down).with(noFace, down));
+        blockStateModelGenerator.blockStateCollector.accept(MultiPartGenerator.create(block)
+                .with(Condition.create().set(BlockStateProperties.NORTH, true), north).with(noFace, north)
+                .with(Condition.create().set(BlockStateProperties.EAST, true), east).with(noFace, east)
+                .with(Condition.create().set(BlockStateProperties.SOUTH, true), south).with(noFace, south)
+                .with(Condition.create().set(BlockStateProperties.WEST, true), west).with(noFace, west)
+                .with(Condition.create().set(BlockStateProperties.UP, true), up).with(noFace, up)
+                .with(Condition.create().set(BlockStateProperties.DOWN, true), down).with(noFace, down));
     }
 
-    private void registerFarmland(BlockStateModelGenerator blockStateModelGenerator, Block dirtBlock, Block farmland) {
-        ResourceLocation dirtTexture = TextureMap.getId(dirtBlock);
-        ResourceLocation dryModel = Models.TEMPLATE_FARMLAND.upload(farmland, (new TextureMap())
-                        .put(TextureKey.DIRT, dirtTexture)
-                        .put(TextureKey.TOP, TextureMap.getId(farmland)),
+    private void registerFarmland(BlockModelGenerators blockStateModelGenerator, Block dirtBlock, Block farmland) {
+        ResourceLocation dirtTexture = TextureMapping.getId(dirtBlock);
+        ResourceLocation dryModel = ModelTemplates.TEMPLATE_FARMLAND.upload(farmland, (new TextureMapping())
+                        .put(TextureSlot.DIRT, dirtTexture)
+                        .put(TextureSlot.TOP, TextureMapping.getId(farmland)),
                 blockStateModelGenerator.modelCollector);
-        ResourceLocation moistModel = Models.TEMPLATE_FARMLAND.upload(TextureMap.getSubId(farmland, "_moist"), (new TextureMap())
-                        .put(TextureKey.DIRT, dirtTexture)
-                        .put(TextureKey.TOP, TextureMap.getSubId(farmland, "_moist")),
+        ResourceLocation moistModel = ModelTemplates.TEMPLATE_FARMLAND.upload(TextureMapping.getSubId(farmland, "_moist"), (new TextureMapping())
+                        .put(TextureSlot.DIRT, dirtTexture)
+                        .put(TextureSlot.TOP, TextureMapping.getSubId(farmland, "_moist")),
                 blockStateModelGenerator.modelCollector);
-        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(farmland)
-                .coordinate(BlockStateModelGenerator.createValueFencedModelMap(BlockStateProperties.MOISTURE, 7, moistModel, dryModel)));
+        blockStateModelGenerator.blockStateCollector.accept(MultiVariantGenerator.create(farmland)
+                .coordinate(BlockModelGenerators.createValueFencedModelMap(BlockStateProperties.MOISTURE, 7, moistModel, dryModel)));
     }
 
-    private void registerDirtPath(BlockStateModelGenerator blockStateModelGenerator, Block dirtBlock, Block pathBlock) {
-        ResourceLocation dirtTexture = TextureMap.getId(dirtBlock);
-        ResourceLocation model = MEModels.PATH_BLOCK.upload(pathBlock, (new TextureMap())
-                        .put(TextureKey.PARTICLE, dirtTexture)
-                        .put(TextureKey.TOP, TextureMap.getId(pathBlock).withSuffixedPath("_top"))
-                        .put(TextureKey.SIDE, TextureMap.getId(pathBlock).withSuffixedPath("_side"))
-                        .put(TextureKey.BOTTOM, dirtTexture),
+    private void registerDirtPath(BlockModelGenerators blockStateModelGenerator, Block dirtBlock, Block pathBlock) {
+        ResourceLocation dirtTexture = TextureMapping.getId(dirtBlock);
+        ResourceLocation model = MEModels.PATH_BLOCK.upload(pathBlock, (new TextureMapping())
+                        .put(TextureSlot.PARTICLE, dirtTexture)
+                        .put(TextureSlot.TOP, TextureMapping.getId(pathBlock).withSuffixedPath("_top"))
+                        .put(TextureSlot.SIDE, TextureMapping.getId(pathBlock).withSuffixedPath("_side"))
+                        .put(TextureSlot.BOTTOM, dirtTexture),
                 blockStateModelGenerator.modelCollector);
-        blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(pathBlock, model));
+        blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators.createSingletonBlockState(pathBlock, model));
     }
 
-    public final void registerLargePlant(BlockStateModelGenerator blockStateModelGenerator, Block plantBlock) {
+    public final void registerLargePlant(BlockModelGenerators blockStateModelGenerator, Block plantBlock) {
         ResourceLocation id = Registries.BLOCK.getId(plantBlock);
         ResourceLocation texture = new ResourceLocation(id.getNamespace(), "block/" + id.getPath());
-        ResourceLocation model = MEModels.LARGE_PLANT.upload(plantBlock, (new TextureMap())
-                        .put(TextureKey.ALL, texture)
-                        .put(TextureKey.PARTICLE, texture),
+        ResourceLocation model = MEModels.LARGE_PLANT.upload(plantBlock, (new TextureMapping())
+                        .put(TextureSlot.ALL, texture)
+                        .put(TextureSlot.PARTICLE, texture),
                 blockStateModelGenerator.modelCollector);
-        blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(plantBlock, model));
+        blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators.createSingletonBlockState(plantBlock, model));
     }
 
-    public final void registerTintableLargePlant(BlockStateModelGenerator blockStateModelGenerator, Block plantBlock) {
+    public final void registerTintableLargePlant(BlockModelGenerators blockStateModelGenerator, Block plantBlock) {
         ResourceLocation id = Registries.BLOCK.getId(plantBlock);
         ResourceLocation texture = new ResourceLocation(id.getNamespace(), "block/" + id.getPath());
-        ResourceLocation model = MEModels.TINTED_LARGE_PLANT.upload(plantBlock, (new TextureMap())
-                        .put(TextureKey.ALL, texture)
-                        .put(TextureKey.PARTICLE, texture),
+        ResourceLocation model = MEModels.TINTED_LARGE_PLANT.upload(plantBlock, (new TextureMapping())
+                        .put(TextureSlot.ALL, texture)
+                        .put(TextureSlot.PARTICLE, texture),
                 blockStateModelGenerator.modelCollector);
-        blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(plantBlock, model));
+        blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators.createSingletonBlockState(plantBlock, model));
     }
 
-    public void registerHangingVine(BlockStateModelGenerator blockStateModelGenerator, Block block) {
-        ResourceLocation base = MEModels.CROP_VINE.upload(block, TextureMap.crop(TextureMap.getId(block)),
+    public void registerHangingVine(BlockModelGenerators blockStateModelGenerator, Block block) {
+        ResourceLocation base = MEModels.CROP_VINE.upload(block, TextureMapping.crop(TextureMapping.getId(block)),
                 blockStateModelGenerator.modelCollector);
-        ResourceLocation tip = MEModels.CROP_VINE.upload(block, "_tip", TextureMap.crop(TextureMap.getSubId(block, "_tip")),
+        ResourceLocation tip = MEModels.CROP_VINE.upload(block, "_tip", TextureMapping.crop(TextureMapping.getSubId(block, "_tip")),
                 blockStateModelGenerator.modelCollector);
-        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block)
-                .coordinate(BlockStateVariantMap.create(CustomHangingBlock.TIP)
-                        .register(false, BlockStateVariant.create().put(VariantSettings.MODEL, base))
-                        .register(true, BlockStateVariant.create().put(VariantSettings.MODEL, tip))));
+        blockStateModelGenerator.blockStateCollector.accept(MultiVariantGenerator.create(block)
+                .coordinate(PropertyDispatch.create(CustomHangingBlock.TIP)
+                        .register(false, Variant.create().put(VariantProperties.MODEL, base))
+                        .register(true, Variant.create().put(VariantProperties.MODEL, tip))));
     }
 
-    public final void registerLargeDoor(BlockStateModelGenerator blockStateModelGenerator, LargeDoorBlock largeDoor, IntProperty part) {
-        BlockStateVariantMap.QuadrupleProperty<Direction, Boolean, DoorHinge, Integer> statesMap =
-                BlockStateVariantMap.create(BlockStateProperties.HORIZONTAL_FACING, BlockStateProperties.OPEN, BlockStateProperties.DOOR_HINGE, part);
+    public final void registerLargeDoor(BlockModelGenerators blockStateModelGenerator, LargeDoorBlock largeDoor, IntegerProperty part) {
+        PropertyDispatch.QuadrupleProperty<Direction, Boolean, DoorHingeSide, Integer> statesMap =
+                PropertyDispatch.create(BlockStateProperties.HORIZONTAL_FACING, BlockStateProperties.OPEN, BlockStateProperties.DOOR_HINGE, part);
         for (int i = 0; i < largeDoor.getDoorWidth() * largeDoor.getDoorHeight(); i++) {
             for (int k = 2; k < 6; k++) {
                 int rot = switch (k) {
@@ -1675,15 +1692,15 @@ public class ModelProvider extends FabricModelProvider {
                 ResourceLocation right = new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_right_" + i);
                 ResourceLocation rightOpen = new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_right_open_" + i);
 
-                statesMap.register(Direction.values()[k], false, DoorHinge.LEFT, i, rotateY(left, rot));
-                statesMap.register(Direction.values()[k], true, DoorHinge.LEFT, i, rotateY(leftOpen, rot));
-                statesMap.register(Direction.values()[k], false, DoorHinge.RIGHT, i, rotateY(right, rot));
-                statesMap.register(Direction.values()[k], true, DoorHinge.RIGHT, i, rotateY(rightOpen, rot));
+                statesMap.register(Direction.values()[k], false, DoorHingeSide.LEFT, i, rotateY(left, rot));
+                statesMap.register(Direction.values()[k], true, DoorHingeSide.LEFT, i, rotateY(leftOpen, rot));
+                statesMap.register(Direction.values()[k], false, DoorHingeSide.RIGHT, i, rotateY(right, rot));
+                statesMap.register(Direction.values()[k], true, DoorHingeSide.RIGHT, i, rotateY(rightOpen, rot));
 
                 if (k == 2) {
-                    TextureMap textures = (new TextureMap())
-                            .put(TextureKey.ALL, new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_" + i))
-                            .put(TextureKey.PARTICLE, new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_" + i));
+                    TextureMapping textures = (new TextureMapping())
+                            .put(TextureSlot.ALL, new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_" + i))
+                            .put(TextureSlot.PARTICLE, new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_" + i));
                     MEModels.LARGE_DOOR_LEFT.upload(largeDoor, "_left_" + i, textures, blockStateModelGenerator.modelCollector);
                     MEModels.LARGE_DOOR_LEFT_OPEN.upload(largeDoor, "_left_open_" + i, textures, blockStateModelGenerator.modelCollector);
                     MEModels.LARGE_DOOR_RIGHT.upload(largeDoor, "_right_" + i, textures, blockStateModelGenerator.modelCollector);
@@ -1691,13 +1708,13 @@ public class ModelProvider extends FabricModelProvider {
                 }
             }
         }
-        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(largeDoor).coordinate(statesMap));
-        blockStateModelGenerator.registerParentedItemModel(largeDoor, ModelIds.getBlockSubModelId(largeDoor, "_left_0"));
+        blockStateModelGenerator.blockStateCollector.accept(MultiVariantGenerator.create(largeDoor).coordinate(statesMap));
+        blockStateModelGenerator.registerParentedItemModel(largeDoor, ModelLocationUtils.getBlockSubModelId(largeDoor, "_left_0"));
     }
 
-    public final void registerThickLargeDoor(BlockStateModelGenerator blockStateModelGenerator, LargeDoorBlock largeDoor, IntProperty part) {
-        BlockStateVariantMap.QuadrupleProperty<Direction, Boolean, DoorHinge, Integer> statesMap =
-                BlockStateVariantMap.create(BlockStateProperties.HORIZONTAL_FACING, BlockStateProperties.OPEN, BlockStateProperties.DOOR_HINGE, part);
+    public final void registerThickLargeDoor(BlockModelGenerators blockStateModelGenerator, LargeDoorBlock largeDoor, IntegerProperty part) {
+        PropertyDispatch.QuadrupleProperty<Direction, Boolean, DoorHingeSide, Integer> statesMap =
+                PropertyDispatch.create(BlockStateProperties.HORIZONTAL_FACING, BlockStateProperties.OPEN, BlockStateProperties.DOOR_HINGE, part);
         for (int i = 0; i < largeDoor.getDoorWidth() * largeDoor.getDoorHeight(); i++) {
             for (int k = 2; k < 6; k++) {
                 int rot = switch (k) {
@@ -1711,15 +1728,15 @@ public class ModelProvider extends FabricModelProvider {
                 ResourceLocation right = new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_right_" + i);
                 ResourceLocation rightOpen = new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_right_open_" + i);
 
-                statesMap.register(Direction.values()[k], false, DoorHinge.LEFT, i, rotateY(left, rot));
-                statesMap.register(Direction.values()[k], true, DoorHinge.LEFT, i, rotateY(leftOpen, rot));
-                statesMap.register(Direction.values()[k], false, DoorHinge.RIGHT, i, rotateY(right, rot));
-                statesMap.register(Direction.values()[k], true, DoorHinge.RIGHT, i, rotateY(rightOpen, rot));
+                statesMap.register(Direction.values()[k], false, DoorHingeSide.LEFT, i, rotateY(left, rot));
+                statesMap.register(Direction.values()[k], true, DoorHingeSide.LEFT, i, rotateY(leftOpen, rot));
+                statesMap.register(Direction.values()[k], false, DoorHingeSide.RIGHT, i, rotateY(right, rot));
+                statesMap.register(Direction.values()[k], true, DoorHingeSide.RIGHT, i, rotateY(rightOpen, rot));
 
                 if (k == 2) {
-                    TextureMap textures = (new TextureMap())
-                            .put(TextureKey.ALL, new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_" + i))
-                            .put(TextureKey.PARTICLE, new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_" + i));
+                    TextureMapping textures = (new TextureMapping())
+                            .put(TextureSlot.ALL, new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_" + i))
+                            .put(TextureSlot.PARTICLE, new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(largeDoor).getPath() + "_" + i));
                     MEModels.LARGE_THICK_DOOR_LEFT.upload(largeDoor, "_left_" + i, textures, blockStateModelGenerator.modelCollector);
                     MEModels.LARGE_THICK_DOOR_LEFT_OPEN.upload(largeDoor, "_left_open_" + i, textures, blockStateModelGenerator.modelCollector);
                     MEModels.LARGE_THICK_DOOR_RIGHT.upload(largeDoor, "_right_" + i, textures, blockStateModelGenerator.modelCollector);
@@ -1727,87 +1744,87 @@ public class ModelProvider extends FabricModelProvider {
                 }
             }
         }
-        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(largeDoor).coordinate(statesMap));
-        blockStateModelGenerator.registerParentedItemModel(largeDoor, ModelIds.getBlockSubModelId(largeDoor, "_left_0"));
+        blockStateModelGenerator.blockStateCollector.accept(MultiVariantGenerator.create(largeDoor).coordinate(statesMap));
+        blockStateModelGenerator.registerParentedItemModel(largeDoor, ModelLocationUtils.getBlockSubModelId(largeDoor, "_left_0"));
     }
 
-    private static BlockStateVariant rotateY(ResourceLocation model, int rot) {
-        BlockStateVariant variant = BlockStateVariant.create().put(VariantSettings.MODEL, model);
+    private static Variant rotateY(ResourceLocation model, int rot) {
+        Variant variant = Variant.create().put(VariantProperties.MODEL, model);
         return switch (rot) {
-            case 90 -> variant.put(VariantSettings.Y, VariantSettings.Rotation.R90);
-            case 180 -> variant.put(VariantSettings.Y, VariantSettings.Rotation.R180);
-            case 270 -> variant.put(VariantSettings.Y, VariantSettings.Rotation.R270);
+            case 90 -> variant.put(VariantProperties.Y, VariantProperties.Rotation.R90);
+            case 180 -> variant.put(VariantProperties.Y, VariantProperties.Rotation.R180);
+            case 270 -> variant.put(VariantProperties.Y, VariantProperties.Rotation.R270);
             default -> variant;
         };
     }
 
-    public void registerWoodBenchModelBlockStates(BlockStateModelGenerator blockStateModelGenerator, Block block){
+    public void registerWoodBenchModelBlockStates(BlockModelGenerators blockStateModelGenerator, Block block){
         ResourceLocation texture = new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(block).getPath());
         ResourceLocation model = MEModels.WOOD_BENCH.upload(block,
-                (new TextureMap()).put(TextureKey.ALL, texture).put(TextureKey.PARTICLE, texture),
+                (new TextureMapping()).put(TextureSlot.ALL, texture).put(TextureSlot.PARTICLE, texture),
                 blockStateModelGenerator.modelCollector);
-        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block,
-                        BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, false))
-                .coordinate(BlockStateModelGenerator.createNorthDefaultHorizontalRotationStates()));
-        blockStateModelGenerator.registerParentedItemModel(block, ModelIds.getBlockModelId(block));
+        blockStateModelGenerator.blockStateCollector.accept(MultiVariantGenerator.create(block,
+                        Variant.create().put(VariantProperties.MODEL, model).put(VariantProperties.UVLOCK, false))
+                .coordinate(BlockModelGenerators.createNorthDefaultHorizontalRotationStates()));
+        blockStateModelGenerator.registerParentedItemModel(block, ModelLocationUtils.getBlockModelId(block));
     }
 
-    public void registerRocksBlock(BlockStateModelGenerator blockStateModelGenerator, Block rocksBlock, Block origin){
+    public void registerRocksBlock(BlockModelGenerators blockStateModelGenerator, Block rocksBlock, Block origin){
         ResourceLocation id = new ResourceLocation(Registries.BLOCK.getId(origin).getNamespace(), "block/" + Registries.BLOCK.getId(origin).getPath());
         if (origin == Blocks.BASALT || origin == Blocks.POLISHED_BASALT) {
             id = id.withSuffixedPath("_side");
         }
-        TextureMap textures = TextureMap.of(TextureKey.ALL, id);
+        TextureMapping textures = TextureMapping.of(TextureSlot.ALL, id);
         ResourceLocation stage0 = MEModels.ROCKS_STAGE_0.upload(rocksBlock, textures, blockStateModelGenerator.modelCollector);
         ResourceLocation stage1 = MEModels.ROCKS_STAGE_1.upload(rocksBlock, textures, blockStateModelGenerator.modelCollector);
         ResourceLocation stage2 = MEModels.ROCKS_STAGE_2.upload(rocksBlock, textures, blockStateModelGenerator.modelCollector);
         ResourceLocation stage3 = MEModels.ROCKS_STAGE_3.upload(rocksBlock, textures, blockStateModelGenerator.modelCollector);
 
-        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(rocksBlock)
-                .coordinate(BlockStateVariantMap.create(BlockStateProperties.HORIZONTAL_FACING, RocksBlock.STAGE)
-                        .register(Direction.NORTH, 0, BlockStateVariant.create().put(VariantSettings.MODEL, stage0).put(VariantSettings.UVLOCK, true))
-                        .register(Direction.EAST, 0, BlockStateVariant.create().put(VariantSettings.MODEL, stage0).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-                        .register(Direction.SOUTH, 0, BlockStateVariant.create().put(VariantSettings.MODEL, stage0).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R180))
-                        .register(Direction.WEST, 0, BlockStateVariant.create().put(VariantSettings.MODEL, stage0).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R270))
-                        .register(Direction.NORTH, 1, BlockStateVariant.create().put(VariantSettings.MODEL, stage1).put(VariantSettings.UVLOCK, true))
-                        .register(Direction.EAST, 1, BlockStateVariant.create().put(VariantSettings.MODEL, stage1).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-                        .register(Direction.SOUTH, 1, BlockStateVariant.create().put(VariantSettings.MODEL, stage1).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R180))
-                        .register(Direction.WEST, 1, BlockStateVariant.create().put(VariantSettings.MODEL, stage1).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R270))
-                        .register(Direction.NORTH, 2, BlockStateVariant.create().put(VariantSettings.MODEL, stage2).put(VariantSettings.UVLOCK, true))
-                        .register(Direction.EAST, 2, BlockStateVariant.create().put(VariantSettings.MODEL, stage2).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-                        .register(Direction.SOUTH, 2, BlockStateVariant.create().put(VariantSettings.MODEL, stage2).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R180))
-                        .register(Direction.WEST, 2, BlockStateVariant.create().put(VariantSettings.MODEL, stage2).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R270))
-                        .register(Direction.NORTH, 3, BlockStateVariant.create().put(VariantSettings.MODEL, stage3).put(VariantSettings.UVLOCK, true))
-                        .register(Direction.EAST, 3, BlockStateVariant.create().put(VariantSettings.MODEL, stage3).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-                        .register(Direction.SOUTH, 3, BlockStateVariant.create().put(VariantSettings.MODEL, stage3).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R180))
-                        .register(Direction.WEST, 3, BlockStateVariant.create().put(VariantSettings.MODEL, stage3).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R270))
+        blockStateModelGenerator.blockStateCollector.accept(MultiVariantGenerator.create(rocksBlock)
+                .coordinate(PropertyDispatch.create(BlockStateProperties.HORIZONTAL_FACING, RocksBlock.STAGE)
+                        .register(Direction.NORTH, 0, Variant.create().put(VariantProperties.MODEL, stage0).put(VariantProperties.UVLOCK, true))
+                        .register(Direction.EAST, 0, Variant.create().put(VariantProperties.MODEL, stage0).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R90))
+                        .register(Direction.SOUTH, 0, Variant.create().put(VariantProperties.MODEL, stage0).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R180))
+                        .register(Direction.WEST, 0, Variant.create().put(VariantProperties.MODEL, stage0).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R270))
+                        .register(Direction.NORTH, 1, Variant.create().put(VariantProperties.MODEL, stage1).put(VariantProperties.UVLOCK, true))
+                        .register(Direction.EAST, 1, Variant.create().put(VariantProperties.MODEL, stage1).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R90))
+                        .register(Direction.SOUTH, 1, Variant.create().put(VariantProperties.MODEL, stage1).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R180))
+                        .register(Direction.WEST, 1, Variant.create().put(VariantProperties.MODEL, stage1).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R270))
+                        .register(Direction.NORTH, 2, Variant.create().put(VariantProperties.MODEL, stage2).put(VariantProperties.UVLOCK, true))
+                        .register(Direction.EAST, 2, Variant.create().put(VariantProperties.MODEL, stage2).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R90))
+                        .register(Direction.SOUTH, 2, Variant.create().put(VariantProperties.MODEL, stage2).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R180))
+                        .register(Direction.WEST, 2, Variant.create().put(VariantProperties.MODEL, stage2).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R270))
+                        .register(Direction.NORTH, 3, Variant.create().put(VariantProperties.MODEL, stage3).put(VariantProperties.UVLOCK, true))
+                        .register(Direction.EAST, 3, Variant.create().put(VariantProperties.MODEL, stage3).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R90))
+                        .register(Direction.SOUTH, 3, Variant.create().put(VariantProperties.MODEL, stage3).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R180))
+                        .register(Direction.WEST, 3, Variant.create().put(VariantProperties.MODEL, stage3).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R270))
                 ));
-        blockStateModelGenerator.registerParentedItemModel(rocksBlock, ModelIds.getBlockModelId(rocksBlock));
+        blockStateModelGenerator.registerParentedItemModel(rocksBlock, ModelLocationUtils.getBlockModelId(rocksBlock));
     }
 
-    public void registerOrientableThickLadder(BlockStateModelGenerator blockStateModelGenerator, Block ladderBlock){
+    public void registerOrientableThickLadder(BlockModelGenerators blockStateModelGenerator, Block ladderBlock){
         ResourceLocation texture = new ResourceLocation(MiddleEarth.MOD_ID, "block/" + Registries.BLOCK.getId(ladderBlock).getPath());
-        ResourceLocation model = MEModels.THICK_LADDER.upload(ladderBlock, TextureMap.of(TextureKey.TEXTURE, texture), blockStateModelGenerator.modelCollector);
+        ResourceLocation model = MEModels.THICK_LADDER.upload(ladderBlock, TextureMapping.of(TextureSlot.TEXTURE, texture), blockStateModelGenerator.modelCollector);
 
-        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(ladderBlock)
-                .coordinate(BlockStateVariantMap.create(WallMountedBlock.FACE, BlockStateProperties.HORIZONTAL_FACING)
-                        .register(WallMountLocation.FLOOR, Direction.NORTH, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true))
-                        .register(WallMountLocation.FLOOR, Direction.EAST, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-                        .register(WallMountLocation.FLOOR, Direction.SOUTH, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R180))
-                        .register(WallMountLocation.FLOOR, Direction.WEST, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R270))
-                        .register(WallMountLocation.WALL, Direction.NORTH, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.X, VariantSettings.Rotation.R90))
-                        .register(WallMountLocation.WALL, Direction.EAST, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.X, VariantSettings.Rotation.R90).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-                        .register(WallMountLocation.WALL, Direction.SOUTH, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.X, VariantSettings.Rotation.R90).put(VariantSettings.Y, VariantSettings.Rotation.R180))
-                        .register(WallMountLocation.WALL, Direction.WEST, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.X, VariantSettings.Rotation.R90).put(VariantSettings.Y, VariantSettings.Rotation.R270))
-                        .register(WallMountLocation.CEILING, Direction.SOUTH, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.X, VariantSettings.Rotation.R180))
-                        .register(WallMountLocation.CEILING, Direction.WEST, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.X, VariantSettings.Rotation.R180).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-                        .register(WallMountLocation.CEILING, Direction.NORTH, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.X, VariantSettings.Rotation.R180).put(VariantSettings.Y, VariantSettings.Rotation.R180))
-                        .register(WallMountLocation.CEILING, Direction.EAST, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true).put(VariantSettings.X, VariantSettings.Rotation.R180).put(VariantSettings.Y, VariantSettings.Rotation.R270))
+        blockStateModelGenerator.blockStateCollector.accept(MultiVariantGenerator.create(ladderBlock)
+                .coordinate(PropertyDispatch.create(FaceAttachedHorizontalDirectionalBlock.FACE, BlockStateProperties.HORIZONTAL_FACING)
+                        .register(AttachFace.FLOOR, Direction.NORTH, Variant.create().put(VariantProperties.MODEL, model).put(VariantProperties.UVLOCK, true))
+                        .register(AttachFace.FLOOR, Direction.EAST, Variant.create().put(VariantProperties.MODEL, model).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R90))
+                        .register(AttachFace.FLOOR, Direction.SOUTH, Variant.create().put(VariantProperties.MODEL, model).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R180))
+                        .register(AttachFace.FLOOR, Direction.WEST, Variant.create().put(VariantProperties.MODEL, model).put(VariantProperties.UVLOCK, true).put(VariantProperties.Y, VariantProperties.Rotation.R270))
+                        .register(AttachFace.WALL, Direction.NORTH, Variant.create().put(VariantProperties.MODEL, model).put(VariantProperties.UVLOCK, true).put(VariantProperties.X, VariantProperties.Rotation.R90))
+                        .register(AttachFace.WALL, Direction.EAST, Variant.create().put(VariantProperties.MODEL, model).put(VariantProperties.UVLOCK, true).put(VariantProperties.X, VariantProperties.Rotation.R90).put(VariantProperties.Y, VariantProperties.Rotation.R90))
+                        .register(AttachFace.WALL, Direction.SOUTH, Variant.create().put(VariantProperties.MODEL, model).put(VariantProperties.UVLOCK, true).put(VariantProperties.X, VariantProperties.Rotation.R90).put(VariantProperties.Y, VariantProperties.Rotation.R180))
+                        .register(AttachFace.WALL, Direction.WEST, Variant.create().put(VariantProperties.MODEL, model).put(VariantProperties.UVLOCK, true).put(VariantProperties.X, VariantProperties.Rotation.R90).put(VariantProperties.Y, VariantProperties.Rotation.R270))
+                        .register(AttachFace.CEILING, Direction.SOUTH, Variant.create().put(VariantProperties.MODEL, model).put(VariantProperties.UVLOCK, true).put(VariantProperties.X, VariantProperties.Rotation.R180))
+                        .register(AttachFace.CEILING, Direction.WEST, Variant.create().put(VariantProperties.MODEL, model).put(VariantProperties.UVLOCK, true).put(VariantProperties.X, VariantProperties.Rotation.R180).put(VariantProperties.Y, VariantProperties.Rotation.R90))
+                        .register(AttachFace.CEILING, Direction.NORTH, Variant.create().put(VariantProperties.MODEL, model).put(VariantProperties.UVLOCK, true).put(VariantProperties.X, VariantProperties.Rotation.R180).put(VariantProperties.Y, VariantProperties.Rotation.R180))
+                        .register(AttachFace.CEILING, Direction.EAST, Variant.create().put(VariantProperties.MODEL, model).put(VariantProperties.UVLOCK, true).put(VariantProperties.X, VariantProperties.Rotation.R180).put(VariantProperties.Y, VariantProperties.Rotation.R270))
                 ));
-        blockStateModelGenerator.registerParentedItemModel(ladderBlock, ModelIds.getBlockModelId(ladderBlock));
+        blockStateModelGenerator.registerParentedItemModel(ladderBlock, ModelLocationUtils.getBlockModelId(ladderBlock));
     }
 
-    public void registerColumnWallModelBlockStates(BlockStateModelGenerator blockStateModelGenerator, Block block, Block origin,
+    public void registerColumnWallModelBlockStates(BlockModelGenerators blockStateModelGenerator, Block block, Block origin,
                                                    String modId, String topTexturePath, String bottomTexturePath, String sideTexturePath){
         String modIdTopBottom = modId;
         if (sideTexturePath.contains("deepslate_carved_window")){
@@ -1836,60 +1853,60 @@ public class ModelProvider extends FabricModelProvider {
             bottomTexturePath = sideTexturePath;
         }
         ResourceLocation sideTexture = new ResourceLocation(modId, "block/" + sideTexturePath);
-        TextureMap textures = (new TextureMap())
-                .put(TextureKey.TOP, new ResourceLocation(modIdTopBottom, "block/" + topTexturePath))
-                .put(TextureKey.BOTTOM, new ResourceLocation(modIdTopBottom, "block/" + bottomTexturePath))
-                .put(TextureKey.WALL, sideTexture)
-                .put(TextureKey.PARTICLE, sideTexture);
+        TextureMapping textures = (new TextureMapping())
+                .put(TextureSlot.TOP, new ResourceLocation(modIdTopBottom, "block/" + topTexturePath))
+                .put(TextureSlot.BOTTOM, new ResourceLocation(modIdTopBottom, "block/" + bottomTexturePath))
+                .put(TextureSlot.WALL, sideTexture)
+                .put(TextureSlot.PARTICLE, sideTexture);
 
         ResourceLocation post = MEModels.COLUMN_WALL_POST.upload(block, textures, blockStateModelGenerator.modelCollector);
         ResourceLocation low = MEModels.COLUMN_WALL_SIDE.upload(block, textures, blockStateModelGenerator.modelCollector);
         ResourceLocation tall = MEModels.COLUMN_WALL_SIDE_TALL.upload(block, textures, blockStateModelGenerator.modelCollector);
 
-        blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator
+        blockStateModelGenerator.blockStateCollector.accept(BlockModelGenerators
                 .createWallBlockState(block, post, low, tall));
 
         ResourceLocation inventory = MEModels.COLUMN_WALL_INVENTORY.upload(block, textures, blockStateModelGenerator.modelCollector);
         blockStateModelGenerator.registerParentedItemModel(block, inventory);
     }
 
-    public final void registerDoubleBlock(BlockStateModelGenerator blockStateModelGenerator, Block doubleBlock, BlockStateModelGenerator.TintType tintType) {
+    public final void registerDoubleBlock(BlockModelGenerators blockStateModelGenerator, Block doubleBlock, BlockModelGenerators.TintType tintType) {
         blockStateModelGenerator.registerItemModel(doubleBlock.asItem());
-        ResourceLocation identifier = blockStateModelGenerator.createSubModel(doubleBlock, "_top", tintType.getCrossModel(), TextureMap::cross);
-        ResourceLocation identifier2 = blockStateModelGenerator.createSubModel(doubleBlock, "_bottom", tintType.getCrossModel(), TextureMap::cross);
+        ResourceLocation identifier = blockStateModelGenerator.createSubModel(doubleBlock, "_top", tintType.getCrossModel(), TextureMapping::cross);
+        ResourceLocation identifier2 = blockStateModelGenerator.createSubModel(doubleBlock, "_bottom", tintType.getCrossModel(), TextureMapping::cross);
         blockStateModelGenerator.registerDoubleBlock(doubleBlock, identifier, identifier2);
     }
 
-    public final void registerLeadGlassPane(BlockStateModelGenerator blockStateModelGenerator, Block glass, Block glassPane) {
+    public final void registerLeadGlassPane(BlockModelGenerators blockStateModelGenerator, Block glass, Block glassPane) {
         blockStateModelGenerator.registerSimpleCubeAll(glass);
-        TextureMap textureMap = TextureMap.paneAndTopForEdge(glass, ModDecorativeBlocks.LEAD_GLASS_PANE);
-        ResourceLocation identifier = Models.TEMPLATE_GLASS_PANE_POST.upload(glassPane, textureMap, blockStateModelGenerator.modelCollector);
-        ResourceLocation identifier2 = Models.TEMPLATE_GLASS_PANE_SIDE.upload(glassPane, textureMap, blockStateModelGenerator.modelCollector);
-        ResourceLocation identifier3 = Models.TEMPLATE_GLASS_PANE_SIDE_ALT.upload(glassPane, textureMap, blockStateModelGenerator.modelCollector);
-        ResourceLocation identifier4 = Models.TEMPLATE_GLASS_PANE_NOSIDE.upload(glassPane, textureMap, blockStateModelGenerator.modelCollector);
-        ResourceLocation identifier5 = Models.TEMPLATE_GLASS_PANE_NOSIDE_ALT.upload(glassPane, textureMap, blockStateModelGenerator.modelCollector);
+        TextureMapping textureMap = TextureMapping.paneAndTopForEdge(glass, ModDecorativeBlocks.LEAD_GLASS_PANE);
+        ResourceLocation identifier = ModelTemplates.TEMPLATE_GLASS_PANE_POST.upload(glassPane, textureMap, blockStateModelGenerator.modelCollector);
+        ResourceLocation identifier2 = ModelTemplates.TEMPLATE_GLASS_PANE_SIDE.upload(glassPane, textureMap, blockStateModelGenerator.modelCollector);
+        ResourceLocation identifier3 = ModelTemplates.TEMPLATE_GLASS_PANE_SIDE_ALT.upload(glassPane, textureMap, blockStateModelGenerator.modelCollector);
+        ResourceLocation identifier4 = ModelTemplates.TEMPLATE_GLASS_PANE_NOSIDE.upload(glassPane, textureMap, blockStateModelGenerator.modelCollector);
+        ResourceLocation identifier5 = ModelTemplates.TEMPLATE_GLASS_PANE_NOSIDE_ALT.upload(glassPane, textureMap, blockStateModelGenerator.modelCollector);
         Item item = glassPane.asItem();
-        Models.GENERATED.upload(ModelIds.getItemModelId(item), TextureMap.layer0(glass), blockStateModelGenerator.modelCollector);
-        blockStateModelGenerator.blockStateCollector.accept(MultipartBlockStateSupplier.create(glassPane).with(BlockStateVariant.create().put(VariantSettings.MODEL, identifier)).with(When.create().set(BlockStateProperties.NORTH, true), BlockStateVariant.create().put(VariantSettings.MODEL, identifier2)).with(When.create().set(BlockStateProperties.EAST, true), BlockStateVariant.create().put(VariantSettings.MODEL, identifier2).put(VariantSettings.Y, VariantSettings.Rotation.R90)).with(When.create().set(BlockStateProperties.SOUTH, true), BlockStateVariant.create().put(VariantSettings.MODEL, identifier3)).with(When.create().set(BlockStateProperties.WEST, true), BlockStateVariant.create().put(VariantSettings.MODEL, identifier3).put(VariantSettings.Y, VariantSettings.Rotation.R90)).with(When.create().set(BlockStateProperties.NORTH, false), BlockStateVariant.create().put(VariantSettings.MODEL, identifier4)).with(When.create().set(BlockStateProperties.EAST, false), BlockStateVariant.create().put(VariantSettings.MODEL, identifier5)).with(When.create().set(BlockStateProperties.SOUTH, false), BlockStateVariant.create().put(VariantSettings.MODEL, identifier5).put(VariantSettings.Y, VariantSettings.Rotation.R90)).with(When.create().set(BlockStateProperties.WEST, false), BlockStateVariant.create().put(VariantSettings.MODEL, identifier4).put(VariantSettings.Y, VariantSettings.Rotation.R270)));
+        ModelTemplates.GENERATED.upload(ModelLocationUtils.getItemModelId(item), TextureMapping.layer0(glass), blockStateModelGenerator.modelCollector);
+        blockStateModelGenerator.blockStateCollector.accept(MultiPartGenerator.create(glassPane).with(Variant.create().put(VariantProperties.MODEL, identifier)).with(Condition.create().set(BlockStateProperties.NORTH, true), Variant.create().put(VariantProperties.MODEL, identifier2)).with(Condition.create().set(BlockStateProperties.EAST, true), Variant.create().put(VariantProperties.MODEL, identifier2).put(VariantProperties.Y, VariantProperties.Rotation.R90)).with(Condition.create().set(BlockStateProperties.SOUTH, true), Variant.create().put(VariantProperties.MODEL, identifier3)).with(Condition.create().set(BlockStateProperties.WEST, true), Variant.create().put(VariantProperties.MODEL, identifier3).put(VariantProperties.Y, VariantProperties.Rotation.R90)).with(Condition.create().set(BlockStateProperties.NORTH, false), Variant.create().put(VariantProperties.MODEL, identifier4)).with(Condition.create().set(BlockStateProperties.EAST, false), Variant.create().put(VariantProperties.MODEL, identifier5)).with(Condition.create().set(BlockStateProperties.SOUTH, false), Variant.create().put(VariantProperties.MODEL, identifier5).put(VariantProperties.Y, VariantProperties.Rotation.R90)).with(Condition.create().set(BlockStateProperties.WEST, false), Variant.create().put(VariantProperties.MODEL, identifier4).put(VariantProperties.Y, VariantProperties.Rotation.R270)));
     }
 
-    private void registerLayers(BlockStateModelGenerator blockStateModelGenerator, Block layers, Block origin) {
+    private void registerLayers(BlockModelGenerators blockStateModelGenerator, Block layers, Block origin) {
         ResourceLocation originId = Registries.BLOCK.getId(origin);
-        TextureMap textureMap = TextureMap.all(originId);
-        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(layers).coordinate(BlockStateVariantMap.create(BlockStateProperties.LAYERS).register((height) -> {
-            BlockStateVariant var10000 = BlockStateVariant.create();
-            VariantSetting var10001 = VariantSettings.MODEL;
+        TextureMapping textureMap = TextureMapping.all(originId);
+        blockStateModelGenerator.blockStateCollector.accept(MultiVariantGenerator.create(layers).coordinate(PropertyDispatch.create(BlockStateProperties.LAYERS).register((height) -> {
+            Variant var10000 = Variant.create();
+            VariantProperty var10001 = VariantProperties.MODEL;
             ResourceLocation var2;
             if (height < 8) {
                 Block var10002 = layers;
                 int var10003 = height;
-                var2 = ModelIds.getBlockSubModelId(var10002, "_height" + var10003 * 2);
+                var2 = ModelLocationUtils.getBlockSubModelId(var10002, "_height" + var10003 * 2);
             } else {
                 var2 = originId.withPath("block/" + originId.getPath());
             }
             return var10000.put(var10001, var2);
         })));
-        blockStateModelGenerator.registerParentedItemModel(layers, ModelIds.getBlockSubModelId(layers, "_height2"));
+        blockStateModelGenerator.registerParentedItemModel(layers, ModelLocationUtils.getBlockSubModelId(layers, "_height2"));
     }
 
     @Override
@@ -1924,20 +1941,20 @@ public class ModelProvider extends FabricModelProvider {
 
         for (Item item : SimpleItemModel.items) {
             try {
-            itemModelGenerator.register(item, Models.GENERATED);
+            itemModelGenerator.register(item, ModelTemplates.GENERATED);
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
         for (Item item : SimpleHandheldItemModel.items) {
             try {
-            itemModelGenerator.register(item, Models.HANDHELD);
+            itemModelGenerator.register(item, ModelTemplates.HANDHELD);
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
         for (Item item : SimpleBigItemModel.items) {
             try {
             itemModelGenerator.register(item, CustomItemModels.BIG_WEAPON);
-            itemModelGenerator.register(item, "_inventory", Models.HANDHELD);
+            itemModelGenerator.register(item, "_inventory", ModelTemplates.HANDHELD);
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
@@ -1966,22 +1983,22 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         // CLUSTERS
-        itemModelGenerator.register(ModBlocks.QUARTZ_CLUSTER.asItem(), Models.GENERATED);
-        itemModelGenerator.register(ModBlocks.SMALL_QUARTZ_BUD.asItem(), Models.GENERATED);
-        itemModelGenerator.register(ModBlocks.MEDIUM_QUARTZ_BUD.asItem(), Models.GENERATED);
-        itemModelGenerator.register(ModBlocks.LARGE_QUARTZ_BUD.asItem(), Models.GENERATED);
-        itemModelGenerator.register(ModBlocks.RED_AGATE_CLUSTER.asItem(), Models.GENERATED);
-        itemModelGenerator.register(ModBlocks.SMALL_RED_AGATE_BUD.asItem(), Models.GENERATED);
-        itemModelGenerator.register(ModBlocks.MEDIUM_RED_AGATE_BUD.asItem(), Models.GENERATED);
-        itemModelGenerator.register(ModBlocks.LARGE_RED_AGATE_BUD.asItem(), Models.GENERATED);
-        itemModelGenerator.register(ModBlocks.CITRINE_CLUSTER.asItem(), Models.GENERATED);
-        itemModelGenerator.register(ModBlocks.SMALL_CITRINE_BUD.asItem(), Models.GENERATED);
-        itemModelGenerator.register(ModBlocks.MEDIUM_CITRINE_BUD.asItem(), Models.GENERATED);
-        itemModelGenerator.register(ModBlocks.LARGE_CITRINE_BUD.asItem(), Models.GENERATED);
-        itemModelGenerator.register(ModBlocks.GLOWSTONE_CLUSTER.asItem(), Models.GENERATED);
-        itemModelGenerator.register(ModBlocks.SMALL_GLOWSTONE_BUD.asItem(), Models.GENERATED);
-        itemModelGenerator.register(ModBlocks.MEDIUM_GLOWSTONE_BUD.asItem(), Models.GENERATED);
-        itemModelGenerator.register(ModBlocks.LARGE_GLOWSTONE_BUD.asItem(), Models.GENERATED);
+        itemModelGenerator.register(ModBlocks.QUARTZ_CLUSTER.asItem(), ModelTemplates.GENERATED);
+        itemModelGenerator.register(ModBlocks.SMALL_QUARTZ_BUD.asItem(), ModelTemplates.GENERATED);
+        itemModelGenerator.register(ModBlocks.MEDIUM_QUARTZ_BUD.asItem(), ModelTemplates.GENERATED);
+        itemModelGenerator.register(ModBlocks.LARGE_QUARTZ_BUD.asItem(), ModelTemplates.GENERATED);
+        itemModelGenerator.register(ModBlocks.RED_AGATE_CLUSTER.asItem(), ModelTemplates.GENERATED);
+        itemModelGenerator.register(ModBlocks.SMALL_RED_AGATE_BUD.asItem(), ModelTemplates.GENERATED);
+        itemModelGenerator.register(ModBlocks.MEDIUM_RED_AGATE_BUD.asItem(), ModelTemplates.GENERATED);
+        itemModelGenerator.register(ModBlocks.LARGE_RED_AGATE_BUD.asItem(), ModelTemplates.GENERATED);
+        itemModelGenerator.register(ModBlocks.CITRINE_CLUSTER.asItem(), ModelTemplates.GENERATED);
+        itemModelGenerator.register(ModBlocks.SMALL_CITRINE_BUD.asItem(), ModelTemplates.GENERATED);
+        itemModelGenerator.register(ModBlocks.MEDIUM_CITRINE_BUD.asItem(), ModelTemplates.GENERATED);
+        itemModelGenerator.register(ModBlocks.LARGE_CITRINE_BUD.asItem(), ModelTemplates.GENERATED);
+        itemModelGenerator.register(ModBlocks.GLOWSTONE_CLUSTER.asItem(), ModelTemplates.GENERATED);
+        itemModelGenerator.register(ModBlocks.SMALL_GLOWSTONE_BUD.asItem(), ModelTemplates.GENERATED);
+        itemModelGenerator.register(ModBlocks.MEDIUM_GLOWSTONE_BUD.asItem(), ModelTemplates.GENERATED);
+        itemModelGenerator.register(ModBlocks.LARGE_GLOWSTONE_BUD.asItem(), ModelTemplates.GENERATED);
     
         // Fallback: every block item that no explicit list covered still needs an inventory model.
         for (Block block : Registries.BLOCK) {
@@ -2001,8 +2018,8 @@ public class ModelProvider extends FabricModelProvider {
                 // double-height plant is the texture of its top half.
                 String texturePath = hasBlockTexture(blockId.getPath() + "_top")
                         ? blockId.getPath() + "_top" : blockId.getPath();
-                Models.GENERATED.upload(ModelIds.getItemModelId(blockItem),
-                        TextureMap.layer0(blockId.withPath("block/" + texturePath)), itemModelGenerator.writer);
+                ModelTemplates.GENERATED.upload(ModelLocationUtils.getItemModelId(blockItem),
+                        TextureMapping.layer0(blockId.withPath("block/" + texturePath)), itemModelGenerator.writer);
             } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
@@ -2011,7 +2028,7 @@ public class ModelProvider extends FabricModelProvider {
             ResourceLocation itemId = Registries.ITEM.getId(item);
             if (!itemId.getNamespace().equals(net.jukoz.me.MiddleEarth.MOD_ID)) { continue; }
             try {
-                itemModelGenerator.register(item, Models.GENERATED);
+                itemModelGenerator.register(item, ModelTemplates.GENERATED);
             } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
@@ -2020,7 +2037,7 @@ public class ModelProvider extends FabricModelProvider {
 
     /**
      * The donor swapped hot metals to a glowing model with 1.21.4's item-model condition API
-     * ({@code ItemModels.condition(new HotComponentProperty(), ...)}). 1.20.1 has no such API, so
+     * ({@code ItemModelShaper.condition(new HotComponentProperty(), ...)}). 1.20.1 has no such API, so
      * the same effect is done with a {@code custom_model_data} override: MEComponents.set mirrors
      * the temperature into that tag, and the base model switches to the {@code _hot} variant.
      */
@@ -2047,10 +2064,10 @@ public class ModelProvider extends FabricModelProvider {
     }
 
     private void registerHotModel(ItemModelGenerator itemModelGenerator, Item item, String hotTexture) {
-        ResourceLocation base = ModelIds.getItemModelId(item);
+        ResourceLocation base = ModelLocationUtils.getItemModelId(item);
         ResourceLocation hot = base.withSuffixedPath("_hot");
         try {
-            Models.GENERATED.upload(hot, TextureMap.layer0(new ResourceLocation(MiddleEarth.MOD_ID, "item/" + hotTexture)), itemModelGenerator.writer);
+            ModelTemplates.GENERATED.upload(hot, TextureMapping.layer0(new ResourceLocation(MiddleEarth.MOD_ID, "item/" + hotTexture)), itemModelGenerator.writer);
             JsonObject textures = new JsonObject();
             textures.addProperty("layer0", base.toString());
             JsonObject json = new JsonObject();
@@ -2074,12 +2091,12 @@ public class ModelProvider extends FabricModelProvider {
      * its own *_pulling_N texture rather than the undrawn one.
      */
     private static void registerBowModels(ItemModelGenerator itemModelGenerator, Item item) {
-        ResourceLocation base = ModelIds.getItemModelId(item);
+        ResourceLocation base = ModelLocationUtils.getItemModelId(item);
         float[] pull = {0.0F, 0.65F, 0.9F};
         JsonArray overrides = new JsonArray();
         for (int i = 0; i < 3; i++) {
             ResourceLocation stage = base.withSuffixedPath("_pulling_" + i);
-            CustomItemModels.BOW.upload(stage, (new TextureMap()).put(TextureKey.LAYER0, stage), itemModelGenerator.writer);
+            CustomItemModels.BOW.upload(stage, (new TextureMapping()).put(TextureSlot.LAYER0, stage), itemModelGenerator.writer);
 
             JsonObject predicate = new JsonObject();
             predicate.addProperty("pulling", 1);
@@ -2101,12 +2118,12 @@ public class ModelProvider extends FabricModelProvider {
     }
 
     public final void registerDyeableArmor(ArmorItem armor, ItemModelGenerator itemModelGenerator) {
-        ResourceLocation identifier = ModelIds.getItemModelId(armor);
-        ResourceLocation identifier2 = TextureMap.getId(armor);
-        ResourceLocation identifier3 = TextureMap.getSubId(armor, "_overlay");
+        ResourceLocation identifier = ModelLocationUtils.getItemModelId(armor);
+        ResourceLocation identifier2 = TextureMapping.getId(armor);
+        ResourceLocation identifier3 = TextureMapping.getSubId(armor, "_overlay");
         // createArmorJson would append ten trim overrides (tunic_cloak_quartz_trim and friends),
         // but the mod ships no trim textures, so those models can never be generated and the
         // inventory icon would fall back to the missing-model placeholder.
-        Models.GENERATED_TWO_LAYERS.upload(identifier, TextureMap.layered(identifier2, identifier3), itemModelGenerator.writer);
+        ModelTemplates.GENERATED_TWO_LAYERS.upload(identifier, TextureMapping.layered(identifier2, identifier3), itemModelGenerator.writer);
     }
 }

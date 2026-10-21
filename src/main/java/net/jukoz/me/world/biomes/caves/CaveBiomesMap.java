@@ -1,10 +1,8 @@
 package net.jukoz.me.world.biomes.caves;
 
-
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.level.biome.Biome;
-
 import java.util.ArrayList;
 
 public class CaveBiomesMap {
@@ -18,7 +16,7 @@ public class CaveBiomesMap {
         caves.add(caveBiomeDTO);
     }
 
-    public ResourceKey<Biome> getClosestBiome(Vec2f coordinates) {
+    public ResourceKey<Biome> getClosestBiome(Vec2 coordinates) {
         ResourceKey<Biome> biome = null;
         float currentDistance = 10.0f;
         for (CaveBiomeDTO biomeDTO: caves) {

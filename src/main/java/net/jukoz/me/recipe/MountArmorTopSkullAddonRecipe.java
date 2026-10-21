@@ -6,22 +6,22 @@ import net.jukoz.me.item.dataComponents.MountArmorAddonComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.recipe.SpecialCraftingRecipe;
-import net.minecraft.recipe.book.CraftingRecipeCategory;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.inventory.RecipeInputInventory;
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.RegistryWrapper;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.utils.ItemTagsME;
 
-public class MountArmorTopSkullAddonRecipe extends SpecialCraftingRecipe {
-    public MountArmorTopSkullAddonRecipe(ResourceLocation id, CraftingRecipeCategory category) {
+public class MountArmorTopSkullAddonRecipe extends CustomRecipe {
+    public MountArmorTopSkullAddonRecipe(ResourceLocation id, CraftingBookCategory category) {
         super(id, category);
     }
 
     @Override
-    public boolean matches(RecipeInputInventory input, Level world) {
+    public boolean matches(CraftingContainer input, Level world) {
         ItemStack itemStackArmor = ItemStack.EMPTY;
         ItemStack itemStackStick = ItemStack.EMPTY;
         ItemStack itemStackSkull= ItemStack.EMPTY;
@@ -56,7 +56,7 @@ public class MountArmorTopSkullAddonRecipe extends SpecialCraftingRecipe {
     public boolean fits(int width, int height) {
         return width * height >= 3;
     }    @Override
-    public ItemStack craft(RecipeInputInventory input, DynamicRegistryManager lookup) {
+    public ItemStack craft(CraftingContainer input, RegistryAccess lookup) {
         ItemStack itemStack = ItemStack.EMPTY;
 
         for(int i = 0; i < input.size(); ++i) {
@@ -84,7 +84,7 @@ public class MountArmorTopSkullAddonRecipe extends SpecialCraftingRecipe {
     }
 
     @Override
-    public RecipeSerializer<? extends SpecialCraftingRecipe> getSerializer() {
+    public RecipeSerializer<? extends CustomRecipe> getSerializer() {
         return ModRecipeSerializer.CUSTOM_MOUNT_ARMOR_TOP_SKULL_ADDON;
     }
 }

@@ -3,8 +3,8 @@ package net.jukoz.me.block.special.forge;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-
 import java.util.List;
+import net.minecraft.world.ContainerHelper;
 
 /**
  * 1.20.1 recipe inputs are {@link Inventory} instances, not 1.21.2's {@code RecipeInput}.
@@ -44,12 +44,12 @@ public class MultipleStackRecipeInput implements Inventory {
 
     @Override
     public ItemStack removeStack(int slot, int amount) {
-        return net.minecraft.inventory.Inventories.splitStack(this.items, slot, amount);
+        return net.minecraft.inventory.ContainerHelper.splitStack(this.items, slot, amount);
     }
 
     @Override
     public ItemStack removeStack(int slot) {
-        return net.minecraft.inventory.Inventories.removeStack(this.items, slot);
+        return net.minecraft.inventory.ContainerHelper.removeStack(this.items, slot);
     }
 
     @Override

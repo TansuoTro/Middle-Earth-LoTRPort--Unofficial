@@ -1,7 +1,7 @@
 package net.jukoz.me.entity.beasts;
 
 import net.jukoz.me.compat.client.render.state.LivingEntityRenderState;
-import net.minecraft.entity.AnimationState;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 

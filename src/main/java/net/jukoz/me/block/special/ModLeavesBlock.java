@@ -4,18 +4,18 @@ import net.jukoz.me.particles.ModParticleTypes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.client.util.ParticleUtil;
+import net.minecraft.util.ParticleUtils;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleType;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.state.property.IntProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -24,13 +24,12 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccess;
-
 import java.util.OptionalInt;
 
 public class ModLeavesBlock extends LeavesBlock {
     final protected boolean castShadow;
-    private final ParticleEffect particleType;
-    public ModLeavesBlock(Settings settings, boolean castShadow, ParticleEffect particleType) {
+    private final ParticleOptions particleType;
+    public ModLeavesBlock(Settings settings, boolean castShadow, ParticleOptions particleType) {
         super(settings);
         this.castShadow = castShadow;
         this.particleType = particleType;
@@ -42,7 +41,7 @@ public class ModLeavesBlock extends LeavesBlock {
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         int i;
         if (state.get(WATERLOGGED).booleanValue()) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
@@ -53,7 +52,7 @@ public class ModLeavesBlock extends LeavesBlock {
         return state;
     }
 
-    private static BlockState updateDistanceFromLogs(BlockState state, WorldAccess world, BlockPos pos) {
+    private static BlockState updateDistanceFromLogs(BlockState state, LevelAccessor world, BlockPos pos) {
         int i = 7;
         BlockPos.Mutable mutable = new BlockPos.Mutable();
         for(int x = -1; x <= 1; x++) {
@@ -94,7 +93,7 @@ public class ModLeavesBlock extends LeavesBlock {
                 BlockPos blockPos = pos.down();
                 BlockState blockState = world.getBlockState(blockPos);
                 if (!isFaceFullSquare(blockState.getCollisionShape(world, blockPos), Direction.UP)) {
-                    ParticleUtil.spawnParticle(world, pos, random, this.particleType);
+                    ParticleUtils.spawnParticle(world, pos, random, this.particleType);
                 }
             }
         }

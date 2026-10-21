@@ -3,9 +3,9 @@ package net.jukoz.me.resources.datas.structure_manager_datas;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
-
 import java.util.List;
 import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 /// NpcSpawnNest is a specific area where entities can spawn with the different parameters.
 public class SpawnNestNodeData {
@@ -55,7 +55,7 @@ public class SpawnNestNodeData {
     }
 
     public StructureSpawnNestPool getRandomPool() {
-        Random random = new Random();
+        RandomSource random = new RandomSource();
         return structureSpawnNestPools.get(random.nextInt(0, structureSpawnNestPools.size()));
     }
 }

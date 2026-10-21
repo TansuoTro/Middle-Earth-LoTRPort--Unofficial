@@ -6,8 +6,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.Holder;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.resources.datas.texture_presets.TexturePresetDataPool;
-
 import java.util.*;
+import net.minecraft.core.HolderGetter;
 
 public class CharacterTextureDatasRegistryME {
     /* [MORDOR] */
@@ -26,9 +26,8 @@ public class CharacterTextureDatasRegistryME {
     public final static ResourceKey<TexturePresetDataPool> WILD_GOBLIN_GOBLIN = of("wild_goblin_goblin");
     public final static ResourceKey<TexturePresetDataPool> WILD_GOBLIN_HOBGOBLIN = of("wild_goblin_hobgoblin");
 
-
     public static void bootstrap(BootstrapContext<TexturePresetDataPool> context) {
-        RegistryEntryLookup<TexturePresetDataPool> npcTextureDataRegistryEntryLookup = context.getRegistryLookup(DynamicRegistriesME.TEXTURE_PRESETS);
+        HolderGetter<TexturePresetDataPool> npcTextureDataRegistryEntryLookup = context.getRegistryLookup(DynamicRegistriesME.TEXTURE_PRESETS);
         /* [MORDOR] */
         //register(context, npcTextureDataRegistryEntryLookup, MORDOR_ORC, Mordor.GENERIC_ORC);
         //register(context, npcTextureDataRegistryEntryLookup, MORDOR_BLACK_URUK, Mordor.GENERIC_URUK);
@@ -43,7 +42,7 @@ public class CharacterTextureDatasRegistryME {
         //register(context, npcTextureDataRegistryEntryLookup, WILD_GOBLIN_HOBGOBLIN, WildGoblin.GENERIC_HOBGOBLIN);
     }
 
-    public static ResourceKey<TexturePresetDataPool> register(BootstrapContext<TexturePresetDataPool> context, RegistryEntryLookup<TexturePresetDataPool> npcTextureDataRegistryEntryLookup, ResourceKey<TexturePresetDataPool> npcTextureDataKey, TexturePresetDataPool texturePresets) {
+    public static ResourceKey<TexturePresetDataPool> register(BootstrapContext<TexturePresetDataPool> context, HolderGetter<TexturePresetDataPool> npcTextureDataRegistryEntryLookup, ResourceKey<TexturePresetDataPool> npcTextureDataKey, TexturePresetDataPool texturePresets) {
         Optional<Holder.Reference<TexturePresetDataPool>> optionalNpcTextureDataReference = npcTextureDataRegistryEntryLookup.getOptional(npcTextureDataKey);
         optionalNpcTextureDataReference.ifPresent(biomeReference -> context.register(npcTextureDataKey, texturePresets));
 
@@ -53,8 +52,6 @@ public class CharacterTextureDatasRegistryME {
     private static ResourceKey<TexturePresetDataPool> of(String idPath) {
         return ResourceKey.of(DynamicRegistriesME.TEXTURE_PRESETS, MiddleEarth.of(idPath));
     }
-
-
 
     private static final class Generic{
 
@@ -111,7 +108,6 @@ public class CharacterTextureDatasRegistryME {
                 TextureElementData.pattern(CharacterPatternsRegistryME.Hairs.Beard.LONG_SINGLE_ORNAMENTED)
             ));
 
-
         private static final TexturePresetData MALE_PRESET = new TexturePresetData()
             .withPatterns(NpcTextureType.HEAD, List.of(
                     TextureElementData.pattern(CharacterPatternsRegistryME.Skins.Head.MALE)
@@ -146,7 +142,6 @@ public class CharacterTextureDatasRegistryME {
                 TextureElementData.pattern(CharacterPatternsRegistryME.Skins.Body.SLIM),
                 TextureElementData.pattern(CharacterPatternsRegistryME.Skins.Body.FAT)
             ));
-
 
         private static final TexturePresetData MIGHTY_SHARED_PRESET = SHARED_PRESET.copy()
             .withPatterns(NpcTextureType.BODY, List.of(

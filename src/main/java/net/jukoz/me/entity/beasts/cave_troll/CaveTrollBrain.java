@@ -8,18 +8,24 @@ import com.mojang.serialization.Dynamic;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.entity.ai.Brain;
-import net.minecraft.entity.ai.brain.MemoryModuleState;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
-import net.minecraft.entity.ai.brain.task.*;
 import net.minecraft.server.level.ServerLevel;
 import net.jukoz.me.entity.ai.brain.ActivitiesME;
 import net.jukoz.me.entity.ai.brain.MemoryModulesME;
 import net.jukoz.me.entity.ai.brain.SensorsME;
 import net.jukoz.me.entity.ai.brain.task.*;
-
 import java.util.Optional;
+import net.minecraft.world.entity.ai.behavior.GateBehavior;
+import net.minecraft.world.entity.ai.behavior.MeleeAttack;
+import net.minecraft.world.entity.ai.behavior.RandomStroll;
+import net.minecraft.world.entity.ai.behavior.RunOne;
+import net.minecraft.world.entity.ai.behavior.SetWalkTargetFromAttackTargetIfTargetOutOfReach;
+import net.minecraft.world.entity.ai.behavior.StartAttacking;
+import net.minecraft.world.entity.ai.behavior.StopAttackingIfTargetInvalid;
+import net.minecraft.util.Tuple;
 
 public class CaveTrollBrain {
     protected static final ImmutableList<SensorType<? extends Sensor<? super CaveTrollEntity>>> SENSORS;
@@ -48,54 +54,54 @@ public class CaveTrollBrain {
 
     private static void addIdleActivities(Brain<CaveTrollEntity> brain) {
         brain.setTaskList(Activity.IDLE, ImmutableList.of(
-                Pair.of(0, UpdateAttackTargetTask.create(CaveTrollBrain::getAttackTarget)),
-                Pair.of(0, UpdateAttackTargetTask.create(CaveTrollBrain::getHurtBy)),
-                Pair.of(1, new RandomTask<>(ImmutableList.of(
-                        Pair.of(StrollTask.create(1.0F), 5),
-                        Pair.of(new CompositeTask<>(ImmutableMap.of(MemoryModulesME.ACTION_TIMEOUT, MemoryModuleState.VALUE_ABSENT), ImmutableSet.of(),
-                                CompositeTask.Order.ORDERED,
-                                CompositeTask.RunMode.TRY_ALL,
+                Tuple.of(0, StartAttacking.create(CaveTrollBrain::getAttackTarget)),
+                Tuple.of(0, StartAttacking.create(CaveTrollBrain::getHurtBy)),
+                Tuple.of(1, new RunOne<>(ImmutableList.of(
+                        Tuple.of(RandomStroll.create(1.0F), 5),
+                        Tuple.of(new GateBehavior<>(ImmutableMap.of(MemoryModulesME.ACTION_TIMEOUT, MemoryStatus.VALUE_ABSENT), ImmutableSet.of(),
+                                GateBehavior.Order.ORDERED,
+                                GateBehavior.RunMode.TRY_ALL,
                                 ImmutableList.of(
-                                        Pair.of(new CaveTrollDigForFoodTask(), 1),
-                                        Pair.of(new CaveTrollEatFoodTask(), 1),
-                                        Pair.of(new CaveTrollSleepTask(), 1)
+                                        Tuple.of(new CaveTrollDigForFoodTask(), 1),
+                                        Tuple.of(new CaveTrollEatFoodTask(), 1),
+                                        Tuple.of(new CaveTrollSleepTask(), 1)
                                 )), 1)
                 )))
         ),
                 ImmutableSet.of(
-                        Pair.of(MemoryModulesME.TAME, MemoryModuleState.VALUE_ABSENT)
+                        Tuple.of(MemoryModulesME.TAME, MemoryStatus.VALUE_ABSENT)
                 ));
     }
 
     private static void addTamedActivities(Brain<CaveTrollEntity> brain) {
         brain.setTaskList(ActivitiesME.TAMED, ImmutableList.of(
-                Pair.of(0, UpdateAttackTargetTask.create(CaveTrollBrain::getAttackTarget)),
-                Pair.of(1, new CompositeTask<>(ImmutableMap.of(MemoryModulesME.SITTING, MemoryModuleState.VALUE_ABSENT), ImmutableSet.of(),
-                        CompositeTask.Order.SHUFFLED,
-                        CompositeTask.RunMode.RUN_ONE,
+                Tuple.of(0, StartAttacking.create(CaveTrollBrain::getAttackTarget)),
+                Tuple.of(1, new GateBehavior<>(ImmutableMap.of(MemoryModulesME.SITTING, MemoryStatus.VALUE_ABSENT), ImmutableSet.of(),
+                        GateBehavior.Order.SHUFFLED,
+                        GateBehavior.RunMode.RUN_ONE,
                         ImmutableList.of(
-                                Pair.of(StrollTask.create(1.0f), 1)
+                                Tuple.of(RandomStroll.create(1.0f), 1)
                         )))
         ),
                 ImmutableSet.of(
-                        Pair.of(MemoryModulesME.TAME, MemoryModuleState.VALUE_PRESENT)
+                        Tuple.of(MemoryModulesME.TAME, MemoryStatus.VALUE_PRESENT)
                 )
         );
     }
 
     private static void addFightActivities(Brain<CaveTrollEntity> brain, CaveTrollEntity troll) {
         brain.setTaskList(Activity.FIGHT, ImmutableList.of(
-                        Pair.of(0, ForgetAttackTargetTask.create()),
-                        Pair.of(2, new RandomTask<>(ImmutableList.of(
-                                Pair.of(MeleeAttackTask.create(30), 4),
-                                Pair.of(RangedApproachTask.create(2.5F), 3),
-                                Pair.of(new BeastChargeTask(troll.chargeDuration(), troll.maxChargeCooldown()), 1),
-                                Pair.of(new CaveTrollRoarTask(), 2),
-                                Pair.of(new CaveTrollSmashTask(), 2)
+                        Tuple.of(0, StopAttackingIfTargetInvalid.create()),
+                        Tuple.of(2, new RunOne<>(ImmutableList.of(
+                                Tuple.of(MeleeAttack.create(30), 4),
+                                Tuple.of(SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(2.5F), 3),
+                                Tuple.of(new BeastChargeTask(troll.chargeDuration(), troll.maxChargeCooldown()), 1),
+                                Tuple.of(new CaveTrollRoarTask(), 2),
+                                Tuple.of(new CaveTrollSmashTask(), 2)
                         )))
                 ),
                 ImmutableSet.of(
-                        Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryModuleState.VALUE_PRESENT)
+                        Tuple.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT)
                 )
         );
     }

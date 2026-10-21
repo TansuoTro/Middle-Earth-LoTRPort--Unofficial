@@ -3,14 +3,13 @@ package net.jukoz.me.item.items;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.PickaxeItem;
-import net.minecraft.item.ToolMaterial;
-
+import net.minecraft.world.item.PickaxeItem;
+import net.minecraft.world.item.Tier;
 import java.util.Map;
 
 /**
@@ -23,9 +22,9 @@ import java.util.Map;
 public class CustomPickaxeItem extends PickaxeItem {
 
     private final double extraAttackDamage;
-    private final ToolMaterial material;
+    private final Tier material;
 
-    public CustomPickaxeItem(ToolMaterial material, float attackDamage, float attackSpeed, Item.Settings settings) {
+    public CustomPickaxeItem(Tier material, float attackDamage, float attackSpeed, Item.Settings settings) {
         super(material, (int) attackDamage, attackSpeed, settings);
         this.extraAttackDamage = attackDamage - (int) attackDamage;
         this.material = material;
@@ -44,15 +43,15 @@ public class CustomPickaxeItem extends PickaxeItem {
     }
 
     @Override
-    public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
         if (this.extraAttackDamage == 0.0 || slot != EquipmentSlot.MAINHAND) {
             return super.getAttributeModifiers(slot);
         }
-        ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-        for (Map.Entry<EntityAttribute, EntityAttributeModifier> entry : super.getAttributeModifiers(slot).entries()) {
-            EntityAttributeModifier modifier = entry.getValue();
+        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+        for (Map.Entry<Attribute, AttributeModifier> entry : super.getAttributeModifiers(slot).entries()) {
+            AttributeModifier modifier = entry.getValue();
             if (entry.getKey() == Attributes.GENERIC_ATTACK_DAMAGE) {
-                builder.put(entry.getKey(), new EntityAttributeModifier(modifier.getId(), modifier.getName(),
+                builder.put(entry.getKey(), new AttributeModifier(modifier.getId(), modifier.getName(),
                         modifier.getValue() + this.extraAttackDamage, modifier.getOperation()));
             } else {
                 builder.put(entry);

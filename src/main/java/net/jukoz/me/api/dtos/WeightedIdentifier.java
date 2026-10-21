@@ -1,13 +1,13 @@
 package net.jukoz.me.api.dtos;
-import net.jukoz.me.compat.NbtCompat;
 
+import net.jukoz.me.compat.NbtCompat;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
 public class WeightedIdentifier extends WeightedItem<ResourceLocation> {
-    public WeightedIdentifier(NbtElement element){
+    public WeightedIdentifier(Tag element){
         super(element);
 
         // asString() stringifies any element in 1.20.1, so a compound would asString() to its whole JSON form.
@@ -33,11 +33,11 @@ public class WeightedIdentifier extends WeightedItem<ResourceLocation> {
     }
 
     @Override
-    public NbtElement getNbt(){
-        // Always a compound: a weighted pool serialises into a single NbtList, and NbtList
+    public Tag getNbt(){
+        // Always a compound: a weighted pool serialises into a single ListTag, and ListTag
         // refuses to mix tag types, so the bare-string form used for weight==1 corrupted every
         // pool that held both weighted and unweighted entries.
-        NbtElement newNbt = super.getNbt();
+        Tag newNbt = super.getNbt();
         if(newNbt == null)
             newNbt = new CompoundTag();
 

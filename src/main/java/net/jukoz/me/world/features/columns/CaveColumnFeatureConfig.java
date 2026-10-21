@@ -36,4 +36,3 @@ public class CaveColumnFeatureConfig implements FeatureConfiguration {
         return this.blockState;
     }
 }
-

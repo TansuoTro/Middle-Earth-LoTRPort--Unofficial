@@ -1,12 +1,13 @@
 package net.jukoz.me.compat.client.render;
 
 import net.jukoz.me.compat.client.render.state.EntityRenderStateCompat;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 /**
  * R2 base for donor-style 1.21.8 renderers that were written against
@@ -20,7 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 public abstract class MEEntityRenderer<T extends Entity, S extends EntityRenderStateCompat>
         extends EntityRenderer<T> {
 
-    protected MEEntityRenderer(EntityRendererFactory.Context ctx) {
+    protected MEEntityRenderer(EntityRendererProvider.Context ctx) {
         super(ctx);
     }
 
@@ -39,7 +40,7 @@ public abstract class MEEntityRenderer<T extends Entity, S extends EntityRenderS
      * Donor-style entry point: the state has already been built and published.
      * Overridden by donor subclasses; the default does nothing.
      */
-    public void render(S state, PoseStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+    public void render(S state, PoseStack matrices, MultiBufferSource vertexConsumers, int light) {
     }
 
     /**
@@ -61,7 +62,7 @@ public abstract class MEEntityRenderer<T extends Entity, S extends EntityRenderS
 
     @Override
     public void render(T entity, float yaw, float tickDelta, PoseStack matrices,
-                             VertexConsumerProvider vertexConsumers, int light) {
+                             MultiBufferSource vertexConsumers, int light) {
         S state = createRenderState();
         state.entity = entity;
         state.tickDelta = tickDelta;

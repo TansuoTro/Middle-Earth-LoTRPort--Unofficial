@@ -1,9 +1,8 @@
 package net.jukoz.me.block.special.plants;
-import net.minecraft.world.level.LevelAccess;
 
+import net.minecraft.world.level.LevelAccess;
 import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.jukoz.me.block.special.CustomWaterloggableTallPlantBlock;
-import net.minecraft.block.*;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -16,8 +15,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class WaterloggablePlant extends CustomPlantBlock implements Fertilizable, Waterloggable {
+public class WaterloggablePlant extends CustomPlantBlock implements BonemealableBlock, SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public WaterloggablePlant(Settings settings) {
@@ -36,7 +40,7 @@ public class WaterloggablePlant extends CustomPlantBlock implements Fertilizable
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (state.get(WATERLOGGED)) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
@@ -56,7 +60,7 @@ public class WaterloggablePlant extends CustomPlantBlock implements Fertilizable
     }
 
     @Override
-    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isFertilizable(LevelReader world, BlockPos pos, BlockState state, boolean isClient) {
         return true;
     }
 

@@ -1,6 +1,6 @@
 package net.jukoz.me.entity.goals;
 
-import net.minecraft.entity.ai.goal.ActiveTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Difficulty;
@@ -8,7 +8,7 @@ import net.jukoz.me.entity.beasts.AbstractBeastEntity;
 import net.jukoz.me.resources.datas.common.DispositionType;
 import net.jukoz.me.resources.persistent_datas.PlayerDataService;
 
-public class BeastTargetPlayerGoal extends ActiveTargetGoal<Player> {
+public class BeastTargetPlayerGoal extends NearestAttackableTargetGoal<Player> {
     AbstractBeastEntity mob;
     DispositionType beastDispositionType;
 

@@ -1,25 +1,25 @@
 package net.jukoz.me.item.items.weapons;
+
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.jukoz.me.entity.EntityAttributesME;
 import net.jukoz.me.item.MEComponents;
-
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.world.item.Tier;
 import net.jukoz.me.item.dataComponents.WeaponTypeDataComponent;
 import net.jukoz.me.item.utils.ItemSettingsME;
 import net.jukoz.me.item.utils.WeaponTypesME;
 
 public class TrollWeaponItem extends SwordItem {
 
-    private final ToolMaterial material;
+    private final Tier material;
 
-    public TrollWeaponItem(ToolMaterial toolMaterial, Settings settings) {
+    public TrollWeaponItem(Tier toolMaterial, Settings settings) {
         super(toolMaterial, (int) WeaponTypesME.TROLL_WEAPON.attack, WeaponTypesME.TROLL_WEAPON.attackSpeed,
                 ((net.jukoz.me.item.MESettings) settings).maxDamage(toolMaterial.getDurability()).component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(WeaponTypesME.TROLL_WEAPON.name)));
         this.material = toolMaterial;
@@ -43,16 +43,16 @@ public class TrollWeaponItem extends SwordItem {
      * added here.
      */
     @Override
-    public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
         if (slot != EquipmentSlot.MAINHAND) {
             return super.getAttributeModifiers(slot);
         }
-        ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
+        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.putAll(super.getAttributeModifiers(slot));
-        builder.put(EntityAttributesME.ENTITY_INTERACTION_RANGE.value(), new EntityAttributeModifier(
+        builder.put(EntityAttributesME.ENTITY_INTERACTION_RANGE.value(), new AttributeModifier(
                 ItemSettingsME.ENTITY_INTERACTION_RANGE_MODIFIER_ID,
                 WeaponTypesME.TROLL_WEAPON.attackRange,
-                EntityAttributeModifier.Operation.ADDITION));
+                AttributeModifier.Operation.ADDITION));
         return builder.build();
     }
 }

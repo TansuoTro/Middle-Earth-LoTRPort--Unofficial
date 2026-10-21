@@ -1,6 +1,6 @@
 package net.jukoz.me.compat.net;
 
-import net.minecraft.entity.data.TrackedDataHandler;
+import net.minecraft.network.syncher.EntityDataSerializer;
 import net.jukoz.me.compat.net.TrackedDataHandlerME;
 import net.minecraft.network.FriendlyByteBuf;
 
@@ -10,8 +10,8 @@ public final class TrackedDataHandlerME {
     private TrackedDataHandlerME() {
     }
 
-    public static <T> TrackedDataHandler<T> create(PacketCodec<FriendlyByteBuf, T> codec) {
-        return new TrackedDataHandler<T>() {
+    public static <T> EntityDataSerializer<T> create(PacketCodec<FriendlyByteBuf, T> codec) {
+        return new EntityDataSerializer<T>() {
             @Override
             public void write(FriendlyByteBuf buf, T value) {
                 codec.encode(buf, value);

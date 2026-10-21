@@ -6,14 +6,13 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.sounds.SoundEvent;
-
 import java.util.EnumMap;
 
 /**
  * The 1.21 ArmorMaterial record, in 1.20.1 terms.
  *
  * <p>1.21 made ArmorMaterial a record that is registered like any other item property and
- * resolved through a {@code RegistryEntry}. On 1.20.1 ArmorMaterial is still an interface
+ * resolved through a {@code Holder}. On 1.20.1 ArmorMaterial is still an interface
  * with per-slot durability and protection lookups, so the donor's per-type defence map and
  * its single durability multiplier are folded into the vanilla formulas.
  */

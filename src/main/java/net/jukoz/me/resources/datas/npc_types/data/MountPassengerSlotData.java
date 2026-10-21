@@ -4,10 +4,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.server.level.ServerLevel;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class MountPassengerSlotData {
     public static class Fields {
@@ -44,7 +44,7 @@ public class MountPassengerSlotData {
 
         if(weightedPassengers.isEmpty())
             return null;
-        Random random = new Random();
+        RandomSource random = new RandomSource();
 
         MountPassengerData data =  weightedPassengers.get(random.nextInt(weightedPassengers.size()));
         if(data.isDiscarded(random))

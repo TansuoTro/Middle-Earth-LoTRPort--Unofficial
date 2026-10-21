@@ -1,17 +1,17 @@
 package net.jukoz.me.registries;
-import net.jukoz.me.item.MEComponents;
 
+import net.jukoz.me.item.MEComponents;
 import net.fabricmc.fabric.api.registry.*;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.block.LeveledCauldronBlock;
-import net.minecraft.block.cauldron.CauldronBehavior;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.world.level.pathfinder.PathNodeType;
-import net.minecraft.item.HoeItem;
+import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionResult;
@@ -27,12 +27,13 @@ import net.jukoz.me.datageneration.content.models.SimpleDyeableItemModel;
 import net.jukoz.me.datageneration.content.tags.LeavesSets;
 import net.jukoz.me.datageneration.content.tags.Saplings;
 import net.jukoz.me.item.*;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import net.minecraft.world.item.DyeableLeatherItem;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 
 public class RegistriesME {
 
@@ -672,48 +673,47 @@ public class RegistriesME {
     }
 
     public static void registerLandPathNodeTypesBlocks() {
-        LandPathNodeTypesRegistry.register(ModNatureBlocks.TOUGH_BERRY_BUSH, PathNodeType.DAMAGE_FIRE, PathNodeType.DAMAGE_FIRE);
-        LandPathNodeTypesRegistry.register(ModNatureBlocks.NETTLES, PathNodeType.DAMAGE_FIRE, PathNodeType.DAMAGE_FIRE);
-        LandPathNodeTypesRegistry.register(ModNatureBlocks.THISTLE, PathNodeType.DAMAGE_FIRE, PathNodeType.DAMAGE_FIRE);
-        LandPathNodeTypesRegistry.register(ModNatureBlocks.BRAMBLES_OF_MORDOR, PathNodeType.DAMAGE_FIRE, PathNodeType.DAMAGE_FIRE);
-        LandPathNodeTypesRegistry.register(ModDecorativeBlocks.SMALL_BRAZIER, PathNodeType.DAMAGE_FIRE, PathNodeType.DAMAGE_FIRE);
-        LandPathNodeTypesRegistry.register(ModDecorativeBlocks.BIG_BRAZIER, PathNodeType.DAMAGE_FIRE, PathNodeType.DAMAGE_FIRE);
-        LandPathNodeTypesRegistry.register(ModDecorativeBlocks.GILDED_SMALL_BRAZIER, PathNodeType.DAMAGE_FIRE, PathNodeType.DAMAGE_FIRE);
-        LandPathNodeTypesRegistry.register(ModDecorativeBlocks.GILDED_BIG_BRAZIER, PathNodeType.DAMAGE_FIRE, PathNodeType.DAMAGE_FIRE);
-        LandPathNodeTypesRegistry.register(ModDecorativeBlocks.BONFIRE, PathNodeType.DAMAGE_FIRE, PathNodeType.DAMAGE_FIRE);
-        LandPathNodeTypesRegistry.register(ModDecorativeBlocks.FIRE_BOWL, PathNodeType.DAMAGE_FIRE, PathNodeType.DAMAGE_FIRE);
+        LandPathNodeTypesRegistry.register(ModNatureBlocks.TOUGH_BERRY_BUSH, BlockPathTypes.DAMAGE_FIRE, BlockPathTypes.DAMAGE_FIRE);
+        LandPathNodeTypesRegistry.register(ModNatureBlocks.NETTLES, BlockPathTypes.DAMAGE_FIRE, BlockPathTypes.DAMAGE_FIRE);
+        LandPathNodeTypesRegistry.register(ModNatureBlocks.THISTLE, BlockPathTypes.DAMAGE_FIRE, BlockPathTypes.DAMAGE_FIRE);
+        LandPathNodeTypesRegistry.register(ModNatureBlocks.BRAMBLES_OF_MORDOR, BlockPathTypes.DAMAGE_FIRE, BlockPathTypes.DAMAGE_FIRE);
+        LandPathNodeTypesRegistry.register(ModDecorativeBlocks.SMALL_BRAZIER, BlockPathTypes.DAMAGE_FIRE, BlockPathTypes.DAMAGE_FIRE);
+        LandPathNodeTypesRegistry.register(ModDecorativeBlocks.BIG_BRAZIER, BlockPathTypes.DAMAGE_FIRE, BlockPathTypes.DAMAGE_FIRE);
+        LandPathNodeTypesRegistry.register(ModDecorativeBlocks.GILDED_SMALL_BRAZIER, BlockPathTypes.DAMAGE_FIRE, BlockPathTypes.DAMAGE_FIRE);
+        LandPathNodeTypesRegistry.register(ModDecorativeBlocks.GILDED_BIG_BRAZIER, BlockPathTypes.DAMAGE_FIRE, BlockPathTypes.DAMAGE_FIRE);
+        LandPathNodeTypesRegistry.register(ModDecorativeBlocks.BONFIRE, BlockPathTypes.DAMAGE_FIRE, BlockPathTypes.DAMAGE_FIRE);
+        LandPathNodeTypesRegistry.register(ModDecorativeBlocks.FIRE_BOWL, BlockPathTypes.DAMAGE_FIRE, BlockPathTypes.DAMAGE_FIRE);
     }
 
     public static void registerCauldronBehaviour() {
 
         HotMetalsModel.items.forEach(item -> {
-            CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(item, COOL_DOWN_METAL);
+            CauldronInteraction.WATER_CAULDRON_BEHAVIOR.put(item, COOL_DOWN_METAL);
         });
 
         HotMetalsModel.ingots.forEach(item -> {
-            CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(item, COOL_DOWN_METAL);
+            CauldronInteraction.WATER_CAULDRON_BEHAVIOR.put(item, COOL_DOWN_METAL);
         });
 
         HotMetalsModel.nuggets.forEach(item -> {
-            CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(item, COOL_DOWN_METAL);
+            CauldronInteraction.WATER_CAULDRON_BEHAVIOR.put(item, COOL_DOWN_METAL);
         });
 
+        CauldronInteraction.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.BROADHOOF_GOAT_PADDED_ARMOR, CLEAN_EQUIPMENT);
+        CauldronInteraction.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.BROADHOOF_GOAT_ORNAMENTED_PADDED_ARMOR, CLEAN_EQUIPMENT);
 
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.BROADHOOF_GOAT_PADDED_ARMOR, CLEAN_EQUIPMENT);
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.BROADHOOF_GOAT_ORNAMENTED_PADDED_ARMOR, CLEAN_EQUIPMENT);
+        CauldronInteraction.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.WARG_LEATHER_ARMOR, CLEAN_EQUIPMENT);
+        CauldronInteraction.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.WARG_REINFORCED_LEATHER_ARMOR, CLEAN_EQUIPMENT);
 
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.WARG_LEATHER_ARMOR, CLEAN_EQUIPMENT);
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.WARG_REINFORCED_LEATHER_ARMOR, CLEAN_EQUIPMENT);
+        CauldronInteraction.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.GREAT_HORN_LIGHT_ARMOR, CLEAN_EQUIPMENT);
+        CauldronInteraction.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.GREAT_HORN_LIGHT_GRAY_ARMOR, CLEAN_EQUIPMENT);
+        CauldronInteraction.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.GREAT_HORN_LIGHT_GREEN_ARMOR, CLEAN_EQUIPMENT);
 
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.GREAT_HORN_LIGHT_ARMOR, CLEAN_EQUIPMENT);
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.GREAT_HORN_LIGHT_GRAY_ARMOR, CLEAN_EQUIPMENT);
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(EquipmentItemsME.GREAT_HORN_LIGHT_GREEN_ARMOR, CLEAN_EQUIPMENT);
-
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR.put(ResourceItemsME.DIRTY_BONE, CLEAN_ITEM);
+        CauldronInteraction.WATER_CAULDRON_BEHAVIOR.put(ResourceItemsME.DIRTY_BONE, CLEAN_ITEM);
     }
 
     //This not good but will do for now until more cases appear
-    public static final CauldronBehavior CLEAN_ITEM = (state, world, pos, player, hand, stack) -> {
+    public static final CauldronInteraction CLEAN_ITEM = (state, world, pos, player, hand, stack) -> {
         if (!world.isClient) {
             player.giveItemStack(new ItemStack(Items.BONE));
             stack.decrement(1);
@@ -723,7 +723,7 @@ public class RegistriesME {
         return InteractionResult.SUCCESS;
     };
 
-    public static final CauldronBehavior COOL_DOWN_METAL = (state, world, pos, player, hand, stack) -> {
+    public static final CauldronInteraction COOL_DOWN_METAL = (state, world, pos, player, hand, stack) -> {
         RandomSource random = world.getRandom();
         int smokeAmount = random.nextInt(9) + 4;
         int bigSmokeAmount = random.nextInt(3) + 2;
@@ -738,9 +738,9 @@ public class RegistriesME {
             stack.decrement(1);
             player.getInventory().offerOrDrop(originalStack);
 
-            LeveledCauldronBlock.decrementFluidLevel(state, world, pos);
+            LayeredCauldronBlock.decrementFluidLevel(state, world, pos);
 
-            world.playSound(null, pos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 1.0f, 1.0f);
+            world.playSound(null, pos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundSource.BLOCKS, 1.0f, 1.0f);
         } else {
             for (int i = 0; i < bigSmokeAmount; i++){
                 world.addParticle(ParticleTypes.POOF,
@@ -764,8 +764,8 @@ public class RegistriesME {
         return InteractionResult.SUCCESS;
     };
 
-    public static final CauldronBehavior CLEAN_EQUIPMENT = (state, world, pos, player, hand, stack) -> {
-        if (!(stack.getItem() instanceof net.minecraft.item.DyeableItem)) {
+    public static final CauldronInteraction CLEAN_EQUIPMENT = (state, world, pos, player, hand, stack) -> {
+        if (!(stack.getItem() instanceof net.minecraft.world.item.DyeableLeatherItem)) {
             return InteractionResult.PASS;
         } else if (!MEComponents.contains(stack, MEComponents.DYED_COLOR)) {
             return InteractionResult.PASS;
@@ -773,7 +773,7 @@ public class RegistriesME {
             if (!world.isClient) {
                 MEComponents.remove(stack, MEComponents.DYED_COLOR);
                 player.incrementStat(Stats.CLEAN_ARMOR);
-                LeveledCauldronBlock.decrementFluidLevel(state, world, pos);
+                LayeredCauldronBlock.decrementFluidLevel(state, world, pos);
             }
 
             return InteractionResult.SUCCESS;

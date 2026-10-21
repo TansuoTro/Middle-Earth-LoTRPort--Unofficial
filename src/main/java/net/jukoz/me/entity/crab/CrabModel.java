@@ -1,11 +1,18 @@
 package net.jukoz.me.entity.crab;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.PartNames;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.util.Mth;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class CrabModel extends EntityModel<CrabEntity> {
     private static final String ARM_RIGHT = "bone_arm_right";
@@ -79,72 +86,63 @@ public class CrabModel extends EntityModel<CrabEntity> {
         this.body = root.getChild(BODY);
     }
 
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = new ModelData();
-        ModelPartData modelPartData = modelData.getRoot();
+    public static LayerDefinition getTexturedModelData() {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
 
+        PartDefinition armRight = modelPartData
+                .addChild(ARM_RIGHT, CubeListBuilder.create().uv(20, 13).cuboid(-2.0F, -0.5F, -0.5F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.pivot(-3.5F, 20.4F, -3.0F));
 
-        ModelPartData armRight = modelPartData
-                .addChild(ARM_RIGHT, ModelPartBuilder.create().uv(20, 13).cuboid(-2.0F, -0.5F, -0.5F, 2.0F, 1.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(-3.5F, 20.4F, -3.0F));
+        PartDefinition clawTopRight = modelPartData.getChild(ARM_RIGHT)
+                .addChild(CLAW_TOP_RIGHT, CubeListBuilder.create().uv(16, 11).cuboid(-3F, 0.5F, -0.5F, 3.0F, 1.0F, 1.0F,  new CubeDeformation(0.0F)),
+                PartPose.of(-1.5F, -0.5F, 0,0, 0, 0));
 
-        ModelPartData clawTopRight = modelPartData.getChild(ARM_RIGHT)
-                .addChild(CLAW_TOP_RIGHT, ModelPartBuilder.create().uv(16, 11).cuboid(-3F, 0.5F, -0.5F, 3.0F, 1.0F, 1.0F,  new Dilation(0.0F)),
-                ModelTransform.of(-1.5F, -0.5F, 0,0, 0, 0));
+        PartDefinition clawBotRight = modelPartData.getChild(ARM_RIGHT)
+                .addChild(CLAW_BOT_RIGHT, CubeListBuilder.create().uv(0, 16).cuboid(-3F, -1.5F, -0.5F, 3.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)),
+                        PartPose.of(-1.5F, 0.5F, 0,0, 0, 0));
 
-        ModelPartData clawBotRight = modelPartData.getChild(ARM_RIGHT)
-                .addChild(CLAW_BOT_RIGHT, ModelPartBuilder.create().uv(0, 16).cuboid(-3F, -1.5F, -0.5F, 3.0F, 1.0F, 1.0F, new Dilation(0.0F)),
-                        ModelTransform.of(-1.5F, 0.5F, 0,0, 0, 0));
+        PartDefinition armLeft = modelPartData
+                .addChild(ARM_LEFT, CubeListBuilder.create().uv(20, 16).cuboid(.0F, -0.5F, -0.5F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.pivot(3.5F, 20.4F, -3.0F));
 
+        PartDefinition clawTopLeft = modelPartData.getChild(ARM_LEFT)
+                .addChild(CLAW_TOP_LEFT, CubeListBuilder.create().uv(16, 9).cuboid(.5F, 0.5F, -0.5F, 3.0F, 1.0F, 1.0F,  new CubeDeformation(0.0F)),
+                        PartPose.of(1.5F, -0.5F, 0,0, 0, 0));
 
-        ModelPartData armLeft = modelPartData
-                .addChild(ARM_LEFT, ModelPartBuilder.create().uv(20, 16).cuboid(.0F, -0.5F, -0.5F, 2.0F, 1.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(3.5F, 20.4F, -3.0F));
+        PartDefinition clawBotLeft = modelPartData.getChild(ARM_LEFT)
+                .addChild(CLAW_BOT_LEFT, CubeListBuilder.create().uv(8, 16).cuboid(.5F, -1.5F, -0.5F, 3.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)),
+                        PartPose.of(1.5F, 0.5F, 0,0, 0, 0));
 
-        ModelPartData clawTopLeft = modelPartData.getChild(ARM_LEFT)
-                .addChild(CLAW_TOP_LEFT, ModelPartBuilder.create().uv(16, 9).cuboid(.5F, 0.5F, -0.5F, 3.0F, 1.0F, 1.0F,  new Dilation(0.0F)),
-                        ModelTransform.of(1.5F, -0.5F, 0,0, 0, 0));
+        PartDefinition bone_leg_swimmer_left = modelPartData.addChild(LEG_SWIMMER_LEFT, CubeListBuilder.create().uv(0, 3).cuboid(-0.5F, -0.5f, 0.5F, 1, 1, 1, new CubeDeformation(0.0F)), PartPose.pivot(2F, 21.8F, 2.8F));
 
-        ModelPartData clawBotLeft = modelPartData.getChild(ARM_LEFT)
-                .addChild(CLAW_BOT_LEFT, ModelPartBuilder.create().uv(8, 16).cuboid(.5F, -1.5F, -0.5F, 3.0F, 1.0F, 1.0F, new Dilation(0.0F)),
-                        ModelTransform.of(1.5F, 0.5F, 0,0, 0, 0));
+        PartDefinition swimmerLeft = modelPartData.getChild(LEG_SWIMMER_LEFT)
+                .addChild(SWIMMER_LEFT, CubeListBuilder.create().uv(8, 16).cuboid(0, -0.5f, 1.5F, 0, 1, 1,  new CubeDeformation(0.0F)),
+                PartPose.of(0, 0, 0,0, 0, 0));
 
+        PartDefinition bone_leg_swimmer_right = modelPartData.addChild(LEG_SWIMMER_RIGHT, CubeListBuilder.create().uv(16, 11).cuboid(-0.5F,  -0.5f, 0.5F, 1, 1, 1, new CubeDeformation(0.0F)), PartPose.pivot(-2F, 21.8F, 2.8F));
 
+        PartDefinition swimmerRight = modelPartData.getChild(LEG_SWIMMER_RIGHT)
+                .addChild(SWIMMER_RIGHT, CubeListBuilder.create().uv(8, 16).cuboid(0, -0.5f, 1.5F, 0, 1, 1,  new CubeDeformation(0.0F)),
+                PartPose.of(0, 0, 0,0, 0, 0));
 
-        ModelPartData bone_leg_swimmer_left = modelPartData.addChild(LEG_SWIMMER_LEFT, ModelPartBuilder.create().uv(0, 3).cuboid(-0.5F, -0.5f, 0.5F, 1, 1, 1, new Dilation(0.0F)), ModelTransform.pivot(2F, 21.8F, 2.8F));
+        PartDefinition bone_leg_right_first = modelPartData.addChild(LEG_RIGHT_FIRST, CubeListBuilder.create().uv(12, 18).cuboid(-1.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.pivot(-2.5F, 22.4F, -2.0F));
 
-        ModelPartData swimmerLeft = modelPartData.getChild(LEG_SWIMMER_LEFT)
-                .addChild(SWIMMER_LEFT, ModelPartBuilder.create().uv(8, 16).cuboid(0, -0.5f, 1.5F, 0, 1, 1,  new Dilation(0.0F)),
-                ModelTransform.of(0, 0, 0,0, 0, 0));
+        PartDefinition bone_leg_right_second = modelPartData.addChild(LEG_RIGHT_SECOND, CubeListBuilder.create().uv(8, 18).cuboid(-1.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.pivot(-2.5F, 22.4F, 0.0F));
 
+        PartDefinition bone_leg_right_third = modelPartData.addChild(LEG_RIGHT_THIRD, CubeListBuilder.create().uv(4, 18).cuboid(-1.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.pivot(-2.5F, 22.4F, 2.0F));
 
-        ModelPartData bone_leg_swimmer_right = modelPartData.addChild(LEG_SWIMMER_RIGHT, ModelPartBuilder.create().uv(16, 11).cuboid(-0.5F,  -0.5f, 0.5F, 1, 1, 1, new Dilation(0.0F)), ModelTransform.pivot(-2F, 21.8F, 2.8F));
+        PartDefinition bone_leg_left_first = modelPartData.addChild(LEG_LEFT_FIRST, CubeListBuilder.create().uv(0, 9).cuboid(0.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.pivot(2.5F, 22.4F, -2.0F));
 
-        ModelPartData swimmerRight = modelPartData.getChild(LEG_SWIMMER_RIGHT)
-                .addChild(SWIMMER_RIGHT, ModelPartBuilder.create().uv(8, 16).cuboid(0, -0.5f, 1.5F, 0, 1, 1,  new Dilation(0.0F)),
-                ModelTransform.of(0, 0, 0,0, 0, 0));
+        PartDefinition bone_leg_left_second = modelPartData.addChild(LEG_LEFT_SECOND, CubeListBuilder.create().uv(16, 16).cuboid(0.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.pivot(2.5F, 22.4F, 0.0F));
 
+        PartDefinition bone_leg_left_third = modelPartData.addChild(LEG_LEFT_THIRD, CubeListBuilder.create().uv(0, 18).cuboid(0.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.pivot(2.5F, 22.4F, 2.0F));
 
+        PartDefinition bone_eye_right = modelPartData.addChild(EYE_RIGHT, CubeListBuilder.create().uv(21, 0).cuboid(-0.5F, -2.0F, -0.5F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.pivot(-1.5F, 19.3F, -2.0F));
 
-        ModelPartData bone_leg_right_first = modelPartData.addChild(LEG_RIGHT_FIRST, ModelPartBuilder.create().uv(12, 18).cuboid(-1.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(-2.5F, 22.4F, -2.0F));
+        PartDefinition bone_eye_left = modelPartData.addChild(EYE_LEFT, CubeListBuilder.create().uv(20, 18).cuboid(-0.5F, -2.0F, -0.5F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.pivot(2.0F, 19.3F, -2.0F));
 
-        ModelPartData bone_leg_right_second = modelPartData.addChild(LEG_RIGHT_SECOND, ModelPartBuilder.create().uv(8, 18).cuboid(-1.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(-2.5F, 22.4F, 0.0F));
-
-        ModelPartData bone_leg_right_third = modelPartData.addChild(LEG_RIGHT_THIRD, ModelPartBuilder.create().uv(4, 18).cuboid(-1.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(-2.5F, 22.4F, 2.0F));
-
-
-        ModelPartData bone_leg_left_first = modelPartData.addChild(LEG_LEFT_FIRST, ModelPartBuilder.create().uv(0, 9).cuboid(0.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(2.5F, 22.4F, -2.0F));
-
-        ModelPartData bone_leg_left_second = modelPartData.addChild(LEG_LEFT_SECOND, ModelPartBuilder.create().uv(16, 16).cuboid(0.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(2.5F, 22.4F, 0.0F));
-
-        ModelPartData bone_leg_left_third = modelPartData.addChild(LEG_LEFT_THIRD, ModelPartBuilder.create().uv(0, 18).cuboid(0.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(2.5F, 22.4F, 2.0F));
-
-
-        ModelPartData bone_eye_right = modelPartData.addChild(EYE_RIGHT, ModelPartBuilder.create().uv(21, 0).cuboid(-0.5F, -2.0F, -0.5F, 1.0F, 2.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(-1.5F, 19.3F, -2.0F));
-
-        ModelPartData bone_eye_left = modelPartData.addChild(EYE_LEFT, ModelPartBuilder.create().uv(20, 18).cuboid(-0.5F, -2.0F, -0.5F, 1.0F, 2.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(2.0F, 19.3F, -2.0F));
-
-        ModelPartData bb_main = modelPartData.addChild(BODY, ModelPartBuilder.create().uv(0, 0).cuboid(-3.5F, -4.7F, -3.5F, 7.0F, 2.0F, 7.0F, new Dilation(0.0F))
-                .uv(0, 9).cuboid(-2.5F, -2.7F, -2.7F, 5.0F, 1.0F, 6.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 24.0F, 0.0F));
-        return TexturedModelData.of(modelData, 32, 32);
+        PartDefinition bb_main = modelPartData.addChild(BODY, CubeListBuilder.create().uv(0, 0).cuboid(-3.5F, -4.7F, -3.5F, 7.0F, 2.0F, 7.0F, new CubeDeformation(0.0F))
+                .uv(0, 9).cuboid(-2.5F, -2.7F, -2.7F, 5.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.pivot(0.0F, 24.0F, 0.0F));
+        return LayerDefinition.of(modelData, 32, 32);
     }
     @Override
     public void setAngles(CrabEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {

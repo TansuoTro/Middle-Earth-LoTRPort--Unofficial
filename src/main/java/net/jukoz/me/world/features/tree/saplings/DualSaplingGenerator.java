@@ -1,12 +1,12 @@
 package net.jukoz.me.world.features.tree.saplings;
 
-import net.minecraft.block.sapling.SaplingGenerator;
+import net.minecraft.world.level.block.grower.AbstractTreeGrower;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import org.jetbrains.annotations.Nullable;
 
-public class DualSaplingGenerator extends SaplingGenerator {
+public class DualSaplingGenerator extends AbstractTreeGrower {
     private final float weight;
     private final ResourceKey<ConfiguredFeature<?, ?>> treeKey1;
     private final ResourceKey<ConfiguredFeature<?, ?>> treeKey2;

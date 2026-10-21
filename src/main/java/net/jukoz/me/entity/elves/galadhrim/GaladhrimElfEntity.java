@@ -11,23 +11,28 @@ import net.jukoz.me.entity.uruks.misties.MistyHobgoblinEntity;
 import net.jukoz.me.entity.uruks.mordor.MordorBlackUrukEntity;
 import net.jukoz.me.item.ModEquipmentItems;
 import net.jukoz.me.item.ModWeaponItems;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.item.*;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.item.DyeableLeatherItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 public class GaladhrimElfEntity extends NpcEntity{
 
-    public GaladhrimElfEntity(EntityType<? extends PathAwareEntity> entityType, Level world) {
+    public GaladhrimElfEntity(EntityType<? extends PathfinderMob> entityType, Level world) {
         super(entityType, world);
         String name = this.getDefaultName().toString();
         if(name.contains("militia")){
@@ -47,14 +52,14 @@ public class GaladhrimElfEntity extends NpcEntity{
 
     @Nullable
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable CompoundTag entityNbt) {
+    public SpawnGroupData initialize(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, @Nullable CompoundTag entityNbt) {
         entityData = super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
         RandomSource random = world.getRandom();
         this.initEquipment(random, difficulty);
         return entityData;
     }
 
-    public static DefaultAttributeContainer.Builder setSoldierAttributes() {
+    public static AttributeSupplier.Builder setSoldierAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25f)
                 .add(Attributes.GENERIC_MAX_HEALTH, 25.0)
@@ -62,7 +67,7 @@ public class GaladhrimElfEntity extends NpcEntity{
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 48.0)
                 .add(Attributes.GENERIC_ATTACK_DAMAGE, 2.0);
     }
-    public static DefaultAttributeContainer.Builder setKnightAttributes() {
+    public static AttributeSupplier.Builder setKnightAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25f)
                 .add(Attributes.GENERIC_MAX_HEALTH, 27.0)
@@ -70,7 +75,7 @@ public class GaladhrimElfEntity extends NpcEntity{
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 48.0)
                 .add(Attributes.GENERIC_ATTACK_DAMAGE, 2.5);
     }
-    public static DefaultAttributeContainer.Builder setVeteranAttributes() {
+    public static AttributeSupplier.Builder setVeteranAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25f)
                 .add(Attributes.GENERIC_MAX_HEALTH, 29.0)
@@ -78,7 +83,7 @@ public class GaladhrimElfEntity extends NpcEntity{
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 48.0)
                 .add(Attributes.GENERIC_ATTACK_DAMAGE, 3.0);
     }
-    public static DefaultAttributeContainer.Builder setLeaderAttributes() {
+    public static AttributeSupplier.Builder setLeaderAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25f)
                 .add(Attributes.GENERIC_MAX_HEALTH, 31.0)
@@ -91,18 +96,18 @@ public class GaladhrimElfEntity extends NpcEntity{
     protected void initGoals() {
         super.initGoals();
         int i = 2;
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, TrollEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MordorBlackUrukEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MistyHobgoblinEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MordorOrcEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MistyGoblinEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MirkwoodSpiderEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, NazgulEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, BanditHumanEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, TrollEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, MordorBlackUrukEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, MistyHobgoblinEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, MordorOrcEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, MistyGoblinEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, MirkwoodSpiderEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, NazgulEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, BanditHumanEntity.class, true));
     }
 
     @Override
-    protected void initEquipment(RandomSource random, LocalDifficulty localDifficulty) {
+    protected void initEquipment(RandomSource random, DifficultyInstance localDifficulty) {
         super.initEquipment(random, localDifficulty);
         switch (this.getRank()){
             case MILITIA -> militiaEquipment(random);
@@ -120,7 +125,7 @@ public class GaladhrimElfEntity extends NpcEntity{
                 0x61626e,
                 0x505258
         };
-        DyeableItem item = (DyeableItem)ModEquipmentItems.TUNIC_CLOAK;
+        DyeableLeatherItem item = (DyeableLeatherItem)ModEquipmentItems.TUNIC_CLOAK;
         ItemStack tunicCloak = new ItemStack(ModEquipmentItems.TUNIC_CLOAK);
         ItemStack hood = new ItemStack(ModEquipmentItems.CLOAK_HOOD);
         ItemStack leatherHelmet = new ItemStack(Items.LEATHER_HELMET);

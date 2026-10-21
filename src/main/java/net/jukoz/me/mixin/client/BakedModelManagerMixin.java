@@ -2,7 +2,7 @@ package net.jukoz.me.mixin.client;
 
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.resources.model.BakedModelManager;
-import net.minecraft.client.texture.TextureManager;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.client.ModTexturedRenderLayers;
@@ -14,12 +14,11 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import java.util.HashMap;
 import java.util.Map;
+import net.minecraft.client.resources.model.ModelManager;
 
-
-@Mixin(BakedModelManager.class)
+@Mixin(ModelManager.class)
 public class BakedModelManagerMixin{
 
     @Mutable

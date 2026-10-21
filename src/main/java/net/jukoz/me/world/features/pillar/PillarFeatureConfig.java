@@ -51,4 +51,3 @@ public class PillarFeatureConfig implements FeatureConfiguration {
         this.blockState = blockstate;
     }
 }
-

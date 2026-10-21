@@ -2,8 +2,8 @@ package net.jukoz.me.entity.beasts.cave_troll;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraft.entity.AnimationState;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
+import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.jukoz.me.entity.beasts.BeastEntityRenderState;
 
 @OnlyIn(Dist.CLIENT)

@@ -4,12 +4,12 @@ import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.function.ValueLists;
-
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.ByIdMap;
 import java.util.function.IntFunction;
+import net.minecraft.network.FriendlyByteBuf;
 
-public enum BackAttachmentsME implements StringIdentifiable {
+public enum BackAttachmentsME implements StringRepresentable {
     CAPE(0,"cape"),
     SHOULDER_CAPE_LEFT(1,"shoulder_cape_left"),
     SHOULDER_CAPE_RIGHT(2,"shoulder_cape_right"),
@@ -88,11 +88,11 @@ public enum BackAttachmentsME implements StringIdentifiable {
     MANTLE_OF_YAVANNA(61,"mantle_of_yavanna")
     ;
 
-    private static final IntFunction<BackAttachmentsME> BY_ID = ValueLists.createIdToValueFunction(BackAttachmentsME::getId, BackAttachmentsME.values(), ValueLists.OutOfBoundsHandling.ZERO);;
+    private static final IntFunction<BackAttachmentsME> BY_ID = ByIdMap.createIdToValueFunction(BackAttachmentsME::getId, BackAttachmentsME.values(), ByIdMap.OutOfBoundsHandling.ZERO);;
     private final String name;
     private final int id;
 
-    public static final Codec<BackAttachmentsME> CODEC = StringIdentifiable.createCodec(BackAttachmentsME::values);
+    public static final Codec<BackAttachmentsME> CODEC = StringRepresentable.createCodec(BackAttachmentsME::values);
     public static final PacketCodec<net.minecraft.network.FriendlyByteBuf, BackAttachmentsME> PACKET_CODEC = PacketCodecs.indexed(BY_ID, BackAttachmentsME::getId);
 
     BackAttachmentsME(int id, String name){
@@ -107,7 +107,6 @@ public enum BackAttachmentsME implements StringIdentifiable {
     public int getId() {
         return id;
     }
-
 
     @Override
     public String asString() {

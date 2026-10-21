@@ -10,12 +10,11 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.TestableWorld;
+import net.minecraft.world.level.LevelSimulatedReader;
 import net.minecraft.world.level.levelgen.feature.TreeFeature;
 import net.minecraft.world.level.levelgen.feature.TreeFeatureConfig;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +53,7 @@ public class OvalFoliagePlacer extends FoliagePlacer {
     }
 
     @Override
-    protected void generate(TestableWorld world, BlockPlacer placer, RandomSource random, TreeFeatureConfig config, int trunkHeight,
+    protected void generate(LevelSimulatedReader world, BlockPlacer placer, RandomSource random, TreeConfiguration config, int trunkHeight,
                             TreeNode treeNode, int foliageHeight, int radius, int offset) {
         BlockPos.Mutable mutable = new BlockPos.Mutable();
         int bounds = radius + 1;
@@ -72,7 +71,7 @@ public class OvalFoliagePlacer extends FoliagePlacer {
         }
     }
 
-    protected static boolean placeLeavesBlock(TestableWorld world, BlockPlacer placer, RandomSource random, TreeFeatureConfig config,
+    protected static boolean placeLeavesBlock(LevelSimulatedReader world, BlockPlacer placer, RandomSource random, TreeConfiguration config,
                                                BlockPos pos, List<BlockState> leaves) {
         if (!TreeFeature.canReplace(world, pos)) {
             return false;
@@ -105,7 +104,7 @@ public class OvalFoliagePlacer extends FoliagePlacer {
     }
 
     @Override
-    public int getRandomHeight(RandomSource random, int trunkHeight, TreeFeatureConfig config) {
+    public int getRandomHeight(RandomSource random, int trunkHeight, TreeConfiguration config) {
         return 4;
     }
 

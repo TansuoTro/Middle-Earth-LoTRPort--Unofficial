@@ -1,6 +1,6 @@
 package net.jukoz.me.network.packets.C2S;
 
-import net.minecraft.world.dimension.DimensionTypes;
+import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.MiddleEarth;
@@ -27,8 +27,6 @@ public class PacketSetSpawnData extends ClientToServerPacket<PacketSetSpawnData>
         this.overworldZ = overworldZ;
     }
 
-
-
     public PacketSetSpawnData(FriendlyByteBuf buf) {
         this(buf.readInt(), buf.readInt(), buf.readInt());
     }
@@ -52,7 +50,6 @@ public class PacketSetSpawnData extends ClientToServerPacket<PacketSetSpawnData>
 
                 MinecraftServer server = context.player().getServer();
                 ServerPlayer player = server.getPlayerManager().getPlayer(context.player().getUuid());
-
 
                 BlockPos overworldSpawnBlockpos = new BlockPos(overworldX, overworldY, overworldZ);
                 PlayerDataService.setOrigin(player, player.getWorld(), DimensionTypes.OVERWORLD_ID, overworldSpawnBlockpos);

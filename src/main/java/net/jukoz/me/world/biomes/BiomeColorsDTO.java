@@ -1,5 +1,6 @@
 package net.jukoz.me.world.biomes;
 
+
 public class BiomeColorsDTO {
     public int skyColor;
     public int fogColor;

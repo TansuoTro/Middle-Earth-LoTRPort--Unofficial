@@ -7,7 +7,7 @@ import java.util.function.Function;
  *
  * <p>The donor serialises its data objects (NPC data, factions, variants, recipes) with a
  * codec made of field codecs plus a factory reference. 1.20.1 has no such type - packets are
- * written by hand against {@code PacketByteBuf} - so this class reproduces the shape the
+ * written by hand against {@code FriendlyByteBuf} - so this class reproduces the shape the
  * donor's declarations use and keeps those declarations compiling.
  *
  * <p>The wire format is this port's own: it only has to agree with itself, not with 1.21.

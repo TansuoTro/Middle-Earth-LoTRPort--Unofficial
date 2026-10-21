@@ -23,7 +23,6 @@ public class AffiliationData {
         this.spawnId = spawnId;
     }
 
-
     public DispositionType getDisposition(){
         return dispositionType;
     }

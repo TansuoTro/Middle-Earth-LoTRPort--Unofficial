@@ -1,16 +1,22 @@
 package net.jukoz.me.entity.npcs.renderer;
+
 import net.jukoz.me.entity.npcs.NpcEntity;
 import net.jukoz.me.compat.client.render.MEBipedEntityModel;
-
 import net.minecraft.client.model.*;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
+import net.minecraft.client.model.HumanoidModel;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.util.Arm;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.Util;
 import net.minecraft.util.RandomSource;
-
 import java.util.List;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class NpcEntityModel extends MEBipedEntityModel<NpcEntity, NpcEntityRenderState> {
     private static final String LEFT_SLEEVE = "left_sleeve";
@@ -34,24 +40,24 @@ public class NpcEntityModel extends MEBipedEntityModel<NpcEntity, NpcEntityRende
         this.parts = List.of(this.head, this.body, this.leftArm, this.rightArm, this.leftLeg, this.rightLeg);
     }
 
-    public static TexturedModelData getTexturedModelData(Dilation dilation) {
-        ModelData modelData = BipedEntityModel.getModelData(dilation, 0.0F);
-        ModelPartData modelPartData = modelData.getRoot();
-        ModelPartData modelPartData2;
-        ModelPartData modelPartData3;
+    public static LayerDefinition getTexturedModelData(CubeDeformation dilation) {
+        MeshDefinition modelData = HumanoidModel.getModelData(dilation, 0.0F);
+        PartDefinition modelPartData = modelData.getRoot();
+        PartDefinition modelPartData2;
+        PartDefinition modelPartData3;
 
-        modelPartData2 = modelPartData.addChild("left_arm", ModelPartBuilder.create().uv(32, 48).cuboid(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation), ModelTransform.pivot(5.0F, 2.0F, 0.0F));
+        modelPartData2 = modelPartData.addChild("left_arm", CubeListBuilder.create().uv(32, 48).cuboid(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation), PartPose.pivot(5.0F, 2.0F, 0.0F));
         modelPartData3 = modelPartData.getChild("right_arm");
-        modelPartData2.addChild(LEFT_SLEEVE, ModelPartBuilder.create().uv(48, 48).cuboid(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation.add(0.25F)), ModelTransform.NONE);
-        modelPartData3.addChild(RIGHT_SLEEVE, ModelPartBuilder.create().uv(40, 32).cuboid(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation.add(0.25F)), ModelTransform.NONE);
+        modelPartData2.addChild(LEFT_SLEEVE, CubeListBuilder.create().uv(48, 48).cuboid(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation.add(0.25F)), PartPose.NONE);
+        modelPartData3.addChild(RIGHT_SLEEVE, CubeListBuilder.create().uv(40, 32).cuboid(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation.add(0.25F)), PartPose.NONE);
 
-        modelPartData2 = modelPartData.addChild("left_leg", ModelPartBuilder.create().uv(16, 48).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation), ModelTransform.pivot(1.9F, 12.0F, 0.0F));
+        modelPartData2 = modelPartData.addChild("left_leg", CubeListBuilder.create().uv(16, 48).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation), PartPose.pivot(1.9F, 12.0F, 0.0F));
         modelPartData3 = modelPartData.getChild("right_leg");
-        modelPartData2.addChild(LEFT_PANTS, ModelPartBuilder.create().uv(0, 48).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation.add(0.25F)), ModelTransform.NONE);
-        modelPartData3.addChild(RIGHT_PANTS, ModelPartBuilder.create().uv(0, 32).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation.add(0.25F)), ModelTransform.NONE);
-        ModelPartData modelPartData4 = modelPartData.getChild("body");
-        modelPartData4.addChild("jacket", ModelPartBuilder.create().uv(16, 32).cuboid(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, dilation.add(0.25F)), ModelTransform.NONE);
-        return TexturedModelData.of(modelData, 64, 64);
+        modelPartData2.addChild(LEFT_PANTS, CubeListBuilder.create().uv(0, 48).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation.add(0.25F)), PartPose.NONE);
+        modelPartData3.addChild(RIGHT_PANTS, CubeListBuilder.create().uv(0, 32).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation.add(0.25F)), PartPose.NONE);
+        PartDefinition modelPartData4 = modelPartData.getChild("body");
+        modelPartData4.addChild("jacket", CubeListBuilder.create().uv(16, 32).cuboid(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, dilation.add(0.25F)), PartPose.NONE);
+        return LayerDefinition.of(modelData, 64, 64);
     }
 
     public void setAngles(NpcEntityRenderState renderState) {
@@ -67,7 +73,7 @@ public class NpcEntityModel extends MEBipedEntityModel<NpcEntity, NpcEntityRende
         this.jacket.visible = visible;
     }
 
-    public void setArmAngle(Arm arm, PoseStack matrices) {
+    public void setArmAngle(HumanoidArm arm, PoseStack matrices) {
         super.setArmAngle(arm, matrices);
     }
 }

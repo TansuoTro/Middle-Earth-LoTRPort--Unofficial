@@ -8,15 +8,14 @@ import net.jukoz.me.compat.DyedColorComponent;
 import net.minecraft.world.item.Item;
 import net.jukoz.me.compat.TooltipAppender;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.item.utils.armor.DyeablePiecesME;
 import net.jukoz.me.item.utils.armor.helmetAttachments.HelmetAttachmentsME;
 import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
-import net.minecraft.util.math.ColorHelper;
-
+import net.minecraft.util.FastColor;
 import java.util.List;
 
 public record HelmetAttachmentDataComponent(boolean down, HelmetAttachmentsME helmetAttachment, int helmetAttachmentColor) implements TooltipAppender {
@@ -84,7 +83,7 @@ public record HelmetAttachmentDataComponent(boolean down, HelmetAttachmentsME he
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, net.minecraft.client.item.TooltipContext context, List<Component> tooltip) {
-        tooltip.add(Component.translatable("tooltip.%s.%s".formatted(MiddleEarth.MOD_ID, this.helmetAttachment().getName())).formatted(Formatting.GRAY));
+    public void appendTooltip(ItemStack stack, net.minecraft.world.item.TooltipFlag context, List<Component> tooltip) {
+        tooltip.add(Component.translatable("tooltip.%s.%s".formatted(MiddleEarth.MOD_ID, this.helmetAttachment().getName())).formatted(ChatFormatting.GRAY));
     }
 }

@@ -1,7 +1,6 @@
 package net.jukoz.me.datageneration.recipes;
 
 import java.util.function.Consumer;
-
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.jukoz.me.MiddleEarth;
@@ -12,12 +11,11 @@ import net.jukoz.me.datageneration.custom.AnvilShapingRecipeJsonBuilder;
 import net.jukoz.me.item.DecorativeItemsME;
 import net.jukoz.me.item.FoodItemsME;
 import net.jukoz.me.item.ResourceItemsME;
-import net.minecraft.data.server.recipe.RecipeJsonProvider;
-import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.resources.ResourceLocation;
@@ -49,7 +47,7 @@ public class AlloyAndAnvilRecipeProvider extends FabricRecipeProvider {
     }
 
     @Override
-    public void generate(Consumer<RecipeJsonProvider> exporter) {
+    public void generate(Consumer<FinishedRecipe> exporter) {
 
         //region ALLOYING (alloy forge)
         AlloyRecipeJsonBuilder.createAlloyRecipe(RecipeCategory.MISC, "bronze", INGOT_LIQUID_VALUE * 4, 4)
@@ -155,14 +153,14 @@ public class AlloyAndAnvilRecipeProvider extends FabricRecipeProvider {
         //endregion
     }
 
-    private void createMeltBulkRecipe(Consumer<RecipeJsonProvider> exporter, Item input, String output) {
+    private void createMeltBulkRecipe(Consumer<FinishedRecipe> exporter, Item input, String output) {
         createMeltRecipe(exporter, input, output, 1, INGOT_LIQUID_VALUE);
         createMeltRecipe(exporter, input, output, 2, INGOT_LIQUID_VALUE);
         createMeltRecipe(exporter, input, output, 3, INGOT_LIQUID_VALUE);
         createMeltRecipe(exporter, input, output, 4, INGOT_LIQUID_VALUE);
     }
 
-    private void createMeltRecipe(Consumer<RecipeJsonProvider> exporter, Item input, String output, int ingots, int amount) {
+    private void createMeltRecipe(Consumer<FinishedRecipe> exporter, Item input, String output, int ingots, int amount) {
         switch (ingots) {
             case 1 -> AlloyRecipeJsonBuilder.createAlloyRecipe(RecipeCategory.MISC, output, amount, 0)
                     .input(input)
@@ -193,14 +191,14 @@ public class AlloyAndAnvilRecipeProvider extends FabricRecipeProvider {
         }
     }
 
-    private void createMeltBulkRecipeTag(Consumer<RecipeJsonProvider> exporter, TagKey<Item> input, String output) {
+    private void createMeltBulkRecipeTag(Consumer<FinishedRecipe> exporter, TagKey<Item> input, String output) {
         createMeltRecipeTag(exporter, input, output, 1, INGOT_LIQUID_VALUE);
         createMeltRecipeTag(exporter, input, output, 2, INGOT_LIQUID_VALUE);
         createMeltRecipeTag(exporter, input, output, 3, INGOT_LIQUID_VALUE);
         createMeltRecipeTag(exporter, input, output, 4, INGOT_LIQUID_VALUE);
     }
 
-    private void createMeltRecipeTag(Consumer<RecipeJsonProvider> exporter, TagKey<Item> input, String output, int ingots, int amount) {
+    private void createMeltRecipeTag(Consumer<FinishedRecipe> exporter, TagKey<Item> input, String output, int ingots, int amount) {
         switch (ingots) {
             case 1 -> AlloyRecipeJsonBuilder.createAlloyRecipe(RecipeCategory.MISC, output, amount, 0)
                     .input(input)
@@ -231,7 +229,7 @@ public class AlloyAndAnvilRecipeProvider extends FabricRecipeProvider {
         }
     }
 
-    private void createAnvilShapingRecipeTag(Consumer<RecipeJsonProvider> exporter, TagKey<Item> input, Item output, int amount) {
+    private void createAnvilShapingRecipeTag(Consumer<FinishedRecipe> exporter, TagKey<Item> input, Item output, int amount) {
         AnvilShapingRecipeJsonBuilder.createAnvilShapingRecipe(RecipeCategory.MISC, output, amount)
                 .input(input)
                 .criterion(hasItem(Items.COPPER_INGOT),
@@ -239,7 +237,7 @@ public class AlloyAndAnvilRecipeProvider extends FabricRecipeProvider {
                 .offerTo(exporter);
     }
 
-    private void createAnvilShapingRecipeItem(Consumer<RecipeJsonProvider> exporter, Item input, Item output, int amount) {
+    private void createAnvilShapingRecipeItem(Consumer<FinishedRecipe> exporter, Item input, Item output, int amount) {
         AnvilShapingRecipeJsonBuilder.createAnvilShapingRecipe(RecipeCategory.MISC, output, amount)
                 .input(input)
                 .criterion(hasItem(Items.COPPER_INGOT),
@@ -247,8 +245,8 @@ public class AlloyAndAnvilRecipeProvider extends FabricRecipeProvider {
                 .offerTo(exporter);
     }
 
-    private void createAnvilRecipe(Consumer<RecipeJsonProvider> exporter, Item inputBlock, Item inputIngot, Item output) {
-        ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, output, 1)
+    private void createAnvilRecipe(Consumer<FinishedRecipe> exporter, Item inputBlock, Item inputIngot, Item output) {
+        ShapedRecipeBuilder.create(RecipeCategory.BUILDING_BLOCKS, output, 1)
                 .pattern("IBI")
                 .pattern(" I ")
                 .pattern("LLL")

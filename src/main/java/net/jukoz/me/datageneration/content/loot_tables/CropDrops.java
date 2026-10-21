@@ -7,32 +7,31 @@ import net.jukoz.me.item.ResourceItemsME;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.loot.condition.BlockStatePropertyLootCondition;
-import net.minecraft.predicate.StatePredicate;
-
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CropDrops {
     public static List<CropDrop> crops = new ArrayList<>() {
         {
-            add(new CropDrop(BlockStatePropertyLootCondition.builder(ModNatureBlocks.TOMATO_CROP).properties(StatePredicate.Builder.create().exactMatch(TomatoCropBlock.AGE, 3)),
+            add(new CropDrop(LootItemBlockStatePropertyCondition.builder(ModNatureBlocks.TOMATO_CROP).properties(StatePropertiesPredicate.Builder.create().exactMatch(TomatoCropBlock.AGE, 3)),
                     ModNatureBlocks.TOMATO_CROP, FoodItemsME.TOMATO, ResourceItemsME.TOMATO_SEEDS));
-            add(new CropDrop(BlockStatePropertyLootCondition.builder(ModNatureBlocks.BELL_PEPPER_CROP).properties(StatePredicate.Builder.create().exactMatch(BellpepperCropBlock.AGE, 4)),
+            add(new CropDrop(LootItemBlockStatePropertyCondition.builder(ModNatureBlocks.BELL_PEPPER_CROP).properties(StatePropertiesPredicate.Builder.create().exactMatch(BellpepperCropBlock.AGE, 4)),
                     ModNatureBlocks.BELL_PEPPER_CROP, FoodItemsME.BELL_PEPPER, ResourceItemsME.BELL_PEPPER_SEEDS));
-            add(new CropDrop(BlockStatePropertyLootCondition.builder(ModNatureBlocks.CUCUMBER_CROP).properties(StatePredicate.Builder.create().exactMatch(CucumberCropBlock.AGE, 3)),
+            add(new CropDrop(LootItemBlockStatePropertyCondition.builder(ModNatureBlocks.CUCUMBER_CROP).properties(StatePropertiesPredicate.Builder.create().exactMatch(CucumberCropBlock.AGE, 3)),
                     ModNatureBlocks.CUCUMBER_CROP, FoodItemsME.CUCUMBER, ResourceItemsME.CUCUMBER_SEEDS));
-            add(new CropDrop(BlockStatePropertyLootCondition.builder(ModNatureBlocks.FLAX_CROP).properties(StatePredicate.Builder.create().exactMatch(FlaxCropBlock.AGE, 3)),
+            add(new CropDrop(LootItemBlockStatePropertyCondition.builder(ModNatureBlocks.FLAX_CROP).properties(StatePropertiesPredicate.Builder.create().exactMatch(FlaxCropBlock.AGE, 3)),
                     ModNatureBlocks.FLAX_CROP, ResourceItemsME.FLAX, ResourceItemsME.FLAX_SEEDS));
-            add(new CropDrop(BlockStatePropertyLootCondition.builder(ModNatureBlocks.GARLIC_CROP).properties(StatePredicate.Builder.create().exactMatch(GarlicCropBlock.AGE, 3)),
+            add(new CropDrop(LootItemBlockStatePropertyCondition.builder(ModNatureBlocks.GARLIC_CROP).properties(StatePropertiesPredicate.Builder.create().exactMatch(GarlicCropBlock.AGE, 3)),
                     ModNatureBlocks.GARLIC_CROP, FoodItemsME.GARLIC, FoodItemsME.GARLIC));
-            add(new CropDrop(BlockStatePropertyLootCondition.builder(ModNatureBlocks.LEEK_CROP).properties(StatePredicate.Builder.create().exactMatch(LeekCropBlock.AGE, 3)),
+            add(new CropDrop(LootItemBlockStatePropertyCondition.builder(ModNatureBlocks.LEEK_CROP).properties(StatePropertiesPredicate.Builder.create().exactMatch(LeekCropBlock.AGE, 3)),
                     ModNatureBlocks.LEEK_CROP, FoodItemsME.LEEK, FoodItemsME.LEEK));
-            add(new CropDrop(BlockStatePropertyLootCondition.builder(ModNatureBlocks.LETTUCE_CROP).properties(StatePredicate.Builder.create().exactMatch(LettuceCropBlock.AGE, 3)),
+            add(new CropDrop(LootItemBlockStatePropertyCondition.builder(ModNatureBlocks.LETTUCE_CROP).properties(StatePropertiesPredicate.Builder.create().exactMatch(LettuceCropBlock.AGE, 3)),
                     ModNatureBlocks.LETTUCE_CROP, FoodItemsME.LETTUCE, ResourceItemsME.LETTUCE_SEEDS));
-            add(new CropDrop(BlockStatePropertyLootCondition.builder(ModNatureBlocks.ONION_CROP).properties(StatePredicate.Builder.create().exactMatch(OnionCropBlock.AGE, 3)),
+            add(new CropDrop(LootItemBlockStatePropertyCondition.builder(ModNatureBlocks.ONION_CROP).properties(StatePropertiesPredicate.Builder.create().exactMatch(OnionCropBlock.AGE, 3)),
                     ModNatureBlocks.ONION_CROP, FoodItemsME.ONION, FoodItemsME.ONION));
-            add(new CropDrop(BlockStatePropertyLootCondition.builder(ModNatureBlocks.PIPEWEED_CROP).properties(StatePredicate.Builder.create().exactMatch(PipeweedCropBlock.AGE, 3)),
+            add(new CropDrop(LootItemBlockStatePropertyCondition.builder(ModNatureBlocks.PIPEWEED_CROP).properties(StatePropertiesPredicate.Builder.create().exactMatch(PipeweedCropBlock.AGE, 3)),
                     ModNatureBlocks.PIPEWEED_CROP, ResourceItemsME.PIPEWEED, ResourceItemsME.PIPEWEED_SEEDS));
         }
     };
@@ -55,12 +54,12 @@ public class CropDrops {
     };
 
     public static class CropDrop {
-        public BlockStatePropertyLootCondition.Builder builder;
+        public LootItemBlockStatePropertyCondition.Builder builder;
         public Block crop_block;
         public Item fruit;
         public Item seeds;
 
-        public CropDrop(BlockStatePropertyLootCondition.Builder builder, Block block, Item fruit, Item seeds) {
+        public CropDrop(LootItemBlockStatePropertyCondition.Builder builder, Block block, Item fruit, Item seeds) {
             this.builder = builder;
             this.crop_block = block;
             this.fruit = fruit;

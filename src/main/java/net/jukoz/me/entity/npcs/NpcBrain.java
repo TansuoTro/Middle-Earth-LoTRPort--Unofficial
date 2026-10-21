@@ -9,11 +9,10 @@ import com.mojang.serialization.Dynamic;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.entity.ai.Brain;
-import net.minecraft.entity.ai.brain.MemoryModuleState;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
-import net.minecraft.entity.ai.brain.task.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.GlobalPos;
 import net.jukoz.me.api.entity.ai.brain.MemoryModulesAPI;
@@ -28,8 +27,15 @@ import net.jukoz.me.resources.datas.combatarchetypes.MeleeCombatArchetypeData;
 import net.jukoz.me.resources.datas.combatarchetypes.data.CombatArchetype;
 import net.jukoz.me.resources.datas.combatarchetypes.runtime.MeleeCombatArchetypeRuntimeData;
 import net.jukoz.me.resources.datas.combatarchetypes.runtime.RangedCombatArchetypeRuntimeData;
-
 import java.util.Optional;
+import net.minecraft.world.entity.ai.behavior.DoNothing;
+import net.minecraft.world.entity.ai.behavior.MeleeAttack;
+import net.minecraft.world.entity.ai.behavior.RunOne;
+import net.minecraft.world.entity.ai.behavior.SetWalkTargetFromAttackTargetIfTargetOutOfReach;
+import net.minecraft.world.entity.ai.behavior.StartAttacking;
+import net.minecraft.world.entity.ai.behavior.StopAttackingIfTargetInvalid;
+import net.minecraft.world.entity.ai.behavior.UpdateActivityFromSchedule;
+import net.minecraft.util.Tuple;
 
 public class NpcBrain {
     protected static final ImmutableList<SensorType<? extends Sensor<? super NpcEntity>>> SENSORS;
@@ -67,14 +73,14 @@ public class NpcBrain {
         int attackSpeed = npcEntity.getTickAttackSpeedCooldown();
 
         brain.setTaskList(Activity.FIGHT, ImmutableList.of(
-                        Pair.of(0, UpdateAttackTargetTask.create(NpcBrain::getAttackTarget)),
-                        Pair.of(1, ForgetAttackTargetTask.create()),
-                        Pair.of(2, NpcRangedAttackTask.create(attackSpeed)),
-                        //Pair.of(2, new NpcMountedApproachTask()),
-                        Pair.of(3, NpcRangedApproachTask.create(movementSpeed, 10))
+                        Tuple.of(0, StartAttacking.create(NpcBrain::getAttackTarget)),
+                        Tuple.of(1, StopAttackingIfTargetInvalid.create()),
+                        Tuple.of(2, NpcRangedAttackTask.create(attackSpeed)),
+                        //Tuple.of(2, new NpcMountedApproachTask()),
+                        Tuple.of(3, NpcRangedApproachTask.create(movementSpeed, 10))
                 ),
                 ImmutableSet.of(
-                        Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryModuleState.VALUE_PRESENT)
+                        Tuple.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT)
                 ));
     }
 
@@ -89,24 +95,23 @@ public class NpcBrain {
         npc.getBrain().refreshActivities(npc.getWorld().getTimeOfDay(), npc.getWorld().getTime());
     }
 
-
     private static void addCoreActivities(Brain<NpcEntity> brain) {
         brain.forget(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
 
         brain.setTaskList(Activity.CORE, 0, ImmutableList.of(
-                //UpdateAttackTargetTask.create((world, npc) -> npc.getHurtBy()),
-                UpdateAttackTargetTask.create(NpcBrain::getAttackTarget))
+                //StartAttacking.create((world, npc) -> npc.getHurtBy()),
+                StartAttacking.create(NpcBrain::getAttackTarget))
         );
     }
 
     private static void addIdleActivities(Brain<NpcEntity> brain) {
         brain.setTaskList(Activity.IDLE, ImmutableList.of(
-                Pair.of(1, new RandomTask(ImmutableMap.of(MemoryModuleType.HOME, MemoryModuleState.VALUE_PRESENT),
+                Tuple.of(1, new RunOne(ImmutableMap.of(MemoryModuleType.HOME, MemoryStatus.VALUE_PRESENT),
                     ImmutableList.of(
-                        Pair.of(new WaitTask(20, 100), 3)
+                        Tuple.of(new DoNothing(20, 100), 3)
                 ))),
-                Pair.of(2, UpdateAttackTargetTask.create(NpcBrain::getAttackTarget)),
-                Pair.of(99, ScheduleActivityTask.create())
+                Tuple.of(2, StartAttacking.create(NpcBrain::getAttackTarget)),
+                Tuple.of(99, UpdateActivityFromSchedule.create())
         ));
     }
 
@@ -115,15 +120,15 @@ public class NpcBrain {
         int attackSpeed = npc.getTickAttackSpeedCooldown();
 
         brain.setTaskList(Activity.FIGHT, ImmutableList.of(
-                        Pair.of(0, UpdateAttackTargetTask.create(NpcBrain::getAttackTarget)),
-                        Pair.of(1, ForgetAttackTargetTask.create()),
-                        Pair.of(2, new NpcMountedApproachTask()),
-                        Pair.of(3, new NpcOnGroundApproachTask()),
-                        Pair.of(4, RangedApproachTask.create(movementSpeed)),
-                        Pair.of(5, MeleeAttackTask.create(30))
+                        Tuple.of(0, StartAttacking.create(NpcBrain::getAttackTarget)),
+                        Tuple.of(1, StopAttackingIfTargetInvalid.create()),
+                        Tuple.of(2, new NpcMountedApproachTask()),
+                        Tuple.of(3, new NpcOnGroundApproachTask()),
+                        Tuple.of(4, SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(movementSpeed)),
+                        Tuple.of(5, MeleeAttack.create(30))
                 ),
                 ImmutableSet.of(
-                        Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryModuleState.VALUE_PRESENT)
+                        Tuple.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT)
                 ));
     }
 

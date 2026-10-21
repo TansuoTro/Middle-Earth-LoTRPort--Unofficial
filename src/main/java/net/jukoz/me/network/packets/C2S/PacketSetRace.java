@@ -19,12 +19,9 @@ public class PacketSetRace extends ClientToServerPacket<PacketSetRace>
 
     private final String race;
 
-
     public PacketSetRace(String race){
         this.race = race;
     }
-
-
 
     public PacketSetRace(FriendlyByteBuf buf) {
         this(buf.readString());

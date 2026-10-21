@@ -2,7 +2,6 @@ package net.jukoz.me.datageneration.recipes;
 
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.jukoz.me.MiddleEarth;
@@ -20,7 +19,7 @@ import net.jukoz.me.item.WeaponItemsME;
 import net.jukoz.me.resources.datas.common.DispositionType;
 import net.jukoz.me.utils.ItemTagsME;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.data.server.recipe.RecipeJsonProvider;
+import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.Item;
@@ -31,7 +30,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.resources.ResourceLocation;
@@ -41,7 +39,6 @@ import net.minecraft.resources.ResourceLocation;
  * net.sevenstars.middleearth.datageneration.providers.recipes (RecipeGenerator API rewritten as a plain 1.20.1 FabricRecipeProvider).
  */
 public class InscriptionRecipeProvider extends FabricRecipeProvider {
-    
 
     private Holder<Enchantment> getEnchantment(Enchantment enchantment) {
         return Holder.of(enchantment);
@@ -61,9 +58,7 @@ public class InscriptionRecipeProvider extends FabricRecipeProvider {
     }
 
     @Override
-    public void generate(Consumer<RecipeJsonProvider> exporter) {
-
-        
+    public void generate(Consumer<FinishedRecipe> exporter) {
 
                 //region UNBREAKING
                 InscriptionRecipeJsonBuilder.createInscriptionRecipe(RecipeCategory.MISC,
@@ -799,8 +794,6 @@ public class InscriptionRecipeProvider extends FabricRecipeProvider {
                         .offerTo(exporter, new ResourceLocation(MiddleEarth.MOD_ID, "inscription_silk_touch"));
                 //endregion
 
-
-
                 //region AILMENT PROTECTION
                 InscriptionRecipeJsonBuilder.createInscriptionRecipe(RecipeCategory.MISC,
                                 getEnchantment(EnchantmentsME.AILMENT_PROTECTION), 1, 4)
@@ -1139,7 +1132,5 @@ public class InscriptionRecipeProvider extends FabricRecipeProvider {
                 //endregion
             
     }
-
-
 
 }

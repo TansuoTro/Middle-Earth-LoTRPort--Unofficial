@@ -11,10 +11,10 @@ import net.jukoz.me.item.utils.armor.backAttachments.BackAttachmentsME;
 import net.jukoz.me.item.utils.armor.helmetAttachments.HelmetAttachmentsME;
 import net.jukoz.me.resources.datas.common.DispositionType;
 import net.jukoz.me.resources.datas.structure_manager_datas.SpawnNestNodeData;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import net.minecraft.world.item.Items;
 
 public class LanguageProvider extends FabricLanguageProvider {
 

@@ -2,21 +2,20 @@ package net.jukoz.me.entity.snail;
 
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.ModEntities;
-import net.minecraft.block.*;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.entity.ai.goal.MoveToTargetPosGoal;
-import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.ai.pathing.SpiderNavigation;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.PassiveEntity;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -26,25 +25,28 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelView;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class SnailEntity extends AnimalEntity {
+public class SnailEntity extends Animal {
 
     public static final int CLIMBING_TIME_TRANSITION = 12;
-    private static final TrackedData<Byte> SNAIL_FLAGS;
+    private static final EntityDataAccessor<Byte> SNAIL_FLAGS;
     private int climbingTicks = 0;
     int moreCropsTicks;
 
-    public SnailEntity(EntityType<? extends AnimalEntity> entityType, Level world) {
+    public SnailEntity(EntityType<? extends Animal> entityType, Level world) {
         super(entityType, world);
     }
 
     @Override
     protected void initGoals() {
         this.goalSelector.add(0, new SnailEatCropGoal(this));
-        this.goalSelector.add(1, new WanderAroundFarGoal(this, 0.8));
+        this.goalSelector.add(1, new WaterAvoidingRandomStrollGoal(this, 0.8));
     }
 
-    public static DefaultAttributeContainer.Builder createSnailAttributes() {
+    public static AttributeSupplier.Builder createSnailAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.GENERIC_MAX_HEALTH, 2)
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.05f)
@@ -57,13 +59,12 @@ public class SnailEntity extends AnimalEntity {
     }
     @Nullable
     @Override
-    public PassiveEntity createChild(ServerLevel world, PassiveEntity entity) {
+    public AgeableMob createChild(ServerLevel world, AgeableMob entity) {
         return ModEntities.SNAIL.create(world);
     }
 
-
     static class SnailEatCropGoal
-            extends MoveToTargetPosGoal {
+            extends MoveToBlockGoal {
         private final SnailEntity snail;
         private boolean wantsCrops;
         private boolean hasTarget;
@@ -111,7 +112,7 @@ public class SnailEntity extends AnimalEntity {
         }
 
         @Override
-        protected boolean isTargetPos(WorldView world, BlockPos pos) {
+        protected boolean isTargetPos(LevelReader world, BlockPos pos) {
             BlockState blockState = world.getBlockState(pos);
             if (blockState.isOf(Blocks.FARMLAND) && this.wantsCrops && !this.hasTarget && (blockState = world.getBlockState(pos.up())).isIn(BlockTags.CROPS)) {
                 this.hasTarget = true;
@@ -154,8 +155,8 @@ public class SnailEntity extends AnimalEntity {
         // Snail is not able to jump
     }
 
-    protected EntityNavigation createNavigation(Level world) {
-        return new SpiderNavigation(this, world);
+    protected PathNavigation createNavigation(Level world) {
+        return new WallClimberNavigation(this, world);
     }
 
     protected void initDataTracker() {
@@ -226,6 +227,6 @@ public class SnailEntity extends AnimalEntity {
     }
 
     static {
-        SNAIL_FLAGS = DataTracker.registerData(SnailEntity.class, TrackedDataHandlerRegistry.BYTE);
+        SNAIL_FLAGS = SynchedEntityData.registerData(SnailEntity.class, EntityDataSerializers.BYTE);
     }
 }

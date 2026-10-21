@@ -11,8 +11,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -29,6 +29,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.block.RenderShape;
 
 public class CandleHeapBlock extends Block {
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
@@ -53,8 +54,6 @@ public class CandleHeapBlock extends Block {
         this.setDefaultState(this.stateManager.getDefaultState().with(LIT, false));
     }
 
-
-
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!world.isClient && player.getAbilities().allowModifyWorld) {
@@ -72,14 +71,14 @@ public class CandleHeapBlock extends Block {
         return InteractionResult.SUCCESS;
     }
 
-    protected static void setLit(WorldAccess world, BlockState state, BlockPos pos, boolean lit) {
+    protected static void setLit(LevelAccessor world, BlockState state, BlockPos pos, boolean lit) {
         world.setBlockState(pos, state.with(LIT, lit), 2 | 3);
         if(lit){
-            world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.5F, 1.0F);
+            world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.5F, 1.0F);
         }
     }
 
-    public static void extinguish(@Nullable Entity entity, WorldAccess world, BlockPos pos, BlockState state) {
+    public static void extinguish(@Nullable Entity entity, LevelAccessor world, BlockPos pos, BlockState state) {
         if (world.isClient()) {
             for(int i = 0; i < 20; ++i) {
                 spawnSmokeParticle((Level)world, pos, true, true);
@@ -91,7 +90,7 @@ public class CandleHeapBlock extends Block {
 
     public static void spawnSmokeParticle(Level world, BlockPos pos, boolean isSignal, boolean lotsOfSmoke) {
         RandomSource random = world.getRandom();
-        DefaultParticleType simpleParticleType = isSignal ? ParticleTypes.CAMPFIRE_SIGNAL_SMOKE : ParticleTypes.CAMPFIRE_COSY_SMOKE;
+        SimpleParticleType simpleParticleType = isSignal ? ParticleTypes.CAMPFIRE_SIGNAL_SMOKE : ParticleTypes.CAMPFIRE_COSY_SMOKE;
         world.addImportantParticle(simpleParticleType, true, (double)pos.getX() + 0.5 + random.nextDouble() / 3.0 * (double)(random.nextBoolean() ? 1 : -1), (double)pos.getY() + random.nextDouble() + random.nextDouble(), (double)pos.getZ() + 0.5 + random.nextDouble() / 3.0 * (double)(random.nextBoolean() ? 1 : -1), 0.0, 0.07, 0.0);
         if (lotsOfSmoke) {
             world.addParticle(ParticleTypes.SMOKE, (double)pos.getX() + 0.5 + random.nextDouble() / 4.0 * (double)(random.nextBoolean() ? 1 : -1), (double)pos.getY() + 0.4, (double)pos.getZ() + 0.5 + random.nextDouble() / 4.0 * (double)(random.nextBoolean() ? 1 : -1), 0.0, 0.005, 0.0);
@@ -102,8 +101,8 @@ public class CandleHeapBlock extends Block {
         builder.add(LIT);
     }
 
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderType(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
@@ -124,7 +123,7 @@ public class CandleHeapBlock extends Block {
         if (f < 0.3F) {
             world.addParticle(ParticleTypes.SMOKE, vec3d.x, vec3d.y, vec3d.z, 0.0, 0.0, 0.0);
             if (f < 0.17F) {
-                world.playSound(vec3d.x + 0.5, vec3d.y + 0.5, vec3d.z + 0.5, SoundEvents.BLOCK_CANDLE_AMBIENT, SoundCategory.BLOCKS, 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
+                world.playSound(vec3d.x + 0.5, vec3d.y + 0.5, vec3d.z + 0.5, SoundEvents.BLOCK_CANDLE_AMBIENT, SoundSource.BLOCKS, 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
             }
         }
 

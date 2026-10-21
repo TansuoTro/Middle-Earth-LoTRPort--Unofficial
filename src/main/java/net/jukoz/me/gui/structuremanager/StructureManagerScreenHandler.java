@@ -2,9 +2,9 @@ package net.jukoz.me.gui.structuremanager;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.screen.ScreenHandler;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -14,14 +14,14 @@ import net.jukoz.me.network.packets.C2S.PacketStructureManagerRespawnEntities;
 import net.jukoz.me.network.packets.C2S.PacketStructureManagerShowAllEntities;
 import net.jukoz.me.network.packets.C2S.PacketStructureManagerUpdateBlockEntityRequest;
 
-public class StructureManagerScreenHandler extends ScreenHandler {
+public class StructureManagerScreenHandler extends AbstractContainerMenu {
 
     private final Level world;
     private StructureManagerScreenData data;
     StructureManagerBlockEntity blockEntity;
 
     // Client side Constructor
-    public StructureManagerScreenHandler(int syncId, PlayerInventory playerInventory, StructureManagerScreenData structureManagerScreenData) {
+    public StructureManagerScreenHandler(int syncId, Inventory playerInventory, StructureManagerScreenData structureManagerScreenData) {
         super(ModScreenHandlers.STRUCTURE_MANAGER_SCREEN_HANDLER, syncId);
         this.world = playerInventory.player.getWorld();
         this.data = structureManagerScreenData;
@@ -83,4 +83,3 @@ public class StructureManagerScreenHandler extends ScreenHandler {
         ClientPlayNetworking.send(new PacketStructureManagerRespawnEntities(this.data.getPos()));
     }
 }
-

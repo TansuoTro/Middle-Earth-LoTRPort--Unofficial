@@ -13,14 +13,13 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-
 import java.util.LinkedList;
 import java.util.List;
 
 public class ModItemGroups {
 
     public static final List<ItemStack> STONE_BLOCKS_CONTENTS = new LinkedList<>();
-    public static final ItemGroup STONE_BLOCKS = FabricItemGroup.builder()
+    public static final CreativeModeTab STONE_BLOCKS = FabricItemGroup.builder()
             .displayName(Component.translatable("itemGroup." + MiddleEarth.MOD_ID + ".stone_blocks"))
             .icon(() -> new ItemStack(StoneBlockSets.CALCITE_BRICKS.base().asItem()))
             .entries((displayContext, entries) -> {
@@ -31,7 +30,7 @@ public class ModItemGroups {
             .build();
 
     public static final List<ItemStack> WOOD_BLOCKS_CONTENTS = new LinkedList<>();
-    public static final ItemGroup WOOD_BLOCKS = FabricItemGroup.builder()
+    public static final CreativeModeTab WOOD_BLOCKS = FabricItemGroup.builder()
             .displayName(Component.translatable("itemGroup." + MiddleEarth.MOD_ID + ".wood_blocks"))
             .icon(() -> new ItemStack(WoodBlockSets.WILLOW_SET.log().asItem()))
             .entries((displayContext, entries) -> {
@@ -42,7 +41,7 @@ public class ModItemGroups {
             .build();
 
     public static final List<ItemStack> MISC_BLOCKS_CONTENTS = new LinkedList<>();
-    public static final ItemGroup MISC_BLOCKS = FabricItemGroup.builder()
+    public static final CreativeModeTab MISC_BLOCKS = FabricItemGroup.builder()
             .displayName(Component.translatable("itemGroup." + MiddleEarth.MOD_ID + ".misc_blocks"))
             .icon(() -> new ItemStack(net.jukoz.me.compat.MEBlocksLegacy.STRAW_BLOCK.asItem()))
             .entries((displayContext, entries) -> {
@@ -53,7 +52,7 @@ public class ModItemGroups {
             .build();
 
     public static final List<ItemStack> DECORATIVES_BLOCKS_CONTENT = new LinkedList<>();
-    public static final ItemGroup DECORATIVES_BLOCKS = FabricItemGroup.builder()
+    public static final CreativeModeTab DECORATIVES_BLOCKS = FabricItemGroup.builder()
             .displayName(Component.translatable("itemGroup." + MiddleEarth.MOD_ID + ".decorative_blocks"))
             .icon(() -> new ItemStack(ModDecorativeItems.DWARVEN_LANTERN))
             .entries((displayContext, entries) -> {
@@ -64,7 +63,7 @@ public class ModItemGroups {
             .build();
 
     public static final List<ItemStack> NATURE_BLOCKS_CONTENTS = new LinkedList<>();
-    public static final ItemGroup NATURE_BLOCKS = FabricItemGroup.builder()
+    public static final CreativeModeTab NATURE_BLOCKS = FabricItemGroup.builder()
             .displayName(Component.translatable("itemGroup." + MiddleEarth.MOD_ID + ".nature_blocks"))
             .icon(() -> new ItemStack(ModNatureBlocks.HEATHER_BUSH.asItem()))
             .entries((displayContext, entries) -> {
@@ -75,7 +74,7 @@ public class ModItemGroups {
             .build();
 
     public static final List<ItemStack> FOOD_CONTENTS = new LinkedList<>();
-    public static final ItemGroup FOOD = FabricItemGroup.builder()
+    public static final CreativeModeTab FOOD = FabricItemGroup.builder()
             .displayName(Component.translatable("itemGroup." + MiddleEarth.MOD_ID + ".food_items"))
             .icon(() -> new ItemStack(ModFoodItems.LEMBAS))
             .entries((displayContext, entries) -> {
@@ -86,7 +85,7 @@ public class ModItemGroups {
             .build();
 
     public static final List<ItemStack> WEAPONS_CONTENTS = new LinkedList<>();
-    public static final ItemGroup WEAPONS = FabricItemGroup.builder()
+    public static final CreativeModeTab WEAPONS = FabricItemGroup.builder()
             .displayName(Component.translatable("itemGroup." + MiddleEarth.MOD_ID + ".weapon_items"))
             .icon(() -> new ItemStack(ModWeaponItems.GONDOR_SWORD))
             .entries((displayContext, entries) -> {
@@ -97,7 +96,7 @@ public class ModItemGroups {
             .build();
 
     public static final List<ItemStack> EQUIPMENT_CONTENTS = new LinkedList<>();
-    public static final ItemGroup EQUIPMENT = FabricItemGroup.builder()
+    public static final CreativeModeTab EQUIPMENT = FabricItemGroup.builder()
             .displayName(Component.translatable("itemGroup." + MiddleEarth.MOD_ID + ".equipment_items"))
             .icon(() -> new ItemStack(ModEquipmentItems.GONDORIAN_FOUNTAIN_GUARD_HELMET))
             .entries((displayContext, entries) -> {
@@ -108,7 +107,7 @@ public class ModItemGroups {
             .build();
 
     public static final List<ItemStack> TOOLS_CONTENTS = new LinkedList<>();
-    public static final ItemGroup TOOLS = FabricItemGroup.builder()
+    public static final CreativeModeTab TOOLS = FabricItemGroup.builder()
             .displayName(Component.translatable("itemGroup." + MiddleEarth.MOD_ID + ".tool_items"))
             .icon(() -> new ItemStack(ModToolItems.DWARVEN_STEEL_PICKAXE))
             .entries((displayContext, entries) -> {
@@ -119,7 +118,7 @@ public class ModItemGroups {
             .build();
 
     public static final List<ItemStack> RESOURCES_CONTENTS = new LinkedList<>();
-    public static final ItemGroup RESOURCES = FabricItemGroup.builder()
+    public static final CreativeModeTab RESOURCES = FabricItemGroup.builder()
             .displayName(Component.translatable("itemGroup." + MiddleEarth.MOD_ID + ".resource_items"))
             .icon(() -> new ItemStack(ModResourceItems.MITHRIL_INGOT))
             .entries((displayContext, entries) -> {
@@ -131,7 +130,7 @@ public class ModItemGroups {
 
     public static final List<ItemStack> SPAWN_EGGS_CONTENTS = new LinkedList<>();
 
-    public static final ItemGroup SPAWN_EGGS = FabricItemGroup.builder()
+    public static final CreativeModeTab SPAWN_EGGS = FabricItemGroup.builder()
             .displayName(Component.translatable("itemGroup." + MiddleEarth.MOD_ID + ".spawn_egg_items"))
             .icon(() -> new ItemStack(ModEggItems.HOBBIT_CIVILIAN_SPAWN_EGG))
             .entries((displayContext, entries) -> {

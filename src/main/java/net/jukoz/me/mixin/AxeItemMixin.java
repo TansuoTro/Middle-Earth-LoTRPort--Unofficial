@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(AxeItem.class)
 public class AxeItemMixin {
     @Redirect(
-            method = "shouldCancelStripAttempt(Lnet/minecraft/item/ItemUsageContext;)Z",
+            method = "shouldCancelStripAttempt(Lnet/minecraft/item/UseOnContext;)Z",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"

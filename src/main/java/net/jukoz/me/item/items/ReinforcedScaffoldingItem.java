@@ -3,16 +3,16 @@ package net.jukoz.me.item.items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.item.ScaffoldingItem;
+import net.minecraft.world.item.ScaffoldingBlockItem;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.block.special.ReinforcedScaffoldingBlock;
 
-public class ReinforcedScaffoldingItem extends ScaffoldingItem {
+public class ReinforcedScaffoldingItem extends ScaffoldingBlockItem {
     public ReinforcedScaffoldingItem(Block block, Settings settings) {
         super(block, settings);
     }
@@ -38,7 +38,7 @@ public class ReinforcedScaffoldingItem extends ScaffoldingItem {
                 if (!world.isClient && !world.isInBuildLimit(mutable)) {
                     if (context.getPlayer() instanceof ServerPlayer serverPlayer && mutable.getY() > world.getTopY()) {
                         serverPlayer.sendMessageToClient(
-                                Component.translatable("build.tooHigh", world.getTopY()).formatted(Formatting.RED),
+                                Component.translatable("build.tooHigh", world.getTopY()).formatted(ChatFormatting.RED),
                                 true
                         );
                     }

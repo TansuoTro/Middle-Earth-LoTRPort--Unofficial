@@ -17,9 +17,9 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.compat.REICommonPluginME;
 import net.jukoz.me.gui.forge.ForgeAlloyingScreen;
-
 import java.util.LinkedList;
 import java.util.List;
+import net.minecraft.client.gui.layouts.LayoutElement;
 
 @OnlyIn(Dist.CLIENT)
 public class AlloyingCategory implements DisplayCategory<AlloyingDisplay> {
@@ -46,9 +46,9 @@ public class AlloyingCategory implements DisplayCategory<AlloyingDisplay> {
     }
 
     @Override
-    public List<Widget> setupDisplay(AlloyingDisplay display, Rectangle bounds) {
+    public List<LayoutElement> setupDisplay(AlloyingDisplay display, Rectangle bounds) {
         final Point startPoint = new Point(bounds.getCenterX() - 87, bounds.getCenterY() - 35);
-        List<Widget> widgets = new LinkedList<>();
+        List<LayoutElement> widgets = new LinkedList<>();
 
         widgets.add(Widgets.createTexturedWidget(TEXTURE, new Rectangle(startPoint.x, startPoint.y, 175, 82)));
 

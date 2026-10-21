@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
-
 import java.util.List;
 
 /// StructureManagerData is used by StructureManagers. It's a data entity that stores the different properties necessary for

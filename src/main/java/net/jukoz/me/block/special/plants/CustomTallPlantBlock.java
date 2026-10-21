@@ -1,8 +1,8 @@
 package net.jukoz.me.block.special.plants;
 
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.block.Fertilizable;
-import net.minecraft.block.TallPlantBlock;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.BlockPos;
@@ -10,7 +10,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelView;
 
-public class CustomTallPlantBlock extends TallPlantBlock implements Fertilizable {
+public class CustomTallPlantBlock extends DoublePlantBlock implements BonemealableBlock {
     private final boolean randomBoneMeal;
     public CustomTallPlantBlock(Settings settings, boolean random) {
         super(settings);
@@ -18,7 +18,7 @@ public class CustomTallPlantBlock extends TallPlantBlock implements Fertilizable
     }
 
     @Override
-    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isFertilizable(LevelReader world, BlockPos pos, BlockState state, boolean isClient) {
         return true;
     }
 

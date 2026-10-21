@@ -4,11 +4,12 @@ import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.function.ValueLists;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.ByIdMap;
 import java.util.function.IntFunction;
+import net.minecraft.network.FriendlyByteBuf;
 
-public enum BlockAuthor implements StringIdentifiable {
+public enum BlockAuthor implements StringRepresentable {
     BOENNDAL(0, "Boenndal"),
     SCOSHER(1, "Scosher"),
     COFFEE_VIKING(2, "CoffeeViking"),
@@ -17,11 +18,11 @@ public enum BlockAuthor implements StringIdentifiable {
     ANGMARZKU(5, "Angmarzku")
     ;
 
-    private static final IntFunction<BlockAuthor> BY_ID = ValueLists.createIdToValueFunction(BlockAuthor::getId, BlockAuthor.values(), ValueLists.OutOfBoundsHandling.ZERO);;
+    private static final IntFunction<BlockAuthor> BY_ID = ByIdMap.createIdToValueFunction(BlockAuthor::getId, BlockAuthor.values(), ByIdMap.OutOfBoundsHandling.ZERO);;
     private final int id;
     private final String authorName;
 
-    public static final Codec<BlockAuthor> CODEC = StringIdentifiable.createCodec(BlockAuthor::values);
+    public static final Codec<BlockAuthor> CODEC = StringRepresentable.createCodec(BlockAuthor::values);
     public static final PacketCodec<net.minecraft.network.FriendlyByteBuf, BlockAuthor> PACKET_CODEC = PacketCodecs.indexed(BY_ID, BlockAuthor::getId);
 
     BlockAuthor(int id, String authorName) {

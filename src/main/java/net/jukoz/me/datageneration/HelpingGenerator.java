@@ -13,10 +13,20 @@ import net.jukoz.me.block.utils.setBuilders.WoodBlockSetBuilder;
 import net.jukoz.me.datageneration.content.loot_tables.BlockDrops;
 import net.jukoz.me.datageneration.content.models.*;
 import net.jukoz.me.datageneration.content.tags.*;
-import net.minecraft.block.*;
 import net.minecraft.core.registries.Registries;
-
 import java.util.Objects;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ButtonBlock;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.FenceGateBlock;
+import net.minecraft.world.level.block.IronBarsBlock;
+import net.minecraft.world.level.block.PressurePlateBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.world.level.block.WallBlock;
 
 /**
  * Port of the upstream (1.21.x) HelpingGenerator: every registered block set builder is
@@ -239,7 +249,7 @@ public class HelpingGenerator {
                 || blockName.contains("pillar");
         final boolean woodModel = (blockName.contains("_wood") && !(blockName.contains("gilded") || blockName.contains("beam"))) || blockName.contains("hyphae");
 
-        if (block instanceof PillarBlock) {
+        if (block instanceof RotatedPillarBlock) {
             if (woodModel) {
                 SimpleBlockModel.woodBlocks.add(block);
             } else {
@@ -265,7 +275,7 @@ public class HelpingGenerator {
             } else {
                 SimpleSlabModel.slabs.add(new SimpleSlabModel.Slab(base, block));
             }
-        } else if (block instanceof StairsBlock) {
+        } else if (block instanceof StairBlock) {
             if (blockName.contains("stripped")) {
                 SimpleStairModel.strippedStairs.add(new SimpleStairModel.Stair(base, block));
             } else if (woodModel) {
@@ -292,7 +302,7 @@ public class HelpingGenerator {
         } else if (block instanceof FenceGateBlock fenceGateBlock) {
             FenceGates.fenceGates.add(fenceGateBlock);
             SimpleFenceGateModel.blocks.add(new SimpleFenceGateModel.FenceGate(base, fenceGateBlock));
-        } else if (block instanceof PaneBlock paneBlock) {
+        } else if (block instanceof IronBarsBlock paneBlock) {
             SimplePaneModel.panes.add(new SimplePaneModel.Pane(base, paneBlock));
         } else if (block instanceof PressurePlateBlock pressurePlateBlock) {
             PressurePlates.pressurePlates.add(pressurePlateBlock);
@@ -305,7 +315,7 @@ public class HelpingGenerator {
             }
             Buttons.buttons.add(buttonBlock);
             SimpleButtonModel.buttons.add(new SimpleButtonModel.Button(base, buttonBlock));
-        } else if (block instanceof TrapdoorBlock trapdoorBlock) {
+        } else if (block instanceof TrapDoorBlock trapdoorBlock) {
             Trapdoors.trapdoors.add(trapdoorBlock);
             SimpleTrapDoorModel.trapdoors.add(new SimpleTrapDoorModel.Trapdoor(base, trapdoorBlock, baseName.contains("planks")));
         } else if (block instanceof DoorBlock doorBlock) {

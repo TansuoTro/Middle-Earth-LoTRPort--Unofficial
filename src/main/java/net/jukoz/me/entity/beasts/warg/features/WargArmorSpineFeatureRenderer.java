@@ -1,14 +1,13 @@
 package net.jukoz.me.entity.beasts.warg.features;
+
 import net.jukoz.me.entity.beasts.warg.WargEntity;
 import net.jukoz.me.compat.client.render.MEFeatureRenderer;
-
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.jukoz.me.compat.client.render.equipment.EquipmentRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRendererContext;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -23,13 +22,13 @@ import net.jukoz.me.item.EquipmentItemsME;
 public class WargArmorSpineFeatureRenderer extends MEFeatureRenderer<WargEntity, WargEntityRenderState, WargModel> {
     private final WargArmorBaseAddonsModel model;
 
-    public WargArmorSpineFeatureRenderer(FeatureRendererContext<WargEntity, WargModel> context, LoadedEntityModelsCompat loader, EquipmentRenderer equipmentRenderer) {
+    public WargArmorSpineFeatureRenderer(RenderLayerParent<WargEntity, WargModel> context, LoadedEntityModelsCompat loader, EquipmentRenderer equipmentRenderer) {
         super(context);
         this.model = new WargArmorBaseAddonsModel(loader.getModelPart(EntityModelLayersME.WARG_ARMOR_ADDONS_SPINE));
     }
 
     @Override
-    public void render(PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, WargEntityRenderState state, float limbAngle, float limbDistance) {
+    public void render(PoseStack matrices, MultiBufferSource vertexConsumers, int light, WargEntityRenderState state, float limbAngle, float limbDistance) {
         ItemStack itemStack = state.armor;
         if(itemStack.isOf(EquipmentItemsME.WARG_REINFORCED_LEATHER_ARMOR)) {
             VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(new ResourceLocation(MiddleEarth.MOD_ID, "textures/entities/warg/feature/warg_armor_bone_spine_addon.png")), true, itemStack.hasGlint());

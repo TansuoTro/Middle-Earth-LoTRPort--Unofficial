@@ -11,15 +11,15 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.util.function.BooleanBiFunction;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.VoxelShapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.stream.Stream;
+import net.minecraft.world.phys.shapes.Shapes;
 
 public class ElvenTreatedAnvilblock extends AbstractShapingAnvilBlock {
     public ElvenTreatedAnvilblock(Settings settings) {
@@ -36,7 +36,7 @@ public class ElvenTreatedAnvilblock extends AbstractShapingAnvilBlock {
                         Block.createCuboidShape(4, 13, 6, 12, 16, 10),
                         Block.createCuboidShape(0, 14, 7, 4, 16, 9),
                         Block.createCuboidShape(5, 5, 6, 11, 13, 10)
-                ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+                ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
             }
             case SOUTH -> {
                 return Stream.of(
@@ -45,7 +45,7 @@ public class ElvenTreatedAnvilblock extends AbstractShapingAnvilBlock {
                         Block.createCuboidShape(4, 13, 6, 12, 16, 10),
                         Block.createCuboidShape(12, 14, 7, 16, 16, 9),
                         Block.createCuboidShape(5, 5, 6, 11, 13, 10)
-                ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+                ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
             }
             case EAST -> {
                 return Stream.of(
@@ -54,7 +54,7 @@ public class ElvenTreatedAnvilblock extends AbstractShapingAnvilBlock {
                         Block.createCuboidShape(6, 13, 4, 10, 16, 12),
                         Block.createCuboidShape(7, 14, 0, 9, 16, 4),
                         Block.createCuboidShape(6, 5, 5, 10, 13, 11)
-                ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+                ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
             }
             case WEST -> {
                 return Stream.of(
@@ -63,15 +63,13 @@ public class ElvenTreatedAnvilblock extends AbstractShapingAnvilBlock {
                         Block.createCuboidShape(6, 13, 4, 10, 16, 12),
                         Block.createCuboidShape(7, 14, 12, 9, 16, 16),
                         Block.createCuboidShape(6, 5, 5, 10, 13, 11)
-                ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+                ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
             }
             default -> {
                 return Block.createCuboidShape(1, 0, 1, 15, 16, 15);
             }
         }
     }
-
-
 
     @Nullable
     @Override

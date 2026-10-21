@@ -1,12 +1,12 @@
 package net.jukoz.me.item.items.weapons.artefacts;
-import net.jukoz.me.entity.EntityAttributesME;
 
+import net.jukoz.me.entity.EntityAttributesME;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.compat.BluntWeapon;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.world.item.Tier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.item.items.weapons.CustomSpearWeaponItem;
@@ -14,7 +14,7 @@ import net.jukoz.me.item.utils.WeaponTypesME;
 
 public class ArtefactCustomSpearWeaponItem extends CustomSpearWeaponItem {
 
-    public ArtefactCustomSpearWeaponItem(ToolMaterial toolMaterial, Item.Settings settings) {
+    public ArtefactCustomSpearWeaponItem(Tier toolMaterial, Item.Settings settings) {
         super(toolMaterial, settings);
         this.type = WeaponTypesME.SPEAR;
     }

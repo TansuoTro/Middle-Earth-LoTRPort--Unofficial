@@ -30,7 +30,6 @@ public abstract class BlockMixin {
 
     @Shadow protected abstract Block asBlock();
 
-
     @Inject(at = @At("HEAD"), method = "onDestroyedByExplosion")
     private void onDestroyedByExplosion(ServerLevel world, BlockPos pos, Explosion explosion, CallbackInfo ci) {
         //TODO fix this
@@ -59,7 +58,7 @@ public abstract class BlockMixin {
     }
 
     @Inject(method = "sideCoversSmallSquare", at = @At("RETURN"), cancellable = true)
-    private static void sideCoversSmallSquare(WorldView world, BlockPos pos, Direction side, CallbackInfoReturnable<Boolean> cir) {
+    private static void sideCoversSmallSquare(LevelReader world, BlockPos pos, Direction side, CallbackInfoReturnable<Boolean> cir) {
         BlockState blockState = world.getBlockState(pos);
         if(blockState.getBlock() == ModDecorativeBlocks.ROPE) cir.setReturnValue(true);
     }

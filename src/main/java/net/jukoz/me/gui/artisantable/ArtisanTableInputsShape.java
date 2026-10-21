@@ -1,7 +1,6 @@
 package net.jukoz.me.gui.artisantable;
 
 import net.jukoz.me.MiddleEarth;
-
 import java.util.ArrayList;
 import java.util.List;
 

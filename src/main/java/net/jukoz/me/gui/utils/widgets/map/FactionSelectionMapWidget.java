@@ -4,13 +4,12 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.onboarding.onboarding_faction.OnboardingFactionScreenController;
 import net.jukoz.me.gui.utils.widgets.map.types.MapMarkerType;
 import net.jukoz.me.resources.datas.factions.data.SpawnData;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import org.joml.Vector2d;
 import org.joml.Vector2i;
-
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +27,7 @@ public class FactionSelectionMapWidget extends MapWidget {
                     new Rectangle2D.Double(0, 0, uiWidth, uiHeight - 11));
             spawnMapMarkers[i].setType(MapMarkerType.DYNAMIC_SPAWN);
         }
-        MapMarkerWidget.setTitle(Component.translatable("widget.%s.spawn_tooltip_title".formatted(MiddleEarth.MOD_ID)).formatted(Formatting.UNDERLINE));
+        MapMarkerWidget.setTitle(Component.translatable("widget.%s.spawn_tooltip_title".formatted(MiddleEarth.MOD_ID)).formatted(ChatFormatting.UNDERLINE));
     }
     public ButtonWidget[] getButtons() {
         ButtonWidget[] spawnButtonArray = new ButtonWidget[spawnMapMarkers.length];
@@ -60,7 +59,7 @@ public class FactionSelectionMapWidget extends MapWidget {
     }
 
     @Override
-    protected void draw(DrawContext context, int startX, int startY) {
+    protected void draw(GuiGraphics context, int startX, int startY) {
         super.draw(context, startX, startY);
         if(spawns == null || spawns.isEmpty()) return;
 
@@ -74,18 +73,18 @@ public class FactionSelectionMapWidget extends MapWidget {
                 mapMarker.computeFromMapPosition(this, coordinates);
                 mapMarker.setContent(
                         List.of(
-                                Component.translatable("spawn." + spawnData.getIdentifier().toTranslationKey()).formatted(Formatting.GOLD),
-                                Component.translatable("widget.%s.marker.margin_front".formatted(MiddleEarth.MOD_ID)).append(Component.translatable("spawn.%s.coordinates_base.dynamic".formatted(MiddleEarth.MOD_ID)).formatted(Formatting.GRAY)
-                                        .append(Component.translatable("spawn.%s.coordinates_base_values.dynamic".formatted(MiddleEarth.MOD_ID), spawnData.getWorldCoordinates().x, spawnData.getWorldCoordinates().z).formatted(Formatting.WHITE)))
+                                Component.translatable("spawn." + spawnData.getIdentifier().toTranslationKey()).formatted(ChatFormatting.GOLD),
+                                Component.translatable("widget.%s.marker.margin_front".formatted(MiddleEarth.MOD_ID)).append(Component.translatable("spawn.%s.coordinates_base.dynamic".formatted(MiddleEarth.MOD_ID)).formatted(ChatFormatting.GRAY)
+                                        .append(Component.translatable("spawn.%s.coordinates_base_values.dynamic".formatted(MiddleEarth.MOD_ID), spawnData.getWorldCoordinates().x, spawnData.getWorldCoordinates().z).formatted(ChatFormatting.WHITE)))
                         ));
             } else {
                 mapMarker.setType(MapMarkerType.CUSTOM_SPAWN);
                 mapMarker.computeFromWorldPosition(this, coordinates);
                 mapMarker.setContent(
                         List.of(
-                                Component.translatable("spawn." + spawnData.getIdentifier().toTranslationKey()).formatted(Formatting.GOLD),
-                                Component.translatable("widget.%s.marker.margin_front".formatted(MiddleEarth.MOD_ID)).append(Component.translatable("spawn.%s.coordinates_base.custom".formatted(MiddleEarth.MOD_ID)).formatted(Formatting.GRAY)
-                                        .append(Component.translatable("spawn.%s.coordinates_base_values.custom".formatted(MiddleEarth.MOD_ID), spawnData.getWorldCoordinates().x, spawnData.getWorldCoordinates().y, spawnData.getWorldCoordinates().z).formatted(Formatting.WHITE)))
+                                Component.translatable("spawn." + spawnData.getIdentifier().toTranslationKey()).formatted(ChatFormatting.GOLD),
+                                Component.translatable("widget.%s.marker.margin_front".formatted(MiddleEarth.MOD_ID)).append(Component.translatable("spawn.%s.coordinates_base.custom".formatted(MiddleEarth.MOD_ID)).formatted(ChatFormatting.GRAY)
+                                        .append(Component.translatable("spawn.%s.coordinates_base_values.custom".formatted(MiddleEarth.MOD_ID), spawnData.getWorldCoordinates().x, spawnData.getWorldCoordinates().y, spawnData.getWorldCoordinates().z).formatted(ChatFormatting.WHITE)))
                         ));
             }
 

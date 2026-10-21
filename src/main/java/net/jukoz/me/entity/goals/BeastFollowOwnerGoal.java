@@ -6,11 +6,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.pathing.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelView;
-
 import java.util.EnumSet;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
+import net.minecraft.world.entity.ai.control.Control;
 
 public class BeastFollowOwnerGoal extends Goal {
     public static final int TELEPORT_DISTANCE = 12;
@@ -19,9 +23,9 @@ public class BeastFollowOwnerGoal extends Goal {
     private static final int VERTICAL_VARIATION = 1;
     private final BeastEntity mob;
     private LivingEntity owner;
-    private final WorldView world;
+    private final LevelReader world;
     private final double speed;
-    private final EntityNavigation navigation;
+    private final PathNavigation navigation;
     private int updateCountdownTicks;
     private final float maxDistance;
     private final float minDistance;
@@ -37,7 +41,7 @@ public class BeastFollowOwnerGoal extends Goal {
         this.maxDistance = maxDistance;
         this.leavesAllowed = leavesAllowed;
         this.setControls(EnumSet.of(Goal.Control.MOVE, Goal.Control.LOOK));
-        if (!(mob.getNavigation() instanceof MobNavigation) && !(mob.getNavigation() instanceof BirdNavigation)) {
+        if (!(mob.getNavigation() instanceof GroundPathNavigation) && !(mob.getNavigation() instanceof FlyingPathNavigation)) {
             throw new IllegalArgumentException("Unsupported mob type for BeastFollowOwnerGoal");
         }
     }
@@ -79,15 +83,15 @@ public class BeastFollowOwnerGoal extends Goal {
     @Override
     public void start() {
         this.updateCountdownTicks = 0;
-        this.oldWaterPathfindingPenalty = this.mob.getPathfindingPenalty(PathNodeType.WATER);
-        this.mob.setPathfindingPenalty(PathNodeType.WATER, 0.0f);
+        this.oldWaterPathfindingPenalty = this.mob.getPathfindingPenalty(BlockPathTypes.WATER);
+        this.mob.setPathfindingPenalty(BlockPathTypes.WATER, 0.0f);
     }
 
     @Override
     public void stop() {
         this.owner = null;
         this.navigation.stop();
-        this.mob.setPathfindingPenalty(PathNodeType.WATER, this.oldWaterPathfindingPenalty);
+        this.mob.setPathfindingPenalty(BlockPathTypes.WATER, this.oldWaterPathfindingPenalty);
     }
 
     @Override
@@ -129,8 +133,8 @@ public class BeastFollowOwnerGoal extends Goal {
     }
 
     private boolean canTeleportTo(BlockPos pos) {
-        PathNodeType pathNodeType = LandPathNodeMaker.getLandNodeType(this.world, pos.mutableCopy());
-        if (pathNodeType != PathNodeType.WALKABLE) {
+        BlockPathTypes pathNodeType = WalkNodeEvaluator.getLandNodeType(this.world, pos.mutableCopy());
+        if (pathNodeType != BlockPathTypes.WALKABLE) {
             return false;
         }
         BlockState blockState = this.world.getBlockState(pos.down());

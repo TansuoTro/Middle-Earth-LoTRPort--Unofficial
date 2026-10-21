@@ -2,6 +2,7 @@ package net.jukoz.me.item.dataComponents;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.chat.Component;
 
 /** Heat level of a forge workpiece. */
 public record TemperatureDataComponent(int temperature) implements net.jukoz.me.compat.TooltipAppender {
@@ -13,7 +14,7 @@ public record TemperatureDataComponent(int temperature) implements net.jukoz.me.
             ComponentCodecs.alternative(BASE_CODEC, Codec.INT, TemperatureDataComponent::new);
 
     @Override
-    public void appendTooltip(net.minecraft.world.item.ItemStack stack, net.minecraft.client.item.TooltipContext context,
+    public void appendTooltip(net.minecraft.world.item.ItemStack stack, net.minecraft.world.item.TooltipFlag context,
                               java.util.List<net.minecraft.network.chat.Component> tooltip) {
         if (temperature < 0) return;
         int tier = Math.min(4, temperature / 20);

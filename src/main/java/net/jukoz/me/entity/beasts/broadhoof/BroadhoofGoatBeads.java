@@ -3,9 +3,8 @@ package net.jukoz.me.entity.beasts.broadhoof;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.util.function.ValueLists;
+import net.minecraft.util.ByIdMap;
 import net.jukoz.me.item.ResourceItemsME;
-
 import java.util.Map;
 import java.util.function.IntFunction;
 
@@ -33,8 +32,8 @@ public enum BroadhoofGoatBeads {
         return BEARD_MATERIALS.get(stack.getItem());
     }
 
-    private static final IntFunction<BroadhoofGoatBeads> INDEX_MAPPER = ValueLists.createIdToValueFunction(
-            BroadhoofGoatBeads::getIndex, values(), ValueLists.OutOfBoundsHandling.WRAP
+    private static final IntFunction<BroadhoofGoatBeads> INDEX_MAPPER = ByIdMap.createIdToValueFunction(
+            BroadhoofGoatBeads::getIndex, values(), ByIdMap.OutOfBoundsHandling.WRAP
     );
     private final int index;
 

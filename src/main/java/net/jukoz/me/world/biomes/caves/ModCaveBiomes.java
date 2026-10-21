@@ -1,7 +1,7 @@
 package net.jukoz.me.world.biomes.caves;
 
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.entity.SpawnGroup;
+import net.minecraft.world.entity.MobCategory;
 import net.jukoz.me.world.biomes.BiomeColorsDTO;
 import net.jukoz.me.world.biomes.MEBiomeKeys;
 import net.jukoz.me.world.biomes.surface.BiomeData;
@@ -10,17 +10,23 @@ import net.jukoz.me.world.features.vegetation.ModVegetationPlacedFeatures;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeEffects;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.gen.feature.*;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import net.minecraft.data.worldgen.BiomeDefaultFeatures;
+import net.minecraft.data.worldgen.placement.CavePlacements;
+import net.minecraft.data.worldgen.placement.MiscOverworldPlacements;
+import net.minecraft.data.worldgen.placement.NetherPlacements;
+import net.minecraft.data.worldgen.placement.OrePlacements;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.biome.BiomeSpecialEffects;
 
 public class ModCaveBiomes {
     public static final int defaultSky = 7907327;
@@ -39,56 +45,56 @@ public class ModCaveBiomes {
     public static CaveBiomesMap haradCaves = new CaveBiomesMap();
 
     public static void init() {
-        defaultCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.LIMESTONE_CAVE, new Vec2f(-1.0f,1.0f)));
-        defaultCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DRIPSTONE_CAVE, new Vec2f(0.0f,1.0f)));
-        defaultCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DOLOMITE_CAVE, new Vec2f(1.0f,1.0f)));
-        defaultCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.BASIC_CAVE, new Vec2f(0.0f,0.0f)));
-        defaultCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.LUSH_CAVE, new Vec2f(-1.0f,-1.1f)));
-        defaultCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.MUD_CAVE, new Vec2f(0f,-1.1f)));
-        defaultCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.FUNGUS_CAVE, new Vec2f(1.0f,-1.1f)));
+        defaultCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.LIMESTONE_CAVE, new Vec2(-1.0f,1.0f)));
+        defaultCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DRIPSTONE_CAVE, new Vec2(0.0f,1.0f)));
+        defaultCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DOLOMITE_CAVE, new Vec2(1.0f,1.0f)));
+        defaultCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.BASIC_CAVE, new Vec2(0.0f,0.0f)));
+        defaultCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.LUSH_CAVE, new Vec2(-1.0f,-1.1f)));
+        defaultCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.MUD_CAVE, new Vec2(0f,-1.1f)));
+        defaultCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.FUNGUS_CAVE, new Vec2(1.0f,-1.1f)));
 
-        elvenCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.LIMESTONE_CAVE, new Vec2f(-1.0f,1.0f)));
-        elvenCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.BASIC_CAVE, new Vec2f(0.0f,1.0f)));
-        elvenCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DRIPSTONE_CAVE, new Vec2f(1.0f,1.0f)));
-        elvenCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.GALONN_CAVE, new Vec2f(0.0f,0.0f)));
-        elvenCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.LUSH_CAVE, new Vec2f(-1.0f,-1.1f)));
-        elvenCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.MUD_CAVE, new Vec2f(0f,-1.1f)));
-        elvenCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.FUNGUS_CAVE, new Vec2f(1.0f,-1.1f)));
+        elvenCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.LIMESTONE_CAVE, new Vec2(-1.0f,1.0f)));
+        elvenCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.BASIC_CAVE, new Vec2(0.0f,1.0f)));
+        elvenCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DRIPSTONE_CAVE, new Vec2(1.0f,1.0f)));
+        elvenCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.GALONN_CAVE, new Vec2(0.0f,0.0f)));
+        elvenCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.LUSH_CAVE, new Vec2(-1.0f,-1.1f)));
+        elvenCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.MUD_CAVE, new Vec2(0f,-1.1f)));
+        elvenCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.FUNGUS_CAVE, new Vec2(1.0f,-1.1f)));
 
-        lonelyMountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.IZHERABAN_CAVE, new Vec2f(-1.0f,1.0f)));
-        lonelyMountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DRIPSTONE_CAVE, new Vec2f(0.0f,1.0f)));
-        lonelyMountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DOLOMITE_CAVE, new Vec2f(1.0f,1.0f)));
-        lonelyMountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.GILDED_CAVE, new Vec2f(0.0f,0.0f)));
-        lonelyMountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.MOUNTAIN_CAVE, new Vec2f(1.0f,-1.0f)));
-        lonelyMountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.LUSH_CAVE, new Vec2f(-1.25f,-1.1f)));
-        lonelyMountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.FUNGUS_CAVE, new Vec2f(0f,-1.1f)));
+        lonelyMountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.IZHERABAN_CAVE, new Vec2(-1.0f,1.0f)));
+        lonelyMountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DRIPSTONE_CAVE, new Vec2(0.0f,1.0f)));
+        lonelyMountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DOLOMITE_CAVE, new Vec2(1.0f,1.0f)));
+        lonelyMountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.GILDED_CAVE, new Vec2(0.0f,0.0f)));
+        lonelyMountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.MOUNTAIN_CAVE, new Vec2(1.0f,-1.0f)));
+        lonelyMountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.LUSH_CAVE, new Vec2(-1.25f,-1.1f)));
+        lonelyMountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.FUNGUS_CAVE, new Vec2(0f,-1.1f)));
 
-        mountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.IZHERABAN_CAVE, new Vec2f(-1.0f,1.0f)));
-        mountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.LIMESTONE_CAVE, new Vec2f(0.0f,1.0f)));
-        mountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DOLOMITE_CAVE, new Vec2f(1.0f,1.0f)));
-        mountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DRIPSTONE_CAVE, new Vec2f(1.0f,0.0f)));
-        mountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.MOUNTAIN_CAVE, new Vec2f(0.0f,0.0f)));
-        mountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.BASIC_CAVE, new Vec2f(0.0f,-1.0f)));
-        mountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.LUSH_CAVE, new Vec2f(-1.25f,-1.1f)));
-        mountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.FUNGUS_CAVE, new Vec2f(0f,-1.1f)));
+        mountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.IZHERABAN_CAVE, new Vec2(-1.0f,1.0f)));
+        mountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.LIMESTONE_CAVE, new Vec2(0.0f,1.0f)));
+        mountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DOLOMITE_CAVE, new Vec2(1.0f,1.0f)));
+        mountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DRIPSTONE_CAVE, new Vec2(1.0f,0.0f)));
+        mountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.MOUNTAIN_CAVE, new Vec2(0.0f,0.0f)));
+        mountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.BASIC_CAVE, new Vec2(0.0f,-1.0f)));
+        mountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.LUSH_CAVE, new Vec2(-1.25f,-1.1f)));
+        mountainCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.FUNGUS_CAVE, new Vec2(0f,-1.1f)));
 
-        ashCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DRIPSTONE_CAVE, new Vec2f(1.0f,0.5f)));
-        ashCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.BASALT_CAVE, new Vec2f(-1.0f,0.5f)));
-        ashCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.MAGMA_CAVE, new Vec2f(0.0f,-1.0f)));
+        ashCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DRIPSTONE_CAVE, new Vec2(1.0f,0.5f)));
+        ashCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.BASALT_CAVE, new Vec2(-1.0f,0.5f)));
+        ashCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.MAGMA_CAVE, new Vec2(0.0f,-1.0f)));
 
-        haradCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DRIPSTONE_CAVE, new Vec2f(1.0f,0f)));
-        haradCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DRY_CAVE, new Vec2f(0.0f,0f)));
-        haradCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.BASIC_CAVE, new Vec2f(-1.0f,0f)));
+        haradCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DRIPSTONE_CAVE, new Vec2(1.0f,0f)));
+        haradCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DRY_CAVE, new Vec2(0.0f,0f)));
+        haradCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.BASIC_CAVE, new Vec2(-1.0f,0f)));
 
-        forodCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.ICE_CAVE, new Vec2f(-0.5f,0f)));
-        forodCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DRIPSTONE_CAVE, new Vec2f(1.0f,0f)));
+        forodCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.ICE_CAVE, new Vec2(-0.5f,0f)));
+        forodCaves.addCave(new CaveBiomeDTO(MEBiomeKeys.DRIPSTONE_CAVE, new Vec2(1.0f,0f)));
     }
 
-    public static ResourceKey<Biome> getBiome(Vec2f coordinates, net.jukoz.me.world.biomes.surface.MEBiome surfaceBiome) {
+    public static ResourceKey<Biome> getBiome(Vec2 coordinates, net.jukoz.me.world.biomes.surface.MEBiome surfaceBiome) {
         return getBiome(coordinates, new BiomeData(surfaceBiome.biome, null, null, null, surfaceBiome.caveType));
     }
 
-    public static ResourceKey<Biome> getBiome(Vec2f coordinates, BiomeData surfaceBiome) {
+    public static ResourceKey<Biome> getBiome(Vec2 coordinates, BiomeData surfaceBiome) {
         if(surfaceBiome.getCaveType() != null)
             return switch (surfaceBiome.getCaveType()) {
                 case ASHEN -> ashCaves.getClosestBiome(coordinates);
@@ -169,13 +175,13 @@ public class ModCaveBiomes {
         BiomeGenerationSettings.LookupBackedBuilder generationSettings = new BiomeGenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addBasicFeatures(generationSettings, true);
-        DefaultBiomeFeatures.addPlainsTallGrass(generationSettings);
+        BiomeDefaultFeatures.addPlainsTallGrass(generationSettings);
 
         undergroundOres.add(OrePlacedFeatures.ORE_CLAY);
-        undergroundOres.add(UndergroundPlacedFeatures.UNDERWATER_MAGMA);
-        undergroundOres.add(MiscPlacedFeatures.DISK_SAND);
-        undergroundOres.add(MiscPlacedFeatures.DISK_CLAY);
-        undergroundOres.add(MiscPlacedFeatures.DISK_GRAVEL);
+        undergroundOres.add(CavePlacements.UNDERWATER_MAGMA);
+        undergroundOres.add(MiscOverworldPlacements.DISK_SAND);
+        undergroundOres.add(MiscOverworldPlacements.DISK_CLAY);
+        undergroundOres.add(MiscOverworldPlacements.DISK_GRAVEL);
 
         generationSettings.feature(GenerationStep.Feature.VEGETAL_DECORATION, ModVegetationPlacedFeatures.AZALEA_GROWTH);
         generationSettings.feature(GenerationStep.Feature.VEGETAL_DECORATION, CavesPlacedFeatures.LUSH_CAVES_CEILING_VEGETATION);
@@ -192,10 +198,10 @@ public class ModCaveBiomes {
         MobSpawnSettings.Builder spawnSettings = new MobSpawnSettings.Builder();
         BiomeGenerationSettings.LookupBackedBuilder generationSettings = new BiomeGenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
-        undergroundOres.add(UndergroundPlacedFeatures.LARGE_DRIPSTONE);
-        undergroundOres.add(UndergroundPlacedFeatures.DRIPSTONE_CLUSTER);
-        undergroundOres.add(UndergroundPlacedFeatures.POINTED_DRIPSTONE);
-        undergroundOres.add(MiscPlacedFeatures.DISK_GRAVEL);
+        undergroundOres.add(CavePlacements.LARGE_DRIPSTONE);
+        undergroundOres.add(CavePlacements.DRIPSTONE_CLUSTER);
+        undergroundOres.add(CavePlacements.POINTED_DRIPSTONE);
+        undergroundOres.add(MiscOverworldPlacements.DISK_GRAVEL);
         addBasicFeatures(generationSettings, true);
 
         return createBiome(biomeColors, spawnSettings, generationSettings, 0.5f, true);
@@ -210,7 +216,7 @@ public class ModCaveBiomes {
         undergroundOres.add(CavesPlacedFeatures.POINTED_DOLOMITE);
         undergroundOres.add(CavesPlacedFeatures.ORE_DOLOMITE_ABUNDANT);
         undergroundOres.add(CavesPlacedFeatures.ORE_OLD_DOLOMITE);
-        undergroundOres.add(MiscPlacedFeatures.DISK_GRAVEL);
+        undergroundOres.add(MiscOverworldPlacements.DISK_GRAVEL);
         addBasicFeatures(generationSettings, true);
 
         return createBiome(biomeColors, spawnSettings, generationSettings, 0.5f, true);
@@ -225,7 +231,7 @@ public class ModCaveBiomes {
         undergroundOres.add(CavesPlacedFeatures.POINTED_GALONN);
         undergroundOres.add(CavesPlacedFeatures.ORE_GALONN);
         undergroundOres.add(CavesPlacedFeatures.ORE_OLD_GALONN);
-        undergroundOres.add(MiscPlacedFeatures.DISK_GRAVEL);
+        undergroundOres.add(MiscOverworldPlacements.DISK_GRAVEL);
         addBasicFeatures(generationSettings, true);
 
         return createBiome(biomeColors, spawnSettings, generationSettings, 0.5f, true);
@@ -255,7 +261,7 @@ public class ModCaveBiomes {
         undergroundOres.add(CavesPlacedFeatures.ORE_IZHER_ABAN);
         undergroundOres.add(CavesPlacedFeatures.ORE_ZIGIL_ABAN);
         undergroundOres.add(CavesPlacedFeatures.ORE_OLD_IZHER_ABAN);
-        undergroundOres.add(MiscPlacedFeatures.DISK_GRAVEL);
+        undergroundOres.add(MiscOverworldPlacements.DISK_GRAVEL);
         addBasicFeatures(generationSettings, true);
 
         return createBiome(biomeColors, spawnSettings, generationSettings, 0.5f, true);
@@ -270,7 +276,7 @@ public class ModCaveBiomes {
         undergroundOres.add(CavesPlacedFeatures.POINTED_LIMESTONE);
         undergroundOres.add(CavesPlacedFeatures.ORE_LIMESTONE_ABUNDANT);
         undergroundOres.add(CavesPlacedFeatures.ORE_OLD_LIMESTONE);
-        undergroundOres.add(MiscPlacedFeatures.DISK_GRAVEL);
+        undergroundOres.add(MiscOverworldPlacements.DISK_GRAVEL);
         addBasicFeatures(generationSettings, true);
 
         return createBiome(biomeColors, spawnSettings, generationSettings, 0.5f, true);
@@ -286,7 +292,7 @@ public class ModCaveBiomes {
         undergroundOres.add(CavesPlacedFeatures.ORE_DIRT);
         undergroundOres.add(CavesPlacedFeatures.ORE_MUD);
         undergroundOres.add(CavesPlacedFeatures.POOL_MUD);
-        undergroundOres.add(MiscPlacedFeatures.DISK_GRAVEL);
+        undergroundOres.add(MiscOverworldPlacements.DISK_GRAVEL);
 
         return createBiome(biomeColors, spawnSettings, generationSettings, 0.5f, true);
     }
@@ -299,7 +305,7 @@ public class ModCaveBiomes {
         addBasicFeatures(generationSettings, true);
         undergroundOres.add(CavesPlacedFeatures.ORE_DIRT);
         undergroundOres.add(CavesPlacedFeatures.DISK_MYCELIUM);
-        undergroundOres.add(MiscPlacedFeatures.DISK_GRAVEL);
+        undergroundOres.add(MiscOverworldPlacements.DISK_GRAVEL);
 
         // TODO bring back the fungus trees without crashing
         //generationSettings.feature(GenerationStep.Feature.VEGETAL_DECORATION, CavesPlacedFeatures.TREE_BROWN_BOLETTE);
@@ -344,10 +350,10 @@ public class ModCaveBiomes {
 
         addBasicFeatures(generationSettings, false);
         generationSettings.feature(GenerationStep.Feature.SURFACE_STRUCTURES, CavesPlacedFeatures.DELTA);
-        generationSettings.feature(GenerationStep.Feature.SURFACE_STRUCTURES, NetherPlacedFeatures.SMALL_BASALT_COLUMNS);
+        generationSettings.feature(GenerationStep.Feature.SURFACE_STRUCTURES, NetherPlacements.SMALL_BASALT_COLUMNS);
         undergroundOres.add(CavesPlacedFeatures.ORE_ASH);
         undergroundOres.add(CavesPlacedFeatures.ORE_ASHEN_DIRT);
-        undergroundOres.add(MiscPlacedFeatures.DISK_GRAVEL);
+        undergroundOres.add(MiscOverworldPlacements.DISK_GRAVEL);
 
         return createBiome(biomeColors, spawnSettings, generationSettings, 0.5f, true);
     }
@@ -357,7 +363,7 @@ public class ModCaveBiomes {
         BiomeGenerationSettings.LookupBackedBuilder generationSettings = new BiomeGenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addBasicFeatures(generationSettings, false);
-        generationSettings.feature(GenerationStep.Feature.SURFACE_STRUCTURES, NetherPlacedFeatures.DELTA);
+        generationSettings.feature(GenerationStep.Feature.SURFACE_STRUCTURES, NetherPlacements.DELTA);
         undergroundOres.add(CavesPlacedFeatures.ORE_MAGMA_ABUNDANT);
         undergroundOres.add(CavesPlacedFeatures.ORE_ASHEN_DIRT);
 
@@ -419,7 +425,7 @@ public class ModCaveBiomes {
         undergroundOres.add(CavesPlacedFeatures.ORE_RUBY);
         undergroundOres.add(CavesPlacedFeatures.ORE_SAPPHIRE);
         undergroundOres.add(CavesPlacedFeatures.SPRING_LAVA);
-        undergroundOres.add(MiscPlacedFeatures.SPRING_WATER);
+        undergroundOres.add(MiscOverworldPlacements.SPRING_WATER);
 
         undergroundOres.add(CavesPlacedFeatures.ORE_MAGMA);
         undergroundOres.add(CavesPlacedFeatures.ORE_OBSIDIAN);
@@ -444,8 +450,8 @@ public class ModCaveBiomes {
             undergroundOres.add(OrePlacedFeatures.ORE_ANDESITE_LOWER);
         }
         undergroundOres.add(OrePlacedFeatures.ORE_TUFF);
-        generationSettings.feature(GenerationStep.Feature.VEGETAL_DECORATION, UndergroundPlacedFeatures.GLOW_LICHEN);
-        DefaultBiomeFeatures.addFrozenTopLayer(generationSettings);
+        generationSettings.feature(GenerationStep.Feature.VEGETAL_DECORATION, CavePlacements.GLOW_LICHEN);
+        BiomeDefaultFeatures.addFrozenTopLayer(generationSettings);
     }
 
     public static Biome createBiome(BiomeColorsDTO biomeColors, MobSpawnSettings.Builder spawnSettings, BiomeGenerationSettings.LookupBackedBuilder generationSettings, float temperature, boolean precipitation) {
@@ -464,7 +470,7 @@ public class ModCaveBiomes {
                 .precipitation(precipitation)
                 .temperature(temperature)
                 .downfall(0.5F)
-                .effects((new BiomeEffects.Builder())
+                .effects((new BiomeSpecialEffects.Builder())
                         .skyColor(biomeColors.skyColor)
                         .fogColor(biomeColors.fogColor)
                         .waterColor(biomeColors.waterColor)

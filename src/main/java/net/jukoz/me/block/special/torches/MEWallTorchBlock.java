@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -24,6 +24,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.block.RenderShape;
 
 public class MEWallTorchBlock extends WallTorchBlock {
 
@@ -51,17 +52,17 @@ public class MEWallTorchBlock extends WallTorchBlock {
         return InteractionResult.SUCCESS;
     }
 
-    protected static void setLit(WorldAccess world, BlockState state, BlockPos pos, boolean lit) {
+    protected static void setLit(LevelAccessor world, BlockState state, BlockPos pos, boolean lit) {
         world.setBlockState(pos, state.cycle(LIT), 2 | 3);
         if(lit){
-            world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.5F, 1.0F);
+            world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.5F, 1.0F);
         }
     }
 
-    protected static void extinguish(@Nullable Player player, BlockState state, WorldAccess world, BlockPos pos) {
+    protected static void extinguish(@Nullable Player player, BlockState state, LevelAccessor world, BlockPos pos) {
         setLit(world, state, pos, false);
 
-        world.playSound(null, pos, SoundEvents.BLOCK_CANDLE_EXTINGUISH, SoundCategory.BLOCKS, 1.5F, 1.0F);
+        world.playSound(null, pos, SoundEvents.BLOCK_CANDLE_EXTINGUISH, SoundSource.BLOCKS, 1.5F, 1.0F);
         world.emitGameEvent(player, GameEvent.BLOCK_CHANGE, pos);
     }
 
@@ -69,8 +70,8 @@ public class MEWallTorchBlock extends WallTorchBlock {
         builder.add(FACING, LIT);
     }
 
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderType(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override

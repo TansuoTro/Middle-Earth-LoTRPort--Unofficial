@@ -19,8 +19,6 @@ public class CeramicCrockpotBlock extends CrockpotBlock {
         super(settings);
     }
 
-
-
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {

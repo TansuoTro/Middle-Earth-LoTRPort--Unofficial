@@ -2,22 +2,22 @@ package net.jukoz.me.compat.net;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.Holder;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.function.ToIntFunction;
 import java.util.function.Supplier;
+import net.minecraft.core.BlockPos;
 
 /**
  * Stand-in for 1.20.5+'s {@code net.minecraft.network.codec.PacketCodecs}.
@@ -26,21 +26,21 @@ import java.util.function.Supplier;
  * decode contexts take precedence over the client/server lifecycle suppliers.
  */
 public final class PacketCodecs {
-    private static final ThreadLocal<DynamicRegistryManager> REGISTRIES = new ThreadLocal<>();
+    private static final ThreadLocal<RegistryAccess> REGISTRIES = new ThreadLocal<>();
     private static volatile MinecraftServer server;
-    private static volatile Supplier<DynamicRegistryManager> clientRegistries = () -> null;
+    private static volatile Supplier<RegistryAccess> clientRegistries = () -> null;
 
     public static void setServer(MinecraftServer value) {
         server = value;
     }
 
-    public static void setClientRegistries(Supplier<DynamicRegistryManager> supplier) {
+    public static void setClientRegistries(Supplier<RegistryAccess> supplier) {
         clientRegistries = supplier;
     }
 
     public static <T> T decode(PacketCodec<FriendlyByteBuf, T> codec, FriendlyByteBuf buf,
-                               DynamicRegistryManager registries) {
-        DynamicRegistryManager previous = REGISTRIES.get();
+                               RegistryAccess registries) {
+        RegistryAccess previous = REGISTRIES.get();
         REGISTRIES.set(registries);
         try {
             return codec.decode(buf);
@@ -50,12 +50,12 @@ public final class PacketCodecs {
         }
     }
 
-    private static DynamicRegistryManager registries() {
-        DynamicRegistryManager explicit = REGISTRIES.get();
+    private static RegistryAccess registries() {
+        RegistryAccess explicit = REGISTRIES.get();
         if (explicit != null) return explicit;
         MinecraftServer activeServer = server;
         if (activeServer != null && activeServer.isOnThread()) return activeServer.getRegistryManager();
-        DynamicRegistryManager client = clientRegistries.get();
+        RegistryAccess client = clientRegistries.get();
         if (client != null) return client;
         return activeServer == null ? null : activeServer.getRegistryManager();
     }
@@ -134,7 +134,7 @@ public final class PacketCodecs {
     /** NBT round-trip for any data codec; the donor uses it for whole-object fields. */
     public static <T> PacketCodec<FriendlyByteBuf, T> codec(Codec<T> codec) {
         return PacketCodec.of((buf, value) -> {
-            NbtElement encoded = codec.encodeStart(NbtOps.INSTANCE, value).result().orElse(new CompoundTag());
+            Tag encoded = codec.encodeStart(NbtOps.INSTANCE, value).result().orElse(new CompoundTag());
             buf.writeNbt((CompoundTag) encoded);
         }, buf -> {
             CompoundTag nbt = buf.readNbt();
@@ -178,7 +178,7 @@ public final class PacketCodecs {
             }
             ResourceLocation id = buf.readIdentifier();
             T inline = element == null ? null : element.decode(buf);
-            DynamicRegistryManager manager = registries();
+            RegistryAccess manager = registries();
             Holder<T> resolved = manager == null ? null : manager.getOptional(registryKey)
                     .flatMap(registry -> registry.getEntry(ResourceKey.of(registryKey, id))).orElse(null);
             if (resolved != null) return resolved;

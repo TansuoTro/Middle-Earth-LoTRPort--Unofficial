@@ -1,7 +1,7 @@
 package net.jukoz.me.block.special;
+
 import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.InteractionHand;
-
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelView;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
@@ -15,7 +15,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -47,7 +47,7 @@ public class ChaliceBlock extends Block {
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (state.get(WATERLOGGED)) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
@@ -60,7 +60,7 @@ public class ChaliceBlock extends Block {
         if (player.getStackInHand(player.getActiveHand()).isEmpty() && !player.isCreative()){
             world.setBlockState(pos, Blocks.AIR.getDefaultState());
             player.equipStack(EquipmentSlot.MAINHAND,  new ItemStack(ModDecorativeBlocks.GOLDEN_CHALICE.asItem()));
-            world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.BLOCKS, 0.5f, world.random.nextFloat() * 0.1f - 1.0f);
+            world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_CHICKEN_EGG, SoundSource.BLOCKS, 0.5f, world.random.nextFloat() * 0.1f - 1.0f);
             return InteractionResult.PASS;
         } else{
             return super.onUse(state, world, pos, player, hand, hit);
@@ -78,4 +78,3 @@ public class ChaliceBlock extends Block {
     }
 
 }
-

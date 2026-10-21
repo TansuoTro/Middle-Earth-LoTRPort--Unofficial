@@ -7,7 +7,6 @@ import net.jukoz.me.world.map.MiddleEarthMapRuntime;
 import net.jukoz.me.world.map.MiddleEarthMapUtils;
 import net.jukoz.me.world.biomes.surface.MEBiome;
 import net.jukoz.me.world.biomes.surface.MEBiomesData;
-
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -42,7 +41,6 @@ public class MiddleEarthHeightMap {
         if(middleEarthMapRuntime == null) middleEarthMapRuntime = MiddleEarthMapRuntime.getInstance();
 
         Color color = middleEarthMapRuntime.getHeight(xWorld, zWorld);
-
 
         if(color != null){
             float red = color.getRed();
@@ -153,7 +151,6 @@ public class MiddleEarthHeightMap {
     public static float getHeight(int x, int z) {
         return getPerlinMapHeight(x, z);
     }
-
 
     // Going to be useful for making roads with curves.
     static float getPointOnBezierCurve(float h0, float h1, float h2, float t)

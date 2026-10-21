@@ -3,26 +3,26 @@ package net.jukoz.me.entity.goals;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.RangedWeaponItem;
+import net.minecraft.world.item.ProjectileWeaponItem;
 import net.jukoz.me.entity.goals.interfaces.Shielder;
-
 import java.util.EnumSet;
+import net.minecraft.world.entity.ai.control.Control;
 
 public class ShieldAgainstProjectileGoal extends Goal {
-    private final PathAwareEntity blocker;
+    private final PathfinderMob blocker;
     private final Shielder shielder;
     private LivingEntity target;
     private Path path;
     private int minDistance;
     private int maxDistance;
 
-    public ShieldAgainstProjectileGoal(PathAwareEntity mob, Shielder shielder, int minDistance, int maxDistance) {
+    public ShieldAgainstProjectileGoal(PathfinderMob mob, Shielder shielder, int minDistance, int maxDistance) {
         this.blocker = mob;
         this.shielder = shielder;
         this.minDistance = minDistance;
@@ -51,7 +51,7 @@ public class ShieldAgainstProjectileGoal extends Goal {
             this.blocker.getNavigation().startMovingTo(target, 0.7f);
         }
         this.blocker.getLookControl().lookAt(this.target.getX(), this.target.getEyeY(), this.target.getZ());
-        this.blocker.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 21, 1));
+        this.blocker.addStatusEffect(new MobEffectInstance(MobEffects.RESISTANCE, 21, 1));
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ShieldAgainstProjectileGoal extends Goal {
         if(path == null) return false;
 
         ItemStack mainStack = target.getMainHandStack();
-        if (mainStack.getItem() instanceof RangedWeaponItem) {
+        if (mainStack.getItem() instanceof ProjectileWeaponItem) {
             if(target instanceof Player player) {
                 return player.getItemUseTime() > 1;
             } else if(mainStack.getItem() instanceof CrossbowItem) {

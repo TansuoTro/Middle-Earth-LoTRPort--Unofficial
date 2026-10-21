@@ -1,22 +1,20 @@
 package net.jukoz.me.entity.beasts;
 
-import net.minecraft.advancement.criterion.Criteria;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.world.level.block.Blocks;
-
-import net.minecraft.item.FoodComponent;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.passive.AbstractHorseEntity;
-import net.minecraft.entity.passive.PassiveEntity;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.inventory.StackReference;
+import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.core.Holder;
@@ -24,7 +22,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.util.Mth;
@@ -35,18 +33,25 @@ import net.jukoz.me.entity.ai.brain.MemoryModulesME;
 import net.jukoz.me.entity.npcs.NpcEntity;
 import net.jukoz.me.resources.datas.common.DispositionType;
 import net.jukoz.me.resources.datas.common.RaceType;
-
 import java.util.List;
+import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityEvent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
-public abstract class AbstractBeastEntity extends AbstractHorseEntity {
-    public static final TrackedData<Boolean> CHARGING = DataTracker.registerData(AbstractBeastEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    public static final TrackedData<Boolean> SITTING = DataTracker.registerData(AbstractBeastEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> CHEST = DataTracker.registerData(AbstractBeastEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> RUNNING = DataTracker.registerData(AbstractBeastEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> FIGHTING = DataTracker.registerData(AbstractBeastEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+public abstract class AbstractBeastEntity extends AbstractHorse {
+    public static final EntityDataAccessor<Boolean> CHARGING = SynchedEntityData.registerData(AbstractBeastEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Boolean> SITTING = SynchedEntityData.registerData(AbstractBeastEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> CHEST = SynchedEntityData.registerData(AbstractBeastEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> RUNNING = SynchedEntityData.registerData(AbstractBeastEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> FIGHTING = SynchedEntityData.registerData(AbstractBeastEntity.class, EntityDataSerializers.BOOLEAN);
 
     // The tameness value ranges from 0-100, updating every in-game day. If it reaches 0, the beast will break free from its owner.
-    private static final TrackedData<Integer> TAMENESS = DataTracker.registerData(AbstractBeastEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final EntityDataAccessor<Integer> TAMENESS = SynchedEntityData.registerData(AbstractBeastEntity.class, EntityDataSerializers.INTEGER);
 
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState attackAnimationState = new AnimationState();
@@ -87,7 +92,7 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
     protected abstract void setupAnimationStates();
 
     @Override
-    public void onTrackedDataSet(TrackedData<?> data) {
+    public void onTrackedDataSet(EntityDataAccessor<?> data) {
         if (!this.firstUpdate && CHARGING.equals(data)) {
             this.chargeTimeout = this.chargeTimeout == 0 ? maxChargeCooldown() : this.chargeTimeout;
         }
@@ -102,7 +107,7 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
         nbt.putBoolean("ChestedBeast", this.hasChest());
         nbt.putInt("Tameness", this.getTameness());
         if (this.hasChest()) {
-            NbtList nbtList = new NbtList();
+            ListTag nbtList = new ListTag();
 
             for (int i = 0; i < this.items.size(); i++) {
                 ItemStack itemStack = this.items.getStack(i);
@@ -126,7 +131,7 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
         this.setTameness(nbt.getInt("Tameness"));
         this.onChestedStatusChanged();
         if (this.hasChest()) {
-            NbtList nbtList = nbt.getList("Items", 10);
+            ListTag nbtList = nbt.getList("Items", 10);
 
             for (int i = 0; i < nbtList.size(); i++) {
                 CompoundTag nbtCompound = nbtList.getCompound(i);
@@ -218,7 +223,7 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
     }
     // endregion
 
-    // region DataTracker
+    // region SynchedEntityData
 
     public int getTameness() {
         return this.dataTracker.get(TAMENESS);
@@ -316,7 +321,7 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
 
     // endregion
 
-    // region Equipment
+    // region Equipable
 
     protected void dropInventory() {
         super.dropInventory();
@@ -327,8 +332,8 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
     }
 
     @Override
-    public StackReference getStackReference(int mappedIndex) {
-        return mappedIndex == 499 ? new StackReference() {
+    public SlotAccess getStackReference(int mappedIndex) {
+        return mappedIndex == 499 ? new SlotAccess() {
             @Override
             public ItemStack get() {
                 return AbstractBeastEntity.this.hasChest() ? new ItemStack(Items.CHEST) : ItemStack.EMPTY;
@@ -418,12 +423,12 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
     public void tryBonding(Player player) {
         if(random.nextDouble() <= 0.1d || player.isCreative()) {
             this.tameBeast(player);
-            this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
+            this.getWorld().sendEntityStatus(this, EntityEvent.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
 
             this.chargeTimeout = 0;
         }
         else {
-            this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES);
+            this.getWorld().sendEntityStatus(this, EntityEvent.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES);
         }
     }
 
@@ -431,7 +436,7 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
         if (player instanceof ServerPlayer) {
             this.setOwnerUuid(player.getUuid());
             this.setTame(true);
-            Criteria.TAME_ANIMAL.trigger((ServerPlayer)player, this);
+            CriteriaTriggers.TAME_ANIMAL.trigger((ServerPlayer)player, this);
         }
     }
 
@@ -465,7 +470,7 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
             if(isFoodItem(itemStack) && getOwner() == player) {
                 int tamenessIncrease;
 
-                FoodComponent component = itemStack.getItem().getFoodComponent();
+                FoodProperties component = itemStack.getItem().getFoodComponent();
                 if(component != null) {
                     tamenessIncrease = component.getHunger();
                 }
@@ -534,7 +539,7 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
     }
 
     @Override
-    protected EntityNavigation createNavigation(Level world) {
+    protected PathNavigation createNavigation(Level world) {
         return new BeastEntityNavigation(this, world);
     }
 
@@ -549,7 +554,7 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
 
     // endregion
 
-    // region Tick Management
+    // region SavedTick Management
     @Override
     public void tick() {
         super.tick();
@@ -623,7 +628,7 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
 
     // endregion
 
-    protected void setChildAttribute(PassiveEntity other, AbstractHorseEntity child, EntityAttribute attribute, double min, double max) {
+    protected void setChildAttribute(AgeableMob other, AbstractHorse child, Attribute attribute, double min, double max) {
         double d = this.calculateAttributeBaseValue(this.getAttributeBaseValue(attribute), other.getAttributeBaseValue(attribute), min, max, this.random);
         child.getAttributeInstance(attribute).setBaseValue(d);
     }
@@ -652,13 +657,13 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
 
     @Override
     public void handleStatus(byte status) {
-        if (status == EntityStatuses.PLAY_ATTACK_SOUND) {
+        if (status == EntityEvent.PLAY_ATTACK_SOUND) {
             this.attackTicksLeft = ATTACK_COOLDOWN;
             this.attackAnimationState.start(this.age);
         }
-        if (status == EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES) {
+        if (status == EntityEvent.ADD_POSITIVE_PLAYER_REACTION_PARTICLES) {
             this.spawnPlayerReactionParticles(true);
-        } else if (status == EntityStatuses.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES) {
+        } else if (status == EntityEvent.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES) {
             this.spawnPlayerReactionParticles(false);
         } else {
             super.handleStatus(status);
@@ -666,13 +671,13 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
     }
 
     @Override
-    public net.minecraft.world.EntityView method_48926() {
+    public net.minecraft.world.level.EntityGetter method_48926() {
         return this.getWorld();
     }
 
     @Override
     protected void updateLimbs(float posDelta) {
-        float f = this.getPose() == EntityPose.STANDING ? Math.min(posDelta * 6.0f, 1.0f) : 0.0f;
+        float f = this.getPose() == Pose.STANDING ? Math.min(posDelta * 6.0f, 1.0f) : 0.0f;
         this.limbAnimator.updateLimbs(f, 0.2f);
     }
 
@@ -705,13 +710,13 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
         me$mountArmorBonus(Attributes.GENERIC_KNOCKBACK_RESISTANCE, "knockback", allowed ? equipment.knockbackResistance() : 0);
     }
 
-    private void me$mountArmorBonus(EntityAttribute attribute, String name, double amount) {
+    private void me$mountArmorBonus(Attribute attribute, String name, double amount) {
         var instance = getAttributeInstance(attribute);
         if (instance == null) return;
         var id = java.util.UUID.nameUUIDFromBytes(("me:mount_armor_" + name).getBytes(java.nio.charset.StandardCharsets.UTF_8));
         instance.removeModifier(id);
-        if (amount != 0) instance.addTemporaryModifier(new net.minecraft.entity.attribute.EntityAttributeModifier(
-                id, "me:mount_armor_" + name, amount, net.minecraft.entity.attribute.EntityAttributeModifier.Operation.ADDITION));
+        if (amount != 0) instance.addTemporaryModifier(new net.minecraft.world.entity.ai.attributes.AttributeModifier(
+                id, "me:mount_armor_" + name, amount, net.minecraft.entity.attribute.AttributeModifier.Operation.ADDITION));
     }
 
     @Override

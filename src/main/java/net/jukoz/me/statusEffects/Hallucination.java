@@ -3,18 +3,17 @@ package net.jukoz.me.statusEffects;
 import net.jukoz.me.utils.HallucinationData;
 import net.jukoz.me.utils.IEntityDataSaver;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.attribute.AttributeContainer;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
-
 import java.util.Map;
 
-public class Hallucination extends StatusEffect {
+public class Hallucination extends MobEffect {
     public Hallucination(){
         super(
-                StatusEffectCategory.HARMFUL,
+                MobEffectCategory.HARMFUL,
                 0x006666
         );
     }
@@ -27,7 +26,7 @@ public class Hallucination extends StatusEffect {
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
         if(entity instanceof Player){
-            Map<StatusEffect, StatusEffectInstance> map = entity.getActiveStatusEffects();
+            Map<MobEffect, MobEffectInstance> map = entity.getActiveStatusEffects();
             int ticksLeft = map.get(this).getDuration();
             if(ticksLeft != -1 && ticksLeft < HallucinationData.STOPPING_TICK)
                 HallucinationData.addHallucination((IEntityDataSaver) entity, -2);
@@ -37,7 +36,7 @@ public class Hallucination extends StatusEffect {
         }
     }
     @Override
-    public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier) {
+    public void onRemoved(LivingEntity entity, AttributeMap attributes, int amplifier) {
         HallucinationData.resetHallucination((IEntityDataSaver) entity);
         HallucinationData.addHallucination((IEntityDataSaver) entity, -100);
 
@@ -47,6 +46,5 @@ public class Hallucination extends StatusEffect {
     public void stop(LivingEntity entity){
         HallucinationData.stopHallucination((IEntityDataSaver) entity);
     }
-
 
 }

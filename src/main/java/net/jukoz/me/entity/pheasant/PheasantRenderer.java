@@ -4,20 +4,20 @@ import com.google.common.collect.Maps;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.beasts.trolls.cave.CaveTrollEntity;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
-
 import java.util.Map;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
-public class PheasantRenderer extends MobEntityRenderer<PheasantEntity, PheasantModel> {
+public class PheasantRenderer extends MobRenderer<PheasantEntity, PheasantModel> {
     private static final String PATH = "textures/entities/pheasants/";
     private static final float SIZE = 1f;
 
-    public PheasantRenderer(EntityRendererFactory.Context context) {
+    public PheasantRenderer(EntityRendererProvider.Context context) {
         super(context, new PheasantModel(context.getPart(ModEntityModelLayers.PHEASANT)), 0.35F);
 
     }
@@ -36,7 +36,7 @@ public class PheasantRenderer extends MobEntityRenderer<PheasantEntity, Pheasant
     }
 
     public void render(PheasantEntity entity, float entityYaw, float partialTick, PoseStack poseStack,
-                       VertexConsumerProvider bufferSource, int packedLight) {
+                       MultiBufferSource bufferSource, int packedLight) {
 
         if(entity.isBaby()) {
             float initialBabySize = (SIZE / 2);

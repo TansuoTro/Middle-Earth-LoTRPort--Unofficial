@@ -4,19 +4,21 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.jukoz.me.entity.humans.gondor.GondorHumanEntity;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.render.entity.model.CrossbowPosing;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.AnimationUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.util.Arm;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.util.Mth;
+import net.minecraft.util.profiling.jfr.Environment;
+
 @Environment(value= EnvType.CLIENT)
 public class MordorOrcModel<T extends Mob>
-        extends BipedEntityModel<T> {
+        extends HumanoidModel<T> {
 
     public MordorOrcModel(ModelPart root) {
         super(root);
@@ -24,14 +26,14 @@ public class MordorOrcModel<T extends Mob>
 
     @Override
     public void animateModel(T mobEntity, float f, float g, float h) {
-        this.rightArmPose = BipedEntityModel.ArmPose.EMPTY;
-        this.leftArmPose = BipedEntityModel.ArmPose.EMPTY;
+        this.rightArmPose = HumanoidModel.ArmPose.EMPTY;
+        this.leftArmPose = HumanoidModel.ArmPose.EMPTY;
         ItemStack itemStack = ((LivingEntity)mobEntity).getStackInHand(InteractionHand.MAIN_HAND);
         if (itemStack.isOf(Items.BOW) && ((Mob)mobEntity).isAttacking()) {
-            if (((Mob)mobEntity).getMainArm() == Arm.RIGHT) {
-                this.rightArmPose = BipedEntityModel.ArmPose.BOW_AND_ARROW;
+            if (((Mob)mobEntity).getMainArm() == HumanoidArm.RIGHT) {
+                this.rightArmPose = HumanoidModel.ArmPose.BOW_AND_ARROW;
             } else {
-                this.leftArmPose = BipedEntityModel.ArmPose.BOW_AND_ARROW;
+                this.leftArmPose = HumanoidModel.ArmPose.BOW_AND_ARROW;
             }
         }
         super.animateModel(mobEntity, f, g, h);
@@ -56,8 +58,8 @@ public class MordorOrcModel<T extends Mob>
     }
 
     @Override
-    public void setArmAngle(Arm arm, PoseStack matrices) {
-        float f = arm == Arm.RIGHT ? 1.0f : -1.0f;
+    public void setArmAngle(HumanoidArm arm, PoseStack matrices) {
+        float f = arm == HumanoidArm.RIGHT ? 1.0f : -1.0f;
         ModelPart modelPart = this.getArm(arm);
         modelPart.pivotX += f;
         modelPart.rotate(matrices);

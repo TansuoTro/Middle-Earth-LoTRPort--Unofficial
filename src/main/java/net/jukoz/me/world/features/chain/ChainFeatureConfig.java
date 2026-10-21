@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-
 import java.util.List;
 
 public class ChainFeatureConfig implements FeatureConfiguration {
@@ -47,4 +46,3 @@ public class ChainFeatureConfig implements FeatureConfiguration {
         this.endBlock = chainBlock;
     }
 }
-

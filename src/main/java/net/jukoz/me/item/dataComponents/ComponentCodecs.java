@@ -4,7 +4,6 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.minecraft.network.FriendlyByteBuf;
-
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -13,11 +12,11 @@ public final class ComponentCodecs {
     private ComponentCodecs() {
     }
 
-    /** 1.20.1 has no {@code Uuids.PACKET_CODEC}; the wire form is the vanilla uuid pair of longs. */
+    /** 1.20.1 has no {@code UUIDUtil.PACKET_CODEC}; the wire form is the vanilla uuid pair of longs. */
     public static final PacketCodec<FriendlyByteBuf, UUID> UUID_CODEC =
             PacketCodec.of((buf, value) -> buf.writeUuid(value), FriendlyByteBuf::readUuid);
 
-    /** 1.20.1's {@code ColorHelper} has no {@code fullAlpha}; the donor passes an opaque rgb. */
+    /** 1.20.1's {@code FastColor} has no {@code fullAlpha}; the donor passes an opaque rgb. */
     public static int fullAlpha(int rgb) {
         return 0xFF000000 | (rgb & 0xFFFFFF);
     }

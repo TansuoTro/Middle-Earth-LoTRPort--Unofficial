@@ -5,7 +5,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.entity.vehicle.BoatEntity;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.server.level.ServerLevel;
@@ -25,12 +25,10 @@ public class FloatingIceBlock extends Block {
         super(settings);
     }
 
-
-
     @Override
     public void onEntityCollision(BlockState state, Level world, BlockPos pos, Entity entity) {
         super.onEntityCollision(state, world, pos, entity);
-        if (world instanceof ServerLevel && entity instanceof BoatEntity) {
+        if (world instanceof ServerLevel && entity instanceof Boat) {
             world.breakBlock(new BlockPos(pos), true, entity);
         }
     }
@@ -40,14 +38,14 @@ public class FloatingIceBlock extends Block {
     }
 
     @Override
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
         FluidState fluidState = world.getFluidState(pos.down());
         FluidState fluidState2 = world.getFluidState(pos);
         return fluidState.getFluid() == Fluids.WATER && fluidState2.getFluid() == Fluids.EMPTY;
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         return !this.canPlaceAt(state, world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 
     }

@@ -2,20 +2,19 @@ package net.jukoz.me.api.entity.ai.brain.task;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.SingleTickTask;
-import net.minecraft.entity.ai.brain.task.TaskTriggerer;
-import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.world.entity.ai.behavior.OneShot;
+import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.GlobalPos;
 import net.jukoz.me.api.entity.ai.brain.MemoryModulesAPI;
-
 import java.util.List;
 import java.util.Optional;
 
 public class DefendHomeTask {
-    public static SingleTickTask<LivingEntity> create(double radius) {
-        return TaskTriggerer.task((context) -> {
+    public static OneShot<LivingEntity> create(double radius) {
+        return BehaviorBuilder.task((context) -> {
             return context.group(context.queryMemoryAbsent(MemoryModuleType.ATTACK_TARGET)).apply(context, (attackTarget) -> {
                 return (world, entity, time) -> {
                     Optional<LivingEntity> optional = Optional.ofNullable(threatClose(world, entity, radius));
@@ -30,7 +29,6 @@ public class DefendHomeTask {
             });
         });
     }
-
 
     private static LivingEntity threatClose(ServerLevel world, LivingEntity entity, double radius) {
         if(entity.isBaby()) {
@@ -47,7 +45,7 @@ public class DefendHomeTask {
                         return null;
                     }
 
-                    if(entity instanceof AnimalEntity && ((AnimalEntity)entity).isInLove()) { // Don't trigger if entity is distracted
+                    if(entity instanceof Animal && ((Animal)entity).isInLove()) { // Don't trigger if entity is distracted
                         return null;
                     }
 

@@ -1,9 +1,9 @@
 package net.jukoz.me.config;
 
 import com.mojang.datafixers.util.Pair;
-
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.util.Tuple;
 
 public class ModConfigProvider implements SimpleConfig.DefaultConfig {
     public static final String COMMENT_PREFIX = "# ";
@@ -12,11 +12,11 @@ public class ModConfigProvider implements SimpleConfig.DefaultConfig {
 
     private String configContents = "";
 
-    public List<Pair> getConfigsList() {
+    public List<Tuple> getConfigsList() {
         return configsList;
     }
 
-    private final List<Pair> configsList = new ArrayList<>();
+    private final List<Tuple> configsList = new ArrayList<>();
 
     public void addLineJump(){
         configContents += "\n";
@@ -33,7 +33,7 @@ public class ModConfigProvider implements SimpleConfig.DefaultConfig {
     public void addDescription(String comment){
         configContents += VALUE_PREFIX + COMMENT_PREFIX + comment + " \n";
     }
-    public void addKeyValuePair(Pair<String, ?> keyValuePair, String acceptedValues) {
+    public void addKeyValuePair(Tuple<String, ?> keyValuePair, String acceptedValues) {
         configsList.add(keyValuePair);
         addDescription("Accept values: " + acceptedValues + " | Default: " + keyValuePair.getSecond());
         configContents += VALUE_PREFIX + keyValuePair.getFirst() + "=" + keyValuePair.getSecond() + "\n";

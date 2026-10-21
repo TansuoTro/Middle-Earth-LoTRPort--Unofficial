@@ -3,6 +3,13 @@ package net.jukoz.me.client.model.equipment.head.helmets.orcs.goblintown;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.PartNames;
 import net.jukoz.me.client.model.equipment.head.helmets.FlapHelmetModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class GoblinTownTunnelerHelmetModel extends FlapHelmetModel {
 
@@ -10,39 +17,39 @@ public class GoblinTownTunnelerHelmetModel extends FlapHelmetModel {
         super(root);
     }
 
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = getModelData();
-        ModelPartData modelPartData = modelData.getRoot();
+    public static LayerDefinition getTexturedModelData() {
+        MeshDefinition modelData = getModelData();
+        PartDefinition modelPartData = modelData.getRoot();
 
-        ModelPartData head = modelPartData.addChild(PartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        head.addChild(PartNames.HAT, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition head = modelPartData.addChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        head.addChild(PartNames.HAT, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData Candle = head.addChild("candle", ModelPartBuilder.create()
-                .uv(0, 22).mirrored().cuboid(-2.6F, -13.05F, -1.6F, 2.0F, 4.0F, 2.0F, new Dilation(0.0F)).mirrored(false)
-                .uv(0, 22).mirrored().cuboid(0.4F, -12.05F, 0.5F, 2.0F, 3.0F, 2.0F, new Dilation(0.0F)).mirrored(false),
-                ModelTransform.pivot(0.0F, 0.3F, 0.0F));
+        PartDefinition Candle = head.addChild("candle", CubeListBuilder.create()
+                .uv(0, 22).mirrored().cuboid(-2.6F, -13.05F, -1.6F, 2.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)).mirrored(false)
+                .uv(0, 22).mirrored().cuboid(0.4F, -12.05F, 0.5F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)).mirrored(false),
+                PartPose.pivot(0.0F, 0.3F, 0.0F));
 
-        Candle.addChild("flame_0", ModelPartBuilder.create()
-                        .uv(0, 21).mirrored().cuboid(0.0F, 0.75F, -0.5F, 0.0F, 1.0F, 1.0F, new Dilation(0.0F)).mirrored(false),
-                ModelTransform.of(1.4F, -13.8F, 1.5F, 0.0F, 0.7854F, 0.0F));
-        Candle.addChild("flame_1", ModelPartBuilder.create()
-                        .uv(0, 21).mirrored().cuboid(0.0F, 0.75F, -0.5F, 0.0F, 1.0F, 1.0F, new Dilation(0.0F)).mirrored(false),
-                ModelTransform.of(1.4F, -13.8F, 1.5F, 0.0F, -0.7854F, 0.0F));
-        Candle.addChild("flame_2", ModelPartBuilder.create()
-                        .uv(0, 21).mirrored().cuboid(0.0F, 0.75F, -0.5F, 0.0F, 1.0F, 1.0F, new Dilation(0.0F)).mirrored(false),
-                ModelTransform.of(-1.6F, -14.8F, -0.6F, 0.0F, -0.7854F, 0.0F));
-        Candle.addChild("flame_3", ModelPartBuilder.create()
-                        .uv(0, 21).mirrored().cuboid(0.0F, 0.75F, -0.5F, 0.0F, 1.0F, 1.0F, new Dilation(0.0F)).mirrored(false),
-                ModelTransform.of(-1.6F, -14.8F, -0.6F, 0.0F, 0.7854F, 0.0F));
+        Candle.addChild("flame_0", CubeListBuilder.create()
+                        .uv(0, 21).mirrored().cuboid(0.0F, 0.75F, -0.5F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirrored(false),
+                PartPose.of(1.4F, -13.8F, 1.5F, 0.0F, 0.7854F, 0.0F));
+        Candle.addChild("flame_1", CubeListBuilder.create()
+                        .uv(0, 21).mirrored().cuboid(0.0F, 0.75F, -0.5F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirrored(false),
+                PartPose.of(1.4F, -13.8F, 1.5F, 0.0F, -0.7854F, 0.0F));
+        Candle.addChild("flame_2", CubeListBuilder.create()
+                        .uv(0, 21).mirrored().cuboid(0.0F, 0.75F, -0.5F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirrored(false),
+                PartPose.of(-1.6F, -14.8F, -0.6F, 0.0F, -0.7854F, 0.0F));
+        Candle.addChild("flame_3", CubeListBuilder.create()
+                        .uv(0, 21).mirrored().cuboid(0.0F, 0.75F, -0.5F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirrored(false),
+                PartPose.of(-1.6F, -14.8F, -0.6F, 0.0F, 0.7854F, 0.0F));
 
-        modelPartData.addChild(PartNames.BODY, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.BODY, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.RIGHT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.RIGHT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.LEFT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.RIGHT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        return TexturedModelData.of(modelData, 64, 64);
+        return LayerDefinition.of(modelData, 64, 64);
     }
 }

@@ -11,7 +11,6 @@ import net.jukoz.me.resources.datas.factions.data.SpawnData;
 import net.jukoz.me.resources.persistent_datas.PlayerDataService;
 import net.jukoz.me.world.dimension.ModDimensions;
 
-
 public class PacketTeleportToCurrentSpawn extends ClientToServerPacket<PacketTeleportToCurrentSpawn> {
     public static final ResourceLocation ID = new ResourceLocation(MiddleEarth.MOD_ID, "packet_teleport_current_spawn");
     public static final PacketType<PacketTeleportToCurrentSpawn> TYPE = PacketType.create(ID, PacketTeleportToCurrentSpawn::new);
@@ -20,10 +19,6 @@ public class PacketTeleportToCurrentSpawn extends ClientToServerPacket<PacketTel
     public PacketTeleportToCurrentSpawn(boolean welcomeNeeded){
         this.welcomeNeeded = welcomeNeeded;
     }
-
-
-
-
 
     public PacketTeleportToCurrentSpawn(FriendlyByteBuf buf) {
         this(buf.readBoolean());

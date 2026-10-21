@@ -3,18 +3,17 @@ package net.jukoz.me.item.items;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.item.utils.ModArmorMaterials;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.item.DyeableItem;
+import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.List;
 
-public class CustomLeggingsItem extends ArmorItem implements DyeableItem {
+public class CustomLeggingsItem extends ArmorItem implements DyeableLeatherItem {
 
     private ModArmorMaterials material;
     private List<CustomBootsItem.Customizations> customsList;
@@ -32,9 +31,8 @@ public class CustomLeggingsItem extends ArmorItem implements DyeableItem {
         this.material = material;
     }
 
-
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag context) {
 
         tooltip.add(Component.of(""));
         if(Screen.hasShiftDown()){

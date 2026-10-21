@@ -2,7 +2,7 @@ package net.jukoz.me.entity.beasts.warg;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraft.entity.AnimationState;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.entity.beasts.BeastEntityRenderState;
 

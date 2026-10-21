@@ -3,9 +3,9 @@ package net.jukoz.me.block.special.forge;
 import net.jukoz.me.item.ResourceItemsME;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.StringRepresentable;
 
-public enum MetalTypes implements StringIdentifiable {
+public enum MetalTypes implements StringRepresentable {
     EMPTY(-1, "empty", null, null, false, 0),
 
     COPPER(0, "copper", Items.COPPER_INGOT, null, true, 11823181),

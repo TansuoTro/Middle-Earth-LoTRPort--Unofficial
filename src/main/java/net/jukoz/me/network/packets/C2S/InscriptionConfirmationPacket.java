@@ -16,8 +16,6 @@ public class InscriptionConfirmationPacket extends ClientToServerPacket<Inscript
     public InscriptionConfirmationPacket() {
     }
 
-
-
     public InscriptionConfirmationPacket(FriendlyByteBuf buf) {
         this();
     }

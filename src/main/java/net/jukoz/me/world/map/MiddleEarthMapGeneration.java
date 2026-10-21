@@ -6,13 +6,11 @@ import net.jukoz.me.utils.resources.FileType;
 import net.jukoz.me.utils.resources.FileUtils;
 import net.jukoz.me.world.biomes.surface.MEBiomesData;
 import net.jukoz.me.world.chunkgen.map.ImageUtils;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
 import static java.lang.String.format;
 
 public class MiddleEarthMapGeneration {
@@ -242,4 +240,3 @@ public class MiddleEarthMapGeneration {
         return newHeightRegion;
     }
 }
-

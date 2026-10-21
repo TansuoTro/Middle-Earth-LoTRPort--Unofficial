@@ -6,7 +6,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.world.features.chain.ChainFeatureConfig;

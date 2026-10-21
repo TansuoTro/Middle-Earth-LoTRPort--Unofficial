@@ -25,4 +25,3 @@ public enum CaveTrollVariant {
         return BY_ID[id % BY_ID.length];
     }
 }
-

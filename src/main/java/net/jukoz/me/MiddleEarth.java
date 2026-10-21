@@ -181,4 +181,3 @@ public class MiddleEarth {
 		return id1.compareTo(id2) == 0;
 	}
 }
-

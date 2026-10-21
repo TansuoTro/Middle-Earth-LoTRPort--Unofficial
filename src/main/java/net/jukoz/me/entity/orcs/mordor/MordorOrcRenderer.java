@@ -3,24 +3,25 @@ package net.jukoz.me.entity.orcs.mordor;
 import com.google.common.collect.Maps;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.BipedEntityRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
+import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.model.EntityModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
-
 import java.util.Map;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
-public class MordorOrcRenderer extends BipedEntityRenderer<MordorOrcEntity, MordorOrcModel<MordorOrcEntity>> {
+public class MordorOrcRenderer extends HumanoidMobRenderer<MordorOrcEntity, MordorOrcModel<MordorOrcEntity>> {
     private static final String PATH = "textures/entities/orcs/mordor/";
 
-    public MordorOrcRenderer(EntityRendererFactory.Context ctx) {
+    public MordorOrcRenderer(EntityRendererProvider.Context ctx) {
         super(ctx, new MordorOrcModel<>(ctx.getPart(ModEntityModelLayers.ORC)), 0.5f);
-        this.addFeature(new ArmorFeatureRenderer<>(this, new MordorOrcModel(ctx.getPart(EntityModelLayers.PLAYER_INNER_ARMOR)),
-                new MordorOrcModel(ctx.getPart(EntityModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
+        this.addFeature(new HumanoidArmorLayer<>(this, new MordorOrcModel(ctx.getPart(ModelLayers.PLAYER_INNER_ARMOR)),
+                new MordorOrcModel(ctx.getPart(ModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
 
     }
 
@@ -41,7 +42,7 @@ public class MordorOrcRenderer extends BipedEntityRenderer<MordorOrcEntity, Mord
 
     @Override
     public void render(MordorOrcEntity entity, float entityYaw, float partialTick, PoseStack poseStack,
-                       VertexConsumerProvider bufferSource, int packedLight) {
+                       MultiBufferSource bufferSource, int packedLight) {
 
         poseStack.scale(0.8f, 0.8f, 0.8f);
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);

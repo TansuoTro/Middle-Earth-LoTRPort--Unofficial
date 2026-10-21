@@ -7,13 +7,12 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.NetherConfiguredFeatures;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.data.worldgen.features.NetherFeatures;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraft.world.gen.placementmodifier.CountMultilayerPlacementModifier;
-import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.placement.CountOnEveryLayerPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
+import net.minecraft.core.HolderGetter;
 
 public class ModMiscPlacedFeatures {
 
@@ -26,17 +25,17 @@ public class ModMiscPlacedFeatures {
     static PlacementModifier sparse = PlacedFeature.createCountExtraModifier(0, 0.5f, 1);
 
     public static void bootstrap(BootstrapContext<PlacedFeature> featureRegisterable) {
-        RegistryEntryLookup<ConfiguredFeature<?, ?>> registryEntryLookup = featureRegisterable.getRegistryLookup(Registries.CONFIGURED_FEATURE);
+        HolderGetter<ConfiguredFeature<?, ?>> registryEntryLookup = featureRegisterable.getRegistryLookup(Registries.CONFIGURED_FEATURE);
 
         PlacedFeature.register(featureRegisterable, LAVA_MAGMA_POOL, registryEntryLookup.getOrThrow(ModMiscConfiguredFeatures.LAVA_MAGMA_POOL),
                 PlacedFeature.createCountExtraModifier(0, 0.05f, 1), InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
 
-        PlacedFeature.register(featureRegisterable, SMALL_BASALT_COLUMNS, registryEntryLookup.getOrThrow(NetherConfiguredFeatures.SMALL_BASALT_COLUMNS),
-                CountMultilayerPlacementModifier.of(1), PlacementModifier.of());
+        PlacedFeature.register(featureRegisterable, SMALL_BASALT_COLUMNS, registryEntryLookup.getOrThrow(NetherFeatures.SMALL_BASALT_COLUMNS),
+                CountOnEveryLayerPlacement.of(1), PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, SMALL_PUMICE_COLUMNS, registryEntryLookup.getOrThrow(ModMiscConfiguredFeatures.SMALL_PUMICE_COLUMNS),
-                CountMultilayerPlacementModifier.of(2), PlacementModifier.of());
+                CountOnEveryLayerPlacement.of(2), PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, LARGE_PUMICE_COLUMNS, registryEntryLookup.getOrThrow(ModMiscConfiguredFeatures.LARGE_PUMICE_COLUMNS),
-                CountMultilayerPlacementModifier.of(1), PlacementModifier.of());
+                CountOnEveryLayerPlacement.of(1), PlacementModifier.of());
     }
 
     public static ResourceKey<PlacedFeature> registerKey(String name) {

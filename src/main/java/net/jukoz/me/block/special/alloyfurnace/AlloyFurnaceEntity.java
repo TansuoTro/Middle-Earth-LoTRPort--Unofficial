@@ -11,52 +11,48 @@ import net.jukoz.me.recipe.AlloyRecipe;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.Map;
 import java.util.Optional;
 
-
-public class AlloyFurnaceEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory {
+public class AlloyFurnaceEntity extends BlockEntity implements MenuProvider, WorldlyContainer {
     private static final String ID = "alloy_furnace";
     public static final int MAX_PROGRESS = 1200;
     public static final int FUEL_SLOT = 0;
     public static final int OUTPUT_SLOT = 5;
-    private final DefaultedList<ItemStack> inventory =
-            DefaultedList.ofSize(6, ItemStack.EMPTY);
-    protected final PropertyDelegate propertyDelegate;
+    private final NonNullList<ItemStack> inventory =
+            NonNullList.ofSize(6, ItemStack.EMPTY);
+    protected final ContainerData propertyDelegate;
     protected final Map<Item, Integer> fuelTimeMap = AbstractFurnaceBlockEntity.createFuelTimeMap();
     private int progress = 0;
     private int fuelTime = 0;
     private int maxFuelTime = 0;
 
-
     public AlloyFurnaceEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ALLOY_FURNACE, pos, state);
-        this.propertyDelegate = new PropertyDelegate() {
+        this.propertyDelegate = new ContainerData() {
             @Override
             public int get(int index) {
                 return switch (index) {
@@ -90,14 +86,14 @@ public class AlloyFurnaceEntity extends BlockEntity implements NamedScreenHandle
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, Player player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new AlloyFurnaceScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
     @Override
     protected void writeNbt(CompoundTag nbt) {
         super.writeNbt(nbt);
-        Inventories.writeNbt(nbt, inventory);
+        ContainerHelper.writeNbt(nbt, inventory);
         nbt.putInt(ID + ".progress", progress);
         nbt.putInt(ID + ".fuel-time", fuelTime);
         nbt.putInt(ID + ".max-fuel-time", maxFuelTime);
@@ -105,7 +101,7 @@ public class AlloyFurnaceEntity extends BlockEntity implements NamedScreenHandle
 
     @Override
     public void readNbt(CompoundTag nbt) {
-        Inventories.readNbt(nbt, inventory);
+        ContainerHelper.readNbt(nbt, inventory);
         super.readNbt(nbt);
         progress = nbt.getInt(ID + ".progress");
         fuelTime = nbt.getInt(ID + ".fuel-time");
@@ -115,7 +111,7 @@ public class AlloyFurnaceEntity extends BlockEntity implements NamedScreenHandle
     public ItemStack getRenderStack() {
         return this.getStack(OUTPUT_SLOT);
     }
-    public void setInventory(DefaultedList<ItemStack> inventory) {
+    public void setInventory(NonNullList<ItemStack> inventory) {
         for (int i = 0; i < inventory.size(); i++) {
             this.inventory.set(i, inventory.get(i));
         }
@@ -190,12 +186,12 @@ public class AlloyFurnaceEntity extends BlockEntity implements NamedScreenHandle
 
     @Override
     public ItemStack removeStack(int slot, int amount) {
-        return Inventories.splitStack(this.inventory, slot, amount);
+        return ContainerHelper.splitStack(this.inventory, slot, amount);
     }
 
     @Override
     public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(inventory, slot);
+        return ContainerHelper.removeStack(inventory, slot);
     }
 
     @Override
@@ -241,7 +237,7 @@ public class AlloyFurnaceEntity extends BlockEntity implements NamedScreenHandle
     }
 
     private static void craftItem(AlloyFurnaceEntity entity) {
-        SimpleInventory inventory1 = new SimpleInventory(entity.size());
+        SimpleContainer inventory1 = new SimpleContainer(entity.size());
         for (int i = 0; i < entity.size(); i++) {
             inventory1.setStack(i, entity.getStack(i));
         }
@@ -261,7 +257,7 @@ public class AlloyFurnaceEntity extends BlockEntity implements NamedScreenHandle
     }
 
     private static boolean hasRecipe(AlloyFurnaceEntity entity) {
-        SimpleInventory inventory1 = new SimpleInventory(entity.size());
+        SimpleContainer inventory1 = new SimpleContainer(entity.size());
         for (int i = 0; i < entity.size(); i++) {
             inventory1.setStack(i, entity.getStack(i));
         }
@@ -276,7 +272,7 @@ public class AlloyFurnaceEntity extends BlockEntity implements NamedScreenHandle
 
     private boolean hasFuel(AlloyFurnaceEntity entity) {
 
-        SimpleInventory inventory1 = new SimpleInventory(entity.size());
+        SimpleContainer inventory1 = new SimpleContainer(entity.size());
         for (int i = 0; i < entity.size(); i++) {
             inventory1.setStack(i, entity.getStack(i));
         }
@@ -301,10 +297,10 @@ public class AlloyFurnaceEntity extends BlockEntity implements NamedScreenHandle
         else entity.getStack(FUEL_SLOT).decrement(1);
     }
 
-    private static boolean canInsertAmountIntoOutput(SimpleInventory inventory1, int count) {
+    private static boolean canInsertAmountIntoOutput(SimpleContainer inventory1, int count) {
         return inventory1.getStack(OUTPUT_SLOT).getMaxCount() > inventory1.getStack(OUTPUT_SLOT).getCount() + (count- 1);
     }
-    private static boolean canInsertRecipeIntoOutput(SimpleInventory inventory1, Item item) {
+    private static boolean canInsertRecipeIntoOutput(SimpleContainer inventory1, Item item) {
         return inventory1.getStack(OUTPUT_SLOT).getItem() == item || inventory1.getStack(OUTPUT_SLOT).isEmpty();
     }
 }

@@ -4,10 +4,10 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.Component;
 import net.jukoz.me.MiddleEarth;
@@ -18,7 +18,6 @@ import net.jukoz.me.resources.datas.factions.data.SpawnData;
 import net.jukoz.me.resources.datas.races.Race;
 import net.jukoz.me.resources.persistent_datas.PlayerData;
 import net.jukoz.me.resources.persistent_datas.PlayerDataService;
-
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
@@ -26,17 +25,17 @@ public class CommandInformation {
     private static final String INFO_BASE_COMMAND = "info";
     private static final String PLAYER = "player";
 
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandRegistryAccess, Commands.RegistrationEnvironment registrationEnvironment) {
         // [INFO]
         dispatcher.register(literal(ModCommands.BASE_COMMAND)
                 .requires(source -> source.hasPermissionLevel(2)) // Require OP
                 .then(literal(INFO_BASE_COMMAND)
-                .then(argument(PLAYER, EntityArgumentType.player()) // With Player Target
+                .then(argument(PLAYER, EntityArgument.player()) // With Player Target
                     .executes(CommandInformation::getTargetInfo))
                 .executes(CommandInformation::getInfo)));
     }
 
-    private static int getInfo(CommandContext<ServerCommandSource> context) {
+    private static int getInfo(CommandContext<CommandSourceStack> context) {
         if(!context.getSource().isExecutedByPlayer() || context.getSource().getPlayer() == null)
             return 1;
 
@@ -64,8 +63,8 @@ public class CommandInformation {
         return 0;
     }
 
-    private static int getTargetInfo(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayer targettedPlayer = EntityArgumentType.getPlayer(context, PLAYER);
+    private static int getTargetInfo(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer targettedPlayer = EntityArgument.getPlayer(context, PLAYER);
 
         PlayerData data = StateSaverAndLoader.getPlayerState(targettedPlayer);
 
@@ -73,16 +72,15 @@ public class CommandInformation {
         if(race != null)
             context.getSource().sendMessage(Component.literal("Race : ").append(Component.translatable(race.getTranslatableKey())));
 
-
         Faction faction =  PlayerDataService.getPlayerFaction(targettedPlayer, targettedPlayer.getWorld());
         if(faction != null)
             context.getSource().sendMessage(Component.literal("Faction : ").append(Component.translatable(faction.getId().toTranslationKey())));
         return 0;
     }
 
-    private static int run(CommandContext<ServerCommandSource> context) {
+    private static int run(CommandContext<CommandSourceStack> context) {
         try{
-            ServerPlayer targettedPlayer = EntityArgumentType.getPlayer(context, PLAYER);
+            ServerPlayer targettedPlayer = EntityArgument.getPlayer(context, PLAYER);
 
             PlayerData data = StateSaverAndLoader.getPlayerState(targettedPlayer);
             targettedPlayer.sendMessage(Component.of(data.toString()));
@@ -94,6 +92,6 @@ public class CommandInformation {
         }
     }
 
-    public static void register(CommandDispatcher<FabricClientCommandSource> fabricClientCommandSourceCommandDispatcher, CommandRegistryAccess commandRegistryAccess) {
+    public static void register(CommandDispatcher<FabricClientCommandSource> fabricClientCommandSourceCommandDispatcher, CommandBuildContext commandRegistryAccess) {
     }
 }

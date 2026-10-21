@@ -3,27 +3,27 @@ package net.jukoz.me.entity.swan;
 import com.google.common.collect.Maps;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.model.EntityModelLayer;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.entity.passive.ChickenEntity;
+import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
 import net.minecraft.util.Mth;
-
 import java.util.Map;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
-public class SwanRenderer extends MobEntityRenderer<SwanEntity, SwanModel<SwanEntity>> {
+public class SwanRenderer extends MobRenderer<SwanEntity, SwanModel<SwanEntity>> {
     private static final String PATH = "textures/entities/swan/";
     private static final float SIZE = 1f;
 
-    public SwanRenderer(EntityRendererFactory.Context context) {
+    public SwanRenderer(EntityRendererProvider.Context context) {
         this(context, 0.35F, ModEntityModelLayers.SWAN);
     }
 
-    protected SwanRenderer(EntityRendererFactory.Context ctx, float shadowRadius, EntityModelLayer layer) {
+    protected SwanRenderer(EntityRendererProvider.Context ctx, float shadowRadius, ModelLayerLocation layer) {
         super(ctx, new SwanModel<>(ctx.getPart(layer)), shadowRadius);
     }
 
@@ -43,7 +43,7 @@ public class SwanRenderer extends MobEntityRenderer<SwanEntity, SwanModel<SwanEn
 
     @Override
     public void render(SwanEntity entity, float entityYaw, float partialTick, PoseStack poseStack,
-                       VertexConsumerProvider bufferSource, int packedLight) {
+                       MultiBufferSource bufferSource, int packedLight) {
         if(entity.isBaby()) {
             float initialBabySize = (SIZE / 2);
             float size = initialBabySize + ((SIZE - initialBabySize) / 24000) * entity.age;
@@ -54,7 +54,7 @@ public class SwanRenderer extends MobEntityRenderer<SwanEntity, SwanModel<SwanEn
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
     }
 
-    protected float getAnimationProgress(ChickenEntity chickenEntity, float f) {
+    protected float getAnimationProgress(Chicken chickenEntity, float f) {
         float g = Mth.lerp(f, chickenEntity.prevFlapProgress, chickenEntity.flapProgress);
         float h = Mth.lerp(f, chickenEntity.prevMaxWingDeviation, chickenEntity.maxWingDeviation);
         return (Mth.sin(g) + 1.0F) * h;

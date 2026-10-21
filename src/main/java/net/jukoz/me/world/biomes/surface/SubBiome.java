@@ -2,7 +2,6 @@ package net.jukoz.me.world.biomes.surface;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
-
 import java.util.ArrayList;
 
 public class SubBiome {

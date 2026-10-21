@@ -3,20 +3,18 @@ package net.jukoz.me.gui.shapinganvil;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
-
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.jukoz.me.compat.SingleStackRecipeInput;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.Property;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.DataSlot;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerLevel;
@@ -32,12 +30,12 @@ import net.jukoz.me.network.packets.S2C.ShapingAnvilRecipePacket;
 import net.jukoz.me.recipe.AnvilShapingRecipe;
 import net.jukoz.me.recipe.ArtisanRecipe;
 import net.jukoz.me.recipe.RecipesME;
-
 import java.util.List;
+import net.minecraft.world.level.block.state.properties.Property;
 
-public class ShapingAnvilScreenHandler extends ScreenHandler {
+public class ShapingAnvilScreenHandler extends AbstractContainerMenu {
     private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+    private final ContainerData propertyDelegate;
     protected BlockPos pos;
     private final Level world;
     private List<AnvilShapingRecipe> availableRecipes;
@@ -46,12 +44,12 @@ public class ShapingAnvilScreenHandler extends ScreenHandler {
     private Property selectedIndex;
     private Property recipesSize;
 
-    public ShapingAnvilScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos blockPos) {
-        this(syncId, playerInventory, new SimpleInventory(1), new ArrayPropertyDelegate(2));
+    public ShapingAnvilScreenHandler(int syncId, Inventory playerInventory, BlockPos blockPos) {
+        this(syncId, playerInventory, new SimpleContainer(1), new SimpleContainerData(2));
         this.pos = blockPos;
     }
 
-    public ShapingAnvilScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate delegate) {
+    public ShapingAnvilScreenHandler(int syncId, Inventory playerInventory, Inventory inventory, ContainerData delegate) {
         super(ModScreenHandlers.TREATED_ANVIL_SCREEN_HANDLER, syncId);
         checkSize(inventory, 1);
         this.inventory = inventory;
@@ -73,7 +71,7 @@ public class ShapingAnvilScreenHandler extends ScreenHandler {
             public void markDirty() {
                 super.markDirty();
                 if(player.getWorld().isClient) {
-                    ShapingAnvilScreen screen = (ShapingAnvilScreen)MinecraftClient.getInstance().currentScreen;
+                    ShapingAnvilScreen screen = (ShapingAnvilScreen)Minecraft.getInstance().currentScreen;
                     if(screen != null) screen.clearOutputs();
                 }
                 ShapingAnvilScreenHandler.this.updateStack(ShapingAnvilScreenHandler.this.inventory);
@@ -84,7 +82,6 @@ public class ShapingAnvilScreenHandler extends ScreenHandler {
         addPlayerHotbar(playerInventory);
 
         addProperties(delegate);
-
 
     }
 
@@ -176,7 +173,7 @@ public class ShapingAnvilScreenHandler extends ScreenHandler {
         return this.inventory.canPlayerUse(player);
     }
 
-    private void addPlayerInventory(PlayerInventory playerInventory) {
+    private void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
@@ -184,7 +181,7 @@ public class ShapingAnvilScreenHandler extends ScreenHandler {
         }
     }
 
-    private void addPlayerHotbar(PlayerInventory playerInventory) {
+    private void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
         }

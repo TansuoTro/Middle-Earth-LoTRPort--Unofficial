@@ -3,12 +3,11 @@ package net.jukoz.me.compat.nbt;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DynamicOps;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryOps;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,13 +23,13 @@ import java.util.Optional;
  */
 public final class ReadView {
     private final CompoundTag nbt;
-    private final DynamicOps<NbtElement> ops;
+    private final DynamicOps<Tag> ops;
 
     public ReadView(CompoundTag nbt) {
         this(nbt, null);
     }
 
-    public ReadView(CompoundTag nbt, DynamicRegistryManager registries) {
+    public ReadView(CompoundTag nbt, RegistryAccess registries) {
         this.nbt = nbt;
         this.ops = registries == null ? NbtOps.INSTANCE : RegistryOps.of(NbtOps.INSTANCE, registries);
     }
@@ -44,7 +43,7 @@ public final class ReadView {
     }
 
     public <T> Optional<T> read(String key, Codec<T> codec) {
-        NbtElement element = this.nbt.get(key);
+        Tag element = this.nbt.get(key);
         if (element == null) {
             return Optional.empty();
         }
@@ -52,7 +51,7 @@ public final class ReadView {
     }
 
     public <T> List<T> getTypedListView(String key, Codec<T> codec) {
-        NbtList list = this.nbt.getList(key, NbtElement.COMPOUND_TYPE);
+        ListTag list = this.nbt.getList(key, Tag.COMPOUND_TYPE);
         List<T> out = new ArrayList<>(list.size());
         for (int i = 0; i < list.size(); i++) {
             codec.parse(ops, list.getCompound(i)).result().ifPresent(out::add);
@@ -65,30 +64,30 @@ public final class ReadView {
     }
 
     public int getInt(String key, int fallback) {
-        return this.nbt.contains(key, NbtElement.NUMBER_TYPE) ? this.nbt.getInt(key) : fallback;
+        return this.nbt.contains(key, Tag.NUMBER_TYPE) ? this.nbt.getInt(key) : fallback;
     }
 
     public short getShort(String key, short fallback) {
-        return this.nbt.contains(key, NbtElement.NUMBER_TYPE) ? this.nbt.getShort(key) : fallback;
+        return this.nbt.contains(key, Tag.NUMBER_TYPE) ? this.nbt.getShort(key) : fallback;
     }
 
     public long getLong(String key, long fallback) {
-        return this.nbt.contains(key, NbtElement.NUMBER_TYPE) ? this.nbt.getLong(key) : fallback;
+        return this.nbt.contains(key, Tag.NUMBER_TYPE) ? this.nbt.getLong(key) : fallback;
     }
 
     public float getFloat(String key, float fallback) {
-        return this.nbt.contains(key, NbtElement.NUMBER_TYPE) ? this.nbt.getFloat(key) : fallback;
+        return this.nbt.contains(key, Tag.NUMBER_TYPE) ? this.nbt.getFloat(key) : fallback;
     }
 
     public double getDouble(String key, double fallback) {
-        return this.nbt.contains(key, NbtElement.NUMBER_TYPE) ? this.nbt.getDouble(key) : fallback;
+        return this.nbt.contains(key, Tag.NUMBER_TYPE) ? this.nbt.getDouble(key) : fallback;
     }
 
     public boolean getBoolean(String key, boolean fallback) {
-        return this.nbt.contains(key, NbtElement.NUMBER_TYPE) ? this.nbt.getBoolean(key) : fallback;
+        return this.nbt.contains(key, Tag.NUMBER_TYPE) ? this.nbt.getBoolean(key) : fallback;
     }
 
     public String getString(String key, String fallback) {
-        return this.nbt.contains(key, NbtElement.STRING_TYPE) ? this.nbt.getString(key) : fallback;
+        return this.nbt.contains(key, Tag.STRING_TYPE) ? this.nbt.getString(key) : fallback;
     }
 }

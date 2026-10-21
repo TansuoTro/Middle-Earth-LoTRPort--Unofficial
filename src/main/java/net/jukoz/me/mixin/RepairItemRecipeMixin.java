@@ -1,7 +1,6 @@
 package net.jukoz.me.mixin;
 
 import net.jukoz.me.MiddleEarth;
-
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RepairItemRecipe;
 import net.minecraft.core.registries.Registries;

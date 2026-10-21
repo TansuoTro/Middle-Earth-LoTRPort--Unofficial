@@ -8,10 +8,10 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -20,6 +20,8 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.level.LevelView;
 import org.jetbrains.annotations.Nullable;
+import com.mojang.math.Axis;
+import net.minecraft.world.phys.shapes.Shapes;
 
 public class WallDwarvenLanternBlock extends DwarvenLanternBlock {
     private static final DirectionProperty FACING;
@@ -37,21 +39,21 @@ public class WallDwarvenLanternBlock extends DwarvenLanternBlock {
     }
 
     @Override
-    public BlockState rotate(BlockState state, BlockRotation rotation) {
+    public BlockState rotate(BlockState state, Rotation rotation) {
         return state.with(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override
-    public BlockState mirror(BlockState state, BlockMirror mirror) {
+    public BlockState mirror(BlockState state, Mirror mirror) {
         Direction direction = state.get(FACING);
         switch (mirror) {
             case LEFT_RIGHT -> {
                 if (direction.getAxis() != Direction.Axis.Z) break;
-                return state.rotate(BlockRotation.CLOCKWISE_180);
+                return state.rotate(Rotation.CLOCKWISE_180);
             }
             case FRONT_BACK -> {
                 if (direction.getAxis() != Direction.Axis.X) break;
-                return state.rotate(BlockRotation.CLOCKWISE_180);
+                return state.rotate(Rotation.CLOCKWISE_180);
             }
         }
         return super.mirror(state, mirror);
@@ -83,12 +85,12 @@ public class WallDwarvenLanternBlock extends DwarvenLanternBlock {
     }
 
     @Override
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
         Direction direction = attachedDirection(state).getOpposite();
         return Block.sideCoversSmallSquare(world, pos.offset(direction), direction.getOpposite());
     }
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (state.get(WATERLOGGED)) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
             extinguish(null, state, world, pos);
@@ -103,7 +105,7 @@ public class WallDwarvenLanternBlock extends DwarvenLanternBlock {
     static {
         FACING = BlockStateProperties.FACING;
 
-        WALL_SHAPE  = VoxelShapes.union(
+        WALL_SHAPE  = Shapes.union(
                 Block.createCuboidShape(5.0, 3.0, 5.0, 11.0, 9.0, 11.0),
                 Block.createCuboidShape(6.0, 9.0, 6.0, 10.0, 10.0, 10.0));
     }

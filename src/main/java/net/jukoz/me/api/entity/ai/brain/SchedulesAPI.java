@@ -1,8 +1,8 @@
 package net.jukoz.me.api.entity.ai.brain;
 
 import net.minecraft.world.entity.schedule.Activity;
-import net.minecraft.entity.ai.brain.Schedule;
-import net.minecraft.entity.ai.brain.ScheduleBuilder;
+import net.minecraft.world.entity.schedule.Schedule;
+import net.minecraft.world.entity.schedule.ScheduleBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.jukoz.me.api.SevenStarsApi;

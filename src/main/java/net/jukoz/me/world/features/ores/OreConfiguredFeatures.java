@@ -11,15 +11,19 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.structure.rule.BlockMatchRuleTest;
-import net.minecraft.structure.rule.TagMatchRuleTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.math.intprovider.UniformIntProvider;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.stateprovider.PredicatedStateProvider;
-
+import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedBlockStateProvider;
 import java.util.List;
+import net.minecraft.data.worldgen.features.FeatureUtils;
+import net.minecraft.data.worldgen.features.OreFeatures;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.DiskConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 
 public class OreConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> ANDESITE_ORE = registerKey("andesite_ore");
@@ -91,214 +95,212 @@ public class OreConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> WHITE_SAND_ORE = registerKey("white_sand_ore");
 
     public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> featureRegisterable) {
-        TagMatchRuleTest dirtTest = new TagMatchRuleTest(BlockTags.DIRT);
-        BlockMatchRuleTest grassTest = new BlockMatchRuleTest(Blocks.GRASS_BLOCK);
-        BlockMatchRuleTest chalkGrassTest = new BlockMatchRuleTest(ModBlocks.CHALKSOIL_GRASS_BLOCK);
-        BlockMatchRuleTest loamGrassTest = new BlockMatchRuleTest(ModBlocks.LOAM_GRASS_BLOCK);
-        BlockMatchRuleTest coarseLoamTest = new BlockMatchRuleTest(ModBlocks.COARSE_LOAM);
-        BlockMatchRuleTest grassyLoamTest = new BlockMatchRuleTest(ModBlocks.GRASSY_LOAM);
-        BlockMatchRuleTest peatGrassTest = new BlockMatchRuleTest(ModBlocks.PEAT_GRASS_BLOCK);
-        BlockMatchRuleTest siltGrassTest = new BlockMatchRuleTest(ModBlocks.SILT_GRASS_BLOCK);
-        BlockMatchRuleTest ashenStoneTest = new BlockMatchRuleTest(StoneBlockSets.ASHENSTONE_SET.baseBlocks.base());
-        BlockMatchRuleTest ashenGravelTest = new BlockMatchRuleTest(ModBlocks.ASHEN_GRAVEL);
-        BlockMatchRuleTest foulDirtTest = new BlockMatchRuleTest(ModBlocks.FOUL_DIRT);
-        BlockMatchRuleTest gravelTest = new BlockMatchRuleTest(Blocks.GRAVEL);
-        TagMatchRuleTest sandTest = new TagMatchRuleTest(BlockTags.SAND);
-        TagMatchRuleTest stoneTest = new TagMatchRuleTest(BlockTags.BASE_STONE_OVERWORLD);
+        TagMatchTest dirtTest = new TagMatchTest(BlockTags.DIRT);
+        BlockMatchTest grassTest = new BlockMatchTest(Blocks.GRASS_BLOCK);
+        BlockMatchTest chalkGrassTest = new BlockMatchTest(ModBlocks.CHALKSOIL_GRASS_BLOCK);
+        BlockMatchTest loamGrassTest = new BlockMatchTest(ModBlocks.LOAM_GRASS_BLOCK);
+        BlockMatchTest coarseLoamTest = new BlockMatchTest(ModBlocks.COARSE_LOAM);
+        BlockMatchTest grassyLoamTest = new BlockMatchTest(ModBlocks.GRASSY_LOAM);
+        BlockMatchTest peatGrassTest = new BlockMatchTest(ModBlocks.PEAT_GRASS_BLOCK);
+        BlockMatchTest siltGrassTest = new BlockMatchTest(ModBlocks.SILT_GRASS_BLOCK);
+        BlockMatchTest ashenStoneTest = new BlockMatchTest(StoneBlockSets.ASHENSTONE_SET.baseBlocks.base());
+        BlockMatchTest ashenGravelTest = new BlockMatchTest(ModBlocks.ASHEN_GRAVEL);
+        BlockMatchTest foulDirtTest = new BlockMatchTest(ModBlocks.FOUL_DIRT);
+        BlockMatchTest gravelTest = new BlockMatchTest(Blocks.GRAVEL);
+        TagMatchTest sandTest = new TagMatchTest(BlockTags.SAND);
+        TagMatchTest stoneTest = new TagMatchTest(BlockTags.BASE_STONE_OVERWORLD);
 
-        List<OreFeatureConfig.Target> ashenStoneList = List.of(
-                OreFeatureConfig.createTarget(dirtTest, ModBlocks.ASH_BLOCK.getDefaultState()),
-                OreFeatureConfig.createTarget(stoneTest, ModBlocks.ASH_BLOCK.getDefaultState()),
-                OreFeatureConfig.createTarget(ashenStoneTest, ModBlocks.ASH_BLOCK.getDefaultState()));
-        List<OreFeatureConfig.Target> calciteList = List.of(
-                OreFeatureConfig.createTarget(stoneTest, Blocks.CALCITE.getDefaultState()),
-                OreFeatureConfig.createTarget(dirtTest, Blocks.CALCITE.getDefaultState()));
-        List<OreFeatureConfig.Target> powderSnowList = List.of(
-                OreFeatureConfig.createTarget(dirtTest, Blocks.POWDER_SNOW.getDefaultState()),
-                OreFeatureConfig.createTarget(new TagMatchRuleTest(BlockTags.SNOW), Blocks.POWDER_SNOW.getDefaultState()));
+        List<OreConfiguration.Target> ashenStoneList = List.of(
+                OreConfiguration.createTarget(dirtTest, ModBlocks.ASH_BLOCK.getDefaultState()),
+                OreConfiguration.createTarget(stoneTest, ModBlocks.ASH_BLOCK.getDefaultState()),
+                OreConfiguration.createTarget(ashenStoneTest, ModBlocks.ASH_BLOCK.getDefaultState()));
+        List<OreConfiguration.Target> calciteList = List.of(
+                OreConfiguration.createTarget(stoneTest, Blocks.CALCITE.getDefaultState()),
+                OreConfiguration.createTarget(dirtTest, Blocks.CALCITE.getDefaultState()));
+        List<OreConfiguration.Target> powderSnowList = List.of(
+                OreConfiguration.createTarget(dirtTest, Blocks.POWDER_SNOW.getDefaultState()),
+                OreConfiguration.createTarget(new TagMatchTest(BlockTags.SNOW), Blocks.POWDER_SNOW.getDefaultState()));
 
-        ConfiguredFeatures.register(featureRegisterable, ANDESITE_ORE, Feature.ORE,
-                new OreFeatureConfig(stoneTest, Blocks.ANDESITE.getDefaultState(), 64, 0.4f));
+        FeatureUtils.register(featureRegisterable, ANDESITE_ORE, Feature.ORE,
+                new OreConfiguration(stoneTest, Blocks.ANDESITE.getDefaultState(), 64, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, ASH_BLOCK_ORE, Feature.ORE,
-                new OreFeatureConfig(ashenStoneList, 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, ASH_BLOCK_ORE, Feature.ORE,
+                new OreConfiguration(ashenStoneList, 48, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, ASHEN_DIRT_ORE, Feature.ORE,
-                new OreFeatureConfig(dirtTest, ModBlocks.ASHEN_DIRT.getDefaultState(), 64, 0.4f));
-        ConfiguredFeatures.register(featureRegisterable, ASHEN_STONE_DIRT_ORE, Feature.ORE,
-                new OreFeatureConfig(ashenStoneTest, ModBlocks.ASHEN_DIRT.getDefaultState(), 64, 0.4f));
+        FeatureUtils.register(featureRegisterable, ASHEN_DIRT_ORE, Feature.ORE,
+                new OreConfiguration(dirtTest, ModBlocks.ASHEN_DIRT.getDefaultState(), 64, 0.4f));
+        FeatureUtils.register(featureRegisterable, ASHEN_STONE_DIRT_ORE, Feature.ORE,
+                new OreConfiguration(ashenStoneTest, ModBlocks.ASHEN_DIRT.getDefaultState(), 64, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, ASHEN_GRAVEL, Feature.ORE,
-                new OreFeatureConfig(dirtTest, ModBlocks.ASHEN_GRAVEL.getDefaultState(), 48, 0.4f));
-        ConfiguredFeatures.register(featureRegisterable, ASHEN_SAND, Feature.ORE,
-                new OreFeatureConfig(dirtTest, ModBlocks.ASHEN_SAND.getDefaultState(), 48, 0.25f));
+        FeatureUtils.register(featureRegisterable, ASHEN_GRAVEL, Feature.ORE,
+                new OreConfiguration(dirtTest, ModBlocks.ASHEN_GRAVEL.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, ASHEN_SAND, Feature.ORE,
+                new OreConfiguration(dirtTest, ModBlocks.ASHEN_SAND.getDefaultState(), 48, 0.25f));
 
-        ConfiguredFeatures.register(featureRegisterable, ASHEN_GRAVEL_DIRT, Feature.ORE,
-                new OreFeatureConfig(ashenGravelTest, ModBlocks.ASHEN_DIRT.getDefaultState(), 48, 0.25f));
-        ConfiguredFeatures.register(featureRegisterable, ASHEN_GRAVEL_SAND, Feature.ORE,
-                new OreFeatureConfig(ashenGravelTest, ModBlocks.ASHEN_SAND.getDefaultState(), 48, 0.25f));
+        FeatureUtils.register(featureRegisterable, ASHEN_GRAVEL_DIRT, Feature.ORE,
+                new OreConfiguration(ashenGravelTest, ModBlocks.ASHEN_DIRT.getDefaultState(), 48, 0.25f));
+        FeatureUtils.register(featureRegisterable, ASHEN_GRAVEL_SAND, Feature.ORE,
+                new OreConfiguration(ashenGravelTest, ModBlocks.ASHEN_SAND.getDefaultState(), 48, 0.25f));
 
-        ConfiguredFeatures.register(featureRegisterable, ASHEN_STONE_GRAVEL, Feature.ORE,
-                new OreFeatureConfig(ashenStoneTest, ModBlocks.ASHEN_GRAVEL.getDefaultState(), 48, 0.4f));
-        ConfiguredFeatures.register(featureRegisterable, ASHEN_STONE_SAND, Feature.ORE,
-                new OreFeatureConfig(ashenStoneTest, ModBlocks.ASHEN_SAND.getDefaultState(), 48, 0.25f));
+        FeatureUtils.register(featureRegisterable, ASHEN_STONE_GRAVEL, Feature.ORE,
+                new OreConfiguration(ashenStoneTest, ModBlocks.ASHEN_GRAVEL.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, ASHEN_STONE_SAND, Feature.ORE,
+                new OreConfiguration(ashenStoneTest, ModBlocks.ASHEN_SAND.getDefaultState(), 48, 0.25f));
 
-        ConfiguredFeatures.register(featureRegisterable, BASALT_ORE, Feature.ORE,
-                new OreFeatureConfig(ashenStoneTest, Blocks.BASALT.getDefaultState(), 64, 0.4f));
+        FeatureUtils.register(featureRegisterable, BASALT_ORE, Feature.ORE,
+                new OreConfiguration(ashenStoneTest, Blocks.BASALT.getDefaultState(), 64, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, SMOOTH_BASALT_ORE, Feature.ORE,
-                new OreFeatureConfig(stoneTest, Blocks.SMOOTH_BASALT.getDefaultState(), 64, 0.4f));
+        FeatureUtils.register(featureRegisterable, SMOOTH_BASALT_ORE, Feature.ORE,
+                new OreConfiguration(stoneTest, Blocks.SMOOTH_BASALT.getDefaultState(), 64, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, BLACK_SAND_ORE, Feature.ORE,
-                new OreFeatureConfig(ashenStoneTest, ModBlocks.BLACK_SAND.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, BLACK_SAND_ORE, Feature.ORE,
+                new OreConfiguration(ashenStoneTest, ModBlocks.BLACK_SAND.getDefaultState(), 48, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, CALCITE_ORE, Feature.ORE,
-                new OreFeatureConfig(calciteList, 64, 0.2f));
+        FeatureUtils.register(featureRegisterable, CALCITE_ORE, Feature.ORE,
+                new OreConfiguration(calciteList, 64, 0.2f));
 
-        ConfiguredFeatures.register(featureRegisterable, BLUE_TUFF_ORE, Feature.ORE,
-                new OreFeatureConfig(stoneTest, StoneBlockSets.BLUE_TUFF_SET.baseBlocks.base().getDefaultState(), 64));
+        FeatureUtils.register(featureRegisterable, BLUE_TUFF_ORE, Feature.ORE,
+                new OreConfiguration(stoneTest, StoneBlockSets.BLUE_TUFF_SET.baseBlocks.base().getDefaultState(), 64));
 
-        ConfiguredFeatures.register(featureRegisterable, COARSE_DIRT_ORE, Feature.ORE,
-                new OreFeatureConfig(dirtTest, Blocks.COARSE_DIRT.getDefaultState(), 48, 0.4f));
-        ConfiguredFeatures.register(featureRegisterable, COARSE_CHALKSOIL_ORE, Feature.ORE,
-                new OreFeatureConfig(chalkGrassTest, ModBlocks.COARSE_CHALKSOIL.getDefaultState(), 48, 0.4f));
-        ConfiguredFeatures.register(featureRegisterable, COARSE_LOAM_ORE, Feature.ORE,
-                new OreFeatureConfig(loamGrassTest, ModBlocks.COARSE_LOAM.getDefaultState(), 48, 0.4f));
-        ConfiguredFeatures.register(featureRegisterable, COARSE_PEAT_ORE, Feature.ORE,
-                new OreFeatureConfig(peatGrassTest, ModBlocks.COARSE_PEAT.getDefaultState(), 48, 0.4f));
-        ConfiguredFeatures.register(featureRegisterable, COARSE_SILT_ORE, Feature.ORE,
-                new OreFeatureConfig(siltGrassTest, ModBlocks.COARSE_SILT.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, COARSE_DIRT_ORE, Feature.ORE,
+                new OreConfiguration(dirtTest, Blocks.COARSE_DIRT.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, COARSE_CHALKSOIL_ORE, Feature.ORE,
+                new OreConfiguration(chalkGrassTest, ModBlocks.COARSE_CHALKSOIL.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, COARSE_LOAM_ORE, Feature.ORE,
+                new OreConfiguration(loamGrassTest, ModBlocks.COARSE_LOAM.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, COARSE_PEAT_ORE, Feature.ORE,
+                new OreConfiguration(peatGrassTest, ModBlocks.COARSE_PEAT.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, COARSE_SILT_ORE, Feature.ORE,
+                new OreConfiguration(siltGrassTest, ModBlocks.COARSE_SILT.getDefaultState(), 48, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, CORRUPTED_MOSS_DISK, Feature.DISK,
-                new DiskFeatureConfig(PredicatedStateProvider.of(ModNatureBlocks.CORRUPTED_MOSS_BLOCK),
-                        BlockPredicate.matchingBlocks(List.of(Blocks.GRASS_BLOCK, Blocks.STONE)), UniformIntProvider.create(1, 3), 1));
+        FeatureUtils.register(featureRegisterable, CORRUPTED_MOSS_DISK, Feature.DISK,
+                new DiskConfiguration(RuleBasedBlockStateProvider.of(ModNatureBlocks.CORRUPTED_MOSS_BLOCK),
+                        BlockPredicate.matchingBlocks(List.of(Blocks.GRASS_BLOCK, Blocks.STONE)), UniformInt.create(1, 3), 1));
 
-        ConfiguredFeatures.register(featureRegisterable, DIORITE_ORE, Feature.ORE,
-                new OreFeatureConfig(stoneTest, Blocks.DIORITE.getDefaultState(), 64, 0.4f));
+        FeatureUtils.register(featureRegisterable, DIORITE_ORE, Feature.ORE,
+                new OreConfiguration(stoneTest, Blocks.DIORITE.getDefaultState(), 64, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, DIRT_TO_GRASS_ORE, Feature.ORE,
-                new OreFeatureConfig(dirtTest, Blocks.GRASS_BLOCK.getDefaultState(), 64, 0.2f));
+        FeatureUtils.register(featureRegisterable, DIRT_TO_GRASS_ORE, Feature.ORE,
+                new OreConfiguration(dirtTest, Blocks.GRASS_BLOCK.getDefaultState(), 64, 0.2f));
 
+        FeatureUtils.register(featureRegisterable, DIRTY_ROOTS_ORE, Feature.ORE,
+                new OreConfiguration(dirtTest, ModBlocks.DIRTY_ROOTS.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, ROOTED_DIRT_ORE, Feature.ORE,
+                new OreConfiguration(dirtTest, Blocks.ROOTED_DIRT.getDefaultState(), 48, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, DIRTY_ROOTS_ORE, Feature.ORE,
-                new OreFeatureConfig(dirtTest, ModBlocks.DIRTY_ROOTS.getDefaultState(), 48, 0.4f));
-        ConfiguredFeatures.register(featureRegisterable, ROOTED_DIRT_ORE, Feature.ORE,
-                new OreFeatureConfig(dirtTest, Blocks.ROOTED_DIRT.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, GRASSY_DIRT_ORE, Feature.ORE,
+                new OreConfiguration(dirtTest, ModBlocks.GRASSY_DIRT.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, GRASSY_CHALKSOIL_ORE, Feature.ORE,
+                new OreConfiguration(chalkGrassTest, ModBlocks.GRASSY_CHALKSOIL.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, GRASSY_LOAM_ORE, Feature.ORE,
+                new OreConfiguration(loamGrassTest, ModBlocks.GRASSY_LOAM.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, GRASSY_PEAT_ORE, Feature.ORE,
+                new OreConfiguration(peatGrassTest, ModBlocks.GRASSY_PEAT.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, GRASSY_SILT_ORE, Feature.ORE,
+                new OreConfiguration(siltGrassTest, ModBlocks.GRASSY_SILT.getDefaultState(), 48, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, GRASSY_DIRT_ORE, Feature.ORE,
-                new OreFeatureConfig(dirtTest, ModBlocks.GRASSY_DIRT.getDefaultState(), 48, 0.4f));
-        ConfiguredFeatures.register(featureRegisterable, GRASSY_CHALKSOIL_ORE, Feature.ORE,
-                new OreFeatureConfig(chalkGrassTest, ModBlocks.GRASSY_CHALKSOIL.getDefaultState(), 48, 0.4f));
-        ConfiguredFeatures.register(featureRegisterable, GRASSY_LOAM_ORE, Feature.ORE,
-                new OreFeatureConfig(loamGrassTest, ModBlocks.GRASSY_LOAM.getDefaultState(), 48, 0.4f));
-        ConfiguredFeatures.register(featureRegisterable, GRASSY_PEAT_ORE, Feature.ORE,
-                new OreFeatureConfig(peatGrassTest, ModBlocks.GRASSY_PEAT.getDefaultState(), 48, 0.4f));
-        ConfiguredFeatures.register(featureRegisterable, GRASSY_SILT_ORE, Feature.ORE,
-                new OreFeatureConfig(siltGrassTest, ModBlocks.GRASSY_SILT.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, COARSE_LOAM_TO_GRASSY, Feature.ORE,
+                new OreConfiguration(dirtTest, ModBlocks.GRASSY_LOAM.getDefaultState(), 64, 0.2f));
+        FeatureUtils.register(featureRegisterable, GRASSY_LOAM_TO_GRASS, Feature.ORE,
+                new OreConfiguration(grassyLoamTest, ModBlocks.LOAM_GRASS_BLOCK.getDefaultState(), 48, 0.65f));
+        FeatureUtils.register(featureRegisterable, COARSE_LOAM_TO_FOUL_DIRT, Feature.ORE,
+                new OreConfiguration(dirtTest, ModBlocks.FOUL_DIRT.getDefaultState(), 64, 0.2f));
+        FeatureUtils.register(featureRegisterable, FOUL_DIRT_TO_WASTE_PILE, Feature.ORE,
+                new OreConfiguration(foulDirtTest, ModBlocks.WASTE_PILE.getDefaultState(), 48, 0.65f));
 
+        FeatureUtils.register(featureRegisterable, GRAVEL_TO_SILT_ORE, Feature.ORE,
+                new OreConfiguration(gravelTest, ModBlocks.SILT.getDefaultState(), 64, 0.2f));
+        FeatureUtils.register(featureRegisterable, SILT_TO_GRASSY_ORE, Feature.ORE,
+                new OreConfiguration(gravelTest, ModBlocks.GRASSY_SILT.getDefaultState(), 48, 0.8f));
+        FeatureUtils.register(featureRegisterable, SILT_TO_COARSE_ORE, Feature.ORE,
+                new OreConfiguration(gravelTest, ModBlocks.COARSE_SILT.getDefaultState(), 48, 0.8f));
 
-        ConfiguredFeatures.register(featureRegisterable, COARSE_LOAM_TO_GRASSY, Feature.ORE,
-                new OreFeatureConfig(dirtTest, ModBlocks.GRASSY_LOAM.getDefaultState(), 64, 0.2f));
-        ConfiguredFeatures.register(featureRegisterable, GRASSY_LOAM_TO_GRASS, Feature.ORE,
-                new OreFeatureConfig(grassyLoamTest, ModBlocks.LOAM_GRASS_BLOCK.getDefaultState(), 48, 0.65f));
-        ConfiguredFeatures.register(featureRegisterable, COARSE_LOAM_TO_FOUL_DIRT, Feature.ORE,
-                new OreFeatureConfig(dirtTest, ModBlocks.FOUL_DIRT.getDefaultState(), 64, 0.2f));
-        ConfiguredFeatures.register(featureRegisterable, FOUL_DIRT_TO_WASTE_PILE, Feature.ORE,
-                new OreFeatureConfig(foulDirtTest, ModBlocks.WASTE_PILE.getDefaultState(), 48, 0.65f));
+        FeatureUtils.register(featureRegisterable, DOLOMITE_ORE, Feature.ORE,
+                new OreConfiguration(stoneTest, StoneBlockSets.DOLOMITE_SET.baseBlocks.base().getDefaultState(), 64, 0.25f));
 
-        ConfiguredFeatures.register(featureRegisterable, GRAVEL_TO_SILT_ORE, Feature.ORE,
-                new OreFeatureConfig(gravelTest, ModBlocks.SILT.getDefaultState(), 64, 0.2f));
-        ConfiguredFeatures.register(featureRegisterable, SILT_TO_GRASSY_ORE, Feature.ORE,
-                new OreFeatureConfig(gravelTest, ModBlocks.GRASSY_SILT.getDefaultState(), 48, 0.8f));
-        ConfiguredFeatures.register(featureRegisterable, SILT_TO_COARSE_ORE, Feature.ORE,
-                new OreFeatureConfig(gravelTest, ModBlocks.COARSE_SILT.getDefaultState(), 48, 0.8f));
+        FeatureUtils.register(featureRegisterable, DRIPSTONE_ORE, Feature.ORE,
+                new OreConfiguration(stoneTest, Blocks.DRIPSTONE_BLOCK.getDefaultState(), 64, 0.25f));
 
-        ConfiguredFeatures.register(featureRegisterable, DOLOMITE_ORE, Feature.ORE,
-                new OreFeatureConfig(stoneTest, StoneBlockSets.DOLOMITE_SET.baseBlocks.base().getDefaultState(), 64, 0.25f));
+        FeatureUtils.register(featureRegisterable, DRY_DIRT_ORE, Feature.ORE,
+                new OreConfiguration(dirtTest, ModBlocks.DRY_DIRT.getDefaultState(), 48, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, DRIPSTONE_ORE, Feature.ORE,
-                new OreFeatureConfig(stoneTest, Blocks.DRIPSTONE_BLOCK.getDefaultState(), 64, 0.25f));
+        FeatureUtils.register(featureRegisterable, FOREST_MOSS_DISK, Feature.DISK,
+                new DiskConfiguration(RuleBasedBlockStateProvider.of(ModNatureBlocks.FOREST_MOSS_BLOCK),
+                        BlockPredicate.matchingBlocks(List.of(Blocks.GRASS_BLOCK, Blocks.STONE)), UniformInt.create(1, 3), 1));
 
-        ConfiguredFeatures.register(featureRegisterable, DRY_DIRT_ORE, Feature.ORE,
-                new OreFeatureConfig(dirtTest, ModBlocks.DRY_DIRT.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, GRAVEL_ORE, Feature.ORE,
+                new OreConfiguration(dirtTest, Blocks.GRAVEL.getDefaultState(), 48, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, FOREST_MOSS_DISK, Feature.DISK,
-                new DiskFeatureConfig(PredicatedStateProvider.of(ModNatureBlocks.FOREST_MOSS_BLOCK),
-                        BlockPredicate.matchingBlocks(List.of(Blocks.GRASS_BLOCK, Blocks.STONE)), UniformIntProvider.create(1, 3), 1));
+        FeatureUtils.register(featureRegisterable, SNOWY_DIRT_ORE, Feature.ORE,
+                new OreConfiguration(dirtTest, ModBlocks.SNOWY_DIRT.getDefaultState(), 48, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, GRAVEL_ORE, Feature.ORE,
-                new OreFeatureConfig(dirtTest, Blocks.GRAVEL.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, SNOWY_GRASS_ORE, Feature.ORE,
+                new OreConfiguration(dirtTest, ModBlocks.SNOWY_GRASS_BLOCK.getDefaultState(), 48, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, SNOWY_DIRT_ORE, Feature.ORE,
-                new OreFeatureConfig(dirtTest, ModBlocks.SNOWY_DIRT.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, GRANITE_ORE, Feature.ORE,
+                new OreConfiguration(stoneTest, Blocks.GRANITE.getDefaultState(), 64, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, SNOWY_GRASS_ORE, Feature.ORE,
-                new OreFeatureConfig(dirtTest, ModBlocks.SNOWY_GRASS_BLOCK.getDefaultState(), 48, 0.4f));
-
-        ConfiguredFeatures.register(featureRegisterable, GRANITE_ORE, Feature.ORE,
-                new OreFeatureConfig(stoneTest, Blocks.GRANITE.getDefaultState(), 64, 0.4f));
-
-        ConfiguredFeatures.register(featureRegisterable, SAND_TO_GRASS_ORE, ModFeatures.SURFACE_ORE,
+        FeatureUtils.register(featureRegisterable, SAND_TO_GRASS_ORE, ModFeatures.SURFACE_ORE,
                 new SurfaceOreFeatureConfig(sandTest, Blocks.GRASS_BLOCK.getDefaultState(), 64));
 
-        ConfiguredFeatures.register(featureRegisterable, STONE_GRASS_ORE, ModFeatures.SURFACE_ORE,
+        FeatureUtils.register(featureRegisterable, STONE_GRASS_ORE, ModFeatures.SURFACE_ORE,
                 new SurfaceOreFeatureConfig(stoneTest, Blocks.GRASS_BLOCK.getDefaultState(), 64));
 
-        ConfiguredFeatures.register(featureRegisterable, GONLUIN_GRASS_ORE, Feature.DISK,
-                new DiskFeatureConfig(PredicatedStateProvider.of(Blocks.GRASS_BLOCK),
-                        BlockPredicate.matchingBlocks(List.of(StoneBlockSets.KHAGALABAN_SET.baseBlocks.base())), UniformIntProvider.create(3, 6), 1));
+        FeatureUtils.register(featureRegisterable, GONLUIN_GRASS_ORE, Feature.DISK,
+                new DiskConfiguration(RuleBasedBlockStateProvider.of(Blocks.GRASS_BLOCK),
+                        BlockPredicate.matchingBlocks(List.of(StoneBlockSets.KHAGALABAN_SET.baseBlocks.base())), UniformInt.create(3, 6), 1));
 
-        ConfiguredFeatures.register(featureRegisterable, OLD_PODZOL_ORE, Feature.ORE,
-                new OreFeatureConfig(grassTest, ModNatureBlocks.OLD_PODZOL.getDefaultState(), 64, 0.4f));
-        ConfiguredFeatures.register(featureRegisterable, OLD_STONE_PODZOL_ORE, Feature.ORE,
-                new OreFeatureConfig(ashenStoneTest, ModNatureBlocks.OLD_PODZOL.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, OLD_PODZOL_ORE, Feature.ORE,
+                new OreConfiguration(grassTest, ModNatureBlocks.OLD_PODZOL.getDefaultState(), 64, 0.4f));
+        FeatureUtils.register(featureRegisterable, OLD_STONE_PODZOL_ORE, Feature.ORE,
+                new OreConfiguration(ashenStoneTest, ModNatureBlocks.OLD_PODZOL.getDefaultState(), 48, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, LIMESTONE_ORE, Feature.ORE,
-                new OreFeatureConfig(stoneTest, StoneBlockSets.LIMESTONE_SET.baseBlocks.base().getDefaultState(), 64, 0.25f));
-        ConfiguredFeatures.register(featureRegisterable, LORIEN_PODZOL_ORE, Feature.ORE,
-                new OreFeatureConfig(dirtTest, ModNatureBlocks.LORIEN_PODZOL.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, LIMESTONE_ORE, Feature.ORE,
+                new OreConfiguration(stoneTest, StoneBlockSets.LIMESTONE_SET.baseBlocks.base().getDefaultState(), 64, 0.25f));
+        FeatureUtils.register(featureRegisterable, LORIEN_PODZOL_ORE, Feature.ORE,
+                new OreConfiguration(dirtTest, ModNatureBlocks.LORIEN_PODZOL.getDefaultState(), 48, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, MIRE_ORE, Feature.ORE,
-                new OreFeatureConfig(dirtTest, ModBlocks.MIRE.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, MIRE_ORE, Feature.ORE,
+                new OreConfiguration(dirtTest, ModBlocks.MIRE.getDefaultState(), 48, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, MUD_ORE, Feature.ORE,
-                new OreFeatureConfig(dirtTest, Blocks.MUD.getDefaultState(), 48, 0.4f));
-        ConfiguredFeatures.register(featureRegisterable, PACKED_MUD_ORE, Feature.ORE,
-                new OreFeatureConfig(dirtTest, Blocks.PACKED_MUD.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, MUD_ORE, Feature.ORE,
+                new OreConfiguration(dirtTest, Blocks.MUD.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, PACKED_MUD_ORE, Feature.ORE,
+                new OreConfiguration(dirtTest, Blocks.PACKED_MUD.getDefaultState(), 48, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, PODZOL_ORE, Feature.ORE,
-                new OreFeatureConfig(dirtTest, Blocks.PODZOL.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, PODZOL_ORE, Feature.ORE,
+                new OreConfiguration(dirtTest, Blocks.PODZOL.getDefaultState(), 48, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, POWDER_SNOW_ORE, Feature.ORE,
-                new OreFeatureConfig(powderSnowList, 41));
+        FeatureUtils.register(featureRegisterable, POWDER_SNOW_ORE, Feature.ORE,
+                new OreConfiguration(powderSnowList, 41));
 
-        ConfiguredFeatures.register(featureRegisterable, RIVER_SAND_ORE, Feature.DISK,
-                new DiskFeatureConfig(PredicatedStateProvider.of(ModBlocks.RIVER_SAND), BlockPredicate.matchingBlocks(List.of(Blocks.DIRT, Blocks.SAND, Blocks.GRASS_BLOCK)), UniformIntProvider.create(2, 5), 2));
+        FeatureUtils.register(featureRegisterable, RIVER_SAND_ORE, Feature.DISK,
+                new DiskConfiguration(RuleBasedBlockStateProvider.of(ModBlocks.RIVER_SAND), BlockPredicate.matchingBlocks(List.of(Blocks.DIRT, Blocks.SAND, Blocks.GRASS_BLOCK)), UniformInt.create(2, 5), 2));
 
-        ConfiguredFeatures.register(featureRegisterable, SAND_ORE, Feature.ORE,
-                new OreFeatureConfig(dirtTest, Blocks.SAND.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, SAND_ORE, Feature.ORE,
+                new OreConfiguration(dirtTest, Blocks.SAND.getDefaultState(), 48, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, SNOW_BLOCK_ORE, Feature.ORE,
-                new OreFeatureConfig(stoneTest, Blocks.SNOW_BLOCK.getDefaultState(), 64, 0.5f));
+        FeatureUtils.register(featureRegisterable, SNOW_BLOCK_ORE, Feature.ORE,
+                new OreConfiguration(stoneTest, Blocks.SNOW_BLOCK.getDefaultState(), 64, 0.5f));
 
-        ConfiguredFeatures.register(featureRegisterable, SOUL_SAND_ORE, Feature.ORE,
-                new OreFeatureConfig(dirtTest, Blocks.SOUL_SAND.getDefaultState(), 32, 0.4f));
+        FeatureUtils.register(featureRegisterable, SOUL_SAND_ORE, Feature.ORE,
+                new OreConfiguration(dirtTest, Blocks.SOUL_SAND.getDefaultState(), 32, 0.4f));
 
-        ConfiguredFeatures.register(featureRegisterable, CALCITE_STONE_ORE, Feature.ORE,
-                new OreFeatureConfig(stoneTest, Blocks.STONE.getDefaultState(), 64, 0.4f));
-        ConfiguredFeatures.register(featureRegisterable, GRASS_TO_STONE_ORE, Feature.ORE,
-                new OreFeatureConfig(dirtTest, Blocks.STONE.getDefaultState(), 64, 0.25f));
-        ConfiguredFeatures.register(featureRegisterable, GRASS_TO_GRANITE_ORE, Feature.ORE,
-                new OreFeatureConfig(dirtTest, Blocks.GRANITE.getDefaultState(), 64, 0.25f));
+        FeatureUtils.register(featureRegisterable, CALCITE_STONE_ORE, Feature.ORE,
+                new OreConfiguration(stoneTest, Blocks.STONE.getDefaultState(), 64, 0.4f));
+        FeatureUtils.register(featureRegisterable, GRASS_TO_STONE_ORE, Feature.ORE,
+                new OreConfiguration(dirtTest, Blocks.STONE.getDefaultState(), 64, 0.25f));
+        FeatureUtils.register(featureRegisterable, GRASS_TO_GRANITE_ORE, Feature.ORE,
+                new OreConfiguration(dirtTest, Blocks.GRANITE.getDefaultState(), 64, 0.25f));
 
-        ConfiguredFeatures.register(featureRegisterable, TUFF_ORE, Feature.ORE,
-                new OreFeatureConfig(stoneTest, Blocks.TUFF.getDefaultState(), 48, 0.25f));
+        FeatureUtils.register(featureRegisterable, TUFF_ORE, Feature.ORE,
+                new OreConfiguration(stoneTest, Blocks.TUFF.getDefaultState(), 48, 0.25f));
 
-        ConfiguredFeatures.register(featureRegisterable, TURF_ORE, Feature.ORE,
-                new OreFeatureConfig(dirtTest, ModBlocks.TURF.getDefaultState(), 64, 0.25f));
+        FeatureUtils.register(featureRegisterable, TURF_ORE, Feature.ORE,
+                new OreConfiguration(dirtTest, ModBlocks.TURF.getDefaultState(), 64, 0.25f));
 
-        ConfiguredFeatures.register(featureRegisterable, WHITE_SAND_ORE, Feature.ORE,
-                new OreFeatureConfig(dirtTest, ModBlocks.WHITE_SAND.getDefaultState(), 48, 0.4f));
+        FeatureUtils.register(featureRegisterable, WHITE_SAND_ORE, Feature.ORE,
+                new OreConfiguration(dirtTest, ModBlocks.WHITE_SAND.getDefaultState(), 48, 0.4f));
     }
 
     public static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {

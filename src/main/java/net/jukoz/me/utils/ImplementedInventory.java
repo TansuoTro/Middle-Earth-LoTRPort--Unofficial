@@ -1,10 +1,10 @@
 package net.jukoz.me.utils;
 
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.inventory.Inventories;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.Direction;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,12 +19,12 @@ public interface ImplementedInventory extends Inventory {
      * Retrieves the item list of this inventory.
      * Must return the same instance every time it's called.
      */
-    DefaultedList<ItemStack> getItems();
+    NonNullList<ItemStack> getItems();
 
     /**
      * Creates an inventory from the item list.
      */
-    static ImplementedInventory of(DefaultedList<ItemStack> items) {
+    static ImplementedInventory of(NonNullList<ItemStack> items) {
         return () -> items;
     }
 
@@ -32,7 +32,7 @@ public interface ImplementedInventory extends Inventory {
      * Creates a new inventory with the specified size.
      */
     static ImplementedInventory ofSize(int size) {
-        return of(DefaultedList.ofSize(size, ItemStack.EMPTY));
+        return of(NonNullList.ofSize(size, ItemStack.EMPTY));
     }
 
     /**
@@ -58,7 +58,6 @@ public interface ImplementedInventory extends Inventory {
         return true;
     }
 
-
     /**
      * Retrieves the item in the slot.
      */
@@ -75,7 +74,7 @@ public interface ImplementedInventory extends Inventory {
      */
     @Override
     default ItemStack removeStack(int slot, int count) {
-        ItemStack result = Inventories.splitStack(getItems(), slot, count);
+        ItemStack result = ContainerHelper.splitStack(getItems(), slot, count);
         if (!result.isEmpty()) {
             markDirty();
         }
@@ -88,7 +87,7 @@ public interface ImplementedInventory extends Inventory {
      */
     @Override
     default ItemStack removeStack(int slot) {
-        return Inventories.removeStack(getItems(), slot);
+        return ContainerHelper.removeStack(getItems(), slot);
     }
 
     /**

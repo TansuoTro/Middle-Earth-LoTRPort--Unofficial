@@ -6,23 +6,23 @@ import net.jukoz.me.compat.MEBannerPatterns;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.recipe.SpecialCraftingRecipe;
-import net.minecraft.recipe.book.CraftingRecipeCategory;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.inventory.RecipeInputInventory;
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.RegistryWrapper;
 import net.minecraft.world.level.Level;
 
-public class CustomItemDecorationRecipe extends SpecialCraftingRecipe {
+public class CustomItemDecorationRecipe extends CustomRecipe {
 
     //TODO NO WORKY
 
-    public CustomItemDecorationRecipe(ResourceLocation id, CraftingRecipeCategory category) {
+    public CustomItemDecorationRecipe(ResourceLocation id, CraftingBookCategory category) {
         super(id, category);
     }
 
-    public boolean matches(RecipeInputInventory craftingRecipeInput, Level world) {
+    public boolean matches(CraftingContainer craftingRecipeInput, Level world) {
         ItemStack itemStack = ItemStack.EMPTY;
         ItemStack itemStack2 = ItemStack.EMPTY;
 
@@ -61,7 +61,7 @@ public class CustomItemDecorationRecipe extends SpecialCraftingRecipe {
         }
     }
 
-    public ItemStack craft(RecipeInputInventory craftingRecipeInput, DynamicRegistryManager wrapperLookup) {
+    public ItemStack craft(CraftingContainer craftingRecipeInput, RegistryAccess wrapperLookup) {
         ItemStack itemStack = ItemStack.EMPTY;
         ItemStack itemStack2 = ItemStack.EMPTY;
 
@@ -89,7 +89,7 @@ public class CustomItemDecorationRecipe extends SpecialCraftingRecipe {
         return width * height >= 2;
     }
 
-    public RecipeSerializer<? extends SpecialCraftingRecipe> getSerializer() {
+    public RecipeSerializer<? extends CustomRecipe> getSerializer() {
         return ModRecipeSerializer.CUSTOM_ITEM_DECORATION;
     }
 }

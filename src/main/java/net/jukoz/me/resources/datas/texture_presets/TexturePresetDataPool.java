@@ -3,17 +3,17 @@ package net.jukoz.me.resources.datas.texture_presets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.api.dtos.WeightedPool;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.resources.datas.common.CharacterMaterialTypes;
 import net.jukoz.me.resources.datas.common.CharacterPatternTypes;
 import net.jukoz.me.resources.datas.common.EntityCategories;
-
 import java.util.HashMap;
 import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class TexturePresetDataPool {
     public static final Codec<TexturePresetDataPool> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -27,9 +27,9 @@ public class TexturePresetDataPool {
         presetsByCategory = new HashMap<>();
 
         for(EntityCategories category : EntityCategories.values()){
-            var optList = categories.getList(category.name(), NbtElement.COMPOUND_TYPE);
+            var optList = categories.getList(category.name(), Tag.COMPOUND_TYPE);
             if(optList.isEmpty()) continue;
-            NbtList nbtListPresets = optList;
+            ListTag nbtListPresets = optList;
             WeightedPool<WeightedTexturePresetHolder> dataPresetList = new WeightedPool<>();
             for(int i = 0; i < nbtListPresets.size(); i++){
                 WeightedTexturePresetHolder fetchedPreset = new WeightedTexturePresetHolder(nbtListPresets.getCompound(i));
@@ -57,13 +57,12 @@ public class TexturePresetDataPool {
         return textureIdentity.preset.getClothingData();
     }
 
-
     public CompoundTag getNbt() {
         CompoundTag newNbt = new CompoundTag();
         for(EntityCategories category : presetsByCategory.keySet()){
             WeightedPool<WeightedTexturePresetHolder> presets = presetsByCategory.get(category);
             if(presets != null && !presets.isEmpty()){
-                NbtList newNbtList = new NbtList();
+                ListTag newNbtList = new ListTag();
                 for (WeightedTexturePresetHolder preset : presets.elements) {
                     newNbtList.add(preset.getNbt());
                 }
@@ -94,7 +93,7 @@ public class TexturePresetDataPool {
     }
 
     public EntityCategories getRandomCategory() {
-        Random random = new Random();
+        RandomSource random = new RandomSource();
         boolean containsMale = this.presetsByCategory.containsKey(EntityCategories.MALE);
         boolean containsFemale = this.presetsByCategory.containsKey(EntityCategories.FEMALE);
         // Shared is not a valid sex
@@ -120,7 +119,7 @@ public class TexturePresetDataPool {
             WeightedPool<WeightedTexturePresetHolder> presets = data.presetsByCategory.get(entityCategories);
             presets = feedSharedToPresets(data, presets);
 
-            Random random = new Random();
+            RandomSource random = new RandomSource();
             return new Identity(entityCategories, presets.get(random.nextInt(presets.size())));
         }
 

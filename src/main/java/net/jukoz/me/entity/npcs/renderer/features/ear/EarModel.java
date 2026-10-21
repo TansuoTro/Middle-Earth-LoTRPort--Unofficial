@@ -1,13 +1,20 @@
 package net.jukoz.me.entity.npcs.renderer.features.ear;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.render.entity.model.SinglePartEntityModel;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.HierarchicalModel;
 import net.jukoz.me.entity.npcs.NpcEntity;
 import net.minecraft.util.Mth;
 import net.jukoz.me.entity.npcs.renderer.NpcEntityRenderState;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
-public class EarModel extends SinglePartEntityModel<NpcEntity> {
+public class EarModel extends HierarchicalModel<NpcEntity> {
     private final ModelPart root;
     public final ModelPart ears;
     public final ModelPart planeFlatLeft;
@@ -22,26 +29,26 @@ public class EarModel extends SinglePartEntityModel<NpcEntity> {
         this.planeFlatRight = this.ears.getChild("ear_right");
     }
 
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = new ModelData();
-        ModelPartData root = modelData.getRoot();
+    public static LayerDefinition getTexturedModelData() {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition root = modelData.getRoot();
 
-        ModelPartData ears = root.addChild("ears", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition ears = root.addChild("ears", CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
         ears.addChild("ear_right",
-                ModelPartBuilder.create().uv(0, 6).cuboid(3.5F, -8.0F, 2F, 7.0F, 6.0F, 0.0F, Dilation.NONE),
-                ModelTransform.NONE);
+                CubeListBuilder.create().uv(0, 6).cuboid(3.5F, -8.0F, 2F, 7.0F, 6.0F, 0.0F, CubeDeformation.NONE),
+                PartPose.NONE);
 
         ears.addChild("ear_left",
-                ModelPartBuilder.create().uv(0, 6).cuboid(3.5F, -8.0F, -2F, 7.0F, 6.0F, 0.0F, Dilation.NONE),
-                ModelTransform.NONE);
+                CubeListBuilder.create().uv(0, 6).cuboid(3.5F, -8.0F, -2F, 7.0F, 6.0F, 0.0F, CubeDeformation.NONE),
+                PartPose.NONE);
 
-        return TexturedModelData.of(modelData, 16, 16);
+        return LayerDefinition.of(modelData, 16, 16);
     }
 
     public void setAngles(NpcEntityRenderState state) {
 
-        // Taken from BipedEntityModel.class
+        // Taken from HumanoidModel.class
         float f = state.leaningPitch;
         boolean bl = state.isGliding;
         this.ears.pitch = state.pitch * 0.017453292F;

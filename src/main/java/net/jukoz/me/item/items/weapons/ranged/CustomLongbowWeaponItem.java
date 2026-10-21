@@ -1,29 +1,28 @@
 package net.jukoz.me.item.items.weapons.ranged;
-import net.jukoz.me.item.MEComponents;
 
+import net.jukoz.me.item.MEComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.item.ArrowItem;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.item.dataComponents.WeaponTypeDataComponent;
 import net.jukoz.me.item.utils.RangedWeaponTypesME;
-
 import java.util.List;
 
 public class CustomLongbowWeaponItem extends BowItem {
@@ -58,7 +57,7 @@ public class CustomLongbowWeaponItem extends BowItem {
                     boolean bl2 = bl && itemStack.isOf(Items.ARROW);
                     if (!world.isClient) {
                         ArrowItem arrowItem = (ArrowItem) (itemStack.getItem() instanceof ArrowItem ? itemStack.getItem() : Items.ARROW);
-                        PersistentProjectileEntity persistentProjectileEntity = arrowItem.createArrow(world, itemStack, playerEntity);
+                        AbstractArrow persistentProjectileEntity = arrowItem.createArrow(world, itemStack, playerEntity);
                         persistentProjectileEntity.setVelocity(playerEntity, playerEntity.getPitch(), playerEntity.getYaw(), 0.0F, f * 5.0F, 1.0F);
                         if (f == 1.0F) {
                             persistentProjectileEntity.setCritical(true);
@@ -82,13 +81,13 @@ public class CustomLongbowWeaponItem extends BowItem {
                                 playerEntity.getActiveHand() == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND));
 
                         if (bl2 || playerEntity.getAbilities().creativeMode && (itemStack.isOf(Items.SPECTRAL_ARROW) || itemStack.isOf(Items.TIPPED_ARROW))) {
-                            persistentProjectileEntity.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
+                            persistentProjectileEntity.pickupType = AbstractArrow.PickupPermission.CREATIVE_ONLY;
                         }
 
                         world.spawnEntity(persistentProjectileEntity);
                     }
 
-                    world.playSound((Player) null, playerEntity.getX(), playerEntity.getY(), playerEntity.getZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (world.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+                    world.playSound((Player) null, playerEntity.getX(), playerEntity.getY(), playerEntity.getZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F / (world.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
                     playerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
 
                     if (!bl2 && !playerEntity.getAbilities().creativeMode) {
@@ -119,7 +118,7 @@ public class CustomLongbowWeaponItem extends BowItem {
                 || Registries.ITEM.getId(this).getPath().contains("uruk_hai")
                 || Registries.ITEM.getId(this).getPath().contains("heyday")
                 || Registries.ITEM.getId(this).getPath().contains("numenorean")){
-            return Component.translatable(this.getTranslationKey()).formatted(Formatting.GOLD);
+            return Component.translatable(this.getTranslationKey()).formatted(ChatFormatting.GOLD);
         }
         return super.getName(stack);
     }

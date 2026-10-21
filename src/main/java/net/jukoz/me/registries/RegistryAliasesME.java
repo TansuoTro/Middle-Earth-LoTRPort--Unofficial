@@ -2,7 +2,6 @@ package net.jukoz.me.registries;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -8,11 +8,10 @@ import net.jukoz.me.world.biomes.surface.MapBasedBiomePool;
 import net.jukoz.me.world.biomes.surface.MapBasedCustomBiome;
 import net.jukoz.me.world.chunkgen.map.ImageUtils;
 import net.jukoz.me.world.map.MiddleEarthMapConfigs;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Vector2d;
 import org.joml.Vector2i;
-
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -105,12 +104,12 @@ public class MapWidget extends ModWidget {
         return getMapPointFromMapCoordinate(point);
     }
 
-    public void drawCentered(DrawContext context, int centerX, int startY){
+    public void drawCentered(GuiGraphics context, int centerX, int startY){
         int startX = centerX - (uiWidth / 2);
         draw(context, startX, startY);
     }
 
-    public void drawAnchored(DrawContext context, int anchorX, int startY, boolean isLeftAnchor){
+    public void drawAnchored(GuiGraphics context, int anchorX, int startY, boolean isLeftAnchor){
         int startX = anchorX;
         if(!isLeftAnchor)
             startX -= uiWidth;
@@ -118,7 +117,7 @@ public class MapWidget extends ModWidget {
         draw(context, startX, startY);
     }
 
-    protected void draw(DrawContext context, int startX, int startY){
+    protected void draw(GuiGraphics context, int startX, int startY){
         this.startX = startX;
         this.startY = startY;
 
@@ -141,13 +140,13 @@ public class MapWidget extends ModWidget {
         }
     }
 
-    protected void drawMapTexture(DrawContext context, int startX, int startY) {
+    protected void drawMapTexture(GuiGraphics context, int startX, int startY) {
         int size = Math.max(getCurrentWidth(), getCurrentHeight());
 
         context.drawTexture(getMapTexture(), startX, startY, uvX.floatValue(), uvY.floatValue(), getWidth(), getHeight(), size, size);
     }
 
-    protected void drawOverlayMapTexture(DrawContext context, int startX, int startY) {
+    protected void drawOverlayMapTexture(GuiGraphics context, int startX, int startY) {
         int size = Math.max(getCurrentWidth(), getCurrentHeight());
 
         context.drawTexture(getOverlayMapTexture(), startX, startY, uvX.floatValue(), uvY.floatValue(), getWidth(), getHeight(), size, size);
@@ -251,7 +250,6 @@ public class MapWidget extends ModWidget {
         currentPointRatio.x = (-startX + mouseX) / getWidth();
         currentPointRatio.y = (-startY + mouseY) / getHeight();
     }
-
 
     protected boolean mouseIsInside(double mouseX, double mouseY) {
         return ((mouseX > startX && mouseX < startX + getWidth()) && (mouseY > startY && mouseY < startY + getHeight()));

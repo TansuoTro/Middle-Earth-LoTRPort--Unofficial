@@ -2,29 +2,33 @@ package net.jukoz.me.recipe;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.recipe.*;
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.JsonHelper;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 
-public class AlloyRecipe implements Recipe<SimpleInventory> {
+public class AlloyRecipe implements Recipe<SimpleContainer> {
     public final ResourceLocation id;
     public final ItemStack output;
-    public final DefaultedList<Ingredient> inputs;
+    public final NonNullList<Ingredient> inputs;
 
-    public AlloyRecipe(ResourceLocation id, ItemStack output, DefaultedList<Ingredient> recipeItems) {
+    public AlloyRecipe(ResourceLocation id, ItemStack output, NonNullList<Ingredient> recipeItems) {
         this.id = id;
         this.output = output;
         this.inputs = recipeItems;
     }
 
     @Override
-    public boolean matches(SimpleInventory inventory, Level world) {
+    public boolean matches(SimpleContainer inventory, Level world) {
         if(world.isClient()) return false;
         int i = 0;
         for (int j = 1; j < inventory.size() - 1; ++j) { // We avoid first and last indexes, because it's for fuel & output.
@@ -40,14 +44,14 @@ public class AlloyRecipe implements Recipe<SimpleInventory> {
         return true;
     }
 
-    public DefaultedList<Ingredient> getIngredients() {
-        DefaultedList<Ingredient> defaultedList = DefaultedList.of();
+    public NonNullList<Ingredient> getIngredients() {
+        NonNullList<Ingredient> defaultedList = NonNullList.of();
         defaultedList.addAll(this.inputs);
         return defaultedList;
     }
 
     @Override
-    public ItemStack craft(SimpleInventory inventory, DynamicRegistryManager registryManager) {
+    public ItemStack craft(SimpleContainer inventory, RegistryAccess registryManager) {
         return output;
     }
 
@@ -57,7 +61,7 @@ public class AlloyRecipe implements Recipe<SimpleInventory> {
     }
 
     @Override
-    public ItemStack getOutput(DynamicRegistryManager registryManager) {
+    public ItemStack getOutput(RegistryAccess registryManager) {
         return output;
     }
 
@@ -88,9 +92,9 @@ public class AlloyRecipe implements Recipe<SimpleInventory> {
 
         @Override
         public AlloyRecipe read(ResourceLocation id, JsonObject json) {
-            ItemStack output = ShapedRecipe.outputFromJson(JsonHelper.getObject(json, "output"));
-            JsonArray ingredients = JsonHelper.getArray(json, "ingredients");
-            DefaultedList<Ingredient> inputs = DefaultedList.ofSize(ingredients.size(), Ingredient.EMPTY);
+            ItemStack output = ShapedRecipe.outputFromJson(GsonHelper.getObject(json, "output"));
+            JsonArray ingredients = GsonHelper.getArray(json, "ingredients");
+            NonNullList<Ingredient> inputs = NonNullList.ofSize(ingredients.size(), Ingredient.EMPTY);
             for (int i = 0; i < ingredients.size(); i++) {
                 Ingredient ingredient = Ingredient.fromJson(ingredients.get(i), true);
                 if (ingredient.isEmpty()) continue;
@@ -102,7 +106,7 @@ public class AlloyRecipe implements Recipe<SimpleInventory> {
 
         @Override
         public AlloyRecipe read(ResourceLocation id, FriendlyByteBuf buf) {
-            DefaultedList<Ingredient> inputs = DefaultedList.ofSize(buf.readInt(), Ingredient.EMPTY);
+            NonNullList<Ingredient> inputs = NonNullList.ofSize(buf.readInt(), Ingredient.EMPTY);
             for (int i = 0; i < inputs.size(); i++) {
                 inputs.set(i, Ingredient.fromPacket(buf));
             }

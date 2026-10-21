@@ -30,4 +30,3 @@ public enum LongbeardDwarfVariant {
         return BY_ID[id % BY_ID.length];
     }
 }
-

@@ -16,10 +16,10 @@ import net.jukoz.me.resources.datas.attributes.AttributePoolElement;
 import net.jukoz.me.resources.datas.common.EntityCategories;
 import net.jukoz.me.resources.datas.factions.Faction;
 import net.jukoz.me.resources.datas.npc_types.NpcType;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import net.minecraft.core.HolderGetter;
 
 public class NpcRegistry {
     private static final ResourceKey<Registry<NpcType>> NPC_TYPE_KEY = DynamicRegistriesME.NPC_TYPE;
@@ -162,10 +162,8 @@ public class NpcRegistry {
     public final static ResourceKey<NpcType> ISENGARD_URUK_HAI_LEADER = DynamicRegistriesME.of(NPC_TYPE_KEY, createID(FactionRegistry.ISENGARD, "leader"));
     public final static ResourceKey<NpcType> ISENGARD_ORTHANC_GUARD = DynamicRegistriesME.of(NPC_TYPE_KEY, createID(FactionRegistry.ISENGARD, "orthanc_guard"));
 
-
-
     public static void bootstrap(BootstrapContext<NpcType> context) {
-        RegistryEntryLookup<NpcType> registryEntryLookup = context.getRegistryLookup(NPC_TYPE_KEY);
+        HolderGetter<NpcType> registryEntryLookup = context.getRegistryLookup(NPC_TYPE_KEY);
 
         allNpcTypes = new ArrayList<>();
 
@@ -185,14 +183,14 @@ public class NpcRegistry {
         registerAll(context, registryEntryLookup, IsengardNpcTypePool.fetchAll());
     }
 
-    private static void registerAll(BootstrapContext<NpcType> context, RegistryEntryLookup<NpcType> registryEntryLookup, List<RegisterableNpcData> npcDatas) {
+    private static void registerAll(BootstrapContext<NpcType> context, HolderGetter<NpcType> registryEntryLookup, List<RegisterableNpcData> npcDatas) {
         for(RegisterableNpcData registerable : npcDatas){
             register(context, registryEntryLookup, registerable.npcDataRegistryKey, registerable.content);
             allNpcTypes.add(registerable.npcDataRegistryKey);
         }
     }
 
-    private static void register(BootstrapContext<NpcType> context, RegistryEntryLookup<NpcType> registryEntryLookup, ResourceKey<NpcType> registryKey, NpcType element){
+    private static void register(BootstrapContext<NpcType> context, HolderGetter<NpcType> registryEntryLookup, ResourceKey<NpcType> registryKey, NpcType element){
         DynamicRegistriesME.register(context, registryEntryLookup, registryKey, element);
         // [LANG datagen]
         TranslationEntries.npcTypeEntries.add(registryKey.getValue().getPath());

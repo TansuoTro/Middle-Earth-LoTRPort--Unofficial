@@ -9,20 +9,23 @@ import net.jukoz.me.entity.humans.gondor.GondorHumanEntity;
 import net.jukoz.me.entity.humans.rohan.RohanHumanEntity;
 import net.jukoz.me.item.ModEquipmentItems;
 import net.jukoz.me.item.ModWeaponItems;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.item.DyeableItem;
+import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 
 public class MistyGoblinEntity extends NpcEntity {
     public MistyGoblinEntity(EntityType<? extends NpcEntity> entityType, Level world) {
@@ -39,14 +42,14 @@ public class MistyGoblinEntity extends NpcEntity {
 
     @Nullable
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable CompoundTag entityNbt) {
+    public SpawnGroupData initialize(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, @Nullable CompoundTag entityNbt) {
         entityData = super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
         RandomSource random = world.getRandom();
         this.initEquipment(random, difficulty);
         return entityData;
     }
 
-    public static DefaultAttributeContainer.Builder setSoldierAttributes() {
+    public static AttributeSupplier.Builder setSoldierAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25f)
                 .add(Attributes.GENERIC_MAX_HEALTH, 20.0)
@@ -59,16 +62,16 @@ public class MistyGoblinEntity extends NpcEntity {
     protected void initGoals() {
         super.initGoals();
         int i = 2;
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, GondorHumanEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, RohanHumanEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, GaladhrimElfEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, LongbeardDwarfEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, ShireHobbitEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, BanditHumanEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, GondorHumanEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, RohanHumanEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, GaladhrimElfEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, LongbeardDwarfEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, ShireHobbitEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, BanditHumanEntity.class, true));
     }
 
     @Override
-    protected void initEquipment(RandomSource random, LocalDifficulty localDifficulty) {
+    protected void initEquipment(RandomSource random, DifficultyInstance localDifficulty) {
         super.initEquipment(random, localDifficulty);
         switch (this.getRank()){
             case MILITIA -> militiaEquipment(random);
@@ -83,7 +86,7 @@ public class MistyGoblinEntity extends NpcEntity {
                 0x484138,
                 0x3b3630
         };
-        DyeableItem item = (DyeableItem)ModEquipmentItems.GAMBESON;
+        DyeableLeatherItem item = (DyeableLeatherItem)ModEquipmentItems.GAMBESON;
         ItemStack leatherHelmet = new ItemStack(Items.LEATHER_HELMET);
         ItemStack leatherChestplate = new ItemStack(Items.LEATHER_CHESTPLATE);
         ItemStack leatherLeggings = new ItemStack(Items.LEATHER_LEGGINGS);
@@ -126,7 +129,6 @@ public class MistyGoblinEntity extends NpcEntity {
         equipStack(EquipmentSlot.CHEST, new ItemStack(ModEquipmentItems.MISTY_GOBLIN_MAIL_CHESTPLATE));
         equipStack(EquipmentSlot.LEGS, new ItemStack(ModEquipmentItems.MISTY_GOBLIN_MAIL_LEGGINGS));
         equipStack(EquipmentSlot.FEET, new ItemStack(ModEquipmentItems.MISTY_GOBLIN_MAIL_BOOTS));
-
 
         float val3 = random.nextFloat();
         if(val3 >= 0.6f){

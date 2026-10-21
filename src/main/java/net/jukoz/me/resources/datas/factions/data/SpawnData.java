@@ -86,8 +86,6 @@ public class SpawnData {
         return Component.translatable("spawn." + identifier.toTranslationKey());
     }
 
-
-
     private String getIdentifierValue() {
         return this.identifier.toString();
     }

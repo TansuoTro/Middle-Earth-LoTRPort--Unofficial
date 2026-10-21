@@ -1,10 +1,17 @@
 package net.jukoz.me.entity.beasts.warg.features;
 
-import net.minecraft.client.render.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.PartNames;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.jukoz.me.entity.beasts.warg.WargModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class WargSaddleModel extends WargModel {
     private final ModelPart warg;
@@ -34,20 +41,20 @@ public class WargSaddleModel extends WargModel {
         this.backBody = body.getChild("back_body");
     }
 
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = getEmptyModelData();
-        ModelPartData bodyNoLegs = modelData.getRoot().getChild("root").getChild(PartNames.BODY).getChild("upper_body").getChild("body_no_legs");
+    public static LayerDefinition getTexturedModelData() {
+        MeshDefinition modelData = getEmptyModelData();
+        PartDefinition bodyNoLegs = modelData.getRoot().getChild("root").getChild(PartNames.BODY).getChild("upper_body").getChild("body_no_legs");
 
-        ModelPartData saddle = bodyNoLegs.addChild("saddle", ModelPartBuilder.create(), ModelTransform.pivot(-9.5F, -3.75F, -4.5F));
+        PartDefinition saddle = bodyNoLegs.addChild("saddle", CubeListBuilder.create(), PartPose.pivot(-9.5F, -3.75F, -4.5F));
 
-        saddle.addChild("cube_r3", ModelPartBuilder.create().uv(26, 12).cuboid(-2.5F, -0.5F, -7.0F, 11.0F, 16.0F, 11.0F, new Dilation(0.4F)), ModelTransform.of(-1.0F, -2.0F, 2.0F, 0.0F, -1.5708F, 0.0F));
+        saddle.addChild("cube_r3", CubeListBuilder.create().uv(26, 12).cuboid(-2.5F, -0.5F, -7.0F, 11.0F, 16.0F, 11.0F, new CubeDeformation(0.4F)), PartPose.of(-1.0F, -2.0F, 2.0F, 0.0F, -1.5708F, 0.0F));
 
-        ModelPartData cloth = saddle.addChild("cloth", ModelPartBuilder.create(), ModelTransform.pivot(-1.0F, -2.0F, 2.0F));
-        cloth.addChild("cube_r4", ModelPartBuilder.create().uv(4, 44).cuboid(-2.5F, -0.5F, -9.0F, 11.0F, 16.0F, 12.0F, new Dilation(0.2F)), ModelTransform.of(-3.0F, 0.25F, 0.0F, 0.0F, -1.5708F, 0.0F));
+        PartDefinition cloth = saddle.addChild("cloth", CubeListBuilder.create(), PartPose.pivot(-1.0F, -2.0F, 2.0F));
+        cloth.addChild("cube_r4", CubeListBuilder.create().uv(4, 44).cuboid(-2.5F, -0.5F, -9.0F, 11.0F, 16.0F, 12.0F, new CubeDeformation(0.2F)), PartPose.of(-3.0F, 0.25F, 0.0F, 0.0F, -1.5708F, 0.0F));
 
-        saddle.addChild("saddle_addons", ModelPartBuilder.create(), ModelTransform.pivot(-6.0F, -2.0F, 2.0F));
+        saddle.addChild("saddle_addons", CubeListBuilder.create(), PartPose.pivot(-6.0F, -2.0F, 2.0F));
 
-        return TexturedModelData.of(modelData, 128, 128);
+        return LayerDefinition.of(modelData, 128, 128);
     }
 
     public void renderSaddle(PoseStack matrices, VertexConsumer vertices, int light, int overlay) {

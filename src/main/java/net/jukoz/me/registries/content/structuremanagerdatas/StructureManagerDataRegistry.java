@@ -8,6 +8,7 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.datageneration.content.TranslationEntries;
 import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.resources.datas.structure_manager_datas.StructureManagerData;
+import net.minecraft.core.HolderGetter;
 
 public class StructureManagerDataRegistry {
     private static final ResourceKey<Registry<StructureManagerData>> STRUCTURE_MANAGER_DATA_KEY = DynamicRegistriesME.STRUCTURE_MANAGER_DATA;
@@ -30,7 +31,7 @@ public class StructureManagerDataRegistry {
     public final static ResourceKey<StructureManagerData> WOODLAND_REALM_HALL_POOL  = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("woodland_realm_hall_pool"));
 
     public static void bootstrap(BootstrapContext<StructureManagerData> context) {
-        RegistryEntryLookup<StructureManagerData> registryEntryLookup = context.getRegistryLookup(STRUCTURE_MANAGER_DATA_KEY);
+        HolderGetter<StructureManagerData> registryEntryLookup = context.getRegistryLookup(STRUCTURE_MANAGER_DATA_KEY);
         
         register(context, registryEntryLookup, BRIGAND_DUNGEON_POOL     , StructureManagerDataPools.BRIGAND_DUNGEON_NESTS);
         register(context, registryEntryLookup, DALE_VILLAGE_POOL        , StructureManagerDataPools.DALE_VILLAGE_NESTS);
@@ -50,7 +51,7 @@ public class StructureManagerDataRegistry {
         register(context, registryEntryLookup, WOODLAND_REALM_HALL_POOL , StructureManagerDataPools.WOODLAND_REALM_HALL_NESTS);
     }
 
-    private static void register(BootstrapContext<StructureManagerData> context, RegistryEntryLookup<StructureManagerData> registryEntryLookup, ResourceKey<StructureManagerData> registryKey, StructureManagerData element){
+    private static void register(BootstrapContext<StructureManagerData> context, HolderGetter<StructureManagerData> registryEntryLookup, ResourceKey<StructureManagerData> registryKey, StructureManagerData element){
         DynamicRegistriesME.register(context, registryEntryLookup, registryKey, element);
         TranslationEntries.structureManagerEntries.add(element);
     }

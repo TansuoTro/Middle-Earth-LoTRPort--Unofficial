@@ -2,7 +2,7 @@ package net.jukoz.me.compat;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +28,7 @@ public final class MELootTable {
     @Nullable
     public static Loot get(ItemStack stack) {
         CompoundTag blockEntityTag = stack.getSubNbt("BlockEntityTag");
-        if (blockEntityTag == null || !blockEntityTag.contains(LOOT_TABLE_KEY, NbtElement.STRING_TYPE)) {
+        if (blockEntityTag == null || !blockEntityTag.contains(LOOT_TABLE_KEY, Tag.STRING_TYPE)) {
             return null;
         }
         ResourceLocation table = ResourceLocation.tryParse(blockEntityTag.getString(LOOT_TABLE_KEY));

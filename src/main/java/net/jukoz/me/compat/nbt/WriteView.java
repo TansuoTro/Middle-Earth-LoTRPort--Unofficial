@@ -3,12 +3,11 @@ package net.jukoz.me.compat.nbt;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DynamicOps;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryOps;
-
 import java.util.function.Consumer;
 
 /**
@@ -18,13 +17,13 @@ import java.util.function.Consumer;
  */
 public final class WriteView {
     private final CompoundTag nbt;
-    private final DynamicOps<NbtElement> ops;
+    private final DynamicOps<Tag> ops;
 
     public WriteView(CompoundTag nbt) {
         this(nbt, null);
     }
 
-    public WriteView(CompoundTag nbt, DynamicRegistryManager registries) {
+    public WriteView(CompoundTag nbt, RegistryAccess registries) {
         this.nbt = nbt;
         this.ops = registries == null ? NbtOps.INSTANCE : RegistryOps.of(NbtOps.INSTANCE, registries);
     }
@@ -41,14 +40,14 @@ public final class WriteView {
         codec.encodeStart(ops, value).result().ifPresent(encoded -> this.nbt.put(key, encoded));
     }
 
-    public ListAppender<NbtElement> getListAppender(String key, int type) {
-        NbtList list = new NbtList();
+    public ListAppender<Tag> getListAppender(String key, int type) {
+        ListTag list = new ListTag();
         this.nbt.put(key, list);
         return new ListAppender<>(list);
     }
 
     public <T> ListAppender<T> getListAppender(String key, Codec<T> codec) {
-        NbtList list = new NbtList();
+        ListTag list = new ListTag();
         this.nbt.put(key, list);
         return new ListAppender<>(list, codec, ops);
     }
@@ -81,17 +80,17 @@ public final class WriteView {
         this.nbt.putString(key, value);
     }
 
-    /** Collects values into an {@link NbtList}, mirroring the donor's list appender. */
+    /** Collects values into an {@link ListTag}, mirroring the donor's list appender. */
     public static final class ListAppender<T> {
-        private final NbtList list;
+        private final ListTag list;
         private final Codec<T> codec;
-        private final DynamicOps<NbtElement> ops;
+        private final DynamicOps<Tag> ops;
 
-        ListAppender(NbtList list) {
+        ListAppender(ListTag list) {
             this(list, null, NbtOps.INSTANCE);
         }
 
-        ListAppender(NbtList list, Codec<T> codec, DynamicOps<NbtElement> ops) {
+        ListAppender(ListTag list, Codec<T> codec, DynamicOps<Tag> ops) {
             this.list = list;
             this.codec = codec;
             this.ops = ops;
@@ -100,7 +99,7 @@ public final class WriteView {
         @SuppressWarnings("unchecked")
         public void add(T value) {
             if (this.codec == null) {
-                this.list.add((NbtElement) value);
+                this.list.add((Tag) value);
                 return;
             }
             this.codec.encodeStart(ops, value).result().ifPresent(this.list::add);

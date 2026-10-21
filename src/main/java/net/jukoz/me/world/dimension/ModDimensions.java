@@ -16,17 +16,15 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.dimension.DimensionOptions;
+import net.minecraft.world.level.dimension.LevelStem;
 import org.joml.Vector2i;
 import org.joml.Vector3i;
-
 
 public class ModDimensions {
     public static final Vector3i ME_SPAWN_LOCATION = new Vector3i(939, 90, 915);
@@ -35,13 +33,13 @@ public class ModDimensions {
     public static final ResourceLocation ME_DIMENSION_ID = new ResourceLocation(MiddleEarth.MOD_ID, PATH);
     public static final ResourceLocation OW_DIMENSION_ID = new ResourceLocation("overworld");
 
-    public static final ResourceKey<DimensionOptions> ME_DIMENSION_KEY =
+    public static final ResourceKey<LevelStem> ME_DIMENSION_KEY =
             ResourceKey.of(Registries.DIMENSION, ME_DIMENSION_ID);
 
     public static ResourceKey<Level> ME_WORLD_KEY =
             ResourceKey.of(Registries.WORLD, ME_DIMENSION_KEY.getValue());
 
-    public static final ResourceKey<DimensionOptions> OW_DIMENSION_KEY =
+    public static final ResourceKey<LevelStem> OW_DIMENSION_KEY =
             ResourceKey.of(Registries.DIMENSION, OW_DIMENSION_ID);
 
     public static ResourceKey<Level> OW_WORLD_KEY =

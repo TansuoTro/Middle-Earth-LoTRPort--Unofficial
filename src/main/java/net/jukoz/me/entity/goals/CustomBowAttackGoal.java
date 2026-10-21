@@ -8,8 +8,8 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.InteractionHand;
-
 import java.util.EnumSet;
+import net.minecraft.world.entity.ai.control.Control;
 
 public class CustomBowAttackGoal<T extends LivingEntity> extends Goal {
         private final T actor;
@@ -21,7 +21,6 @@ public class CustomBowAttackGoal<T extends LivingEntity> extends Goal {
         private boolean movingToLeft;
         private boolean backward;
         private int combatTicks = -1;
-
 
     public CustomBowAttackGoal(T actor, double speed, int attackInterval, float range) {
             this.actor = actor;

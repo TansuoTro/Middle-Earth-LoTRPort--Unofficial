@@ -35,8 +35,6 @@ public class ForgeModeSwitchPacket extends ClientToServerPacket<ForgeModeSwitchP
         this.z = z;
     }
 
-
-
     public ForgeModeSwitchPacket(FriendlyByteBuf buf) {
         this(buf.readDouble(), buf.readDouble(), buf.readDouble());
     }

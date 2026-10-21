@@ -29,7 +29,6 @@ public class MapBasedCustomBiome {
         return this;
     }
 
-
     public ResourceKey<Biome> getBiomeKey(){
         return biomeRegistryKey;
     }

@@ -1,7 +1,6 @@
 package net.jukoz.me.registries.content.texturepresets.pools.longbeards;
 
 import net.jukoz.me.registries.content.texturepresets.TexturePresetsRegistry;
-
 import java.util.List;
 
 public class LongbeardsTexturePresetsPool {

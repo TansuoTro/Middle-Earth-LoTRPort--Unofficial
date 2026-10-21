@@ -3,6 +3,13 @@ package net.jukoz.me.client.model.equipment.head.helmets.orcs.mordor.dolguldur;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.PartNames;
 import net.jukoz.me.client.model.equipment.head.helmets.HelmetAddonModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class BlackCastellanHelmetModel extends HelmetAddonModel {
 
@@ -10,48 +17,48 @@ public class BlackCastellanHelmetModel extends HelmetAddonModel {
         super(root);
     }
 
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = new ModelData();
-        ModelPartData modelPartData = modelData.getRoot();
+    public static LayerDefinition getTexturedModelData() {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
 
-        ModelPartData head = modelPartData.addChild(PartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        head.addChild(PartNames.HAT, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition head = modelPartData.addChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        head.addChild(PartNames.HAT, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        head.addChild("addon_eye", ModelPartBuilder.create()
-                        .uv(6, 0).cuboid(-4.5F, -3.55F, -4.475F, 9.0F, 1.0F, 0.0F, new Dilation(0.0F)),
-                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        head.addChild("addon_eye", CubeListBuilder.create()
+                        .uv(6, 0).cuboid(-4.5F, -3.55F, -4.475F, 9.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)),
+                PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        head.addChild("horn_left", ModelPartBuilder.create()
-                .uv(0, -8).mirrored().cuboid(0.0F, -14.25F, -9.0F, 0.0F, 10.0F, 10.0F, new Dilation(0.0F)).mirrored(false),
-                ModelTransform.of(3.0F, 1.0F, -5.0F, -0.4363F, -0.6981F, 0.0F));
+        head.addChild("horn_left", CubeListBuilder.create()
+                .uv(0, -8).mirrored().cuboid(0.0F, -14.25F, -9.0F, 0.0F, 10.0F, 10.0F, new CubeDeformation(0.0F)).mirrored(false),
+                PartPose.of(3.0F, 1.0F, -5.0F, -0.4363F, -0.6981F, 0.0F));
 
-        head.addChild("horn_right", ModelPartBuilder.create()
-                .uv(0, -8).cuboid(0.0F, -14.25F, -9.0F, 0.0F, 10.0F, 10.0F, new Dilation(0.0F)),
-                ModelTransform.of(-3.0F, 1.0F, -5.0F, -0.4363F, 0.6981F, 0.0F));
+        head.addChild("horn_right", CubeListBuilder.create()
+                .uv(0, -8).cuboid(0.0F, -14.25F, -9.0F, 0.0F, 10.0F, 10.0F, new CubeDeformation(0.0F)),
+                PartPose.of(-3.0F, 1.0F, -5.0F, -0.4363F, 0.6981F, 0.0F));
 
-        ModelPartData addons = head.addChild("fin", ModelPartBuilder.create()
-                        .uv(0, 0).cuboid(0.0F, -13.0F, -6.0F, 0.0F, 11.0F, 12.0F, new Dilation(0.0F)),
-                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition addons = head.addChild("fin", CubeListBuilder.create()
+                        .uv(0, 0).cuboid(0.0F, -13.0F, -6.0F, 0.0F, 11.0F, 12.0F, new CubeDeformation(0.0F)),
+                PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        addons.addChild("side_right", ModelPartBuilder.create()
-                        .uv(24, 15).cuboid(-5.25F, -9.75F, 0.252F, 6.0F, 15.0F, 0.0F, new Dilation(0.0F)),
-                ModelTransform.of(-5.0F, -7.0F, -1.25F, 0.0F, 0.6545F, 0.0F));
+        addons.addChild("side_right", CubeListBuilder.create()
+                        .uv(24, 15).cuboid(-5.25F, -9.75F, 0.252F, 6.0F, 15.0F, 0.0F, new CubeDeformation(0.0F)),
+                PartPose.of(-5.0F, -7.0F, -1.25F, 0.0F, 0.6545F, 0.0F));
 
-        addons.addChild("side_left", ModelPartBuilder.create()
-                        .uv(24, 0).mirrored().cuboid(-0.5F, -9.75F, 0.284F, 6.0F, 15.0F, 0.0F, new Dilation(0.0F)).mirrored(false),
-                ModelTransform.of(4.814F, -7.0F, -1.5F, 0.0F, -0.6545F, 0.0F));
+        addons.addChild("side_left", CubeListBuilder.create()
+                        .uv(24, 0).mirrored().cuboid(-0.5F, -9.75F, 0.284F, 6.0F, 15.0F, 0.0F, new CubeDeformation(0.0F)).mirrored(false),
+                PartPose.of(4.814F, -7.0F, -1.5F, 0.0F, -0.6545F, 0.0F));
 
-        addons.addChild("lower_extension", ModelPartBuilder.create()
-                        .uv(0, 23).cuboid(-4.0F, 0.90F, -4.0F, 8.0F, 8.0F, 8.0F, new Dilation(0.55F)),
-                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        addons.addChild("lower_extension", CubeListBuilder.create()
+                        .uv(0, 23).cuboid(-4.0F, 0.90F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.55F)),
+                PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.BODY, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.RIGHT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.BODY, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.RIGHT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.LEFT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.RIGHT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        return TexturedModelData.of(modelData, 64, 64);
+        return LayerDefinition.of(modelData, 64, 64);
     }
 }

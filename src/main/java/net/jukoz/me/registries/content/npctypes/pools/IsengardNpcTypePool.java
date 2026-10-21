@@ -19,7 +19,6 @@ import net.jukoz.me.resources.datas.npc_types.NpcType;
 import net.jukoz.me.resources.datas.npc_types.data.WeightedGearData;
 import net.jukoz.me.resources.datas.npc_types.data.WeightedItemData;
 import net.jukoz.me.resources.datas.npc_types.data.GearSlotPool;
-
 import java.util.List;
 
 public class IsengardNpcTypePool {
@@ -39,7 +38,6 @@ public class IsengardNpcTypePool {
     public final static NpcType URUK_HAI_LEADER;
 
     public final static NpcType ORTHANC_GUARD;
-
 
     public static List<NpcRegistry.RegisterableNpcData> fetchAll() {
         return List.of(
@@ -118,7 +116,6 @@ public class IsengardNpcTypePool {
                                 .add(WeightedItemData.create(Items.AIR).withWeight(3))
                         )
         ), NpcRegistry.COMMON_NPC_ATTRIBUTES , CombatArchetypePool.DEFAULT, NpcLoot.FROM_1_TO_4);
-
 
         WARRIOR = new NpcType(NpcRegistry.ISENGARD_ORC_WARRIOR.getValue(), RaceRegistry.ORC, FACTION, TexturePresetsRegistry.ISENGARD_ORC, List.of(
                 WeightedGearData.create()
@@ -262,7 +259,6 @@ public class IsengardNpcTypePool {
                                 .add(WeightedItemData.create(WeaponItemsME.URUK_HAI_WHITE_PALMPRINT_SHIELD))
                         )
         ), NpcRegistry.COMMON_NPC_ATTRIBUTES , CombatArchetypePool.DEFAULT, NpcLoot.FROM_10_TO_16);
-
 
         URUK_HAI_BERSERKER = new NpcType(NpcRegistry.ISENGARD_URUK_HAI_BERSERKER.getValue(), RaceRegistry.URUK, FACTION, TexturePresetsRegistry.ISENGARD_URUK_HAI, List.of(
                 WeightedGearData.create()

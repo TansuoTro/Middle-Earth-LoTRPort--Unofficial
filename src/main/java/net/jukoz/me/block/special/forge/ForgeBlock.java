@@ -6,7 +6,6 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.server.level.ServerLevel;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import net.jukoz.me.item.dataComponents.TemperatureDataComponent;
-import net.minecraft.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -15,26 +14,33 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.ItemScatterer;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.Containers;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
+import com.mojang.math.Axis;
 
-public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
+public class ForgeBlock extends BaseEntityBlock implements EntityBlock {
     public static final EnumProperty<ForgePart> PART = EnumProperty.of("part", ForgePart.class);
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
@@ -44,11 +50,9 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
         this.setDefaultState(((this.stateManager.getDefaultState()).with(FACING, Direction.NORTH)).with(LIT, false).with(PART, ForgePart.BOTTOM));
     }
 
-
-
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderType(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
@@ -65,10 +69,10 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
                     ItemStack nuggetStack = new ItemStack(metal.getNugget(), storage % 144 / 16);
                     MEComponents.set(nuggetStack, MEComponents.TEMPERATURE_DATA, new TemperatureDataComponent(1000));
 
-                    ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), ingotStack);
-                    ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), nuggetStack);
+                    Containers.spawn(world, pos.getX(), pos.getY(), pos.getZ(), ingotStack);
+                    Containers.spawn(world, pos.getX(), pos.getY(), pos.getZ(), nuggetStack);
                 }
-                ItemScatterer.spawn(world, pos, forgeBlockEntity);
+                Containers.spawn(world, pos, forgeBlockEntity);
             }
         }
     }
@@ -113,12 +117,12 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
     }
 
     @Override
-    public BlockState rotate(BlockState state, BlockRotation rotation) {
+    public BlockState rotate(BlockState state, Rotation rotation) {
         return state.with(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override
-    public BlockState mirror(BlockState state, BlockMirror mirror) {
+    public BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.get(FACING)));
     }
 
@@ -135,7 +139,7 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
             return InteractionResult.SUCCESS;
         } else {
             if(state.get(PART) == ForgePart.BOTTOM){
-                NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+                MenuProvider screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
                 if(screenHandlerFactory != null) {
                     player.openHandledScreen(screenHandlerFactory);
                 }
@@ -180,7 +184,7 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
             double e = pos.getY();
             double f = (double)pos.getZ() + 0.5;
             if (random.nextDouble() < 0.1) {
-                world.playSound(d, e, f, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0f, 1.0f, false);
+                world.playSound(d, e, f, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundSource.BLOCKS, 1.0f, 1.0f, false);
             }
             Direction direction = state.get(FACING);
             Direction.Axis axis = direction.getAxis();
@@ -192,7 +196,7 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
             world.addParticle(ParticleTypes.SMOKE, d + i, e + j, f + k, 0.0, 0.0, 0.0);
             world.addParticle(ParticleTypes.FLAME, d + i, e + j, f + k, 0.0, 0.0, 0.0);
         } else {
-            DefaultParticleType simpleParticleType = ParticleTypes.CAMPFIRE_COSY_SMOKE;
+            SimpleParticleType simpleParticleType = ParticleTypes.CAMPFIRE_COSY_SMOKE;
             world.addImportantParticle(simpleParticleType, true, (double)pos.getX() + 0.5 + random.nextDouble() / 3.0 * (double)(random.nextBoolean() ? 1 : -1), (double)pos.getY() + random.nextDouble() + random.nextDouble(), (double)pos.getZ() + 0.5 + random.nextDouble() / 3.0 * (double)(random.nextBoolean() ? 1 : -1), 0.0, 0.07, 0.0);
         }
     }

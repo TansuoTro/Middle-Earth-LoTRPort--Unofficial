@@ -5,9 +5,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import net.jukoz.me.item.utils.RangedWeaponTypesME;
-
 import java.util.function.Predicate;
 
 public class CustomCrossbowWeaponItem extends CrossbowItem {
@@ -33,7 +32,7 @@ public class CustomCrossbowWeaponItem extends CrossbowItem {
                 || Registries.ITEM.getId(this).getPath().contains("uruk_hai")
                 || Registries.ITEM.getId(this).getPath().contains("heyday")
                 || Registries.ITEM.getId(this).getPath().contains("numenorean")){
-            return Component.translatable(this.getTranslationKey()).formatted(Formatting.GOLD);
+            return Component.translatable(this.getTranslationKey()).formatted(ChatFormatting.GOLD);
         }
         return super.getName(stack);
     }

@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.world.level.block.PowderSnowBlock;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.attribute.AttributeContainer;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.registries.Registries;
@@ -29,7 +29,7 @@ public class PowderSnowBlockMixin {
     @Inject(method = "canWalkOnPowderSnow", at = @At("HEAD"), cancellable = true)
     private static void canWalkOnPowderSnowEntity(Entity entity, final CallbackInfoReturnable<Boolean> info) {
         if(entity instanceof LivingEntity livingEntity){
-            AttributeContainer container = livingEntity.getAttributes();
+            AttributeMap container = livingEntity.getAttributes();
             if(container.hasAttribute(EntityAttributesME.POWDERED_SNOW_IMMUNITY.value()) && container.getValue(EntityAttributesME.POWDERED_SNOW_IMMUNITY.value()) != 0.0){
                 info.setReturnValue(true);
             }

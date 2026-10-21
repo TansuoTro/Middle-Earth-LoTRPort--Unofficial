@@ -1,7 +1,6 @@
 package net.jukoz.me.item.utils;
 
-import net.minecraft.client.MinecraftClient;
-
+import net.minecraft.client.Minecraft;
 import net.jukoz.me.item.MEComponents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemGroup;
@@ -11,9 +10,8 @@ import net.minecraft.world.item.armortrim.ArmorTrimMaterial;
 import net.minecraft.world.item.armortrim.ArmorTrimMaterials;
 import net.minecraft.world.item.armortrim.ArmorTrimPattern;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.registry.*;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -27,17 +25,24 @@ import net.jukoz.me.item.ResourceItemsME;
 import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.resources.datas.factions.Faction;
 import net.jukoz.me.resources.datas.npc_types.NpcType;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.RegistryOps;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.armortrim.TrimMaterial;
+import net.minecraft.world.item.armortrim.TrimMaterials;
+import net.minecraft.world.item.armortrim.TrimPattern;
 
 public class ItemGroupsUtil {
     private static final Comparator<Holder<NpcType>> NPC_DATA_COMPARATOR = Comparator.comparing(Holder::value, Comparator.comparing(NpcType::getId));
 
-    public static void addNpcEggs(ItemGroup.Entries entries, RegistryWrapper.Impl<NpcType> registryWrapper, Predicate<Holder<NpcType>> filter, RegistryWrapper.WrapperLookup lookup, ItemGroup.StackVisibility stackVisibility) {
+    public static void addNpcEggs(CreativeModeTab.Entries entries, HolderLookup.Impl<NpcType> registryWrapper, Predicate<Holder<NpcType>> filter, HolderLookup.WrapperLookup lookup, CreativeModeTab.StackVisibility stackVisibility) {
         ResourceLocation randomSpawnEggId = MiddleEarth.of("npc_random_spawn_egg");
 
         ItemStack randomNpcSpawnEgg = new ItemStack(EggItemsME.NPC_SPAWN_EGG);
@@ -47,12 +52,12 @@ public class ItemGroupsUtil {
 
         NpcInitializationData npcInitializationData = new NpcInitializationData(null, true);
 
-        RegistryOps<NbtElement> ops = RegistryOps.of(
+        RegistryOps<Tag> ops = RegistryOps.of(
                 NbtOps.INSTANCE,
                 lookup
         );
 
-        NbtElement element = NpcInitializationData.CODEC
+        Tag element = NpcInitializationData.CODEC
                 .encodeStart(ops, npcInitializationData)
                 .result().orElse(new CompoundTag());
         compoundData.put(NpcEntity.KeyStrings.INITIALIZATION_DATA, element);
@@ -68,25 +73,25 @@ public class ItemGroupsUtil {
         });
     }
 
-    private static ItemStack addTrim(Item partItem, RegistryWrapper.WrapperLookup wrapper, RegistryKey<ArmorTrimMaterial> reference) {
+    private static ItemStack addTrim(Item partItem, HolderLookup.WrapperLookup wrapper, ResourceKey<TrimMaterial> reference) {
         ItemStack item = partItem.getDefaultStack();
-        Holder.Reference<ArmorTrimMaterial> material = wrapper.getOptionalWrapper(RegistryKeys.TRIM_MATERIAL).orElseThrow().getOrThrow(reference);
-        Holder.Reference<ArmorTrimPattern> pattern = wrapper.getOptionalWrapper(RegistryKeys.TRIM_PATTERN).orElseThrow().getOptional(RegistryKey.of(RegistryKeys.TRIM_PATTERN, MiddleEarth.of( "smithing_part"))).orElse(null);
+        Holder.Reference<TrimMaterial> material = wrapper.getOptionalWrapper(Registries.TRIM_MATERIAL).orElseThrow().getOrThrow(reference);
+        Holder.Reference<TrimPattern> pattern = wrapper.getOptionalWrapper(Registries.TRIM_PATTERN).orElseThrow().getOptional(ResourceKey.of(Registries.TRIM_PATTERN, MiddleEarth.of( "smithing_part"))).orElse(null);
         MEArmorTrim.set(item, new ArmorTrim(material , pattern));
         return item;
     }
 
-    public static Collection<ItemStack> processResourceItem(ItemStack itemStack, ItemGroup.DisplayContext displayContext) {
+    public static Collection<ItemStack> processResourceItem(ItemStack itemStack, CreativeModeTab.DisplayContext displayContext) {
         if(PART_LIST.contains(itemStack.getItem())) {
             return processSmithingMaterial(itemStack.getItem(), displayContext);
         }
         return List.of(itemStack);
     }
 
-    private static Collection<ItemStack> processSmithingMaterial(Item item, ItemGroup.DisplayContext displayContext) {
-        RegistryWrapper.WrapperLookup wrapper = displayContext.lookup();
+    private static Collection<ItemStack> processSmithingMaterial(Item item, CreativeModeTab.DisplayContext displayContext) {
+        HolderLookup.WrapperLookup wrapper = displayContext.lookup();
         List<ItemStack> trimSet = new ArrayList<>();
-        for(RegistryKey<ArmorTrimMaterial> trimKey : METAL_LIST){
+        for(ResourceKey<TrimMaterial> trimKey : METAL_LIST){
             trimSet.add(addTrim(item, wrapper, trimKey));
         }
         return trimSet;
@@ -113,15 +118,15 @@ public class ItemGroupsUtil {
             ResourceItemsME.SHIELD_PLATE
     );
 
-    private static final List<RegistryKey<ArmorTrimMaterial>> METAL_LIST = List.of(
+    private static final List<ResourceKey<TrimMaterial>> METAL_LIST = List.of(
             SmithingTrimMaterialsME.TIN,
-            ArmorTrimMaterials.COPPER,
+            TrimMaterials.COPPER,
             SmithingTrimMaterialsME.BRONZE,
             SmithingTrimMaterialsME.CRUDE,
-            ArmorTrimMaterials.IRON,
+            TrimMaterials.IRON,
             SmithingTrimMaterialsME.SILVER,
             SmithingTrimMaterialsME.LEAD,
-            ArmorTrimMaterials.GOLD,
+            TrimMaterials.GOLD,
             SmithingTrimMaterialsME.STEEL,
             SmithingTrimMaterialsME.EDHEL_STEEL,
             SmithingTrimMaterialsME.KHAZAD_STEEL,
@@ -129,7 +134,7 @@ public class ItemGroupsUtil {
             SmithingTrimMaterialsME.MITHRIL
     );
 
-    public static Collection<ItemStack> addFactionBanners(RegistryWrapper.WrapperLookup lookup) {
+    public static Collection<ItemStack> addFactionBanners(HolderLookup.WrapperLookup lookup) {
         List<ItemStack> bannerList = new ArrayList<>();
         List<Holder.Reference<Faction>> factions = lookup.getWrapperOrThrow(DynamicRegistriesME.FACTION).streamEntries().toList();
         for(Holder.Reference<Faction> factionReference : factions){

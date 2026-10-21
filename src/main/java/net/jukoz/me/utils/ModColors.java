@@ -1,5 +1,6 @@
 package net.jukoz.me.utils;
 
+
 public enum ModColors {
     ALERT(0xED553B),
     WARNING(0xF6D55C),

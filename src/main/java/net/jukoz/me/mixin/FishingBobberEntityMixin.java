@@ -3,8 +3,8 @@ package net.jukoz.me.mixin;
 import net.jukoz.me.utils.LootModifiers;
 import net.jukoz.me.world.dimension.ModDimensions;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.entity.projectile.FishingBobberEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.world.entity.projectile.FishingHook;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
@@ -12,10 +12,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-@Mixin(FishingBobberEntity.class)
-public abstract class FishingBobberEntityMixin extends ProjectileEntity {
+@Mixin(FishingHook.class)
+public abstract class FishingBobberEntityMixin extends Projectile {
 
-    public FishingBobberEntityMixin(EntityType<? extends ProjectileEntity> entityType, Level world) {
+    public FishingBobberEntityMixin(EntityType<? extends Projectile> entityType, Level world) {
         super(entityType, world);
     }
 

@@ -3,11 +3,10 @@ package net.jukoz.me.block.special.shapingAnvil;
 import net.jukoz.me.compat.MEArmorTrim;
 import net.jukoz.me.item.MEComponents;
 import net.jukoz.me.item.MEDurability;
-
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.entity.ExperienceOrbEntity;
+import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.item.armortrim.ArmorTrim;
 import net.minecraft.world.item.armortrim.ArmorTrimMaterial;
 import net.minecraft.world.item.armortrim.ArmorTrimPattern;
@@ -28,59 +27,58 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.jukoz.me.compat.SingleStackRecipeInput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.RegistryWrapper;
 import net.minecraft.tags.TagKey;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.List;
 import net.jukoz.me.compat.MEEnchants;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.world.item.armortrim.TrimMaterial;
+import net.minecraft.world.item.armortrim.TrimPattern;
 
-public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory, SidedInventory {
+public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory, WorldlyContainer {
     private static final String ID = "shaping_anvil";
 
     public int outputIndex = 0;
     public int maxOutputIndex = 0;
 
-    public final DefaultedList<ItemStack> inventory =
-            DefaultedList.ofSize(1, ItemStack.EMPTY);
+    public final NonNullList<ItemStack> inventory =
+            NonNullList.ofSize(1, ItemStack.EMPTY);
 
-    protected final PropertyDelegate propertyDelegate;
+    protected final ContainerData propertyDelegate;
 
     //TODO make work in creative somehow
 
     public ShapingAnvilBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.TREATED_ANVIL, pos, state);
 
-        this.propertyDelegate = new PropertyDelegate() {
+        this.propertyDelegate = new ContainerData() {
             @Override
             public int get(int index) {
                 return switch (index) {
@@ -107,7 +105,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
     public ShapingAnvilBlockEntity(BlockEntityType type, BlockPos pos, BlockState state) {
         super(type, pos, state);
 
-        this.propertyDelegate = new PropertyDelegate() {
+        this.propertyDelegate = new ContainerData() {
             @Override
             public int get(int index) {
                 return switch (index) {
@@ -158,7 +156,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
             if(MEComponents.get(input, MEComponents.TEMPERATURE_DATA) != null) {
                 temperature = MEComponents.get(input, MEComponents.TEMPERATURE_DATA).temperature();
             }
-            entity.getWorld().playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.5f, 1.0f - (float) temperature / 1000);
+            entity.getWorld().playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundSource.BLOCKS, 1.5f, 1.0f - (float) temperature / 1000);
 
             int minRandProgress = 7;
             int maxRandProgress = 14;
@@ -195,15 +193,14 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
             } else {
                 MEComponents.set(input, MEComponents.TEMPERATURE_DATA, new TemperatureDataComponent(MEComponents.get(input, MEComponents.TEMPERATURE_DATA).temperature() - value));
             }
-            RegistryWrapper.Impl<ArmorTrimMaterial>  armorTrimMaterialRegistry = entity.getWorld().getRegistryManager().getWrapperOrThrow(Registries.TRIM_MATERIAL);
-            RegistryWrapper.Impl<ArmorTrimPattern>  armorTrimPatternRegistry = entity.getWorld().getRegistryManager().getWrapperOrThrow(Registries.TRIM_PATTERN);
-
+            HolderLookup.Impl<TrimMaterial>  armorTrimMaterialRegistry = entity.getWorld().getRegistryManager().getWrapperOrThrow(Registries.TRIM_MATERIAL);
+            HolderLookup.Impl<TrimPattern>  armorTrimPatternRegistry = entity.getWorld().getRegistryManager().getWrapperOrThrow(Registries.TRIM_PATTERN);
 
             if (input.getDamage() == 0){
                 int xp = 2;
                 if(input.getItem() == ResourceItemsME.ROD || input.getItem() == ResourceItemsME.ARMOR_PLATE) xp = 4;
                 if(input.getItem() == ResourceItemsME.LARGE_ROD) xp = 7;
-                ExperienceOrbEntity.spawn(world, entity.getPos().toCenterPos().add(0, 1, 0), xp);
+                ExperienceOrb.spawn(world, entity.getPos().toCenterPos().add(0, 1, 0), xp);
 
                 ItemStack output = match.get(entity.outputIndex).craft(new SingleStackRecipeInput(input), entity.world.getRegistryManager());
 
@@ -229,7 +226,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
                 if (MEComponents.get(input, MEComponents.TEMPERATURE_DATA) != null){
                     MEComponents.set(output, MEComponents.TEMPERATURE_DATA, new TemperatureDataComponent(MEComponents.get(input, MEComponents.TEMPERATURE_DATA).temperature()));
                 }
-                entity.getWorld().playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                entity.getWorld().playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundSource.BLOCKS, 1.0f, 1.0f);
                 entity.setStack(0, output);
                 entity.update();
             }
@@ -238,7 +235,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
             if (serverWorld instanceof ServerLevel) {
                 ((ServerLevel)serverWorld).spawnParticles(ModParticleTypes.ANVIL_SPARK_PARTICLE, pos.getX()+ 0.5f, pos.getY() + 1.0f, pos.getZ() + 0.5f, 2, 0.0, 0.0, 0.0, 0.0);
             }
-            entity.getWorld().playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.5f, 1.0f);
+            entity.getWorld().playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundSource.BLOCKS, 1.5f, 1.0f);
         }
     }
 
@@ -264,7 +261,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
     }
 
     private static boolean hasShapingRecipe(ShapingAnvilBlockEntity entity) {
-        SimpleInventory inventory1 = new SimpleInventory(entity.size());
+        SimpleContainer inventory1 = new SimpleContainer(entity.size());
         ItemStack input;
 
         inventory1.setStack(0, entity.getStack(0));
@@ -283,7 +280,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
     protected void writeNbt(CompoundTag nbt) {
         super.writeNbt(nbt);
         WriteView view = new WriteView(nbt);
-        Inventories.writeNbt(view.nbt(), this.inventory, true);
+        ContainerHelper.writeNbt(view.nbt(), this.inventory, true);
         view.putInt("current-index", this.outputIndex);
         view.putInt("current-max-index", this.maxOutputIndex);
     }
@@ -293,7 +290,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
         super.readNbt(nbt);
         ReadView view = new ReadView(nbt);
         this.inventory.clear();
-        Inventories.readNbt(view.nbt(), this.inventory);
+        ContainerHelper.readNbt(view.nbt(), this.inventory);
         this.outputIndex = view.getInt("current-index", 0);
         this.maxOutputIndex = view.getInt("current-max-index", 0);
     }
@@ -305,14 +302,14 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, Player player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new ShapingAnvilScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
     @Nullable
     @Override
-    public Packet<ClientPlayPacketListener> toUpdatePacket() {
-        return BlockEntityUpdateS2CPacket.create(this);
+    public Packet<ClientGamePacketListener> toUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
@@ -367,7 +364,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
 
     @Override
     public ItemStack removeStack(int slot, int amount) {
-        ItemStack result = Inventories.splitStack(inventory, slot, amount);
+        ItemStack result = ContainerHelper.splitStack(inventory, slot, amount);
         if (!result.isEmpty()) {
             update();
         }
@@ -376,7 +373,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
 
     @Override
     public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(inventory, slot);
+        return ContainerHelper.removeStack(inventory, slot);
     }
 
     @Override

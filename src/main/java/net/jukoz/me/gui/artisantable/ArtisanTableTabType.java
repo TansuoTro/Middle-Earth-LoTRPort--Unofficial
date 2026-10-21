@@ -2,10 +2,11 @@ package net.jukoz.me.gui.artisantable;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.profiling.jfr.Environment;
 
 enum ArtisanTableTabType {
     ABOVE(new Textures(new ResourceLocation("minecraft", "advancements/tab_above_left_selected"), new ResourceLocation("minecraft", "advancements/tab_above_middle_selected"), new ResourceLocation("minecraft", "advancements/tab_above_right_selected")), new Textures(new ResourceLocation("minecraft", "advancements/tab_above_left"), new ResourceLocation("minecraft", "advancements/tab_above_middle"), new ResourceLocation("minecraft", "advancements/tab_above_right")), 28, 32, 8),
@@ -31,14 +32,14 @@ enum ArtisanTableTabType {
         return this.tabCount;
     }
 
-    public void drawBackground(DrawContext context, int x, int y, boolean selected, int index) {
+    public void drawBackground(GuiGraphics context, int x, int y, boolean selected, int index) {
         Textures textures;
         Textures textures2 = textures = selected ? this.selectedTextures : this.unselectedTextures;
         ResourceLocation identifier = index == 0 ? textures.first() : (index == this.tabCount - 1 ? textures.last() : textures.middle());
         context.drawTexture(identifier, x + this.getTabX(index), y + this.getTabY(index), 0, 0, this.width, this.height);
     }
 
-    public void drawIcon(DrawContext context, int x, int y, int index, ItemStack stack) {
+    public void drawIcon(GuiGraphics context, int x, int y, int index, ItemStack stack) {
         int i = x + this.getTabX(index);
         int j = y + this.getTabY(index);
         switch (this.ordinal()) {
@@ -95,4 +96,3 @@ enum ArtisanTableTabType {
     record Textures(ResourceLocation first, ResourceLocation middle, ResourceLocation last) {
     }
 }
-

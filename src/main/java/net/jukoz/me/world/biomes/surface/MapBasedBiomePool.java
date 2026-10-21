@@ -7,7 +7,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -102,7 +101,6 @@ public class MapBasedBiomePool {
         add(new Color(0x5a7ca1), deadMarshesWater);
         mangrovePond = new MapBasedCustomBiome(MEBiomeKeys.MANGROVE_POND, -3, MEBiomeDataConfigs.riverModifier);
         add(new Color(0x5ba67d), mangrovePond);
-
 
         add(new Color(0x4e637a), new MapBasedCustomBiome(MEBiomeKeys.EMYN_MUIL_POND,-4, MEBiomeDataConfigs.emynMuilModifier));
         add(new Color(0x657bf3), new MapBasedCustomBiome(MEBiomeKeys.FROZEN_OCEAN, -26, MEBiomeDataConfigs.oceanModifier));

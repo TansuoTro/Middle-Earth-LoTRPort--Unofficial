@@ -2,32 +2,30 @@ package net.jukoz.me.entity.beasts.cave_troll;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Dynamic;
-import net.minecraft.advancement.criterion.Criteria;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.world.level.block.state.BlockState;
-
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import java.util.Map;
-import net.minecraft.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.loot.context.LootContextTypes;
-import net.minecraft.loot.context.LootContextParameterSet;
-import net.minecraft.particle.BlockStateParticleEffect;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
@@ -45,13 +43,13 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.math.Box;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.profiler.Profiler;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccess;
 import net.jukoz.me.MiddleEarth;
@@ -65,22 +63,28 @@ import net.jukoz.me.sound.SoundsME;
 import net.jukoz.me.utils.PlayerUtil;
 import net.jukoz.me.utils.SpawnUtil;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.List;
+import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityEvent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 
 // TODO Add sounds
 public class CaveTrollEntity extends AbstractBeastEntity {
     public LootTable scavengeLootTable;
-    public LootContextParameterSet lootWorldContext;
+    public LootParams lootWorldContext;
     private float smashingStrength; // Used in server-side only
     private float smashingTime; // Used in server-side only
     private float enragedTime; // Used in server-side only
-    public static final TrackedData<Boolean> SCAVENGING = DataTracker.registerData(CaveTrollEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    public static final TrackedData<Boolean> ROARING = DataTracker.registerData(CaveTrollEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    public static final TrackedData<Boolean> SLEEPING = DataTracker.registerData(CaveTrollEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    public static final TrackedData<Boolean> SMASHING = DataTracker.registerData(CaveTrollEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    public static final TrackedData<Boolean> ENRAGED = DataTracker.registerData(CaveTrollEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Integer> VARIANT = DataTracker.registerData(CaveTrollEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    public static final EntityDataAccessor<Boolean> SCAVENGING = SynchedEntityData.registerData(CaveTrollEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Boolean> ROARING = SynchedEntityData.registerData(CaveTrollEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Boolean> SLEEPING = SynchedEntityData.registerData(CaveTrollEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Boolean> SMASHING = SynchedEntityData.registerData(CaveTrollEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Boolean> ENRAGED = SynchedEntityData.registerData(CaveTrollEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.registerData(CaveTrollEntity.class, EntityDataSerializers.INTEGER);
     public final AnimationState chaseAnimationState = new AnimationState();
     public final AnimationState scavengingAnimationState = new AnimationState();
     public final AnimationState startSleepingAnimationState = new AnimationState();
@@ -99,17 +103,17 @@ public class CaveTrollEntity extends AbstractBeastEntity {
                 if(lootTable != null) {
                     scavengeLootTable = lootTable;
 
-                    lootWorldContext = new LootContextParameterSet.Builder(serverWorld)
-                            .add(LootContextParameters.THIS_ENTITY, this)
-                            .add(LootContextParameters.ORIGIN, this.getPos())
-                            .build(LootContextTypes.CHEST);
+                    lootWorldContext = new LootParams.Builder(serverWorld)
+                            .add(LootContextParams.THIS_ENTITY, this)
+                            .add(LootContextParams.ORIGIN, this.getPos())
+                            .build(LootContextParamSets.CHEST);
                 }
 
             }
         }
     }
 
-    public static DefaultAttributeContainer.Builder setAttributes() {
+    public static AttributeSupplier.Builder setAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.1f)
                 .add(Attributes.GENERIC_MAX_HEALTH, 120.0)
@@ -145,10 +149,9 @@ public class CaveTrollEntity extends AbstractBeastEntity {
         this.dataTracker.set(VARIANT, view.getInt("Variant", 0));
     }
 
-
     @Nullable
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable CompoundTag nbt) {
+    public SpawnGroupData initialize(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, @Nullable CompoundTag nbt) {
         CaveTrollVariant variant = Util.getRandom(CaveTrollVariant.values(), this.random);
         setVariant(variant);
         return super.initialize(world, difficulty, spawnReason, entityData, nbt);
@@ -168,7 +171,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
 
     @Override
     protected void mobTick() {
-        Profiler profiler = this.getWorld().getProfiler();
+        ProfilerFiller profiler = this.getWorld().getProfiler();
         profiler.push("caveTrollBrain");
         this.getBrain().tick((ServerLevel) this.getWorld(), this);
         profiler.swap("caveTrollActivityUpdate");
@@ -176,7 +179,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
         profiler.pop();
 
         if(!this.isClientWorld() && this.isAffectedByDaylight()) {
-            this.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 100));
+            this.addStatusEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100));
         }
 
         super.mobTick();
@@ -188,7 +191,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
 
         if(rand < 0.15 || (rand < 0.3 && this.getTameness() <= 0) || player.isCreative()) { // Tame success, chance is twice as high if the troll is feral
             this.tameBeast(player);
-            this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
+            this.getWorld().sendEntityStatus(this, EntityEvent.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
 
             this.chargeTimeout = 0;
         }
@@ -196,8 +199,8 @@ public class CaveTrollEntity extends AbstractBeastEntity {
             this.enragedTime = this.age;
             this.setEnraged(true);
             this.getBrain().remember(MemoryModuleType.ATTACK_TARGET, player);
-            this.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 1200));
-            this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES);
+            this.addStatusEffect(new MobEffectInstance(MobEffects.STRENGTH, 1200));
+            this.getWorld().sendEntityStatus(this, EntityEvent.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES);
         }
     }
 
@@ -265,7 +268,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
     public void tameBeast(Player player) {
         if (player instanceof ServerPlayer) {
             this.tameBeast((LivingEntity) player);
-            Criteria.TAME_ANIMAL.trigger((ServerPlayer)player, this);
+            CriteriaTriggers.TAME_ANIMAL.trigger((ServerPlayer)player, this);
         }
     }
 
@@ -533,10 +536,10 @@ public class CaveTrollEntity extends AbstractBeastEntity {
 
     public void smashAttack(float strength) { // Strength goes from 0 to 100
         setSmashing(false);
-        Box box = new Box(this.getPos().subtract(5,0,5), this.getPos().add(5,1,5));
+        AABB box = new AABB(this.getPos().subtract(5,0,5), this.getPos().add(5,1,5));
 
         double weaponDamage = 0;
-        for (Map.Entry<EntityAttribute, EntityAttributeModifier> entry : this.getMainHandStack().getAttributeModifiers(EquipmentSlot.MAINHAND).entries()) {
+        for (Map.Entry<Attribute, AttributeModifier> entry : this.getMainHandStack().getAttributeModifiers(EquipmentSlot.MAINHAND).entries()) {
             if (entry.getKey() == Attributes.GENERIC_ATTACK_DAMAGE) {
                 weaponDamage = entry.getValue().getValue();
             }
@@ -555,7 +558,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
 
             for(int x = -5; x <= 5; x++) { // Spawn particles on affected blocks
                 for(int z = -5; z <= 5; z++) {
-                    BlockStateParticleEffect particles = new BlockStateParticleEffect(ParticleTypes.BLOCK, world.getBlockState(new BlockPos(this.getBlockX() + x, this.getBlockY() - 1, this.getBlockZ() + z)));
+                    BlockParticleOption particles = new BlockParticleOption(ParticleTypes.BLOCK, world.getBlockState(new BlockPos(this.getBlockX() + x, this.getBlockY() - 1, this.getBlockZ() + z)));
                     serverWorld.spawnParticles(particles, this.getBlockX() + x, this.getBlockY(), this.getBlockZ() + z, 7, 0.5, 0.3, 0.5, 0.2);
                 }
             }
@@ -761,12 +764,12 @@ public class CaveTrollEntity extends AbstractBeastEntity {
         this.playSound(this.getRoarSound(), 1.0f, 1.0f);
     }
 
-    public static boolean canSpawn(EntityType<CaveTrollEntity> type, ServerWorldAccess serverWorldAccess, SpawnReason spawnReason, BlockPos blockPos, RandomSource random) {
+    public static boolean canSpawn(EntityType<CaveTrollEntity> type, ServerLevelAccessor serverWorldAccess, MobSpawnType spawnReason, BlockPos blockPos, RandomSource random) {
         return SpawnUtil.canSpawn(blockPos, serverWorldAccess, spawnReason);
     }
 
     @Override
-    public boolean canSpawn(WorldAccess world, SpawnReason spawnReason) {
+    public boolean canSpawn(LevelAccessor world, MobSpawnType spawnReason) {
         return true;
     }
 }

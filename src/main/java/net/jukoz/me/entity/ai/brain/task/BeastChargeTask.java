@@ -1,19 +1,19 @@
 package net.jukoz.me.entity.ai.brain.task;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.entity.ai.brain.MemoryModuleState;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.MultiTickTask;
+import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.server.level.ServerLevel;
 import net.jukoz.me.entity.beasts.AbstractBeastEntity;
 
-public class BeastChargeTask extends MultiTickTask<AbstractBeastEntity> {
+public class BeastChargeTask extends Behavior<AbstractBeastEntity> {
     private final int MAX_COOLDOWN;
     public BeastChargeTask(int runtime, int maxCooldown) {
         super(
                 ImmutableMap.of(
                         MemoryModuleType.ATTACK_TARGET,
-                        MemoryModuleState.VALUE_PRESENT
+                        MemoryStatus.VALUE_PRESENT
                 ),
                 runtime
         );

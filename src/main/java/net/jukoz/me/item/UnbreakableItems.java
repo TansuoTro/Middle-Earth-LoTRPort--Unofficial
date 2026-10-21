@@ -1,7 +1,6 @@
 package net.jukoz.me.item;
 
 import net.minecraft.world.item.Item;
-
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Set;

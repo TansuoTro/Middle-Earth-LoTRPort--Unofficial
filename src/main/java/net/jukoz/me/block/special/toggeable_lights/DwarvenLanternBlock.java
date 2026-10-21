@@ -2,18 +2,18 @@ package net.jukoz.me.block.special.toggeable_lights;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.block.HorizontalFacingBlock;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,8 +22,9 @@ import net.minecraft.world.phys.shapes.VoxelShapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.function.ToIntFunction;
+import com.mojang.math.Axis;
+import net.minecraft.world.phys.shapes.Shapes;
 
 public class DwarvenLanternBlock extends AbstractToggeableLightBlock {
     public static final BooleanProperty HANGING;
@@ -59,7 +60,7 @@ public class DwarvenLanternBlock extends AbstractToggeableLightBlock {
         return null;
     }
 
-    public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
+    public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
         if (!world.isClient && projectile.isOnFire() && !state.get(LIT)) {
             world.setBlockState(hit.getBlockPos(), state.with(LIT, true), STATE_TO_LUMINANCE.applyAsInt(state));
         }
@@ -79,10 +80,10 @@ public class DwarvenLanternBlock extends AbstractToggeableLightBlock {
         HANGING = BlockStateProperties.HANGING;
         STATE_TO_LUMINANCE = (state) -> { return state.get(LIT) ? state.get(LEVEL_15) : 0; };
 
-        STANDING_SHAPE = VoxelShapes.union(
+        STANDING_SHAPE = Shapes.union(
                 Block.createCuboidShape(5.0, 0.0, 5.0, 11.0, 6.0, 11.0),
                 Block.createCuboidShape(6.0, 6.0, 6.0, 10.0, 7.0, 10.0));
-        HANGING_SHAPE = VoxelShapes.union(
+        HANGING_SHAPE = Shapes.union(
                 Block.createCuboidShape(5.0, 3.0, 5.0, 11.0, 8.0, 11.0),
                 Block.createCuboidShape(6.0, 8.0, 6.0, 10.0, 10.0, 10.0));
     }

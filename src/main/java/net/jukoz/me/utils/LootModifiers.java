@@ -7,11 +7,11 @@ import net.minecraft.world.level.storage.loot.LootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.Registry;
-import net.minecraft.loot.condition.RandomChanceLootCondition;
-import net.minecraft.loot.entry.ItemEntry;
-import net.minecraft.loot.function.SetCountLootFunction;
-import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
-import net.minecraft.loot.provider.number.UniformLootNumberProvider;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraft.resources.ResourceLocation;
 
 public class LootModifiers {
@@ -26,11 +26,10 @@ public class LootModifiers {
         LootTableEvents.MODIFY.register(((resourceManager, lootManager, id, tableBuilder, source) -> {
             if(HORSE_LOOT_TABLE_IDENTIFIER.equals(id)){
                 LootPool.Builder poolBuilder = LootPool.builder()
-                        .rolls(ConstantLootNumberProvider.create(1))
-                        .conditionally(RandomChanceLootCondition.builder(1f))
-                        .with(ItemEntry.builder(ModFoodItems.RAW_HORSE))
-                        .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 2.0f)).build());
-
+                        .rolls(ConstantValue.create(1))
+                        .conditionally(LootItemRandomChanceCondition.builder(1f))
+                        .with(LootItem.builder(ModFoodItems.RAW_HORSE))
+                        .apply(SetItemCountFunction.builder(UniformGenerator.create(1.0f, 2.0f)).build());
 
                 tableBuilder.pool(poolBuilder.build());
             }

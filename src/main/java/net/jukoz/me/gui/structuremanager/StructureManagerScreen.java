@@ -2,13 +2,13 @@ package net.jukoz.me.gui.structuremanager;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
@@ -18,13 +18,13 @@ import net.jukoz.me.gui.utils.widgets.searchbar.SearchBarResult;
 import net.jukoz.me.gui.utils.widgets.searchbar.SearchBarResultType;
 import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.resources.datas.structure_manager_datas.StructureManagerData;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.util.profiling.jfr.Environment;
 
 @Environment(value= EnvType.CLIENT)
-public class StructureManagerScreen extends HandledScreen<StructureManagerScreenHandler> {
+public class StructureManagerScreen extends AbstractContainerScreen<StructureManagerScreenHandler> {
     private static final ResourceLocation TEXTURE = MiddleEarth.ofPath("textures", "gui", "structure_manager.png");
 
     public SearchBarWidget searchBarWidget;
@@ -39,7 +39,7 @@ public class StructureManagerScreen extends HandledScreen<StructureManagerScreen
 
     private static final int TEXT_COLOR = Color.WHITE.getRGB();
 
-    public StructureManagerScreen(StructureManagerScreenHandler handler, PlayerInventory playerInventory, Component title) {
+    public StructureManagerScreen(StructureManagerScreenHandler handler, Inventory playerInventory, Component title) {
         super(handler, playerInventory, title);
 
         Level world = playerInventory.player.getWorld();
@@ -84,15 +84,15 @@ public class StructureManagerScreen extends HandledScreen<StructureManagerScreen
     }
 
     @Override
-    protected void drawBackground(DrawContext context, float deltaTicks, int mouseX, int mouseY) {
+    protected void drawBackground(GuiGraphics context, float deltaTicks, int mouseX, int mouseY) {
     }
 
     @Override
-    protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
+    protected void drawForeground(GuiGraphics context, int mouseX, int mouseY) {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float deltaTicks) {
         renderBackground(context);
         super.render(context, mouseX, mouseY, deltaTicks);
 
@@ -100,7 +100,6 @@ public class StructureManagerScreen extends HandledScreen<StructureManagerScreen
 
         int centerX = (int) (client.currentScreen.width / 2f);
         int startY = 70;
-
 
         int managerSearchBarWidgetStartY = startY;
         managerSearchBarWidgetStartY += this.searchBarWidget.drawSearchBar(context, centerX - 5 - this.searchBarWidget.searchBarToggleButton.getWidth(), managerSearchBarWidgetStartY, textRenderer);
@@ -113,7 +112,7 @@ public class StructureManagerScreen extends HandledScreen<StructureManagerScreen
         Component selectedIdText = (dataIdentifier == null)
                 ? Component.translatable("N/A")
                 : Component.translatable(dataIdentifier.toTranslationKey("structure_manager_data"));
-        this.runtimeDataText = Component.translatable("ui.middle-earth.structure_manager.label_selected_id", selectedIdText).formatted(Formatting.BOLD).formatted(Formatting.WHITE);
+        this.runtimeDataText = Component.translatable("ui.middle-earth.structure_manager.label_selected_id", selectedIdText).formatted(ChatFormatting.BOLD).formatted(ChatFormatting.WHITE);
 
         context.drawText(this.textRenderer, this.runtimeDataText, centerX + 5, startY + 5, TEXT_COLOR, false);
 

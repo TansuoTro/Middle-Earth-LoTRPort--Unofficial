@@ -1,13 +1,14 @@
 package net.jukoz.me.compat.client.render.state;
 
 import java.util.UUID;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.EntityPose;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import net.jukoz.me.client.renderer.ArmedEntityRenderStateAccess;
 import net.jukoz.me.client.renderer.BipedEntityRenderStateAccess;
+import net.minecraft.world.entity.Pose;
 
 /**
  * R2 field carrier for the biped render state family. The donor-named
@@ -24,10 +25,10 @@ public class BipedEntityRenderStateCompat extends LivingEntityRenderStateCompat
     public float handSwingProgress;
     public float baseScale = 1.0F;
     public float standingEyeHeight;
-    public EntityPose pose = EntityPose.STANDING;
+    public Pose pose = Pose.STANDING;
     public Direction sleepingDirection;
-    public BipedEntityModel.ArmPose leftArmPose = BipedEntityModel.ArmPose.EMPTY;
-    public BipedEntityModel.ArmPose rightArmPose = BipedEntityModel.ArmPose.EMPTY;
+    public HumanoidModel.ArmPose leftArmPose = HumanoidModel.ArmPose.EMPTY;
+    public HumanoidModel.ArmPose rightArmPose = HumanoidModel.ArmPose.EMPTY;
     public ItemStack equippedChestStack = ItemStack.EMPTY;
     public UUID uuid;
 
@@ -38,7 +39,7 @@ public class BipedEntityRenderStateCompat extends LivingEntityRenderStateCompat
     private Vec3 velocity = Vec3.ZERO;
     private Vec3 previousVelocity = Vec3.ZERO;
 
-    public boolean isInPose(EntityPose pose) {
+    public boolean isInPose(Pose pose) {
         return this.pose == pose;
     }
 

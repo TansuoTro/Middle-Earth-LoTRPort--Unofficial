@@ -4,24 +4,35 @@ import net.jukoz.me.entity.dwarves.longbeards.LongbeardDwarfEntity;
 import net.jukoz.me.entity.elves.galadhrim.GaladhrimElfEntity;
 import net.jukoz.me.entity.hobbits.shire.ShireHobbitEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-
 import java.util.Random;
+import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityEvent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.util.RandomSource;
 
-public class BalrogEntity extends HostileEntity {
+public class BalrogEntity extends Monster {
 
     private int attackTicksLeft = 0;
     public static final int ATTACK_COOLDOWN = 10;
@@ -31,28 +42,28 @@ public class BalrogEntity extends HostileEntity {
     private int idleAnimationTimeout = 0;
     private int attackAnimationTimeout = 0;
 
-    private Random randomRegen = new Random();
+    private RandomSource randomRegen = new RandomSource();
 
-    public BalrogEntity(EntityType<? extends HostileEntity> entityType, Level world) {
+    public BalrogEntity(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
     }
 
     protected void initGoals() {
-        this.goalSelector.add(1, new SwimGoal(this));
-        this.goalSelector.add(2, new RevengeGoal(this));
+        this.goalSelector.add(1, new FloatGoal(this));
+        this.goalSelector.add(2, new HurtByTargetGoal(this));
         this.goalSelector.add(3, new MeleeAttackGoal(this, 1.0f, true));
-        this.goalSelector.add(4, new WanderAroundGoal(this, 1.0F));
-        this.goalSelector.add(5, new LookAtEntityGoal(this, Player.class, 6.0F));
-        this.goalSelector.add(6, new LookAroundGoal(this));
+        this.goalSelector.add(4, new RandomStrollGoal(this, 1.0F));
+        this.goalSelector.add(5, new LookAtPlayerGoal(this, Player.class, 6.0F));
+        this.goalSelector.add(6, new RandomLookAroundGoal(this));
 
-        this.targetSelector.add(1, new ActiveTargetGoal<>(this, Player.class, true));
-        this.targetSelector.add(2, new ActiveTargetGoal<>(this, GaladhrimElfEntity.class, true));
-        this.targetSelector.add(3, new ActiveTargetGoal<>(this, LongbeardDwarfEntity.class, true));
-        this.targetSelector.add(4, new ActiveTargetGoal<>(this, ShireHobbitEntity.class, true));
+        this.targetSelector.add(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.add(2, new NearestAttackableTargetGoal<>(this, GaladhrimElfEntity.class, true));
+        this.targetSelector.add(3, new NearestAttackableTargetGoal<>(this, LongbeardDwarfEntity.class, true));
+        this.targetSelector.add(4, new NearestAttackableTargetGoal<>(this, ShireHobbitEntity.class, true));
 
     }
 
-    public static DefaultAttributeContainer.Builder createBalrogAttributes() {
+    public static AttributeSupplier.Builder createBalrogAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.GENERIC_MAX_HEALTH, 300.0)
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.4)
@@ -78,7 +89,7 @@ public class BalrogEntity extends HostileEntity {
     @Override
     public boolean tryAttack(Entity target) {
         this.attackTicksLeft = ATTACK_COOLDOWN;
-        this.getWorld().sendEntityStatus(this, EntityStatuses.PLAY_ATTACK_SOUND);
+        this.getWorld().sendEntityStatus(this, EntityEvent.PLAY_ATTACK_SOUND);
         float f = this.getAttackDamage();
         float g = (int)f > 0 ? f / 2.0f + (float)this.random.nextInt((int)f) : f;
         boolean bl = target.damage(this.getDamageSources().mobAttack(this), g);
@@ -107,7 +118,6 @@ public class BalrogEntity extends HostileEntity {
         return true;
     }
 
-
     private void setupAnimationStates() {
         if (this.idleAnimationTimeout <= 0) {
             this.idleAnimationTimeout = this.random.nextInt(40) + 80;
@@ -119,7 +129,7 @@ public class BalrogEntity extends HostileEntity {
 
     @Override
     protected void updateLimbs(float posDelta) {
-        float f = this.getPose() == EntityPose.STANDING ? Math.min(posDelta * 6.0f, 1.0f) : 0.0f;
+        float f = this.getPose() == Pose.STANDING ? Math.min(posDelta * 6.0f, 1.0f) : 0.0f;
         this.limbAnimator.updateLimbs(f, 0.2f);
     }
 
@@ -132,7 +142,7 @@ public class BalrogEntity extends HostileEntity {
 
         if(this.getHealth() < this.getMaxHealth() / 2){
             if(randomRegen.nextInt(100) <= 5){
-                this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 100));
+                this.addStatusEffect(new MobEffectInstance(MobEffects.REGENERATION, 100));
             }
         }
     }
@@ -152,7 +162,6 @@ public class BalrogEntity extends HostileEntity {
     protected void playStepSound(BlockPos pos, BlockState state) {
         this.playSound(SoundEvents.ENTITY_WARDEN_STEP, 0.15F, 2.0F);
     }
-
 
     public BalrogVariant getVariant() {
         return BalrogVariant.byId(this.getId());

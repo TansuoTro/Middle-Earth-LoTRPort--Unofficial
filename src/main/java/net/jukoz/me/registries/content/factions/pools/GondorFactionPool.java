@@ -16,7 +16,6 @@ import net.jukoz.me.resources.datas.factions.data.SpawnData;
 import net.jukoz.me.resources.datas.factions.data.SpawnDataHandler;
 import net.jukoz.me.resources.datas.common.NpcRank;
 import org.joml.Vector2d;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -58,7 +57,7 @@ public class GondorFactionPool {
                         new SpawnData(MiddleEarth.of(FACTION_PATH,  "minas_tirith"),  new Vector2d(1945, 1785)),
                         new SpawnData(MiddleEarth.of(FACTION_PATH,  "anorien"),  new Vector2d(1930, 1735)),
                         new SpawnData(MiddleEarth.of(FACTION_PATH,  "ithilien"),  new Vector2d(1975, 1700)), // Henneth Annun
-                        new SpawnData(MiddleEarth.of(FACTION_PATH,  "lossarnach"),  new Vector2d(1895, 1792)), // Erui Source
+                        new SpawnData(MiddleEarth.of(FACTION_PATH,  "lossarnach"),  new Vector2d(1895, 1792)), // Erui Channel
                         new SpawnData(MiddleEarth.of(FACTION_PATH,  "pelargir"),  new Vector2d(1875, 1960)),
                         new SpawnData(MiddleEarth.of(FACTION_PATH,  "lamedon"),  new Vector2d(1625, 1800)), // Linhir
                         new SpawnData(MiddleEarth.of(FACTION_PATH,  "lebennin"),  new Vector2d(1715, 1955)), // Linhir

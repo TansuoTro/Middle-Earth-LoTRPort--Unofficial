@@ -1,6 +1,6 @@
 package net.jukoz.me.entity.npcs.initializer;
 
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.resources.ResourceLocation;
@@ -17,7 +17,6 @@ import net.jukoz.me.resources.datas.npc_types.data.MountData;
 import net.jukoz.me.resources.datas.texture_presets.CharacterTexturePattern;
 import net.jukoz.me.resources.datas.texture_presets.ClothingSelection;
 import net.jukoz.me.resources.datas.texture_presets.TexturePresetDataPool;
-
 import java.util.Optional;
 
 public class NpcGenerator {
@@ -112,7 +111,7 @@ public class NpcGenerator {
         return npcTextureData;
     }
 
-    public static NpcTextureData generateHairTextureData(NpcTextureData npcTextureData, TexturePresetDataPool.Identity textureIdentity, DynamicRegistryManager manager) {
+    public static NpcTextureData generateHairTextureData(NpcTextureData npcTextureData, TexturePresetDataPool.Identity textureIdentity, RegistryAccess manager) {
         ResourceLocation globalHairMaterialId = TexturePresetDataPool.getRawMaterial(textureIdentity, CharacterMaterialTypes.HAIR);
 
         // Hair

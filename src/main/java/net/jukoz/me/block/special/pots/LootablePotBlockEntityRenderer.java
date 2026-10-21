@@ -4,31 +4,33 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.block.BlockRenderManager;
-import net.minecraft.client.render.block.BlockModelRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererFactory;
-import net.minecraft.client.render.block.entity.DecoratedPotBlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.DecoratedPotRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.layers.RenderLayers;
 import net.minecraft.util.Mth;
-import net.minecraft.util.math.RotationAxis;
+import com.mojang.math.Axis;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 
 @OnlyIn(Dist.CLIENT)
 public class LootablePotBlockEntityRenderer implements BlockEntityRenderer<DecoratedPotBlockEntity> {
     private static final float POSITIVE_WOBBLE_SCALE = 0.015625F;
-    private final DecoratedPotBlockEntityRenderer vanillaRenderer;
-    private final BlockRenderManager blockRenderManager;
+    private final DecoratedPotRenderer vanillaRenderer;
+    private final BlockRenderDispatcher blockRenderManager;
 
-    public LootablePotBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
-        this.vanillaRenderer = new DecoratedPotBlockEntityRenderer(context);
+    public LootablePotBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
+        this.vanillaRenderer = new DecoratedPotRenderer(context);
         this.blockRenderManager = context.getRenderManager();
     }
 
     @Override
-    public void render(DecoratedPotBlockEntity entity, float tickProgress, PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+    public void render(DecoratedPotBlockEntity entity, float tickProgress, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
         BlockState state = entity.getCachedState();
         if (!(state.getBlock() instanceof LootablePotBlock)) {
             vanillaRenderer.render(entity, tickProgress, matrices, vertexConsumers, light, overlay);
@@ -38,7 +40,7 @@ public class LootablePotBlockEntityRenderer implements BlockEntityRenderer<Decor
         matrices.push();
         ((net.jukoz.me.compat.MERenderManagerAccess) blockRenderManager).getModelRenderer().render(
                 matrices.peek(),
-                vertexConsumers.getBuffer(RenderLayers.getEntityBlockLayer(state, true)),
+                vertexConsumers.getBuffer(ItemBlockRenderTypes.getEntityBlockLayer(state, true)),
                 state,
                 blockRenderManager.getModel(state),
                 1.0F,

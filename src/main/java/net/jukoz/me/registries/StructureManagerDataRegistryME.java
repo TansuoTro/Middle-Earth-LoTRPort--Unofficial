@@ -14,9 +14,9 @@ import net.jukoz.me.registries.content.npctypes.pools.*;
 import net.jukoz.me.resources.datas.structure_manager_datas.SpawnNestNodeData;
 import net.jukoz.me.resources.datas.structure_manager_datas.StructureManagerData;
 import net.jukoz.me.resources.datas.structure_manager_datas.StructureSpawnNestPool;
-
 import java.util.List;
 import java.util.Optional;
+import net.minecraft.core.HolderGetter;
 
 public class StructureManagerDataRegistryME {
     public final static StructureManagerData GONDOR_GENERIC_NESTS;
@@ -24,14 +24,14 @@ public class StructureManagerDataRegistryME {
     public final static StructureManagerData DALE_KEEP_NESTS;
 
     public static void bootstrap(BootstrapContext<StructureManagerData> context) {
-        RegistryEntryLookup<StructureManagerData> structureDataRegistryEntryLookup = context.getRegistryLookup(DynamicRegistriesME.STRUCTURE_MANAGER_DATA);
+        HolderGetter<StructureManagerData> structureDataRegistryEntryLookup = context.getRegistryLookup(DynamicRegistriesME.STRUCTURE_MANAGER_DATA);
         // [TEMPLATE]
         register(context, structureDataRegistryEntryLookup, GONDOR_GENERIC_NESTS);
         register(context, structureDataRegistryEntryLookup, EREBOR_GENERIC_NESTS);
         register(context, structureDataRegistryEntryLookup, DALE_KEEP_NESTS);
     }
 
-    private static StructureManagerData register(BootstrapContext<StructureManagerData> context, RegistryEntryLookup<StructureManagerData> registryEntryLookup, StructureManagerData structureManagerData) {
+    private static StructureManagerData register(BootstrapContext<StructureManagerData> context, HolderGetter<StructureManagerData> registryEntryLookup, StructureManagerData structureManagerData) {
         ResourceKey<StructureManagerData> registryKey = ResourceKey.of(DynamicRegistriesME.STRUCTURE_MANAGER_DATA, structureManagerData.getId());
         String name = registryKey.getValue().getPath();
         ResourceKey<StructureManagerData> structureDataKey = ResourceKey.of(DynamicRegistriesME.STRUCTURE_MANAGER_DATA, new ResourceLocation(MiddleEarth.MOD_ID,name));

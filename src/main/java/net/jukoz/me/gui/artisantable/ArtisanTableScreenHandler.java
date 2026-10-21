@@ -15,25 +15,27 @@ import net.jukoz.me.recipe.ArtisanRecipe;
 import net.jukoz.me.recipe.ModRecipes;
 import net.jukoz.me.resources.datas.common.DispositionType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.world.inventory.ResultContainer;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.screen.*;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.DataSlot;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.level.block.state.properties.Property;
 
-public class ArtisanTableScreenHandler extends ScreenHandler {
-    private final ScreenHandlerContext context;
+public class ArtisanTableScreenHandler extends AbstractContainerMenu {
+    private final ContainerLevelAccess context;
     private final Property selectedRecipe;
     private final Property recipesSize;
     private final Level world;
@@ -45,7 +47,7 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
     final Slot outputSlot;
     Runnable contentsChangedListener;
     public final Inventory input;
-    final CraftingResultInventory output;
+    final ResultContainer output;
     private Player playerEntity;
     private ArtisanTableInputsShape inputsShape = ArtisanTableInputsShape.ANY;
     private int xp = 0;
@@ -53,15 +55,15 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
     private String disposition;
     private boolean isCreative;
 
-    public ArtisanTableScreenHandler(int syncId, PlayerInventory playerInventory, String disposition) {
-        this(syncId, playerInventory, ScreenHandlerContext.EMPTY);
+    public ArtisanTableScreenHandler(int syncId, Inventory playerInventory, String disposition) {
+        this(syncId, playerInventory, ContainerLevelAccess.EMPTY);
 
         String[] splited = disposition.split("/");
         this.disposition = splited[0];
         this.isCreative = Boolean.parseBoolean(splited[1]);
     }
 
-    public ArtisanTableScreenHandler(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context, String disposition) {
+    public ArtisanTableScreenHandler(int syncId, Inventory playerInventory, ContainerLevelAccess context, String disposition) {
         this(syncId, playerInventory, context);
 
         String[] splited = disposition.split("/");
@@ -69,7 +71,7 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
         this.isCreative = Boolean.parseBoolean(splited[1]);
     }
 
-    public ArtisanTableScreenHandler(int syncId, PlayerInventory playerInventory, final ScreenHandlerContext context) {
+    public ArtisanTableScreenHandler(int syncId, Inventory playerInventory, final ContainerLevelAccess context) {
         super(ModScreenHandlers.ARTISAN_SCREEN_HANDLER, syncId);
         this.selectedRecipe = Property.create();
         this.recipesSize = Property.create();
@@ -82,7 +84,7 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
         this.disposition = "neutral";
         this.isCreative = false;
 
-        this.input = new SimpleInventory(9) {
+        this.input = new SimpleContainer(9) {
             public void markDirty() {
                 super.markDirty();
                 outputs.clear();
@@ -90,7 +92,7 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
                 ArtisanTableScreenHandler.this.contentsChangedListener.run();
             }
         };
-        this.output = new CraftingResultInventory();
+        this.output = new ResultContainer();
         this.context = context;
         this.world = playerInventory.player.getWorld();
         this.playerEntity = playerInventory.player;
@@ -131,7 +133,7 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
 
                 long l = world.getTime();
                 if (ArtisanTableScreenHandler.this.lastTakeTime != l) {
-                    world.playSound(null, (BlockPos) player.getBlockPos(), SoundEvents.ENTITY_VILLAGER_WORK_TOOLSMITH, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                    world.playSound(null, (BlockPos) player.getBlockPos(), SoundEvents.ENTITY_VILLAGER_WORK_TOOLSMITH, SoundSource.BLOCKS, 1.0f, 1.0f);
                     ArtisanTableScreenHandler.this.lastTakeTime = l;
                 }
 
@@ -339,7 +341,7 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
         this.sendContentUpdates();
     }
 
-    public ScreenHandlerType<?> getType() {
+    public MenuType<?> getType() {
         return ModScreenHandlers.ARTISAN_SCREEN_HANDLER;
     }
 
@@ -393,7 +395,7 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
         });
     }
 
-    private void addPlayerInventory(PlayerInventory playerInventory) {
+    private void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 36 + j * 18, 84 + i * 18));
@@ -401,7 +403,7 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
         }
     }
 
-    private void addPlayerHotbar(PlayerInventory playerInventory) {
+    private void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInventory, i, 36 + i * 18, 142));
         }

@@ -75,7 +75,7 @@ public class MiddleEarthMapRuntime {
         if(currentValidationBlockCount < MiddleEarthMapConfigs.BIOME_VALIDATION_BLOCK_DELAY) return;
         currentValidationBlockCount = 0;
 
-        // Tick delay
+        // SavedTick delay
         int serverTick = middleEarthMapUtils.getTick();
         if(serverTick - latestValidationTick < MiddleEarthMapConfigs.BIOME_VALIDATION_TICK_DELAY) return;
         latestValidationTick = serverTick;

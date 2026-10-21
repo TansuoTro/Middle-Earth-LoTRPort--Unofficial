@@ -2,7 +2,6 @@ package net.jukoz.me.utils.resources;
 
 import net.jukoz.me.utils.LoggerUtil;
 import net.jukoz.me.world.chunkgen.map.ImageUtils;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
@@ -63,9 +62,8 @@ public class FileUtils {
         }
     }
 
-
     /**
-     * TODO : Optimise this part, it the longest process in World-Gen
+     * TODO : Optimise this part, it the longest process in Level-Gen
      */
     public static BufferedImage blur(BufferedImage image, int brushSize, float ratio) {
         // Create new expended image :
@@ -101,7 +99,6 @@ public class FileUtils {
         ConvolveOp op = new ConvolveOp(kernel, ConvolveOp.EDGE_NO_OP, null);
 
         expendedImage = op.filter(expendedImage, null);
-
 
         return expendedImage.getSubimage(brushSize, brushSize, width, height);
     }

@@ -5,6 +5,7 @@ import net.jukoz.me.client.model.equipment.head.*;
 import net.jukoz.me.item.ModEquipmentItems;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemConvertible;
+import net.minecraft.world.level.ItemLike;
 
 public enum ModArmors {
 
@@ -122,7 +123,7 @@ public enum ModArmors {
     private final String name;
     private final CustomHelmetModel<LivingEntity> helmetModel;
     private final CustomChestplateModel<LivingEntity> chestPlateModel;
-    private final ItemConvertible[] items;
+    private final ItemLike[] items;
     private final boolean hasInnerLayer;
     private final boolean hasVanillaArmorModel;
     private final boolean hasCape;
@@ -130,7 +131,7 @@ public enum ModArmors {
     private final boolean dyeable;
 
     ModArmors(String name, CustomHelmetModel<LivingEntity> helmetModel, CustomChestplateModel<LivingEntity> chestPlateModel,
-              boolean hasInnerLayer, boolean hasVanillaArmorModel, boolean hasCape, boolean hasHood, boolean dyeable, ItemConvertible... items) {
+              boolean hasInnerLayer, boolean hasVanillaArmorModel, boolean hasCape, boolean hasHood, boolean dyeable, ItemLike... items) {
         this.name = name;
         this.helmetModel = helmetModel;
         this.chestPlateModel = chestPlateModel;
@@ -154,7 +155,7 @@ public enum ModArmors {
         return this.chestPlateModel;
     }
 
-    public ItemConvertible[] getItems(){
+    public ItemLike[] getItems(){
         return this.items;
     }
 

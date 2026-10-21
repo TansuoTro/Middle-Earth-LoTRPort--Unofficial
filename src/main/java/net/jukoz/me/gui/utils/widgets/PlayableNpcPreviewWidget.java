@@ -1,12 +1,12 @@
 package net.jukoz.me.gui.utils.widgets;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.jukoz.me.compat.client.render.state.EntityRenderState;
-import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -18,9 +18,9 @@ import net.jukoz.me.entity.npcs.renderer.NpcEntityRenderState;
 import net.jukoz.me.resources.datas.races.Race;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 
 public class PlayableNpcPreviewWidget extends ModWidget{
     private static final ResourceLocation NPC_PREVIEW = new ResourceLocation(MiddleEarth.MOD_ID,"textures/gui/widget/npc_preview_widget.png");
@@ -105,7 +105,7 @@ public class PlayableNpcPreviewWidget extends ModWidget{
         if(currentButtonClicked != null) return;
 
         if(tickHoldingStart == 0)
-            this.tickHoldingStart = MinecraftClient.getInstance().inGameHud.getTicks();
+            this.tickHoldingStart = Minecraft.getInstance().inGameHud.getTicks();
 
         isLeftButton = isLeft;
         if(isLeft){
@@ -115,7 +115,7 @@ public class PlayableNpcPreviewWidget extends ModWidget{
         }
     }
 
-    public void updateEntity(ResourceLocation npcDataIdentifier, Race race, ClientWorld world, boolean deactivatedAI) {
+    public void updateEntity(ResourceLocation npcDataIdentifier, Race race, ClientLevel world, boolean deactivatedAI) {
         if(world != null)
             haveBeenInitialized = true;
 
@@ -135,7 +135,7 @@ public class PlayableNpcPreviewWidget extends ModWidget{
         this.entity = npcEntity;
     }
 
-    public void drawCenteredAnchoredBottom(DrawContext context, int centerX, int endY) {
+    public void drawCenteredAnchoredBottom(GuiGraphics context, int centerX, int endY) {
         float size = 35f;
         int x = centerX;
         int y = endY;
@@ -205,10 +205,9 @@ public class PlayableNpcPreviewWidget extends ModWidget{
         this.entity.prevHeadYaw = this.entity.getBodyYaw();
     }
 
-
     private boolean canRotateSmoothly(){
         var minimumThreshold = tickHoldingStart + TICK_DELAY;
-        var currentHudTime = MinecraftClient.getInstance().inGameHud.getTicks();
+        var currentHudTime = Minecraft.getInstance().inGameHud.getTicks();
         return currentHudTime > minimumThreshold;
     }
 

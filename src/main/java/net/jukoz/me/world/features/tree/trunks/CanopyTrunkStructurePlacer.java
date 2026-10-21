@@ -6,12 +6,11 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.TestableWorld;
+import net.minecraft.world.level.LevelSimulatedReader;
 import net.minecraft.world.level.levelgen.feature.TreeFeatureConfig;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 import net.jukoz.me.world.gen.ModTreeGeneration;
-
 import java.util.List;
 import java.util.function.BiConsumer;
 
@@ -58,12 +57,12 @@ public class CanopyTrunkStructurePlacer extends CanopyTrunkPlacer {
     }
 
     @Override
-    public List<FoliagePlacer.TreeNode> generate(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, int height, BlockPos startPos, TreeFeatureConfig config) {
+    public List<FoliagePlacer.TreeNode> generate(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, int height, BlockPos startPos, TreeConfiguration config) {
         // Deprecated, although it can be useful later on, so keeping it there
-        /*if(world instanceof ServerWorld serverWorld) {
+        /*if(world instanceof ServerLevel serverWorld) {
             StructureTemplate template = getStructureTemplate(serverWorld);
             generateStructurePool(serverWorld, startPos, height);
-        } else if(world instanceof ChunkRegion chunkRegion) {
+        } else if(world instanceof WorldGenRegion chunkRegion) {
             StructureTemplate template = getStructureTemplate(chunkRegion);
             generateStructurePool(chunkRegion.toServerWorld(), startPos, height, template);
         }*/
@@ -71,21 +70,21 @@ public class CanopyTrunkStructurePlacer extends CanopyTrunkPlacer {
     }
 
     // NOTE keep it for later maybe
-    /*private void generateStructurePool(ServerWorld world, BlockPos startPos, int height) {
-        RegistryKey<StructurePool> pool = ModStructureKeys.LOTHLORIEN_TALAN_KEY;
-        Registry<StructurePool> registry = world.getRegistryManager().get(RegistryKeys.TEMPLATE_POOL);
-        RegistryEntry<StructurePool> registryEntry = registry.get(pool);
+    /*private void generateStructurePool(ServerLevel world, BlockPos startPos, int height) {
+        ResourceKey<StructureTemplatePool> pool = ModStructureKeys.LOTHLORIEN_TALAN_KEY;
+        Registry<StructureTemplatePool> registry = world.getRegistryManager().get(Registries.TEMPLATE_POOL);
+        Holder<StructureTemplatePool> registryEntry = registry.get(pool);
         BlockPos blockPos = startPos.mutableCopy().add(new Vec3i(0, (int)(this.structureStart * height), 0));
-        StructurePoolBasedGenerator.generate(world, registryEntry, ModStructureKeys.LOTHLORIEN_TALAN_KEY.getValue(), 8, blockPos, false);
+        JigsawPlacement.generate(world, registryEntry, ModStructureKeys.LOTHLORIEN_TALAN_KEY.getValue(), 8, blockPos, false);
     }
 
     @Nullable
-    private StructureTemplate getStructureTemplate(ServerWorld world) {
+    private StructureTemplate getStructureTemplate(ServerLevel world) {
         return structureName == null ? null : world.getStructureTemplateManager().getTemplate(this.structureName).orElse(null);
     }
 
     @Nullable
-    private StructureTemplate getStructureTemplate(ChunkRegion world) {
+    private StructureTemplate getStructureTemplate(WorldGenRegion world) {
         return structureName == null ? null : world.toServerWorld().getStructureTemplateManager().getTemplate(this.structureName).orElse(null);
     }*/
 }

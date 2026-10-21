@@ -17,7 +17,6 @@ import net.jukoz.me.registries.content.races.RaceRegistry;
 import net.jukoz.me.resources.datas.factions.Faction;
 import net.jukoz.me.resources.datas.npc_types.NpcType;
 import net.jukoz.me.resources.datas.npc_types.data.*;
-
 import java.util.List;
 
 public class GundabadNpcTypePool {
@@ -245,7 +244,6 @@ public class GundabadNpcTypePool {
                                 .add(WeightedItemData.create(EquipmentItemsME.GUNDABAD_REINFORCED_LEATHER_VEST).withColors(allColors).withCape(BackAttachmentsME.ORCISH_CAPE))
                                 .add(WeightedItemData.create(EquipmentItemsME.GUNDABAD_REINFORCED_LEATHER_VEST).withColors(allColors).withCape(BackAttachmentsME.ORCISH_SHOULDERS, allColors))
 
-
                                 .add(WeightedItemData.create(EquipmentItemsME.GUNDABAD_LEATHER_SCALE_COAT).withColors(allColors))
                                 .add(WeightedItemData.create(EquipmentItemsME.GUNDABAD_LEATHER_SCALE_COAT).withColors(allColors).withCape(BackAttachmentsME.ORCISH_CAPE))
                                 .add(WeightedItemData.create(EquipmentItemsME.GUNDABAD_LEATHER_SCALE_COAT).withColors(allColors).withCape(BackAttachmentsME.ORCISH_SHOULDERS, allColors))
@@ -296,7 +294,6 @@ public class GundabadNpcTypePool {
                                 .add(WeightedItemData.create(EquipmentItemsME.GUNDABAD_REINFORCED_LEATHER_VEST).withColors(allColors))
                                 .add(WeightedItemData.create(EquipmentItemsME.GUNDABAD_REINFORCED_LEATHER_VEST).withColors(allColors).withCape(BackAttachmentsME.ORCISH_CAPE))
                                 .add(WeightedItemData.create(EquipmentItemsME.GUNDABAD_REINFORCED_LEATHER_VEST).withColors(allColors).withCape(BackAttachmentsME.ORCISH_SHOULDERS, allColors))
-
 
                                 .add(WeightedItemData.create(EquipmentItemsME.GUNDABAD_LEATHER_SCALE_COAT).withColors(allColors))
                                 .add(WeightedItemData.create(EquipmentItemsME.GUNDABAD_LEATHER_SCALE_COAT).withColors(allColors).withCape(BackAttachmentsME.ORCISH_CAPE))

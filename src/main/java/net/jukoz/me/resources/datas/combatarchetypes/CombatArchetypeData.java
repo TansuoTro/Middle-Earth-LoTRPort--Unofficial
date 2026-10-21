@@ -37,7 +37,6 @@ public abstract class CombatArchetypeData {
 
         nbt.putString("type", combatArchetype.name());
 
-
         CompoundTag dataNbt =  getDataNbt();
 
         nbt.put("data", dataNbt);

@@ -1,11 +1,10 @@
 package net.jukoz.me.gui.onboarding.onboarding_faction;
 
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.resources.datas.common.DispositionType;
 import net.jukoz.me.resources.datas.factions.Faction;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.List;
 public class OnboardingFactionScreenService {
     private List<Faction> factions = new ArrayList<>();
     public OnboardingFactionScreenService(Level world){
-        DynamicRegistryManager registryManager = world.getRegistryManager();
+        RegistryAccess registryManager = world.getRegistryManager();
         this.factions = registryManager.get(DynamicRegistriesME.FACTION).stream().toList();
     }
 

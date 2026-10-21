@@ -7,7 +7,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.biome.Biome;
-
 import java.awt.Color;
 import java.util.*;
 

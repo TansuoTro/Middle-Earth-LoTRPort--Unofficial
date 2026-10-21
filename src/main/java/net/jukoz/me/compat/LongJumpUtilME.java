@@ -5,8 +5,8 @@ import net.minecraft.world.entity.EntityPose;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-
 import java.util.Optional;
+import net.minecraft.world.entity.Pose;
 
 /** 1.20.1 port of 1.21's {@code LongJumpUtil.calculateJumpVectorForAngle}. */
 public final class LongJumpUtilME {
@@ -49,7 +49,7 @@ public final class LongJumpUtilME {
             int steps = Mth.ceil(horizontal / horizontalSpeed) * 2;
             double travelled = 0.0;
             Vec3 previous = null;
-            EntityDimensions dimensions = entity.getDimensions(EntityPose.LONG_JUMPING);
+            EntityDimensions dimensions = entity.getDimensions(Pose.LONG_JUMPING);
 
             for (int i = 0; i < steps - 1; i++) {
                 travelled += horizontal / (double) steps;

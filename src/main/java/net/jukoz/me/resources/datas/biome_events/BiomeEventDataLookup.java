@@ -3,7 +3,7 @@ package net.jukoz.me.resources.datas.biome_events;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.SpawnGroup;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.Holder;
@@ -19,9 +19,7 @@ import net.jukoz.me.entity.npcs.NpcEntity;
 import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.registries.content.biomevents.BiomeEventRegistry;
 import net.jukoz.me.world.dimension.ModDimensions;
-
 import java.util.*;
-
 
 public class BiomeEventDataLookup {
     public static HashMap<EntityType<?>, Set<UUID>> entities = new HashMap<>();
@@ -72,7 +70,7 @@ public class BiomeEventDataLookup {
 
         if(!canSpawn)
             return false;
-        if(type.getSpawnGroup() != SpawnGroup.MONSTER)
+        if(type.getSpawnGroup() != MobCategory.MONSTER)
             return true;
 
         if(!entities.containsKey(type)){
@@ -92,7 +90,7 @@ public class BiomeEventDataLookup {
 
         EntityType<?> type = entity.getType();
         UUID uuid = entity.getUuid();
-        if(type.getSpawnGroup() != SpawnGroup.MONSTER)
+        if(type.getSpawnGroup() != MobCategory.MONSTER)
             return;
         if(entity instanceof Mob mobEntity && mobEntity.isPersistent()){
             return;
@@ -101,7 +99,7 @@ public class BiomeEventDataLookup {
     }
 
     public static void removeEntity(EntityType<?> type, UUID uuid){
-        if(type.getSpawnGroup() != SpawnGroup.MONSTER) return;
+        if(type.getSpawnGroup() != MobCategory.MONSTER) return;
         Set<UUID> set = entities.get(type);
         if (set == null) return;
         set.remove(uuid);

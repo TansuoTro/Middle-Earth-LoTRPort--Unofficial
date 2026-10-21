@@ -2,25 +2,24 @@ package net.jukoz.me.entity.beasts;
 
 import net.jukoz.me.entity.beasts.trolls.TrollEntity;
 import net.jukoz.me.item.items.TrollArmorItem;
-import net.minecraft.advancement.criterion.Criteria;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.entity.*;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.passive.AbstractDonkeyEntity;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.entity.animal.horse.AbstractChestedHorse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.StackReference;
+import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -30,17 +29,23 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.EntityView;
+import net.minecraft.world.level.EntityGetter;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.UUID;
 import java.util.function.Predicate;
+import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityEvent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 
 // Beasts are mostly aggressive Entities which work much like wolves, while also allowing the player to mount them.
-public class BeastEntity extends AbstractDonkeyEntity {
-    public static final TrackedData<Boolean> CHARGING = DataTracker.registerData(BeastEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    public static final TrackedData<Boolean> SITTING = DataTracker.registerData(BeastEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+public class BeastEntity extends AbstractChestedHorse {
+    public static final EntityDataAccessor<Boolean> CHARGING = SynchedEntityData.registerData(BeastEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Boolean> SITTING = SynchedEntityData.registerData(BeastEntity.class, EntityDataSerializers.BOOLEAN);
 
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState attackAnimationState = new AnimationState();
@@ -58,7 +63,7 @@ public class BeastEntity extends AbstractDonkeyEntity {
     private static final UUID BEAST_ARMOR_BONUS_ID = UUID.fromString("667E1665-8B10-40C8-8F9D-CF9B1667F295");
 
     // Initializing ====================================================================================================
-    protected BeastEntity(EntityType<? extends AbstractDonkeyEntity> entityType, Level world) {
+    protected BeastEntity(EntityType<? extends AbstractChestedHorse> entityType, Level world) {
         super(entityType, world);
     }
 
@@ -89,15 +94,15 @@ public class BeastEntity extends AbstractDonkeyEntity {
     }
 
     @Override
-    public void onTrackedDataSet(TrackedData<?> data) {
+    public void onTrackedDataSet(EntityDataAccessor<?> data) {
         if (!this.firstUpdate && CHARGING.equals(data)) {
             this.chargeTimeout = this.chargeTimeout == 0 ? maxChargeCooldown() : this.chargeTimeout;
         }
         super.onTrackedDataSet(data);
     }
 
-    private StackReference createInventoryStackReference(final int slot, final Predicate<ItemStack> predicate) {
-        return new StackReference(){
+    private SlotAccess createInventoryStackReference(final int slot, final Predicate<ItemStack> predicate) {
+        return new SlotAccess(){
 
             @Override
             public ItemStack get() {
@@ -121,7 +126,7 @@ public class BeastEntity extends AbstractDonkeyEntity {
         super.writeCustomDataToNbt(nbt);
         nbt.putBoolean("ChestedBeast", this.hasChest());
         if (this.hasChest()) {
-            NbtList nbtList = new NbtList();
+            ListTag nbtList = new ListTag();
             for(int i = 2; i < this.items.size(); ++i) {
                 ItemStack itemStack = this.items.getStack(i);
                 if (!itemStack.isEmpty()) {
@@ -144,7 +149,7 @@ public class BeastEntity extends AbstractDonkeyEntity {
         this.setHasChest(nbt.getBoolean("ChestedBeast"));
         this.onChestedStatusChanged();
         if (this.hasChest()) {
-            NbtList nbtList = nbt.getList("Items", 10);
+            ListTag nbtList = nbt.getList("Items", 10);
 
             for(int i = 0; i < nbtList.size(); ++i) {
                 CompoundTag nbtCompound = nbtList.getCompound(i);
@@ -177,7 +182,6 @@ public class BeastEntity extends AbstractDonkeyEntity {
     public int getJumpCooldown() {
         return this.chargeTimeout;
     }
-
 
     public double getMountedHeightOffset() {
         float f = Math.min(0.25F, this.limbAnimator.getSpeed());
@@ -248,7 +252,7 @@ public class BeastEntity extends AbstractDonkeyEntity {
         return (float)this.getAttributeValue(Attributes.GENERIC_ATTACK_DAMAGE);
     }
 
-    // Equipment =======================================================================================================
+    // Equipable =======================================================================================================
 
     protected void dropInventory() {
         super.dropInventory();
@@ -272,7 +276,7 @@ public class BeastEntity extends AbstractDonkeyEntity {
     }
 
     @Override
-    public StackReference getStackReference(int mappedIndex) {
+    public SlotAccess getStackReference(int mappedIndex) {
         int j;
         int i = mappedIndex - 400;
         if (i >= 0 && i < 2 && i < this.items.size()) {
@@ -281,13 +285,13 @@ public class BeastEntity extends AbstractDonkeyEntity {
             }
             if (i == 1) {
                 if (!this.hasArmorSlot()) {
-                    return StackReference.EMPTY;
+                    return SlotAccess.EMPTY;
                 }
                 return this.createInventoryStackReference(i, stack -> stack.isEmpty() || this.isHorseArmor((ItemStack)stack));
             }
         }
         if ((j = mappedIndex - 500 + 2) >= 2 && j < this.items.size()) {
-            return StackReference.of(this.items, j);
+            return SlotAccess.of(this.items, j);
         }
         return super.getStackReference(mappedIndex);
     }
@@ -334,7 +338,7 @@ public class BeastEntity extends AbstractDonkeyEntity {
             if (this.isHorseArmor(stack)) {
                 int i = ((TrollArmorItem)stack.getItem()).getBonus();
                 if (i != 0) {
-                    this.getAttributeInstance(Attributes.GENERIC_ARMOR).addTemporaryModifier(new EntityAttributeModifier(BEAST_ARMOR_BONUS_ID, "Beast armor bonus", (double)i, EntityAttributeModifier.Operation.ADDITION));
+                    this.getAttributeInstance(Attributes.GENERIC_ARMOR).addTemporaryModifier(new AttributeModifier(BEAST_ARMOR_BONUS_ID, "Beast armor bonus", (double)i, AttributeModifier.Operation.ADDITION));
                 }
             }
         }
@@ -382,17 +386,16 @@ public class BeastEntity extends AbstractDonkeyEntity {
             if (player instanceof ServerPlayer) {
                 this.setOwnerUuid(player.getUuid());
                 this.setTame(true);
-                Criteria.TAME_ANIMAL.trigger((ServerPlayer)player, this);
+                CriteriaTriggers.TAME_ANIMAL.trigger((ServerPlayer)player, this);
             }
-            this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
+            this.getWorld().sendEntityStatus(this, EntityEvent.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
 
             this.chargeTimeout = 0;
         }
         else {
-            this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES);
+            this.getWorld().sendEntityStatus(this, EntityEvent.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES);
         }
     }
-
 
     public InteractionResult interactMob(Player player, InteractionHand hand) {
         boolean bl = !this.isBaby() && this.isTame() && player.shouldCancelInteraction();
@@ -445,7 +448,7 @@ public class BeastEntity extends AbstractDonkeyEntity {
     @Override
     public boolean tryAttack(Entity target) {
         this.attackTicksLeft = ATTACK_COOLDOWN;
-        this.getWorld().sendEntityStatus(this, EntityStatuses.PLAY_ATTACK_SOUND);
+        this.getWorld().sendEntityStatus(this, EntityEvent.PLAY_ATTACK_SOUND);
         float f = this.getAttackDamage();
         float g = (int)f > 0 ? f / 2.0f + (float)this.random.nextInt((int)f) : f;
         boolean bl = target.damage(this.getDamageSources().mobAttack(this), g);
@@ -465,7 +468,7 @@ public class BeastEntity extends AbstractDonkeyEntity {
         return bl;
     }
 
-    // Tick Management =================================================================================================
+    // SavedTick Management =================================================================================================
     @Override
     public void tick() {
         super.tick();
@@ -508,15 +511,15 @@ public class BeastEntity extends AbstractDonkeyEntity {
 
     @Override
     public void handleStatus(byte status) {
-        if (status == EntityStatuses.PLAY_ATTACK_SOUND) {
+        if (status == EntityEvent.PLAY_ATTACK_SOUND) {
             this.attackTicksLeft = ATTACK_COOLDOWN;
         }
         if(status == 4){
             this.attackAnimationState.start(this.age);
         }
-        if (status == EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES) {
+        if (status == EntityEvent.ADD_POSITIVE_PLAYER_REACTION_PARTICLES) {
             this.spawnPlayerReactionParticles(true);
-        } else if (status == EntityStatuses.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES) {
+        } else if (status == EntityEvent.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES) {
             this.spawnPlayerReactionParticles(false);
         } else {
             super.handleStatus(status);
@@ -534,7 +537,7 @@ public class BeastEntity extends AbstractDonkeyEntity {
 
     @Override
     protected void updateLimbs(float posDelta) {
-        float f = this.getPose() == EntityPose.STANDING ? Math.min(posDelta * 6.0f, 1.0f) : 0.0f;
+        float f = this.getPose() == Pose.STANDING ? Math.min(posDelta * 6.0f, 1.0f) : 0.0f;
         this.limbAnimator.updateLimbs(f, 0.2f);
     }
 
@@ -549,7 +552,7 @@ public class BeastEntity extends AbstractDonkeyEntity {
     }
 
     @Override
-    public EntityView method_48926() {
+    public EntityGetter method_48926() {
         return null;
     }
 }

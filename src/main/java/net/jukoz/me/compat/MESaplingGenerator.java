@@ -1,19 +1,18 @@
 package net.jukoz.me.compat;
 
-import net.minecraft.block.sapling.SaplingGenerator;
+import net.minecraft.world.level.block.grower.AbstractTreeGrower;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.Optional;
 
 /**
- * 1.21.8's concrete {@code net.minecraft.block.SaplingGenerator(name, secondary, tree, flowers)}
+ * 1.21.8's concrete {@code net.minecraft.block.AbstractTreeGrower(name, secondary, tree, flowers)}
  * shim. 1.20.1's generator is abstract and only exposes {@code getTreeFeature(RandomSource, boolean)},
  * so this subclass stores the single configured feature the donor passed.
  */
-public class MESaplingGenerator extends SaplingGenerator {
+public class MESaplingGenerator extends AbstractTreeGrower {
     private final String name;
     @Nullable
     private final ResourceKey<ConfiguredFeature<?, ?>> treeFeature;

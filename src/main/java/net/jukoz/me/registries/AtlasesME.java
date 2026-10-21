@@ -2,8 +2,8 @@ package net.jukoz.me.registries;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.texture.SpriteAtlasTexture;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 
@@ -25,8 +25,8 @@ public class AtlasesME {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static SpriteAtlasTexture getAtlasFromPath(ResourceLocation atlasPath){
-        MinecraftClient client = MinecraftClient.getInstance();
+    public static TextureAtlas getAtlasFromPath(ResourceLocation atlasPath){
+        Minecraft client = Minecraft.getInstance();
         return client.getBakedModelManager().getAtlas(atlasPath);
     }
 

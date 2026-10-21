@@ -23,14 +23,11 @@ public class PacketSetAffiliation extends ClientToServerPacket<PacketSetAffiliat
     private final String factionName;
     private final String spawnName;
 
-
     public PacketSetAffiliation(String dispositionName, String factionName, String spawnName){
         this.dispositionName = dispositionName;
         this.factionName = factionName;
         this.spawnName = spawnName;
     }
-
-
 
     public PacketSetAffiliation(FriendlyByteBuf buf) {
         this(buf.readString(), buf.readString(), buf.readString());

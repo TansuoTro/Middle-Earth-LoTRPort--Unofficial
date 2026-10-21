@@ -2,7 +2,7 @@ package net.jukoz.me.block.special.plants;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.block.Fertilizable;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.server.level.ServerLevel;
@@ -13,7 +13,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelView;
 
-public class WildCropBlock extends CustomPlantBlock implements Fertilizable {
+public class WildCropBlock extends CustomPlantBlock implements BonemealableBlock {
     protected static final VoxelShape SHAPE = Block.createCuboidShape(2.0, 0.0, 2.0, 14.0, 13.0, 14.0);
 
     public WildCropBlock(Settings settings) {
@@ -26,7 +26,7 @@ public class WildCropBlock extends CustomPlantBlock implements Fertilizable {
     }
 
     @Override
-    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isFertilizable(LevelReader world, BlockPos pos, BlockState state, boolean isClient) {
         return true;
     }
 

@@ -2,7 +2,7 @@ package net.jukoz.me.entity.npcs.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
@@ -15,7 +15,6 @@ import net.minecraft.world.level.Level;
 import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.resources.datas.common.EntityCategories;
 import net.jukoz.me.resources.datas.npc_types.NpcType;
-
 import java.util.Optional;
 
 public class NpcData {
@@ -24,14 +23,14 @@ public class NpcData {
 
     private Holder<NpcType> type;
     private EntityCategories category;
-    private final SpawnReason spawnReason;
+    private final MobSpawnType spawnReason;
     private final Optional<BlockPos> structureManagerPos;
 
     static {
         CODEC = RecordCodecBuilder.create((instance) -> instance.group(
                 DynamicRegistriesME.NPC_TYPE_CODEC.optionalFieldOf("Type").forGetter(NpcData::getOptionalType),
                 Codec.STRING.optionalFieldOf("Category").forGetter(NpcData::getOptionalCategory),
-                Codec.STRING.optionalFieldOf("SpawnReason").forGetter(NpcData::getOptionalSpawnReason),
+                Codec.STRING.optionalFieldOf("MobSpawnType").forGetter(NpcData::getOptionalSpawnReason),
                 BlockPos.CODEC.optionalFieldOf("StructureManagerPos").forGetter((data) -> data.structureManagerPos)
         ).apply(instance, NpcData::new));
 
@@ -46,11 +45,11 @@ public class NpcData {
     public NpcData(Optional<Holder<NpcType>> type, Optional<String> category, Optional<String> spawnReason, Optional<BlockPos> structureManagerPos) {
         this.type = type.orElse(null);
         this.category = category.map(value -> parseEnum(EntityCategories.class, value)).orElse(null);
-        this.spawnReason = spawnReason.map(value -> parseEnum(SpawnReason.class, value)).orElse(null);
+        this.spawnReason = spawnReason.map(value -> parseEnum(MobSpawnType.class, value)).orElse(null);
         this.structureManagerPos = structureManagerPos == null ||  structureManagerPos.isEmpty() ? Optional.empty() : structureManagerPos;
     }
 
-    public NpcData(Holder<NpcType> type, EntityCategories category, SpawnReason spawnReason, Optional<BlockPos> structureManagerPos) {
+    public NpcData(Holder<NpcType> type, EntityCategories category, MobSpawnType spawnReason, Optional<BlockPos> structureManagerPos) {
         this.type = type;
         this.category = category;
         this.spawnReason = spawnReason;
@@ -73,7 +72,7 @@ public class NpcData {
         return new NpcData(this.type, category, this.spawnReason, this.structureManagerPos);
     }
 
-    public NpcData withSpawnReason(SpawnReason spawnReason) {
+    public NpcData withSpawnReason(MobSpawnType spawnReason) {
         return new NpcData(this.type, this.category, spawnReason, this.structureManagerPos);
     }
 
@@ -106,12 +105,11 @@ public class NpcData {
         return type.value().getFactionIdentifier();
     }
 
-
     public EntityCategories getCategory() {
         return category;
     }
 
-    public SpawnReason getSpawnReason() {
+    public MobSpawnType getSpawnReason() {
         return spawnReason;
     }
 
@@ -124,7 +122,6 @@ public class NpcData {
     private Optional<Holder<NpcType>> getOptionalType() {
         return type != null ? Optional.of(type) : Optional.empty();
     }
-
 
     private Optional<String> getOptionalCategory() {
         return category != null ? Optional.of(category.name()) : Optional.empty();
@@ -140,7 +137,6 @@ public class NpcData {
     public BlockPos getStructureManagerPos() {
         return structureManagerPos.orElse(null);
     }
-
 
     private static <E extends Enum<E>> E parseEnum(Class<E> type, String value) {
         try {

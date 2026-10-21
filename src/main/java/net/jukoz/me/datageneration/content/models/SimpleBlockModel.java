@@ -3,7 +3,6 @@ package net.jukoz.me.datageneration.content.models;
 import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.minecraft.world.level.block.Block;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,11 +12,9 @@ public class SimpleBlockModel {
 
     public record ChiseledPolishedBlock(Block base, Block origin) {}
 
-
     public static List<Block> blocks = new ArrayList<>() {
         {
             add(ModBlocks.COBBLY_DIRT);
-
 
             add(ModBlocks.SNOWY_DIRT);
 

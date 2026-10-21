@@ -11,11 +11,14 @@ import net.jukoz.me.item.utils.ModItemGroups;
 import net.jukoz.me.utils.LoggerUtil;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.item.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.BannerPatternItem;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 
 public class ModResourceItems {
     public static final Item MIDDLE_EARTH_MAP = ResourceItemsME.MIDDLE_EARTH_MAP;
@@ -66,7 +69,6 @@ public class ModResourceItems {
             new Item(new FabricItemSettings()));
     public static final Item MORGUL_STEEL_NUGGET = registerItem("morgul_steel_nugget",
             new Item(new FabricItemSettings()));
-
 
     public static final Item RAW_MITHRIL = ResourceItemsME.RAW_MITHRIL;
     public static final Item MITHRIL_INGOT = ResourceItemsME.MITHRIL_INGOT;
@@ -130,7 +132,6 @@ public class ModResourceItems {
 
     public static final Item COPPER_COIN = ResourceItemsME.COPPER_COIN;
     public static final Item SILVER_COIN = ResourceItemsME.SILVER_COIN;
-
 
     public static final Item FLAX = ResourceItemsME.FLAX;
     public static final Item FLAX_SEEDS = ResourceItemsME.FLAX_SEEDS;

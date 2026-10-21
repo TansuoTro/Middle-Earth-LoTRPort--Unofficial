@@ -28,4 +28,3 @@ public enum ShireHobbitVariant {
         return BY_ID[id % BY_ID.length];
     }
 }
-

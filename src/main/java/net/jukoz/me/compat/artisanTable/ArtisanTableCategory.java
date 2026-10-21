@@ -13,9 +13,9 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-
 import java.util.LinkedList;
 import java.util.List;
+import net.minecraft.client.gui.layouts.LayoutElement;
 
 public class ArtisanTableCategory implements DisplayCategory<BasicDisplay> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(MiddleEarth.MOD_ID, "textures/gui/artisan_table_rei.png");
@@ -36,9 +36,9 @@ public class ArtisanTableCategory implements DisplayCategory<BasicDisplay> {
     }
 
     @Override
-    public List<Widget> setupDisplay(BasicDisplay display, Rectangle bounds) {
+    public List<LayoutElement> setupDisplay(BasicDisplay display, Rectangle bounds) {
         final Point startPoint = new Point(bounds.getCenterX() - 87, bounds.getCenterY() - 35);
-        List<Widget> widgets = new LinkedList<>();
+        List<LayoutElement> widgets = new LinkedList<>();
 
         widgets.add(Widgets.createTexturedWidget(TEXTURE, new Rectangle(startPoint.x, startPoint.y, 175, 82)));
 

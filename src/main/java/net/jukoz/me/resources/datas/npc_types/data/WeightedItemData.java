@@ -1,16 +1,15 @@
 package net.jukoz.me.resources.datas.npc_types.data;
+
 import net.jukoz.me.compat.METext;
 import net.jukoz.me.compat.NbtCompat;
-
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.api.dtos.WeightedItem;
 import net.jukoz.me.item.utils.armor.backAttachments.BackAttachmentsME;
 import net.jukoz.me.item.utils.armor.helmetAttachments.HelmetAttachmentsME;
-
 import java.util.List;
 
 public class WeightedItemData extends WeightedItem<GearItemData> {
@@ -26,7 +25,7 @@ public class WeightedItemData extends WeightedItem<GearItemData> {
         this.item = new GearItemData(itemIdentifier);
     }
 
-    public WeightedItemData(NbtElement element){
+    public WeightedItemData(Tag element){
         super(element);
         if(element == null)
             return;
@@ -102,8 +101,8 @@ public class WeightedItemData extends WeightedItem<GearItemData> {
     }
 
     @Override
-    public NbtElement getNbt() {
-        NbtElement nbt = super.getNbt();
+    public Tag getNbt() {
+        Tag nbt = super.getNbt();
         if(nbt == null)
             nbt = new CompoundTag();
         nbt = this.item.getNbt(NbtCompat.compound(nbt));

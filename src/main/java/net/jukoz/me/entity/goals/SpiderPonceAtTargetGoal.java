@@ -2,16 +2,16 @@ package net.jukoz.me.entity.goals;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.PounceAtTargetGoal;
+import net.minecraft.world.entity.ai.goal.LeapAtTargetGoal;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.phys.Vec3;
 import net.jukoz.me.entity.spider.Pouncer;
-
 import java.util.EnumSet;
+import net.minecraft.world.entity.ai.control.Control;
 
 public class SpiderPonceAtTargetGoal extends Goal {
-    private final HostileEntity spider;
+    private final Monster spider;
     private LivingEntity target;
     private final float verticalVelocity;
     private final float horizontalVelocity;
@@ -23,11 +23,11 @@ public class SpiderPonceAtTargetGoal extends Goal {
     private final int maxDistance;
     private final int moduloTicks;
 
-    public SpiderPonceAtTargetGoal(HostileEntity mob, Pouncer pouncer, float verticalVelocity, float horizontalVelocity) {
+    public SpiderPonceAtTargetGoal(Monster mob, Pouncer pouncer, float verticalVelocity, float horizontalVelocity) {
         this(mob, pouncer, verticalVelocity, horizontalVelocity, 3, 12, 5);
     }
 
-    public SpiderPonceAtTargetGoal(HostileEntity mob, Pouncer pouncer, float verticalVelocity, float horizontalVelocity,
+    public SpiderPonceAtTargetGoal(Monster mob, Pouncer pouncer, float verticalVelocity, float horizontalVelocity,
                                    int minDistance, int maxDistance, int moduloTicks) {
         this.spider = mob;
         this.pouncer = pouncer;
@@ -60,7 +60,7 @@ public class SpiderPonceAtTargetGoal extends Goal {
         this.path = this.spider.getNavigation().findPathTo(target, 0);
         if(path == null) return false;
 
-        int randomInt = this.spider.getRandom().nextInt(PounceAtTargetGoal.toGoalTicks(this.moduloTicks));
+        int randomInt = this.spider.getRandom().nextInt(LeapAtTargetGoal.toGoalTicks(this.moduloTicks));
         return  this.spider.getRandom().nextInt(2) == 0 && randomInt == 0;
     }
 

@@ -3,15 +3,15 @@ package net.jukoz.me.world.features.chain;
 import com.mojang.serialization.Codec;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.block.PillarBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.StructureWorldAccess;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 
 public class ChainFeature extends Feature<ChainFeatureConfig> {
 
@@ -20,9 +20,9 @@ public class ChainFeature extends Feature<ChainFeatureConfig> {
     }
 
     @Override
-    public boolean generate(FeatureContext<ChainFeatureConfig> context) {
+    public boolean generate(FeaturePlaceContext<ChainFeatureConfig> context) {
         BlockPos blockPos = context.getOrigin();
-        StructureWorldAccess structureWorldAccess = context.getWorld();
+        WorldGenLevel structureWorldAccess = context.getWorld();
         RandomSource random = context.getRandom();
         ChainFeatureConfig config = context.getConfig();
         int maxDistance = config.maxLength;

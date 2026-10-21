@@ -1,10 +1,8 @@
 package net.jukoz.me.item;
 
-
-
 import net.minecraft.world.item.Item;
-import net.minecraft.item.ToolMaterial;
-import net.minecraft.item.ToolMaterials;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.Tiers;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.Rarity;
@@ -33,7 +31,6 @@ import net.jukoz.me.item.utils.ShieldTypesME;
 import net.jukoz.me.item.utils.ToolMaterialsME;
 import net.jukoz.me.registries.RegistryAliasesME;
 import net.jukoz.me.registries.content.factions.FactionRegistry;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;

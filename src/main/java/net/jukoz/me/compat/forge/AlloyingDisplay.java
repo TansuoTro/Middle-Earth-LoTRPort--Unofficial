@@ -8,7 +8,6 @@ import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.block.special.forge.MetalTypes;
 import net.jukoz.me.compat.REICommonPluginME;
 import net.jukoz.me.recipe.AlloyingRecipe;
-
 import java.util.ArrayList;
 import java.util.List;
 

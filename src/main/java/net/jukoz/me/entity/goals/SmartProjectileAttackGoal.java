@@ -7,8 +7,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.util.Mth;
 import net.jukoz.me.entity.goals.interfaces.CooldownRangedAttackMob;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.EnumSet;
+import net.minecraft.world.entity.ai.control.Control;
 
 public class SmartProjectileAttackGoal extends Goal {
 	private final Mob mob;
@@ -26,7 +26,7 @@ public class SmartProjectileAttackGoal extends Goal {
 
 	public SmartProjectileAttackGoal(CooldownRangedAttackMob mob, double mobSpeed, int minIntervalTicks, int maxIntervalTicks, float minShootRange, float maxShootRange) {
 		if (!(mob instanceof LivingEntity)) {
-			throw new IllegalArgumentException("ProjectileAttackGoal requires Mob implements RangedAttackMob");
+			throw new IllegalArgumentException("RangedAttackGoal requires Mob implements RangedAttackMob");
 		} else {
 			this.owner = mob;
 			this.mob = (Mob)mob;

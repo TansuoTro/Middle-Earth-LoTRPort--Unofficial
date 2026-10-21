@@ -1,16 +1,15 @@
 package net.jukoz.me.gui.return_confirmation;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Colors;
+import net.minecraft.util.CommonColors;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.utils.widgets.ModWidget;
 import net.jukoz.me.network.packets.C2S.PacketTeleportToCurrentOverworldSpawn;
-
 import java.awt.event.KeyEvent;
 
 public class ReturnConfirmationScreen extends Screen {
@@ -40,7 +39,7 @@ public class ReturnConfirmationScreen extends Screen {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         ModWidget.updateMouse(mouseX, mouseY);
         this.drawContent(context);
     }
@@ -56,7 +55,7 @@ public class ReturnConfirmationScreen extends Screen {
         super.tick();
     }
 
-    private void drawContent(DrawContext context) {
+    private void drawContent(GuiGraphics context) {
         int panelSizeX = 102;
         int panelSizeY = 18;
         int margin = 5;
@@ -71,7 +70,7 @@ public class ReturnConfirmationScreen extends Screen {
             context.drawText(textRenderer, continueText,
                     startX + (int)((panelSizeX - textRenderer.getWidth(continueText)) / 2f),
                     startY + (int) ((panelSizeY / 2f) - (textRenderer.fontHeight / 2f)) + 1,
-                    Colors.BLACK, false);
+                    CommonColors.BLACK, false);
 
             net.jukoz.me.compat.client.gui.MEGui.setBounds(returnToOverworldButton, panelSizeX, panelSizeY, startX, startY);
             if(ModWidget.getFocusEnabled() && returnToOverworldButton.isFocused()){

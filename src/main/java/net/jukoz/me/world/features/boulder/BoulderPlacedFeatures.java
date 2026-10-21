@@ -9,10 +9,9 @@ import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
+import net.minecraft.core.HolderGetter;
 
 public class BoulderPlacedFeatures {
     public static final ResourceKey<PlacedFeature> ANDESITE_BOULDER = registerKey("andesite_boulder");
@@ -100,7 +99,7 @@ public class BoulderPlacedFeatures {
     public static final ResourceKey<PlacedFeature> BIG_BOULDER_GABBRO    = registerKey("big_boulder_gabbro");
 
     public static void bootstrap(BootstrapContext<PlacedFeature> featureRegisterable) {
-        RegistryEntryLookup<ConfiguredFeature<?, ?>> registryEntryLookup = featureRegisterable.getRegistryLookup(Registries.CONFIGURED_FEATURE);
+        HolderGetter<ConfiguredFeature<?, ?>> registryEntryLookup = featureRegisterable.getRegistryLookup(Registries.CONFIGURED_FEATURE);
         Holder.Reference<ConfiguredFeature<?, ?>> andesite = registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.ANDESITE_BOULDER);
         Holder.Reference<ConfiguredFeature<?, ?>> calcite = registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.CALCITE_BOULDER);
         Holder.Reference<ConfiguredFeature<?, ?>> diorite = registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.DIORITE_BOULDER);
@@ -137,7 +136,6 @@ public class BoulderPlacedFeatures {
         PlacedFeature.register(featureRegisterable, MOSSY_BOULDER, mossy, uncommon,
                 InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
 
-    
         PlacedFeature.register(featureRegisterable, SMALL_BOULDER_ANDESITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.SMALL_BOULDER_ANDESITE), 
                 sparse, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, MEDIUM_BOULDER_ANDESITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.MEDIUM_BOULDER_ANDESITE),

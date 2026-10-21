@@ -2,9 +2,8 @@ package net.jukoz.me.compat;
 
 import net.jukoz.me.compat.NbtCompat;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
-
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
 import java.util.function.Consumer;
 
 /**
@@ -21,31 +20,31 @@ public final class NbtCompat {
     }
 
     /** The compound behind {@code element}, or null when it is not one. */
-    public static CompoundTag compound(NbtElement element) {
+    public static CompoundTag compound(Tag element) {
         return element instanceof CompoundTag compound ? compound : null;
     }
 
-    public static boolean isCompound(NbtElement element) {
+    public static boolean isCompound(Tag element) {
         return element instanceof CompoundTag;
     }
 
-    public static void ifCompound(NbtElement element, Consumer<CompoundTag> action) {
+    public static void ifCompound(Tag element, Consumer<CompoundTag> action) {
         if (element instanceof CompoundTag compound) {
             action.accept(compound);
         }
     }
 
     /** The list behind {@code element}, or null when it is not one. */
-    public static NbtList list(NbtElement element) {
-        return element instanceof NbtList list ? list : null;
+    public static ListTag list(Tag element) {
+        return element instanceof ListTag list ? list : null;
     }
 
-    public static boolean isList(NbtElement element) {
-        return element instanceof NbtList;
+    public static boolean isList(Tag element) {
+        return element instanceof ListTag;
     }
 
-    public static void ifList(NbtElement element, Consumer<NbtList> action) {
-        if (element instanceof NbtList list) {
+    public static void ifList(Tag element, Consumer<ListTag> action) {
+        if (element instanceof ListTag list) {
             action.accept(list);
         }
     }

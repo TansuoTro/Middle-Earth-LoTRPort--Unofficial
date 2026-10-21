@@ -6,22 +6,20 @@ import net.jukoz.me.entity.duck.DuckEntity;
 import net.jukoz.me.entity.goals.PheasantStartledGoal;
 import net.jukoz.me.item.ModEquipmentItems;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.NoPenaltyTargeting;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.pathfinder.PathNodeType;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.ChickenEntity;
-import net.minecraft.entity.passive.PassiveEntity;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -36,34 +34,47 @@ import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.EnumSet;
 import java.util.List;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 
-public class PheasantEntity extends AnimalEntity {
-    private static final TrackedData<Integer> VARIANT = DataTracker.registerData(PheasantEntity.class, TrackedDataHandlerRegistry.INTEGER);
+public class PheasantEntity extends Animal {
+    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.registerData(PheasantEntity.class, EntityDataSerializers.INTEGER);
 
-    public PheasantEntity(EntityType<? extends AnimalEntity> entityType, Level world) {
+    public PheasantEntity(EntityType<? extends Animal> entityType, Level world) {
         super(entityType, world);
-        this.setPathfindingPenalty(PathNodeType.WATER, 0.0f);
+        this.setPathfindingPenalty(BlockPathTypes.WATER, 0.0f);
     }
 
     @Override
     protected void initGoals() {
-        this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(1, new EscapeDangerGoal(this, 1.4));
+        this.goalSelector.add(0, new FloatGoal(this));
+        this.goalSelector.add(1, new PanicGoal(this, 1.4));
         this.goalSelector.add(2, new PheasantStartledGoal(this));
         this.goalSelector.add(3, new FollowParentGoal(this, 1.1));
-        this.goalSelector.add(4, new AnimalMateGoal(this, 1.0));
+        this.goalSelector.add(4, new BreedGoal(this, 1.0));
         this.goalSelector.add(5, new TemptGoal(this, 0.9, DuckEntity.SEEDS_BREEDING_INGREDIENT, true));
-        this.goalSelector.add(6, new LookAtEntityGoal(this, Player.class, 6.0f));
-        this.goalSelector.add(6, new WanderAroundFarGoal(this, 1.0));
-        this.goalSelector.add(7, new LookAroundGoal(this));
+        this.goalSelector.add(6, new LookAtPlayerGoal(this, Player.class, 6.0f));
+        this.goalSelector.add(6, new WaterAvoidingRandomStrollGoal(this, 1.0));
+        this.goalSelector.add(7, new RandomLookAroundGoal(this));
     }
 
     @Override
@@ -72,7 +83,7 @@ public class PheasantEntity extends AnimalEntity {
         this.dataTracker.startTracking(VARIANT, 0);
     }
 
-    public static DefaultAttributeContainer.Builder createPheasantAttributes() {
+    public static AttributeSupplier.Builder createPheasantAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.GENERIC_MAX_HEALTH, 5.0)
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.4);
@@ -91,13 +102,13 @@ public class PheasantEntity extends AnimalEntity {
     }
 
     @Override
-    protected float getActiveEyeHeight(EntityPose pose, EntityDimensions dimensions) {
+    protected float getActiveEyeHeight(Pose pose, EntityDimensions dimensions) {
         return this.isBaby() ? dimensions.height * 0.85f : dimensions.height * 0.92f;
     }
 
     @Nullable
     @Override
-    public PheasantEntity createChild(ServerLevel world, PassiveEntity entity) {
+    public PheasantEntity createChild(ServerLevel world, AgeableMob entity) {
         return ModEntities.PHEASANT.create(world);
     }
 
@@ -141,8 +152,8 @@ public class PheasantEntity extends AnimalEntity {
     }
 
     /* VARIANTS */
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason,
-                                 @Nullable EntityData entityData, @Nullable CompoundTag entityNbt) {
+    public SpawnGroupData initialize(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason,
+                                 @Nullable SpawnGroupData entityData, @Nullable CompoundTag entityNbt) {
         PheasantVariant variant = Util.getRandom(PheasantVariant.values(), this.random);
         setVariant(variant);
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);

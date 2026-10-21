@@ -4,15 +4,15 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.inventory.SingleStackInventory;
+import net.minecraft.world.ticks.ContainerSingleItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.loot.context.LootContextParameterSet;
-import net.minecraft.loot.context.LootContextTypes;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
@@ -20,7 +20,7 @@ import net.minecraft.world.level.Level;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import org.jetbrains.annotations.Nullable;
 
-public class PlateBlockEntity extends BlockEntity implements SingleStackInventory {
+public class PlateBlockEntity extends BlockEntity implements ContainerSingleItem {
     private ItemStack food = ItemStack.EMPTY;
     @Nullable
     private ResourceLocation lootTable;
@@ -89,8 +89,8 @@ public class PlateBlockEntity extends BlockEntity implements SingleStackInventor
 
     @Nullable
     @Override
-    public Packet<ClientPlayPacketListener> toUpdatePacket() {
-        return BlockEntityUpdateS2CPacket.create(this);
+    public Packet<ClientGamePacketListener> toUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
@@ -132,7 +132,7 @@ public class PlateBlockEntity extends BlockEntity implements SingleStackInventor
     public void generateItem(ServerLevel world) {
         if (this.lootTable != null && blockPlaced) {
             LootTable lootTable = world.getServer().getLootManager().getLootTable(this.lootTable);
-            LootContextParameterSet lootContext = new LootContextParameterSet.Builder(world).build(LootContextTypes.EMPTY);
+            LootParams lootContext = new LootParams.Builder(world).build(LootContextParamSets.EMPTY);
             ObjectArrayList<ItemStack> lootList = lootTable.generateLoot(lootContext, this.lootTableSeed);
             ItemStack itemLoot = ItemStack.EMPTY;
             if(!lootList.isEmpty()) itemLoot = lootList.get(world.getRandom().nextInt(lootList.size()));

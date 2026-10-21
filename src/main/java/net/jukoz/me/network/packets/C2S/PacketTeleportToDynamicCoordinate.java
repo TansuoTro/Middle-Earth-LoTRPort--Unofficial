@@ -25,8 +25,6 @@ public class PacketTeleportToDynamicCoordinate extends ClientToServerPacket<Pack
         this.welcomeNeeded = welcomeNeeded;
     }
 
-
-
     public PacketTeleportToDynamicCoordinate(FriendlyByteBuf buf) {
         this(buf.readDouble(), buf.readDouble(), buf.readBoolean());
     }

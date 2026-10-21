@@ -1,7 +1,6 @@
 package net.jukoz.me.block.special;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -9,14 +8,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.state.property.IntProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.core.BlockPos;
@@ -29,10 +28,16 @@ import net.minecraft.world.level.LevelView;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.jukoz.me.block.registration.WoodBlockSets;
 import net.jukoz.me.item.FoodItemsME;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
 
-public class TapperBlock extends HorizontalFacingBlock {
+public class TapperBlock extends HorizontalDirectionalBlock {
     public static final int FULL_TAP_LEVEL = 5;
-    public static final IntProperty TAP_LEVEL = IntProperty.of("tap_level", 0, FULL_TAP_LEVEL);
+    public static final IntegerProperty TAP_LEVEL = IntegerProperty.of("tap_level", 0, FULL_TAP_LEVEL);
     public static final int RANDOM_TICK_CHANCE = 7;
 
     public TapperBlock(Settings settings) {
@@ -47,20 +52,18 @@ public class TapperBlock extends HorizontalFacingBlock {
         return state.get(TAP_LEVEL);
     }
 
-
-
     @Override
     public BlockState getPlacementState(BlockPlaceContext ctx) {
         return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
     }
 
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
         BlockState behindBlock = world.getBlockState(pos.offset(state.get(FACING).getOpposite()));
         return behindBlock.isIn(BlockTags.LOGS);
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return switch (state.get(FACING)) {
             case SOUTH -> Block.createCuboidShape(4.0, 0.0, 0.0, 12.0, 10.0, 8.0);
             default -> Block.createCuboidShape(4.0, 0.0, 8.0, 12.0, 10.0, 16.0);
@@ -96,7 +99,7 @@ public class TapperBlock extends HorizontalFacingBlock {
             }
             else if (stack.isOf(Items.GLASS_BOTTLE)) {
                 if(result != Items.SLIME_BALL) stack.decrement(1);
-                world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 1.0F, 1.1F);
+                world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.1F);
 
                 if (stack.isEmpty()) {
                     player.setStackInHand(hand, stackResult);
@@ -142,17 +145,17 @@ public class TapperBlock extends HorizontalFacingBlock {
     }
 
     @Override
-    public BlockState rotate(BlockState state, BlockRotation rotation) {
+    public BlockState rotate(BlockState state, Rotation rotation) {
         return state.with(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override
-    public BlockState mirror(BlockState state, BlockMirror mirror) {
+    public BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.get(FACING)));
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderType(BlockState state) {
+        return RenderShape.MODEL;
     }
 }

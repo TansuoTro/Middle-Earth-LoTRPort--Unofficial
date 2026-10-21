@@ -1,7 +1,7 @@
 package net.jukoz.me.compat.client.render;
 
 import net.jukoz.me.mixin.client.AnimationStateAccessor;
-import net.minecraft.entity.AnimationState;
+import net.minecraft.world.entity.AnimationState;
 
 /**
  * R2 replacement for 1.21.8's {@code AnimationState#copyFrom(AnimationState)}.

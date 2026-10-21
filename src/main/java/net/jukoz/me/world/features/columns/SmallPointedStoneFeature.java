@@ -6,8 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
-
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -17,8 +16,8 @@ public class SmallPointedStoneFeature extends Feature<SmallPointedStoneFeatureCo
         super(codec);
     }
 
-    public boolean generate(FeatureContext<SmallPointedStoneFeatureConfig> context) {
-        WorldAccess worldAccess = context.getWorld();
+    public boolean generate(FeaturePlaceContext<SmallPointedStoneFeatureConfig> context) {
+        LevelAccessor worldAccess = context.getWorld();
         BlockPos blockPos = context.getOrigin();
         RandomSource random = context.getRandom();
         SmallPointedStoneFeatureConfig SmallPointedStoneFeatureConfig = context.getConfig();
@@ -34,7 +33,7 @@ public class SmallPointedStoneFeature extends Feature<SmallPointedStoneFeatureCo
         }
     }
 
-    private static Optional<Direction> getDirection(WorldAccess world, BlockPos pos, RandomSource random) {
+    private static Optional<Direction> getDirection(LevelAccessor world, BlockPos pos, RandomSource random) {
         boolean bl = ClusterFeature.canReplace(world.getBlockState(pos.up()));
         boolean bl2 = ClusterFeature.canReplace(world.getBlockState(pos.down()));
         if (bl && bl2) {
@@ -46,7 +45,7 @@ public class SmallPointedStoneFeature extends Feature<SmallPointedStoneFeatureCo
         }
     }
 
-    private static void generateDripstoneBlocks(WorldAccess world, RandomSource random, BlockPos pos, SmallPointedStoneFeatureConfig config) {
+    private static void generateDripstoneBlocks(LevelAccessor world, RandomSource random, BlockPos pos, SmallPointedStoneFeatureConfig config) {
         ClusterFeature.generateBlock(world, pos, config.blockState);
         Iterator var4 = Direction.Type.HORIZONTAL.iterator();
 

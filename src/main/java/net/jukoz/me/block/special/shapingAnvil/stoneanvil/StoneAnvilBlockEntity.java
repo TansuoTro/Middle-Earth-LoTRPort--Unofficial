@@ -1,10 +1,8 @@
 package net.jukoz.me.block.special.shapingAnvil.stoneanvil;
 
 import net.jukoz.me.compat.MEArmorTrim;
-
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.armortrim.ArmorTrim;
 import net.minecraft.world.item.armortrim.ArmorTrimMaterial;
@@ -16,8 +14,8 @@ import net.minecraft.core.BlockPos;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import net.jukoz.me.block.special.shapingAnvil.ShapingAnvilBlockEntity;
-
 import java.util.Optional;
+import net.minecraft.world.item.armortrim.TrimMaterial;
 
 public class StoneAnvilBlockEntity extends ShapingAnvilBlockEntity {
 
@@ -35,9 +33,9 @@ public class StoneAnvilBlockEntity extends ShapingAnvilBlockEntity {
 
         ArmorTrim trim = MEArmorTrim.get(input);
         if (trim != null){
-            Optional<ResourceKey<ArmorTrimMaterial>> armorTrimMaterialRegistryKey = trim.getMaterial().getKey();
+            Optional<ResourceKey<TrimMaterial>> armorTrimMaterialRegistryKey = trim.getMaterial().getKey();
             if(armorTrimMaterialRegistryKey.isPresent()) {
-                ResourceKey<ArmorTrimMaterial> armorTrimMaterial = armorTrimMaterialRegistryKey.get();
+                ResourceKey<TrimMaterial> armorTrimMaterial = armorTrimMaterialRegistryKey.get();
                 if (!armorTrimMaterial.getValue().equals(MiddleEarth.of("bronze")) &&
                         !armorTrimMaterial.getValue().equals(MiddleEarth.of("crude")) &&
                         !armorTrimMaterial.getValue().equals(MiddleEarth.of("iron"))) {

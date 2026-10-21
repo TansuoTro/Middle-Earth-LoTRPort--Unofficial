@@ -5,7 +5,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.math.Box;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.Level;
@@ -13,7 +13,6 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.structureManager.features.StructureManagerService;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.npcs.NpcEntity;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -42,13 +41,13 @@ public class SpawnEventDataUtil {
         int sameEntityAmount = data.getSameEntityLimitAmount().orElse(10);
         boolean sameEntitySurfaceOnly = data.getSameEntitySurfaceOnly().orElse(false);
 
-        Box searchBox = Box.of(pos.toCenterPos(), sameEntityDistance, sameEntityDistance, sameEntityDistance);
+        AABB searchBox = AABB.of(pos.toCenterPos(), sameEntityDistance, sameEntityDistance, sameEntityDistance);
 
         boolean hasNpcTypeLimit = targetEntityType == EntitiesME.NPC && data.getNpcType(null) != null;
         int sameNpcTypeAmount = data.getSameNpcTypeLimitAmount().orElse(5);
         int sameNpcTypeDistance = data.getSameNpcTypeLimitDistance().orElse(128);
         boolean sameNpcTypeSurfaceOnly = data.getSameNpcTypeSurfaceOnly().orElse(false);
-        Box npcSearchBox = hasNpcTypeLimit ? Box.of(pos.toCenterPos(), sameNpcTypeDistance, sameNpcTypeDistance, sameNpcTypeDistance) : null;
+        AABB npcSearchBox = hasNpcTypeLimit ? AABB.of(pos.toCenterPos(), sameNpcTypeDistance, sameNpcTypeDistance, sameNpcTypeDistance) : null;
 
         int[] counts = new int[2]; // [0] = entity count, [1] = npc type count
         world.getOtherEntities(null, searchBox, entity -> {

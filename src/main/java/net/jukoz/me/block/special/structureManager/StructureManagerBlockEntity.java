@@ -4,15 +4,15 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.BedBlock;
-import net.minecraft.block.enums.BedPart;
+import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.screen.ScreenHandler;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.nbt.CompoundTag;
@@ -33,7 +33,6 @@ import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.resources.datas.structure_manager_datas.SpawnNestNodeData;
 import net.jukoz.me.resources.datas.structure_manager_datas.StructureManagerData;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.*;
 
 public class StructureManagerBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory {
@@ -97,13 +96,13 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
     }
 
     @Override
-    public BlockEntityUpdateS2CPacket toUpdatePacket() {
-        return BlockEntityUpdateS2CPacket.create(this);
+    public ClientboundBlockEntityDataPacket toUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, Player player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new StructureManagerScreenHandler(syncId, playerInventory,
                 new StructureManagerScreenData(this.pos, this.enabled, this.toInitialize, Optional.ofNullable(this.structureManagerIdentifier))
         );
@@ -138,7 +137,6 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
     }
     // endregion
 
-
     @Override
     public void setWorld(Level world) {
         super.setWorld(world);
@@ -151,7 +149,7 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
         for(SpawnNestManager nest : structureNestList.getManagers()){
             for(UUID uuid : nest.getEntityUuids()){
                 if((world instanceof net.minecraft.server.level.ServerLevel sw ? sw.getEntity(uuid) : null) instanceof LivingEntity livingEntity){
-                    livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 10*20));
+                    livingEntity.addStatusEffect(new MobEffectInstance(MobEffects.GLOWING, 10*20));
                 }
             }
         }

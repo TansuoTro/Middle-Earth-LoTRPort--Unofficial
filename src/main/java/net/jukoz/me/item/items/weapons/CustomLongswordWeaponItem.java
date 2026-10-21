@@ -5,10 +5,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.compat.BluntWeapon;
 import net.jukoz.me.item.utils.WeaponTypesME;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.entity.EquipmentSlot;
 
 public class CustomLongswordWeaponItem extends ReachWeaponItem {
-    public CustomLongswordWeaponItem(ToolMaterial toolMaterial, Item.Settings settings) {
+    public CustomLongswordWeaponItem(Tier toolMaterial, Item.Settings settings) {
         super(toolMaterial, WeaponTypesME.LONGSWORD, settings);
         // Keep in case of pvp re-balancing feedbacks
         /*.component(DataComponentTypes.BLOCKS_ATTACKS,

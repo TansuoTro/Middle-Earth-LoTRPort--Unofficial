@@ -7,10 +7,9 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.block.MultifaceGrowthBlock;
+import net.minecraft.world.level.block.MultifaceBlock;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.RegistryCodecs;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.core.HolderList;
 import net.minecraft.Util;
 import net.minecraft.core.Direction;
@@ -18,18 +17,18 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.jukoz.me.world.features.columns.CaveColumnFeatureConfig;
-
 import java.util.List;
+import net.minecraft.core.HolderSet;
 
 public class MultifaceStateFeatureConfig implements FeatureConfiguration {
-	public final MultifaceGrowthBlock block;
+	public final MultifaceBlock block;
 	public final int searchRange;
 	public final boolean placeOnFloor;
 	public final boolean placeOnCeiling;
 	public final boolean placeOnWalls;
 	public final boolean persistent;
 	public final float spreadChance;
-	public final RegistryEntryList<Block> canPlaceOn;
+	public final HolderSet<Block> canPlaceOn;
 	private final ObjectArrayList<Direction> directions;
 
 	public static final Codec<MultifaceStateFeatureConfig> CODEC = RecordCodecBuilder.create(
@@ -50,8 +49,8 @@ public class MultifaceStateFeatureConfig implements FeatureConfiguration {
 			).apply(instance, MultifaceStateFeatureConfig::new));
 
     public MultifaceStateFeatureConfig(Block block, int searchRange, boolean placeOnFloor, boolean placeOnCeiling,
-									   boolean placeOnWalls, boolean persistent, float spreadChance, RegistryEntryList<Block> canPlaceOn) {
-        this.block = (MultifaceGrowthBlock) block;
+									   boolean placeOnWalls, boolean persistent, float spreadChance, HolderSet<Block> canPlaceOn) {
+        this.block = (MultifaceBlock) block;
         this.searchRange = searchRange;
         this.placeOnFloor = placeOnFloor;
 		this.placeOnCeiling = placeOnCeiling;
@@ -73,8 +72,8 @@ public class MultifaceStateFeatureConfig implements FeatureConfiguration {
 		}
     }
 
-    private static DataResult<MultifaceGrowthBlock> validateBlock(Block block) {
-		return block instanceof MultifaceGrowthBlock multifaceGrowthBlock
+    private static DataResult<MultifaceBlock> validateBlock(Block block) {
+		return block instanceof MultifaceBlock multifaceGrowthBlock
 			? DataResult.success(multifaceGrowthBlock)
 			: DataResult.error(() -> "Growth block should be a multiface spreadeable block");
 	}

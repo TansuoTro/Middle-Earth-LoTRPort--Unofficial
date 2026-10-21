@@ -1,8 +1,8 @@
 package net.jukoz.me.block.special.artisantable;
 
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.StringRepresentable;
 
-public enum ArtisanTablePart implements StringIdentifiable {
+public enum ArtisanTablePart implements StringRepresentable {
     LEFT("left"),
     RIGHT("right");
 

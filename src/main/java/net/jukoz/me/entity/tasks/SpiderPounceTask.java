@@ -4,56 +4,56 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.BlockPosLookTarget;
-import net.minecraft.entity.ai.brain.MemoryModuleState;
+import net.minecraft.world.entity.ai.behavior.BlockPosTracker;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.LongJumpTask;
-import net.minecraft.entity.ai.brain.task.MultiTickTask;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
+import net.minecraft.world.entity.ai.behavior.LongJumpToRandomPos;
+import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.collection.Weighting;
-import net.minecraft.util.math.*;
-import net.minecraft.util.math.intprovider.UniformIntProvider;
+import net.minecraft.util.random.WeightedRandom;
+import net.minecraft.util.valueproviders.UniformInt;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 
-public class SpiderPounceTask<E extends Mob> extends MultiTickTask<E> {
+public class SpiderPounceTask<E extends Mob> extends Behavior<E> {
 	protected static final int MAX_TARGET_SEARCH_TIME = 20;
 	private static final int JUMP_WINDUP_TIME = 40;
 	protected static final int PATHING_DISTANCE = 8;
 	private static final int RUN_TIME = 200;
 	private static final List<Integer> POUNCE_ANGLES = Lists.<Integer>newArrayList(30, 37, 45, 50, 55);
-	private final UniformIntProvider cooldownRange;
+	private final UniformInt cooldownRange;
 	protected final int verticalRange;
 	protected final int horizontalRange;
 	protected final float maxRange;
 	protected List<Target> potentialTargets = Lists.<Target>newArrayList();
-	protected Optional<Vec3d> startPos = Optional.empty();
+	protected Optional<Vec3> startPos = Optional.empty();
 	@Nullable
-	protected Vec3d currentTarget;
+	protected Vec3 currentTarget;
 	protected int targetSearchTime;
 	protected long targetPickedTime;
 	private final Function<E, SoundEvent> entityToSound;
 	private final BiPredicate<E, BlockPos> jumpToPredicate;
 
-	public SpiderPounceTask(UniformIntProvider cooldownRange, int verticalRange, int horizontalRange, float maxRange,
+	public SpiderPounceTask(UniformInt cooldownRange, int verticalRange, int horizontalRange, float maxRange,
 			Function<E, SoundEvent> entityToSound) {
 		super(
 				ImmutableMap.of(
 						MemoryModuleType.LOOK_TARGET,
-						MemoryModuleState.REGISTERED
+						MemoryStatus.REGISTERED
 						//MemoryModuleType.LONG_JUMP_COOLING_DOWN,
-						//MemoryModuleState.VALUE_ABSENT,
+						//MemoryStatus.VALUE_ABSENT,
 						//MemoryModuleType.LONG_JUMP_MID_JUMP,
-						//MemoryModuleState.VALUE_ABSENT
+						//MemoryStatus.VALUE_ABSENT
 				),
 				200
 		);
@@ -62,7 +62,7 @@ public class SpiderPounceTask<E extends Mob> extends MultiTickTask<E> {
 		this.horizontalRange = horizontalRange;
 		this.maxRange = maxRange;
 		this.entityToSound = entityToSound;
-		this.jumpToPredicate = LongJumpTask::shouldJumpTo;
+		this.jumpToPredicate = LongJumpToRandomPos::shouldJumpTo;
 	}
 
 	@Override
@@ -124,7 +124,7 @@ public class SpiderPounceTask<E extends Mob> extends MultiTickTask<E> {
 				double e = d + mobEntity.getJumpBoostVelocityModifier();
 				mobEntity.setVelocity(this.currentTarget.multiply(e / d));
 				mobEntity.getBrain().remember(MemoryModuleType.LONG_JUMP_COOLING_DOWN, cooldownRange.get(mobEntity.getRandom()));
-				serverWorld.playSoundFromEntity(null, mobEntity, (SoundEvent)this.entityToSound.apply(mobEntity), SoundCategory.NEUTRAL, 1.0F, 1.0F);
+				serverWorld.playSoundFromEntity(null, mobEntity, (SoundEvent)this.entityToSound.apply(mobEntity), SoundSource.NEUTRAL, 1.0F, 1.0F);
 				potentialTargets.clear();
 				targetSearchTime = 0;
 			}
@@ -150,11 +150,11 @@ public class SpiderPounceTask<E extends Mob> extends MultiTickTask<E> {
 				Target target = optional.get();
 				BlockPos pos = new BlockPos((int)target.pos.x, (int)target.pos.y, (int)target.pos.z);
 				if (this.canJumpTo(world, entity, pos)) {
-					Vec3d vec3d = Vec3d.ofCenter(pos);
-					Vec3d vec3d2 = this.getJumpingVelocity(entity, vec3d);
+					Vec3 vec3d = Vec3.ofCenter(pos);
+					Vec3 vec3d2 = this.getJumpingVelocity(entity, vec3d);
 					if (vec3d2 != null) {
-						entity.getBrain().remember(MemoryModuleType.LOOK_TARGET, new BlockPosLookTarget(pos));
-						EntityNavigation entityNavigation = entity.getNavigation();
+						entity.getBrain().remember(MemoryModuleType.LOOK_TARGET, new BlockPosTracker(pos));
+						PathNavigation entityNavigation = entity.getNavigation();
 						Path path = entityNavigation.findPathTo(pos, 0, 8);
 						if (path == null || !path.reachesTarget()) {
 							this.currentTarget = vec3d2;
@@ -190,21 +190,21 @@ public class SpiderPounceTask<E extends Mob> extends MultiTickTask<E> {
 	}
 
 	@Nullable
-	protected Vec3d getJumpingVelocity(Mob entity, Vec3d targetPos) {
+	protected Vec3 getJumpingVelocity(Mob entity, Vec3 targetPos) {
 		List<Integer> list = Lists.<Integer>newArrayList(POUNCE_ANGLES);
 		Collections.shuffle(list);
 		float f = 0.42F * this.maxRange;
 
 		for (int i : list) {
-			Optional<Vec3d> optional = net.jukoz.me.compat.LongJumpUtilME.getJumpingVelocity(entity, targetPos, f, i, true);
+			Optional<Vec3> optional = net.jukoz.me.compat.LongJumpUtilME.getJumpingVelocity(entity, targetPos, f, i, true);
 			if (optional.isPresent()) {
-				return (Vec3d)optional.get();
+				return (Vec3)optional.get();
 			}
 		}
 
 		return null;
 	}
 
-	public record Target(Vec3d pos, int weight) {
+	public record Target(Vec3 pos, int weight) {
 	}
 }

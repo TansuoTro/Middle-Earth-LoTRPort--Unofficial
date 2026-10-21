@@ -8,6 +8,7 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.datageneration.content.TranslationEntries;
 import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.resources.datas.races.Race;
+import net.minecraft.core.HolderGetter;
 
 public class RaceRegistry {
     private static final ResourceKey<Registry<Race>> RACE_KEY = DynamicRegistriesME.RACE;
@@ -22,7 +23,7 @@ public class RaceRegistry {
     public final static ResourceKey<Race> SNAGA = DynamicRegistriesME.of(RACE_KEY, RacePools.SNAGA.getId());
 
     public static void bootstrap(BootstrapContext<Race> context) {
-        RegistryEntryLookup<Race> registryEntryLookup = context.getRegistryLookup(RACE_KEY);
+        HolderGetter<Race> registryEntryLookup = context.getRegistryLookup(RACE_KEY);
 
         register(context, registryEntryLookup, DWARF, RacePools.DWARF);
         register(context, registryEntryLookup, ELF, RacePools.ELF);
@@ -34,7 +35,7 @@ public class RaceRegistry {
         register(context, registryEntryLookup, SNAGA, RacePools.SNAGA);
     }
 
-    private static void register(BootstrapContext<Race> context, RegistryEntryLookup<Race> registryEntryLookup, ResourceKey<Race> registryKey, Race element){
+    private static void register(BootstrapContext<Race> context, HolderGetter<Race> registryEntryLookup, ResourceKey<Race> registryKey, Race element){
         DynamicRegistriesME.register(context, registryEntryLookup, registryKey, element);
         // [LANG datagen]
         TranslationEntries.raceEntries.add(registryKey.getValue().getPath());

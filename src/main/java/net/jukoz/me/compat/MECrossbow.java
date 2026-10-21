@@ -2,9 +2,8 @@ package net.jukoz.me.compat;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
-
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +25,7 @@ public final class MECrossbow {
     public static void setCharged(ItemStack stack, List<ItemStack> projectiles) {
         CompoundTag nbt = stack.getOrCreateNbt();
         nbt.putBoolean(CHARGED_KEY, true);
-        NbtList list = new NbtList();
+        ListTag list = new ListTag();
         for (ItemStack projectile : projectiles) {
             list.add(projectile.writeNbt(new CompoundTag()));
         }
@@ -51,8 +50,8 @@ public final class MECrossbow {
     public static List<ItemStack> getProjectiles(ItemStack stack) {
         List<ItemStack> projectiles = new ArrayList<>();
         CompoundTag nbt = stack.getNbt();
-        if (nbt != null && nbt.contains(CHARGED_PROJECTILES_KEY, NbtElement.LIST_TYPE)) {
-            NbtList list = nbt.getList(CHARGED_PROJECTILES_KEY, NbtElement.COMPOUND_TYPE);
+        if (nbt != null && nbt.contains(CHARGED_PROJECTILES_KEY, Tag.LIST_TYPE)) {
+            ListTag list = nbt.getList(CHARGED_PROJECTILES_KEY, Tag.COMPOUND_TYPE);
             for (int i = 0; i < list.size(); i++) {
                 projectiles.add(ItemStack.fromNbt(list.getCompound(i)));
             }

@@ -2,10 +2,17 @@ package net.jukoz.me.entity.duck;
 
 import net.jukoz.me.entity.goose.GooseEntity;
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.util.Mth;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class DuckModel<T extends DuckEntity> extends EntityModel<DuckEntity> {
     private final ModelPart head;
@@ -22,33 +29,33 @@ public class DuckModel<T extends DuckEntity> extends EntityModel<DuckEntity> {
         this.right_leg = root.getChild("right_leg");
         this.left_leg = root.getChild("left_leg");
     }
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = new ModelData();
-        ModelPartData modelPartData = modelData.getRoot();
-        ModelPartData head = modelPartData.addChild("head", ModelPartBuilder.create().uv(20, 0).cuboid(-2.0F, -5.5F, -2.25F, 4.0F, 4.0F, 4.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 15.25F, -3.25F));
+    public static LayerDefinition getTexturedModelData() {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
+        PartDefinition head = modelPartData.addChild("head", CubeListBuilder.create().uv(20, 0).cuboid(-2.0F, -5.5F, -2.25F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.pivot(0.0F, 15.25F, -3.25F));
 
-        ModelPartData cube_r1 = head.addChild("cube_r1", ModelPartBuilder.create().uv(10, 13).cuboid(-1.0F, -12.75F, -6.05F, 2.0F, 1.0F, 3.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 8.75F, 2.75F, 0.1309F, 0.0F, 0.0F));
+        PartDefinition cube_r1 = head.addChild("cube_r1", CubeListBuilder.create().uv(10, 13).cuboid(-1.0F, -12.75F, -6.05F, 2.0F, 1.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.of(0.0F, 8.75F, 2.75F, 0.1309F, 0.0F, 0.0F));
 
-        ModelPartData cube_r2 = head.addChild("cube_r2", ModelPartBuilder.create().uv(0, 0).cuboid(-1.0F, -11.0F, -4.5F, 2.0F, 3.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 8.75F, 2.75F, -0.0873F, 0.0F, 0.0F));
+        PartDefinition cube_r2 = head.addChild("cube_r2", CubeListBuilder.create().uv(0, 0).cuboid(-1.0F, -11.0F, -4.5F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.of(0.0F, 8.75F, 2.75F, -0.0873F, 0.0F, 0.0F));
 
-        ModelPartData body = modelPartData.addChild("body", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 17.0389F, -0.1265F));
+        PartDefinition body = modelPartData.addChild("body", CubeListBuilder.create(), PartPose.pivot(0.0F, 17.0389F, -0.1265F));
 
-        ModelPartData cube_r3 = body.addChild("cube_r3", ModelPartBuilder.create().uv(0, 0).cuboid(-3.0F, -9.0F, -6.0F, 6.0F, 5.0F, 8.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 7.9611F, 0.1265F, -0.1745F, 0.0F, 0.0F));
+        PartDefinition cube_r3 = body.addChild("cube_r3", CubeListBuilder.create().uv(0, 0).cuboid(-3.0F, -9.0F, -6.0F, 6.0F, 5.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.of(0.0F, 7.9611F, 0.1265F, -0.1745F, 0.0F, 0.0F));
 
-        ModelPartData right_wing = modelPartData.addChild("right_wing", ModelPartBuilder.create(), ModelTransform.pivot(3.0F, 15.75F, -1.0F));
+        PartDefinition right_wing = modelPartData.addChild("right_wing", CubeListBuilder.create(), PartPose.pivot(3.0F, 15.75F, -1.0F));
 
-        ModelPartData cube_r4 = right_wing.addChild("cube_r4", ModelPartBuilder.create().uv(0, 13).cuboid(3.0F, -9.0F, -5.0F, 1.0F, 4.0F, 8.0F, new Dilation(0.0F)), ModelTransform.of(-3.0F, 9.25F, 1.0F, -0.1745F, 0.0F, 0.0F));
+        PartDefinition cube_r4 = right_wing.addChild("cube_r4", CubeListBuilder.create().uv(0, 13).cuboid(3.0F, -9.0F, -5.0F, 1.0F, 4.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.of(-3.0F, 9.25F, 1.0F, -0.1745F, 0.0F, 0.0F));
 
-        ModelPartData left_wing = modelPartData.addChild("left_wing", ModelPartBuilder.create(), ModelTransform.pivot(-3.0F, 15.75F, -1.0F));
+        PartDefinition left_wing = modelPartData.addChild("left_wing", CubeListBuilder.create(), PartPose.pivot(-3.0F, 15.75F, -1.0F));
 
-        ModelPartData cube_r5 = left_wing.addChild("cube_r5", ModelPartBuilder.create().uv(10, 17).cuboid(-4.0F, -9.0F, -5.0F, 1.0F, 4.0F, 8.0F, new Dilation(0.0F)), ModelTransform.of(3.0F, 9.25F, 1.0F, -0.1745F, 0.0F, 0.0F));
+        PartDefinition cube_r5 = left_wing.addChild("cube_r5", CubeListBuilder.create().uv(10, 17).cuboid(-4.0F, -9.0F, -5.0F, 1.0F, 4.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.of(3.0F, 9.25F, 1.0F, -0.1745F, 0.0F, 0.0F));
 
-        ModelPartData right_leg = modelPartData.addChild("right_leg", ModelPartBuilder.create().uv(0, 13).cuboid(-0.5F, -0.75F, 0.0F, 1.0F, 4.0F, 0.0F, new Dilation(0.0F))
-                .uv(0, 5).cuboid(-1.0F, 3.25F, -3.0F, 2.0F, 0.0F, 3.0F, new Dilation(0.0F)), ModelTransform.pivot(-1.5F, 20.75F, -1.0F));
+        PartDefinition right_leg = modelPartData.addChild("right_leg", CubeListBuilder.create().uv(0, 13).cuboid(-0.5F, -0.75F, 0.0F, 1.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))
+                .uv(0, 5).cuboid(-1.0F, 3.25F, -3.0F, 2.0F, 0.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.pivot(-1.5F, 20.75F, -1.0F));
 
-        ModelPartData left_leg = modelPartData.addChild("left_leg", ModelPartBuilder.create().uv(2, 16).cuboid(-0.5F, -0.75F, 0.0F, 1.0F, 4.0F, 0.0F, new Dilation(0.0F))
-                .uv(0, 13).cuboid(-1.0F, 3.25F, -3.0F, 2.0F, 0.0F, 3.0F, new Dilation(0.0F)), ModelTransform.pivot(1.5F, 20.75F, -1.0F));
-        return TexturedModelData.of(modelData, 64, 64);
+        PartDefinition left_leg = modelPartData.addChild("left_leg", CubeListBuilder.create().uv(2, 16).cuboid(-0.5F, -0.75F, 0.0F, 1.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))
+                .uv(0, 13).cuboid(-1.0F, 3.25F, -3.0F, 2.0F, 0.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.pivot(1.5F, 20.75F, -1.0F));
+        return LayerDefinition.of(modelData, 64, 64);
     }
     @Override
     public void render(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {

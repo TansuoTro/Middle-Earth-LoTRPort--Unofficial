@@ -6,7 +6,7 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.artisantable.ArtisanTableScreenHandler;
 import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
-import net.minecraft.screen.ScreenHandler;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.resources.ResourceLocation;
 
@@ -30,8 +30,6 @@ public class ArtisanTableTabPacket extends ClientToServerPacket<ArtisanTableTabP
         this.syncId = syncId;
     }
 
-
-
     public ArtisanTableTabPacket(FriendlyByteBuf buf) {
         this(buf.readString(), buf.readInt());
     }
@@ -52,7 +50,7 @@ public class ArtisanTableTabPacket extends ClientToServerPacket<ArtisanTableTabP
         try{
             context.player().getServer().execute(() -> {
                 ServerPlayer player = context.player();
-                ScreenHandler screenHandler = player.currentScreenHandler;
+                AbstractContainerMenu screenHandler = player.currentScreenHandler;
                 if (screenHandler.syncId == this.syncId && screenHandler instanceof ArtisanTableScreenHandler artisanTableScreenHandler) {
                     artisanTableScreenHandler.changeTab(shapeId);
                 }

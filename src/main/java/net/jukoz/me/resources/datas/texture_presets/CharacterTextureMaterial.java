@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
-import net.minecraft.registry.entry.RegistryElementCodec;
+import net.minecraft.resources.RegistryFileCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.registries.DynamicRegistriesME;
@@ -50,7 +50,7 @@ public class CharacterTextureMaterial {
         PACKET_CODEC = PacketCodec.tuple(
                 PacketCodecs.IDENTIFIER, CharacterTextureMaterial::getIdentifier,
                 PacketCodecs.STRING, CharacterTextureMaterial::getTypeValue, CharacterTextureMaterial::new);
-        ENTRY_CODEC = RegistryElementCodec.of(DynamicRegistriesME.SKIN_MATERIAL, CODEC);
+        ENTRY_CODEC = RegistryFileCodec.of(DynamicRegistriesME.SKIN_MATERIAL, CODEC);
         ENTRY_PACKET_CODEC = PacketCodecs.registryEntry(DynamicRegistriesME.SKIN_MATERIAL, PACKET_CODEC);
     }
 }

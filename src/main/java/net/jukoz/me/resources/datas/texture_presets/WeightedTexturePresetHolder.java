@@ -1,15 +1,14 @@
 package net.jukoz.me.resources.datas.texture_presets;
-import net.jukoz.me.compat.NbtCompat;
 
+import net.jukoz.me.compat.NbtCompat;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.api.dtos.WeightedItem;
 import net.jukoz.me.api.dtos.WeightedPool;
 import net.jukoz.me.resources.datas.common.CharacterMaterialTypes;
 import net.jukoz.me.resources.datas.common.CharacterPatternTypes;
 import net.jukoz.me.api.dtos.WeightedIdentifier;
-
 import java.util.*;
 
 public class WeightedTexturePresetHolder extends WeightedItem<TexturePreset> {
@@ -30,10 +29,9 @@ public class WeightedTexturePresetHolder extends WeightedItem<TexturePreset> {
         return this;
     }
 
-
     @Override
-    public NbtElement getNbt(){
-        NbtElement nbt = super.getNbt();
+    public Tag getNbt(){
+        Tag nbt = super.getNbt();
         if(nbt == null){
             nbt = new CompoundTag();
         }

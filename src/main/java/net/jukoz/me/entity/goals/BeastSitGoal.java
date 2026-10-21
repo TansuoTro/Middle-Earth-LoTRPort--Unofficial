@@ -3,8 +3,8 @@ package net.jukoz.me.entity.goals;
 import net.jukoz.me.entity.beasts.BeastEntity;
 import net.jukoz.me.entity.beasts.trolls.TrollEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-
 import java.util.EnumSet;
+import net.minecraft.world.entity.ai.control.Control;
 
 public class BeastSitGoal extends Goal {
     private final BeastEntity mob;

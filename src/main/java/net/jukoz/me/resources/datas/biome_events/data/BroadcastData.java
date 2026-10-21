@@ -7,7 +7,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +45,6 @@ public class BroadcastData {
         this.broadcastDistance = distance;
         return this;
     }
-
 
     private Optional<ResourceLocation> getBroadcastMessageLangKey() {
         return Optional.ofNullable(broadcastLangKey);

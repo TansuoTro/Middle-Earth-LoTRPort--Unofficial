@@ -9,7 +9,6 @@ import net.jukoz.me.resources.datas.attributes.AttributePool;
 import net.jukoz.me.resources.datas.attributes.AttributePoolElement;
 import net.jukoz.me.resources.datas.races.Race;
 import net.jukoz.me.resources.datas.common.EntityCategories;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -146,7 +145,6 @@ public class RacePools {
                         .addElement(AttributePoolElement.create(EntityAttributesME.WIDTH_SCALE, 0.95, 1.01)));
             }},
             List.of(), List.of());
-
 
         GOBLIN = new Race(MiddleEarth.of("goblin"), RaceType.GOBLIN,
                 new AttributePool()

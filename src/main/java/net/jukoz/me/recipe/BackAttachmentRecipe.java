@@ -6,23 +6,22 @@ import net.jukoz.me.item.items.armor.BackAttachmentItem;
 import net.jukoz.me.item.items.armor.CustomChestplateItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.recipe.SpecialCraftingRecipe;
-import net.minecraft.recipe.book.CraftingRecipeCategory;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.inventory.RecipeInputInventory;
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.RegistryWrapper;
 import net.minecraft.world.level.Level;
 
+public class BackAttachmentRecipe extends CustomRecipe {
 
-public class BackAttachmentRecipe extends SpecialCraftingRecipe {
-
-    public BackAttachmentRecipe(ResourceLocation id, CraftingRecipeCategory category) {
+    public BackAttachmentRecipe(ResourceLocation id, CraftingBookCategory category) {
         super(id, category);
     }
 
     @Override
-    public boolean matches(RecipeInputInventory input, Level world) {
+    public boolean matches(CraftingContainer input, Level world) {
         ItemStack itemStackChest = ItemStack.EMPTY;
         ItemStack itemStackBackAttachment = ItemStack.EMPTY;
 
@@ -49,7 +48,7 @@ public class BackAttachmentRecipe extends SpecialCraftingRecipe {
     }
 
     @Override
-    public ItemStack craft(RecipeInputInventory input, DynamicRegistryManager lookup) {
+    public ItemStack craft(CraftingContainer input, RegistryAccess lookup) {
         ItemStack itemStack = ItemStack.EMPTY;
         ItemStack backAttachment = ItemStack.EMPTY;
 
@@ -89,7 +88,7 @@ public class BackAttachmentRecipe extends SpecialCraftingRecipe {
         return width * height >= 2;
     }
 
-    public RecipeSerializer<? extends SpecialCraftingRecipe> getSerializer() {
+    public RecipeSerializer<? extends CustomRecipe> getSerializer() {
         return ModRecipeSerializer.CUSTOM_ARMOR_BACK_ATTACHMENT;
     }
 }

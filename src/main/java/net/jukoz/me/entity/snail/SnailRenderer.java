@@ -5,25 +5,25 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.crab.CrabModel;
 import net.jukoz.me.entity.crab.CrabVariant;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.model.EntityModelLayer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
-
 import java.util.Map;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
-public class SnailRenderer extends MobEntityRenderer<SnailEntity, SnailModel<SnailEntity>> {
+public class SnailRenderer extends MobRenderer<SnailEntity, SnailModel<SnailEntity>> {
 
     private static final String PATH = "textures/entities/snails/";
 
-    public SnailRenderer(EntityRendererFactory.Context context) {
+    public SnailRenderer(EntityRendererProvider.Context context) {
         this(context, 0.2F, ModEntityModelLayers.SNAIL);
     }
 
-    protected SnailRenderer(EntityRendererFactory.Context ctx, float shadowRadius, EntityModelLayer layer) {
+    protected SnailRenderer(EntityRendererProvider.Context ctx, float shadowRadius, ModelLayerLocation layer) {
         super(ctx, new SnailModel(ctx.getPart(layer)), shadowRadius);
     }
 
@@ -41,7 +41,7 @@ public class SnailRenderer extends MobEntityRenderer<SnailEntity, SnailModel<Sna
     }
 
     @Override
-    public void render(SnailEntity mobEntity, float f, float g, PoseStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
+    public void render(SnailEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 }

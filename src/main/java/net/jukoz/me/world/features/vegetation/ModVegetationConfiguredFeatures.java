@@ -10,29 +10,42 @@ import net.jukoz.me.world.features.columns.CaveColumnFeatureConfig;
 import net.jukoz.me.world.features.growth.MultifaceStateFeatureConfig;
 import net.jukoz.me.world.features.underground.CavesConfiguredFeatures;
 import net.jukoz.me.world.gen.ModFeatures;
-import net.minecraft.block.*;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.HolderList;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.collection.Pool;
-import net.minecraft.util.dynamic.Range;
+import net.minecraft.util.random.WeightedRandomList;
+import net.minecraft.util.InclusiveRange;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.math.intprovider.ConstantIntProvider;
-import net.minecraft.util.math.intprovider.UniformIntProvider;
-import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
+import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.placementmodifier.BlockFilterPlacementModifier;
+import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.gen.stateprovider.DualNoiseBlockStateProvider;
-import net.minecraft.world.gen.stateprovider.WeightedBlockStateProvider;
-
+import net.minecraft.world.level.levelgen.feature.stateproviders.DualNoiseProvider;
+import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 import java.util.List;
-import net.minecraft.util.collection.DataPool;
+import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.data.worldgen.features.FeatureUtils;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.MultifaceBlock;
+import net.minecraft.world.level.block.SweetBerryBushBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.BlockPileConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.DeltaFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.MultifaceGrowthConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
+import net.minecraft.core.HolderSet;
 
 public class ModVegetationConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> WATER_DELTA = registerKey("water_delta");
@@ -86,14 +99,14 @@ public class ModVegetationConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> YELLOW_FLOWER_GROWTH = registerKey("yellow_flower_growth");
     public static final ResourceKey<ConfiguredFeature<?, ?>> PINK_FLOWER_GROWTH = registerKey("pink_flower_growth");
     public static final ResourceKey<ConfiguredFeature<?, ?>> WHITE_FLOWER_GROWTH = registerKey("white_flower_growth");
-    public static final RegistryEntryList.Direct<Block> BLOCKS_GROWTH = RegistryEntryList.of(Block::getRegistryEntry,
+    public static final HolderSet.Direct<Block> BLOCKS_GROWTH = HolderSet.of(Block::getRegistryEntry,
             Blocks.GRASS_BLOCK, Blocks.DIRT, Blocks.COARSE_DIRT, Blocks.STONE, Blocks.ANDESITE, Blocks.DIORITE, Blocks.GRANITE, Blocks.MOSSY_COBBLESTONE,
             Blocks.MOSS_BLOCK, Blocks.CLAY, Blocks.COBBLESTONE, Blocks.DEEPSLATE, Blocks.OAK_LOG, Blocks.BIRCH_LOG, Blocks.DARK_OAK_LOG, Blocks.SPRUCE_LOG,
             WoodBlockSets.BEECH_SET.logBlocks.log(), WoodBlockSets.MAPLE_SET.logBlocks.log(), WoodBlockSets.SILVER_MAPLE_SET.logBlocks.log(), WoodBlockSets.HOLLY_SET.logBlocks.log());
     // endregion
 
     // region FOLIAGE
-    public static final  RegistryEntryList<Block> BLOCKS_MOSS = RegistryEntryList.of(Block::getRegistryEntry,
+    public static final  HolderSet<Block> BLOCKS_MOSS = HolderSet.of(Block::getRegistryEntry,
             Blocks.STONE, Blocks.ANDESITE, Blocks.DIORITE, Blocks.GRANITE, Blocks.MOSSY_COBBLESTONE, Blocks.COBBLESTONE,
             Blocks.GRASS_BLOCK, Blocks.DIRT, Blocks.MOSS_BLOCK, Blocks.SPRUCE_LOG, Blocks.OAK_LOG, Blocks.BIRCH_LOG, Blocks.DARK_OAK_LOG,
             WoodBlockSets.PINE_SET.logBlocks.log(), WoodBlockSets.LARCH_SET.logBlocks.log(), WoodBlockSets.BEECH_SET.logBlocks.log(), WoodBlockSets.MAPLE_SET.logBlocks.log(),
@@ -228,399 +241,398 @@ public class ModVegetationConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> PATCH_WILD_TOMATO = registerKey("patch_wild_tomato");
     // endregion
 
-
     public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> featureRegisterable) {
-        ConfiguredFeatures.register(featureRegisterable, WATER_DELTA, ModFeatures.DELTA_FEATURE,
-                new DeltaFeatureConfig(Blocks.WATER.getDefaultState(), Blocks.GRASS_BLOCK.getDefaultState(), UniformIntProvider.create(3, 7), UniformIntProvider.create(0, 2)));
+        FeatureUtils.register(featureRegisterable, WATER_DELTA, ModFeatures.DELTA_FEATURE,
+                new DeltaFeatureConfiguration(Blocks.WATER.getDefaultState(), Blocks.GRASS_BLOCK.getDefaultState(), UniformInt.create(3, 7), UniformInt.create(0, 2)));
 
-        ConfiguredFeatures.register(featureRegisterable, FIELD_HEATHER, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
-                        new RandomPatchFeatureConfig(8, 3, 2,
-                                PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(
-                                        new WeightedBlockStateProvider(DataPool.<BlockState>builder()
+        FeatureUtils.register(featureRegisterable, FIELD_HEATHER, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
+                        new RandomPatchConfiguration(8, 3, 2,
+                                PlacementUtils.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(
+                                        new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
                                                 .add(ModNatureBlocks.HEATHER.getDefaultState(), 1)
                                                 .add(ModNatureBlocks.HEATHER_BUSH.getDefaultState(), 2))
                                 )))));
-        ConfiguredFeatures.register(featureRegisterable, FIELD_DRY_HEATHER, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
-                        new RandomPatchFeatureConfig(8, 3, 2,
-                                PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(
-                                        new WeightedBlockStateProvider(DataPool.<BlockState>builder()
+        FeatureUtils.register(featureRegisterable, FIELD_DRY_HEATHER, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
+                        new RandomPatchConfiguration(8, 3, 2,
+                                PlacementUtils.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(
+                                        new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
                                                 .add(ModNatureBlocks.DRY_HEATHER.getDefaultState(), 1)
                                                 .add(ModNatureBlocks.DRY_HEATHER_BUSH.getDefaultState(), 2))
                                 )))));
 
-        ConfiguredFeatures.register(featureRegisterable, FIELD_LAVENDER, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.LAVENDER))));
+        FeatureUtils.register(featureRegisterable, FIELD_LAVENDER, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.LAVENDER))));
 
-        ConfiguredFeatures.register(featureRegisterable, FIELD_WILD_WHEAT, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
-                        new RandomPatchFeatureConfig(8, 3, 2,
-                                PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(
-                                        new WeightedBlockStateProvider(DataPool.<BlockState>builder()
+        FeatureUtils.register(featureRegisterable, FIELD_WILD_WHEAT, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
+                        new RandomPatchConfiguration(8, 3, 2,
+                                PlacementUtils.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(
+                                        new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
                                                 .add(ModNatureBlocks.TALL_WILD_WHEAT.getDefaultState(), 1)
                                                 .add(ModNatureBlocks.WILD_WHEAT.getDefaultState(), 3))
                                 )))));
 
-        ConfiguredFeatures.register(featureRegisterable, MIRKWOOD_VINES, ModFeatures.MIRKWOOD_VINE, new DefaultFeatureConfig());
-        ConfiguredFeatures.register(featureRegisterable, WILLOW_VINES, ModFeatures.WILLOW_VINE, new DefaultFeatureConfig());
+        FeatureUtils.register(featureRegisterable, MIRKWOOD_VINES, ModFeatures.MIRKWOOD_VINE, new NoneFeatureConfiguration());
+        FeatureUtils.register(featureRegisterable, WILLOW_VINES, ModFeatures.WILLOW_VINE, new NoneFeatureConfiguration());
 
-        ConfiguredFeatures.register(featureRegisterable, FLOWER_ALLIUM, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(Blocks.ALLIUM))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWER_ATHELAS, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.ATHELAS))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWER_AZURE_BLUET, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(Blocks.AZURE_BLUET))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWER_BLUE_GENTIAN, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.BLUE_GENTIAN))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWER_CORNFLOWER, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(Blocks.CORNFLOWER))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWER_GREEN_JEWEL, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.GREEN_JEWEL_CORNFLOWER))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWER_LILAC, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(Blocks.LILAC))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWER_LEBENNIN, Feature.FLOWER,
-                new RandomPatchFeatureConfig(96, 6, 2, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(new DualNoiseBlockStateProvider(new Range<>(1, 3), new DoublePerlinNoiseSampler.NoiseParameters(-10, 1.0), 1.0f, 2143L,
-                                new DoublePerlinNoiseSampler.NoiseParameters(-3, 1.0), 1.0f,
+        FeatureUtils.register(featureRegisterable, FLOWER_ALLIUM, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(Blocks.ALLIUM))));
+        FeatureUtils.register(featureRegisterable, FLOWER_ATHELAS, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.ATHELAS))));
+        FeatureUtils.register(featureRegisterable, FLOWER_AZURE_BLUET, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(Blocks.AZURE_BLUET))));
+        FeatureUtils.register(featureRegisterable, FLOWER_BLUE_GENTIAN, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.BLUE_GENTIAN))));
+        FeatureUtils.register(featureRegisterable, FLOWER_CORNFLOWER, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(Blocks.CORNFLOWER))));
+        FeatureUtils.register(featureRegisterable, FLOWER_GREEN_JEWEL, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.GREEN_JEWEL_CORNFLOWER))));
+        FeatureUtils.register(featureRegisterable, FLOWER_LILAC, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(Blocks.LILAC))));
+        FeatureUtils.register(featureRegisterable, FLOWER_LEBENNIN, Feature.FLOWER,
+                new RandomPatchConfiguration(96, 6, 2, PlacementUtils.createEntry(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(new DualNoiseProvider(new InclusiveRange<>(1, 3), new NormalNoise.NoiseParameters(-10, 1.0), 1.0f, 2143L,
+                                new NormalNoise.NoiseParameters(-3, 1.0), 1.0f,
                                 List.of(Blocks.TALL_GRASS.getDefaultState(), Blocks.RED_TULIP.getDefaultState(), Blocks.POPPY.getDefaultState(), Blocks.AZURE_BLUET.getDefaultState(),
                                         ModNatureBlocks.LIGHT_BLUE_FLOWERS.getDefaultState(), Blocks.CORNFLOWER.getDefaultState(), Blocks.OXEYE_DAISY.getDefaultState(), Blocks.GRASS.getDefaultState()))))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWER_LOSSARNACH, Feature.FLOWER,
-                new RandomPatchFeatureConfig(96, 6, 2, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(new DualNoiseBlockStateProvider(new Range<>(1, 3), new DoublePerlinNoiseSampler.NoiseParameters(-10, 1.0), 1.0f, 2241L,
-                                new DoublePerlinNoiseSampler.NoiseParameters(-3, 1.0), 1.0f,
+        FeatureUtils.register(featureRegisterable, FLOWER_LOSSARNACH, Feature.FLOWER,
+                new RandomPatchConfiguration(96, 6, 2, PlacementUtils.createEntry(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(new DualNoiseProvider(new InclusiveRange<>(1, 3), new NormalNoise.NoiseParameters(-10, 1.0), 1.0f, 2241L,
+                                new NormalNoise.NoiseParameters(-3, 1.0), 1.0f,
                                 List.of(Blocks.TALL_GRASS.getDefaultState(), Blocks.RED_TULIP.getDefaultState(), Blocks.POPPY.getDefaultState(), Blocks.PINK_TULIP.getDefaultState(),
                                         Blocks.ROSE_BUSH.getDefaultState(), Blocks.ORANGE_TULIP.getDefaultState(), Blocks.OXEYE_DAISY.getDefaultState(),
                                         Blocks.LILY_OF_THE_VALLEY.getDefaultState(), Blocks.ALLIUM.getDefaultState(), Blocks.GRASS.getDefaultState()))))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWER_DORWINION, Feature.FLOWER,
-                new RandomPatchFeatureConfig(96, 6, 2, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(new DualNoiseBlockStateProvider(new Range<>(1, 3), new DoublePerlinNoiseSampler.NoiseParameters(-10, 1.0), 1.0f, 2345L,
-                                new DoublePerlinNoiseSampler.NoiseParameters(-3, 1.0), 1.0f,
+        FeatureUtils.register(featureRegisterable, FLOWER_DORWINION, Feature.FLOWER,
+                new RandomPatchConfiguration(96, 6, 2, PlacementUtils.createEntry(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(new DualNoiseProvider(new InclusiveRange<>(1, 3), new NormalNoise.NoiseParameters(-10, 1.0), 1.0f, 2345L,
+                                new NormalNoise.NoiseParameters(-3, 1.0), 1.0f,
                                 List.of(Blocks.TALL_GRASS.getDefaultState(), Blocks.PINK_TULIP.getDefaultState(), Blocks.WHITE_TULIP.getDefaultState(), Blocks.AZURE_BLUET.getDefaultState(),
                                         Blocks.ALLIUM.getDefaultState(), Blocks.CORNFLOWER.getDefaultState(), Blocks.LILY_OF_THE_VALLEY.getDefaultState(), Blocks.GRASS.getDefaultState()))))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWER_MALLOS, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.MALLOS))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWER_NOBLEWHITE, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.NOBLEWHITE))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWER_POPPY, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(Blocks.POPPY))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWER_ELANOR, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.ELANOR))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWER_NIPHREDIL, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.NIPHREDIL))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWER_SIMBELMYNE, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.SIMBELMYNE))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWER_ROSE_BUSH, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(Blocks.ROSE_BUSH))));
+        FeatureUtils.register(featureRegisterable, FLOWER_MALLOS, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.MALLOS))));
+        FeatureUtils.register(featureRegisterable, FLOWER_NOBLEWHITE, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.NOBLEWHITE))));
+        FeatureUtils.register(featureRegisterable, FLOWER_POPPY, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(Blocks.POPPY))));
+        FeatureUtils.register(featureRegisterable, FLOWER_ELANOR, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.ELANOR))));
+        FeatureUtils.register(featureRegisterable, FLOWER_NIPHREDIL, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.NIPHREDIL))));
+        FeatureUtils.register(featureRegisterable, FLOWER_SIMBELMYNE, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.SIMBELMYNE))));
+        FeatureUtils.register(featureRegisterable, FLOWER_ROSE_BUSH, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(Blocks.ROSE_BUSH))));
 
-        ConfiguredFeatures.register(featureRegisterable, FLOWERS_LIGHT_BLUE, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.LIGHT_BLUE_FLOWERS))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWERS_MAGENTA, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.MAGENTA_FLOWERS))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWERS_ORANGE, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.ORANGE_FLOWERS))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWERS_PINK, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.PINK_FLOWERS))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWERS_PURPLE, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.PURPLE_FLOWERS))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWERS_RED, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.RED_FLOWERS))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWERS_WHITE, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.WHITE_FLOWERS))));
-        ConfiguredFeatures.register(featureRegisterable, FLOWERS_YELLOW, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.YELLOW_FLOWERS))));
+        FeatureUtils.register(featureRegisterable, FLOWERS_LIGHT_BLUE, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.LIGHT_BLUE_FLOWERS))));
+        FeatureUtils.register(featureRegisterable, FLOWERS_MAGENTA, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.MAGENTA_FLOWERS))));
+        FeatureUtils.register(featureRegisterable, FLOWERS_ORANGE, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.ORANGE_FLOWERS))));
+        FeatureUtils.register(featureRegisterable, FLOWERS_PINK, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.PINK_FLOWERS))));
+        FeatureUtils.register(featureRegisterable, FLOWERS_PURPLE, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.PURPLE_FLOWERS))));
+        FeatureUtils.register(featureRegisterable, FLOWERS_RED, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.RED_FLOWERS))));
+        FeatureUtils.register(featureRegisterable, FLOWERS_WHITE, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.WHITE_FLOWERS))));
+        FeatureUtils.register(featureRegisterable, FLOWERS_YELLOW, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.YELLOW_FLOWERS))));
 
-        ConfiguredFeatures.register(featureRegisterable, AZALEA_GROWTH, Feature.MULTIFACE_GROWTH,
-                new MultifaceGrowthFeatureConfig((MultifaceGrowthBlock)ModNatureBlocks.AZALEA_FLOWER_GROWTH,
+        FeatureUtils.register(featureRegisterable, AZALEA_GROWTH, Feature.MULTIFACE_GROWTH,
+                new MultifaceGrowthConfiguration((MultifaceBlock)ModNatureBlocks.AZALEA_FLOWER_GROWTH,
                         20, true, true, true, 0.5f, BLOCKS_GROWTH));
-        ConfiguredFeatures.register(featureRegisterable, DRY_GROWTH, Feature.MULTIFACE_GROWTH,
-                new MultifaceGrowthFeatureConfig((MultifaceGrowthBlock)ModNatureBlocks.DRY_GROWTH,
+        FeatureUtils.register(featureRegisterable, DRY_GROWTH, Feature.MULTIFACE_GROWTH,
+                new MultifaceGrowthConfiguration((MultifaceBlock)ModNatureBlocks.DRY_GROWTH,
                         20, true, true, true, 0.5f, BLOCKS_GROWTH));
-        ConfiguredFeatures.register(featureRegisterable, IVY_GROWTH, Feature.MULTIFACE_GROWTH,
-                new MultifaceGrowthFeatureConfig((MultifaceGrowthBlock)ModNatureBlocks.IVY_GROWTH,
+        FeatureUtils.register(featureRegisterable, IVY_GROWTH, Feature.MULTIFACE_GROWTH,
+                new MultifaceGrowthConfiguration((MultifaceBlock)ModNatureBlocks.IVY_GROWTH,
                         20, true, true, true, 0.5f, BLOCKS_GROWTH));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_FROZEN_GROWTH, Feature.MULTIFACE_GROWTH,
-                new MultifaceGrowthFeatureConfig((MultifaceGrowthBlock)ModNatureBlocks.FROZEN_GROWTH,
+        FeatureUtils.register(featureRegisterable, PATCH_FROZEN_GROWTH, Feature.MULTIFACE_GROWTH,
+                new MultifaceGrowthConfiguration((MultifaceBlock)ModNatureBlocks.FROZEN_GROWTH,
                         20, true, true, true, 0.5f, BLOCKS_GROWTH));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_GREEN_GROWTH, Feature.MULTIFACE_GROWTH,
-                new MultifaceGrowthFeatureConfig((MultifaceGrowthBlock)ModNatureBlocks.GREEN_GROWTH,
+        FeatureUtils.register(featureRegisterable, PATCH_GREEN_GROWTH, Feature.MULTIFACE_GROWTH,
+                new MultifaceGrowthConfiguration((MultifaceBlock)ModNatureBlocks.GREEN_GROWTH,
                         20, true, true, true, 0.5f, BLOCKS_GROWTH));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_THORNY_GROWTH, Feature.MULTIFACE_GROWTH,
-                new MultifaceGrowthFeatureConfig((MultifaceGrowthBlock)ModNatureBlocks.THORNY_GROWTH,
+        FeatureUtils.register(featureRegisterable, PATCH_THORNY_GROWTH, Feature.MULTIFACE_GROWTH,
+                new MultifaceGrowthConfiguration((MultifaceBlock)ModNatureBlocks.THORNY_GROWTH,
                         20, true, true, true, 0.5f, BLOCKS_GROWTH));
-        ConfiguredFeatures.register(featureRegisterable, LILAC_FLOWER_GROWTH, Feature.MULTIFACE_GROWTH,
-                new MultifaceGrowthFeatureConfig((MultifaceGrowthBlock)ModNatureBlocks.LILAC_FLOWER_GROWTH,
+        FeatureUtils.register(featureRegisterable, LILAC_FLOWER_GROWTH, Feature.MULTIFACE_GROWTH,
+                new MultifaceGrowthConfiguration((MultifaceBlock)ModNatureBlocks.LILAC_FLOWER_GROWTH,
                         20, true, true, true, 0.5f, BLOCKS_GROWTH));
-        ConfiguredFeatures.register(featureRegisterable, RED_FLOWER_GROWTH, Feature.MULTIFACE_GROWTH,
-                new MultifaceGrowthFeatureConfig((MultifaceGrowthBlock)ModNatureBlocks.RED_FLOWER_GROWTH,
+        FeatureUtils.register(featureRegisterable, RED_FLOWER_GROWTH, Feature.MULTIFACE_GROWTH,
+                new MultifaceGrowthConfiguration((MultifaceBlock)ModNatureBlocks.RED_FLOWER_GROWTH,
                         20, true, true, true, 0.5f, BLOCKS_GROWTH));
-        ConfiguredFeatures.register(featureRegisterable, YELLOW_FLOWER_GROWTH, Feature.MULTIFACE_GROWTH,
-                new MultifaceGrowthFeatureConfig((MultifaceGrowthBlock)ModNatureBlocks.YELLOW_FLOWER_GROWTH,
+        FeatureUtils.register(featureRegisterable, YELLOW_FLOWER_GROWTH, Feature.MULTIFACE_GROWTH,
+                new MultifaceGrowthConfiguration((MultifaceBlock)ModNatureBlocks.YELLOW_FLOWER_GROWTH,
                         20, true, true, true, 0.5f, BLOCKS_GROWTH));
-        ConfiguredFeatures.register(featureRegisterable, PINK_FLOWER_GROWTH, Feature.MULTIFACE_GROWTH,
-                new MultifaceGrowthFeatureConfig((MultifaceGrowthBlock)ModNatureBlocks.PINK_FLOWER_GROWTH,
+        FeatureUtils.register(featureRegisterable, PINK_FLOWER_GROWTH, Feature.MULTIFACE_GROWTH,
+                new MultifaceGrowthConfiguration((MultifaceBlock)ModNatureBlocks.PINK_FLOWER_GROWTH,
                         20, true, true, true, 0.5f, BLOCKS_GROWTH));
-        ConfiguredFeatures.register(featureRegisterable, WHITE_FLOWER_GROWTH, Feature.MULTIFACE_GROWTH,
-                new MultifaceGrowthFeatureConfig((MultifaceGrowthBlock)ModNatureBlocks.WHITE_FLOWER_GROWTH,
+        FeatureUtils.register(featureRegisterable, WHITE_FLOWER_GROWTH, Feature.MULTIFACE_GROWTH,
+                new MultifaceGrowthConfiguration((MultifaceBlock)ModNatureBlocks.WHITE_FLOWER_GROWTH,
                         20, true, true, true, 0.5f, BLOCKS_GROWTH));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_BASALT, Feature.BLOCK_PILE,
-                new BlockPileFeatureConfig(BlockStateProvider.of(Blocks.BASALT)));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_BLACKSTONE, Feature.BLOCK_PILE,
-                new BlockPileFeatureConfig(BlockStateProvider.of(Blocks.BLACKSTONE)));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_PUMICE, Feature.BLOCK_PILE,
-                new BlockPileFeatureConfig(BlockStateProvider.of(StoneBlockSets.PUMICE_SET.baseBlocks.base())));
+        FeatureUtils.register(featureRegisterable, PATCH_BASALT, Feature.BLOCK_PILE,
+                new BlockPileConfiguration(BlockStateProvider.of(Blocks.BASALT)));
+        FeatureUtils.register(featureRegisterable, PATCH_BLACKSTONE, Feature.BLOCK_PILE,
+                new BlockPileConfiguration(BlockStateProvider.of(Blocks.BLACKSTONE)));
+        FeatureUtils.register(featureRegisterable, PATCH_PUMICE, Feature.BLOCK_PILE,
+                new BlockPileConfiguration(BlockStateProvider.of(StoneBlockSets.PUMICE_SET.baseBlocks.base())));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_COBWEB, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(Blocks.COBWEB))));
+        FeatureUtils.register(featureRegisterable, PATCH_COBWEB, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(Blocks.COBWEB))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_PERSISTENT_WEBBING, Feature.MULTIFACE_GROWTH,
-                new MultifaceGrowthFeatureConfig((MultifaceGrowthBlock)ModNatureBlocks.WEBBING,
+        FeatureUtils.register(featureRegisterable, PATCH_PERSISTENT_WEBBING, Feature.MULTIFACE_GROWTH,
+                new MultifaceGrowthConfiguration((MultifaceBlock)ModNatureBlocks.WEBBING,
                         20, true, true, true, 0.95f, BLOCKS_GROWTH));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_WEBBING, ModFeatures.MULTIFACE_PERSISTENT,
+        FeatureUtils.register(featureRegisterable, PATCH_WEBBING, ModFeatures.MULTIFACE_PERSISTENT,
                 new MultifaceStateFeatureConfig(ModNatureBlocks.WEBBING,
                         20, true, true, true, false, 0.95f, BLOCKS_GROWTH));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_SPIDER_EGGS, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.SHELOBITE_LARVA_EGG))));
+        FeatureUtils.register(featureRegisterable, PATCH_SPIDER_EGGS, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.SHELOBITE_LARVA_EGG))));
 
-        ConfiguredFeatures.register(featureRegisterable, PUMICE_COLUMN, ModFeatures.CAVE_COLUMN,
-                new CaveColumnFeatureConfig(ConstantIntProvider.create(1), UniformIntProvider.create(1, 4), StoneBlockSets.PUMICE_SET.baseBlocks.base().getDefaultState()));
-        ConfiguredFeatures.register(featureRegisterable, PUMICE_COLUMN_LARGE, ModFeatures.CAVE_COLUMN,
-                new CaveColumnFeatureConfig(UniformIntProvider.create(2, 3), UniformIntProvider.create(5, 10), StoneBlockSets.PUMICE_SET.baseBlocks.base().getDefaultState()));
+        FeatureUtils.register(featureRegisterable, PUMICE_COLUMN, ModFeatures.CAVE_COLUMN,
+                new CaveColumnFeatureConfig(ConstantInt.create(1), UniformInt.create(1, 4), StoneBlockSets.PUMICE_SET.baseBlocks.base().getDefaultState()));
+        FeatureUtils.register(featureRegisterable, PUMICE_COLUMN_LARGE, ModFeatures.CAVE_COLUMN,
+                new CaveColumnFeatureConfig(UniformInt.create(2, 3), UniformInt.create(5, 10), StoneBlockSets.PUMICE_SET.baseBlocks.base().getDefaultState()));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_BRACKEN, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.BRACKEN))));
+        FeatureUtils.register(featureRegisterable, PATCH_BRACKEN, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.BRACKEN))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_GIANT_BUTTERBUR, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.GIANT_BUTTERBUR))));
+        FeatureUtils.register(featureRegisterable, PATCH_GIANT_BUTTERBUR, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.GIANT_BUTTERBUR))));
 
-        ConfiguredFeatures.register(featureRegisterable, FIELD_BLUE_FESCUE, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
-                        new RandomPatchFeatureConfig(8, 3, 2,
-                                PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(
-                                        new WeightedBlockStateProvider(DataPool.<BlockState>builder()
+        FeatureUtils.register(featureRegisterable, FIELD_BLUE_FESCUE, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
+                        new RandomPatchConfiguration(8, 3, 2,
+                                PlacementUtils.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(
+                                        new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
                                                 .add(ModNatureBlocks.BLUE_FESCUE.getDefaultState(), 2)
                                                 .add(ModNatureBlocks.LARGE_BLUE_FESCUE.getDefaultState(), 1))
                                 )))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_BROWN_GRASS, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.BROWN_GRASS))));
+        FeatureUtils.register(featureRegisterable, PATCH_BROWN_GRASS, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.BROWN_GRASS))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_SHORT_BULRUSH, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.SHORT_BULRUSH))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_SHORT_CATTAIL, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.SHORT_CATTAILS))));
+        FeatureUtils.register(featureRegisterable, PATCH_SHORT_BULRUSH, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.SHORT_BULRUSH))));
+        FeatureUtils.register(featureRegisterable, PATCH_SHORT_CATTAIL, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.SHORT_CATTAILS))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_TALL_BULRUSH, Feature.FLOWER,
+        FeatureUtils.register(featureRegisterable, PATCH_TALL_BULRUSH, Feature.FLOWER,
                 createShallowWaterPatchFeatureConfig(ModNatureBlocks.TALL_BULRUSH, 96, 7, 3));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_TALL_CATTAIL, Feature.FLOWER,
+        FeatureUtils.register(featureRegisterable, PATCH_TALL_CATTAIL, Feature.FLOWER,
                 createShallowWaterPatchFeatureConfig(ModNatureBlocks.TALL_CATTAILS, 96, 7, 3));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_COASTAL_PANIC_GRASS, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.COASTAL_PANIC_GRASS))));
+        FeatureUtils.register(featureRegisterable, PATCH_COASTAL_PANIC_GRASS, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.COASTAL_PANIC_GRASS))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_CORRUPTED_MOSS, Feature.MULTIFACE_GROWTH,
-                new MultifaceGrowthFeatureConfig((MultifaceGrowthBlock)ModNatureBlocks.CORRUPTED_MOSS,
+        FeatureUtils.register(featureRegisterable, PATCH_CORRUPTED_MOSS, Feature.MULTIFACE_GROWTH,
+                new MultifaceGrowthConfiguration((MultifaceBlock)ModNatureBlocks.CORRUPTED_MOSS,
                         20, true, true, true, 0.5f,
-                        RegistryEntryList.of(Block::getRegistryEntry,
+                        HolderSet.of(Block::getRegistryEntry,
                                 Blocks.STONE, Blocks.ANDESITE, Blocks.DIORITE, Blocks.GRANITE, Blocks.MOSSY_COBBLESTONE, Blocks.COBBLESTONE,
                                 Blocks.GRASS_BLOCK, Blocks.DIRT,  Blocks.SPRUCE_LOG, Blocks.OAK_LOG, Blocks.BIRCH_LOG, Blocks.DARK_OAK_LOG,
                                 WoodBlockSets.MIRKWOOD_SET.logBlocks.log(), ModNatureBlocks.OLD_PODZOL)));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_CORRUPTED_MOSS_CARPET, Feature.BLOCK_PILE,
-                new BlockPileFeatureConfig(BlockStateProvider.of(ModNatureBlocks.CORRUPTED_MOSS_CARPET)));
+        FeatureUtils.register(featureRegisterable, PATCH_CORRUPTED_MOSS_CARPET, Feature.BLOCK_PILE,
+                new BlockPileConfiguration(BlockStateProvider.of(ModNatureBlocks.CORRUPTED_MOSS_CARPET)));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_DEAD_RUSHES, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.DEAD_RUSHES))));
+        FeatureUtils.register(featureRegisterable, PATCH_DEAD_RUSHES, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.DEAD_RUSHES))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_BEACH_GRASS, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.BEACH_GRASS))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_BUSHES, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(new WeightedBlockStateProvider(DataPool.<BlockState>builder()
+        FeatureUtils.register(featureRegisterable, PATCH_BEACH_GRASS, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.BEACH_GRASS))));
+        FeatureUtils.register(featureRegisterable, PATCH_BUSHES, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
                                 .add(ModNatureBlocks.LARGE_BUSH.getDefaultState(), 4))), List.of(), 15));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_CLOVERS, Feature.FLOWER, new RandomPatchFeatureConfig(48, 6, 2,
-                PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(new WeightedBlockStateProvider(CavesConfiguredFeatures.get4StagesBlockBuilder(ModNatureBlocks.CLOVERS))))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_DRY_GRASS, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(new WeightedBlockStateProvider(DataPool.<BlockState>builder()
+        FeatureUtils.register(featureRegisterable, PATCH_CLOVERS, Feature.FLOWER, new RandomPatchConfiguration(48, 6, 2,
+                PlacementUtils.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(new WeightedStateProvider(CavesConfiguredFeatures.get4StagesBlockBuilder(ModNatureBlocks.CLOVERS))))));
+        FeatureUtils.register(featureRegisterable, PATCH_DRY_GRASS, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
                                 .add(Blocks.DEAD_BUSH.getDefaultState(), 4))), List.of(), 15));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_SMALL_DRY_SHRUB, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.SMALL_DRY_SHRUB))));
+        FeatureUtils.register(featureRegisterable, PATCH_SMALL_DRY_SHRUB, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.SMALL_DRY_SHRUB))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_DUCKWEED, Feature.RANDOM_PATCH,
-                new RandomPatchFeatureConfig(48, 1, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.DUCKWEED)))));
+        FeatureUtils.register(featureRegisterable, PATCH_DUCKWEED, Feature.RANDOM_PATCH,
+                new RandomPatchConfiguration(48, 1, 3, PlacementUtils.createEntry(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.DUCKWEED)))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_DYING_GRASS, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.DYING_GRASS))));
+        FeatureUtils.register(featureRegisterable, PATCH_DYING_GRASS, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.DYING_GRASS))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_FALLEN_LEAVES, Feature.BLOCK_PILE,
-                new BlockPileFeatureConfig(BlockStateProvider.of(ModNatureBlocks.FALLEN_LEAVES)));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_FALLEN_MALLORN_LEAVES, Feature.BLOCK_PILE,
-                new BlockPileFeatureConfig(BlockStateProvider.of(ModNatureBlocks.FALLEN_MALLORN_LEAVES)));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_FALLEN_MIRKWOOD_LEAVES, Feature.BLOCK_PILE,
-                new BlockPileFeatureConfig(BlockStateProvider.of(ModNatureBlocks.FALLEN_MIRKWOOD_LEAVES)));
+        FeatureUtils.register(featureRegisterable, PATCH_FALLEN_LEAVES, Feature.BLOCK_PILE,
+                new BlockPileConfiguration(BlockStateProvider.of(ModNatureBlocks.FALLEN_LEAVES)));
+        FeatureUtils.register(featureRegisterable, PATCH_FALLEN_MALLORN_LEAVES, Feature.BLOCK_PILE,
+                new BlockPileConfiguration(BlockStateProvider.of(ModNatureBlocks.FALLEN_MALLORN_LEAVES)));
+        FeatureUtils.register(featureRegisterable, PATCH_FALLEN_MIRKWOOD_LEAVES, Feature.BLOCK_PILE,
+                new BlockPileConfiguration(BlockStateProvider.of(ModNatureBlocks.FALLEN_MIRKWOOD_LEAVES)));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_FALSE_OATGRASS, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.FALSE_OATGRASS))));
+        FeatureUtils.register(featureRegisterable, PATCH_FALSE_OATGRASS, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.FALSE_OATGRASS))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_FOREST_MOSS, Feature.MULTIFACE_GROWTH,
-                new MultifaceGrowthFeatureConfig((MultifaceGrowthBlock)ModNatureBlocks.FOREST_MOSS,
+        FeatureUtils.register(featureRegisterable, PATCH_FOREST_MOSS, Feature.MULTIFACE_GROWTH,
+                new MultifaceGrowthConfiguration((MultifaceBlock)ModNatureBlocks.FOREST_MOSS,
                     20, true, true, true, 0.5f, BLOCKS_MOSS));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_FLOATING_ICE, Feature.RANDOM_PATCH,
-                new RandomPatchFeatureConfig(12, 7, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.FLOATING_ICE)))));
+        FeatureUtils.register(featureRegisterable, PATCH_FLOATING_ICE, Feature.RANDOM_PATCH,
+                new RandomPatchConfiguration(12, 7, 3, PlacementUtils.createEntry(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.FLOATING_ICE)))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_FOREST_MOSS_CARPET, Feature.BLOCK_PILE,
-                new BlockPileFeatureConfig(BlockStateProvider.of(ModNatureBlocks.FOREST_MOSS_CARPET)));
+        FeatureUtils.register(featureRegisterable, PATCH_FOREST_MOSS_CARPET, Feature.BLOCK_PILE,
+                new BlockPileConfiguration(BlockStateProvider.of(ModNatureBlocks.FOREST_MOSS_CARPET)));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_FROZEN_GRASS, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.FROZEN_GRASS))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_FROZEN_SHRUB, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.FROZEN_SHRUB))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_FROZEN_TUFT, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.FROZEN_TUFT))));
+        FeatureUtils.register(featureRegisterable, PATCH_FROZEN_GRASS, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.FROZEN_GRASS))));
+        FeatureUtils.register(featureRegisterable, PATCH_FROZEN_SHRUB, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.FROZEN_SHRUB))));
+        FeatureUtils.register(featureRegisterable, PATCH_FROZEN_TUFT, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.FROZEN_TUFT))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_GREEN_SHRUB, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.GREEN_SHRUB))));
+        FeatureUtils.register(featureRegisterable, PATCH_GREEN_SHRUB, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.GREEN_SHRUB))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_GRIM_GRASS, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.GRIM_GRASS))));
+        FeatureUtils.register(featureRegisterable, PATCH_GRIM_GRASS, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.GRIM_GRASS))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_HEATH, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.HEATH))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_HEATHER, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
-                        new RandomPatchFeatureConfig(8, 3, 2,
-                                PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(
-                                        new WeightedBlockStateProvider(DataPool.<BlockState>builder()
+        FeatureUtils.register(featureRegisterable, PATCH_HEATH, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.HEATH))));
+        FeatureUtils.register(featureRegisterable, PATCH_HEATHER, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
+                        new RandomPatchConfiguration(8, 3, 2,
+                                PlacementUtils.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(
+                                        new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
                                                 .add(ModNatureBlocks.HEATHER.getDefaultState(), 1)
                                                 .add(ModNatureBlocks.HEATHER_BUSH.getDefaultState(), 1))
                                 )))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_DEAD_HEATHER, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
-                        new RandomPatchFeatureConfig(8, 3, 2,
-                                PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(
-                                        new WeightedBlockStateProvider(DataPool.<BlockState>builder()
+        FeatureUtils.register(featureRegisterable, PATCH_DEAD_HEATHER, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
+                        new RandomPatchConfiguration(8, 3, 2,
+                                PlacementUtils.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(
+                                        new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
                                                 .add(ModNatureBlocks.DEAD_HEATHER.getDefaultState(), 1)
                                                 .add(ModNatureBlocks.DEAD_HEATHER_BUSH.getDefaultState(), 1))
                                 )))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_DRY_HEATHER, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
-                        new RandomPatchFeatureConfig(8, 3, 2,
-                                PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(
-                                        new WeightedBlockStateProvider(DataPool.<BlockState>builder()
+        FeatureUtils.register(featureRegisterable, PATCH_DRY_HEATHER, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
+                        new RandomPatchConfiguration(8, 3, 2,
+                                PlacementUtils.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(
+                                        new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
                                                 .add(ModNatureBlocks.DRY_HEATHER.getDefaultState(), 1)
                                                 .add(ModNatureBlocks.DRY_HEATHER_BUSH.getDefaultState(), 1))
                                 )))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_RED_HEATHER, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
-                        new RandomPatchFeatureConfig(8, 3, 2,
-                                PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(
-                                        new WeightedBlockStateProvider(DataPool.<BlockState>builder()
+        FeatureUtils.register(featureRegisterable, PATCH_RED_HEATHER, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
+                        new RandomPatchConfiguration(8, 3, 2,
+                                PlacementUtils.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(
+                                        new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
                                                 .add(ModNatureBlocks.RED_HEATHER.getDefaultState(), 1)
                                                 .add(ModNatureBlocks.RED_HEATHER_BUSH.getDefaultState(), 1))
                                 )))));
-        ConfiguredFeatures.register(featureRegisterable, FIELD_DEAD_NORMAL_HEATHER, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
-                        new RandomPatchFeatureConfig(8, 3, 2,
-                                PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(
-                                        new WeightedBlockStateProvider(DataPool.<BlockState>builder()
+        FeatureUtils.register(featureRegisterable, FIELD_DEAD_NORMAL_HEATHER, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
+                        new RandomPatchConfiguration(8, 3, 2,
+                                PlacementUtils.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(
+                                        new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
                                                 .add(ModNatureBlocks.HEATHER.getDefaultState(), 1)
                                                 .add(ModNatureBlocks.HEATHER_BUSH.getDefaultState(), 1)
                                                 .add(ModNatureBlocks.DEAD_HEATHER.getDefaultState(), 1)
                                                 .add(ModNatureBlocks.DEAD_HEATHER_BUSH.getDefaultState(), 1))
                                 )))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_BLUE_LAVENDER, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.BLUE_LAVENDER))));
+        FeatureUtils.register(featureRegisterable, PATCH_BLUE_LAVENDER, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.BLUE_LAVENDER))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_LAVENDER, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.LAVENDER))));
+        FeatureUtils.register(featureRegisterable, PATCH_LAVENDER, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.LAVENDER))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_WHITE_LAVENDER, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.WHITE_LAVENDER))));
+        FeatureUtils.register(featureRegisterable, PATCH_WHITE_LAVENDER, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.WHITE_LAVENDER))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_HOGWEED, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
-                        new RandomPatchFeatureConfig(8, 3, 2,
-                                PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(
-                                        new WeightedBlockStateProvider(DataPool.<BlockState>builder()
+        FeatureUtils.register(featureRegisterable, PATCH_HOGWEED, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
+                        new RandomPatchConfiguration(8, 3, 2,
+                                PlacementUtils.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(
+                                        new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
                                                 .add(ModNatureBlocks.HOGWEED.getDefaultState(), 1)
                                                 .add(ModNatureBlocks.SHORT_HOGWEED.getDefaultState(), 3))
                                         )))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_HOBBIT_SUNFLOWERS, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.HOBBIT_SUNFLOWERS))));
+        FeatureUtils.register(featureRegisterable, PATCH_HOBBIT_SUNFLOWERS, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.HOBBIT_SUNFLOWERS))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_BLUE_BIGLEAF_HYDRANGEA, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.BLUE_BIGLEAF_HYDRANGEA))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_PINK_BIGLEAF_HYDRANGEA, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.PINK_BIGLEAF_HYDRANGEA))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_WHITE_BIGLEAF_HYDRANGEA, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.WHITE_BIGLEAF_HYDRANGEA))));
+        FeatureUtils.register(featureRegisterable, PATCH_BLUE_BIGLEAF_HYDRANGEA, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.BLUE_BIGLEAF_HYDRANGEA))));
+        FeatureUtils.register(featureRegisterable, PATCH_PINK_BIGLEAF_HYDRANGEA, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.PINK_BIGLEAF_HYDRANGEA))));
+        FeatureUtils.register(featureRegisterable, PATCH_WHITE_BIGLEAF_HYDRANGEA, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.WHITE_BIGLEAF_HYDRANGEA))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_CAMPION, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.CAMPION))));
+        FeatureUtils.register(featureRegisterable, PATCH_CAMPION, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.CAMPION))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_REEDS, Feature.RANDOM_PATCH,
-                new RandomPatchFeatureConfig(256, 12, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ResourceItemsME.REEDS)),
-                        BlockFilterPlacementModifier.of(BlockPredicate.allOf(BlockPredicate.anyOf(BlockPredicate.allOf(BlockPredicate.IS_AIR,
+        FeatureUtils.register(featureRegisterable, PATCH_REEDS, Feature.RANDOM_PATCH,
+                new RandomPatchConfiguration(256, 12, 3, PlacementUtils.createEntry(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ResourceItemsME.REEDS)),
+                        BlockPredicateFilter.of(BlockPredicate.allOf(BlockPredicate.anyOf(BlockPredicate.allOf(BlockPredicate.IS_AIR,
                                                 BlockPredicate.anyOf(
                                                         BlockPredicate.matchingFluids(new BlockPos(1, -1, 0), Fluids.WATER, Fluids.FLOWING_WATER),
                                                         BlockPredicate.matchingFluids(new BlockPos(-1, -1, 0), Fluids.WATER, Fluids.FLOWING_WATER),
@@ -632,240 +644,240 @@ public class ModVegetationConfiguredFeatures {
                                                         BlockPredicate.matchingFluids(new BlockPos(1, -1, -1), Fluids.WATER, Fluids.FLOWING_WATER))),
                                 BlockPredicate.allOf(BlockPredicate.matchingFluids(BlockPos.ORIGIN, Fluids.WATER, Fluids.FLOWING_WATER), hasAdjacentBank())),
                                 BlockPredicate.wouldSurvive(ResourceItemsME.REEDS.getDefaultState(), BlockPos.ORIGIN))))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_SHORT_REEDS, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.SHORT_REEDS))));
+        FeatureUtils.register(featureRegisterable, PATCH_SHORT_REEDS, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.SHORT_REEDS))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_MISTWEED, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.MISTWEED))));
+        FeatureUtils.register(featureRegisterable, PATCH_MISTWEED, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.MISTWEED))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_SCORCHED_GRASS, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.SCORCHED_GRASS))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_SCORCHED_SHRUB, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.SCORCHED_SHRUB))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_SCORCHED_TUFT, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.SCORCHED_TUFT))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_SEDUM, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.SEDUM))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_SEDUM_ORANGE, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.ORANGE_SEDUM))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_SEDUM_RED, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.RED_SEDUM))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_SEDUM_YELLOW, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.YELLOW_SEDUM))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_SEDUMS, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
-                        new RandomPatchFeatureConfig(8, 3, 2,
-                                PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(
-                                        new WeightedBlockStateProvider(DataPool.<BlockState>builder()
+        FeatureUtils.register(featureRegisterable, PATCH_SCORCHED_GRASS, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.SCORCHED_GRASS))));
+        FeatureUtils.register(featureRegisterable, PATCH_SCORCHED_SHRUB, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.SCORCHED_SHRUB))));
+        FeatureUtils.register(featureRegisterable, PATCH_SCORCHED_TUFT, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.SCORCHED_TUFT))));
+        FeatureUtils.register(featureRegisterable, PATCH_SEDUM, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.SEDUM))));
+        FeatureUtils.register(featureRegisterable, PATCH_SEDUM_ORANGE, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.ORANGE_SEDUM))));
+        FeatureUtils.register(featureRegisterable, PATCH_SEDUM_RED, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.RED_SEDUM))));
+        FeatureUtils.register(featureRegisterable, PATCH_SEDUM_YELLOW, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.YELLOW_SEDUM))));
+        FeatureUtils.register(featureRegisterable, PATCH_SEDUMS, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.RANDOM_PATCH,
+                        new RandomPatchConfiguration(8, 3, 2,
+                                PlacementUtils.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(
+                                        new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
                                                 .add(ModNatureBlocks.ORANGE_SEDUM.getDefaultState(), 1)
                                                 .add(ModNatureBlocks.RED_SEDUM.getDefaultState(), 1)
                                                 .add(ModNatureBlocks.YELLOW_SEDUM.getDefaultState(), 1))
                                 )))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_SHRIVELED_SHRUB, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.SHRIVELED_SHRUB))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_LARGE_SHRIVELED_SHRUB, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.LARGE_SHRIVELED_SHRUB))));
+        FeatureUtils.register(featureRegisterable, PATCH_SHRIVELED_SHRUB, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.SHRIVELED_SHRUB))));
+        FeatureUtils.register(featureRegisterable, PATCH_LARGE_SHRIVELED_SHRUB, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.LARGE_SHRIVELED_SHRUB))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_RUSHES, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.RUSHES))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_SHORT_RUSHES, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.SHORT_RUSHES))));
+        FeatureUtils.register(featureRegisterable, PATCH_RUSHES, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.RUSHES))));
+        FeatureUtils.register(featureRegisterable, PATCH_SHORT_RUSHES, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.SHORT_RUSHES))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_STRAWBERRY_BUSH, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.STRAWBERRY_BUSH.getDefaultState()
+        FeatureUtils.register(featureRegisterable, PATCH_STRAWBERRY_BUSH, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.STRAWBERRY_BUSH.getDefaultState()
                                 .with(SweetBerryBushBlock.AGE, 0))), List.of(Blocks.GRASS_BLOCK)));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_YELLOW_TROLLIUS, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.YELLOW_TROLLIUS))));
+        FeatureUtils.register(featureRegisterable, PATCH_YELLOW_TROLLIUS, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.YELLOW_TROLLIUS))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_TAN_SHRUB, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.TAN_SHRUB))));
+        FeatureUtils.register(featureRegisterable, PATCH_TAN_SHRUB, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.TAN_SHRUB))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_TEMPERATE_GRASS, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.TEMPERATE_GRASS))));
+        FeatureUtils.register(featureRegisterable, PATCH_TEMPERATE_GRASS, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.TEMPERATE_GRASS))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_SWEET_BERRY_BUSH, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(Blocks.SWEET_BERRY_BUSH.getDefaultState()
+        FeatureUtils.register(featureRegisterable, PATCH_SWEET_BERRY_BUSH, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(Blocks.SWEET_BERRY_BUSH.getDefaultState()
                                 .with(SweetBerryBushBlock.AGE, 0))), List.of(
                                         Blocks.GRASS_BLOCK, Blocks.DIRT, ModBlocks.GRASSY_DIRT,
                                 ModBlocks.LOAM_GRASS_BLOCK, ModBlocks.LOAM, ModBlocks.GRASSY_LOAM,
                                 ModBlocks.PEAT_GRASS_BLOCK, ModBlocks.PEAT, ModBlocks.GRASSY_PEAT,
                                 ModBlocks.SILT_GRASS_BLOCK, ModBlocks.SILT, ModBlocks.GRASSY_SILT)));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_TOUGH_BERRY_BUSH, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.TOUGH_BERRY_BUSH.getDefaultState()
+        FeatureUtils.register(featureRegisterable, PATCH_TOUGH_BERRY_BUSH, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.TOUGH_BERRY_BUSH.getDefaultState()
                                 .with(SweetBerryBushBlock.AGE, 0))), List.of(Blocks.GRASS_BLOCK, Blocks.DIRT, ModBlocks.ASHEN_DIRT)));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_TUFT_GRASS, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.GRASS_TUFT))));
+        FeatureUtils.register(featureRegisterable, PATCH_TUFT_GRASS, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.GRASS_TUFT))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_SPARSE_GRASS, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.SPARSE_GRASS))));
+        FeatureUtils.register(featureRegisterable, PATCH_SPARSE_GRASS, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.SPARSE_GRASS))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_LARGE_LILY_PAD, Feature.RANDOM_PATCH,
-                new RandomPatchFeatureConfig(12, 7, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.LARGE_LILY_PAD)))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_LARGE_FLOWERING_LILY_PAD, Feature.RANDOM_PATCH,
-                new RandomPatchFeatureConfig(12, 7, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.LARGE_FLOWERING_LILY_PAD)))));
+        FeatureUtils.register(featureRegisterable, PATCH_LARGE_LILY_PAD, Feature.RANDOM_PATCH,
+                new RandomPatchConfiguration(12, 7, 3, PlacementUtils.createEntry(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.LARGE_LILY_PAD)))));
+        FeatureUtils.register(featureRegisterable, PATCH_LARGE_FLOWERING_LILY_PAD, Feature.RANDOM_PATCH,
+                new RandomPatchConfiguration(12, 7, 3, PlacementUtils.createEntry(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.LARGE_FLOWERING_LILY_PAD)))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_LILY_PADS, Feature.RANDOM_PATCH,
-                new RandomPatchFeatureConfig(12, 7, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.LILY_PADS)))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_FLOWERING_LILY_PADS, Feature.RANDOM_PATCH,
-                new RandomPatchFeatureConfig(12, 7, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.FLOWERING_LILY_PADS)))));
+        FeatureUtils.register(featureRegisterable, PATCH_LILY_PADS, Feature.RANDOM_PATCH,
+                new RandomPatchConfiguration(12, 7, 3, PlacementUtils.createEntry(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.LILY_PADS)))));
+        FeatureUtils.register(featureRegisterable, PATCH_FLOWERING_LILY_PADS, Feature.RANDOM_PATCH,
+                new RandomPatchConfiguration(12, 7, 3, PlacementUtils.createEntry(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.FLOWERING_LILY_PADS)))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_SMALL_LILY_PADS, Feature.RANDOM_PATCH,
-                new RandomPatchFeatureConfig(10, 7, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.SMALL_LILY_PADS)))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_SMALL_FLOWERING_LILY_PADS, Feature.RANDOM_PATCH,
-                new RandomPatchFeatureConfig(10, 7, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.SMALL_FLOWERING_LILY_PADS)))));
+        FeatureUtils.register(featureRegisterable, PATCH_SMALL_LILY_PADS, Feature.RANDOM_PATCH,
+                new RandomPatchConfiguration(10, 7, 3, PlacementUtils.createEntry(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.SMALL_LILY_PADS)))));
+        FeatureUtils.register(featureRegisterable, PATCH_SMALL_FLOWERING_LILY_PADS, Feature.RANDOM_PATCH,
+                new RandomPatchConfiguration(10, 7, 3, PlacementUtils.createEntry(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.SMALL_FLOWERING_LILY_PADS)))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_MIRKWOOD, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(new WeightedBlockStateProvider(DataPool.<BlockState>builder()
+        FeatureUtils.register(featureRegisterable, PATCH_MIRKWOOD, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
                                 .add(Blocks.GRASS.getDefaultState(), 8)
                                 .add(Blocks.FERN.getDefaultState(), 8)
                                 .add(Blocks.TALL_GRASS.getDefaultState(), 15)
                                 .add(Blocks.LARGE_FERN.getDefaultState(), 10)
                                 .add(Blocks.BROWN_MUSHROOM.getDefaultState(), 1))), List.of(), 15));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_MIRKWOOD_ROOTS, Feature.BLOCK_PILE,
-                new BlockPileFeatureConfig(new WeightedBlockStateProvider(DataPool.<BlockState>builder()
+        FeatureUtils.register(featureRegisterable, PATCH_MIRKWOOD_ROOTS, Feature.BLOCK_PILE,
+                new BlockPileConfiguration(new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
                         .add(ModNatureBlocks.MIRKWOOD_ROOTS.getDefaultState(), 3))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_MOSS, Feature.MULTIFACE_GROWTH,
-                new MultifaceGrowthFeatureConfig((MultifaceGrowthBlock)ModNatureBlocks.MOSS,
+        FeatureUtils.register(featureRegisterable, PATCH_MOSS, Feature.MULTIFACE_GROWTH,
+                new MultifaceGrowthConfiguration((MultifaceBlock)ModNatureBlocks.MOSS,
                         20, true, true, true, 0.5f, BLOCKS_MOSS));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_MOSS_CARPET, Feature.BLOCK_PILE,
-                new BlockPileFeatureConfig(BlockStateProvider.of(Blocks.MOSS_CARPET)));
+        FeatureUtils.register(featureRegisterable, PATCH_MOSS_CARPET, Feature.BLOCK_PILE,
+                new BlockPileConfiguration(BlockStateProvider.of(Blocks.MOSS_CARPET)));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_STICKY_SNOW, Feature.MULTIFACE_GROWTH,
-                new MultifaceGrowthFeatureConfig((MultifaceGrowthBlock)ModNatureBlocks.STICKY_SNOW,
+        FeatureUtils.register(featureRegisterable, PATCH_STICKY_SNOW, Feature.MULTIFACE_GROWTH,
+                new MultifaceGrowthConfiguration((MultifaceBlock)ModNatureBlocks.STICKY_SNOW,
                         32, true, true, true, 0.75f,
-                        RegistryEntryList.of(Block::getRegistryEntry,
+                        HolderSet.of(Block::getRegistryEntry,
                                 Blocks.STONE, Blocks.ANDESITE, Blocks.DIORITE, Blocks.GRANITE, Blocks.MOSSY_COBBLESTONE, Blocks.COBBLESTONE,
                                 Blocks.GRASS_BLOCK, Blocks.DIRT, Blocks.BASALT)));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_MIXED_WILD_WHEAT, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(new WeightedBlockStateProvider((DataPool.<BlockState>builder()
+        FeatureUtils.register(featureRegisterable, PATCH_MIXED_WILD_WHEAT, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(new WeightedStateProvider((SimpleWeightedRandomList.<BlockState>builder()
                                 .add(ModNatureBlocks.TALL_WILD_WHEAT.getDefaultState(), 1)
                                 .add(ModNatureBlocks.WILD_WHEAT.getDefaultState(), 3))
                         ))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_WHEAT_GRASS, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.WHEATGRASS))));
+        FeatureUtils.register(featureRegisterable, PATCH_WHEAT_GRASS, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.WHEATGRASS))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_MEADOW_GRASS, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.MEADOWGRASS))));
+        FeatureUtils.register(featureRegisterable, PATCH_MEADOW_GRASS, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.MEADOWGRASS))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_WILD_GRASS, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.WILD_GRASS))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_WILDER_GRASS, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.WILDERGRASS))));
+        FeatureUtils.register(featureRegisterable, PATCH_WILD_GRASS, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.WILD_GRASS))));
+        FeatureUtils.register(featureRegisterable, PATCH_WILDER_GRASS, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.WILDERGRASS))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_YELLOW_FLOWER, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.YELLOW_FLOWER))));
+        FeatureUtils.register(featureRegisterable, PATCH_YELLOW_FLOWER, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.YELLOW_FLOWER))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_NETTLES, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.NETTLES))));
+        FeatureUtils.register(featureRegisterable, PATCH_NETTLES, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.NETTLES))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_THISTLE, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.THISTLE))));
+        FeatureUtils.register(featureRegisterable, PATCH_THISTLE, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.THISTLE))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_MORDOR_BRAMBLES, Feature.FLOWER,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.BRAMBLES_OF_MORDOR))));
+        FeatureUtils.register(featureRegisterable, PATCH_MORDOR_BRAMBLES, Feature.FLOWER,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.BRAMBLES_OF_MORDOR))));
 
         // region MUSHROOMS
-        ConfiguredFeatures.register(featureRegisterable, PATCH_BROWN_BOLETE, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.BROWN_BOLETE))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_BROWN_BOLETE_TILLER, Feature.FLOWER, new RandomPatchFeatureConfig(48, 6, 2,
-                PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(new WeightedBlockStateProvider(CavesConfiguredFeatures.get4StagesBlockBuilder(ModNatureBlocks.BROWN_BOLETE_TILLER))))));
+        FeatureUtils.register(featureRegisterable, PATCH_BROWN_BOLETE, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.BROWN_BOLETE))));
+        FeatureUtils.register(featureRegisterable, PATCH_BROWN_BOLETE_TILLER, Feature.FLOWER, new RandomPatchConfiguration(48, 6, 2,
+                PlacementUtils.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(new WeightedStateProvider(CavesConfiguredFeatures.get4StagesBlockBuilder(ModNatureBlocks.BROWN_BOLETE_TILLER))))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_MORSEL, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.MORSEL))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_MORSEL_TILLER, Feature.FLOWER, new RandomPatchFeatureConfig(48, 6, 2,
-                PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(new WeightedBlockStateProvider(CavesConfiguredFeatures.get4StagesBlockBuilder(ModNatureBlocks.MORSEL_TILLER))))));
+        FeatureUtils.register(featureRegisterable, PATCH_MORSEL, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.MORSEL))));
+        FeatureUtils.register(featureRegisterable, PATCH_MORSEL_TILLER, Feature.FLOWER, new RandomPatchConfiguration(48, 6, 2,
+                PlacementUtils.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(new WeightedStateProvider(CavesConfiguredFeatures.get4StagesBlockBuilder(ModNatureBlocks.MORSEL_TILLER))))));
 
-        ConfiguredFeatures.register(featureRegisterable, PATCH_WHITE_MUSHROOM, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.WHITE_MUSHROOM))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_WHITE_MUSHROOM_TILLER, Feature.FLOWER, new RandomPatchFeatureConfig(48, 6, 2,
-                PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(new WeightedBlockStateProvider(CavesConfiguredFeatures.get4StagesBlockBuilder(ModNatureBlocks.WHITE_MUSHROOM_TILLER))))));
+        FeatureUtils.register(featureRegisterable, PATCH_WHITE_MUSHROOM, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.WHITE_MUSHROOM))));
+        FeatureUtils.register(featureRegisterable, PATCH_WHITE_MUSHROOM_TILLER, Feature.FLOWER, new RandomPatchConfiguration(48, 6, 2,
+                PlacementUtils.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(new WeightedStateProvider(CavesConfiguredFeatures.get4StagesBlockBuilder(ModNatureBlocks.WHITE_MUSHROOM_TILLER))))));
         // endregion
 
         // region WILD CROPS
-        ConfiguredFeatures.register(featureRegisterable, PATCH_WILD_BEETROOT, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.WILD_BEETROOT))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_WILD_BELL_PEPPER, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.WILD_BELL_PEPPER))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_WILD_CARROT, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.WILD_CARROT))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_WILD_CUCUMBER, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.WILD_CUCUMBER))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_WILD_FLAX, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.WILD_FLAX))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_WILD_GARLIC, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.WILD_GARLIC))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_WILD_LEEK, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.WILD_LEEK))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_WILD_LETTUCE, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.WILD_LETTUCE))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_WILD_ONION, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.WILD_ONION))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_WILD_PIPEWEED, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.WILD_PIPEWEED))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_WILD_POTATO, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.WILD_POTATO))));
-        ConfiguredFeatures.register(featureRegisterable, PATCH_WILD_TOMATO, Feature.RANDOM_PATCH,
-                ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockFeatureConfig(BlockStateProvider.of(ModNatureBlocks.WILD_TOMATO))));
+        FeatureUtils.register(featureRegisterable, PATCH_WILD_BEETROOT, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.WILD_BEETROOT))));
+        FeatureUtils.register(featureRegisterable, PATCH_WILD_BELL_PEPPER, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.WILD_BELL_PEPPER))));
+        FeatureUtils.register(featureRegisterable, PATCH_WILD_CARROT, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.WILD_CARROT))));
+        FeatureUtils.register(featureRegisterable, PATCH_WILD_CUCUMBER, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.WILD_CUCUMBER))));
+        FeatureUtils.register(featureRegisterable, PATCH_WILD_FLAX, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.WILD_FLAX))));
+        FeatureUtils.register(featureRegisterable, PATCH_WILD_GARLIC, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.WILD_GARLIC))));
+        FeatureUtils.register(featureRegisterable, PATCH_WILD_LEEK, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.WILD_LEEK))));
+        FeatureUtils.register(featureRegisterable, PATCH_WILD_LETTUCE, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.WILD_LETTUCE))));
+        FeatureUtils.register(featureRegisterable, PATCH_WILD_ONION, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.WILD_ONION))));
+        FeatureUtils.register(featureRegisterable, PATCH_WILD_PIPEWEED, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.WILD_PIPEWEED))));
+        FeatureUtils.register(featureRegisterable, PATCH_WILD_POTATO, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.WILD_POTATO))));
+        FeatureUtils.register(featureRegisterable, PATCH_WILD_TOMATO, Feature.RANDOM_PATCH,
+                FeatureUtils.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.of(ModNatureBlocks.WILD_TOMATO))));
         // endregion
     }
 
@@ -873,11 +885,11 @@ public class ModVegetationConfiguredFeatures {
         return ResourceKey.of(Registries.CONFIGURED_FEATURE, new ResourceLocation(MiddleEarth.MOD_ID, name));
     }
 
-    private static RandomPatchFeatureConfig createShallowWaterPatchFeatureConfig(Block block, int tries, int xzSpread, int ySpread) {
+    private static RandomPatchConfiguration createShallowWaterPatchFeatureConfig(Block block, int tries, int xzSpread, int ySpread) {
         BlockState state = block.getDefaultState();
-        return new RandomPatchFeatureConfig(tries, xzSpread, ySpread, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK,
-                new SimpleBlockFeatureConfig(BlockStateProvider.of(state)),
-                BlockFilterPlacementModifier.of(BlockPredicate.allOf(BlockPredicate.anyOf(
+        return new RandomPatchConfiguration(tries, xzSpread, ySpread, PlacementUtils.createEntry(Feature.SIMPLE_BLOCK,
+                new SimpleBlockConfiguration(BlockStateProvider.of(state)),
+                BlockPredicateFilter.of(BlockPredicate.allOf(BlockPredicate.anyOf(
                                 BlockPredicate.IS_AIR,
                                 BlockPredicate.allOf(
                                         BlockPredicate.matchingFluids(BlockPos.ORIGIN, Fluids.WATER, Fluids.FLOWING_WATER), hasAdjacentBank())), BlockPredicate.wouldSurvive(state, BlockPos.ORIGIN)))));

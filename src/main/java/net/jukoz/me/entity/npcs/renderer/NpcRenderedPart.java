@@ -1,5 +1,6 @@
 package net.jukoz.me.entity.npcs.renderer;
 
+
 public enum NpcRenderedPart {
     BODY("body"),
     HEAD("head"),

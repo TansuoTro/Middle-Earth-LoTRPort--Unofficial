@@ -7,11 +7,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.StructureWorldAccess;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.jukoz.me.block.special.WebbingBlock;
-
 import java.util.List;
 
 public class MultifaceStateFeature extends Feature<MultifaceStateFeatureConfig> {
@@ -20,8 +19,8 @@ public class MultifaceStateFeature extends Feature<MultifaceStateFeatureConfig> 
 	}
 
 	@Override
-	public boolean generate(FeatureContext<MultifaceStateFeatureConfig> context) {
-		StructureWorldAccess structureWorldAccess = context.getWorld();
+	public boolean generate(FeaturePlaceContext<MultifaceStateFeatureConfig> context) {
+		WorldGenLevel structureWorldAccess = context.getWorld();
 		BlockPos blockPos = context.getOrigin();
 		RandomSource random = context.getRandom();
 		MultifaceStateFeatureConfig multifaceGrowthFeatureConfig = context.getConfig();
@@ -57,7 +56,7 @@ public class MultifaceStateFeature extends Feature<MultifaceStateFeatureConfig> 
 	}
 
 	public static boolean generate(
-			StructureWorldAccess world, BlockPos pos, BlockState state, MultifaceStateFeatureConfig config, RandomSource random, List<Direction> directions
+			WorldGenLevel world, BlockPos pos, BlockState state, MultifaceStateFeatureConfig config, RandomSource random, List<Direction> directions
 	) {
 		BlockPos.Mutable mutable = pos.mutableCopy();
 

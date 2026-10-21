@@ -39,7 +39,6 @@ public class RangedCombatArchetypeRuntimeData extends CombatArchetypeRuntimeData
         return false;
     }
 
-
     public void attack(){
         super.attack();
         this.lastShootTick = 0;

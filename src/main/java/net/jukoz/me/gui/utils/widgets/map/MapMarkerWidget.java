@@ -1,6 +1,6 @@
 package net.jukoz.me.gui.utils.widgets.map;
-import net.jukoz.me.compat.METext;
 
+import net.jukoz.me.compat.METext;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.utils.widgets.ModWidget;
@@ -8,14 +8,13 @@ import net.jukoz.me.gui.utils.widgets.UiDirections;
 import net.jukoz.me.gui.utils.widgets.map.types.MapArrowType;
 import net.jukoz.me.gui.utils.widgets.map.types.MapMarkerType;
 import net.jukoz.me.utils.ModColors;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Vector2d;
 import org.joml.Vector2i;
-
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,7 +100,7 @@ public class MapMarkerWidget extends ModWidget {
         runtimeStartCoordinates = new Vector2i((int) starts.x, (int) starts.y);
     }
 
-    public void draw(DrawContext context) {
+    public void draw(GuiGraphics context) {
         Vector2i drawStart = new Vector2i(runtimeStartCoordinates.x, runtimeStartCoordinates.y);
         Vector2i drawSize = type.size;
         Vector2i drawUvs = type.uvs;
@@ -170,7 +169,7 @@ public class MapMarkerWidget extends ModWidget {
                     texts.addAll(childs.get(i).getContent());
                 }
                 if(childs.size() > maxChildDisplay){
-                    texts.add(Component.translatable("widget.%s.marker.more".formatted(MiddleEarth.MOD_ID)).formatted(Formatting.BLUE));
+                    texts.add(Component.translatable("widget.%s.marker.more".formatted(MiddleEarth.MOD_ID)).formatted(ChatFormatting.BLUE));
                 }
             }
             context.drawTooltip(client.textRenderer, texts, Optional.empty(), drawStart.x + (drawSize.x / 2), drawStart.y + (drawSize.y / 2));
@@ -179,7 +178,6 @@ public class MapMarkerWidget extends ModWidget {
         // draw marker or arrow
 
         context.drawTexture((isArrow) ? MAP_ARROWS : MAP_MARKERS, drawStart.x, drawStart.y, drawUvs.x, drawUvs.y, drawSize.x, drawSize.y, 256, 256);
-
 
         // draw marker or arrow (FOCUSED)
         if(isFocused || ((isSelected || forceSelectedVisual) && getFocusEnabled())){

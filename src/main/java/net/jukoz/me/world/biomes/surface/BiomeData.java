@@ -7,7 +7,6 @@ import net.jukoz.me.world.biomes.caves.CaveType;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 
-
 /**
  * Custom biome data used during runtime to determine what to generate
  */

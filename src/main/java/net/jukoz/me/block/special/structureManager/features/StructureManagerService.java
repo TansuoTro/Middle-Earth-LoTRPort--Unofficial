@@ -2,7 +2,7 @@ package net.jukoz.me.block.special.structureManager.features;
 
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -15,7 +15,6 @@ import net.jukoz.me.entity.npcs.initializer.NpcEntityBuilder;
 import net.jukoz.me.resources.datas.structure_manager_datas.StructureManagerData;
 import net.jukoz.me.resources.datas.structure_manager_datas.StructureManagerDataLookup;
 import net.jukoz.me.resources.datas.structure_manager_datas.StructureSpawnNestPool;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -54,7 +53,7 @@ public class StructureManagerService {
         } else {
             entity = (LivingEntity) pool.getEntityType().create(world);
             if(entity instanceof Mob mob)
-                mob.initialize(world, world.getLocalDifficulty(pos), SpawnReason.STRUCTURE, null, null);
+                mob.initialize(world, world.getLocalDifficulty(pos), MobSpawnType.STRUCTURE, null, null);
             entity.setPosition(chosenBlockPos.toCenterPos());
         }
 

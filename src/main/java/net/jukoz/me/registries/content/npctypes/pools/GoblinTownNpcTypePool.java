@@ -17,7 +17,6 @@ import net.jukoz.me.registries.content.texturepresets.TexturePresetsRegistry;
 import net.jukoz.me.resources.datas.factions.Faction;
 import net.jukoz.me.resources.datas.npc_types.NpcType;
 import net.jukoz.me.resources.datas.npc_types.data.*;
-
 import java.util.List;
 
 public class GoblinTownNpcTypePool {
@@ -232,7 +231,6 @@ public class GoblinTownNpcTypePool {
                                 .add(WeightedItemData.create(Items.AIR))
                         )
         ), NpcRegistry.COMMON_NPC_ATTRIBUTES, CombatArchetypePool.DEFAULT, new MountData(EntitiesME.WARG).withArmor(EquipmentItemsME.WARG_REINFORCED_LEATHER_ARMOR), NpcLoot.FROM_10_TO_16);
-
 
         VETERAN = new NpcType(NpcRegistry.GOBLIN_TOWN_VETERAN.getValue(), RaceRegistry.GOBLIN, FACTION, TexturePresetsRegistry.GOBLIN_TOWN_BRUTE, List.of(
                 WeightedGearData.create()

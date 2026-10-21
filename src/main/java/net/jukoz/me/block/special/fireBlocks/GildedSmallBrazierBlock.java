@@ -24,8 +24,6 @@ public class GildedSmallBrazierBlock extends AbstractToggleableFireBlock {
         super(settings);
     }
 
-
-
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }

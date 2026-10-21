@@ -3,6 +3,13 @@ package net.jukoz.me.client.model.equipment.head.helmets.humans.rohan;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.PartNames;
 import net.jukoz.me.compat.client.render.state.BipedEntityRenderState;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class RohanHairHelmetModel extends RohanHelmetModel {
     private static final float MAX_ANGLE_HAIR = 75f;
@@ -14,32 +21,32 @@ public class RohanHairHelmetModel extends RohanHelmetModel {
         hair = root.getChild("head").getChild("hair_bone").getChild("hair");
     }
 
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = getModelData();
-        ModelPartData modelPartData = modelData.getRoot();
+    public static LayerDefinition getTexturedModelData() {
+        MeshDefinition modelData = getModelData();
+        PartDefinition modelPartData = modelData.getRoot();
 
-        ModelPartData head = modelPartData.addChild(PartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        head.addChild(PartNames.HAT, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition head = modelPartData.addChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        head.addChild(PartNames.HAT, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData hair_bone = head.addChild("hair_bone", ModelPartBuilder.create(),
-                ModelTransform.of(0.0F, -9.5F, 5.5F, 0.48F, 0.0F, 0.0F));
-        hair_bone.addChild("hair", ModelPartBuilder.create()
-                .uv(0, 27).cuboid(-1.0F, -2.25F, 0.0F, 2.0F, 3.0F, 18.0F, new Dilation(0.0F)),
-                ModelTransform.of(0.0F, 1.0F, -1.0F, -2.0508F, 0.0F, 0.0F));
+        PartDefinition hair_bone = head.addChild("hair_bone", CubeListBuilder.create(),
+                PartPose.of(0.0F, -9.5F, 5.5F, 0.48F, 0.0F, 0.0F));
+        hair_bone.addChild("hair", CubeListBuilder.create()
+                .uv(0, 27).cuboid(-1.0F, -2.25F, 0.0F, 2.0F, 3.0F, 18.0F, new CubeDeformation(0.0F)),
+                PartPose.of(0.0F, 1.0F, -1.0F, -2.0508F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.BODY, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.RIGHT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.BODY, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.RIGHT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.LEFT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.RIGHT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        return TexturedModelData.of(modelData, 64, 64);
+        return LayerDefinition.of(modelData, 64, 64);
     }
 
     @Override
     public void setAngles(BipedEntityRenderState bipedEntityRenderState) {
-        /*Vec3d velocity = bipedEntityRenderState.positionOffset;
+        /*Vec3 velocity = bipedEntityRenderState.positionOffset;
         double sqrVel = velocity.lengthSquared();
         double speed = (sqrVel * 0.35f) + Math.sqrt(Math.abs(bipedEntityRenderState.limbFrequency)) * 0.4f;
         double degree;

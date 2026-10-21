@@ -3,7 +3,6 @@ package net.jukoz.me.world.biomes.surface;
 import net.jukoz.me.world.biomes.MEBiomeKeys;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -172,7 +171,6 @@ public class SubBiomes {
         subBiomesMap.put(MEBiomeKeys.UDUN, new SubBiome(144)
                 .addSubBiomeData(-1.0f, -0.31f, MEBiomeKeys.MORDOR_ASHEN_FOREST)
                 .addSubBiomeData(0.29f, 2.01f, MEBiomeKeys.MORDOR_HILL, true));
-
 
         subBiomesMap.put(MEBiomeKeys.EASTERN_RHOVANION, new SubBiome()
                 .addSubBiomeData(-1.0f, -0.35f, MEBiomeKeys.EASTERN_RHOVANION_FOREST)

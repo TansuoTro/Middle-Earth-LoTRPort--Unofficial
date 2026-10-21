@@ -3,25 +3,23 @@ package net.jukoz.me.entity.spider.scuttler;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.ai.pathing.SpiderNavigation;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.particle.BlockStateParticleEffect;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Holder;
@@ -38,8 +36,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.level.biome.Biome;
@@ -56,17 +54,28 @@ import net.jukoz.me.registries.content.spidervariants.SpiderVariantRegistry;
 import net.jukoz.me.resources.datas.biome_events.BiomeEventDataLookup;
 import net.jukoz.me.utils.SpawnUtil;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.Optional;
+import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 
-public class ShelobiteScuttlerEntity extends HostileEntity implements Pouncer {
+public class ShelobiteScuttlerEntity extends Monster implements Pouncer {
     public static final int CLIMBING_TIME_TRANSITION = 12;
     public static final int LEAPING_TIME_TRANSITION = 8;
     public static final float MOVEMENT_SPEED = 1.15f;
-    private static final TrackedData<Byte> SPIDER_FLAGS;
-    private static final TrackedData<Integer> BITE_FLAG;
-    private static final TrackedData<Integer> POUNCE_FLAG;
-    private static final TrackedData<Holder<SpiderVariant>> VARIANT;
+    private static final EntityDataAccessor<Byte> SPIDER_FLAGS;
+    private static final EntityDataAccessor<Integer> BITE_FLAG;
+    private static final EntityDataAccessor<Integer> POUNCE_FLAG;
+    private static final EntityDataAccessor<Holder<SpiderVariant>> VARIANT;
 
     // region Brain
     protected static final ImmutableList<SensorType<? extends Sensor<? super ShelobiteScuttlerEntity>>> SENSOR_TYPES = ImmutableList.of(
@@ -103,12 +112,12 @@ public class ShelobiteScuttlerEntity extends HostileEntity implements Pouncer {
     private int leapingTicks = 0;
     private int biteAnimationCooldown = 0;
 
-    public ShelobiteScuttlerEntity(EntityType<? extends HostileEntity> entityType, Level world) {
+    public ShelobiteScuttlerEntity(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
     }
 
-    public static DefaultAttributeContainer.Builder setAttributes() {
-        return HostileEntity.createHostileAttributes()
+    public static AttributeSupplier.Builder setAttributes() {
+        return Monster.createHostileAttributes()
                 .add(Attributes.GENERIC_MAX_HEALTH, 16.0)
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.34)
                 .add(Attributes.GENERIC_ATTACK_DAMAGE, 4)
@@ -117,7 +126,7 @@ public class ShelobiteScuttlerEntity extends HostileEntity implements Pouncer {
 
     @Nullable
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable CompoundTag nbt) {
+    public SpawnGroupData initialize(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, @Nullable CompoundTag nbt) {
         if (entityData instanceof SpiderData spiderData) {
             this.setVariant(spiderData.variant);
         } else {
@@ -147,17 +156,17 @@ public class ShelobiteScuttlerEntity extends HostileEntity implements Pouncer {
     }
 
     protected void initGoals() {
-        this.goalSelector.add(1, new SwimGoal(this));
+        this.goalSelector.add(1, new FloatGoal(this));
         this.goalSelector.add(3, new SpiderPonceAtTargetGoal(this, this,
                 0.45F, 0.25f, 4, 14, 17));
         this.goalSelector.add(4, new MeleeAttackGoal(this, MOVEMENT_SPEED , false));
-        this.goalSelector.add(5, new WanderAroundFarGoal(this, 0.8));
-        this.goalSelector.add(6, new LookAtEntityGoal(this, Player.class, 8.0F));
-        this.goalSelector.add(6, new LookAroundGoal(this));
-        this.targetSelector.add(1, new RevengeGoal(this));
-        this.targetSelector.add(2, new ActiveTargetGoal<>(this, Player.class, true));
-        this.targetSelector.add(3, new ActiveTargetGoal<>(this, NpcEntity.class, true));
-        this.targetSelector.add(4, new ActiveTargetGoal<>(this, CaveTrollEntity.class, true));
+        this.goalSelector.add(5, new WaterAvoidingRandomStrollGoal(this, 0.8));
+        this.goalSelector.add(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.add(6, new RandomLookAroundGoal(this));
+        this.targetSelector.add(1, new HurtByTargetGoal(this));
+        this.targetSelector.add(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.add(3, new NearestAttackableTargetGoal<>(this, NpcEntity.class, true));
+        this.targetSelector.add(4, new NearestAttackableTargetGoal<>(this, CaveTrollEntity.class, true));
     }
 
     public double getMountedHeightOffset() {
@@ -165,8 +174,8 @@ public class ShelobiteScuttlerEntity extends HostileEntity implements Pouncer {
     }
 
     @Override
-    protected EntityNavigation createNavigation(Level world) {
-        return new SpiderNavigation(this, world);
+    protected PathNavigation createNavigation(Level world) {
+        return new WallClimberNavigation(this, world);
     }
 
     protected void initDataTracker() {
@@ -195,7 +204,7 @@ public class ShelobiteScuttlerEntity extends HostileEntity implements Pouncer {
         setTrackerState(POUNCE_FLAG, pounceAnimation);
     }
 
-    protected void setTrackerState(TrackedData<Integer> trackedData, AnimationState animationState) {
+    protected void setTrackerState(EntityDataAccessor<Integer> trackedData, AnimationState animationState) {
         int state = this.dataTracker.get(trackedData);
         if(state == 1) {
             animationState.start(this.age);
@@ -219,7 +228,7 @@ public class ShelobiteScuttlerEntity extends HostileEntity implements Pouncer {
                 Vec3 vec3d = getPos().add(0.0, 0.5, 0.0);
                 BlockState blockState = this.getSteppingBlockState();
                 int count = (int) Mth.clamp(20.0 * this.fallDistance - 1, 0.0, 120.0);
-                serverWorld.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, blockState), vec3d.x, vec3d.y, vec3d.z,
+                serverWorld.spawnParticles(new BlockParticleOption(ParticleTypes.BLOCK, blockState), vec3d.x, vec3d.y, vec3d.z,
                         count, this.random.nextDouble() - 0.5, 0.15, this.random.nextDouble() - 0.5, 0.16f);
             }
         }
@@ -250,7 +259,7 @@ public class ShelobiteScuttlerEntity extends HostileEntity implements Pouncer {
     @Override
     protected void mobTick() {
         super.mobTick();
-        //Profiler profiler = Profilers.get();
+        //ProfilerFiller profiler = Profilers.get();
         //profiler.push("shelobiteScuttlerBrain");
         //this.getBrain().tick(world, this);
         //profiler.pop();
@@ -318,8 +327,8 @@ public class ShelobiteScuttlerEntity extends HostileEntity implements Pouncer {
     }
 
     // Immune to Poison
-    public boolean canHaveStatusEffect(StatusEffectInstance effect) {
-        return effect.getEffectType() != StatusEffects.POISON && super.canHaveStatusEffect(effect);
+    public boolean canHaveStatusEffect(MobEffectInstance effect) {
+        return effect.getEffectType() != MobEffects.POISON && super.canHaveStatusEffect(effect);
     }
 
     public boolean isClimbingWall() {
@@ -364,19 +373,19 @@ public class ShelobiteScuttlerEntity extends HostileEntity implements Pouncer {
     }
 
     static {
-        SPIDER_FLAGS = DataTracker.registerData(ShelobiteScuttlerEntity.class, TrackedDataHandlerRegistry.BYTE);
-        BITE_FLAG = DataTracker.registerData(ShelobiteScuttlerEntity.class, TrackedDataHandlerRegistry.INTEGER);
-        POUNCE_FLAG = DataTracker.registerData(ShelobiteScuttlerEntity.class, TrackedDataHandlerRegistry.INTEGER);
-        VARIANT = DataTracker.registerData(ShelobiteScuttlerEntity.class, TrackedDataHandlerRegistryME.SPIDER_VARIANT);
+        SPIDER_FLAGS = SynchedEntityData.registerData(ShelobiteScuttlerEntity.class, EntityDataSerializers.BYTE);
+        BITE_FLAG = SynchedEntityData.registerData(ShelobiteScuttlerEntity.class, EntityDataSerializers.INTEGER);
+        POUNCE_FLAG = SynchedEntityData.registerData(ShelobiteScuttlerEntity.class, EntityDataSerializers.INTEGER);
+        VARIANT = SynchedEntityData.registerData(ShelobiteScuttlerEntity.class, TrackedDataHandlerRegistryME.SPIDER_VARIANT);
     }
 
-    public static boolean canSpawn(EntityType<ShelobiteScuttlerEntity> type, ServerWorldAccess serverWorldAccess, SpawnReason spawnReason, BlockPos blockPos, RandomSource random) {
-        if(spawnReason != SpawnReason.NATURAL)
+    public static boolean canSpawn(EntityType<ShelobiteScuttlerEntity> type, ServerLevelAccessor serverWorldAccess, MobSpawnType spawnReason, BlockPos blockPos, RandomSource random) {
+        if(spawnReason != MobSpawnType.NATURAL)
             return ShelobiteScuttlerEntity.canSpawnInDark(type, serverWorldAccess, spawnReason, blockPos, random);
         return SpawnUtil.canSpawn(blockPos, serverWorldAccess, spawnReason);
     }
 
-    public static class SpiderData implements EntityData {
+    public static class SpiderData implements SpawnGroupData {
         public final Holder<SpiderVariant> variant;
 
         public SpiderData(Holder<SpiderVariant> variant) {

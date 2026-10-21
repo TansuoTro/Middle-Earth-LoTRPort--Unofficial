@@ -4,7 +4,6 @@ import net.minecraft.world.item.Item;
 import net.jukoz.me.block.special.forge.MetalTypes;
 import net.jukoz.me.item.EquipmentItemsME;
 import net.jukoz.me.resources.datas.common.DispositionType;
-
 import java.util.ArrayList;
 import java.util.List;
 

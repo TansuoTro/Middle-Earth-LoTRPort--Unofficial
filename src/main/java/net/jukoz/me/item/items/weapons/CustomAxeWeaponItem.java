@@ -1,21 +1,21 @@
 package net.jukoz.me.item.items.weapons;
-import net.jukoz.me.item.MEComponents;
 
+import net.jukoz.me.item.MEComponents;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.world.item.Tier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import net.jukoz.me.item.dataComponents.WeaponTypeDataComponent;
 import net.jukoz.me.item.utils.WeaponTypesME;
 
 public class CustomAxeWeaponItem extends AxeItem {
 
-    private final ToolMaterial material;
+    private final Tier material;
 
-    public CustomAxeWeaponItem(ToolMaterial toolMaterial, Item.Settings settings) {
+    public CustomAxeWeaponItem(Tier toolMaterial, Item.Settings settings) {
         super(toolMaterial, WeaponTypesME.AXE.attack, WeaponTypesME.AXE.attackSpeed,
                 ((net.jukoz.me.item.MESettings) settings).component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(WeaponTypesME.AXE.name)));
         this.material = toolMaterial;
@@ -40,7 +40,7 @@ public class CustomAxeWeaponItem extends AxeItem {
                 || Registries.ITEM.getId(this).getPath().contains("uruk_hai")
                 || Registries.ITEM.getId(this).getPath().contains("heyday")
                 || Registries.ITEM.getId(this).getPath().contains("numenorean")){
-            return Component.translatable(this.getTranslationKey()).formatted(Formatting.GOLD);
+            return Component.translatable(this.getTranslationKey()).formatted(ChatFormatting.GOLD);
         }
         return super.getName(stack);
     }

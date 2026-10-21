@@ -42,5 +42,4 @@ public class PacketOpenMapScreen extends ServerToClientPacket<PacketOpenMapScree
         buf.writeBoolean(this.canTeleport);
     }
 
-
 }

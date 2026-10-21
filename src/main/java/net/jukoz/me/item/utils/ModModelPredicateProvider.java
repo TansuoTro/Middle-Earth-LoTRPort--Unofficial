@@ -2,7 +2,7 @@ package net.jukoz.me.item.utils;
 
 import net.jukoz.me.item.ModEquipmentItems;
 import net.jukoz.me.item.ModWeaponItems;
-import net.minecraft.client.item.ModelPredicateProviderRegistry;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.resources.ResourceLocation;
 
@@ -21,14 +21,14 @@ public class ModModelPredicateProvider {
         registerBow(ModWeaponItems.UMBAR_BOW);
     }
     private static void registerBow(Item bow) {
-        ModelPredicateProviderRegistry.register(bow, new ResourceLocation("pull"),
+        ItemProperties.register(bow, new ResourceLocation("pull"),
                 (stack, world, entity, seed) -> {
                    if(entity == null) return 0.0f;
                    else if (entity.getActiveItem() != stack) return 0.0f;
                    return (float)(stack.getMaxUseTime() - entity.getItemUseTimeLeft()) / 20.0f;
                 });
 
-        ModelPredicateProviderRegistry.register(bow, new ResourceLocation("pulling"),
+        ItemProperties.register(bow, new ResourceLocation("pulling"),
                 (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0f : 0.0f);
     }
 
@@ -42,7 +42,7 @@ public class ModModelPredicateProvider {
     }
 
     private static void registerShield(Item shield) {
-        ModelPredicateProviderRegistry.register(shield, new ResourceLocation("blocking"),
+        ItemProperties.register(shield, new ResourceLocation("blocking"),
                 (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F);
     }
 }

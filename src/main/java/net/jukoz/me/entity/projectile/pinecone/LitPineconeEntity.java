@@ -7,11 +7,11 @@ import net.jukoz.me.item.ModResourceItems;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.particle.ItemStackParticleEffect;
-import net.minecraft.particle.ParticleEffect;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -20,7 +20,6 @@ import net.minecraft.world.level.Level;
 public class LitPineconeEntity extends AbstractProjectleEntity {
     private Item item = ModResourceItems.LIT_PINECONE;
     private float damage;
-
 
     public LitPineconeEntity(EntityType<? extends LitPineconeEntity> entityType, Level world) {
         super(entityType, world);

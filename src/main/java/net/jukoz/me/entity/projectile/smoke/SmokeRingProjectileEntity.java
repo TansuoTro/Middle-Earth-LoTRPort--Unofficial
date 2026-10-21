@@ -1,11 +1,10 @@
 package net.jukoz.me.entity.projectile.smoke;
 
-import net.minecraft.entity.*;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.nbt.CompoundTag;
@@ -16,11 +15,13 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.utils.ModCollisionUtils;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MoverType;
 
-public class SmokeRingProjectileEntity extends ProjectileEntity {
+public class SmokeRingProjectileEntity extends Projectile {
     public static final int MAX_LIFESPAN_TICKS = 40;
     public static final int FAILED_MAX_LIFESPAN_TICKS = 14;
-    private static final TrackedData<Boolean> FAILED = DataTracker.registerData(SmokeRingProjectileEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> FAILED = SynchedEntityData.registerData(SmokeRingProjectileEntity.class, EntityDataSerializers.BOOLEAN);
     private static final double ENTITY_BOX_EXPANSION = 1.0;
     private static final float ENTITY_COLLISION_MARGIN = 0.3F;
 
@@ -93,7 +94,7 @@ public class SmokeRingProjectileEntity extends ProjectileEntity {
         if (isFadingOut) return;
 
         if (this.isFailed()) {
-            this.move(MovementType.SELF, this.getVelocity());
+            this.move(MoverType.SELF, this.getVelocity());
             return;
         }
 
@@ -101,7 +102,7 @@ public class SmokeRingProjectileEntity extends ProjectileEntity {
             return;
         }
 
-        this.move(MovementType.SELF, this.getVelocity());
+        this.move(MoverType.SELF, this.getVelocity());
     }
 
     private boolean checkEntityCollision() {

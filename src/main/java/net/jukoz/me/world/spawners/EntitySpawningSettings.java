@@ -1,7 +1,6 @@
 package net.jukoz.me.world.spawners;
 
 import net.minecraft.world.entity.EntityType;
-
 import javax.swing.text.html.parser.Entity;
 
 public class EntitySpawningSettings {

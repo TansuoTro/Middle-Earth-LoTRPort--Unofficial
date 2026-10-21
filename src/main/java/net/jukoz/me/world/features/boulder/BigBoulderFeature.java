@@ -10,10 +10,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.StructureWorldAccess;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
-
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 
 public class BigBoulderFeature extends Feature<BigBoulderFeatureConfig> {
     private static final ImmutableList<Block> CANNOT_PLACE_ON_BLOCKS;
@@ -24,9 +23,9 @@ public class BigBoulderFeature extends Feature<BigBoulderFeatureConfig> {
     }
 
     @Override
-    public boolean generate(FeatureContext<BigBoulderFeatureConfig> context) {
+    public boolean generate(FeaturePlaceContext<BigBoulderFeatureConfig> context) {
         BlockPos blockPos = context.getOrigin();
-        StructureWorldAccess structureWorldAccess = context.getWorld();
+        WorldGenLevel structureWorldAccess = context.getWorld();
         RandomSource random = context.getRandom();
 
         BlockState underBlock = structureWorldAccess.getBlockState(blockPos.down());

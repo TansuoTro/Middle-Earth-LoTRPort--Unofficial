@@ -12,18 +12,17 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityGroup;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.ai.pathing.SpiderNavigation;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -31,39 +30,48 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.monster.Spider;
 
-public class MirkwoodSpiderEntity extends HostileEntity {
+public class MirkwoodSpiderEntity extends Monster {
     public static final int CLIMBING_TIME_TRANSITION = 12;
     public static final int ADULT_AGE = 20 * 60 * 2; // 2 min of baby time
     public static final float MOVEMENT_SPEED = 1.2f;
-    private static final TrackedData<Byte> SPIDER_FLAGS;
+    private static final EntityDataAccessor<Byte> SPIDER_FLAGS;
     private int climbingTicks = 0;
 
-    public MirkwoodSpiderEntity(EntityType<? extends HostileEntity> entityType, Level world) {
+    public MirkwoodSpiderEntity(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
     }
 
-    public static DefaultAttributeContainer.Builder setAttributes() {
-        return HostileEntity.createHostileAttributes()
+    public static AttributeSupplier.Builder setAttributes() {
+        return Monster.createHostileAttributes()
                 .add(Attributes.GENERIC_MAX_HEALTH, 16.0)
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.4)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 36.0);
     }
 
     protected void initGoals() {
-        this.goalSelector.add(1, new SwimGoal(this));
+        this.goalSelector.add(1, new FloatGoal(this));
         this.goalSelector.add(3, new FastPonceAtTargetGoal(this, 0.3F, 0.4f));
         this.goalSelector.add(4, new MeleeAttackGoal(this, MOVEMENT_SPEED , false));
-        this.goalSelector.add(5, new WanderAroundFarGoal(this, 0.8));
-        this.goalSelector.add(6, new LookAtEntityGoal(this, Player.class, 8.0F));
-        this.goalSelector.add(6, new LookAroundGoal(this));
+        this.goalSelector.add(5, new WaterAvoidingRandomStrollGoal(this, 0.8));
+        this.goalSelector.add(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.add(6, new RandomLookAroundGoal(this));
 
-        this.targetSelector.add(1, new RevengeGoal(this));
-        this.targetSelector.add(2, new ActiveTargetGoal<>(this, Player.class, true));
-        this.targetSelector.add(3, new ActiveTargetGoal<>(this, GaladhrimElfEntity.class, true));
-        this.targetSelector.add(4, new ActiveTargetGoal<>(this, LongbeardDwarfEntity.class, true));
-        this.targetSelector.add(5, new ActiveTargetGoal<>(this, ShireHobbitEntity.class, true));
-        this.targetSelector.add(6, new ActiveTargetGoal<>(this, MordorOrcEntity.class, true));
+        this.targetSelector.add(1, new HurtByTargetGoal(this));
+        this.targetSelector.add(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.add(3, new NearestAttackableTargetGoal<>(this, GaladhrimElfEntity.class, true));
+        this.targetSelector.add(4, new NearestAttackableTargetGoal<>(this, LongbeardDwarfEntity.class, true));
+        this.targetSelector.add(5, new NearestAttackableTargetGoal<>(this, ShireHobbitEntity.class, true));
+        this.targetSelector.add(6, new NearestAttackableTargetGoal<>(this, MordorOrcEntity.class, true));
     }
 
     public boolean tryAttack(Entity target) {
@@ -77,10 +85,10 @@ public class MirkwoodSpiderEntity extends HostileEntity {
                 }
 
                 if (i > 1) {
-                    ((LivingEntity)target).addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, i * 20, 0), this);
+                    ((LivingEntity)target).addStatusEffect(new MobEffectInstance(MobEffects.POISON, i * 20, 0), this);
                     double random = Math.random();
                     if(random < 0.2f) {
-                        ((LivingEntity)target).addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, i * 20, 0), this);
+                        ((LivingEntity)target).addStatusEffect(new MobEffectInstance(MobEffects.NAUSEA, i * 20, 0), this);
                     }
                 }
             }
@@ -95,8 +103,8 @@ public class MirkwoodSpiderEntity extends HostileEntity {
         return (double)(this.getHeight() * 0.5F);
     }
 
-    protected EntityNavigation createNavigation(Level world) {
-        return new SpiderNavigation(this, world);
+    protected PathNavigation createNavigation(Level world) {
+        return new WallClimberNavigation(this, world);
     }
 
     protected void initDataTracker() {
@@ -147,13 +155,13 @@ public class MirkwoodSpiderEntity extends HostileEntity {
         }
     }
 
-    public EntityGroup getGroup() {
-        return EntityGroup.ARTHROPOD;
+    public MobType getGroup() {
+        return MobType.ARTHROPOD;
     }
 
     // Immune to Poison
-    public boolean canHaveStatusEffect(StatusEffectInstance effect) {
-        return effect.getEffectType() != StatusEffects.POISON && super.canHaveStatusEffect(effect);
+    public boolean canHaveStatusEffect(MobEffectInstance effect) {
+        return effect.getEffectType() != MobEffects.POISON && super.canHaveStatusEffect(effect);
     }
 
     public boolean isClimbingWall() {
@@ -184,6 +192,6 @@ public class MirkwoodSpiderEntity extends HostileEntity {
     }
 
     static {
-        SPIDER_FLAGS = DataTracker.registerData(net.minecraft.entity.mob.SpiderEntity.class, TrackedDataHandlerRegistry.BYTE);
+        SPIDER_FLAGS = SynchedEntityData.registerData(net.minecraft.entity.mob.Spider.class, EntityDataSerializers.BYTE);
     }
 }

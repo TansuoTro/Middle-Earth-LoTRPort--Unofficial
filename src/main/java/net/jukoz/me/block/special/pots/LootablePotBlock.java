@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.LevelView;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.block.RenderShape;
 
 public class LootablePotBlock extends DecoratedPotBlock {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -40,7 +41,7 @@ public class LootablePotBlock extends DecoratedPotBlock {
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.INVISIBLE;
+    public RenderShape getRenderType(BlockState state) {
+        return RenderShape.INVISIBLE;
     }
 }

@@ -12,30 +12,28 @@ import net.jukoz.me.gui.wood_pile.WoodPileScreenHandler;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.ScreenHandler;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import org.jetbrains.annotations.Nullable;
-
 import static net.jukoz.me.block.special.wood_pile.WoodPileBlock.STAGE;
 
-public class WoodPileBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, ImplementedInventory {
+public class WoodPileBlockEntity extends BlockEntity implements MenuProvider, ImplementedInventory {
 
     private static final String ID = "wood_pile";
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(9, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.ofSize(9, ItemStack.EMPTY);
 
     public WoodPileBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.WOOD_PILE, pos, state);
@@ -48,28 +46,28 @@ public class WoodPileBlockEntity extends BlockEntity implements NamedScreenHandl
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, Player player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new WoodPileScreenHandler(syncId, playerInventory, this);
     }
 
     @Override
     public void readNbt(CompoundTag nbt) {
         super.readNbt(nbt);
-        Inventories.readNbt(nbt, inventory);
+        ContainerHelper.readNbt(nbt, inventory);
     }
 
     @Override
     public void writeNbt(CompoundTag nbt) {
         super.writeNbt(nbt);
-        Inventories.writeNbt(nbt, inventory);
+        ContainerHelper.writeNbt(nbt, inventory);
     }
-    public void setInventory(DefaultedList<ItemStack> inventory) {
+    public void setInventory(NonNullList<ItemStack> inventory) {
         for (int i = 0; i < inventory.size(); i++) {
             this.inventory.set(i, inventory.get(i));
         }
     }
     @Override
-    public DefaultedList<ItemStack> getItems() {
+    public NonNullList<ItemStack> getItems() {
         return inventory;
     }
 
@@ -95,7 +93,7 @@ public class WoodPileBlockEntity extends BlockEntity implements NamedScreenHandl
     }
     @Override
     public ItemStack removeStack(int slot, int count) {
-        ItemStack result = Inventories.splitStack(getItems(), slot, count);
+        ItemStack result = ContainerHelper.splitStack(getItems(), slot, count);
         if (!result.isEmpty()) {
             markDirty();
         }
@@ -135,7 +133,6 @@ public class WoodPileBlockEntity extends BlockEntity implements NamedScreenHandl
     public void clear() {
         inventory.clear();
     }
-
 
     @Override
     public boolean canPlayerUse(Player player) {

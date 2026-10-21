@@ -5,21 +5,39 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.*;
 import net.minecraft.world.entity.ai.sensing.Sensor;
-import net.minecraft.entity.ai.brain.task.*;
-import net.minecraft.entity.mob.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.util.math.intprovider.UniformIntProvider;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.tasks.SpiderPounceTask;
-
 import java.util.Optional;
+import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.behavior.BehaviorControl;
+import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
+import net.minecraft.world.entity.ai.behavior.DoNothing;
+import net.minecraft.world.entity.ai.behavior.InteractWith;
+import net.minecraft.world.entity.ai.behavior.LongJumpMidJump;
+import net.minecraft.world.entity.ai.behavior.LongJumpToRandomPos;
+import net.minecraft.world.entity.ai.behavior.MeleeAttack;
+import net.minecraft.world.entity.ai.behavior.RandomStroll;
+import net.minecraft.world.entity.ai.behavior.RunOne;
+import net.minecraft.world.entity.ai.behavior.SetEntityLookTarget;
+import net.minecraft.world.entity.ai.behavior.SetLookAndInteract;
+import net.minecraft.world.entity.ai.behavior.SetWalkTargetAwayFrom;
+import net.minecraft.world.entity.ai.behavior.SetWalkTargetFromAttackTargetIfTargetOutOfReach;
+import net.minecraft.world.entity.ai.behavior.StartAttacking;
+import net.minecraft.world.entity.ai.behavior.StopAttackingIfTargetInvalid;
+import net.minecraft.world.entity.ai.behavior.StopBeingAngryIfTargetDead;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
+import net.minecraft.world.entity.schedule.Activity;
+import net.minecraft.util.Tuple;
 
 public class ShelobiteScuttlerBrain {
-	private static final UniformIntProvider POUNCE_COOLDOWN_RANGE = UniformIntProvider.create(50, 80);
+	private static final UniformInt POUNCE_COOLDOWN_RANGE = UniformInt.create(50, 80);
 	public static final int POUNCE_VERTICAL_RANGE = 1;
 	public static final int POUNCE_HORIZONTAL_RANGE = 3;
 
@@ -41,7 +59,7 @@ public class ShelobiteScuttlerBrain {
 	private static void addCoreActivities(ShelobiteScuttlerEntity shelobiteScuttler, Brain<ShelobiteScuttlerEntity> brain) {
 		brain.setTaskList(
 				Activity.CORE, 0, ImmutableList.of(
-						ForgetAngryAtTargetTask.create()
+						StopBeingAngryIfTargetDead.create()
 				)
 		);
 	}
@@ -51,10 +69,10 @@ public class ShelobiteScuttlerBrain {
 				Activity.IDLE,
 				10,
 				ImmutableList.of(
-						UpdateAttackTargetTask.<ShelobiteScuttlerEntity>create(ShelobiteScuttlerBrain::getTarget),
+						StartAttacking.<ShelobiteScuttlerEntity>create(ShelobiteScuttlerBrain::getTarget),
 						getFollowTasks(),
 						getIdleTasks(),
-						FindInteractionTargetTask.create(EntityType.PLAYER, 4)
+						SetLookAndInteract.create(EntityType.PLAYER, 4)
 				)
 		);
 	}
@@ -64,9 +82,9 @@ public class ShelobiteScuttlerBrain {
 				Activity.FIGHT,
 				10,
 				ImmutableList.of(
-						ForgetAttackTargetTask.create(),
-						RangedApproachTask.create(1.0F),
-						MeleeAttackTask.create(20)
+						StopAttackingIfTargetInvalid.create(),
+						SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(1.0F),
+						MeleeAttack.create(20)
 				),
 				MemoryModuleType.ATTACK_TARGET
 		);
@@ -76,66 +94,66 @@ public class ShelobiteScuttlerBrain {
 		brain.setTaskList(
 				Activity.LONG_JUMP,
 				ImmutableList.of(
-						Pair.of(0, ForgetAttackTargetTask.create()),
-						//new LeapingChargeTask(POUNCE_COOLDOWN_RANGE, SoundEvents.ENTITY_SPIDER_STEP),
-						Pair.of(1, new SpiderPounceTask<>(
+						Tuple.of(0, StopAttackingIfTargetInvalid.create()),
+						//new LongJumpMidJump(POUNCE_COOLDOWN_RANGE, SoundEvents.ENTITY_SPIDER_STEP),
+						Tuple.of(1, new SpiderPounceTask<>(
 								POUNCE_COOLDOWN_RANGE, POUNCE_VERTICAL_RANGE, POUNCE_HORIZONTAL_RANGE,
 								3.5714288F, spider -> SoundEvents.ENTITY_SPIDER_STEP
 						))
 				),
 				ImmutableSet.of(
-						Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryModuleState.VALUE_PRESENT),
-						Pair.of(MemoryModuleType.LONG_JUMP_COOLING_DOWN, MemoryModuleState.VALUE_ABSENT)
+						Tuple.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT),
+						Tuple.of(MemoryModuleType.LONG_JUMP_COOLING_DOWN, MemoryStatus.VALUE_ABSENT)
 				),
 				ImmutableSet.of(MemoryModuleType.ATTACK_TARGET, MemoryModuleType.LONG_JUMP_COOLING_DOWN)
 				//MemoryModuleType.LONG_JUMP_COOLING_DOWN
 				//Activity.LONG_JUMP,
 				//10,
 				//ImmutableList.of(
-				//		Pair.of(0, new LeapingChargeTask(POUNCE_COOLDOWN_RANGE, SoundEvents.ENTITY_SPIDER_STEP)),
-				//		Pair.of(
+				//		Tuple.of(0, new LongJumpMidJump(POUNCE_COOLDOWN_RANGE, SoundEvents.ENTITY_SPIDER_STEP)),
+				//		Tuple.of(
 				//				1,
-				//				new LongJumpTask<>(
+				//				new LongJumpToRandomPos<>(
 				//						POUNCE_COOLDOWN_RANGE, POUNCE_VERTICAL_RANGE, POUNCE_HORIZONTAL_RANGE, 3.5714288F, spider -> SoundEvents.ENTITY_SPIDER_STEP
 				//				)
 				//		)
 				//),
 				//MemoryModuleType.ATTACK_TARGET
 				//ImmutableSet.of(
-						//Pair.of(MemoryModuleType.TEMPTING_PLAYER, MemoryModuleState.VALUE_ABSENT),
-						//Pair.of(MemoryModuleType.BREED_TARGET, MemoryModuleState.VALUE_ABSENT),
-						//Pair.of(MemoryModuleType.LONG_JUMP_COOLING_DOWN, MemoryModuleState.VALUE_ABSENT)
+						//Tuple.of(MemoryModuleType.TEMPTING_PLAYER, MemoryStatus.VALUE_ABSENT),
+						//Tuple.of(MemoryModuleType.BREED_TARGET, MemoryStatus.VALUE_ABSENT),
+						//Tuple.of(MemoryModuleType.LONG_JUMP_COOLING_DOWN, MemoryStatus.VALUE_ABSENT)
 				//)
 		);
 	}
 
-	private static RandomTask<ShelobiteScuttlerEntity> getFollowTasks() {
-		return new RandomTask<>(
+	private static RunOne<ShelobiteScuttlerEntity> getFollowTasks() {
+		return new RunOne<>(
 				ImmutableList.of(
-						Pair.of(LookAtMobTask.create(EntityType.PLAYER, 8.0F), 1),
-						Pair.of(LookAtMobTask.create(EntitiesME.SHELOBITE_SCUTTLER, 8.0F), 1),
-						Pair.of(LookAtMobTask.create(8.0F), 1),
-						Pair.of(new WaitTask(30, 60), 1)
+						Tuple.of(SetEntityLookTarget.create(EntityType.PLAYER, 8.0F), 1),
+						Tuple.of(SetEntityLookTarget.create(EntitiesME.SHELOBITE_SCUTTLER, 8.0F), 1),
+						Tuple.of(SetEntityLookTarget.create(8.0F), 1),
+						Tuple.of(new DoNothing(30, 60), 1)
 				)
 		);
 	}
 
-	private static RandomTask<ShelobiteScuttlerEntity> getIdleTasks() {
-		return new RandomTask<>(
+	private static RunOne<ShelobiteScuttlerEntity> getIdleTasks() {
+		return new RunOne<>(
 				ImmutableList.of(
-						Pair.of(StrollTask.create(0.6F), 2),
-						Pair.of(FindEntityTask.create(EntitiesME.SHELOBITE_SCUTTLER, 8, MemoryModuleType.INTERACTION_TARGET, 0.6F, 2), 2),
-						Pair.of(GoToRememberedPositionTask.createPosBased(net.jukoz.me.api.entity.ai.brain.MemoryModulesAPI.SHELTER_POS, 0.6F, 2, true), 2),
+						Tuple.of(RandomStroll.create(0.6F), 2),
+						Tuple.of(InteractWith.create(EntitiesME.SHELOBITE_SCUTTLER, 8, MemoryModuleType.INTERACTION_TARGET, 0.6F, 2), 2),
+						Tuple.of(SetWalkTargetAwayFrom.createPosBased(net.jukoz.me.api.entity.ai.brain.MemoryModulesAPI.SHELTER_POS, 0.6F, 2, true), 2),
 						
-						Pair.of(new WaitTask(30, 60), 1)
+						Tuple.of(new DoNothing(30, 60), 1)
 				)
 		);
 	}
 /*
 	protected static void tick(MirkwoodSpiderEntity shelobiteScuttler) {
-		Random random = shelobiteScuttler.getWorld().getRandom();
+		RandomSource random = shelobiteScuttler.getWorld().getRandom();
 		Brain<MirkwoodSpiderEntity> brain = shelobiteScuttler.getBrain();
-		List<Task<? super MirkwoodSpiderEntity>> runningTasks = brain.getRunningTasks();
+		List<BehaviorControl<? super MirkwoodSpiderEntity>> runningTasks = brain.getRunningTasks();
 		brain.resetPossibleActivities(ImmutableList.of(Activity.LONG_JUMP, Activity.FIGHT, Activity.IDLE));
 		System.out.println(shelobiteScuttler.getBrain().getOptionalRegisteredMemory(MemoryModuleType.LONG_JUMP_COOLING_DOWN));
 		shelobiteScuttler.setAttacking(brain.hasMemoryModule(MemoryModuleType.ATTACK_TARGET));
@@ -199,8 +217,8 @@ public class ShelobiteScuttlerBrain {
 		System.out.println(activity);
 	}
 
-	public static void updateActivities(AxolotlEntity axolotl) {
-		Brain<AxolotlEntity> brain = axolotl.getBrain();
+	public static void updateActivities(Axolotl axolotl) {
+		Brain<Axolotl> brain = axolotl.getBrain();
 		Activity activity = (Activity)brain.getFirstPossibleNonCoreActivity().orElse(null);
 		if (activity != Activity.PLAY_DEAD) {
 			brain.resetPossibleActivities(ImmutableList.of(Activity.PLAY_DEAD, Activity.FIGHT, Activity.IDLE));
@@ -215,7 +233,7 @@ public class ShelobiteScuttlerBrain {
 	}
 
 	private static Optional<? extends LivingEntity> getTarget(ShelobiteScuttlerEntity shelobiteScuttler) {
-		Optional<LivingEntity> optional = net.minecraft.entity.ai.brain.task.LookTargetUtil.getEntity(shelobiteScuttler, MemoryModuleType.ANGRY_AT);
+		Optional<LivingEntity> optional = net.minecraft.entity.ai.brain.task.BehaviorUtils.getEntity(shelobiteScuttler, MemoryModuleType.ANGRY_AT);
 		if (optional.isPresent() && Sensor.testAttackableTargetPredicateIgnoreVisibility(shelobiteScuttler, (LivingEntity)optional.get())) {
 			return optional;
 		} else {
@@ -225,7 +243,7 @@ public class ShelobiteScuttlerBrain {
 	}
 
 	protected static void tryRevenge(ServerLevel world, ShelobiteScuttlerEntity shelobiteScuttler, LivingEntity target) {
-		if (!(target instanceof AbstractPiglinEntity)) {
+		if (!(target instanceof AbstractPiglin)) {
 			tryRevenge(world, shelobiteScuttler, target);
 		}
 	}

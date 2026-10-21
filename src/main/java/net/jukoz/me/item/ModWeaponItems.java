@@ -12,11 +12,13 @@ import net.jukoz.me.item.items.ReachWeaponItem;
 import net.jukoz.me.item.utils.ModItemGroups;
 import net.jukoz.me.item.utils.ModToolMaterials;
 import net.jukoz.me.utils.LoggerUtil;
-import net.minecraft.item.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Tiers;
 
 public class ModWeaponItems {
     private static final int SWORD_DAMAGE = 3;
@@ -35,7 +37,6 @@ public class ModWeaponItems {
     private static final float DAGGER_REACH = 3.5f;
     private static final float TWO_HAND_REACH = 5.5f;
     private static final float PIKE_REACH = 6.5f;
-
 
     public static final Item ANDUIN_SWORD = registerItemWithModel("anduin_sword",
             new CustomSwordWeaponItem(ModToolMaterials.STEEL, SWORD_DAMAGE, SWORD_ATTACKS_SPEED, Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".anduin"), new FabricItemSettings()), false);

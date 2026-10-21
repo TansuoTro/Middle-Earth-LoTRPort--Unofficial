@@ -9,6 +9,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.beasts.great_horn.GreatHornVariant;
+import net.minecraft.core.HolderSet;
 
 public class GreatHornVariantRegistryHelper {
     private static final String TEXTURE_PATH = "entities/great_horn/";
@@ -23,7 +24,7 @@ public class GreatHornVariantRegistryHelper {
         return createSpawnConditions(registry.getRegistryLookup(Registries.BIOME).getOrThrow(biomeTag), priority);
     }
 
-    public static SpawnConditionSelectors createSpawnConditions(RegistryEntryList<Biome> requiredBiomes, int priority) {
+    public static SpawnConditionSelectors createSpawnConditions(HolderSet<Biome> requiredBiomes, int priority) {
         return SpawnConditionSelectors.createSingle(new BiomeSpawnCondition(requiredBiomes), priority);
     }
 }

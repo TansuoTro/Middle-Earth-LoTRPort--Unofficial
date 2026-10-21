@@ -6,11 +6,11 @@ import net.jukoz.me.utils.LoggerUtil;
 import net.jukoz.me.world.dimension.ModDimensions;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.entity.LightningEntity;
+import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.passive.PigEntity;
+import net.minecraft.world.entity.animal.Pig;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -29,15 +29,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Mixin(PigEntity.class)
+@Mixin(Pig.class)
 public class PigEntityMixin {
     @Inject(at = @At(value = "HEAD"), method = "onStruckByLightning", cancellable = true)
-    private void onStruckByLightning(ServerLevel world, LightningEntity lightning, CallbackInfo callBackInfo) {
+    private void onStruckByLightning(ServerLevel world, LightningBolt lightning, CallbackInfo callBackInfo) {
         if(ModDimensions.isInMiddleEarth(world)) {
             callBackInfo.cancel();
         }

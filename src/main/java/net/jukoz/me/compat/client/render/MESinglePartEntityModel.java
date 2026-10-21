@@ -2,21 +2,21 @@ package net.jukoz.me.compat.client.render;
 
 import net.jukoz.me.compat.client.render.state.EntityRenderStateCompat;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.entity.model.SinglePartEntityModel;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.HierarchicalModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.entity.LivingEntity;
 
 /**
  * R2 bridge for donor-style 1.21.8 models written as
- * {@code SinglePartEntityModel<S extends EntityRenderState>}.
+ * {@code HierarchicalModel<S extends EntityRenderState>}.
  *
- * <p>1.20.1's {@link SinglePartEntityModel} is entity-typed, so the entity arguments are
+ * <p>1.20.1's {@link HierarchicalModel} is entity-typed, so the entity arguments are
  * ignored: the state currently published on {@link MEEntityRenderContext} is handed to
  * the donor-style {@link #setAngles(EntityRenderStateCompat)} instead.
  */
 public abstract class MESinglePartEntityModel<S extends EntityRenderStateCompat>
-        extends SinglePartEntityModel<LivingEntity> {
+        extends HierarchicalModel<LivingEntity> {
 
     private final ModelPart part;
 

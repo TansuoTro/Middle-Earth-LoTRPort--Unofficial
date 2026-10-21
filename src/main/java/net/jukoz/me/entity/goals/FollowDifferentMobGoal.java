@@ -4,17 +4,18 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.pathing.BirdNavigation;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.ai.pathing.MobNavigation;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.level.pathfinder.PathNodeType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.world.entity.EntitySelector;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
+import net.minecraft.world.entity.ai.control.Control;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 
 public class FollowDifferentMobGoal<T extends Mob> extends Goal {
     private final Mob mob;
@@ -22,7 +23,7 @@ public class FollowDifferentMobGoal<T extends Mob> extends Goal {
     @Nullable
     private Mob target;
     private final double speed;
-    private final EntityNavigation navigation;
+    private final PathNavigation navigation;
     private int updateCountdownTicks;
     private final float minDistance;
     private float oldWaterPathFindingPenalty;
@@ -38,14 +39,14 @@ public class FollowDifferentMobGoal<T extends Mob> extends Goal {
         this.minDistance = minDistance;
         this.maxDistance = maxDistance;
         this.setControls(EnumSet.of(Goal.Control.MOVE, Goal.Control.LOOK));
-        if (!(follower.getNavigation() instanceof MobNavigation) && !(follower.getNavigation() instanceof BirdNavigation)) {
+        if (!(follower.getNavigation() instanceof GroundPathNavigation) && !(follower.getNavigation() instanceof FlyingPathNavigation)) {
             throw new IllegalArgumentException("Unsupported follower type for FollowMobGoal");
         }
     }
 
     @Override
     public boolean canStart() {
-        List<T> list = this.mob.getWorld().getEntitiesByClass(this.followedClass, this.mob.getBoundingBox().expand(this.maxDistance), EntityPredicates.VALID_ENTITY);
+        List<T> list = this.mob.getWorld().getEntitiesByClass(this.followedClass, this.mob.getBoundingBox().expand(this.maxDistance), EntitySelector.VALID_ENTITY);
         if (!list.isEmpty()) {
             for (Mob mobEntity : list) {
                 if (!mobEntity.isInvisible()) {
@@ -66,15 +67,15 @@ public class FollowDifferentMobGoal<T extends Mob> extends Goal {
     @Override
     public void start() {
         this.updateCountdownTicks = 0;
-        this.oldWaterPathFindingPenalty = this.mob.getPathfindingPenalty(PathNodeType.WATER);
-        this.mob.setPathfindingPenalty(PathNodeType.WATER, 0.0F);
+        this.oldWaterPathFindingPenalty = this.mob.getPathfindingPenalty(BlockPathTypes.WATER);
+        this.mob.setPathfindingPenalty(BlockPathTypes.WATER, 0.0F);
     }
 
     @Override
     public void stop() {
         this.target = null;
         this.navigation.stop();
-        this.mob.setPathfindingPenalty(PathNodeType.WATER, this.oldWaterPathFindingPenalty);
+        this.mob.setPathfindingPenalty(BlockPathTypes.WATER, this.oldWaterPathFindingPenalty);
     }
 
     @Override

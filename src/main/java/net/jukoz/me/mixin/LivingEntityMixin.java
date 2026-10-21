@@ -8,12 +8,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.entity.*;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.passive.HorseEntity;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Holder;
@@ -39,6 +38,10 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.jukoz.me.compat.MEEnchants;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
@@ -48,7 +51,7 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Shadow public abstract ItemStack getStackInHand(InteractionHand hand);
 
-    @Shadow public abstract boolean hasStatusEffect(StatusEffect effect);
+    @Shadow public abstract boolean hasStatusEffect(MobEffect effect);
 
     @Shadow public abstract @NotNull ItemStack getWeaponStack();
 
@@ -109,10 +112,10 @@ public abstract class LivingEntityMixin extends Entity {
         stackTraceLock = false;
     }
 
-    @ModifyVariable(method = "addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z",
+    @ModifyVariable(method = "addStatusEffect(Lnet/minecraft/entity/effect/MobEffectInstance;Lnet/minecraft/entity/Entity;)Z",
             at = @At("HEAD"), index = 1, argsOnly = true)
-    public final StatusEffectInstance addStatusEffect(StatusEffectInstance effect) {
-        if(effect.getEffectType().getCategory().equals(StatusEffectCategory.HARMFUL)) {
+    public final MobEffectInstance addStatusEffect(MobEffectInstance effect) {
+        if(effect.getEffectType().getCategory().equals(MobEffectCategory.HARMFUL)) {
             float ailmentLevel = 0;
             Level world = this.getWorld();
             ailmentLevel += getAilmentProtectionLevel(this.getEquippedStack(EquipmentSlot.HEAD), world);
@@ -123,15 +126,15 @@ public abstract class LivingEntityMixin extends Entity {
                 float scale = 0.08f * ailmentLevel;
                 scale = 1 - Math.min(0.8f, scale);
                 int scaledDuration = Math.max(1, Math.round(effect.getDuration() * scale));
-                effect = new StatusEffectInstance(effect.getEffectType(), scaledDuration, effect.getAmplifier(),
+                effect = new MobEffectInstance(effect.getEffectType(), scaledDuration, effect.getAmplifier(),
                         effect.isAmbient(), effect.shouldShowParticles(), effect.shouldShowIcon());
             }
         }
         return effect;
     }
 
-    @Inject(method = "addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z", at = @At("TAIL"))
-    public final void addStatusEffect(StatusEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "addStatusEffect(Lnet/minecraft/entity/effect/MobEffectInstance;Lnet/minecraft/entity/Entity;)Z", at = @At("TAIL"))
+    public final void addStatusEffect(MobEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {
         if(!this.getWorld().isClient) {
             for (ServerPlayer player : ((ServerLevel) this.getWorld()).getPlayers()) {
                 ServerPlayNetworking.send(player, new PacketLivingEntityData(this.getId(), effect));
@@ -165,7 +168,7 @@ public abstract class LivingEntityMixin extends Entity {
             float currentValue = cir.getReturnValue();
             float modifier = 1f;
             float fightingModifier = 1f;
-            if(getControllingPassenger().getVehicle() instanceof HorseEntity){
+            if(getControllingPassenger().getVehicle() instanceof Horse){
                 currentValue = 0.5f;
                 fightingModifier = 2f;
             }

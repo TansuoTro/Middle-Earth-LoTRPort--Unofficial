@@ -2,10 +2,10 @@ package net.jukoz.me.mixin.client;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.option.GameOptions;
-import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.Options;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -20,13 +20,13 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @OnlyIn(Dist.CLIENT)
-@Mixin(MinecraftClient.class)
+@Mixin(Minecraft.class)
 public abstract class MinecraftClientMixin {
     @Shadow @Final
-    public GameOptions options;
+    public Options options;
 
     @Inject(method = "setWorld", at = @At("HEAD"))
-    private void resetGlintInNether(ClientWorld world, CallbackInfo ci) {
+    private void resetGlintInNether(ClientLevel world, CallbackInfo ci) {
         if (ModClientConfigs.DISABLE_GLINT && world != null && ModDimensions.isInMiddleEarth(world)) {
             this.options.getGlintStrength().setValue(0.0);
         }

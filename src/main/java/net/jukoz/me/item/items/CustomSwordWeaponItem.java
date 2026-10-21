@@ -2,38 +2,37 @@ package net.jukoz.me.item.items;
 
 import net.jukoz.me.MiddleEarth;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.world.item.Tier;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.List;
 
 public class CustomSwordWeaponItem extends SwordItem {
     private final MutableComponent faction;
     private final MutableComponent subFaction;
-    private final ToolMaterial material;
+    private final Tier material;
 
-    public CustomSwordWeaponItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings) {
+    public CustomSwordWeaponItem(Tier toolMaterial, int attackDamage, float attackSpeed, Settings settings) {
         super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getDurability()));
         this.faction = null;
         this.subFaction = null;
         this.material = toolMaterial;
     }
 
-    public CustomSwordWeaponItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, MutableComponent faction, Settings settings) {
+    public CustomSwordWeaponItem(Tier toolMaterial, int attackDamage, float attackSpeed, MutableComponent faction, Settings settings) {
         super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getDurability()));
         this.faction = faction;
         this.subFaction = null;
         this.material = toolMaterial;
     }
 
-    public CustomSwordWeaponItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, MutableComponent faction, MutableComponent subFaction, Settings settings) {
+    public CustomSwordWeaponItem(Tier toolMaterial, int attackDamage, float attackSpeed, MutableComponent faction, MutableComponent subFaction, Settings settings) {
         super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getDurability()));
         this.faction = faction;
         this.subFaction = subFaction;
@@ -53,7 +52,7 @@ public class CustomSwordWeaponItem extends SwordItem {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag context) {
         tooltip.add(Component.of(""));
         if (Screen.hasShiftDown()) {
             if (this.faction != null) {
@@ -66,7 +65,7 @@ public class CustomSwordWeaponItem extends SwordItem {
         } else {
             tooltip.add(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".shift"));
         }
-        tooltip.add(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".reach").append(Float.toString(4.5f)).append(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".blocks_range")).formatted(Formatting.DARK_GREEN));
+        tooltip.add(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".reach").append(Float.toString(4.5f)).append(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".blocks_range")).formatted(ChatFormatting.DARK_GREEN));
 
         super.appendTooltip(stack, world, tooltip, context);
     }

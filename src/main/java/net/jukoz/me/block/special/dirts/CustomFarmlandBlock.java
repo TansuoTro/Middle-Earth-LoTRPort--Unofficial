@@ -2,7 +2,7 @@ package net.jukoz.me.block.special.dirts;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.block.FarmlandBlock;
+import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -18,10 +18,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelView;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.Iterator;
 
-public class CustomFarmlandBlock extends FarmlandBlock {
+public class CustomFarmlandBlock extends FarmBlock {
 
     private final Block target;
 
@@ -75,7 +74,7 @@ public class CustomFarmlandBlock extends FarmlandBlock {
         return world.getBlockState(pos.up()).isIn(BlockTags.MAINTAINS_FARMLAND);
     }
 
-    private static boolean isWaterNearby(WorldView world, BlockPos pos) {
+    private static boolean isWaterNearby(LevelReader world, BlockPos pos) {
         Iterator var2 = BlockPos.iterate(pos.add(-4, 0, -4), pos.add(4, 1, 4)).iterator();
 
         BlockPos blockPos;

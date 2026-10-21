@@ -2,7 +2,7 @@ package net.jukoz.me.mixin;
 
 import net.jukoz.me.MiddleEarth;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.block.CobwebBlock;
+import net.minecraft.world.level.block.WebBlock;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.core.registries.Registries;

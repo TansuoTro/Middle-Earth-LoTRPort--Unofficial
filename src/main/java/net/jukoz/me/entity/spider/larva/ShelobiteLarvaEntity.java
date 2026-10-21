@@ -1,19 +1,17 @@
 package net.jukoz.me.entity.spider.larva;
 
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.ai.pathing.SpiderNavigation;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Holder;
@@ -28,8 +26,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.TrackedDataHandlerRegistryME;
@@ -43,15 +41,26 @@ import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.registries.content.spidervariants.SpiderVariantRegistry;
 import net.jukoz.me.utils.SpawnUtil;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.Optional;
+import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 
-public class ShelobiteLarvaEntity extends HostileEntity {
+public class ShelobiteLarvaEntity extends Monster {
     public static final int CLIMBING_TIME_TRANSITION = 12;
     public static final float MOVEMENT_SPEED = 1f;
-    private static final TrackedData<Byte> SPIDER_FLAGS;
-    private static final TrackedData<Boolean> ATTACK_FLAG;
-    private static final TrackedData<Holder<SpiderVariant>> VARIANT;
+    private static final EntityDataAccessor<Byte> SPIDER_FLAGS;
+    private static final EntityDataAccessor<Boolean> ATTACK_FLAG;
+    private static final EntityDataAccessor<Holder<SpiderVariant>> VARIANT;
 
     public final AnimationState idleAnimation = new AnimationState();
     public final AnimationState walkingAnimation = new AnimationState();
@@ -59,34 +68,34 @@ public class ShelobiteLarvaEntity extends HostileEntity {
 
     private int climbingTicks = 0;
 
-    public ShelobiteLarvaEntity(EntityType<? extends HostileEntity> entityType, Level world) {
+    public ShelobiteLarvaEntity(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
     }
 
-    public static DefaultAttributeContainer.Builder setAttributes() {
-        return HostileEntity.createHostileAttributes()
+    public static AttributeSupplier.Builder setAttributes() {
+        return Monster.createHostileAttributes()
                 .add(Attributes.GENERIC_MAX_HEALTH, 8.0)
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.27)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 24.0);
     }
 
     protected void initGoals() {
-        this.goalSelector.add(1, new SwimGoal(this));
+        this.goalSelector.add(1, new FloatGoal(this));
         this.goalSelector.add(3, new MeleeAttackGoal(this, MOVEMENT_SPEED , false));
-        this.goalSelector.add(4, new WanderAroundFarGoal(this, 0.8));
+        this.goalSelector.add(4, new WaterAvoidingRandomStrollGoal(this, 0.8));
         this.goalSelector.add(5, new FollowDifferentMobGoal<ShelobiteScuttlerEntity>(this,
                 ShelobiteScuttlerEntity.class, 1.0, 7, 16));
-        this.goalSelector.add(6, new LookAtEntityGoal(this, Player.class, 8.0F));
-        this.goalSelector.add(6, new LookAroundGoal(this));
-        this.targetSelector.add(1, new RevengeGoal(this));
-        this.targetSelector.add(2, new ActiveTargetGoal<>(this, Player.class, true));
-        this.targetSelector.add(3, new ActiveTargetGoal<>(this, NpcEntity.class, true));
-        this.targetSelector.add(4, new ActiveTargetGoal<>(this, CaveTrollEntity.class, true));
+        this.goalSelector.add(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.add(6, new RandomLookAroundGoal(this));
+        this.targetSelector.add(1, new HurtByTargetGoal(this));
+        this.targetSelector.add(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.add(3, new NearestAttackableTargetGoal<>(this, NpcEntity.class, true));
+        this.targetSelector.add(4, new NearestAttackableTargetGoal<>(this, CaveTrollEntity.class, true));
     }
 
     @Nullable
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable CompoundTag nbt) {
+    public SpawnGroupData initialize(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, @Nullable CompoundTag nbt) {
         if (entityData instanceof ShelobiteScuttlerEntity.SpiderData spiderData) {
             this.setVariant(spiderData.variant);
         } else {
@@ -105,8 +114,8 @@ public class ShelobiteLarvaEntity extends HostileEntity {
     }
 
     @Override
-    protected EntityNavigation createNavigation(Level world) {
-        return new SpiderNavigation(this, world);
+    protected PathNavigation createNavigation(Level world) {
+        return new WallClimberNavigation(this, world);
     }
 
     protected void initDataTracker() {
@@ -200,8 +209,8 @@ public class ShelobiteLarvaEntity extends HostileEntity {
     }
 
     // Immune to Poison
-    public boolean canHaveStatusEffect(StatusEffectInstance effect) {
-        return effect.getEffectType() != StatusEffects.POISON && super.canHaveStatusEffect(effect);
+    public boolean canHaveStatusEffect(MobEffectInstance effect) {
+        return effect.getEffectType() != MobEffects.POISON && super.canHaveStatusEffect(effect);
     }
 
     public boolean isClimbingWall() {
@@ -242,13 +251,13 @@ public class ShelobiteLarvaEntity extends HostileEntity {
     }
 
     static {
-        SPIDER_FLAGS = DataTracker.registerData(ShelobiteLarvaEntity.class, TrackedDataHandlerRegistry.BYTE);
-        ATTACK_FLAG = DataTracker.registerData(ShelobiteLarvaEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-        VARIANT = DataTracker.registerData(ShelobiteLarvaEntity.class, TrackedDataHandlerRegistryME.SPIDER_VARIANT);
+        SPIDER_FLAGS = SynchedEntityData.registerData(ShelobiteLarvaEntity.class, EntityDataSerializers.BYTE);
+        ATTACK_FLAG = SynchedEntityData.registerData(ShelobiteLarvaEntity.class, EntityDataSerializers.BOOLEAN);
+        VARIANT = SynchedEntityData.registerData(ShelobiteLarvaEntity.class, TrackedDataHandlerRegistryME.SPIDER_VARIANT);
     }
 
-    public static boolean canSpawn(EntityType<ShelobiteLarvaEntity> type, ServerWorldAccess serverWorldAccess, SpawnReason spawnReason, BlockPos blockPos, RandomSource random) {
-        if(spawnReason != SpawnReason.NATURAL)
+    public static boolean canSpawn(EntityType<ShelobiteLarvaEntity> type, ServerLevelAccessor serverWorldAccess, MobSpawnType spawnReason, BlockPos blockPos, RandomSource random) {
+        if(spawnReason != MobSpawnType.NATURAL)
             return ShelobiteLarvaEntity.canSpawnInDark(type, serverWorldAccess, spawnReason, blockPos, random);
         return SpawnUtil.canSpawn(blockPos, serverWorldAccess, spawnReason);
     }

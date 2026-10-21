@@ -11,7 +11,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.LevelView;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.Map;
 
 public class ModVerticallyAttachableBlockItem extends BlockItem {
@@ -24,7 +23,7 @@ public class ModVerticallyAttachableBlockItem extends BlockItem {
         this.verticalAttachmentDirections = verticalAttachmentDirections;
     }
 
-    protected boolean canPlaceAt(WorldView world, BlockState state, BlockPos pos) {
+    protected boolean canPlaceAt(LevelReader world, BlockState state, BlockPos pos) {
         return state.canPlaceAt(world, pos);
     }
 
@@ -32,7 +31,7 @@ public class ModVerticallyAttachableBlockItem extends BlockItem {
     protected BlockState getPlacementState(BlockPlaceContext context) {
         BlockState blockState = this.wallBlock.getPlacementState(context);
         BlockState blockState2 = null;
-        WorldView worldView = context.getWorld();
+        LevelReader worldView = context.getWorld();
         BlockPos blockPos = context.getBlockPos();
         Direction[] var6 = context.getPlacementDirections();
         int var7 = var6.length;

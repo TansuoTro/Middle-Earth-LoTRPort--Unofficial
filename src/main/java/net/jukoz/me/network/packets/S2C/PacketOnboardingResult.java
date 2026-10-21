@@ -4,7 +4,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.ListTag;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.MiddleEarth;
@@ -14,7 +14,7 @@ import net.jukoz.me.network.handlers.OnboardingScreenHandler;
 import net.jukoz.me.network.packets.ServerToClientPacket;
 import net.jukoz.me.resources.datas.attributes.AttributePoolElement;
 import net.jukoz.me.world.dimension.ModDimensions;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 
 public class PacketOnboardingResult extends ServerToClientPacket<PacketOnboardingResult> {
@@ -53,7 +53,7 @@ public class PacketOnboardingResult extends ServerToClientPacket<PacketOnboardin
             if(!canReturnToOverworld){
                 return;
             }
-            MinecraftClient client = MinecraftClient.getInstance();
+            Minecraft client = Minecraft.getInstance();
             client.setScreen(new ReturnConfirmationScreen(delay));
         } else if(ModDimensions.isInOverworld(context.player().getWorld())){
             OnboardingScreenHandler.handle(context, havePlayerData, delay, AttributePoolElement.obtainAttributeList(attributeList));
@@ -77,6 +77,5 @@ public class PacketOnboardingResult extends ServerToClientPacket<PacketOnboardin
         buf.writeFloat(this.delayOnTeleportationConfirm);
         buf.writeNbt(this.attributeList);
     }
-
 
 }

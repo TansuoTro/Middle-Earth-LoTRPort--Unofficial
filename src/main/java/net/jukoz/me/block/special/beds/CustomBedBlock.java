@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.RenderShape;
 
 public class CustomBedBlock extends BedBlock {
 
@@ -20,7 +21,7 @@ public class CustomBedBlock extends BedBlock {
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderType(BlockState state) {
+        return RenderShape.MODEL;
     }
 }

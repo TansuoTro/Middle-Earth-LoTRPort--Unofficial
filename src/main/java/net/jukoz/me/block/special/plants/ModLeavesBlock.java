@@ -38,7 +38,7 @@ public class ModLeavesBlock extends TintedParticleLeavesBlock {
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         int i;
         if (state.get(WATERLOGGED)) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
@@ -49,7 +49,7 @@ public class ModLeavesBlock extends TintedParticleLeavesBlock {
         return state;
     }
 
-    private static BlockState updateDistanceFromLogs(BlockState state, WorldAccess world, BlockPos pos) {
+    private static BlockState updateDistanceFromLogs(BlockState state, LevelAccessor world, BlockPos pos) {
         int i = 7;
         BlockPos.Mutable mutable = new BlockPos.Mutable();
         for(int x = -1; x <= 1; x++) {

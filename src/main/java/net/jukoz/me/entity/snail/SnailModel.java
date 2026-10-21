@@ -2,38 +2,45 @@ package net.jukoz.me.entity.snail;
 
 import net.jukoz.me.entity.spider.MirkwoodSpiderEntity;
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.render.entity.model.SinglePartEntityModel;
+import net.minecraft.client.model.HierarchicalModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.util.Mth;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
 // Made with Blockbench 4.8.3
 // Exported for Minecraft version 1.17+ for Yarn
 // Paste this class into your mod and generate all required imports
-public class SnailModel<T extends SnailEntity> extends SinglePartEntityModel<T> {
+public class SnailModel<T extends SnailEntity> extends HierarchicalModel<T> {
 	private final ModelPart snail;
 	private final ModelPart body;
 	public SnailModel(ModelPart root) {
 		this.snail = root.getChild("snail");
 		this.body = snail.getChild("body");
 	}
-	public static TexturedModelData getTexturedModelData() {
-		ModelData modelData = new ModelData();
-		ModelPartData modelPartData = modelData.getRoot();
-		ModelPartData snail = modelPartData.addChild("snail", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 24.0F, -2.0F));
+	public static LayerDefinition getTexturedModelData() {
+		MeshDefinition modelData = new MeshDefinition();
+		PartDefinition modelPartData = modelData.getRoot();
+		PartDefinition snail = modelPartData.addChild("snail", CubeListBuilder.create(), PartPose.pivot(0.0F, 24.0F, -2.0F));
 
-		ModelPartData house = snail.addChild("house", ModelPartBuilder.create().uv(0, 9).cuboid(-1.5F, -5.5F, 1.0F, 3.0F, 4.0F, 4.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+		PartDefinition house = snail.addChild("house", CubeListBuilder.create().uv(0, 9).cuboid(-1.5F, -5.5F, 1.0F, 3.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-		ModelPartData body = snail.addChild("body", ModelPartBuilder.create().uv(0, 0).cuboid(-1.0F, -2.0F, -4.0F, 2.0F, 2.0F, 7.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 3.0F));
+		PartDefinition body = snail.addChild("body", CubeListBuilder.create().uv(0, 0).cuboid(-1.0F, -2.0F, -4.0F, 2.0F, 2.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.pivot(0.0F, 0.0F, 3.0F));
 
-		ModelPartData eyes = body.addChild("eyes", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, -3.0F));
+		PartDefinition eyes = body.addChild("eyes", CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, -3.0F));
 
-		ModelPartData eye_r1 = eyes.addChild("eye_r1", ModelPartBuilder.create().uv(0, 0).cuboid(0.0F, -2.0F, -1.0F, 0.0F, 2.0F, 1.0F, new Dilation(0.0F)), ModelTransform.of(-1.0F, -2.0F, 0.0F, 0.0F, 0.0F, -0.3491F));
+		PartDefinition eye_r1 = eyes.addChild("eye_r1", CubeListBuilder.create().uv(0, 0).cuboid(0.0F, -2.0F, -1.0F, 0.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.of(-1.0F, -2.0F, 0.0F, 0.0F, 0.0F, -0.3491F));
 
-		ModelPartData eye_r2 = eyes.addChild("eye_r2", ModelPartBuilder.create().uv(0, 2).cuboid(0.0F, -2.0F, -1.0F, 0.0F, 2.0F, 1.0F, new Dilation(0.0F)), ModelTransform.of(1.0F, -2.0F, 0.0F, 0.0F, 0.0F, 0.3491F));
-		return TexturedModelData.of(modelData, 32, 32);
+		PartDefinition eye_r2 = eyes.addChild("eye_r2", CubeListBuilder.create().uv(0, 2).cuboid(0.0F, -2.0F, -1.0F, 0.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.of(1.0F, -2.0F, 0.0F, 0.0F, 0.0F, 0.3491F));
+		return LayerDefinition.of(modelData, 32, 32);
 	}
 	@Override
 	public void setAngles(SnailEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
@@ -63,6 +70,5 @@ public class SnailModel<T extends SnailEntity> extends SinglePartEntityModel<T> 
 	public ModelPart getPart() {
 		return snail;
 	}
-
 
 }

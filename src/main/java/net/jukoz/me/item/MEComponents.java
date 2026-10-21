@@ -12,13 +12,13 @@ import net.jukoz.me.item.dataComponents.TemperatureDataComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.IdentityHashMap;
 import java.util.Map;
+import net.minecraft.network.chat.Component;
 
 /**
  * NBT-backed replacement for 1.21's data component API.
@@ -135,12 +135,12 @@ public final class MEComponents {
      * component registry.
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static void appendTooltips(ItemStack stack, net.minecraft.client.item.TooltipContext context, java.util.List<net.minecraft.network.chat.Component> tooltip) {
+    public static void appendTooltips(ItemStack stack, net.minecraft.world.item.TooltipFlag context, java.util.List<net.minecraft.network.chat.Component> tooltip) {
         appendTooltips(stack, context, tooltip, null);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static void appendTooltips(ItemStack stack, net.minecraft.client.item.TooltipContext context, java.util.List<net.minecraft.network.chat.Component> tooltip, net.minecraft.world.level.Level world) {
+    public static void appendTooltips(ItemStack stack, net.minecraft.world.item.TooltipFlag context, java.util.List<net.minecraft.network.chat.Component> tooltip, net.minecraft.world.level.Level world) {
         tooltip.addAll(net.jukoz.me.item.ItemExtras.lore(stack.getItem()));
         for (MEComponent<?> key : ALL) {
             Object value = get(stack, (MEComponent) key);
@@ -158,7 +158,7 @@ public final class MEComponents {
     @SuppressWarnings("unchecked")
     public static <T> T get(ItemStack stack, MEComponent<T> key) {
         CompoundTag tag = stack.getNbt();
-        if (tag != null && tag.contains(ROOT, NbtElement.COMPOUND_TYPE)) {
+        if (tag != null && tag.contains(ROOT, Tag.COMPOUND_TYPE)) {
             CompoundTag root = tag.getCompound(ROOT);
             String path = key.id().getPath();
             if (root.contains(path)) {
@@ -192,7 +192,7 @@ public final class MEComponents {
             remove(stack, key);
             return;
         }
-        NbtElement encoded = encode(key, value);
+        Tag encoded = encode(key, value);
         if (encoded == null) {
             return;
         }
@@ -220,7 +220,7 @@ public final class MEComponents {
 
     public static <T> void remove(ItemStack stack, MEComponent<T> key) {
         CompoundTag tag = stack.getNbt();
-        if (tag == null || !tag.contains(ROOT, NbtElement.COMPOUND_TYPE)) {
+        if (tag == null || !tag.contains(ROOT, Tag.COMPOUND_TYPE)) {
             return;
         }
         CompoundTag root = tag.getCompound(ROOT);
@@ -239,12 +239,12 @@ public final class MEComponents {
     // ------------------------------------------------------------------
 
     @Nullable
-    static <T> NbtElement encode(MEComponent<T> key, T value) {
+    static <T> Tag encode(MEComponent<T> key, T value) {
         return key.codec().encodeStart(NbtOps.INSTANCE, value).result().orElse(null);
     }
 
     @Nullable
-    static <T> T decode(MEComponent<T> key, NbtElement element) {
+    static <T> T decode(MEComponent<T> key, Tag element) {
         return key.codec().parse(NbtOps.INSTANCE, element).result().orElse(null);
     }
 }

@@ -3,13 +3,11 @@ package net.jukoz.me.entity.beasts.trolls.stone;
 import net.jukoz.me.entity.ModEntities;
 import net.jukoz.me.entity.beasts.trolls.TrollEntity;
 import net.jukoz.me.world.biomes.MEBiomeKeys;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.*;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.passive.AbstractDonkeyEntity;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.entity.animal.horse.AbstractChestedHorse;
 import net.minecraft.world.item.Item;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.particles.ParticleTypes;
@@ -21,9 +19,14 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import java.util.List;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.goal.FleeSunGoal;
+import net.minecraft.world.entity.ai.goal.RestrictSunGoal;
 
 public class StoneTrollEntity extends TrollEntity {
-    public static final TrackedData<Integer> PETRIFYING = DataTracker.registerData(StoneTrollEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    public static final EntityDataAccessor<Integer> PETRIFYING = SynchedEntityData.registerData(StoneTrollEntity.class, EntityDataSerializers.INTEGER);
     public static final List<ResourceKey<Biome>> darkBiomes = List.of(
             MEBiomeKeys.MORDOR,
             MEBiomeKeys.MORDOR_MOUNTAINS,
@@ -31,15 +34,15 @@ public class StoneTrollEntity extends TrollEntity {
     );
     private final int PETRIFYING_DURATION = 600;
 
-    public StoneTrollEntity(EntityType<? extends AbstractDonkeyEntity> entityType, Level world) {
+    public StoneTrollEntity(EntityType<? extends AbstractChestedHorse> entityType, Level world) {
         super(entityType, world);
     }
 
     @Override
     protected void initGoals() {
         super.initGoals();
-        this.goalSelector.add(0, new AvoidSunlightGoal(this));
-        this.goalSelector.add(1, new EscapeSunlightGoal(this, 1.2d));
+        this.goalSelector.add(0, new RestrictSunGoal(this));
+        this.goalSelector.add(1, new FleeSunGoal(this, 1.2d));
     }
 
     @Override

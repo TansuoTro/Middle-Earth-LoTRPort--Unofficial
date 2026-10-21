@@ -1,7 +1,6 @@
 package net.jukoz.me.item.items.armor;
 
 import net.jukoz.me.item.MEComponents;
-
 import net.jukoz.me.compat.DyedColorComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -16,7 +15,6 @@ import net.minecraft.world.level.biome.Biome;
 import net.jukoz.me.item.dataComponents.BackAttachmentDataComponent;
 import net.jukoz.me.item.utils.armor.ExtendedArmorMaterial;
 import org.jetbrains.annotations.Nullable;
-
 import java.awt.*;
 
 public class MantleOfYavannaItem extends BackAttachmentItem {

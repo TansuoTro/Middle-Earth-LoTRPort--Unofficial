@@ -16,7 +16,6 @@ public class ModLogger {
         isDebug = debug;
     }
 
-
     public void logDebugMsg(String msg) {
         if(SevenStarsApi.IS_DEBUG){
             LOGGER.info(buildMessage(msg));

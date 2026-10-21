@@ -3,32 +3,32 @@ package net.jukoz.me.gui.inscriptiontable;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.CyclingSlotIcon;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.CyclingSlotBackground;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.sounds.SoundManager;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.text.StringVisitable;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Colors;
+import net.minecraft.util.CommonColors;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.math.ColorHelper;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.network.packets.C2S.InscriptionConfirmationPacket;
 import net.jukoz.me.network.packets.C2S.InscriptionWordUpdatePacket;
 import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import net.minecraft.util.profiling.jfr.Environment;
 
 @Environment(value= EnvType.CLIENT)
-public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreenHandler> {
+public class InscriptionTableScreen extends AbstractContainerScreen<InscriptionTableScreenHandler> {
     private static final ResourceLocation TEXTURE = MiddleEarth.ofPath( "textures", "gui", "inscription_table.png");
 
     private static final ResourceLocation SCROLLER_TEXTURE = new ResourceLocation("minecraft", "container/villager/scroller");
@@ -51,7 +51,7 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
     private int maxLevel;
     private Component enchantText;
 
-    private final CyclingSlotIcon catalystSlotIcon = new CyclingSlotIcon(0);
+    private final CyclingSlotBackground catalystSlotIcon = new CyclingSlotBackground(0);
 
     private WidgetArrowButtonPage confirmationButton;
 
@@ -59,7 +59,7 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
     private final List<String> selectedWords = new ArrayList<>();
     private final List<Integer> selectedButtons = new ArrayList<>();
 
-    public InscriptionTableScreen(InscriptionTableScreenHandler handler, PlayerInventory inventory, Component title) {
+    public InscriptionTableScreen(InscriptionTableScreenHandler handler, Inventory inventory, Component title) {
         super(handler, inventory, title);
         this.backgroundWidth = 275;
         this.backgroundHeight = 183;
@@ -144,7 +144,7 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
     }
 
     @Override
-    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
+    protected void drawBackground(GuiGraphics context, float delta, int mouseX, int mouseY) {
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
 
@@ -188,7 +188,7 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
             this.confirmationButton.active = false;
             if(!this.selectedWords.isEmpty()){
                 context.drawTexture(TEXTURE, i + 123, j + 25, 347, 39, 130, 16, 512, 256);
-                StringVisitable stringVisitable = textRenderer.getTextHandler().trimToWidth(this.enchantText, 159, Style.EMPTY);
+                FormattedText stringVisitable = textRenderer.getTextHandler().trimToWidth(this.enchantText, 159, Style.EMPTY);
                 context.drawTextWrapped(this.textRenderer, stringVisitable, i + 188 - textRenderer.getWidth(stringVisitable.getString()) / 2, j + 29, 159, net.jukoz.me.compat.MEColors.fullAlpha(0xad6b3f));
             }
         }
@@ -209,12 +209,12 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
             stringBuilder.append(Component.translatable("inscription." + MiddleEarth.MOD_ID + "." + word).getString());
             m++;
         }
-        StringVisitable stringVisitable = textRenderer.getTextHandler().trimToWidth(Component.literal(stringBuilder.toString()), 159, Style.EMPTY);
-        context.drawCenteredTextWithShadow(this.textRenderer, stringVisitable.getString(), i + 186, j + 11, Colors.WHITE);
+        FormattedText stringVisitable = textRenderer.getTextHandler().trimToWidth(Component.literal(stringBuilder.toString()), 159, Style.EMPTY);
+        context.drawCenteredTextWithShadow(this.textRenderer, stringVisitable.getString(), i + 186, j + 11, CommonColors.WHITE);
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         renderBackground(context);
         super.render(context, mouseX, mouseY, delta);
 
@@ -244,12 +244,12 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
                     if(widgetButtonPage.hidden) {
 //                        Component text = Component.literal(StringUtils.capitalize(word)).setStyle(Style.EMPTY.withStrikethrough(widgetButtonPage.hidden));
                         Component text = Component.translatable("inscription." + MiddleEarth.MOD_ID + "." + word).setStyle(Style.EMPTY.withStrikethrough(widgetButtonPage.hidden));
-                        context.drawText(this.textRenderer, text, i + 11, n, Colors.GRAY, false);
+                        context.drawText(this.textRenderer, text, i + 11, n, CommonColors.GRAY, false);
                     } else {
-                        context.drawText(this.textRenderer, Component.translatable("inscription." + MiddleEarth.MOD_ID + "." + word), i + 11, n, Colors.WHITE, false);
+                        context.drawText(this.textRenderer, Component.translatable("inscription." + MiddleEarth.MOD_ID + "." + word), i + 11, n, CommonColors.WHITE, false);
                     }
                 } else {
-                    context.drawText(this.textRenderer, Component.translatable("inscription." + MiddleEarth.MOD_ID + "." + word), i + 11, n, Colors.WHITE, false);
+                    context.drawText(this.textRenderer, Component.translatable("inscription." + MiddleEarth.MOD_ID + "." + word), i + 11, n, CommonColors.WHITE, false);
                 }
                 n += 14;
             }
@@ -264,7 +264,7 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
         return listSize > 11;
     }
 
-    private void renderScrollbar(DrawContext context, int x, int y) {
+    private void renderScrollbar(GuiGraphics context, int x, int y) {
         int i = this.handler.getWords().size() + 1 - 11;
         if (i > 1) {
             int j = 153 - (27 + (i - 1) * 153 / i);
@@ -330,7 +330,7 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
         private static final ResourceLocation BUTTON_MARKERS = MiddleEarth.of("inscription_table_markers");
 
         public WidgetInscriptionButtonPage(final int x, final int y, final int index, final ButtonWidget.PressAction onPress) {
-            super(x, y, 86, 14, ScreenTexts.EMPTY, onPress, DEFAULT_NARRATION_SUPPLIER);
+            super(x, y, 86, 14, CommonComponents.EMPTY, onPress, DEFAULT_NARRATION_SUPPLIER);
             this.index = index;
             this.visible = false;
         }
@@ -352,8 +352,8 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
         }
 
         @Override
-        protected void renderButton(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
-            MinecraftClient minecraftClient = MinecraftClient.getInstance();
+        protected void renderButton(GuiGraphics context, int mouseX, int mouseY, float deltaTicks) {
+            Minecraft minecraftClient = Minecraft.getInstance();
             final int x = getX();
             final int y = getY();
             final int width = getWidth();
@@ -389,12 +389,12 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
         private static final ResourceLocation HIGHLIGHTED_BUTTON_TEXTURE = MiddleEarth.of("arrow_button_highlighted");
 
         public WidgetArrowButtonPage(final int x, final int y, final ButtonWidget.PressAction onPress) {
-            super(x, y, 16, 11, ScreenTexts.EMPTY, onPress, DEFAULT_NARRATION_SUPPLIER);
+            super(x, y, 16, 11, CommonComponents.EMPTY, onPress, DEFAULT_NARRATION_SUPPLIER);
         }
 
         @Override
-        protected void renderButton(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
-            MinecraftClient minecraftClient = MinecraftClient.getInstance();
+        protected void renderButton(GuiGraphics context, int mouseX, int mouseY, float deltaTicks) {
+            Minecraft minecraftClient = Minecraft.getInstance();
             if (this.isHovered() && this.active){
                 context.drawTexture(HIGHLIGHTED_BUTTON_TEXTURE, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight());
             } else if (this.active) {

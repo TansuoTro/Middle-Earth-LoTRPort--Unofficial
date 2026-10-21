@@ -14,9 +14,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.StructureWorldAccess;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.plate.PlateBlockEntity;
 import net.jukoz.me.world.features.chain.ChainFeatureConfig;
@@ -28,9 +28,9 @@ public class PlatedFoodFeature extends Feature<PlatedFoodFeatureConfig> {
     }
 
     @Override
-    public boolean generate(FeatureContext<PlatedFoodFeatureConfig> context) {
+    public boolean generate(FeaturePlaceContext<PlatedFoodFeatureConfig> context) {
         BlockPos blockPos = context.getOrigin();
-        StructureWorldAccess structureWorldAccess = context.getWorld();
+        WorldGenLevel structureWorldAccess = context.getWorld();
         RandomSource random = context.getRandom();
         PlatedFoodFeatureConfig config = context.getConfig();
         ResourceLocation lootTableIdentifier = config.lootTable;

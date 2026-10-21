@@ -4,13 +4,12 @@ import net.fabricmc.yarn.constants.MiningLevels;
 import net.jukoz.me.block.registration.StoneBlockSets;
 import net.jukoz.me.item.ModResourceItems;
 import net.minecraft.world.item.Items;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.util.Lazy;
-
+import net.minecraft.util.LazyLoadedValue;
 import java.util.function.Supplier;
 
-public enum ModToolMaterials implements ToolMaterial
+public enum ModToolMaterials implements Tier
 {
     JADE(MiningLevels.STONE, 256, 4.0f, 1.0f, 5, () -> Ingredient.ofItems(StoneBlockSets.JADEITE.base())),
     BRONZE(MiningLevels.IRON, 200, 5.0f, 1.0f, 5, () -> Ingredient.ofItems(ModResourceItems.BRONZE_INGOT)),
@@ -27,7 +26,7 @@ public enum ModToolMaterials implements ToolMaterial
     private final float miningSpeed;
     private final float attackDamage;
     private final int enchantability;
-    private final Lazy<Ingredient> repairIngredient;
+    private final LazyLoadedValue<Ingredient> repairIngredient;
 
     private ModToolMaterials(int miningLevel, int itemDurability, float miningSpeed, float attackDamage, int enchantability, Supplier<Ingredient> repairIngredient) {
         this.miningLevel = miningLevel;
@@ -35,7 +34,7 @@ public enum ModToolMaterials implements ToolMaterial
         this.miningSpeed = miningSpeed;
         this.attackDamage = attackDamage;
         this.enchantability = enchantability;
-        this.repairIngredient = new Lazy<Ingredient>(repairIngredient);
+        this.repairIngredient = new LazyLoadedValue<Ingredient>(repairIngredient);
     }
 
     @Override

@@ -3,7 +3,7 @@ package net.jukoz.me.block.special.toggeable_lights;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -17,8 +17,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.function.ToIntFunction;
+import com.mojang.math.Axis;
 
 public class CrudeLanternBlock extends AbstractToggeableLightBlock {
     public static final BooleanProperty HANGING;
@@ -54,7 +54,7 @@ public class CrudeLanternBlock extends AbstractToggeableLightBlock {
         return null;
     }
 
-    public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
+    public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
         if (!world.isClient && projectile.isOnFire() && !state.get(LIT)) {
             world.setBlockState(hit.getBlockPos(), state.with(LIT, true), STATE_TO_LUMINANCE.applyAsInt(state));
         }

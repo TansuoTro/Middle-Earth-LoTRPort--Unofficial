@@ -84,28 +84,34 @@ import net.jukoz.me.particles.custom.LeavesParticle;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.BiomeColors;
-import net.minecraft.client.color.world.FoliageColors;
-import net.minecraft.client.color.world.GrassColors;
-import net.minecraft.client.gui.screen.ingame.HandledScreens;
+import net.minecraft.world.level.FoliageColor;
+import net.minecraft.world.level.GrassColor;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.model.EntityModelLayer;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.item.DyeableItem;
+import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.AmethystClusterBlock;
+import net.minecraft.world.level.block.HangingRootsBlock;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.MultifaceBlock;
 
 @Mod.EventBusSubscriber(modid = MiddleEarth.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MiddleEarthClient {
 
-    public static final EntityModelLayer INNER_ARMOR_MODEL_LAYER = new EntityModelLayer(new ResourceLocation(MiddleEarth.MOD_ID, "armor"), "layer_0");
-    public static final EntityModelLayer HELMET_ADDON_MODEL_LAYER = new EntityModelLayer(new ResourceLocation(MiddleEarth.MOD_ID, "armor"), "helmet_addon");
-    public static final EntityModelLayer CAPE_MODEL_LAYER = new EntityModelLayer(new ResourceLocation(MiddleEarth.MOD_ID, "armor"), "cape");
-    public static final EntityModelLayer HOOD_MODEL_LAYER = new EntityModelLayer(new ResourceLocation(MiddleEarth.MOD_ID, "armor"), "hood");
-    public static final EntityModelLayer HEATER_SHIELD_LAYER = new EntityModelLayer(new ResourceLocation(MiddleEarth.MOD_ID, "heater_shield"), "main");
-    public static final EntityModelLayer KITE_SHIELD_LAYER = new EntityModelLayer(new ResourceLocation(MiddleEarth.MOD_ID, "kite_shield"), "main");
-    public static final EntityModelLayer ROUND_SHIELD_LAYER = new EntityModelLayer(new ResourceLocation(MiddleEarth.MOD_ID, "round_shield"), "main");
-    public static final EntityModelLayer HELD_BANNER_LAYER = new EntityModelLayer(new ResourceLocation(MiddleEarth.MOD_ID, "held_banner"), "main");
+    public static final ModelLayerLocation INNER_ARMOR_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(MiddleEarth.MOD_ID, "armor"), "layer_0");
+    public static final ModelLayerLocation HELMET_ADDON_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(MiddleEarth.MOD_ID, "armor"), "helmet_addon");
+    public static final ModelLayerLocation CAPE_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(MiddleEarth.MOD_ID, "armor"), "cape");
+    public static final ModelLayerLocation HOOD_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(MiddleEarth.MOD_ID, "armor"), "hood");
+    public static final ModelLayerLocation HEATER_SHIELD_LAYER = new ModelLayerLocation(new ResourceLocation(MiddleEarth.MOD_ID, "heater_shield"), "main");
+    public static final ModelLayerLocation KITE_SHIELD_LAYER = new ModelLayerLocation(new ResourceLocation(MiddleEarth.MOD_ID, "kite_shield"), "main");
+    public static final ModelLayerLocation ROUND_SHIELD_LAYER = new ModelLayerLocation(new ResourceLocation(MiddleEarth.MOD_ID, "round_shield"), "main");
+    public static final ModelLayerLocation HELD_BANNER_LAYER = new ModelLayerLocation(new ResourceLocation(MiddleEarth.MOD_ID, "held_banner"), "main");
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
@@ -153,7 +159,6 @@ public class MiddleEarthClient {
         EntityRendererRegistry.register(ModEntities.MORDOR_BLACK_URUK_VETERAN, MordorBlackUrukRenderer::new);
         EntityRendererRegistry.register(ModEntities.MORDOR_BLACK_URUK_LEADER, MordorBlackUrukRenderer::new);
 
-
         EntityRendererRegistry.register(ModEntities.MISTY_GOBLIN_SNAGA, MistyGoblinRenderer::new);
         EntityRendererRegistry.register(ModEntities.MISTY_GOBLIN_WARRIOR, MistyGoblinRenderer::new);
         EntityRendererRegistry.register(ModEntities.MISTY_HOBGOBLIN_SOLDIER, MistyHobgoblinRenderer::new);
@@ -185,14 +190,14 @@ public class MiddleEarthClient {
 
         // Items
         ModelLoadingRegistry.INSTANCE.registerModelProvider(((manager, out) -> new VariantsModelProvider().provideExtraModels(manager, out)));
-        EntityRendererRegistry.register(ModEntities.PEBBLE, FlyingItemEntityRenderer::new);
-        EntityRendererRegistry.register(ModEntities.PINECONE, FlyingItemEntityRenderer::new);
-        EntityRendererRegistry.register(ModEntities.LIT_PINECONE, FlyingItemEntityRenderer::new);
+        EntityRendererRegistry.register(ModEntities.PEBBLE, ThrownItemRenderer::new);
+        EntityRendererRegistry.register(ModEntities.PINECONE, ThrownItemRenderer::new);
+        EntityRendererRegistry.register(ModEntities.LIT_PINECONE, ThrownItemRenderer::new);
         EntityRendererRegistry.register(ModEntities.SPEAR, JavelinEntityRenderer::new);
         EntityRendererRegistry.register(ModEntities.BOULDER, BoulderEntityRenderer::new);
         EntityRendererRegistry.register(EntitiesME.FIRE_OF_ORTHANC, FireOfOrthancEntityRenderer::new);
         EntityRendererRegistry.register(EntitiesME.SMOKE_RING_PROJECTILE, SmokeRingProjectileRenderer::new);
-        EntityRendererRegistry.register(EntitiesME.WEB, FlyingItemEntityRenderer::new);
+        EntityRendererRegistry.register(EntitiesME.WEB, ThrownItemRenderer::new);
         EntityRendererRegistry.register(EntitiesME.SEAT_ENTITY, SeatRenderer::new);
         EntityRendererRegistry.register(EntitiesME.REINFORCED_BARREL, BarrelEntityRenderer::new);
 
@@ -212,21 +217,21 @@ public class MiddleEarthClient {
 
         ModModelPredicateProvider.registerAllPredicates();
 
-        HandledScreens.register(ModScreenHandlers.ALLOY_SCREEN_HANDLER, AlloyFurnaceScreen::new);
-        HandledScreens.register(ModScreenHandlers.ARTISAN_SCREEN_HANDLER, ArtisanTableScreen::new);
-        HandledScreens.register(ModScreenHandlers.WOOD_PILE_SCREEN_HANDLER, WoodPileScreen::new);
-        HandledScreens.register(ModScreenHandlers.FORGE_ALLOYING_SCREEN_HANDLER, ForgeAlloyingScreen::new);
-        HandledScreens.register(ModScreenHandlers.INSCRIPTION_SCREEN_HANDLER, InscriptionTableScreen::new);
-        HandledScreens.register(ModScreenHandlers.TREATED_ANVIL_SCREEN_HANDLER, ShapingAnvilScreen::new);
-        HandledScreens.register(ModScreenHandlers.STRUCTURE_MANAGER_SCREEN_HANDLER, StructureManagerScreen::new);
-        HandledScreens.register(ModScreenHandlers.STRUCTURE_NEST_SCREEN_HANDLER, StructureNestScreen::new);
+        MenuScreens.register(ModScreenHandlers.ALLOY_SCREEN_HANDLER, AlloyFurnaceScreen::new);
+        MenuScreens.register(ModScreenHandlers.ARTISAN_SCREEN_HANDLER, ArtisanTableScreen::new);
+        MenuScreens.register(ModScreenHandlers.WOOD_PILE_SCREEN_HANDLER, WoodPileScreen::new);
+        MenuScreens.register(ModScreenHandlers.FORGE_ALLOYING_SCREEN_HANDLER, ForgeAlloyingScreen::new);
+        MenuScreens.register(ModScreenHandlers.INSCRIPTION_SCREEN_HANDLER, InscriptionTableScreen::new);
+        MenuScreens.register(ModScreenHandlers.TREATED_ANVIL_SCREEN_HANDLER, ShapingAnvilScreen::new);
+        MenuScreens.register(ModScreenHandlers.STRUCTURE_MANAGER_SCREEN_HANDLER, StructureManagerScreen::new);
+        MenuScreens.register(ModScreenHandlers.STRUCTURE_NEST_SCREEN_HANDLER, StructureNestScreen::new);
         BlockEntityRendererRegistry.register(ModBlockEntities.ALLOY_FURNACE, AlloyFurnaceEntityRenderer::new);
 
         ModNetworks.registerS2CPackets();
         net.jukoz.me.network.ModClientNetworkHandler.register(new net.jukoz.me.network.connections.ConnectionToServer());
 
         // Port shim: initialise both entity model-layer registries during client init. A lazy
-        // <clinit> triggered from a renderer constructor runs after the EntityModelLoader has
+        // <clinit> triggered from a renderer constructor runs after the EntityModelSet has
         // already baked its model map, which fails with "No model for layer me:xxx#main".
         net.jukoz.me.entity.EntityModelLayersME.init();
         net.jukoz.me.entity.model.ModEntityModelLayers.init();
@@ -286,10 +291,10 @@ public class MiddleEarthClient {
         // below would otherwise render SOLID, turning its transparent pixels black.
         for (net.minecraft.world.level.block.Block block : net.minecraft.core.registries.Registries.BLOCK) {
             if (!net.minecraft.core.registries.Registries.BLOCK.getId(block).getNamespace().equals(MiddleEarth.MOD_ID)) continue;
-            if (block instanceof net.minecraft.block.PlantBlock
-                    || block instanceof net.minecraft.block.MultifaceGrowthBlock
+            if (block instanceof net.minecraft.world.level.block.BushBlock
+                    || block instanceof net.minecraft.world.level.block.MultifaceBlock
                     || block instanceof net.minecraft.world.level.block.AmethystClusterBlock
-                    || block instanceof net.minecraft.block.HangingRootsBlock) {
+                    || block instanceof net.minecraft.world.level.block.HangingRootsBlock) {
                 BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout());
             } else if (block instanceof net.minecraft.world.level.block.LeavesBlock) {
                 BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutoutMipped());
@@ -338,16 +343,15 @@ public class MiddleEarthClient {
 
         ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> {
             if (view == null || pos == null) {
-                return GrassColors.getDefaultColor();
+                return GrassColor.getDefaultColor();
             }
             return BiomeColors.getGrassColor(view, pos);
         }, ModNatureBlocks.WILD_GRASS, ModNatureBlocks.GRASS_TUFT, ModNatureBlocks.WHEATGRASS);
 
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
             BlockState blockState = ((BlockItem)stack.getItem()).getBlock().getDefaultState();
-            return FoliageColors.getDefaultColor();
+            return FoliageColor.getDefaultColor();
         }, ModNatureBlocks.WILD_GRASS, ModNatureBlocks.GRASS_TUFT, ModNatureBlocks.WHEATGRASS);
-
 
         for(Block block : SimpleDoubleBlockModel.doubleBlocks){
             BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout());
@@ -470,7 +474,7 @@ public class MiddleEarthClient {
     }
 
     private void registerDyeableItem(Item item) {
-        if (!(item instanceof DyeableItem)) return;
-        ColorProviderRegistry.ITEM.register((stack, layer) -> layer == 0 ? ((DyeableItem)stack.getItem()).getColor(stack) : 0xFFFFFF, item);
+        if (!(item instanceof DyeableLeatherItem)) return;
+        ColorProviderRegistry.ITEM.register((stack, layer) -> layer == 0 ? ((DyeableLeatherItem)stack.getItem()).getColor(stack) : 0xFFFFFF, item);
     }
 }

@@ -7,22 +7,22 @@ import net.minecraft.world.level.block.entity.BannerPattern;
 import net.jukoz.me.compat.MEBannerPatterns;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.NbtString;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.core.RegistryEntryLookup;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.RegistryWrapper;
-import net.minecraft.registry.entry.RegistryElementCodec;
+import net.minecraft.resources.RegistryFileCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.text.TranslatableTextContent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
@@ -39,9 +39,10 @@ import net.jukoz.me.resources.datas.npc_types.NpcTypeLookup;
 import net.jukoz.me.resources.datas.npc_types.data.WeightedGearData;
 import net.jukoz.me.resources.datas.races.Race;
 import net.jukoz.me.resources.datas.races.RaceLookup;
-
 import java.util.*;
-
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.util.RandomSource;
 
 public class Faction {
     private static HashMap<DispositionType, List<Integer>> FactionSelectionOrderIndexPerDisposition;
@@ -63,7 +64,7 @@ public class Faction {
     ).apply(instance, Faction::new));
 
     public static final PacketCodec<net.minecraft.network.FriendlyByteBuf, Faction> PACKET_CODEC = PacketCodecs.codec(CODEC);
-    public static final Codec<Holder<Faction>> ENTRY_CODEC = RegistryElementCodec.of(DynamicRegistriesME.FACTION, CODEC);
+    public static final Codec<Holder<Faction>> ENTRY_CODEC = RegistryFileCodec.of(DynamicRegistriesME.FACTION, CODEC);
     public static final PacketCodec<FriendlyByteBuf, Holder<Faction>> ENTRY_PACKET_CODEC = PacketCodecs.registryEntry(DynamicRegistriesME.FACTION, PACKET_CODEC);
 
     private final ResourceLocation id;
@@ -108,13 +109,13 @@ public class Faction {
 
         this.npcDatasByRank = new HashMap<>();
         if(npcs.isPresent()){
-            NbtList list = npcs.get().getList("ranks", NbtElement.COMPOUND_TYPE);
+            ListTag list = npcs.get().getList("ranks", Tag.COMPOUND_TYPE);
             for(int i = 0; i < list.size(); i++){
                 CompoundTag rankCompound = list.getCompound(i);
                 String rankName = rankCompound.getString("rank").toUpperCase();
                 try{
                     NpcRank rank = NpcRank.valueOf(rankName);
-                    NbtList npcDataList = rankCompound.getList("pool", NbtElement.COMPOUND_TYPE);
+                    ListTag npcDataList = rankCompound.getList("pool", Tag.COMPOUND_TYPE);
                     List<ResourceLocation> dataList = new ArrayList<>();
                     for(int j = 0; j < npcDataList.size(); j++){
                         dataList.add(MiddleEarth.fetchId(npcDataList.getString(j)));
@@ -245,7 +246,7 @@ public class Faction {
         }
     }
 
-    public Faction getParentFaction(RegistryWrapper.WrapperLookup lookup){
+    public Faction getParentFaction(HolderLookup.WrapperLookup lookup){
         if(factionType != FactionType.SUBFACTION || parentFactionId == null)
             return null;
         try{
@@ -281,13 +282,13 @@ public class Faction {
         if(this.npcDatasByRank == null || this.npcDatasByRank.isEmpty())
             return Optional.empty();
         CompoundTag nbtCompound = new CompoundTag();
-        NbtList ranks = new NbtList();
+        ListTag ranks = new ListTag();
         for(NpcRank rank : this.npcDatasByRank.keySet()){
             CompoundTag rankNbt = new CompoundTag();
             rankNbt.putString("rank", rank.toString().toUpperCase());
-            NbtList identifiers = new NbtList();
+            ListTag identifiers = new ListTag();
             for(ResourceLocation npcDataIdentifier : this.npcDatasByRank.get(rank).stream().toList()) {
-                identifiers.add(NbtString.of(npcDataIdentifier.toString()));
+                identifiers.add(StringTag.of(npcDataIdentifier.toString()));
             }
             rankNbt.put("pool", identifiers);
             ranks.add(rankNbt);
@@ -319,7 +320,7 @@ public class Faction {
         List<NpcType> npcTypeList = NpcTypeLookup.getAllNpcTypesFromRace(world, getNpcPoolFromRank(npcRank), race.getId());
         if(npcTypeList.isEmpty())
             return null;
-        Random random = new Random();
+        RandomSource random = new RandomSource();
         return npcTypeList.get(random.nextInt(0, npcTypeList.size()));
     }
 
@@ -337,7 +338,7 @@ public class Faction {
         List<NpcType> npcTypeList = NpcTypeLookup.getAllNpcTypesFromRace(world, identifiersToUse, selectedRace.getId());
         if(npcTypeList.isEmpty())
             return WeightedGearData.Create();
-        Random random = new Random();
+        RandomSource random = new RandomSource();
         NpcType foundNpcType = npcTypeList.get(random.nextInt(0, npcTypeList.size()));
         return foundNpcType.getGear();
     }
@@ -356,9 +357,9 @@ public class Faction {
         return bannerData.getBannerPatternsWithColors(world);
     }
 
-    public ItemStack getBannerItem(RegistryWrapper.WrapperLookup wrapper){
+    public ItemStack getBannerItem(HolderLookup.WrapperLookup wrapper){
         if(bannerData == null) return ItemStack.EMPTY;
-        return bannerData.getBannerItem(wrapper, Component.translatable("block.%s.faction_banner".formatted(MiddleEarth.MOD_ID), getFullName()).formatted(Formatting.GOLD));
+        return bannerData.getBannerItem(wrapper, Component.translatable("block.%s.faction_banner".formatted(MiddleEarth.MOD_ID), getFullName()).formatted(ChatFormatting.GOLD));
     }
 
     public List<ResourceLocation> getSubFactions(){
@@ -401,13 +402,13 @@ public class Faction {
     }
 
     public MutableComponent getFullName() {
-        return MutableComponent.of(new TranslatableTextContent(translatableKey, "", TranslatableTextContent.EMPTY_ARGUMENTS));
+        return MutableComponent.of(new TranslatableContents(translatableKey, "", TranslatableContents.EMPTY_ARGUMENTS));
     }
 
     public MutableComponent tryGetShortName() {
         String target = translatableKey.concat(".fallback");
         String fallback = Component.translatable(translatableKey).getString();
-        return MutableComponent.of(new TranslatableTextContent(target, fallback, TranslatableTextContent.EMPTY_ARGUMENTS));
+        return MutableComponent.of(new TranslatableContents(target, fallback, TranslatableContents.EMPTY_ARGUMENTS));
     }
 
     public Faction getSubfactionById(Level world, ResourceLocation id) {
@@ -475,7 +476,7 @@ public class Faction {
         return spawnDataHandler.getSpawnList().size();
     }
 
-    public MEBannerPatterns getBannerPatternComponents(RegistryEntryLookup<BannerPattern> bannerPatternLookup) {
+    public MEBannerPatterns getBannerPatternComponents(HolderGetter<BannerPattern> bannerPatternLookup) {
         if(bannerData == null)
             return null;
         return bannerData.getBannerPatternComponents(bannerPatternLookup);
@@ -488,7 +489,7 @@ public class Faction {
         if(allNpcIds.size() == 0)
             return null;
 
-        Random random = new Random();
+        RandomSource random = new RandomSource();
         return allNpcIds.get(random.nextInt(allNpcIds.size()));
     }
 

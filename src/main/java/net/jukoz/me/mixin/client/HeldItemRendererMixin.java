@@ -3,8 +3,8 @@ package net.jukoz.me.mixin.client;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.jukoz.me.item.items.weapons.ranged.CustomCrossbowWeaponItem;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.item.HeldItemRenderer;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -16,11 +16,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(HeldItemRenderer.class)
+@Mixin(ItemInHandRenderer.class)
 public class HeldItemRendererMixin {
 
     @Inject(at = @At("HEAD"), method = "getHandRenderType", cancellable = true)
-    private static void getHandRenderType(ClientPlayerEntity player, CallbackInfoReturnable<HeldItemRenderer.HandRenderType> cir) {
+    private static void getHandRenderType(LocalPlayer player, CallbackInfoReturnable<ItemInHandRenderer.HandRenderType> cir) {
         ItemStack itemStack = player.getMainHandStack();
         ItemStack itemStack2 = player.getOffHandStack();
         InteractionHand hand = player.getActiveHand();
@@ -28,22 +28,22 @@ public class HeldItemRendererMixin {
                 || itemStack.isOf(Items.CROSSBOW) || itemStack2.isOf(Items.CROSSBOW)
                 || itemStack.isOf(Items.BOW) || itemStack2.isOf(Items.BOW);
         if (!bl) {
-            cir.setReturnValue(HeldItemRenderer.HandRenderType.RENDER_BOTH_HANDS);
+            cir.setReturnValue(ItemInHandRenderer.HandRenderType.RENDER_BOTH_HANDS);
         } else if (player.isUsingItem()){
-            cir.setReturnValue(HeldItemRenderer.HandRenderType.shouldOnlyRender(hand));
+            cir.setReturnValue(ItemInHandRenderer.HandRenderType.shouldOnlyRender(hand));
         } else {
-            cir.setReturnValue(isChargedCrossbow(itemStack) ? HeldItemRenderer.HandRenderType.RENDER_MAIN_HAND_ONLY : HeldItemRenderer.HandRenderType.RENDER_BOTH_HANDS);
+            cir.setReturnValue(isChargedCrossbow(itemStack) ? ItemInHandRenderer.HandRenderType.RENDER_MAIN_HAND_ONLY : ItemInHandRenderer.HandRenderType.RENDER_BOTH_HANDS);
         }
     }
 
     @Inject(at = @At("HEAD"), method = "getUsingItemHandRenderType", cancellable = true)
-    private static void getUsingItemHandRenderType(ClientPlayerEntity player, CallbackInfoReturnable<HeldItemRenderer.HandRenderType> cir) {
+    private static void getUsingItemHandRenderType(LocalPlayer player, CallbackInfoReturnable<ItemInHandRenderer.HandRenderType> cir) {
         ItemStack itemStack = player.getActiveItem();
         InteractionHand hand = player.getActiveHand();
         if (!itemStack.isOf(Items.BOW) && !(itemStack.getItem() instanceof CustomCrossbowWeaponItem) && !itemStack.isOf(Items.CROSSBOW)) {
-            cir.setReturnValue(hand == InteractionHand.MAIN_HAND && isChargedCrossbow(player.getOffHandStack()) ? HeldItemRenderer.HandRenderType.RENDER_MAIN_HAND_ONLY : HeldItemRenderer.HandRenderType.RENDER_BOTH_HANDS);
+            cir.setReturnValue(hand == InteractionHand.MAIN_HAND && isChargedCrossbow(player.getOffHandStack()) ? ItemInHandRenderer.HandRenderType.RENDER_MAIN_HAND_ONLY : ItemInHandRenderer.HandRenderType.RENDER_BOTH_HANDS);
         } else {
-            cir.setReturnValue(HeldItemRenderer.HandRenderType.shouldOnlyRender(hand));
+            cir.setReturnValue(ItemInHandRenderer.HandRenderType.shouldOnlyRender(hand));
         }
     }
 
@@ -51,7 +51,6 @@ public class HeldItemRendererMixin {
     private static boolean isChargedCrossbow(ItemStack stack) {
         return (stack.getItem() instanceof CustomCrossbowWeaponItem || stack.isOf(Items.CROSSBOW)) && CrossbowItem.isCharged(stack);
     }
-
 
     @WrapOperation(method = "renderFirstPersonItem", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z", ordinal = 0))

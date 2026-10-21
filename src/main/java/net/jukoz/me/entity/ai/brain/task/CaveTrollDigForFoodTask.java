@@ -3,36 +3,35 @@ package net.jukoz.me.entity.ai.brain.task;
 import com.google.common.collect.ImmutableMap;
 import net.fabricmc.fabric.mixin.loot.LootTableAccessor;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.entity.ai.brain.MemoryModuleState;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.MultiTickTask;
+import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.LootTables;
-import net.minecraft.loot.entry.LootPoolEntry;
-import net.minecraft.loot.entry.LootTableEntry;
-import net.minecraft.loot.provider.number.LootNumberProvider;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.LootTableReference;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.collection.Pool;
+import net.minecraft.util.random.WeightedRandomList;
 import net.jukoz.me.entity.ai.brain.MemoryModulesME;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntity;
 import net.jukoz.me.item.WeaponItemsME;
-
 import java.util.List;
 
-public class CaveTrollDigForFoodTask extends MultiTickTask<CaveTrollEntity> {
+public class CaveTrollDigForFoodTask extends Behavior<CaveTrollEntity> {
     public CaveTrollDigForFoodTask() {
         super(
                 ImmutableMap.of(
                         MemoryModuleType.WALK_TARGET,
-                        MemoryModuleState.VALUE_ABSENT,
+                        MemoryStatus.VALUE_ABSENT,
                         MemoryModuleType.ATTACK_TARGET,
-                        MemoryModuleState.VALUE_ABSENT,
+                        MemoryStatus.VALUE_ABSENT,
                         MemoryModulesME.DIG_FOR_FOOD_COOLDOWN,
-                        MemoryModuleState.VALUE_ABSENT
+                        MemoryStatus.VALUE_ABSENT
                 ),
                 100
         );

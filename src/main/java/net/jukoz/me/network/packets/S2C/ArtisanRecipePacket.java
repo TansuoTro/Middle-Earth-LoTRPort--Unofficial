@@ -2,7 +2,7 @@ package net.jukoz.me.network.packets.S2C;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
@@ -29,7 +29,7 @@ public class ArtisanRecipePacket extends ServerToClientPacket<ArtisanRecipePacke
     @Override
     @OnlyIn(Dist.CLIENT)
     public void process(ClientPacketContext context) {
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
         ArtisanTableScreen screen = (ArtisanTableScreen)client.currentScreen;
         if (screen != null) {
             ArtisanTableScreenHandler screenHandler = screen.getScreenHandler();
@@ -53,6 +53,5 @@ public class ArtisanRecipePacket extends ServerToClientPacket<ArtisanRecipePacke
         buf.writeInt(this.index);
         buf.writeItemStack(this.output);
     }
-
 
 }

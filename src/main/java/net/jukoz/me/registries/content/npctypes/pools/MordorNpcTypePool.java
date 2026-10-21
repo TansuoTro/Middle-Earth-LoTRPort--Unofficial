@@ -19,7 +19,6 @@ import net.jukoz.me.resources.datas.npc_types.NpcType;
 import net.jukoz.me.resources.datas.npc_types.data.WeightedGearData;
 import net.jukoz.me.resources.datas.npc_types.data.WeightedItemData;
 import net.jukoz.me.resources.datas.npc_types.data.GearSlotPool;
-
 import java.util.List;
 
 public class MordorNpcTypePool {

@@ -55,7 +55,7 @@ public class DataGeneration implements DataGeneratorEntrypoint {
     private static boolean registriesBuilt = false;
 
     @Override
-    public void buildRegistry(RegistryBuilder registryBuilder) {
+    public void buildRegistry(RegistrySetBuilder registryBuilder) {
         if (registriesBuilt) {
             return;
         }

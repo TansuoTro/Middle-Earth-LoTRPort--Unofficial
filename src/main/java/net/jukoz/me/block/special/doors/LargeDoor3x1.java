@@ -1,10 +1,10 @@
 package net.jukoz.me.block.special.doors;
 
 import net.jukoz.me.block.special.LargeDoorBlock;
-import net.minecraft.state.property.IntProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 public class LargeDoor3x1 extends LargeDoorBlock {
-    public static final IntProperty PART = IntProperty.of("part", 0, 2);
+    public static final IntegerProperty PART = IntegerProperty.of("part", 0, 2);
 
     public LargeDoor3x1(Settings settings) {
         super(settings);
@@ -13,7 +13,7 @@ public class LargeDoor3x1 extends LargeDoorBlock {
     }
 
     @Override
-    public IntProperty getPart() {
+    public IntegerProperty getPart() {
         return PART;
     }
 }

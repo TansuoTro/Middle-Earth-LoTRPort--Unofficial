@@ -1,6 +1,5 @@
 package net.jukoz.me.entity.goals;
 
-
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.RangedAttackMob;
@@ -9,8 +8,8 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.Items;
-
 import java.util.EnumSet;
+import net.minecraft.world.entity.ai.control.Control;
 
 public class BowAttackGoal<T extends LivingEntity>
         extends Goal {
@@ -128,4 +127,3 @@ public class BowAttackGoal<T extends LivingEntity>
         }
     }
 }
-

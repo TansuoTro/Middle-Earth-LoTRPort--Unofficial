@@ -2,14 +2,13 @@ package net.jukoz.me.entity.ai.brain;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.mojang.serialization.Codec;
-import net.minecraft.entity.ai.brain.Memory;
+import net.minecraft.world.entity.ai.memory.ExpirableValue;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.jukoz.me.MiddleEarth;
-
 import java.util.Optional;
 
 public class MemoryModulesME<U> {
@@ -22,14 +21,14 @@ public class MemoryModulesME<U> {
     public static final MemoryModuleType<Boolean> SITTING = register("sitting", Codec.BOOL);
     public static final MemoryModuleType<BlockPos> ASSIGNED_BED_POS = register("assigned_bed_pos", BlockPos.CODEC);
     public static final MemoryModuleType<BlockPos> STRUCTURE_MANAGER_HOST_POS = register("structure_manager_host_pos", BlockPos.CODEC);
-    private final Optional<Codec<Memory<U>>> codec;
+    private final Optional<Codec<ExpirableValue<U>>> codec;
 
     @VisibleForTesting
     public MemoryModulesME(Optional<Codec<U>> codec) {
-        this.codec = codec.map(Memory::createCodec);
+        this.codec = codec.map(ExpirableValue::createCodec);
     }
 
-    public Optional<Codec<Memory<U>>> getCodec() {
+    public Optional<Codec<ExpirableValue<U>>> getCodec() {
         return this.codec;
     }
 

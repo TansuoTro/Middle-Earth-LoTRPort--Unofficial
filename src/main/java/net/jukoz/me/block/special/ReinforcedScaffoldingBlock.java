@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.state.property.IntProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -27,14 +27,12 @@ import java.util.Map;
 public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
     public static final int MAX_SUPPORT_DISTANCE = 14;
     private static final int MAX_STORED_DISTANCE = 7;
-    public static final IntProperty SUPPORT_DISTANCE = IntProperty.of("support_distance", 0, MAX_SUPPORT_DISTANCE);
+    public static final IntegerProperty SUPPORT_DISTANCE = IntegerProperty.of("support_distance", 0, MAX_SUPPORT_DISTANCE);
 
     public ReinforcedScaffoldingBlock(BlockBehaviour.Settings settings) {
         super(settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(SUPPORT_DISTANCE, 0));
     }
-
-
 
     @Override
     public BlockState getPlacementState(BlockPlaceContext ctx) {
@@ -54,7 +52,7 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (state.get(WATERLOGGED)) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
@@ -84,7 +82,7 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
     }
 
     @Override
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
         return calculateDistance(world, pos, this) < MAX_SUPPORT_DISTANCE;
     }
 

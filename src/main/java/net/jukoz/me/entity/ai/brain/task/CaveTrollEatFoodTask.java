@@ -1,11 +1,11 @@
 package net.jukoz.me.entity.ai.brain.task;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.entity.ai.brain.MemoryModuleState;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.MultiTickTask;
+import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.item.Item;
-import net.minecraft.particle.ItemStackParticleEffect;
+import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
@@ -15,10 +15,9 @@ import net.minecraft.world.phys.Vec3;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.ai.brain.MemoryModulesME;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntity;
-
 import java.util.Optional;
 
-public class CaveTrollEatFoodTask extends MultiTickTask<CaveTrollEntity> {
+public class CaveTrollEatFoodTask extends Behavior<CaveTrollEntity> {
     private long startTime;
     public static TagKey<Item> TROLL_FOOD = TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "troll_food"));
 
@@ -26,11 +25,11 @@ public class CaveTrollEatFoodTask extends MultiTickTask<CaveTrollEntity> {
         super(
                 ImmutableMap.of(
                         MemoryModuleType.WALK_TARGET,
-                        MemoryModuleState.VALUE_ABSENT,
+                        MemoryStatus.VALUE_ABSENT,
                         MemoryModuleType.ATTACK_TARGET,
-                        MemoryModuleState.VALUE_ABSENT,
+                        MemoryStatus.VALUE_ABSENT,
                         MemoryModulesME.FOOD_EATEN_COUNT,
-                        MemoryModuleState.REGISTERED
+                        MemoryStatus.REGISTERED
                 ),
                 200
         );
@@ -55,7 +54,7 @@ public class CaveTrollEatFoodTask extends MultiTickTask<CaveTrollEntity> {
     @Override
     protected void keepRunning(ServerLevel world, CaveTrollEntity entity, long time) {
         if((time - startTime) > 60 && !entity.getMainHandStack().isEmpty()) {
-            ItemStackParticleEffect particles = new ItemStackParticleEffect(ParticleTypes.ITEM, entity.getMainHandStack());
+            ItemParticleOption particles = new ItemParticleOption(ParticleTypes.ITEM, entity.getMainHandStack());
             Vec3 position = new Vec3(entity.getX() - Math.sin(Math.toRadians(entity.getBodyYaw())), entity.getEyeY(), entity.getZ() + Math.cos(Math.toRadians(entity.getBodyYaw())));
             world.spawnParticles(particles, position.getX(), position.getY() - 1.0, position.getZ(),7, 0.0, 0.0, 0.0, 0.1);
         }

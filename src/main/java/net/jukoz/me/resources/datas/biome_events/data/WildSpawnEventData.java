@@ -15,7 +15,6 @@ import net.minecraft.util.RandomSource;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.registries.content.npctypes.NpcRegistry;
 import net.jukoz.me.resources.datas.npc_types.NpcType;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -107,7 +106,6 @@ public class WildSpawnEventData {
     private Boolean requireNight = null;
     private Double discardChance = null;
     private BroadcastData broadcastData = null;
-
 
     private WildSpawnEventData(
             ResourceLocation entityType, 
@@ -297,7 +295,6 @@ public class WildSpawnEventData {
         return this;
     }
     // #endregion
-
 
     public Optional<Integer> getStructureManagerRadiusAvoidance() {
         return Optional.ofNullable(structureManagerRadiusAvoidance);

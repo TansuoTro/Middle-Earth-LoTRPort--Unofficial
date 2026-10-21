@@ -4,16 +4,16 @@ import com.google.common.collect.Maps;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
-
 import java.util.Map;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
-public class SnowTrollRenderer extends MobEntityRenderer<SnowTrollEntity, SnowTrollModel> {
+public class SnowTrollRenderer extends MobRenderer<SnowTrollEntity, SnowTrollModel> {
     private static final String PATH = "textures/entities/trolls/snow/";
 
-    public SnowTrollRenderer(EntityRendererFactory.Context ctx) {
+    public SnowTrollRenderer(EntityRendererProvider.Context ctx) {
         super(ctx, new SnowTrollModel(ctx.getPart(ModEntityModelLayers.SNOW_TROLL)), 1.1f);
     }
 

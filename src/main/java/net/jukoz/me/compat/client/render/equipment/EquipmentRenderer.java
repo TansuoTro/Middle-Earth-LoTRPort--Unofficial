@@ -1,13 +1,13 @@
 package net.jukoz.me.compat.client.render.equipment;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
+import net.minecraft.world.item.ItemDisplayContext;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
@@ -24,7 +24,7 @@ public class EquipmentRenderer {
     public static final EquipmentRenderer INSTANCE = new EquipmentRenderer();
 
     public void render(EquipmentModel.LayerType layerType, ResourceLocation assetId, Model model,
-                       ItemStack stack, PoseStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+                       ItemStack stack, PoseStack matrices, MultiBufferSource vertexConsumers, int light) {
         ResourceLocation texture = new ResourceLocation(assetId.getNamespace(),
                 "textures/entity/equipment/" + layerType.getName() + "/" + assetId.getPath() + ".png");
         VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers,
@@ -33,9 +33,9 @@ public class EquipmentRenderer {
     }
 
     /** Donor 1.21.8 call sites (thrown spear) delegate plain item rendering through the equipment renderer. */
-    public void renderItem(ItemStack stack, ModelTransformationMode mode, int light, int overlay,
-                           PoseStack matrices, VertexConsumerProvider vertexConsumers, Level world, int seed) {
-        MinecraftClient.getInstance().getItemRenderer()
+    public void renderItem(ItemStack stack, ItemDisplayContext mode, int light, int overlay,
+                           PoseStack matrices, MultiBufferSource vertexConsumers, Level world, int seed) {
+        Minecraft.getInstance().getItemRenderer()
                 .renderItem(stack, mode, light, overlay, matrices, vertexConsumers, world, seed);
     }
 }

@@ -1,6 +1,5 @@
 package net.jukoz.me.world.features.tree.roots;
 
-
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.level.block.Block;
@@ -8,8 +7,9 @@ import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.HolderList;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.core.HolderSet;
 
-public record MirkwoodRootPlacement(RegistryEntryList<Block> canGrowThrough, RegistryEntryList<Block> muddyRootsIn, BlockStateProvider muddyRootsProvider, int maxRootWidth, int maxRootLength, float randomSkewChance) {
+public record MirkwoodRootPlacement(HolderSet<Block> canGrowThrough, HolderSet<Block> muddyRootsIn, BlockStateProvider muddyRootsProvider, int maxRootWidth, int maxRootLength, float randomSkewChance) {
     public static final Codec<MirkwoodRootPlacement> CODEC = RecordCodecBuilder.create((instance) -> {
         return instance.group(RegistryCodecs.entryList(Registries.BLOCK).fieldOf("can_grow_through").forGetter((rootPlacement) -> {
             return rootPlacement.canGrowThrough;
@@ -26,7 +26,7 @@ public record MirkwoodRootPlacement(RegistryEntryList<Block> canGrowThrough, Reg
         })).apply(instance, MirkwoodRootPlacement::new);
     });
 
-    public MirkwoodRootPlacement(RegistryEntryList<Block> canGrowThrough, RegistryEntryList<Block> muddyRootsIn, BlockStateProvider muddyRootsProvider,
+    public MirkwoodRootPlacement(HolderSet<Block> canGrowThrough, HolderSet<Block> muddyRootsIn, BlockStateProvider muddyRootsProvider,
                                  int maxRootWidth, int maxRootLength, float randomSkewChance) {
         this.canGrowThrough = canGrowThrough;
         this.muddyRootsIn = muddyRootsIn;
@@ -36,11 +36,11 @@ public record MirkwoodRootPlacement(RegistryEntryList<Block> canGrowThrough, Reg
         this.randomSkewChance = randomSkewChance;
     }
 
-    public RegistryEntryList<Block> canGrowThrough() {
+    public HolderSet<Block> canGrowThrough() {
         return this.canGrowThrough;
     }
 
-    public RegistryEntryList<Block> muddyRootsIn() {
+    public HolderSet<Block> muddyRootsIn() {
         return this.muddyRootsIn;
     }
 

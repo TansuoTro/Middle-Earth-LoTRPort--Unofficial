@@ -2,19 +2,19 @@ package net.jukoz.me.api.entity.ai.brain.task;
 
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.entity.ai.brain.BlockPosLookTarget;
+import net.minecraft.world.entity.ai.behavior.BlockPosTracker;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.WalkTarget;
-import net.minecraft.entity.ai.brain.task.Task;
-import net.minecraft.entity.ai.brain.task.TaskTriggerer;
-import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.world.entity.ai.behavior.BehaviorControl;
+import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.core.BlockPos;
 import org.apache.commons.lang3.mutable.MutableLong;
 
 public class StrollInWaterTask {
-    public static Task<PathAwareEntity> create(int range, float speed) {
+    public static BehaviorControl<PathfinderMob> create(int range, float speed) {
         MutableLong mutableLong = new MutableLong(0L);
-        return TaskTriggerer.task(
+        return BehaviorBuilder.task(
                 context -> context.group(
                                 context.queryMemoryAbsent(MemoryModuleType.ATTACK_TARGET),
                                 context.queryMemoryAbsent(MemoryModuleType.WALK_TARGET),
@@ -41,8 +41,8 @@ public class StrollInWaterTask {
                                 }
 
                                 if (blockPos != null) {
-                                    lookTarget.remember(new BlockPosLookTarget(blockPos));
-                                    walkTarget.remember(new WalkTarget(new BlockPosLookTarget(blockPos), speed, 0));
+                                    lookTarget.remember(new BlockPosTracker(blockPos));
+                                    walkTarget.remember(new WalkTarget(new BlockPosTracker(blockPos), speed, 0));
                                 }
 
                                 mutableLong.setValue(time + 40L);

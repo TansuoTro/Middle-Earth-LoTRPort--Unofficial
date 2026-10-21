@@ -24,8 +24,6 @@ public class PacketTeleportToCustomCoordinate extends ClientToServerPacket<Packe
         this.welcomeNeeded = welcomeNeeded;
     }
 
-
-
     public PacketTeleportToCustomCoordinate(FriendlyByteBuf buf) {
         this(buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readBoolean());
     }

@@ -16,7 +16,6 @@ import net.jukoz.me.resources.datas.factions.data.InitialDiplomacy;
 import net.jukoz.me.resources.datas.factions.data.SpawnData;
 import net.jukoz.me.resources.datas.factions.data.SpawnDataHandler;
 import org.joml.Vector2d;
-
 import java.util.HashMap;
 import java.util.List;
 

@@ -47,8 +47,6 @@ public class ForgeOutputPacket extends ClientToServerPacket<ForgeOutputPacket> {
         this.mode = mode;
     }
 
-
-
     public ForgeOutputPacket(FriendlyByteBuf buf) {
         this(buf.readInt(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readInt());
     }

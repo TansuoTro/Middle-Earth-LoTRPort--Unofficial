@@ -3,6 +3,13 @@ package net.jukoz.me.client.model.equipment.chest.backAttachments.unarmored;
 import net.jukoz.me.client.model.equipment.chest.backAttachments.CloakCapeModel;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.PartNames;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class UnarmoredFurCapeModel extends CloakCapeModel {
 
@@ -10,54 +17,54 @@ public class UnarmoredFurCapeModel extends CloakCapeModel {
         super(root);
     }
 
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = new ModelData();
-        ModelPartData modelPartData = modelData.getRoot();
+    public static LayerDefinition getTexturedModelData() {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
 
-        ModelPartData head = modelPartData.addChild(PartNames.HEAD, ModelPartBuilder.create(),
-                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        head.addChild(PartNames.HAT, ModelPartBuilder.create(),
-                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition head = modelPartData.addChild(PartNames.HEAD, CubeListBuilder.create(),
+                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        head.addChild(PartNames.HAT, CubeListBuilder.create(),
+                PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData body = modelPartData.addChild(PartNames.BODY, ModelPartBuilder.create(),
-                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        body.addChild("cape_shoulder", ModelPartBuilder.create().uv(0, 16).cuboid(-4.0F, -23.5F, -2.0F, 8.0F, 12.0F, 4.0F, new Dilation(0.55F)),
-                ModelTransform.pivot(0.0F, 23.0F, 0.016F));
+        PartDefinition body = modelPartData.addChild(PartNames.BODY, CubeListBuilder.create(),
+                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        body.addChild("cape_shoulder", CubeListBuilder.create().uv(0, 16).cuboid(-4.0F, -23.5F, -2.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.55F)),
+                PartPose.pivot(0.0F, 23.0F, 0.016F));
 
-        body.addChild("fur", ModelPartBuilder.create()
-                .uv(76, 68).cuboid(-9.49F, -2.0F, -3.75F, 19.0F, 5.0F, 7.0F, new Dilation(0.3F))
-                .uv(24, 66).cuboid(-9.5F, -2.0F, -3.75F, 19.0F, 7.0F, 7.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0f, 0.0f));
+        body.addChild("fur", CubeListBuilder.create()
+                .uv(76, 68).cuboid(-9.49F, -2.0F, -3.75F, 19.0F, 5.0F, 7.0F, new CubeDeformation(0.3F))
+                .uv(24, 66).cuboid(-9.5F, -2.0F, -3.75F, 19.0F, 7.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.pivot(0.0F, 0.0f, 0.0f));
 
-        ModelPartData cape = body.addChild("cape", ModelPartBuilder.create()
-                .uv(0, 32).mirrored().cuboid(-9F, 0.5F, -3F, 18.0F, 13.0F, 6.0F, new Dilation(0.4F)).mirrored(false)
-                .uv(0, 94).mirrored().cuboid(-9F, 0.5F, -3F, 18.0F, 13.0F, 6.0F, new Dilation(0.39F)).mirrored(false),
-                ModelTransform.pivot(0.0F, 1.0f, 0.0f));
+        PartDefinition cape = body.addChild("cape", CubeListBuilder.create()
+                .uv(0, 32).mirrored().cuboid(-9F, 0.5F, -3F, 18.0F, 13.0F, 6.0F, new CubeDeformation(0.4F)).mirrored(false)
+                .uv(0, 94).mirrored().cuboid(-9F, 0.5F, -3F, 18.0F, 13.0F, 6.0F, new CubeDeformation(0.39F)).mirrored(false),
+                PartPose.pivot(0.0F, 1.0f, 0.0f));
 
-        cape.addChild("cape_low", ModelPartBuilder.create()
-                .uv(0, 51).mirrored().cuboid(-9F, 0.7F, -3F, 18.0F, 9.0F, 6.0F, new Dilation(0.4F)).mirrored(false)
-                .uv(0, 113).mirrored().cuboid(-9F, 0.7F, -3F, 18.0F, 9.0F, 6.0F, new Dilation(0.39F)).mirrored(false),
-                ModelTransform.pivot(0.0f, 13.3158f, 0.0f));
+        cape.addChild("cape_low", CubeListBuilder.create()
+                .uv(0, 51).mirrored().cuboid(-9F, 0.7F, -3F, 18.0F, 9.0F, 6.0F, new CubeDeformation(0.4F)).mirrored(false)
+                .uv(0, 113).mirrored().cuboid(-9F, 0.7F, -3F, 18.0F, 9.0F, 6.0F, new CubeDeformation(0.39F)).mirrored(false),
+                PartPose.pivot(0.0f, 13.3158f, 0.0f));
 
-        ModelPartData right_arm = modelPartData.addChild(PartNames.RIGHT_ARM, ModelPartBuilder.create(),
-                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        right_arm.addChild("right_arm_shoulder_cape", ModelPartBuilder.create().uv(24, 16).cuboid(-4.0F, -2.5F, -2.0F, 4.0F, 12.0F, 4.0F, new Dilation(0.25F)),
-                ModelTransform.pivot(-0.0F, -0.0F, 0.0F));
+        PartDefinition right_arm = modelPartData.addChild(PartNames.RIGHT_ARM, CubeListBuilder.create(),
+                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        right_arm.addChild("right_arm_shoulder_cape", CubeListBuilder.create().uv(24, 16).cuboid(-4.0F, -2.5F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.25F)),
+                PartPose.pivot(-0.0F, -0.0F, 0.0F));
 
-        ModelPartData left_arm = modelPartData.addChild(PartNames.LEFT_ARM, ModelPartBuilder.create(),
-                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        left_arm.addChild("left_arm_shoulder_cape", ModelPartBuilder.create().uv(40, 16).mirrored().cuboid(0.0F, -2.5F, -2.0F, 4.0F, 12.0F, 4.0F, new Dilation(0.25F)).mirrored(false),
-                ModelTransform.pivot(0.0F, -0.0F, 0.0F));
+        PartDefinition left_arm = modelPartData.addChild(PartNames.LEFT_ARM, CubeListBuilder.create(),
+                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        left_arm.addChild("left_arm_shoulder_cape", CubeListBuilder.create().uv(40, 16).mirrored().cuboid(0.0F, -2.5F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.25F)).mirrored(false),
+                PartPose.pivot(0.0F, -0.0F, 0.0F));
 
-        ModelPartData right_leg = modelPartData.addChild(PartNames.RIGHT_LEG, ModelPartBuilder.create(),
-                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        right_leg.addChild("right_leg", ModelPartBuilder.create().uv(72, 16).cuboid(-2.1F, -1.0F, -2.0F, 4.0F, 12.0F, 4.0F, new Dilation(0.55F)),
-                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition right_leg = modelPartData.addChild(PartNames.RIGHT_LEG, CubeListBuilder.create(),
+                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        right_leg.addChild("right_leg", CubeListBuilder.create().uv(72, 16).cuboid(-2.1F, -1.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.55F)),
+                PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData left_leg = modelPartData.addChild(PartNames.LEFT_LEG, ModelPartBuilder.create(),
-                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        left_leg.addChild("left_leg", ModelPartBuilder.create().uv(56, 16).mirrored().cuboid(-1.968F, -1.0F, -2.0F, 4.0F, 12.0F, 4.0F, new Dilation(0.55F)).mirrored(false),
-                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition left_leg = modelPartData.addChild(PartNames.LEFT_LEG, CubeListBuilder.create(),
+                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        left_leg.addChild("left_leg", CubeListBuilder.create().uv(56, 16).mirrored().cuboid(-1.968F, -1.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.55F)).mirrored(false),
+                PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        return TexturedModelData.of(modelData, 128, 128);
+        return LayerDefinition.of(modelData, 128, 128);
     }
 }

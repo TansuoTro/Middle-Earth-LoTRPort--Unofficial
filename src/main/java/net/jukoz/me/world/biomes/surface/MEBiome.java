@@ -4,7 +4,6 @@ import net.jukoz.me.world.biomes.caves.CaveType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
-
 import java.awt.*;
 
 public class MEBiome {

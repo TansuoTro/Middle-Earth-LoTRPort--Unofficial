@@ -3,8 +3,8 @@ package net.jukoz.me.item.items;
 import net.jukoz.me.resources.datas.common.RaceType;
 import net.jukoz.me.resources.datas.races.RaceUtil;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -22,8 +22,8 @@ public class OrcishFoodItem extends Item {
         if(user instanceof Player playerEntity) {
             RaceType raceType = RaceUtil.getRaceType(playerEntity);
             if(raceType != RaceType.GOBLIN && raceType != RaceType.SNAGA && raceType != RaceType.ORC && raceType != RaceType.URUK) {
-                user.addStatusEffect(new StatusEffectInstance(StatusEffects.HUNGER, 20 * 30, 1));
-                user.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 20 * 10, 0));
+                user.addStatusEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 1));
+                user.addStatusEffect(new MobEffectInstance(MobEffects.NAUSEA, 20 * 10, 0));
 
             }
         }

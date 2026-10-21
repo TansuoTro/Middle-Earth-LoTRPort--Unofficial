@@ -20,7 +20,6 @@ import net.jukoz.me.resources.datas.npc_types.data.GearSlotPool;
 import net.jukoz.me.resources.datas.npc_types.data.MountData;
 import net.jukoz.me.resources.datas.npc_types.data.WeightedGearData;
 import net.jukoz.me.resources.datas.npc_types.data.WeightedItemData;
-
 import java.util.List;
 
 public class MoriaNpcTypePool {
@@ -96,7 +95,6 @@ public class MoriaNpcTypePool {
                                 .add(WeightedItemData.create(Items.AIR))
                         )
         ), NpcRegistry.COMMON_NPC_ATTRIBUTES , CombatArchetypePool.DEFAULT, NpcLoot.FROM_1_TO_4);
-
 
         MILITIA = new NpcType(NpcRegistry.MORIA_MILITIA.getValue(), RaceRegistry.GOBLIN, FACTION, TexturePresetsRegistry.MORIA_GOBLIN, List.of(
                 WeightedGearData.create()

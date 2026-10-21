@@ -4,7 +4,6 @@ import net.minecraft.world.entity.EntityType;
 import net.jukoz.me.registries.content.npctypes.NpcRegistry;
 import net.jukoz.me.resources.datas.biome_events.BiomeEventData;
 import net.jukoz.me.resources.datas.biome_events.data.WildSpawnEventData;
-
 import java.util.List;
 
 public class GondorBiomeEventPool {
@@ -26,7 +25,6 @@ public class GondorBiomeEventPool {
                 new WildSpawnEventData(NpcRegistry.GONDOR_SOLDIER).withWeight(3).withSameNpcType(2, 256),
                 new WildSpawnEventData(NpcRegistry.GONDOR_KNIGHT).withWeight(1).withSameNpcType(0, 256)
         ));
-
 
         OSGILIATH = new BiomeEventData(false, List.of(
                 new WildSpawnEventData(NpcRegistry.MORDOR_SCOUT).withWeight(4).withSameNpcType(3, 256),

@@ -11,7 +11,6 @@ import net.jukoz.me.resources.datas.common.CharacterPatternTypes;
 import net.jukoz.me.resources.datas.texture_presets.*;
 import net.jukoz.me.resources.datas.common.EntityCategories;
 import net.jukoz.me.api.dtos.WeightedIdentifier;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -198,7 +197,6 @@ public class GondorTexturePresetsPool {
                 ));
     }
     // endregion
-
 
     // region [DATAS]
     static {

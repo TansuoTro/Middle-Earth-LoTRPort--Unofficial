@@ -1,6 +1,6 @@
 package net.jukoz.me.recipe;
-import net.jukoz.me.item.MEComponents;
 
+import net.jukoz.me.item.MEComponents;
 import net.jukoz.me.compat.DyedColorComponent;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.item.items.armor.CustomChestplateItem;
@@ -8,26 +8,25 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.recipe.SpecialCraftingRecipe;
-import net.minecraft.recipe.book.CraftingRecipeCategory;
-import net.minecraft.inventory.RecipeInputInventory;
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.RegistryWrapper;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.level.Level;
 
+public class BackAttachmentRemovalRecipe extends CustomRecipe {
 
-public class BackAttachmentRemovalRecipe extends SpecialCraftingRecipe {
-
-    public BackAttachmentRemovalRecipe(ResourceLocation id, CraftingRecipeCategory category) {
+    public BackAttachmentRemovalRecipe(ResourceLocation id, CraftingBookCategory category) {
         super(id, category);
     }
 
     @Override
-    public DefaultedList<ItemStack> getRemainder(RecipeInputInventory input) {
-        DefaultedList<ItemStack> defaultedList = DefaultedList.ofSize(input.size(), ItemStack.EMPTY);
+    public NonNullList<ItemStack> getRemainder(CraftingContainer input) {
+        NonNullList<ItemStack> defaultedList = NonNullList.ofSize(input.size(), ItemStack.EMPTY);
 
         for(int i = 0; i < defaultedList.size(); ++i) {
             ItemStack itemStack = input.getStack(i);
@@ -46,9 +45,8 @@ public class BackAttachmentRemovalRecipe extends SpecialCraftingRecipe {
         return defaultedList;
     }
 
-
     @Override
-    public boolean matches(RecipeInputInventory input, Level world) {
+    public boolean matches(CraftingContainer input, Level world) {
         ItemStack itemStackChest = ItemStack.EMPTY;
         ItemStack itemStackShears = ItemStack.EMPTY;
 
@@ -72,7 +70,7 @@ public class BackAttachmentRemovalRecipe extends SpecialCraftingRecipe {
     }
 
     @Override
-    public ItemStack craft(RecipeInputInventory input, DynamicRegistryManager lookup) {
+    public ItemStack craft(CraftingContainer input, RegistryAccess lookup) {
         ItemStack itemStack = ItemStack.EMPTY;
 
         for(int i = 0; i < input.size(); ++i) {
@@ -104,7 +102,7 @@ public class BackAttachmentRemovalRecipe extends SpecialCraftingRecipe {
         return width * height >= 2;
     }
 
-    public RecipeSerializer<? extends SpecialCraftingRecipe> getSerializer() {
+    public RecipeSerializer<? extends CustomRecipe> getSerializer() {
         return ModRecipeSerializer.CUSTOM_ARMOR_BACK_ATTACHMENT_REMOVAL;
     }
 }

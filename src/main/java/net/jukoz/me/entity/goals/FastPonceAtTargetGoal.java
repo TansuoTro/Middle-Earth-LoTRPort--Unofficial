@@ -2,11 +2,11 @@ package net.jukoz.me.entity.goals;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.PounceAtTargetGoal;
+import net.minecraft.world.entity.ai.goal.LeapAtTargetGoal;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.phys.Vec3;
-
 import java.util.EnumSet;
+import net.minecraft.world.entity.ai.control.Control;
 
 public class FastPonceAtTargetGoal extends Goal {
     private final Mob mob;
@@ -37,7 +37,7 @@ public class FastPonceAtTargetGoal extends Goal {
         if (!this.mob.isOnGround()) {
             return false;
         }
-        return this.mob.getRandom().nextInt(PounceAtTargetGoal.toGoalTicks(5)) == 0;
+        return this.mob.getRandom().nextInt(LeapAtTargetGoal.toGoalTicks(5)) == 0;
     }
 
     @Override

@@ -8,22 +8,22 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.StructureWorldAccess;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.LevelAccess;
-import net.minecraft.world.gen.feature.DefaultFeatureConfig;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.jukoz.me.block.registration.WoodBlockSets;
 
-public class WillowVinesFeature extends Feature<DefaultFeatureConfig> {
-    public WillowVinesFeature(Codec<DefaultFeatureConfig> configCodec) {
+public class WillowVinesFeature extends Feature<NoneFeatureConfiguration> {
+    public WillowVinesFeature(Codec<NoneFeatureConfiguration> configCodec) {
         super(configCodec);
     }
 
     @Override
-    public boolean generate(FeatureContext<DefaultFeatureConfig> context) {
-        StructureWorldAccess structureWorldAccess = context.getWorld();
+    public boolean generate(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        WorldGenLevel structureWorldAccess = context.getWorld();
         BlockPos blockPos = context.getOrigin();
         RandomSource random = context.getRandom();
         if (!structureWorldAccess.isAir(blockPos)) {
@@ -39,7 +39,7 @@ public class WillowVinesFeature extends Feature<DefaultFeatureConfig> {
         }
     }
 
-    private void generateVinesInArea(WorldAccess world, RandomSource random, BlockPos pos) {
+    private void generateVinesInArea(LevelAccessor world, RandomSource random, BlockPos pos) {
         BlockPos.Mutable mutable = new BlockPos.Mutable();
 
         for(int i = 0; i < 32; ++i) {
@@ -61,7 +61,7 @@ public class WillowVinesFeature extends Feature<DefaultFeatureConfig> {
         }
     }
 
-    public static void generateVineColumn(WorldAccess world, BlockPos.Mutable pos, int length) {
+    public static void generateVineColumn(LevelAccessor world, BlockPos.Mutable pos, int length) {
         for(int i = 0; i <= length; ++i) {
             if (world.isAir(pos)) {
                 BlockState blockStateAbove = world.getBlockState(pos.up());
@@ -85,7 +85,7 @@ public class WillowVinesFeature extends Feature<DefaultFeatureConfig> {
         }
     }
 
-    private static boolean validateRoot(WorldAccess world, BlockPos.Mutable mutable) {
+    private static boolean validateRoot(LevelAccessor world, BlockPos.Mutable mutable) {
         BlockState blockState = world.getBlockState(mutable.up());
         return (blockState.isOf(WoodBlockSets.WILLOW_SET.logBlocks.log()) || blockState.isOf(WoodBlockSets.WILLOW_SET.leaves));
     }

@@ -8,9 +8,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.resources.datas.factions.Faction;
 import net.jukoz.me.resources.datas.npc_types.NpcType;
-
 import java.util.Optional;
 import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 /// StructureSpawnNestPool is a list of npcs with spawn parameters such as weight, category, etc.
 public class StructureSpawnNestPool {
@@ -83,7 +83,7 @@ public class StructureSpawnNestPool {
     }
     public int getEntityAmount(){
         if(maxAmount.isPresent()){
-            Random random = new Random();
+            RandomSource random = new RandomSource();
             return random.nextInt(amount, (maxAmount.get() + 1));
         }
         return this.amount;

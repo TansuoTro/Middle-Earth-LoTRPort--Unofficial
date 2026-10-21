@@ -3,13 +3,18 @@ package net.jukoz.me.particles.custom;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.TextureSheetParticle;
 
-public class AnvilBonkParticle extends SpriteBillboardParticle {
+public class AnvilBonkParticle extends TextureSheetParticle {
 
-    AnvilBonkParticle(ClientWorld clientWorld, double d, double e, double f) {
+    AnvilBonkParticle(ClientLevel clientWorld, double d, double e, double f) {
         super(clientWorld, d, e, f, 0.0, 0.0, 0.0);
         this.gravityStrength = 0.75F;
         this.velocityMultiplier = 0.999F;
@@ -20,8 +25,8 @@ public class AnvilBonkParticle extends SpriteBillboardParticle {
         this.maxAge = (int) (16.0 / (Math.random() * 0.8 + 0.2));
     }
 
-    public ParticleTextureSheet getType() {
-        return ParticleTextureSheet.PARTICLE_SHEET_OPAQUE;
+    public ParticleRenderType getType() {
+        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
     public int getBrightness(float tint) {
@@ -47,14 +52,14 @@ public class AnvilBonkParticle extends SpriteBillboardParticle {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class Factory implements ParticleFactory<DefaultParticleType> {
-        private final SpriteProvider spriteProvider;
+    public static class Factory implements ParticleProvider<SimpleParticleType> {
+        private final SpriteSet spriteProvider;
 
-        public Factory(SpriteProvider spriteProvider) {
+        public Factory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(DefaultParticleType simpleParticleType, ClientWorld clientWorld, double d, double e, double f, double g, double h, double i) {
+        public Particle createParticle(SimpleParticleType simpleParticleType, ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
             AnvilBonkParticle anvilBonkParticle = new AnvilBonkParticle(clientWorld, d, e, f);
             anvilBonkParticle.setSprite(this.spriteProvider);
             return anvilBonkParticle;

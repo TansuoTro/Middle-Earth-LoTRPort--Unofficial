@@ -1,6 +1,6 @@
 package net.jukoz.me.entity;
 
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.Holder;
@@ -9,8 +9,8 @@ import net.minecraft.world.level.LevelAccess;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.compat.nbt.ReadView;
 import net.jukoz.me.compat.nbt.WriteView;
-
 import java.util.Optional;
+import net.minecraft.util.RandomSource;
 
 /**
  * 1.20.1 stand-in for the vanilla 1.21.5 {@code net.minecraft.entity.Variants} helper.
@@ -28,11 +28,11 @@ public final class VariantsME {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> Registry<T> registry(DynamicRegistryManager manager, ResourceKey<? extends Registry<T>> registryKey) {
+    public static <T> Registry<T> registry(RegistryAccess manager, ResourceKey<? extends Registry<T>> registryKey) {
         return (Registry<T>) manager.get(registryKey);
     }
 
-    public static <T> Holder<T> getOrDefaultOrThrow(DynamicRegistryManager manager, ResourceKey<T> key) {
+    public static <T> Holder<T> getOrDefaultOrThrow(RegistryAccess manager, ResourceKey<T> key) {
         Registry<T> registry = registry(manager, ResourceKey.ofRegistry(key.getRegistry()));
         if (registry == null) {
             throw new IllegalStateException("Missing variant registry " + key.getRegistry());
@@ -41,7 +41,7 @@ public final class VariantsME {
         if (entry != null) {
             return entry;
         }
-        // A tracked data must never be initialised with null: DataTracker.Entry.isUnchanged()
+        // A tracked data must never be initialised with null: SynchedEntityData.Entry.isUnchanged()
         // dereferences the initial value the first time the entity is tracked, which takes the
         // whole server tick down. Fall back to whatever the registry does hold.
         Optional<Holder.Reference<T>> any = registry.getRandom(net.minecraft.util.RandomSource.create());
@@ -54,7 +54,7 @@ public final class VariantsME {
         return any.get();
     }
 
-    public static <T> Optional<Holder<T>> getEntry(DynamicRegistryManager manager, ResourceKey<T> key) {
+    public static <T> Optional<Holder<T>> getEntry(RegistryAccess manager, ResourceKey<T> key) {
         Registry<T> registry = registry(manager, ResourceKey.ofRegistry(key.getRegistry()));
         if (registry == null) {
             return Optional.empty();
@@ -69,7 +69,7 @@ public final class VariantsME {
         entry.getKey().ifPresent(key -> view.put(VARIANT_KEY, ResourceLocation.CODEC, key.getValue()));
     }
 
-    public static <T> Optional<Holder<T>> readVariantFromNbt(ReadView view, DynamicRegistryManager manager,
+    public static <T> Optional<Holder<T>> readVariantFromNbt(ReadView view, RegistryAccess manager,
                                                                     ResourceKey<? extends Registry<T>> registryKey) {
         Optional<ResourceLocation> id = view.read(VARIANT_KEY, ResourceLocation.CODEC);
         if (id.isEmpty()) {
@@ -82,7 +82,7 @@ public final class VariantsME {
         return registry.getEntry(ResourceKey.of(registryKey, id.get())).map(entry -> (Holder<T>) entry);
     }
 
-    public static <T> Optional<Holder<T>> select(WorldAccess world, Registry<T> registry) {
+    public static <T> Optional<Holder<T>> select(LevelAccessor world, Registry<T> registry) {
         if (registry == null) {
             return Optional.empty();
         }

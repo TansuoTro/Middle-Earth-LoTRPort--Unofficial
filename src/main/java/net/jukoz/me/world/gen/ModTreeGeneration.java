@@ -2,7 +2,6 @@ package net.jukoz.me.world.gen;
 
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
-
 import net.jukoz.me.utils.RegistryUtils;
 import net.jukoz.me.world.biomes.MEBiomeKeys;
 import net.jukoz.me.world.features.tree.foliages.PalmFoliagePlacer;
@@ -16,7 +15,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.gen.feature.OreFeature;
+import net.minecraft.world.level.levelgen.feature.OreFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;

@@ -3,24 +3,25 @@ package net.jukoz.me.entity.humans.bandit;
 import com.google.common.collect.Maps;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.BipedEntityRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
+import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.model.EntityModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
-
 import java.util.Map;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
-public class BanditHumanRenderer extends BipedEntityRenderer<BanditHumanEntity, BanditHumanModel<BanditHumanEntity>> {
+public class BanditHumanRenderer extends HumanoidMobRenderer<BanditHumanEntity, BanditHumanModel<BanditHumanEntity>> {
     private static final String PATH = "textures/entities/humans/bandits/";
 
-    public BanditHumanRenderer(EntityRendererFactory.Context ctx) {
+    public BanditHumanRenderer(EntityRendererProvider.Context ctx) {
         super(ctx, new BanditHumanModel<>(ctx.getPart(ModEntityModelLayers.HUMAN)), 0.5f);
-        this.addFeature(new ArmorFeatureRenderer<>(this, new BanditHumanModel(ctx.getPart(EntityModelLayers.PLAYER_INNER_ARMOR)),
-                new BanditHumanModel(ctx.getPart(EntityModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
+        this.addFeature(new HumanoidArmorLayer<>(this, new BanditHumanModel(ctx.getPart(ModelLayers.PLAYER_INNER_ARMOR)),
+                new BanditHumanModel(ctx.getPart(ModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
 
     }
 
@@ -43,7 +44,7 @@ public class BanditHumanRenderer extends BipedEntityRenderer<BanditHumanEntity, 
 
     @Override
     public void render(BanditHumanEntity entity, float entityYaw, float partialTick, PoseStack poseStack,
-                       VertexConsumerProvider bufferSource, int packedLight) {
+                       MultiBufferSource bufferSource, int packedLight) {
 
         poseStack.scale(0.95f, 0.95f, 0.95f);
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);

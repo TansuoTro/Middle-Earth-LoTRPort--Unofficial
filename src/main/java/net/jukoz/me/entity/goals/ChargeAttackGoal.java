@@ -53,7 +53,7 @@ public class ChargeAttackGoal extends Goal {
         if (path == null) {
             return false;
         }
-        PathNode pathNode = path.getEnd();
+        Node pathNode = path.getEnd();
         if (pathNode == null) {
             return false;
         }

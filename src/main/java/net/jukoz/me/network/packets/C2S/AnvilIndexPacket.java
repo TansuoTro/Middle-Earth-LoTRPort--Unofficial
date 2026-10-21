@@ -1,7 +1,7 @@
 package net.jukoz.me.network.packets.C2S;
 
-import net.minecraft.screen.AnvilScreenHandler;
-import net.minecraft.screen.ScreenHandler;
+import net.minecraft.world.inventory.AnvilMenu;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.server.level.ServerPlayer;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.network.FriendlyByteBuf;
@@ -46,8 +46,6 @@ public class AnvilIndexPacket extends ClientToServerPacket<AnvilIndexPacket> {
         this.z = z;
     }
 
-
-
     public AnvilIndexPacket(FriendlyByteBuf buf) {
         this(buf.readInt(), buf.readDouble(), buf.readDouble(), buf.readDouble());
     }
@@ -75,7 +73,7 @@ public class AnvilIndexPacket extends ClientToServerPacket<AnvilIndexPacket> {
                 });
             } else {
                 ServerPlayer player = context.player();
-                ScreenHandler screenHandler = player.currentScreenHandler;
+                AbstractContainerMenu screenHandler = player.currentScreenHandler;
                 if (screenHandler instanceof ShapingAnvilScreenHandler anvilScreenHandler) {
                     anvilScreenHandler.updateScreen();
                 }

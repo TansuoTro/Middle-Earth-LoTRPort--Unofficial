@@ -2,11 +2,9 @@ package net.jukoz.me.resources.datas.npc_types.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
 import net.jukoz.me.compat.DyedColorComponent;
-import net.minecraft.entity.*;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.entity.passive.AbstractHorseEntity;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.item.MEComponents;
@@ -19,11 +17,14 @@ import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.beasts.AbstractBeastEntity;
 import net.jukoz.me.entity.npcs.NpcEntity;
 import net.jukoz.me.resources.datas.npc_types.NpcType;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 
 public class MountData {
     public static class Fields {
@@ -39,7 +40,6 @@ public class MountData {
             ItemStack.CODEC.optionalFieldOf(Fields.ARMOR).forGetter(MountData::getOptionalArmor),
             MountPassengerSlotData.CODEC.listOf().fieldOf(Fields.PASSENGER_SLOTS).forGetter(MountData::getPassengerSlots)
     ).apply(instance, MountData::new));
-
 
     private ResourceLocation entityType;
     private ResourceLocation npcType;
@@ -95,7 +95,6 @@ public class MountData {
         return Optional.ofNullable(armor);
     }
 
-
     private List<MountPassengerSlotData> getPassengerSlots() {
         if(passengerSlots == null)
             return new ArrayList<>();
@@ -124,12 +123,12 @@ public class MountData {
                 mob.initialize(
                         world,
                         world.getLocalDifficulty(owner.getBlockPos()),
-                        SpawnReason.EVENT,
+                        MobSpawnType.EVENT,
                         null,
                         null
                 );
             }
-            if(entity instanceof AbstractHorseEntity horse){
+            if(entity instanceof AbstractHorse horse){
                 horse.setTame(true);
                 horse.setOwnerUuid(owner.getUuid());
                 if(horse instanceof AbstractBeastEntity beast){

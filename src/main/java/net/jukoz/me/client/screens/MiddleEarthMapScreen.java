@@ -6,28 +6,30 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.world.map.MiddleEarthMapConfigs;
 import net.jukoz.me.world.dimension.ModDimensions;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.text.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import org.joml.Vector2i;
-
 import java.util.Optional;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.LiteralContents;
 
 @OnlyIn(Dist.CLIENT)
 public class MiddleEarthMapScreen extends Screen {
     private static final ResourceLocation WINDOW_TEXTURE = new ResourceLocation(MiddleEarth.MOD_ID,"textures/gui/map_background.png");
     private static final ResourceLocation MAP_UI_TEXTURE = new ResourceLocation(MiddleEarth.MOD_ID,"textures/gui/map_ui.png");
     private static final ResourceLocation MAP_TEXTURE = new ResourceLocation(MiddleEarth.MOD_ID,"textures/map.png");
-    private static final Text MAP_TITLE_TEXT = Text.of("Middle-earth Map");
+    private static final Component MAP_TITLE_TEXT = Component.of("Middle-earth Map");
     public static final int MARGIN = 5;
 
     public static final int MAP_IMAGE_WIDTH = 3000;
@@ -52,7 +54,7 @@ public class MiddleEarthMapScreen extends Screen {
     private Vector2i cursorWorldCoordinate;
 
     private static boolean debug = false;
-    AbstractClientPlayerEntity player;
+    AbstractClientPlayer player;
 
     private static int pixelWeight;
 
@@ -65,7 +67,6 @@ public class MiddleEarthMapScreen extends Screen {
             zoom *= 1.2f;
         }
     }
-
 
     @Override
     protected void init() {
@@ -96,23 +97,21 @@ public class MiddleEarthMapScreen extends Screen {
         int optionsOffsetX = x + windowWidth + 2;
         int optionsOffsetY = y + windowHeight - MARGIN;
 
-
-        ButtonWidget debugButton = ButtonWidget.builder(Text.literal("Debug"), button -> {
+        ButtonWidget debugButton = ButtonWidget.builder(Component.literal("VisibleForDebug"), button -> {
                     debug = !debug;
                 })
                 .dimensions(optionsOffsetX, y + MARGIN, 18, 18).build();
 
-
-        ButtonWidget centerOnPlayer = ButtonWidget.builder(Text.literal("Center on Player"), button -> {
+        ButtonWidget centerOnPlayer = ButtonWidget.builder(Component.literal("Center on Player"), button -> {
                     centerOnPlayer();
                 })
                 .dimensions(optionsOffsetX, optionsOffsetY - (offset * 3) - (buttonMargin * 2), 18, 18).build();
 
-        ButtonWidget zoomButton = ButtonWidget.builder(Text.literal("Zoom"), button -> {
+        ButtonWidget zoomButton = ButtonWidget.builder(Component.literal("Zoom"), button -> {
                     zoom(1, false);
                 })
                 .dimensions(optionsOffsetX, optionsOffsetY - (offset * 2)  - buttonMargin, 18, 18).build();
-        ButtonWidget dezoomButton = ButtonWidget.builder(Text.literal("Dezoom"), button -> {
+        ButtonWidget dezoomButton = ButtonWidget.builder(Component.literal("Dezoom"), button -> {
                     zoom(-1, false);
                 })
                 .dimensions(optionsOffsetX, optionsOffsetY - offset, 18, 18).build();
@@ -129,10 +128,10 @@ public class MiddleEarthMapScreen extends Screen {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         Entity cameraEntity = this.client.getCameraEntity();
         if(cameraEntity != null) {
-            if (cameraEntity instanceof AbstractClientPlayerEntity abstractClientPlayerEntity) {
+            if (cameraEntity instanceof AbstractClientPlayer abstractClientPlayerEntity) {
                 this.player = abstractClientPlayerEntity;
 
                 this.renderBackground(context);
@@ -143,13 +142,13 @@ public class MiddleEarthMapScreen extends Screen {
         }
     }
 
-    public void drawWindow(DrawContext context, int mouseX, int mouseY) {
+    public void drawWindow(GuiGraphics context, int mouseX, int mouseY) {
         int x = (this.width -  windowWidth) / 2;
         int y = (this.height - windowHeight) / 2;
         RenderSystem.enableBlend();
 
         drawMaintTextures(context, x, y, mouseX, mouseY);
-        Vec2f mapPlayerPos = getCoordinateOnMap((float)player.getBlockPos().getX(), (float)player.getBlockPos().getZ(), 4,4);
+        Vec2 mapPlayerPos = getCoordinateOnMap((float)player.getBlockPos().getX(), (float)player.getBlockPos().getZ(), 4,4);
         if(ModDimensions.isInMiddleEarth(player.getWorld())){
             context.drawTexture(this.player.getSkinTexture(),
                     x + MARGIN + (int)mapPlayerPos.x - 4,
@@ -159,28 +158,28 @@ public class MiddleEarthMapScreen extends Screen {
             boolean outsideBound = cursorIsOutsideOfMapBounds(mouseX, mouseY);
             cursorWorldCoordinate = getWorldCoordinateOfCursor(mouseX, mouseY);
 
-            // Debug panel
+            // VisibleForDebug panel
             if(debug){
                 Level world = this.player.getWorld();
                 Optional<ResourceKey<Biome>> biomeRegistry = world.getBiome(this.player.getBlockPos()).getKey();
-                MutableText text = MutableText.of(new LiteralTextContent("N/A"));
+                MutableComponent text = MutableComponent.of(new LiteralContents("N/A"));
                 if(biomeRegistry.isPresent()) {
                     String currentBiomeId = biomeRegistry.get().getValue().toString().replace(':', '.');
-                    text = MutableText.of(new LiteralTextContent("Biome: "));
-                    text.append(Text.translatable("biome." + currentBiomeId));
+                    text = MutableComponent.of(new LiteralContents("Biome: "));
+                    text.append(Component.translatable("biome." + currentBiomeId));
 
                 }
-                context.drawTextWithShadow(textRenderer, Text.literal("Player information"), 0, 5, 0xffffff);
+                context.drawTextWithShadow(textRenderer, Component.literal("Player information"), 0, 5, 0xffffff);
                 BlockPos playerPos = this.player.getBlockPos();
-                context.drawTextWithShadow(textRenderer, Text.literal("Coordinates : " + (int)playerPos.getX() + ", " + (int)playerPos.getY() + ", " + (int)playerPos.getZ()), 5, 15, 0xffffff);
+                context.drawTextWithShadow(textRenderer, Component.literal("Coordinates : " + (int)playerPos.getX() + ", " + (int)playerPos.getY() + ", " + (int)playerPos.getZ()), 5, 15, 0xffffff);
                 context.drawTextWithShadow(textRenderer, text, 5, 25, 0xffffff);
 
-                context.drawTextWithShadow(textRenderer, Text.literal("Cursor information"), 0, 45, 0xffffff);
-                context.drawTextWithShadow(textRenderer, Text.literal("Coordinates : " + ((outsideBound) ? "N/A" : (int)cursorWorldCoordinate.x + ", "+ (int)cursorWorldCoordinate.y)), 5, 55, 0xffffff);
+                context.drawTextWithShadow(textRenderer, Component.literal("Cursor information"), 0, 45, 0xffffff);
+                context.drawTextWithShadow(textRenderer, Component.literal("Coordinates : " + ((outsideBound) ? "N/A" : (int)cursorWorldCoordinate.x + ", "+ (int)cursorWorldCoordinate.y)), 5, 55, 0xffffff);
 
                 /*
                 if(!oustideBound && this.player.isCreative()){
-                    context.drawTextWithShadow(textRenderer, Text.literal("Right Click to teleport"), mouseX + 10, mouseY, 0xcccccc);
+                    context.drawTextWithShadow(textRenderer, Component.literal("Right Click to teleport"), mouseX + 10, mouseY, 0xcccccc);
                 }
                  */
             }
@@ -219,7 +218,7 @@ public class MiddleEarthMapScreen extends Screen {
         return ZOOM_LEVELS[zoomLevel - 1];
     }
 
-    private void drawMaintTextures(DrawContext context, int x, int y, double mouseX, double mouseY) {
+    private void drawMaintTextures(GuiGraphics context, int x, int y, double mouseX, double mouseY) {
         // Border
         context.drawTexture(WINDOW_TEXTURE, x, y, 0, 0,  windowWidth, windowHeight,
                  windowWidth, windowHeight);
@@ -234,7 +233,7 @@ public class MiddleEarthMapScreen extends Screen {
 
         // Map UI
 
-        // Debug Button
+        // VisibleForDebug Button
         int debugButtonTextureOffset = children().get(debugButtonIndex).isMouseOver(mouseX, mouseY) ? 18 : 0;
         if(!ModDimensions.isInMiddleEarth(player.getWorld())){
             debugButtonTextureOffset = 36;
@@ -279,10 +278,9 @@ public class MiddleEarthMapScreen extends Screen {
         ((ButtonWidget)children().get(zoomButtonIndex)).active = (zoomLevel < MAX_ZOOM_LEVEL - 1);
         ((ButtonWidget)children().get(dezoomButtonIndex)).active = (zoomLevel > 1);
 
-
         // BREE (TEST)
         /*
-        Vec2f breeOnMap = getCoordinateOnMap(4100.0f, 2550.0f, 2,2);
+        Vec2 breeOnMap = getCoordinateOnMap(4100.0f, 2550.0f, 2,2);
         context.drawTexture(MAP_UI_TEXTURE,
                 x + MARGIN + (int)breeOnMap.x,
                 y + MARGIN + (int)breeOnMap.y,
@@ -310,7 +308,6 @@ public class MiddleEarthMapScreen extends Screen {
         correctMapVision();
         return true;
     }
-
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
@@ -343,19 +340,19 @@ public class MiddleEarthMapScreen extends Screen {
 
         float modifier = getZoomLevel() - 1;
         // Maximum (dynamic)
-        // When zoomLevelIndex is 0, maximum should be 0,0
+        // Condition zoomLevelIndex is 0, maximum should be 0,0
         mapDisplacementX = (int)Math.min((mapWindowWidth) * modifier, mapDisplacementX);
         mapDisplacementY = (int) Math.min(( mapWindowHeight) * modifier, mapDisplacementY);
     }
 
-    private Vec2f getCoordinateOnMap(float posX, float posZ, int textureOffsetX, int textureOffsetY) {
+    private Vec2 getCoordinateOnMap(float posX, float posZ, int textureOffsetX, int textureOffsetY) {
         float transformedPosX = ((posX / pixelWeight / WORLD_SIZE.x) * mapWindowWidth * getZoomLevel()) - mapDisplacementX;
         float transformedPosY = ((posZ / pixelWeight / WORLD_SIZE.y) *  mapWindowHeight * getZoomLevel()) - mapDisplacementY;
 
         transformedPosX = Math.max(textureOffsetX, Math.min(mapWindowWidth - textureOffsetX, transformedPosX));
         transformedPosY = Math.max(textureOffsetY, Math.min( mapWindowHeight - textureOffsetY, transformedPosY));
 
-        return new Vec2f(transformedPosX, transformedPosY);
+        return new Vec2(transformedPosX, transformedPosY);
     }
 
     private boolean cursorIsOutsideOfMapBounds(double mouseX, double mouseY){
@@ -404,7 +401,6 @@ public class MiddleEarthMapScreen extends Screen {
 
         return new Vector2i(centerX * pixelWeight, centerY * pixelWeight);
     }
-
 
     private Vector2i getCoordinateInCenterOfMap(){
         Vector2i currentCenter = getCenterOfCurrentMap();

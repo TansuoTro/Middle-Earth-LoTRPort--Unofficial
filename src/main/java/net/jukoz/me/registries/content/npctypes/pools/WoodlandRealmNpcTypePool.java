@@ -1,8 +1,8 @@
 package net.jukoz.me.registries.content.npctypes.pools;
-import net.jukoz.me.compat.METext;
 
+import net.jukoz.me.compat.METext;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Items;
 import net.minecraft.resources.ResourceKey;
@@ -30,7 +30,6 @@ import net.jukoz.me.resources.datas.npc_types.data.GearSlotPool;
 import net.jukoz.me.resources.datas.npc_types.data.MountData;
 import net.jukoz.me.resources.datas.npc_types.data.WeightedGearData;
 import net.jukoz.me.resources.datas.npc_types.data.WeightedItemData;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -410,7 +409,7 @@ public class WoodlandRealmNpcTypePool {
                     AttributePoolElement.create(Attributes.GENERIC_MAX_HEALTH, 28),
                     AttributePoolElement.create(Attributes.GENERIC_ARMOR, 10, 20),
                     AttributePoolElement.create(Attributes.GENERIC_ATTACK_DAMAGE, 1, 2)
-                            .withModifier(TOTAL_DAMAGE_MODIFIER, 1.5, EntityAttributeModifier.Operation.MULTIPLY_TOTAL) // Does 1.5x damage, with 1 -> 2 base damage (strong)
+                            .withModifier(TOTAL_DAMAGE_MODIFIER, 1.5, AttributeModifier.Operation.MULTIPLY_TOTAL) // Does 1.5x damage, with 1 -> 2 base damage (strong)
             )));
         }}, CombatArchetypePool.DEFAULT, NpcLoot.FROM_15_TO_25);
     }

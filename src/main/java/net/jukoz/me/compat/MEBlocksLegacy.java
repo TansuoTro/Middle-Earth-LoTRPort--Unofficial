@@ -8,6 +8,7 @@ import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.jukoz.me.block.registration.StoneBlockSets;
 import net.jukoz.me.block.registration.WoodBlockSets;
 import net.jukoz.me.block.utils.setBuilders.WoodBlockSetBuilder;
+import net.minecraft.world.level.block.Blocks;
 
 /**
  * Aliases for block names the old 1.20.1 datagen still references after the donor
@@ -196,7 +197,6 @@ public final class MEBlocksLegacy {
         if (set.strippedLogBlocks != null) return set.strippedLogBlocks.verticalSlab();
         return set.planksBlocks != null ? set.planksBlocks.verticalSlab() : net.minecraft.world.level.block.Blocks.AIR;
     }
-
 
     private static Block strippedStairs(WoodBlockSetBuilder set) {
         if (set.strippedLogBlocks != null) return set.strippedLogBlocks.stairs();

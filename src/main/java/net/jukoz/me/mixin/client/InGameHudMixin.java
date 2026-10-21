@@ -6,9 +6,9 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.statusEffects.ModStatusEffects;
 import net.jukoz.me.utils.HallucinationData;
 import net.jukoz.me.utils.IEntityDataSaver;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Final;
@@ -20,19 +20,18 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @OnlyIn(Dist.CLIENT)
-@Mixin(InGameHud.class)
+@Mixin(Gui.class)
 public abstract class InGameHudMixin {
     @Unique
     private static final ResourceLocation HALLUCINATION_OUTLINE = new ResourceLocation(MiddleEarth.MOD_ID, "textures/misc/hallucination_outline.png");
 
-    @Shadow @Final private MinecraftClient client;
+    @Shadow @Final private Minecraft client;
 
+    @Shadow protected abstract void renderOverlay(GuiGraphics context, ResourceLocation texture, float opacity);
 
-    @Shadow protected abstract void renderOverlay(DrawContext context, ResourceLocation texture, float opacity);
-
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getLastFrameDuration()F", shift = At.Shift.AFTER))
-    public void injected(DrawContext context, float tickDelta, CallbackInfo ci) {
-        Player player = MinecraftClient.getInstance().player;
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getLastFrameDuration()F", shift = At.Shift.AFTER))
+    public void injected(GuiGraphics context, float tickDelta, CallbackInfo ci) {
+        Player player = Minecraft.getInstance().player;
         assert player != null;
 
         if(player.hasStatusEffect(ModStatusEffects.HALLUCINATION)) {
@@ -42,6 +41,3 @@ public abstract class InGameHudMixin {
         }
     }
 }
-
-
-

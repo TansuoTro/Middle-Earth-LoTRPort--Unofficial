@@ -1,21 +1,21 @@
 package net.jukoz.me.item.items.weapons.artefacts;
-import net.jukoz.me.entity.EntityAttributesME;
 
+import net.jukoz.me.entity.EntityAttributesME;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.compat.BluntWeapon;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.world.item.Tier;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.item.items.weapons.CustomDaggerWeaponItem;
 
 public class ArtefactCustomDaggerWeaponItem extends CustomDaggerWeaponItem {
 
-    public ArtefactCustomDaggerWeaponItem(ToolMaterial toolMaterial, Item.Settings settings) {
+    public ArtefactCustomDaggerWeaponItem(Tier toolMaterial, Item.Settings settings) {
         super(toolMaterial, settings);
     }
 

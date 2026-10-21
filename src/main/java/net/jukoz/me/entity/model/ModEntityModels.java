@@ -10,15 +10,16 @@ import net.jukoz.me.entity.spider.MirkwoodSpiderModel;
 import net.jukoz.me.entity.beasts.trolls.cave.CaveTrollModel;
 import net.jukoz.me.entity.beasts.trolls.snow.SnowTrollModel;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.TexturedModelData;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.EntityModelLayer;
-
 import java.util.Map;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.util.profiling.jfr.Environment;
 
 @Environment(value= EnvType.CLIENT)
 public class ModEntityModels {
-    public static Map<EntityModelLayer, TexturedModelData> getModels() {
-        ImmutableMap.Builder<EntityModelLayer, TexturedModelData> builder = ImmutableMap.builder();
+    public static Map<ModelLayerLocation, LayerDefinition> getModels() {
+        ImmutableMap.Builder<ModelLayerLocation, LayerDefinition> builder = ImmutableMap.builder();
 
         builder.put(ModEntityModelLayers.HUMAN, HumanModel.getTexturedModelData(CubeDeformation.NONE));
         builder.put(ModEntityModelLayers.DWARF, DwarfModel.getTexturedModelData(CubeDeformation.NONE));
@@ -35,7 +36,7 @@ public class ModEntityModels {
         builder.put(ModEntityModelLayers.CRAB, CrabModel.getTexturedModelData());
         builder.put(ModEntityModelLayers.SNAIL, SnailModel.getTexturedModelData());
 
-        ImmutableMap<EntityModelLayer, TexturedModelData> immutableMap = builder.build();
+        ImmutableMap<ModelLayerLocation, LayerDefinition> immutableMap = builder.build();
         return immutableMap;
     }
 }

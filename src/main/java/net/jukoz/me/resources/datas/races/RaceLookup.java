@@ -4,7 +4,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.registries.DynamicRegistriesME;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

@@ -1,7 +1,6 @@
 package net.jukoz.me.block.special.toggeable_lights;
 
-import net.minecraft.block.*;
-import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -15,8 +14,14 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.VoxelShapes;
 import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.function.ToIntFunction;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import com.mojang.math.Axis;
+import net.minecraft.world.phys.shapes.Shapes;
 
 public class SilverLanternBlock extends AbstractToggeableLightBlock {
     public static final BooleanProperty HANGING;
@@ -52,14 +57,14 @@ public class SilverLanternBlock extends AbstractToggeableLightBlock {
         return null;
     }
 
-    public void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
+    public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
         if (!world.isClient && projectile.isOnFire() && !state.get(LIT)) {
             world.setBlockState(hit.getBlockPos(), state.with(LIT, true), STATE_TO_LUMINANCE.applyAsInt(state));
         }
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return state.get(HANGING) ? HANGING_SHAPE : STANDING_SHAPE;
     }
 
@@ -72,10 +77,10 @@ public class SilverLanternBlock extends AbstractToggeableLightBlock {
         HANGING = BlockStateProperties.HANGING;
         STATE_TO_LUMINANCE = (state) -> { return state.get(LIT) ? state.get(LEVEL_15) : 0; };
 
-        STANDING_SHAPE = VoxelShapes.union(
+        STANDING_SHAPE = Shapes.union(
                 Block.createCuboidShape(5.0, 0.0, 5.0, 11.0, 7.0, 11.0),
                 Block.createCuboidShape(6.0, 7.0, 6.0, 10.0, 9.0, 10.0));
-        HANGING_SHAPE = VoxelShapes.union(
+        HANGING_SHAPE = Shapes.union(
                 Block.createCuboidShape(5.0, 1.0, 5.0, 11.0, 8.0, 11.0),
                 Block.createCuboidShape(6.0, 8.0, 6.0, 10.0, 10.0, 10.0));
     }

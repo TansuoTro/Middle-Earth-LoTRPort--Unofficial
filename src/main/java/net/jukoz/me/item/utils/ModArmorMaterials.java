@@ -10,8 +10,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Lazy;
-
+import net.minecraft.util.LazyLoadedValue;
 import java.util.EnumMap;
 import java.util.function.Supplier;
 

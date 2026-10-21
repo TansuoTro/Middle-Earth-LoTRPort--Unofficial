@@ -2,7 +2,6 @@ package net.jukoz.me.gui.utils.widgets.map.types;
 
 import net.jukoz.me.gui.utils.widgets.UiDirections;
 import org.joml.Vector2i;
-
 import java.util.HashMap;
 
 public enum MapArrowType {

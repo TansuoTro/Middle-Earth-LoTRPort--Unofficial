@@ -3,30 +3,32 @@ package net.jukoz.me.block.special.crockpot;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererFactory;
-import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.texture.SpriteAtlasTexture;
-import net.minecraft.client.util.SpriteIdentifier;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.resources.model.Material;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.util.math.RotationAxis;
+import com.mojang.math.Axis;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.util.profiling.jfr.Environment;
 
 @Environment(value= EnvType.CLIENT)
 public class CrockpotEntityRenderer implements BlockEntityRenderer<CrockpotBlockEntity> {
     private static final float SIZE_FACTOR = 0.25f;
-    private static SpriteIdentifier waterSpriteId = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new ResourceLocation("minecraft", "block/water_still"));
+    private static Material waterSpriteId = new Material(TextureAtlas.BLOCK_ATLAS_TEXTURE, new ResourceLocation("minecraft", "block/water_still"));
 
-    public CrockpotEntityRenderer(BlockEntityRendererFactory.Context context) {
+    public CrockpotEntityRenderer(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
     public void render(CrockpotBlockEntity entity, float tickProgress, PoseStack matrices,
-                       VertexConsumerProvider vertexConsumers, int light, int overlay) {
+                       MultiBufferSource vertexConsumers, int light, int overlay) {
         int color = 4161734;
         int red = color >> 16 & 255;
         int green = color >> 8 & 255;
@@ -40,7 +42,7 @@ public class CrockpotEntityRenderer implements BlockEntityRenderer<CrockpotBlock
             VertexConsumer consumer = vertexConsumers.getBuffer(RenderLayer.getTranslucentMovingBlock());
             //matrices.peek();
 
-            Sprite waterSprite = waterSpriteId.getSprite();
+            TextureAtlasSprite waterSprite = waterSpriteId.getSprite();
 
             PoseStack.Entry entry = matrices.peek();
 

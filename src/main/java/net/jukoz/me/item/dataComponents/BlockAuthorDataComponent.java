@@ -10,7 +10,6 @@ import net.jukoz.me.compat.net.PacketCodec;
 import net.minecraft.network.chat.Component;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.utils.BlockAuthor;
-
 import java.util.List;
 
 public record BlockAuthorDataComponent(BlockAuthor author) implements TooltipAppender {
@@ -27,7 +26,7 @@ public record BlockAuthorDataComponent(BlockAuthor author) implements TooltipApp
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, net.minecraft.client.item.TooltipContext context, List<Component> tooltip) {
+    public void appendTooltip(ItemStack stack, net.minecraft.world.item.TooltipFlag context, List<Component> tooltip) {
         tooltip.add(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".author").append(this.author.getAuthorName()));
     }
 }

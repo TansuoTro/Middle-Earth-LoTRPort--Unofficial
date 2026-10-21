@@ -13,7 +13,6 @@ import net.jukoz.me.resources.datas.common.EntityCategories;
 import net.jukoz.me.api.dtos.WeightedIdentifier;
 import net.jukoz.me.resources.datas.texture_presets.WeightedClothingPresetHolder;
 import net.jukoz.me.resources.datas.texture_presets.WeightedTexturePresetHolder;
-
 import java.util.HashMap;
 import java.util.List;
 

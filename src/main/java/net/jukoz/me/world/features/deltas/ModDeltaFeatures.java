@@ -8,28 +8,27 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.StructureWorldAccess;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.LevelAccess;
-import net.minecraft.world.gen.feature.DeltaFeatureConfig;
+import net.minecraft.world.level.levelgen.feature.configurations.DeltaFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
-
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import java.util.Iterator;
 
-public class ModDeltaFeatures extends Feature<DeltaFeatureConfig> {
+public class ModDeltaFeatures extends Feature<DeltaFeatureConfiguration> {
     private static final ImmutableList<Block> CANNOT_REPLACE_BLOCKS;
     private static final Direction[] DIRECTIONS;
     private static final double field_31501 = 0.9;
 
-    public ModDeltaFeatures(Codec<DeltaFeatureConfig> codec) {
+    public ModDeltaFeatures(Codec<DeltaFeatureConfiguration> codec) {
         super(codec);
     }
 
-    public boolean generate(FeatureContext<DeltaFeatureConfig> context) {
+    public boolean generate(FeaturePlaceContext<DeltaFeatureConfiguration> context) {
         boolean bl = false;
         RandomSource random = context.getRandom();
-        StructureWorldAccess structureWorldAccess = context.getWorld();
-        DeltaFeatureConfig deltaFeatureConfig = (DeltaFeatureConfig)context.getConfig();
+        WorldGenLevel structureWorldAccess = context.getWorld();
+        DeltaFeatureConfiguration deltaFeatureConfig = (DeltaFeatureConfiguration)context.getConfig();
         BlockPos blockPos = context.getOrigin();
         boolean bl2 = random.nextDouble() < 0.9;
         int i = bl2 ? deltaFeatureConfig.getRimSize().get(random) : 0;
@@ -63,7 +62,7 @@ public class ModDeltaFeatures extends Feature<DeltaFeatureConfig> {
         return bl;
     }
 
-    private static boolean canPlace(WorldAccess world, BlockPos pos, DeltaFeatureConfig config) {
+    private static boolean canPlace(LevelAccessor world, BlockPos pos, DeltaFeatureConfiguration config) {
         //pos = pos.offset(Direction.Axis.Y, -1);
         BlockState blockState = world.getBlockState(pos);
         if (blockState.isOf(config.getContents().getBlock())) {

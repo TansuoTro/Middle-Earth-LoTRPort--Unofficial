@@ -3,9 +3,8 @@ package net.jukoz.me.block.utils.setBuilders;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.block.NoteBlockInstrument;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.world.level.block.SoundType;
 import net.jukoz.me.block.utils.BlockRecordTypes;
-
 import java.util.List;
 
 public class SimpleBlockSetBuilder {
@@ -17,12 +16,12 @@ public class SimpleBlockSetBuilder {
     public float blastResistance;
     public MapColor mapColor;
     public NoteBlockInstrument instrument;
-    public BlockSoundGroup soundGroup;
+    public SoundType soundGroup;
     public boolean requiresTool;
     public  List<ItemStack> group;
 
     public SimpleBlockSetBuilder(String name, float hardness, float blastResistance,
-                                 MapColor mapColor, NoteBlockInstrument instrument, BlockSoundGroup soundGroup, boolean requiresTool,
+                                 MapColor mapColor, NoteBlockInstrument instrument, SoundType soundGroup, boolean requiresTool,
                                  List<ItemStack> group){
         this.setName = name;
         this.hardness = hardness;

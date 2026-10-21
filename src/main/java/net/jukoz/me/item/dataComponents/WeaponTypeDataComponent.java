@@ -9,10 +9,9 @@ import net.jukoz.me.compat.TooltipAppender;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.item.utils.armor.ArmorMaterialsME;
-
 import java.util.List;
 
 public record WeaponTypeDataComponent(String type) implements TooltipAppender {
@@ -26,9 +25,9 @@ public record WeaponTypeDataComponent(String type) implements TooltipAppender {
     ;
 
     @Override
-    public void appendTooltip(ItemStack stack, net.minecraft.client.item.TooltipContext context, List<Component> tooltip) {
-        tooltip.add(Component.translatable("tooltip.%s.type".formatted(MiddleEarth.MOD_ID)).formatted(Formatting.GOLD)
-                .append(Component.translatable("tooltip.%s.%s".formatted(MiddleEarth.MOD_ID, this.type)).formatted(Formatting.WHITE)));
+    public void appendTooltip(ItemStack stack, net.minecraft.world.item.TooltipFlag context, List<Component> tooltip) {
+        tooltip.add(Component.translatable("tooltip.%s.type".formatted(MiddleEarth.MOD_ID)).formatted(ChatFormatting.GOLD)
+                .append(Component.translatable("tooltip.%s.%s".formatted(MiddleEarth.MOD_ID, this.type)).formatted(ChatFormatting.WHITE)));
     }
 
     @Override

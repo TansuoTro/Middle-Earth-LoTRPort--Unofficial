@@ -11,7 +11,6 @@ import net.jukoz.me.resources.datas.factions.Faction;
 import net.jukoz.me.resources.datas.factions.data.BannerData;
 import net.jukoz.me.resources.datas.common.NpcRank;
 import net.jukoz.me.resources.datas.factions.data.InitialDiplomacy;
-
 import java.util.HashMap;
 import java.util.List;
 

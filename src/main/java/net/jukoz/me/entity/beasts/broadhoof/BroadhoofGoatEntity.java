@@ -1,20 +1,16 @@
 package net.jukoz.me.entity.beasts.broadhoof;
 
 import net.minecraft.world.level.block.state.BlockState;
-
-import net.minecraft.item.FoodComponent;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.entity.passive.*;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.item.GoatHornItem;
+import net.minecraft.world.item.InstrumentItem;
 import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -25,7 +21,7 @@ import net.minecraft.tags.InstrumentTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.nbt.CompoundTag;
@@ -38,8 +34,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.config.ModServerConfigs;
@@ -54,10 +50,28 @@ import net.jukoz.me.resources.datas.common.RaceType;
 import net.jukoz.me.utils.ItemTagsME;
 import net.jukoz.me.utils.PlayerUtil;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.IntUnaryOperator;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityEvent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.item.ItemEntity;
 
 public class BroadhoofGoatEntity extends AbstractBeastEntity {
     private static final float MIN_MOVEMENT_SPEED_BONUS = (float)BroadhoofGoatEntity.getChildMovementSpeedBonus(() -> 0.0);
@@ -66,22 +80,21 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
     private static final float MAX_JUMP_STRENGTH_BONUS = (float)BroadhoofGoatEntity.getChildJumpStrengthBonus(() -> 1.0);
     private static final float MIN_HEALTH_BONUS = BroadhoofGoatEntity.getChildHealthBonus(max -> 0);
     private static final float MAX_HEALTH_BONUS = BroadhoofGoatEntity.getChildHealthBonus(max -> max - 1);
-    private static final TrackedData<Integer> VARIANT = DataTracker.registerData(BroadhoofGoatEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    private static final TrackedData<Integer> BEADS = DataTracker.registerData(BroadhoofGoatEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    private static final TrackedData<Boolean> HAIR = DataTracker.registerData(BroadhoofGoatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> LEFT_HORN = DataTracker.registerData(BroadhoofGoatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> RIGHT_HORN = DataTracker.registerData(BroadhoofGoatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> BRUSHED_BEARD = DataTracker.registerData(BroadhoofGoatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> MOUNTABLE = DataTracker.registerData(BroadhoofGoatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.registerData(BroadhoofGoatEntity.class, EntityDataSerializers.INTEGER);
+    private static final EntityDataAccessor<Integer> BEADS = SynchedEntityData.registerData(BroadhoofGoatEntity.class, EntityDataSerializers.INTEGER);
+    private static final EntityDataAccessor<Boolean> HAIR = SynchedEntityData.registerData(BroadhoofGoatEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> LEFT_HORN = SynchedEntityData.registerData(BroadhoofGoatEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> RIGHT_HORN = SynchedEntityData.registerData(BroadhoofGoatEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> BRUSHED_BEARD = SynchedEntityData.registerData(BroadhoofGoatEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> MOUNTABLE = SynchedEntityData.registerData(BroadhoofGoatEntity.class, EntityDataSerializers.BOOLEAN);
     public final AnimationState jumpAnimationState = new AnimationState();
     private static final EntityDimensions BABY_BASE_DIMENSIONS = EntitiesME.BROADHOOF_GOAT.getDimensions().scaled(0.5f);
-
 
     public BroadhoofGoatEntity(EntityType<? extends AbstractBeastEntity> entityType, Level world) {
         super(entityType, world);
     }
 
-    public static DefaultAttributeContainer.Builder setAttributes() {
+    public static AttributeSupplier.Builder setAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.2)
                 .add(Attributes.GENERIC_MAX_HEALTH, 50.0d)
@@ -103,14 +116,14 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
 
     @Override
     protected void initGoals() {
-        this.goalSelector.add(1, new SwimGoal(this));
-        this.goalSelector.add(2, new WanderAroundFarGoal(this, 1.0));
+        this.goalSelector.add(1, new FloatGoal(this));
+        this.goalSelector.add(2, new WaterAvoidingRandomStrollGoal(this, 1.0));
         this.goalSelector.add(3, new MeleeAttackGoal(this, 2.5, false));
         this.goalSelector.add(4, new ChargeAttackGoal(this, maxChargeCooldown()));
-        this.goalSelector.add(5, new AnimalMateGoal(this, 1.5));
+        this.goalSelector.add(5, new BreedGoal(this, 1.5));
         this.goalSelector.add(6, new TemptGoal(this, 1.0, Ingredient.fromTag(ItemTagsME.COW_FOOD), false));
-        this.goalSelector.add(7, new LookAtEntityGoal(this, Player.class, 6.0f));
-        this.goalSelector.add(8, new LookAroundGoal(this));
+        this.goalSelector.add(7, new LookAtPlayerGoal(this, Player.class, 6.0f));
+        this.goalSelector.add(8, new RandomLookAroundGoal(this));
         this.targetSelector.add(1, new BeastRevengeGoal(this, new Class[0]).setGroupRevenge());
     }
 
@@ -190,7 +203,7 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
                         if (this.isBreedingItem(itemStack)) { // Feed
                             if(this.getHealth() < this.getMaxHealth()) { // Food provides health
                                 if (!player.getAbilities().creativeMode) itemStack.decrement(1);
-                                FoodComponent foodComponent = itemStack.getItem().getFoodComponent();
+                                FoodProperties foodComponent = itemStack.getItem().getFoodComponent();
                                 float f = foodComponent != null ? (float)foodComponent.getHunger() : 1.0f;
                                 this.heal(2.0f * f);
                                 return InteractionResult.SUCCESS;
@@ -260,7 +273,7 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
 
     @Override
     @Nullable
-    public PassiveEntity createChild(ServerLevel world, PassiveEntity entity) {
+    public AgeableMob createChild(ServerLevel world, AgeableMob entity) {
         BroadhoofGoatEntity broadhoofEntity = (BroadhoofGoatEntity)entity;
         BroadhoofGoatEntity broadhoofEntity2 = EntitiesME.BROADHOOF_GOAT.create(world);
         if (broadhoofEntity2 != null) {
@@ -278,15 +291,14 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
     }
 
     @Override
-    protected void setChildAttributes(PassiveEntity other, AbstractHorseEntity child) {
+    protected void setChildAttributes(AgeableMob other, AbstractHorse child) {
         this.setChildAttribute(other, child, Attributes.GENERIC_MAX_HEALTH, MIN_HEALTH_BONUS, MAX_HEALTH_BONUS);
         this.setChildAttribute(other, child, Attributes.HORSE_JUMP_STRENGTH, MIN_JUMP_STRENGTH_BONUS, MAX_JUMP_STRENGTH_BONUS);
         this.setChildAttribute(other, child, Attributes.GENERIC_MOVEMENT_SPEED, MIN_MOVEMENT_SPEED_BONUS, MAX_MOVEMENT_SPEED_BONUS);
     }
 
-
     @Override
-    public EntityDimensions getDimensions(EntityPose pose) {
+    public EntityDimensions getDimensions(Pose pose) {
         return this.isBaby() ? BABY_BASE_DIMENSIONS : super.getDimensions(pose);
     }
 
@@ -301,7 +313,7 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
     }
 
     @Override
-    public boolean canBreedWith(AnimalEntity other) {
+    public boolean canBreedWith(Animal other) {
         return other instanceof BroadhoofGoatEntity;
     }
 
@@ -313,7 +325,7 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
     @Override
     public boolean tryAttack(Entity target) {
         if(!this.getWorld().isClient() && super.tryAttack(target)) {
-            this.getWorld().sendEntityStatus(this, EntityStatuses.PLAY_ATTACK_SOUND);
+            this.getWorld().sendEntityStatus(this, EntityEvent.PLAY_ATTACK_SOUND);
             return true;
         }
 
@@ -421,7 +433,7 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
         if (!bl && !bl2) {
             return false;
         }
-        TrackedData<Boolean> trackedData = !bl ? RIGHT_HORN : (!bl2 ? LEFT_HORN : (this.random.nextBoolean() ? LEFT_HORN : RIGHT_HORN));
+        EntityDataAccessor<Boolean> trackedData = !bl ? RIGHT_HORN : (!bl2 ? LEFT_HORN : (this.random.nextBoolean() ? LEFT_HORN : RIGHT_HORN));
         this.dataTracker.set(trackedData, false);
         Vec3 vec3d = this.getPos();
         ItemStack itemStack = this.getGoatHornStack();
@@ -438,7 +450,7 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
         TagKey<Instrument> tagKey = this.random.nextBoolean() ? InstrumentTags.SCREAMING_GOAT_HORNS : InstrumentTags.REGULAR_GOAT_HORNS;
         return this.getWorld().getRegistryManager().get(Registries.INSTRUMENT).getEntryList(tagKey)
                 .flatMap(list -> list.getRandom(random))
-                .map(registryEntry -> GoatHornItem.getStackForInstrument(Items.GOAT_HORN, registryEntry))
+                .map(registryEntry -> InstrumentItem.getStackForInstrument(Items.GOAT_HORN, registryEntry))
                 .orElseGet(() -> new ItemStack(Items.GOAT_HORN));
     }
 
@@ -503,7 +515,7 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
     }
 
     /* VARIANTS */
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable CompoundTag nbt) {
+    public SpawnGroupData initialize(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, @Nullable CompoundTag nbt) {
         BroadhoofGoatColor color = Util.getRandom(BroadhoofGoatColor.values(), this.random);
         BroadhoofGoatPattern pattern = BroadhoofGoatPattern.PATTERN_COMBINATIONS.get(color).getRandom().getItem();
         BroadhoofGoatHorns horns = Util.getRandom(BroadhoofGoatHorns.values(), this.random);
@@ -518,7 +530,6 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
 
         return super.initialize(world, difficulty, spawnReason, entityData, nbt);
     }
-
 
     // VARIANTS
 
@@ -635,7 +646,7 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
     }
 
     @Override
-    protected void playWalkSound(BlockSoundGroup group) {
+    protected void playWalkSound(SoundType group) {
         this.playSound(SoundEvents.ENTITY_GOAT_STEP, 1.0f, 0.7f);
     }
 

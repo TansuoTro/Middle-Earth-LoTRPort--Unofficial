@@ -1,13 +1,12 @@
 package net.jukoz.me.gui.utils.widgets.text;
 
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.LanguageManager;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Colors;
+import net.minecraft.util.CommonColors;
 import net.jukoz.me.gui.utils.widgets.ModWidget;
 import net.jukoz.me.utils.resources.FileUtils;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +16,7 @@ public class TextBlockWidget extends ModWidget {
     private int startX, startY;
     private TextAlignment textAlignment;
     private boolean isJustified = false;
-    private TextRenderer textRenderer;
+    private Font textRenderer;
     private final int spaceWidth;
     private final boolean hasNoSpace;
 
@@ -107,17 +106,17 @@ public class TextBlockWidget extends ModWidget {
         return textOverflow;
     }
 
-    public void draw(DrawContext context, boolean showLimit, boolean showBorders){
+    public void draw(GuiGraphics context, boolean showLimit, boolean showBorders){
         if(showBorders) {
-            context.drawVerticalLine(startX, startY, startY + height, Colors.RED);
-            context.drawVerticalLine(startX + width, startY, startY + height, Colors.RED);
-            context.drawHorizontalLine(startX, startX + width, startY, Colors.RED);
-            context.drawHorizontalLine(startX, startX + width, startY + height, Colors.RED);
+            context.drawVerticalLine(startX, startY, startY + height, CommonColors.RED);
+            context.drawVerticalLine(startX + width, startY, startY + height, CommonColors.RED);
+            context.drawHorizontalLine(startX, startX + width, startY, CommonColors.RED);
+            context.drawHorizontalLine(startX, startX + width, startY + height, CommonColors.RED);
         }
         draw(context, showLimit);
     }
 
-    public void draw(DrawContext context, boolean showTextLimit){
+    public void draw(GuiGraphics context, boolean showTextLimit){
         int currentHeight = 0;
         for(List<Word> words : wordsPerLine){
             if (showTextLimit && !words.isEmpty() && currentHeight + textRenderer.fontHeight > height){
@@ -139,20 +138,20 @@ public class TextBlockWidget extends ModWidget {
         return Component.literal(textContentBuilder.toString());
     }
 
-    private void drawTextLimitLine(DrawContext context, int currentStart) {
+    private void drawTextLimitLine(GuiGraphics context, int currentStart) {
         Component text = Component.of("...");
         context.drawText(textRenderer, text,
-                startX + (width / 2) - (textRenderer.getWidth(text) / 2), startY + currentStart, Colors.RED, false);
+                startX + (width / 2) - (textRenderer.getWidth(text) / 2), startY + currentStart, CommonColors.RED, false);
     }
 
-    private void drawTextLine(DrawContext context, List<Word> currentLine, int currentStart, boolean isEnd) {
+    private void drawTextLine(GuiGraphics context, List<Word> currentLine, int currentStart, boolean isEnd) {
         if (isJustified && !isEnd) {
             Component text = getJustifiedTextFromList(currentLine);
             Component lastWordText = Component.literal(currentLine.get(currentLine.size()-1).content);
             context.drawText(textRenderer, text,
-                    startX, startY + currentStart, Colors.BLACK, false);
+                    startX, startY + currentStart, CommonColors.BLACK, false);
             context.drawText(textRenderer, lastWordText,
-                    startX + width - textRenderer.getWidth(lastWordText), startY + currentStart, Colors.BLACK, false);
+                    startX + width - textRenderer.getWidth(lastWordText), startY + currentStart, CommonColors.BLACK, false);
         } else {
             Component text = getTextFromList(currentLine);
             // draw alignment
@@ -163,7 +162,7 @@ public class TextBlockWidget extends ModWidget {
             };
 
             context.drawText(textRenderer, text,
-                    x, startY + currentStart, Colors.BLACK, false);
+                    x, startY + currentStart, CommonColors.BLACK, false);
         }
     }
 

@@ -3,15 +3,14 @@ package net.jukoz.me.datageneration.custom;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
-
 import com.google.gson.JsonObject;
 import net.jukoz.me.recipe.AnvilShapingRecipe;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancement.CriterionMerger;
-import net.minecraft.advancement.criterion.CriterionConditions;
-import net.minecraft.advancement.criterion.RecipeUnlockedCriterion;
-import net.minecraft.data.server.recipe.RecipeJsonProvider;
+import net.minecraft.advancements.RequirementsStrategy;
+import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemConvertible;
 import net.minecraft.world.item.ItemStack;
@@ -32,7 +31,7 @@ public class AnvilShapingRecipeJsonBuilder {
     private Ingredient input;
     private final Item output;
     private final int amount;
-    private final Map<String, CriterionConditions> criteria = new LinkedHashMap<>();
+    private final Map<String, CriterionTriggerInstance> criteria = new LinkedHashMap<>();
 
     private AnvilShapingRecipeJsonBuilder(RecipeCategory category, Item output, int amount) {
         this.category = category;
@@ -56,7 +55,7 @@ public class AnvilShapingRecipeJsonBuilder {
         return this.input(Ingredient.fromTag(tag));
     }
 
-    public AnvilShapingRecipeJsonBuilder input(ItemConvertible itemProvider) {
+    public AnvilShapingRecipeJsonBuilder input(ItemLike itemProvider) {
         return this.input(Ingredient.ofItems(itemProvider));
     }
 
@@ -65,25 +64,25 @@ public class AnvilShapingRecipeJsonBuilder {
         return this;
     }
 
-    public AnvilShapingRecipeJsonBuilder criterion(String name, CriterionConditions conditions) {
+    public AnvilShapingRecipeJsonBuilder criterion(String name, CriterionTriggerInstance conditions) {
         this.criteria.put(name, conditions);
         return this;
     }
 
-    public void offerTo(Consumer<RecipeJsonProvider> exporter) {
+    public void offerTo(Consumer<FinishedRecipe> exporter) {
         this.offerTo(exporter, Registries.ITEM.getId(this.getOutputItem()).getPath());
     }
 
-    public void offerTo(Consumer<RecipeJsonProvider> exporter, String path) {
+    public void offerTo(Consumer<FinishedRecipe> exporter, String path) {
         this.offerTo(exporter, new ResourceLocation(net.jukoz.me.MiddleEarth.MOD_ID, path));
     }
 
-    public void offerTo(Consumer<RecipeJsonProvider> exporter, ResourceLocation recipeId) {
+    public void offerTo(Consumer<FinishedRecipe> exporter, ResourceLocation recipeId) {
         this.validate(recipeId);
         Advancement.Builder advancement = Advancement.Builder.createUntelemetered()
-                .criterion("has_the_recipe", RecipeUnlockedCriterion.create(recipeId))
+                .criterion("has_the_recipe", RecipeUnlockedTrigger.create(recipeId))
                 .rewards(AdvancementRewards.Builder.recipe(recipeId))
-                .criteriaMerger(CriterionMerger.OR);
+                .criteriaMerger(RequirementsStrategy.OR);
         this.criteria.forEach(advancement::criterion);
         exporter.accept(new CustomRecipeJsonProvider(recipeId, AnvilShapingRecipe.Serializer.INSTANCE,
                 this::writeRecipeJson, advancement, recipeId.withPrefixedPath("recipes/")));

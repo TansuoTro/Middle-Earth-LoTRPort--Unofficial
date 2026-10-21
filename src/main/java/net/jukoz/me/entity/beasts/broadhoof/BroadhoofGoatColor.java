@@ -5,14 +5,14 @@ import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.function.ValueLists;
-
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.ByIdMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.IntFunction;
+import net.minecraft.network.FriendlyByteBuf;
 
-public enum BroadhoofGoatColor implements StringIdentifiable {
+public enum BroadhoofGoatColor implements StringRepresentable {
     WHITE(0, "white"),
     LIGHT_GRAY(1, "light_gray"),
     PALE(2, "pale"),
@@ -21,9 +21,9 @@ public enum BroadhoofGoatColor implements StringIdentifiable {
     GRAY(5, "gray"),
     BLACK(6, "black");
 
-    public static final Codec<BroadhoofGoatColor> CODEC = StringIdentifiable.createCodec(BroadhoofGoatColor::values);
-    private static final IntFunction<BroadhoofGoatColor> INDEX_MAPPER = ValueLists.createIdToValueFunction(
-            BroadhoofGoatColor::getIndex, values(), ValueLists.OutOfBoundsHandling.WRAP
+    public static final Codec<BroadhoofGoatColor> CODEC = StringRepresentable.createCodec(BroadhoofGoatColor::values);
+    private static final IntFunction<BroadhoofGoatColor> INDEX_MAPPER = ByIdMap.createIdToValueFunction(
+            BroadhoofGoatColor::getIndex, values(), ByIdMap.OutOfBoundsHandling.WRAP
     );
     public static final PacketCodec<net.minecraft.network.FriendlyByteBuf, BroadhoofGoatColor> PACKET_CODEC = PacketCodecs.indexed(INDEX_MAPPER, BroadhoofGoatColor::getIndex);
     private final int index;

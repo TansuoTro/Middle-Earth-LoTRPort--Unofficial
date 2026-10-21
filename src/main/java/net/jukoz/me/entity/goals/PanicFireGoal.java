@@ -1,11 +1,11 @@
 package net.jukoz.me.entity.goals;
 
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.entity.ai.goal.EscapeSunlightGoal;
-import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.world.entity.ai.goal.FleeSunGoal;
+import net.minecraft.world.entity.PathfinderMob;
 
-public class PanicFireGoal extends EscapeSunlightGoal {
-    public PanicFireGoal(PathAwareEntity mob, double speed) {
+public class PanicFireGoal extends FleeSunGoal {
+    public PanicFireGoal(PathfinderMob mob, double speed) {
         super(mob, speed);
     }
 

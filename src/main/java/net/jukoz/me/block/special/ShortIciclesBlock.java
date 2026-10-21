@@ -20,9 +20,7 @@ public class ShortIciclesBlock extends Block {
         super(settings);
     }
 
-
-
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
         BlockPos blockPos = pos.up();
         BlockState blockState = world.getBlockState(blockPos);
         return blockState.isSideSolidFullSquare(world, blockPos, Direction.DOWN);
@@ -33,7 +31,7 @@ public class ShortIciclesBlock extends Block {
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (direction == Direction.UP && !this.canPlaceAt(state, world, pos)) {
             return Blocks.AIR.getDefaultState();
         } else {

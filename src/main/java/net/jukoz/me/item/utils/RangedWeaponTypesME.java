@@ -1,8 +1,8 @@
 package net.jukoz.me.item.utils;
 
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.StringRepresentable;
 
-public enum RangedWeaponTypesME implements StringIdentifiable {
+public enum RangedWeaponTypesME implements StringRepresentable {
 
     BOW("bow", false, 512),
     NOBLE_BOW("bow", false, 768),

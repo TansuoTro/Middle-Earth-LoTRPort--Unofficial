@@ -3,19 +3,18 @@ package net.jukoz.me.item.items;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.item.utils.ModArmorMaterials;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.item.DyeableItem;
+import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-
 import java.text.Normalizer;
 import java.util.List;
 
-public class CustomHelmetItem extends ArmorItem implements DyeableItem {
+public class CustomHelmetItem extends ArmorItem implements DyeableLeatherItem {
 
     private ModArmorMaterials material;
     private List<CustomHelmetItem.Customizations> customsList;
@@ -37,7 +36,7 @@ public class CustomHelmetItem extends ArmorItem implements DyeableItem {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag context) {
 
         tooltip.add(Component.of(""));
         if (Screen.hasShiftDown()) {
@@ -65,7 +64,6 @@ public class CustomHelmetItem extends ArmorItem implements DyeableItem {
             super.appendTooltip(stack, world, tooltip, context);
         }
     }
-
 
     public enum Customizations{
         DYEABLE("dyeable"),

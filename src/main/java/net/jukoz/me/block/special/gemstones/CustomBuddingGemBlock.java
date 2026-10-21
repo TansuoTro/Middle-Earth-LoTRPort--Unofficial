@@ -10,7 +10,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,8 +40,6 @@ public class CustomBuddingGemBlock extends BuddingAmethystBlock {
             } else if (blockState.isOf(clusters.get(2)) && blockState.get(AmethystClusterBlock.FACING) == direction) {
                 block = clusters.get(3);
             }
-
-
 
             if (block != null) {
                 BlockState blockState2 = (BlockState)((BlockState)block.getDefaultState().with(AmethystClusterBlock.FACING, direction)).with(AmethystClusterBlock.WATERLOGGED, blockState.getFluidState().getFluid() == Fluids.WATER);

@@ -3,14 +3,14 @@ package net.jukoz.me.block.special;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.block.Waterloggable;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.util.function.BooleanBiFunction;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -20,10 +20,10 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.level.LevelView;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.stream.Stream;
+import net.minecraft.world.phys.shapes.Shapes;
 
-public class WoodTableBlock extends Block implements Waterloggable {
+public class WoodTableBlock extends Block implements SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public WoodTableBlock(Settings settings) {
@@ -42,7 +42,7 @@ public class WoodTableBlock extends Block implements Waterloggable {
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (state.get(WATERLOGGED)) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
@@ -63,6 +63,6 @@ public class WoodTableBlock extends Block implements Waterloggable {
                 Block.createCuboidShape(0, 0, 13, 3, 13, 16),
                 Block.createCuboidShape(13, 0, 13, 16, 13, 16),
                 Block.createCuboidShape(0, 13, 0, 16, 16, 16)
-        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+        ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
     }
 }

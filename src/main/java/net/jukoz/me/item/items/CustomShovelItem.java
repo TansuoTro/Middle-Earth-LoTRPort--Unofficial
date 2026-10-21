@@ -1,18 +1,18 @@
 package net.jukoz.me.item.items;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.ShovelItem;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.Tier;
 
 /**
  * ShovelItem that restores the donor's tool durability, repair material and
  * enchantability (1.20.1 has no data-component settings, so these come from the
- * ToolMaterial via overrides, mirroring {@code ReachWeaponItem}).
+ * Tier via overrides, mirroring {@code ReachWeaponItem}).
  */
 public class CustomShovelItem extends ShovelItem {
-    private final ToolMaterial material;
+    private final Tier material;
 
-    public CustomShovelItem(ToolMaterial material, float attackDamage, float attackSpeed, Settings settings) {
+    public CustomShovelItem(Tier material, float attackDamage, float attackSpeed, Settings settings) {
         super(material, attackDamage, attackSpeed, settings);
         this.material = material;
     }

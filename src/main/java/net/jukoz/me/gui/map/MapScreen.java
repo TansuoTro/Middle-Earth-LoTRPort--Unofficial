@@ -1,14 +1,14 @@
 package net.jukoz.me.gui.map;
-import net.jukoz.me.compat.METext;
 
+import net.jukoz.me.compat.METext;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.jukoz.me.MiddleEarth;
@@ -23,7 +23,6 @@ import net.jukoz.me.world.biomes.surface.MapBasedCustomBiome;
 import net.jukoz.me.world.map.MiddleEarthMapConfigs;
 import org.joml.Vector2d;
 import org.joml.Vector2i;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,7 +108,7 @@ public class MapScreen extends Screen {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         if(isFullscreen){
             renderFullscreen(context);
         } else {
@@ -121,28 +120,28 @@ public class MapScreen extends Screen {
         showCursorInformationTooltip(context, mouseX, mouseY);
     }
 
-    private void showCursorInformationTooltip(DrawContext context, int mouseX, int mouseY) {
+    private void showCursorInformationTooltip(GuiGraphics context, int mouseX, int mouseY) {
         Vector2d mapRatio = mapWidget.getCurrentMapRatio(mouseX, mouseY);
         if(mapRatio != null) {
             List<Component> texts = new ArrayList<>();
-            texts.add(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.tooltip.coordinates_title").formatted(Formatting.UNDERLINE));
+            texts.add(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.tooltip.coordinates_title").formatted(ChatFormatting.UNDERLINE));
             double x = Math.round((mapRatio.x * MiddleEarthMapConfigs.FULL_MAP_SIZE) * 10) / 10.0;
             double z = Math.round((mapRatio.y * MiddleEarthMapConfigs.FULL_MAP_SIZE) * 10) / 10.0;
-            texts.add(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.tooltip.coordinates_label").formatted(Formatting.GRAY)
-                    .append(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.tooltip.coordinates_content", x, z).formatted(Formatting.WHITE)));
+            texts.add(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.tooltip.coordinates_label").formatted(ChatFormatting.GRAY)
+                    .append(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.tooltip.coordinates_content", x, z).formatted(ChatFormatting.WHITE)));
 
             MapBasedCustomBiome biome = mapWidget.getBiomeAt((int) (mapRatio.x * MiddleEarthMapConfigs.REGION_SIZE), (int) (mapRatio.y * MiddleEarthMapConfigs.REGION_SIZE));
-            texts.add(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.tooltip.biome_label").formatted(Formatting.GRAY)
-                    .append(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.tooltip.biome_content", Component.translatable(biome.getBiome().getBiomeRegistryKey().getValue().toTranslationKey("biome"))).formatted(Formatting.WHITE)));
+            texts.add(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.tooltip.biome_label").formatted(ChatFormatting.GRAY)
+                    .append(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.tooltip.biome_content", Component.translatable(biome.getBiome().getBiomeRegistryKey().getValue().toTranslationKey("biome"))).formatted(ChatFormatting.WHITE)));
             if(hasTeleportPermission){
-                texts.add(METext.withColor( Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.tooltip.teleport_keybind", KeyInputHandler.mapTeleportKey.getBoundKeyLocalizedText().getString()).formatted(Formatting.ITALIC), ModColors.PENDING.color));
+                texts.add(METext.withColor( Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.tooltip.teleport_keybind", KeyInputHandler.mapTeleportKey.getBoundKeyLocalizedText().getString()).formatted(ChatFormatting.ITALIC), ModColors.PENDING.color));
             }
             context.drawTooltip(textRenderer, texts, mouseX, mouseY);
         }
 
     }
 
-    private void renderFullscreen(DrawContext context) {
+    private void renderFullscreen(GuiGraphics context) {
         startX = MARGIN;
         endX = context.getScaledWindowWidth() - MARGIN;
         startY = MARGIN;
@@ -159,7 +158,7 @@ public class MapScreen extends Screen {
         drawPlayer(context);
     }
 
-    private void renderNormal(DrawContext context) {
+    private void renderNormal(GuiGraphics context) {
         int centerX = context.getScaledWindowWidth() / 2;
         startX = centerX - (WIDTH / 2);
         endX = centerX + (WIDTH / 2);
@@ -176,22 +175,21 @@ public class MapScreen extends Screen {
         drawPlayer(context);
     }
 
-    private void drawPlayer(DrawContext context) {
+    private void drawPlayer(GuiGraphics context) {
         if(!playerIsInDimension) return;
         Vector2d playerRatio = mapWidget.getMapPointFromWorldCoordinate(new Vector2d(playerBlockPos.getX(), playerBlockPos.getZ()));
         int margin = (isFullscreen) ? 0 : MARGIN;
         double x = Math.max(startX + margin + 4, Math.min(endX - 4 - ((isFullscreen) ? NORMAL_BUTTON_SIZE.x : MARGIN), playerRatio.x));
         double y = Math.max(startY + margin + 4, Math.min(endY - 4 - margin, playerRatio.y));
 
-
         // TODO (?) : show the head?
-        //PlayerSkinDrawer.draw(context, player.getSkinTextures(), (int)x, (int)y, 4);
-        //PlayerSkinDrawer.draw(context, minecraft.getSkinProvider().getSkinTexturesSupplier(new GameProfile(UUID.fromString(this.uuid),this.name)).get(),x,y);
+        //PlayerFaceRenderer.draw(context, player.getSkinTextures(), (int)x, (int)y, 4);
+        //PlayerFaceRenderer.draw(context, minecraft.getSkinProvider().getSkinTexturesSupplier(new GameProfile(UUID.fromString(this.uuid),this.name)).get(),x,y);
 
         context.drawTexture(MAP_UI_TEXTURE, (int)x- 4, (int) y- 4, 154, 1, 8, 8, 256, 256);
     }
 
-    private void drawFullscreenToggleButton(DrawContext context){
+    private void drawFullscreenToggleButton(GuiGraphics context){
         int fullscreenToggleButtonUvY = ((ModWidget.isMouseOver(fullscreenButton) || fullscreenButton.isFocused()) ? 18 : 1);
         if(!fullscreenButton.active)
             fullscreenToggleButtonUvY = 35;
@@ -207,7 +205,7 @@ public class MapScreen extends Screen {
         }
     }
 
-    private void drawMapOverlayToggleButton(DrawContext context){
+    private void drawMapOverlayToggleButton(GuiGraphics context){
         int overlayToggleButtonUvY = (ModWidget.isMouseOver(overlayToggleButton) || overlayToggleButton.isFocused()) ? 69 : 52;
         if(!overlayToggleButton.active)
             overlayToggleButtonUvY = 86;
@@ -219,7 +217,7 @@ public class MapScreen extends Screen {
         context.drawTexture(MAP_UI_TEXTURE, x, y, 1, overlayToggleButtonUvY, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y, 256, 256);
     }
 
-    private void drawRecenterButton(DrawContext context){
+    private void drawRecenterButton(GuiGraphics context){
         recenterButton.active = playerIsInDimension;
 
         int recenterButtonUvY = (ModWidget.isMouseOver(recenterButton) || recenterButton.isFocused()) ? 18 : 1;
@@ -232,7 +230,7 @@ public class MapScreen extends Screen {
         context.drawTexture(MAP_UI_TEXTURE, x, x, y, 52, recenterButtonUvY, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y, 256, 256);
     }
 
-    private void drawZoomButtons(DrawContext context){
+    private void drawZoomButtons(GuiGraphics context){
         int zoomInButtonUvX = 86;
         int zoomInButtonUvY = (ModWidget.isMouseOver(zoomInButton) || zoomInButton.isFocused()) ? 18 : 1;
         zoomInButton.active = mapWidget.canZoomIn();

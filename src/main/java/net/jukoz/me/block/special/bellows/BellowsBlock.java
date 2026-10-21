@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.jukoz.me.block.registration.ModBlockEntities;
-import net.minecraft.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -15,8 +14,8 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,16 +24,19 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
 
-public class BellowsBlock extends BlockWithEntity {
+public class BellowsBlock extends BaseEntityBlock {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public BellowsBlock(Settings settings) {
         super(settings);
         this.setDefaultState(((this.stateManager.getDefaultState()).with(FACING, Direction.NORTH)));
     }
-
-
 
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
@@ -55,13 +57,13 @@ public class BellowsBlock extends BlockWithEntity {
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return Block.createCuboidShape(3, 0, 3, 13, 7, 13);
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderType(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
@@ -96,7 +98,6 @@ public class BellowsBlock extends BlockWithEntity {
         }
     }
 
-
     public boolean pump(Level world, BlockPos pos, BlockState state, Entity entity) {
         if (world.isClient) return false;
 
@@ -108,12 +109,12 @@ public class BellowsBlock extends BlockWithEntity {
     }
 
     @Override
-    public BlockState rotate(BlockState state, BlockRotation rotation) {
+    public BlockState rotate(BlockState state, Rotation rotation) {
         return state.with(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override
-    public BlockState mirror(BlockState state, BlockMirror mirror) {
+    public BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.get(FACING)));
     }
 

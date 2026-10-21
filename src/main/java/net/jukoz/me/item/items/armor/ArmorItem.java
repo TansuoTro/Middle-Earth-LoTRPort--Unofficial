@@ -1,6 +1,6 @@
 package net.jukoz.me.item.items.armor;
-import net.jukoz.me.item.MEComponents;
 
+import net.jukoz.me.item.MEComponents;
 import net.minecraft.world.item.Item;
 import net.jukoz.me.item.dataComponents.ArmorTierDataComponent;
 import net.jukoz.me.item.utils.armor.ExtendedArmorMaterial;

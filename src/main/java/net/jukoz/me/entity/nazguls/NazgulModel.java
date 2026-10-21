@@ -3,18 +3,26 @@ package net.jukoz.me.entity.nazguls;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.PartNames;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.Arm;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.util.Mth;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.util.profiling.jfr.Environment;
 
 @Environment(value= EnvType.CLIENT)
 public class NazgulModel<T extends Mob>
-        extends BipedEntityModel<T> {
+        extends HumanoidModel<T> {
 
     private static final String LEFT_SLEEVE = "left_sleeve";
     private static final String RIGHT_SLEEVE = "right_sleeve";
@@ -35,57 +43,55 @@ public class NazgulModel<T extends Mob>
         super.animateModel(mobEntity, f, g, h);
     }
 
-    public static TexturedModelData getTexturedModelData(Dilation dilation) {
-        ModelData modelData = new ModelData();
-        ModelPartData root = modelData.getRoot();
+    public static LayerDefinition getTexturedModelData(CubeDeformation dilation) {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition root = modelData.getRoot();
 
-        root.addChild(PartNames.BODY, ModelPartBuilder.create().uv(8, 8)
+        root.addChild(PartNames.BODY, CubeListBuilder.create().uv(8, 8)
                         .cuboid(-1.0f, 0f, -1.0f, 2.0f, 2.0f, 2.0f, dilation),
-                ModelTransform.pivot(0.0f, 0.0f, 0.0f));
+                PartPose.pivot(0.0f, 0.0f, 0.0f));
 
-
-        root.addChild(PartNames.HEAD, ModelPartBuilder.create().uv(0, 0)
+        root.addChild(PartNames.HEAD, CubeListBuilder.create().uv(0, 0)
                         .cuboid(-4.0f, -8.0f, -4.0f, 8.0f, 8.0f, 8.0f, dilation),
-                ModelTransform.pivot(0.0f, 0.0f, 0.0f));
+                PartPose.pivot(0.0f, 0.0f, 0.0f));
 
-        ModelPartData leftArm = root.addChild(PartNames.LEFT_ARM, ModelPartBuilder.create().uv(32, 48)
+        PartDefinition leftArm = root.addChild(PartNames.LEFT_ARM, CubeListBuilder.create().uv(32, 48)
                         .cuboid(-1.0f, -2.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation),
-                ModelTransform.pivot(LEFT_ARM_PIVOT_X, 2.5f, 0.0f));
-        ModelPartData rightArm = root.addChild(PartNames.RIGHT_ARM, ModelPartBuilder.create().uv(40, 16)
+                PartPose.pivot(LEFT_ARM_PIVOT_X, 2.5f, 0.0f));
+        PartDefinition rightArm = root.addChild(PartNames.RIGHT_ARM, CubeListBuilder.create().uv(40, 16)
                         .cuboid(-3f, -2.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation),
-                ModelTransform.pivot(RIGHT_ARM_PIVOT_X, 2.5f, 0.0f));
+                PartPose.pivot(RIGHT_ARM_PIVOT_X, 2.5f, 0.0f));
 
-        rightArm.addChild(RIGHT_SLEEVE, ModelPartBuilder.create().uv(40, 32).cuboid(0f, 0f, 0f, 3.0f, 12.0f, 4.0f, dilation.add(0.25f)),
-                ModelTransform.pivot(-2f, -2f, -2f));
-        leftArm.addChild(LEFT_SLEEVE, ModelPartBuilder.create().uv(48, 48).cuboid(0f, 0f, 0f, 3.0f, 12.0f, 4.0f, dilation.add(0.25f)),
-                ModelTransform.pivot(-1f, -2f, -2f));
+        rightArm.addChild(RIGHT_SLEEVE, CubeListBuilder.create().uv(40, 32).cuboid(0f, 0f, 0f, 3.0f, 12.0f, 4.0f, dilation.add(0.25f)),
+                PartPose.pivot(-2f, -2f, -2f));
+        leftArm.addChild(LEFT_SLEEVE, CubeListBuilder.create().uv(48, 48).cuboid(0f, 0f, 0f, 3.0f, 12.0f, 4.0f, dilation.add(0.25f)),
+                PartPose.pivot(-1f, -2f, -2f));
 
-        root.addChild(PartNames.BODY, ModelPartBuilder.create().uv(16, 16)
+        root.addChild(PartNames.BODY, CubeListBuilder.create().uv(16, 16)
                         .cuboid(-4.0f, 0.0f, -2f, 8.0f, 12.0f, 4.0f, dilation),
-                ModelTransform.pivot(0.0f, 0f, 0.0f));
+                PartPose.pivot(0.0f, 0f, 0.0f));
 
-        root.getChild(PartNames.BODY).addChild(PartNames.JACKET, ModelPartBuilder.create().uv(16, 32)
-                .cuboid(-4.0f, 0.0f, 0f, 8.0f, 12.0f, 4.0f, dilation.add(0.25f)), ModelTransform.NONE);
+        root.getChild(PartNames.BODY).addChild(PartNames.JACKET, CubeListBuilder.create().uv(16, 32)
+                .cuboid(-4.0f, 0.0f, 0f, 8.0f, 12.0f, 4.0f, dilation.add(0.25f)), PartPose.NONE);
 
-        root.addChild(PartNames.RIGHT_LEG, ModelPartBuilder.create().uv(0, 16)
+        root.addChild(PartNames.RIGHT_LEG, CubeListBuilder.create().uv(0, 16)
                         .cuboid(-2.0f, 0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation),
-                ModelTransform.pivot(-LEG_PIVOT_X, 0.0f, 0.0f));
-        root.addChild(PartNames.LEFT_LEG, ModelPartBuilder.create().uv(0, 16).mirrored()
+                PartPose.pivot(-LEG_PIVOT_X, 0.0f, 0.0f));
+        root.addChild(PartNames.LEFT_LEG, CubeListBuilder.create().uv(0, 16).mirrored()
                         .cuboid(-2.0f, 0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation),
-                ModelTransform.pivot(LEG_PIVOT_X, 0.0f, 0.0f));
+                PartPose.pivot(LEG_PIVOT_X, 0.0f, 0.0f));
 
-
-        root.getChild(PartNames.LEFT_LEG).addChild(LEFT_PANTS, ModelPartBuilder.create().uv(0, 48)
+        root.getChild(PartNames.LEFT_LEG).addChild(LEFT_PANTS, CubeListBuilder.create().uv(0, 48)
                         .cuboid(-2.0f, 0.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation.add(0.25f)),
-                ModelTransform.pivot(0, 0.0f, 0.0f));
-        root.getChild(PartNames.RIGHT_LEG).addChild(RIGHT_PANTS, ModelPartBuilder.create().uv(0, 32)
+                PartPose.pivot(0, 0.0f, 0.0f));
+        root.getChild(PartNames.RIGHT_LEG).addChild(RIGHT_PANTS, CubeListBuilder.create().uv(0, 32)
                         .cuboid(-2.0f, 0.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation.add(0.25f)),
-                ModelTransform.pivot(0, 0.0f, 0.0f));
+                PartPose.pivot(0, 0.0f, 0.0f));
 
-        root.addChild(PartNames.HAT, ModelPartBuilder.create().uv(32, 0).cuboid(-4.0f, -8.0f, -4.0f, 8.0f, 8.0f, 8.0f, dilation.add(0.5f)),
-                ModelTransform.pivot(0.0f, 0.0f, 0.0f));                // 54
+        root.addChild(PartNames.HAT, CubeListBuilder.create().uv(32, 0).cuboid(-4.0f, -8.0f, -4.0f, 8.0f, 8.0f, 8.0f, dilation.add(0.5f)),
+                PartPose.pivot(0.0f, 0.0f, 0.0f));                // 54
 
-        return TexturedModelData.of(modelData, 64, 64);
+        return LayerDefinition.of(modelData, 64, 64);
     }
 
     @Override
@@ -113,8 +119,8 @@ public class NazgulModel<T extends Mob>
     }
 
     @Override
-    public void setArmAngle(Arm arm, PoseStack matrices) {
-        float f = arm == Arm.RIGHT ? 1.0f : -1.0f;
+    public void setArmAngle(HumanoidArm arm, PoseStack matrices) {
+        float f = arm == HumanoidArm.RIGHT ? 1.0f : -1.0f;
         ModelPart modelPart = this.getArm(arm);
         modelPart.pivotX += f;
         modelPart.rotate(matrices);

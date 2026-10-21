@@ -5,7 +5,6 @@ import net.jukoz.me.resources.datas.combatarchetypes.CombatArchetypeData;
 import net.jukoz.me.resources.datas.combatarchetypes.MeleeCombatArchetypeData;
 import net.jukoz.me.resources.datas.combatarchetypes.RangedCombatArchetypeData;
 import net.jukoz.me.resources.datas.combatarchetypes.data.CombatArchetype;
-
 import java.util.Optional;
 
 public class CombatArchetypeDataUtil {

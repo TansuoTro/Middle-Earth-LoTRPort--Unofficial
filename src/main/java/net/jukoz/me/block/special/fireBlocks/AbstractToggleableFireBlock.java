@@ -6,20 +6,19 @@ import net.minecraft.world.level.block.BlockRenderType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.BlockWithEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.block.entity.CampfireBlockEntity;
+import net.minecraft.world.level.block.entity.CampfireBlockEntity;
 import net.minecraft.world.entity.Entity;
-
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.ai.pathing.NavigationType;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -35,8 +34,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.RenderShape;
 
-public abstract class AbstractToggleableFireBlock extends BlockWithEntity {
+public abstract class AbstractToggleableFireBlock extends BaseEntityBlock {
 
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
@@ -45,9 +46,8 @@ public abstract class AbstractToggleableFireBlock extends BlockWithEntity {
         this.setDefaultState(this.stateManager.getDefaultState().with(LIT, true));
     }
 
-
     @Override
-    public boolean canPathfindThrough(BlockState state, BlockGetter world, BlockPos pos, NavigationType type) {
+    public boolean canPathfindThrough(BlockState state, BlockGetter world, BlockPos pos, PathComputationType type) {
         return false;
     }
 
@@ -68,14 +68,14 @@ public abstract class AbstractToggleableFireBlock extends BlockWithEntity {
         return InteractionResult.SUCCESS;
     }
 
-    protected static void setLit(WorldAccess world, BlockState state, BlockPos pos, boolean lit) {
+    protected static void setLit(LevelAccessor world, BlockState state, BlockPos pos, boolean lit) {
         world.setBlockState(pos, state.with(LIT, lit), 2 | 3);
         if(lit){
-            world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.5F, 1.0F);
+            world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.5F, 1.0F);
         }
     }
 
-    public static void extinguish(@Nullable Entity entity, WorldAccess world, BlockPos pos, BlockState state) {
+    public static void extinguish(@Nullable Entity entity, LevelAccessor world, BlockPos pos, BlockState state) {
         if (world.isClient()) {
             for(int i = 0; i < 20; ++i) {
                 spawnSmokeParticle((Level)world, pos, true, true);
@@ -87,7 +87,7 @@ public abstract class AbstractToggleableFireBlock extends BlockWithEntity {
 
     public static void spawnSmokeParticle(Level world, BlockPos pos, boolean isSignal, boolean lotsOfSmoke) {
         RandomSource random = world.getRandom();
-        DefaultParticleType simpleParticleType = isSignal ? ParticleTypes.CAMPFIRE_SIGNAL_SMOKE : ParticleTypes.CAMPFIRE_COSY_SMOKE;
+        SimpleParticleType simpleParticleType = isSignal ? ParticleTypes.CAMPFIRE_SIGNAL_SMOKE : ParticleTypes.CAMPFIRE_COSY_SMOKE;
         world.addImportantParticle(simpleParticleType, true, (double)pos.getX() + 0.5 + random.nextDouble() / 3.0 * (double)(random.nextBoolean() ? 1 : -1), (double)pos.getY() + random.nextDouble() + random.nextDouble(), (double)pos.getZ() + 0.5 + random.nextDouble() / 3.0 * (double)(random.nextBoolean() ? 1 : -1), 0.0, 0.07, 0.0);
         if (lotsOfSmoke) {
             world.addParticle(ParticleTypes.SMOKE, (double)pos.getX() + 0.5 + random.nextDouble() / 4.0 * (double)(random.nextBoolean() ? 1 : -1), (double)pos.getY() + 0.4, (double)pos.getZ() + 0.5 + random.nextDouble() / 4.0 * (double)(random.nextBoolean() ? 1 : -1), 0.0, 0.005, 0.0);
@@ -98,8 +98,8 @@ public abstract class AbstractToggleableFireBlock extends BlockWithEntity {
         builder.add(new Property[]{LIT});
     }
 
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderType(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
@@ -115,7 +115,7 @@ public abstract class AbstractToggleableFireBlock extends BlockWithEntity {
         super.onEntityCollision(state, world, pos, entity);
     }
 
-    public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
+    public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
         BlockPos blockPos = hit.getBlockPos();
         if (!world.isClient && projectile.isOnFire()) {
             ServerLevel serverWorld = (ServerLevel)world;

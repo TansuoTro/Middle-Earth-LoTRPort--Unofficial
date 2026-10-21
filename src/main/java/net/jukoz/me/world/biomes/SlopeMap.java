@@ -1,7 +1,6 @@
 package net.jukoz.me.world.biomes;
 
 import net.minecraft.world.level.block.Block;
-
 import java.util.ArrayList;
 
 public class SlopeMap {

@@ -14,25 +14,36 @@ import net.jukoz.me.item.ModEquipmentItems;
 import net.jukoz.me.item.ModResourceItems;
 import net.jukoz.me.item.ModWeaponItems;
 import net.jukoz.me.item.items.PebbleItem;
-import net.minecraft.entity.*;
 import net.minecraft.world.entity.monster.RangedAttackMob;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.item.DyeableItem;
+import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 
 public class ShireHobbitEntity extends NpcEntity {
     private static float FLEE_DISTANCE = 8f;
@@ -54,7 +65,7 @@ public class ShireHobbitEntity extends NpcEntity {
 
     @Nullable
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable CompoundTag entityNbt) {
+    public SpawnGroupData initialize(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, @Nullable CompoundTag entityNbt) {
         entityData = super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
         RandomSource random = world.getRandom();
         this.initEquipment(random, difficulty);
@@ -64,32 +75,32 @@ public class ShireHobbitEntity extends NpcEntity {
     @Override
     protected void initGoals() {
         int i = 0;
-        this.goalSelector.add(++i, new SwimGoal(this));
-        this.goalSelector.add(++i, new FleeEntityGoal<>(this, TrollEntity.class, FLEE_DISTANCE, FLEE_SPEED_MIN, FLEE_SPEED_MAX));
-        this.goalSelector.add(++i, new FleeEntityGoal<>(this, MordorBlackUrukEntity.class, FLEE_DISTANCE, FLEE_SPEED_MIN, FLEE_SPEED_MAX));
-        this.goalSelector.add(++i, new FleeEntityGoal<>(this, MistyHobgoblinEntity.class, FLEE_DISTANCE, FLEE_SPEED_MIN, FLEE_SPEED_MAX));
-        this.goalSelector.add(++i, new FleeEntityGoal<>(this, MordorOrcEntity.class, FLEE_DISTANCE, FLEE_SPEED_MIN, FLEE_SPEED_MAX));
-        this.goalSelector.add(++i, new FleeEntityGoal<>(this, MistyGoblinEntity.class, FLEE_DISTANCE, FLEE_SPEED_MIN, FLEE_SPEED_MAX));
-        this.goalSelector.add(++i, new FleeEntityGoal<>(this, BanditHumanEntity.class, FLEE_DISTANCE, FLEE_SPEED_MIN, FLEE_SPEED_MAX));
-        this.goalSelector.add(++i, new FleeEntityGoal<>(this, MirkwoodSpiderEntity.class, FLEE_DISTANCE, FLEE_SPEED_MIN, FLEE_SPEED_MAX));
-        this.goalSelector.add(++i, new FleeEntityGoal<>(this, NazgulEntity.class, FLEE_DISTANCE, FLEE_SPEED_MIN, FLEE_SPEED_MAX));
-        this.goalSelector.add(++i, new ProjectileAttackGoal(this, 1.0, 12, 24, 20.0f));
-        this.goalSelector.add(++i, new WanderAroundFarGoal(this, 1.0));
-        this.goalSelector.add(++i, new LookAtEntityGoal(this, Player.class, 6.0f));
-        this.goalSelector.add(++i, new LookAroundGoal(this));
+        this.goalSelector.add(++i, new FloatGoal(this));
+        this.goalSelector.add(++i, new AvoidEntityGoal<>(this, TrollEntity.class, FLEE_DISTANCE, FLEE_SPEED_MIN, FLEE_SPEED_MAX));
+        this.goalSelector.add(++i, new AvoidEntityGoal<>(this, MordorBlackUrukEntity.class, FLEE_DISTANCE, FLEE_SPEED_MIN, FLEE_SPEED_MAX));
+        this.goalSelector.add(++i, new AvoidEntityGoal<>(this, MistyHobgoblinEntity.class, FLEE_DISTANCE, FLEE_SPEED_MIN, FLEE_SPEED_MAX));
+        this.goalSelector.add(++i, new AvoidEntityGoal<>(this, MordorOrcEntity.class, FLEE_DISTANCE, FLEE_SPEED_MIN, FLEE_SPEED_MAX));
+        this.goalSelector.add(++i, new AvoidEntityGoal<>(this, MistyGoblinEntity.class, FLEE_DISTANCE, FLEE_SPEED_MIN, FLEE_SPEED_MAX));
+        this.goalSelector.add(++i, new AvoidEntityGoal<>(this, BanditHumanEntity.class, FLEE_DISTANCE, FLEE_SPEED_MIN, FLEE_SPEED_MAX));
+        this.goalSelector.add(++i, new AvoidEntityGoal<>(this, MirkwoodSpiderEntity.class, FLEE_DISTANCE, FLEE_SPEED_MIN, FLEE_SPEED_MAX));
+        this.goalSelector.add(++i, new AvoidEntityGoal<>(this, NazgulEntity.class, FLEE_DISTANCE, FLEE_SPEED_MIN, FLEE_SPEED_MAX));
+        this.goalSelector.add(++i, new RangedAttackGoal(this, 1.0, 12, 24, 20.0f));
+        this.goalSelector.add(++i, new WaterAvoidingRandomStrollGoal(this, 1.0));
+        this.goalSelector.add(++i, new LookAtPlayerGoal(this, Player.class, 6.0f));
+        this.goalSelector.add(++i, new RandomLookAroundGoal(this));
         i = 1;
-        this.targetSelector.add(++i, new RevengeGoal(this).setGroupRevenge());
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, TrollEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MistyHobgoblinEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MordorBlackUrukEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MordorOrcEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MistyGoblinEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, BanditHumanEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MirkwoodSpiderEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, NazgulEntity.class, true));
+        this.targetSelector.add(++i, new HurtByTargetGoal(this).setGroupRevenge());
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, TrollEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, MistyHobgoblinEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, MordorBlackUrukEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, MordorOrcEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, MistyGoblinEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, BanditHumanEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, MirkwoodSpiderEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, NazgulEntity.class, true));
     }
 
-    public static DefaultAttributeContainer.Builder setSoldierAttributes() {
+    public static AttributeSupplier.Builder setSoldierAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.3f)
                 .add(Attributes.GENERIC_MAX_HEALTH, 20.0)
@@ -97,7 +108,7 @@ public class ShireHobbitEntity extends NpcEntity {
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 48.0)
                 .add(Attributes.GENERIC_ATTACK_DAMAGE, 1.0);
     }
-    public static DefaultAttributeContainer.Builder setKnightAttributes() {
+    public static AttributeSupplier.Builder setKnightAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.3f)
                 .add(Attributes.GENERIC_MAX_HEALTH, 22.0)
@@ -107,7 +118,7 @@ public class ShireHobbitEntity extends NpcEntity {
     }
 
     @Override
-    protected void initEquipment(RandomSource random, LocalDifficulty localDifficulty) {
+    protected void initEquipment(RandomSource random, DifficultyInstance localDifficulty) {
         super.initEquipment(random, localDifficulty);
 
         switch (this.getRank()){
@@ -137,8 +148,8 @@ public class ShireHobbitEntity extends NpcEntity {
                     0x665723
             };
             int colorIndex = random.nextInt(3);
-            DyeableItem itemHood = (DyeableItem)ModEquipmentItems.CLOAK_HOOD;
-            DyeableItem item = (DyeableItem)ModEquipmentItems.CLOAK;
+            DyeableLeatherItem itemHood = (DyeableLeatherItem)ModEquipmentItems.CLOAK_HOOD;
+            DyeableLeatherItem item = (DyeableLeatherItem)ModEquipmentItems.CLOAK;
             ItemStack stack = new ItemStack((Item)item);
             item.setColor(stack, colors[colorIndex]);
 
@@ -168,7 +179,6 @@ public class ShireHobbitEntity extends NpcEntity {
             equipStack(EquipmentSlot.HEAD, new ItemStack(ModEquipmentItems.HOBBIT_SHIRRIFF_HAT_GREEN));
         }
     }
-
 
     public ShireHobbitVariant getVariant() {
         return ShireHobbitVariant.byId(this.getId());

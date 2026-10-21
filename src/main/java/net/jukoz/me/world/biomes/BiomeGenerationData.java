@@ -1,5 +1,6 @@
 package net.jukoz.me.world.biomes;
 
+
 public class BiomeGenerationData {
     public byte[] biomeWeight;
     public double noiseModifier; /** Between 0 and 2; */

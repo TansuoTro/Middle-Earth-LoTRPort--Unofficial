@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -13,7 +13,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.npcs.NpcEntity;
 import net.jukoz.me.resources.datas.npc_types.NpcType;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -95,7 +94,7 @@ public class MountPassengerData {
         return Optional.ofNullable(discardChance);
     }
 
-    public boolean isDiscarded(Random random) {
+    public boolean isDiscarded(RandomSource random) {
         if(discardChance == null)
             return false;
         double obtained = random.nextDouble();
@@ -118,7 +117,7 @@ public class MountPassengerData {
                 mob.initialize(
                         serverWorld,
                         serverWorld.getLocalDifficulty(owner.getBlockPos()),
-                        SpawnReason.EVENT,
+                        MobSpawnType.EVENT,
                         null,
                         null
                 );

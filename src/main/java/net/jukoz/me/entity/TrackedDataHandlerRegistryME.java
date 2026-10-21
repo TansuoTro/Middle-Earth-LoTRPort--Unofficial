@@ -1,7 +1,7 @@
 package net.jukoz.me.entity;
 
 import net.jukoz.me.compat.net.TrackedDataHandlerME;
-import net.minecraft.entity.data.TrackedDataHandler;
+import net.minecraft.network.syncher.EntityDataSerializer;
 import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
@@ -12,20 +12,20 @@ import net.jukoz.me.entity.npcs.data.NpcData;
 import net.jukoz.me.entity.npcs.data.NpcInitializationData;
 import net.jukoz.me.entity.npcs.data.NpcTextureData;
 import net.jukoz.me.entity.spider.SpiderVariant;
+import net.minecraft.network.syncher.EntityDataSerializers;
 
 public class TrackedDataHandlerRegistryME {
-    public static final TrackedDataHandler<NpcData> NPC_DATA;
-    public static final TrackedDataHandler<NpcInitializationData> NPC_INITIALIZATION_DATA;
-    public static final TrackedDataHandler<NpcTextureData> NPC_TEXTURE_DATA;
+    public static final EntityDataSerializer<NpcData> NPC_DATA;
+    public static final EntityDataSerializer<NpcInitializationData> NPC_INITIALIZATION_DATA;
+    public static final EntityDataSerializer<NpcTextureData> NPC_TEXTURE_DATA;
 
-
-    public static final TrackedDataHandler<Long> INITIALIZATION_TICK;
-    public static final TrackedDataHandler<String> FACTION_ID;
-    public static final TrackedDataHandler<String> NPC_DATA_ID;
-    public static final TrackedDataHandler<String> CATEGORY;
-    public static final TrackedDataHandler<BlockPos> STRUCTURE_MANAGER_HOST_POS;
-    public static final TrackedDataHandler<Holder<SpiderVariant>> SPIDER_VARIANT;
-    public static final TrackedDataHandler<Holder<GreatHornVariant>> GREAT_HORN_VARIANT;
+    public static final EntityDataSerializer<Long> INITIALIZATION_TICK;
+    public static final EntityDataSerializer<String> FACTION_ID;
+    public static final EntityDataSerializer<String> NPC_DATA_ID;
+    public static final EntityDataSerializer<String> CATEGORY;
+    public static final EntityDataSerializer<BlockPos> STRUCTURE_MANAGER_HOST_POS;
+    public static final EntityDataSerializer<Holder<SpiderVariant>> SPIDER_VARIANT;
+    public static final EntityDataSerializer<Holder<GreatHornVariant>> GREAT_HORN_VARIANT;
 
     public static void register() {
         of("npc_data", NPC_DATA);
@@ -40,8 +40,8 @@ public class TrackedDataHandlerRegistryME {
         of("great_horn_variant", GREAT_HORN_VARIANT);
     }
 
-    private static void of(String name, TrackedDataHandler<?> dataHandler) {
-        net.minecraft.entity.data.TrackedDataHandlerRegistry.register(dataHandler);
+    private static void of(String name, EntityDataSerializer<?> dataHandler) {
+        net.minecraft.entity.data.EntityDataSerializers.register(dataHandler);
     }
 
     static {

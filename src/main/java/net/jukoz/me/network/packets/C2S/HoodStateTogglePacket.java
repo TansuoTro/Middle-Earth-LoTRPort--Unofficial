@@ -11,7 +11,6 @@ import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceLocation;
-
 import java.util.Objects;
 
 public class HoodStateTogglePacket extends ClientToServerPacket<HoodStateTogglePacket> {
@@ -21,8 +20,6 @@ public class HoodStateTogglePacket extends ClientToServerPacket<HoodStateToggleP
 
     public HoodStateTogglePacket() {
     }
-
-
 
     public HoodStateTogglePacket(FriendlyByteBuf buf) {
         this();

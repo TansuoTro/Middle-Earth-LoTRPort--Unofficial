@@ -1,6 +1,5 @@
 package net.jukoz.me.item;
 
-
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.block.registration.ModNatureBlocks;
@@ -16,15 +15,20 @@ import net.jukoz.me.item.utils.ModItemGroups;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.item.FoodComponent;
-import net.minecraft.item.*;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Rarity;
 import net.jukoz.me.registries.RegistryAliasesME;
-
 import java.util.function.Function;
+import net.minecraft.world.item.BannerPatternItem;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BoatItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.vehicle.Boat;
 
 public class ResourceItemsME {
 
@@ -47,7 +51,7 @@ public class ResourceItemsME {
 
     public static final Item REINFORCED_BARREL = registerItem("reinforced_barrel",
             (settings) -> {
-                return new BoatItem(true, net.minecraft.entity.vehicle.BoatEntity.Type.OAK, settings);
+                return new BoatItem(true, net.minecraft.entity.vehicle.Boat.Type.OAK, settings);
             }, new MESettings().maxCount(1));
 
     public static final Item RAW_TIN = registerItem("raw_tin",
@@ -148,7 +152,7 @@ public class ResourceItemsME {
 
     public static final Item GLOWWORM_BOTTLE = registerItem("glowworm_bottle",
             GlowwormBottle::new, new MESettings().maxCount(1)
-                    .food(new FoodComponent.Builder().hunger(2).saturationModifier(0.3f).alwaysEdible().build()).recipeRemainder(Items.GLASS_BOTTLE));
+                    .food(new FoodProperties.Builder().hunger(2).saturationModifier(0.3f).alwaysEdible().build()).recipeRemainder(Items.GLASS_BOTTLE));
 
     public static final Item COPPER_COIN = registerItem("copper_coin", Item::new, new MESettings());
     public static final Item SILVER_COIN = registerItem("silver_coin", Item::new, new MESettings());
@@ -164,7 +168,6 @@ public class ResourceItemsME {
             Item::new, new MESettings());
     public static final Item PIPEWEED_SEEDS = registerItem("pipeweed_seeds",
             (settings) -> new BlockItem(ModNatureBlocks.PIPEWEED_CROP, settings), new MESettings());
-
 
     public static final Item TOMATO_SEEDS = registerItem("tomato_seeds",
             (settings) -> new BlockItem(ModNatureBlocks.TOMATO_CROP, settings), new MESettings());
@@ -291,19 +294,19 @@ public class ResourceItemsME {
                     .providesBannerPatterns(BannerPatternTagsME.SNAIL_PATTERN_ITEM));
 
     public static final Item PTEROSAUR_NUGGET = registerHiddenItem("pterosaur_nugget",
-            HotChickenFoodItem::new, new MESettings().food(new FoodComponent.Builder().hunger(1).saturationModifier(0.5f).build()));
+            HotChickenFoodItem::new, new MESettings().food(new FoodProperties.Builder().hunger(1).saturationModifier(0.5f).build()));
     public static final Item THERAPOD_NUGGET = registerHiddenItem("therapod_nugget",
-            HotChickenFoodItem::new, new MESettings().food(new FoodComponent.Builder().hunger(7).saturationModifier(0.8f).build()));
+            HotChickenFoodItem::new, new MESettings().food(new FoodProperties.Builder().hunger(7).saturationModifier(0.8f).build()));
     public static final Item CERATOPSIAN_NUGGET = registerHiddenItem("ceratopsian_nugget",
-            HotChickenFoodItem::new, new MESettings().food(new FoodComponent.Builder().hunger(10).saturationModifier(0.8f).build()));
+            HotChickenFoodItem::new, new MESettings().food(new FoodProperties.Builder().hunger(10).saturationModifier(0.8f).build()));
     public static final Item THYREOPHORAN_NUGGET = registerHiddenItem("thyreophoran_nugget",
-            HotChickenFoodItem::new, new MESettings().food(new FoodComponent.Builder().hunger(10).saturationModifier(0.8f).build()));
+            HotChickenFoodItem::new, new MESettings().food(new FoodProperties.Builder().hunger(10).saturationModifier(0.8f).build()));
     public static final Item SAUROPOD_NUGGET = registerHiddenItem("sauropod_nugget",
-            HotChickenFoodItem::new, new MESettings().maxCount(16).food(new FoodComponent.Builder().hunger(14).saturationModifier(0.85f).build()));
+            HotChickenFoodItem::new, new MESettings().maxCount(16).food(new FoodProperties.Builder().hunger(14).saturationModifier(0.85f).build()));
 
     private static Item registerItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
         Item item = settings instanceof MESettings meSettings && meSettings.bannerPatternTag() != null
-                ? new net.minecraft.item.BannerPatternItem(net.minecraft.tags.TagKey.of(
+                ? new net.minecraft.world.item.BannerPatternItem(net.minecraft.tags.TagKey.of(
                         net.minecraft.core.registries.Registries.BANNER_PATTERN,
                         new ResourceLocation(meSettings.bannerPatternTag())), settings)
                 : factory.apply(settings);

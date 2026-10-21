@@ -1,8 +1,7 @@
 package net.jukoz.me.entity.beasts.broadhoof;
 
-import net.minecraft.util.function.ValueLists;
+import net.minecraft.util.ByIdMap;
 import net.jukoz.me.api.dtos.WeightedPool;
-
 import java.util.*;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
@@ -69,8 +68,8 @@ public enum BroadhoofGoatPattern {
             BroadhoofGoatColor.BLACK, new WeightedPool<>(Stream.of(GENERIC_SET, BROWN_SET, PALE_SET))
     );
 
-    private static final IntFunction<BroadhoofGoatPattern> INDEX_MAPPER = ValueLists.createIdToValueFunction(
-            BroadhoofGoatPattern::getIndex, values(), ValueLists.OutOfBoundsHandling.WRAP
+    private static final IntFunction<BroadhoofGoatPattern> INDEX_MAPPER = ByIdMap.createIdToValueFunction(
+            BroadhoofGoatPattern::getIndex, values(), ByIdMap.OutOfBoundsHandling.WRAP
     );
     private final int index;
 

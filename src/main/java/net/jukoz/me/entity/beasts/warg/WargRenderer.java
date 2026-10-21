@@ -1,10 +1,10 @@
 package net.jukoz.me.entity.beasts.warg;
+
 import net.jukoz.me.compat.client.render.equipment.EquipmentRenderer;
 import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.jukoz.me.compat.client.render.MEMobEntityRenderer;
-
 import com.google.common.collect.Maps;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.jukoz.me.compat.client.render.equipment.EquipmentModel;
 import net.jukoz.me.compat.client.render.equipment.SaddleFeatureRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -13,18 +13,18 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.beasts.warg.features.*;
 import net.jukoz.me.entity.EntityModelLayersME;
 import net.minecraft.client.renderer.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
-
 import java.util.Map;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 public class WargRenderer extends MEMobEntityRenderer<WargEntity, WargEntityRenderState, WargModel> {
     private static final String PATH = "textures/entities/warg/";
     private static final float SIZE = 1f;
     private static final int LIGHT_LEVEL_EMISSIVE_EYES = 8;
 
-    public WargRenderer(EntityRendererFactory.Context context) {
+    public WargRenderer(EntityRendererProvider.Context context) {
         super(context, new WargModel(context.getPart(EntityModelLayersME.WARG)), 0.8f);
         this.addFeature(new WargEyesFeatureRenderer(this));
         this.addFeature( // Armor Feature
@@ -44,7 +44,7 @@ public class WargRenderer extends MEMobEntityRenderer<WargEntity, WargEntityRend
     }
 
     @Override
-    public void render(WargEntityRenderState state, PoseStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
+    public void render(WargEntityRenderState state, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         if(state.baby) {
             matrixStack.scale(SIZE/2, SIZE/2, SIZE/2);
         }

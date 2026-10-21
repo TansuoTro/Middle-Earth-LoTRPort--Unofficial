@@ -11,14 +11,12 @@ import net.jukoz.me.item.ModEquipmentItems;
 import net.jukoz.me.item.ModWeaponItems;
 import net.jukoz.me.sound.ModSounds;
 import net.jukoz.me.utils.ParticleManager;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.*;
 import net.minecraft.world.level.pathfinder.PathNodeType;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -27,33 +25,47 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 
-public class NazgulEntity extends HostileEntity {
+public class NazgulEntity extends Monster {
     public static int FADING_TIME = 45;
     public static int ALERT_TIME = 600;
     public static float DAMAGE_MULTIPLIER = 0.4f;
     private int ticksSinceDeath = 0;
     private int ticksSinceAlert = ALERT_TIME;
-    public NazgulEntity(EntityType<? extends HostileEntity> entityType, Level world) {
+    public NazgulEntity(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
-        this.setPathfindingPenalty(PathNodeType.WATER, -1.0f);
+        this.setPathfindingPenalty(BlockPathTypes.WATER, -1.0f);
     }
 
     @Nullable
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable CompoundTag entityNbt) {
+    public SpawnGroupData initialize(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, @Nullable CompoundTag entityNbt) {
         entityData = super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
         RandomSource random = world.getRandom();
         this.initEquipment(random, difficulty);
         return entityData;
     }
 
-    public static DefaultAttributeContainer.Builder setAttributes() {
+    public static AttributeSupplier.Builder setAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.3f)
                 .add(Attributes.GENERIC_MAX_HEALTH, 30.0)
@@ -63,7 +75,7 @@ public class NazgulEntity extends HostileEntity {
     }
 
     @Override
-    protected void initEquipment(RandomSource random, LocalDifficulty localDifficulty) {
+    protected void initEquipment(RandomSource random, DifficultyInstance localDifficulty) {
         super.initEquipment(random, localDifficulty);
         this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModWeaponItems.MORGUL_BLADE));
 
@@ -76,21 +88,21 @@ public class NazgulEntity extends HostileEntity {
     @Override
     protected void initGoals() {
         int i = 0;
-        this.goalSelector.add(++i, new SwimGoal(this));
+        this.goalSelector.add(++i, new FloatGoal(this));
         this.goalSelector.add(++i, new PanicFireGoal(this, 1.1f));
         this.goalSelector.add(++i, new MeleeAttackGoal(this, 1.2f, false));
-        this.goalSelector.add(++i, new WanderAroundFarGoal(this, 1.0));
-        this.goalSelector.add(++i, new LookAtEntityGoal(this, Player.class, 6.0f));
-        this.goalSelector.add(++i, new LookAroundGoal(this));
+        this.goalSelector.add(++i, new WaterAvoidingRandomStrollGoal(this, 1.0));
+        this.goalSelector.add(++i, new LookAtPlayerGoal(this, Player.class, 6.0f));
+        this.goalSelector.add(++i, new RandomLookAroundGoal(this));
         i = 0;
-        this.targetSelector.add(++i, new RevengeGoal(this, new Class[0]));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, Player.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, GaladhrimElfEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, LongbeardDwarfEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, GondorHumanEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, RohanHumanEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, BanditHumanEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, ShireHobbitEntity.class, true));
+        this.targetSelector.add(++i, new HurtByTargetGoal(this, new Class[0]));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, GaladhrimElfEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, LongbeardDwarfEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, GondorHumanEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, RohanHumanEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, BanditHumanEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, ShireHobbitEntity.class, true));
     }
 
     public enum State {

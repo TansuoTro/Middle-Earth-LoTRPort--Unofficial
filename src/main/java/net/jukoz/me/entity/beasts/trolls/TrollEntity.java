@@ -13,31 +13,39 @@ import net.jukoz.me.entity.humans.rohan.RohanHumanEntity;
 import net.jukoz.me.entity.projectile.boulder.BoulderEntity;
 import net.jukoz.me.item.ModFoodItems;
 import net.jukoz.me.item.items.TrollArmorItem;
-import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.entity.passive.AbstractDonkeyEntity;
+import net.minecraft.world.entity.animal.horse.AbstractChestedHorse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.math.*;
 import net.minecraft.world.level.Level;
-
 import java.util.List;
+import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityEvent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.phys.Vec3;
 
 public class TrollEntity extends BeastEntity {
     private int throwCooldown = 100;
@@ -47,8 +55,7 @@ public class TrollEntity extends BeastEntity {
     private int bondingTries = 0;
     private int bondingTimeout = 0;
 
-    public static final TrackedData<Boolean> THROWING = DataTracker.registerData(TrollEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-
+    public static final EntityDataAccessor<Boolean> THROWING = SynchedEntityData.registerData(TrollEntity.class, EntityDataSerializers.BOOLEAN);
 
     // Temporary disabled until next update
     @Override
@@ -56,11 +63,11 @@ public class TrollEntity extends BeastEntity {
         return false;
     }
 
-    public TrollEntity(EntityType<? extends AbstractDonkeyEntity> entityType, Level world) {
+    public TrollEntity(EntityType<? extends AbstractChestedHorse> entityType, Level world) {
         super(entityType, world);
     }
 
-    public static DefaultAttributeContainer.Builder setAttributes() {
+    public static AttributeSupplier.Builder setAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.35f)
                 .add(Attributes.GENERIC_MAX_HEALTH, 120.0)
@@ -73,23 +80,23 @@ public class TrollEntity extends BeastEntity {
 
     @Override
     protected void initGoals() {
-        this.goalSelector.add(1, new SwimGoal(this));
+        this.goalSelector.add(1, new FloatGoal(this));
         this.goalSelector.add(2, new BeastSitGoal(this));
         this.goalSelector.add(4, new MeleeAttackGoal(this, 0.9f, false));
         this.goalSelector.add(6, new BeastFollowOwnerGoal(this, 1.0, 10.0f, 2.0f, false));
-        this.goalSelector.add(7, new WanderAroundFarGoal(this, 1.0));
-        this.goalSelector.add(8, new LookAtEntityGoal(this, Player.class, 6.0f));
-        this.goalSelector.add(9, new LookAroundGoal(this));
+        this.goalSelector.add(7, new WaterAvoidingRandomStrollGoal(this, 1.0));
+        this.goalSelector.add(8, new LookAtPlayerGoal(this, Player.class, 6.0f));
+        this.goalSelector.add(9, new RandomLookAroundGoal(this));
         this.targetSelector.add(1, new BeastTrackOwnerAttackerGoal((BeastEntity) this));
         this.targetSelector.add(2, new BeastAttackWithOwnerGoal((BeastEntity)this));
-        this.targetSelector.add(3, new RevengeGoal(this, new Class[0]));
+        this.targetSelector.add(3, new HurtByTargetGoal(this, new Class[0]));
         this.targetSelector.add(4, new TargetPlayerGoal(this));
-        this.targetSelector.add(4, new ActiveTargetGoal<>(this, GaladhrimElfEntity.class, true));
-        this.targetSelector.add(5, new ActiveTargetGoal<>(this, LongbeardDwarfEntity.class, true));
-        this.targetSelector.add(6, new ActiveTargetGoal<>(this, GondorHumanEntity.class, true));
-        this.targetSelector.add(7, new ActiveTargetGoal<>(this, RohanHumanEntity.class, true));
-        this.targetSelector.add(8, new ActiveTargetGoal<>(this, BanditHumanEntity.class, true));
-        this.targetSelector.add(9, new ActiveTargetGoal<>(this, ShireHobbitEntity.class, true));
+        this.targetSelector.add(4, new NearestAttackableTargetGoal<>(this, GaladhrimElfEntity.class, true));
+        this.targetSelector.add(5, new NearestAttackableTargetGoal<>(this, LongbeardDwarfEntity.class, true));
+        this.targetSelector.add(6, new NearestAttackableTargetGoal<>(this, GondorHumanEntity.class, true));
+        this.targetSelector.add(7, new NearestAttackableTargetGoal<>(this, RohanHumanEntity.class, true));
+        this.targetSelector.add(8, new NearestAttackableTargetGoal<>(this, BanditHumanEntity.class, true));
+        this.targetSelector.add(9, new NearestAttackableTargetGoal<>(this, ShireHobbitEntity.class, true));
     }
 
     protected void initDataTracker() {
@@ -98,7 +105,7 @@ public class TrollEntity extends BeastEntity {
     }
 
     @Override
-    public void onTrackedDataSet(TrackedData<?> data) {
+    public void onTrackedDataSet(EntityDataAccessor<?> data) {
         if(!this.firstUpdate && THROWING.equals(data)) {
             this.throwCooldown = this.throwCooldown == 0 ? 200 : this.throwCooldown;
         }
@@ -146,7 +153,7 @@ public class TrollEntity extends BeastEntity {
             }
         }
         if(this.isThrowing() && canThrow()) {
-            this.setVelocity(Vec3d.ZERO);
+            this.setVelocity(Vec3.ZERO);
             if(throwCooldown <= 180) {
                 throwAttack();
             }
@@ -175,7 +182,7 @@ public class TrollEntity extends BeastEntity {
         super.writeCustomDataToNbt(nbt);
         nbt.putBoolean("ChestedTroll", this.hasChest());
         if (this.hasChest()) {
-            NbtList nbtList = new NbtList();
+            ListTag nbtList = new ListTag();
             for(int i = 2; i < this.items.size(); ++i) {
                 ItemStack itemStack = this.items.getStack(i);
                 if (!itemStack.isEmpty()) {
@@ -198,7 +205,7 @@ public class TrollEntity extends BeastEntity {
         this.setHasChest(nbt.getBoolean("ChestedTroll"));
         this.onChestedStatusChanged();
         if (this.hasChest()) {
-            NbtList nbtList = nbt.getList("Items", 10);
+            ListTag nbtList = nbt.getList("Items", 10);
 
             for(int i = 0; i < nbtList.size(); ++i) {
                 CompoundTag nbtCompound = nbtList.getCompound(i);
@@ -261,9 +268,9 @@ public class TrollEntity extends BeastEntity {
                         this.setOwnerUuid(player.getUuid());
                         this.setTame(true);
                         this.setTarget(null);
-                        Criteria.TAME_ANIMAL.trigger((ServerPlayer)player, this);
+                        CriteriaTriggers.TAME_ANIMAL.trigger((ServerPlayer)player, this);
                     }
-                    this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
+                    this.getWorld().sendEntityStatus(this, EntityEvent.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
 
                     this.chargeTimeout = 0;
                 }
@@ -284,7 +291,7 @@ public class TrollEntity extends BeastEntity {
         if(target != null && !this.getWorld().isClient) {
             this.setThrowing(false);
 
-            Vec3d rotationVec = this.getRotationVec(1.0f);
+            Vec3 rotationVec = this.getRotationVec(1.0f);
             BoulderEntity boulder = new BoulderEntity(ModEntities.BOULDER, this, this.getWorld());
             double x = target.getX() - this.getX();
             double y = target.getBodyY(0.3333333333333333) - boulder.getY();
@@ -304,8 +311,8 @@ public class TrollEntity extends BeastEntity {
         List<Entity> entities = this.getWorld().getOtherEntities(this, this.getBoundingBox().expand(0.2f, 0.0, 0.2f));
 
         if(!this.isTame() && !this.getWorld().isClient) {
-            if(targetDir == Vec3d.ZERO && this.getTarget() != null) {
-                targetDir = new Vec3d( this.getTarget().getBlockPos().getX() - this.getBlockPos().getX(),
+            if(targetDir == Vec3.ZERO && this.getTarget() != null) {
+                targetDir = new Vec3( this.getTarget().getBlockPos().getX() - this.getBlockPos().getX(),
                         this.getTarget().getBlockPos().getY() - this.getBlockPos().getY(),
                         this.getTarget().getBlockPos().getZ() - this.getBlockPos().getZ());
             }

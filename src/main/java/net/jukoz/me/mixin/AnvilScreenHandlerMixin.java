@@ -2,19 +2,19 @@ package net.jukoz.me.mixin;
 
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.inventory.CraftingResultInventory;
+import net.minecraft.world.inventory.ResultContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.screen.AnvilScreenHandler;
+import net.minecraft.world.inventory.AnvilMenu;
 import net.jukoz.me.config.ModServerConfigs;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(AnvilScreenHandler.class)
+@Mixin(AnvilMenu.class)
 public class AnvilScreenHandlerMixin {
     @Redirect(method = "updateResult", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/inventory/CraftingResultInventory;setStack(ILnet/minecraft/item/ItemStack;)V"))
-    private void interceptAnvilOutput(CraftingResultInventory outputInventory, int slot, ItemStack stack) {
+            target = "Lnet/minecraft/inventory/ResultContainer;setStack(ILnet/minecraft/item/ItemStack;)V"))
+    private void interceptAnvilOutput(ResultContainer outputInventory, int slot, ItemStack stack) {
         if (!stack.isEmpty()) {
             for (var entry : EnchantmentHelper.get(stack).entrySet()) {
                 var enchant = entry.getKey();

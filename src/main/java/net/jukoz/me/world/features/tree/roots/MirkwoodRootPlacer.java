@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-
 import net.jukoz.me.world.features.tree.ModRootPlacerType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
@@ -15,7 +14,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Plane;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.TestableWorld;
+import net.minecraft.world.level.LevelSimulatedReader;
 import net.minecraft.world.level.levelgen.feature.TreeFeatureConfig;
 import net.minecraft.world.level.levelgen.feature.rootplacers.AboveRootPlacement;
 import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacer;
@@ -37,7 +36,7 @@ public class MirkwoodRootPlacer extends RootPlacer {
         this.mirkwoodRootPlacement = mirkwoodRootPlacement;
     }
 
-    public boolean generate(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos pos, BlockPos trunkPos, TreeFeatureConfig config) {
+    public boolean generate(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos pos, BlockPos trunkPos, TreeConfiguration config) {
         List<BlockPos> list = Lists.newArrayList();
         BlockPos.Mutable mutable = pos.mutableCopy();
 
@@ -74,7 +73,7 @@ public class MirkwoodRootPlacer extends RootPlacer {
         return true;
     }
 
-    private boolean canGrow(TestableWorld world, RandomSource random, BlockPos pos, Direction direction, BlockPos origin, List<BlockPos> offshootPositions, int rootLength) {
+    private boolean canGrow(LevelSimulatedReader world, RandomSource random, BlockPos pos, Direction direction, BlockPos origin, List<BlockPos> offshootPositions, int rootLength) {
         int i = this.mirkwoodRootPlacement.maxRootLength();
         if (rootLength != i && offshootPositions.size() <= i) {
             List<BlockPos> list = this.getOffshootPositions(pos, direction, random, origin);
@@ -113,13 +112,13 @@ public class MirkwoodRootPlacer extends RootPlacer {
         }
     }
 
-    protected boolean canGrowThrough(TestableWorld world, BlockPos pos) {
+    protected boolean canGrowThrough(LevelSimulatedReader world, BlockPos pos) {
         return super.canGrowThrough(world, pos) || world.testBlockState(pos, (state) -> {
             return state.isIn(this.mirkwoodRootPlacement.canGrowThrough());
         });
     }
 
-    protected void placeRoots(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos pos, TreeFeatureConfig config) {
+    protected void placeRoots(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos pos, TreeConfiguration config) {
         if (world.testBlockState(pos, (state) -> {
             return state.isIn(this.mirkwoodRootPlacement.muddyRootsIn());
         })) {

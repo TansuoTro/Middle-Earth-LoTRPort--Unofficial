@@ -1,7 +1,6 @@
 package net.jukoz.me.registries.content.texturepresets.pools.hobgoblintribes;
 
 import net.jukoz.me.registries.content.texturepresets.TexturePresetsRegistry;
-
 import java.util.List;
 
 public class HobgoblinTribesTexturePresetsPool {

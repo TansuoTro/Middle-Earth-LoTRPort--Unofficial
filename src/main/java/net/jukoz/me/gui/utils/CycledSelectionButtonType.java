@@ -1,5 +1,6 @@
 package net.jukoz.me.gui.utils;
 
+
 public enum CycledSelectionButtonType {
     NORMAL(0,0),
     SILVER(0, 38),

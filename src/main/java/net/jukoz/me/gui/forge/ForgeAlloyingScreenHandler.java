@@ -3,29 +3,28 @@ package net.jukoz.me.gui.forge;
 import net.jukoz.me.block.special.forge.ForgeBlockEntity;
 import net.jukoz.me.gui.ModScreenHandlers;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
-public class ForgeAlloyingScreenHandler extends ScreenHandler {
+public class ForgeAlloyingScreenHandler extends AbstractContainerMenu {
     protected final Inventory inventory;
-    protected final PropertyDelegate propertyDelegate;
+    protected final ContainerData propertyDelegate;
     protected final Level world;
     protected BlockPos pos;
 
-    public ForgeAlloyingScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos blockPos) {
-        this(syncId, playerInventory, new SimpleInventory(6), new ArrayPropertyDelegate(6));
+    public ForgeAlloyingScreenHandler(int syncId, Inventory playerInventory, BlockPos blockPos) {
+        this(syncId, playerInventory, new SimpleContainer(6), new SimpleContainerData(6));
         this.pos = blockPos;
     }
 
-    public ForgeAlloyingScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate delegate) {
+    public ForgeAlloyingScreenHandler(int syncId, Inventory playerInventory, Inventory inventory, ContainerData delegate) {
         super(ModScreenHandlers.FORGE_ALLOYING_SCREEN_HANDLER, syncId);
         this.inventory = inventory;
         this.propertyDelegate = delegate;
@@ -135,7 +134,7 @@ public class ForgeAlloyingScreenHandler extends ScreenHandler {
         return (float) progress / ForgeBlockEntity.MAX_PROGRESS;
     }
 
-    private void addPlayerInventory(PlayerInventory playerInventory) {
+    private void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 91 + i * 18));
@@ -143,7 +142,7 @@ public class ForgeAlloyingScreenHandler extends ScreenHandler {
         }
     }
 
-    private void addPlayerHotbar(PlayerInventory playerInventory) {
+    private void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 149));
         }

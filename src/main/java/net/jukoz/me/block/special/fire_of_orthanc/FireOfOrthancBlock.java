@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -23,6 +23,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.Explosion;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.entity.EquipmentSlot;
 
 public class FireOfOrthancBlock extends Block {
     public static final VoxelShape OUTLINE_SHAPE = Block.createCuboidShape(2, 0, 2, 14, 12, 14);
@@ -57,7 +58,7 @@ public class FireOfOrthancBlock extends Block {
             world.spawnEntity(fireOfOrthancEntity);
             world.emitGameEvent(igniter, GameEvent.PRIME_FUSE, pos);
         } else {
-            world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.25F, 0.8F);
+            world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.25F, 0.8F);
         }
     }
 

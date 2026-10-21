@@ -1,7 +1,6 @@
 package net.jukoz.me.world.chunkgen.map;
 
 import com.google.common.base.Stopwatch;
-
 import javax.imageio.ImageIO;
 import java.awt.image.*;
 import java.io.File;
@@ -70,10 +69,8 @@ public class ImageUtils {
 
         expendedImage = op.filter(expendedImage, null);
 
-
         return expendedImage.getSubimage(BRUSH_SIZE, BRUSH_SIZE, width, height);
     }
-
 
     public static BufferedImage[][] subdivide(BufferedImage parent) {
         BufferedImage[][] subidivedImages = new BufferedImage[2][2];
@@ -91,11 +88,10 @@ public class ImageUtils {
         return subidivedImages;
     }
 
-
     private static BufferedImage createChildFromParentImage(BufferedImage child, BufferedImage parent, int halfRegionSize, int xIndex, int yIndex) {
         for(int x = halfRegionSize * xIndex; x < halfRegionSize * (xIndex+1); x++) {
             for(int y = halfRegionSize * yIndex; y < halfRegionSize * (yIndex+1); y++) {
-                /* Debug
+                /* VisibleForDebug
                     final int color = parent.getRGB(x, y);
                     final Short id = MEBiomesData.getBiomeIdByBiome(MEBiomesData.getBiomeByColor(color));
                     if(id == null){

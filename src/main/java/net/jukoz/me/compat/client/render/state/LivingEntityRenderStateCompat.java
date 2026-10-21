@@ -1,5 +1,6 @@
 package net.jukoz.me.compat.client.render.state;
 
+
 /**
  * R2 field carrier for the living-entity render state family. The donor-named
  * {@link LivingEntityRenderState} simply extends this class.

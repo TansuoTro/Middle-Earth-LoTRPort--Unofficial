@@ -4,18 +4,18 @@ import com.google.common.collect.Lists;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.client.gui.widget.PageTurnWidget;
-import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.client.gui.screens.inventory.PageButton;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.world.item.Item;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Colors;
-import net.minecraft.util.Formatting;
+import net.minecraft.util.CommonColors;
+import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.EntitiesME;
@@ -24,7 +24,6 @@ import net.jukoz.me.item.DecorativeItemsME;
 import net.jukoz.me.item.EggItemsME;
 import net.jukoz.me.item.ResourceItemsME;
 import net.jukoz.me.item.ToolItemsME;
-
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
@@ -37,8 +36,8 @@ public class PlayerBookScreen extends Screen {
     private static final int HEIGHT = 220;
     private static HashMap<PlayerBookChapters, List<PlayerBookPageData>> chaptersPages;
     private List<Chapter> chapters;
-    private PageTurnWidget nextPageButton;
-    private PageTurnWidget previousPageButton;
+    private PageButton nextPageButton;
+    private PageButton previousPageButton;
     private PlayerBookChapters currentChapter = PlayerBookChapters.GETTING_STARTED;
     private int currentPage = 0;
 
@@ -57,13 +56,13 @@ public class PlayerBookScreen extends Screen {
         super.init();
         int x = (this.width - 192) / 2;
         int y = this.height / 2;
-        this.previousPageButton = this.addDrawableChild(new PageTurnWidget(x - 27, y + 70, false, button -> this.openPreviousPage(), true));
-        this.nextPageButton = this.addDrawableChild(new PageTurnWidget(x + 210, y + 70, true, button -> this.openNextPage(), true));
+        this.previousPageButton = this.addDrawableChild(new PageButton(x - 27, y + 70, false, button -> this.openPreviousPage(), true));
+        this.nextPageButton = this.addDrawableChild(new PageButton(x + 210, y + 70, true, button -> this.openNextPage(), true));
         updatePageButtons();
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float deltaTicks) {
         int centerX = context.getScaledWindowWidth() / 2;
         int startX = 5 + centerX - (WIDTH / 2);
         int startY = (context.getScaledWindowHeight() / 2) - (HEIGHT / 2);
@@ -71,13 +70,13 @@ public class PlayerBookScreen extends Screen {
         context.drawTexture(TEXTURE, startX, startY, 0, 0, WIDTH, HEIGHT, 384, 384);
 
         if(currentPage == 0) {
-            drawScaledText(textRenderer, context, Component.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.title").formatted(Formatting.UNDERLINE).formatted(Formatting.BOLD),
-                    startX + (int)(WIDTH * 0.325), startY + (int)(HEIGHT * 0.11f), 1.5f, Colors.BLACK, true);
+            drawScaledText(textRenderer, context, Component.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.title").formatted(ChatFormatting.UNDERLINE).formatted(ChatFormatting.BOLD),
+                    startX + (int)(WIDTH * 0.325), startY + (int)(HEIGHT * 0.11f), 1.5f, CommonColors.BLACK, true);
 
-            context.drawTextWrapped(textRenderer, Component.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.description"), startX + 38, startY + (int)(HEIGHT * 0.22f), 116, Colors.BLACK);
+            context.drawTextWrapped(textRenderer, Component.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.description"), startX + 38, startY + (int)(HEIGHT * 0.22f), 116, CommonColors.BLACK);
 
-            drawScaledText(textRenderer, context, Component.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.chapters").formatted(Formatting.UNDERLINE).formatted(Formatting.BOLD),
-                    startX + (int)(WIDTH * 0.75), startY + (int)(HEIGHT * 0.11f), 1.5f, Colors.BLACK, true);
+            drawScaledText(textRenderer, context, Component.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.chapters").formatted(ChatFormatting.UNDERLINE).formatted(ChatFormatting.BOLD),
+                    startX + (int)(WIDTH * 0.75), startY + (int)(HEIGHT * 0.11f), 1.5f, CommonColors.BLACK, true);
             int index = 0;
             for(Chapter chapter : chapters) {
                 MutableComponent text = Component.translatable("screen." + MiddleEarth.MOD_ID + "." + chapter.name);
@@ -87,35 +86,33 @@ public class PlayerBookScreen extends Screen {
                     context.drawOrderedTooltip(this.client.textRenderer, Lists.transform(
                             List.of(Component.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.navigate_to")
                             ), Component::asOrderedText), mouseX, mouseY);
-                    text.formatted(Formatting.UNDERLINE);
+                    text.formatted(ChatFormatting.UNDERLINE);
                 }
 
                 context.drawItem(chapter.icon.getDefaultStack(), startX + (int)(WIDTH * 0.5f) + 12, startY + (int)(HEIGHT * 0.22f) - 4 + (index * 18));
-                context.drawText(textRenderer, text, startX + (int)(WIDTH * 0.5f) + 32, startY + (int)(HEIGHT * 0.22f) + (index * 18), Colors.BLACK, false);
+                context.drawText(textRenderer, text, startX + (int)(WIDTH * 0.5f) + 32, startY + (int)(HEIGHT * 0.22f) + (index * 18), CommonColors.BLACK, false);
                 index++;
             }
         } else {
             PlayerBookPageData pageData = chaptersPages.get(currentChapter).get(currentPage - 1);
             if(pageData != null) {
-                drawScaledText(textRenderer, context, Component.translatable("screen." + MiddleEarth.MOD_ID + "." + pageData.leftPageTitle).formatted(Formatting.UNDERLINE),
-                        startX + (int)(WIDTH * 0.3), startY + (int)(HEIGHT * 0.11f), 1.25f, Colors.BLACK, true);
+                drawScaledText(textRenderer, context, Component.translatable("screen." + MiddleEarth.MOD_ID + "." + pageData.leftPageTitle).formatted(ChatFormatting.UNDERLINE),
+                        startX + (int)(WIDTH * 0.3), startY + (int)(HEIGHT * 0.11f), 1.25f, CommonColors.BLACK, true);
 
                 if(pageData.image != null) {
                     context.drawTexture(pageData.image, startX, startY, 0, 0, WIDTH, HEIGHT, 320, 320);
                 }
 
                 context.drawTextWrapped(textRenderer, Component.translatable("screen." + MiddleEarth.MOD_ID + "." + pageData.leftPageDescription),
-                        startX + 38, startY + (int)(HEIGHT * 0.2f), 116, Colors.BLACK);
+                        startX + 38, startY + (int)(HEIGHT * 0.2f), 116, CommonColors.BLACK);
                 context.drawTextWrapped(textRenderer, Component.translatable("screen." + MiddleEarth.MOD_ID + "." + pageData.rightPageDescription),
-                        startX + (int)(WIDTH * 0.5f) + 16, startY + (int)(HEIGHT * 0.16f), 114, Colors.BLACK);
+                        startX + (int)(WIDTH * 0.5f) + 16, startY + (int)(HEIGHT * 0.16f), 114, CommonColors.BLACK);
             }
         }
 
         renderTooltip(context, mouseX, mouseY);
         super.render(context, mouseX, mouseY, deltaTicks);
     }
-
-
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
@@ -133,7 +130,7 @@ public class PlayerBookScreen extends Screen {
                         this.currentChapter = chapter.chapter;
                         this.currentPage = 1;
                         updatePageButtons();
-                        this.client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                        this.client.getSoundManager().play(SimpleSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                         return true;
                     }
                     index++;
@@ -143,11 +140,11 @@ public class PlayerBookScreen extends Screen {
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    private void renderTooltip(DrawContext context, int mouseX, int mouseY) {
+    private void renderTooltip(GuiGraphics context, int mouseX, int mouseY) {
         int centerX = context.getScaledWindowWidth() / 2;
     }
 
-    public static void drawScaledText(TextRenderer textRenderer, DrawContext context, Component text, int x, int y, float scale, int color, boolean centered) {
+    public static void drawScaledText(Font textRenderer, GuiGraphics context, Component text, int x, int y, float scale, int color, boolean centered) {
         com.mojang.blaze3d.vertex.PoseStack matrices = context.getMatrices();
         matrices.push();
         matrices.scale(scale, scale, 1.0f);

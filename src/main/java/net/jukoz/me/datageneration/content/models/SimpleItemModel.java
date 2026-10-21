@@ -6,7 +6,6 @@ import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.item.DecorativeItemsME;
 import net.jukoz.me.item.FoodItemsME;
 import net.jukoz.me.item.ResourceItemsME;
-
 import java.util.ArrayList;
 import java.util.List;
 

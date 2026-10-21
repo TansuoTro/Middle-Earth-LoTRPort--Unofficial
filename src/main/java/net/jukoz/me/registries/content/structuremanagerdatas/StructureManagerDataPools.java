@@ -9,7 +9,6 @@ import net.jukoz.me.registries.content.npctypes.NpcRegistry;
 import net.jukoz.me.resources.datas.structure_manager_datas.SpawnNestNodeData;
 import net.jukoz.me.resources.datas.structure_manager_datas.StructureManagerData;
 import net.jukoz.me.resources.datas.structure_manager_datas.StructureSpawnNestPool;
-
 import java.util.List;
 
 public class StructureManagerDataPools {

@@ -3,7 +3,6 @@ package net.jukoz.me.commands.suggestions;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.minecraft.resources.ResourceLocation;
-
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;

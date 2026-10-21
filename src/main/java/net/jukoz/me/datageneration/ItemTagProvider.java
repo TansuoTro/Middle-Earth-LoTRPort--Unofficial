@@ -17,17 +17,17 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.core.RegistryWrapper;
 import net.minecraft.tags.TagKey;
 import net.minecraft.resources.ResourceLocation;
-
 import java.util.concurrent.CompletableFuture;
+import net.minecraft.core.HolderLookup;
 
 public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
-    public ItemTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+    public ItemTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.WrapperLookup> registriesFuture) {
         super(output, registriesFuture);
     }
 
     @Override
-    protected void configure(RegistryWrapper.WrapperLookup arg) {
+    protected void configure(HolderLookup.WrapperLookup arg) {
         populatePortedTags();
         var bones = getOrCreateTagBuilder(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "bones")));
         var feathers = getOrCreateTagBuilder(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "feathers")));
@@ -53,10 +53,8 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
         TagKey<Item> mod_stripped_logs = TagKey.of(Registries.ITEM, new ResourceLocation("me", "mod_stripped_logs"));
         getOrCreateTagBuilder(TagKey.of(Registries.ITEM, new ResourceLocation("me", "mod_planks"))).add(notNullItems(Planks.getItemPlanks()));
 
-
         getOrCreateTagBuilder(TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "planks"))).add(notNullItems(Planks.getItemPlanks()));
         getOrCreateTagBuilder(TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "logs"))).add(notNullItems(Logs.getItemLogs()));
-
 
         bones.add(Items.BONE);
         bones.add(ModResourceItems.ORC_BONE);
@@ -320,4 +318,3 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
         return values.stream().filter(java.util.Objects::nonNull).toArray(Item[]::new);
     }
 }
-

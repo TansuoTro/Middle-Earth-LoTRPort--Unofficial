@@ -21,8 +21,6 @@ public class PacketStructureManagerRespawnEntities extends ClientToServerPacket<
         this.pos = pos;
     }
 
-
-
     public PacketStructureManagerRespawnEntities(FriendlyByteBuf buf) {
         this(buf.readBlockPos());
     }

@@ -5,19 +5,19 @@ import net.jukoz.me.entity.hobbits.shire.ShireHobbitEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.projectile.thrown.ThrownEntity;
+import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 
-public class BoulderEntity extends ThrownEntity {
+public class BoulderEntity extends ThrowableProjectile {
 
-    public BoulderEntity(EntityType<? extends ThrownEntity> type, Level world) {
+    public BoulderEntity(EntityType<? extends ThrowableProjectile> type, Level world) {
         super(type, world);
     }
 
-    public BoulderEntity(EntityType<? extends ThrownEntity> type, LivingEntity owner, Level world) {
+    public BoulderEntity(EntityType<? extends ThrowableProjectile> type, LivingEntity owner, Level world) {
         super(type, owner, world);
     }
     public BoulderEntity(Level world, double x, double y, double z) {

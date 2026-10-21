@@ -2,6 +2,7 @@ package net.jukoz.me.config;
 
 import com.mojang.datafixers.util.Pair;
 import net.jukoz.me.MiddleEarth;
+import net.minecraft.util.Tuple;
 
 public class ModServerConfigs {
     public static SimpleConfig CONFIG;
@@ -45,53 +46,53 @@ public class ModServerConfigs {
         configs.addComment("This file stores server/host configuration options for the Middle-earth mod.");
         configs.addLineJump();
 
-        // World configurations
-        configs.addComment("World configurations");
+        // Level configurations
+        configs.addComment("Level configurations");
         configs.addDescription("Should players respawn at their selected spawn location in Middle-earth if they die without having a bed assigned?");
-        configs.addKeyValuePair(new Pair<>("enableSpawnOverride", true), "boolean");
+        configs.addKeyValuePair(new Tuple<>("enableSpawnOverride", true), "boolean");
         configs.addDescription("Should players be able to return to the overworld by reusing the starlight phial?");
-        configs.addKeyValuePair(new Pair<>("enableReturnToOverworld", true), "boolean");
+        configs.addKeyValuePair(new Tuple<>("enableReturnToOverworld", true), "boolean");
         configs.addDescription("Should procedural structures (such as Orthanc) generate in Middle-earth?");
-        configs.addKeyValuePair(new Pair<>("enableProceduralStructures", true), "boolean");
+        configs.addKeyValuePair(new Tuple<>("enableProceduralStructures", true), "boolean");
         configs.addDescription("Maximum amount of non-persistent entity per type in Middle-earth");
-        configs.addKeyValuePair(new Pair<>("globalMobCap", true), "int");
+        configs.addKeyValuePair(new Tuple<>("globalMobCap", true), "int");
         configs.addLineJump();
 
         // PlayerFactionPayload configurations
         configs.addComment("PlayerFactionPayload configurations");
         configs.addDescription("Should players be allowed to change factions when they use the starlight phial?");
-        configs.addKeyValuePair(new Pair<>("enableFactionReset", true), "boolean");
+        configs.addKeyValuePair(new Tuple<>("enableFactionReset", true), "boolean");
         configs.addDescription("Should players keep their race when returning to the Overworld");
-        configs.addKeyValuePair(new Pair<>("enableKeepRaceOnDimensionSwap", true), "boolean");
+        configs.addKeyValuePair(new Tuple<>("enableKeepRaceOnDimensionSwap", true), "boolean");
         configs.addDescription("Amount of time before teleporting");
-        configs.addKeyValuePair(new Pair<>("delayOnTeleportConfirmation", 3), "int");
+        configs.addKeyValuePair(new Tuple<>("delayOnTeleportConfirmation", 3), "int");
         configs.addLineJump();
 
         // Mount configurations
         configs.addComment("Mount configurations");
         configs.addDescription("Should players and NPCs be allowed to ride broadhoof goats?");
-        configs.addKeyValuePair(new Pair<>("enableMountBroadhoofGoat", true), "boolean");
+        configs.addKeyValuePair(new Tuple<>("enableMountBroadhoofGoat", true), "boolean");
 
         // Food configurations
         configs.addComment("Food configurations");
         configs.addDescription("Should players be allowed to craft golden apples and golden carrots in Middle-earth?");
-        configs.addKeyValuePair(new Pair<>("enableGoldenFoodRecipes", false), "boolean");
+        configs.addKeyValuePair(new Tuple<>("enableGoldenFoodRecipes", false), "boolean");
 
         // Golem configurations
         configs.addComment("Golem configurations");
         configs.addDescription("Should players be allowed to place golems with block patterns in Middle-earth?");
-        configs.addKeyValuePair(new Pair<>("enableGolems", false), "boolean");
+        configs.addKeyValuePair(new Tuple<>("enableGolems", false), "boolean");
 
         // Enchants configurations
         configs.addComment("Enchants configurations");
         configs.addDescription("What is the maximum level a sharpness can have in an anvil output");
-        configs.addKeyValuePair(new Pair<>("sharpnessMaxLevel", 3), "int");
+        configs.addKeyValuePair(new Tuple<>("sharpnessMaxLevel", 3), "int");
         configs.addDescription("What is the maximum level a power can have in an anvil output");
-        configs.addKeyValuePair(new Pair<>("powerMaxLevel", 3), "int");
+        configs.addKeyValuePair(new Tuple<>("powerMaxLevel", 3), "int");
     }
 
     private static void assignServerConfigs() {
-        // World configurations
+        // Level configurations
         ENABLE_SPAWN_OVERRIDE = CONFIG.getOrDefault("enableSpawnOverride", true);
         ENABLE_RETURN_TO_OVERWORLD = CONFIG.getOrDefault("enableReturnToOverworld", true);
         ENABLE_PROCEDURAL_STRUCTURES = CONFIG.getOrDefault("enableProceduralStructures", true);

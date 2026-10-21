@@ -25,4 +25,3 @@ public enum GondorHumanVariant {
         return BY_ID[id % BY_ID.length];
     }
 }
-

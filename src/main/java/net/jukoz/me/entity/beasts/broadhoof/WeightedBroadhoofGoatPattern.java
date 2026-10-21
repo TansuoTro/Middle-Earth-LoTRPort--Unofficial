@@ -2,7 +2,6 @@ package net.jukoz.me.entity.beasts.broadhoof;
 
 import net.minecraft.Util;
 import net.jukoz.me.api.dtos.WeightedItem;
-
 import java.util.*;
 
 public class WeightedBroadhoofGoatPattern extends WeightedItem<BroadhoofGoatPattern> {

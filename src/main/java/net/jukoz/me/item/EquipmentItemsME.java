@@ -1,6 +1,5 @@
 package net.jukoz.me.item;
 
-
 import net.jukoz.me.compat.DyedColorComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ArmorItem;
@@ -27,8 +26,6 @@ import net.jukoz.me.item.utils.armor.backAttachments.BackAttachmentsME;
 import net.jukoz.me.item.utils.armor.helmetAttachments.HelmetAttachmentsME;
 import net.jukoz.me.registries.RegistryAliasesME;
 import net.jukoz.me.registries.content.factions.FactionRegistry;
-
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +34,7 @@ import java.util.function.Function;
 public class EquipmentItemsME {
 
     /**
-     * Middle-earth mod Equipment Items, armors, capes, hoods registry
+     * Middle-earth mod Equipable Items, armors, capes, hoods registry
      */
 
     public static List<Item> armorPiecesListHelmets = new ArrayList<>();
@@ -121,7 +118,6 @@ public class EquipmentItemsME {
     public static final Item AUTUMN_LEAF_CAPE = registerBackAttachment("autumn_leaf_cape",
             (settings) -> new BackAttachmentItem(settings, ArmorMaterialsME.FABRIC_T0), new MESettings()
                     .component(MEComponents.BACK_ATTACHMENT_DATA, BackAttachmentDataComponent.newBackAttachment(BackAttachmentsME.AUTUMN_LEAF_CAPE)));
-
 
     public static final Item BLACK_FUR_CLOAK = registerDyeableBackAttachment("black_fur_cloak",
             (settings) -> new BackAttachmentItem(settings, ArmorMaterialsME.FUR_T0), new MESettings()
@@ -214,7 +210,6 @@ public class EquipmentItemsME {
                     .component(MEComponents.DYED_COLOR, new DyedColorComponent( 15256475)));
     public static final Item KETTLE_HAT = registerCustomModelArmorPiece("kettle_hat",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.IRON_T2, settings), new MESettings());
-
 
     public static final Item BLACKSMITH_APRON = registerArmorPiece("blacksmith_apron",
             (settings) -> new CustomChestplateItem(ArmorMaterialsME.LEATHER_T2, settings), new MESettings());
@@ -1567,7 +1562,6 @@ public class EquipmentItemsME {
             Item::new, ItemSettingsME.wargArmor(ArmorMaterialsME.WARG_MORDOR_PLATE_ARMOR.material())
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.MORDOR)));
 
-
     //region DOL GULDUR
     public static final Item DOL_GULDUR_JAILER_COLLAR = registerArmorPiece("dol_guldur_jailer_collar",
             (settings) -> new CustomHelmetItem(ArmorMaterialsME.CRUDE_T1, settings), new MESettings()
@@ -2196,7 +2190,7 @@ public class EquipmentItemsME {
     }
 
     public static void registerModItems() {
-        MiddleEarth.LOGGER.logDebugMsg("Registering Mod Equipment Items for " + MiddleEarth.MOD_ID);
+        MiddleEarth.LOGGER.logDebugMsg("Registering Mod Equipable Items for " + MiddleEarth.MOD_ID);
         ArmorTags.registerRecipesTemplates();
     }
 }

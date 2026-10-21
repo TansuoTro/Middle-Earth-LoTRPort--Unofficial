@@ -1,8 +1,8 @@
 package net.jukoz.me.block.special.forge;
 
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.StringRepresentable;
 
-public enum ForgePart implements StringIdentifiable {
+public enum ForgePart implements StringRepresentable {
     BOTTOM("bottom"),
     TOP("top");
 

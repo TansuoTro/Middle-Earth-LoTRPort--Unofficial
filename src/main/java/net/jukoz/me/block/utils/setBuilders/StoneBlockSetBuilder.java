@@ -3,10 +3,9 @@ package net.jukoz.me.block.utils.setBuilders;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.block.NoteBlockInstrument;
-import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.world.level.block.SoundType;
 import net.jukoz.me.block.utils.BlockRecordTypes;
 import net.jukoz.me.block.utils.StoneBlockTypes;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +55,7 @@ public class StoneBlockSetBuilder {
     public float blastResistance;
     public MapColor mapColor;
     public NoteBlockInstrument instrument;
-    public BlockSoundGroup soundGroup;
+    public SoundType soundGroup;
     public boolean hasMossy;
     public boolean hasCracked;
     public boolean isVanilla;
@@ -64,12 +63,12 @@ public class StoneBlockSetBuilder {
     public boolean hasVanillaPolished;
 
     public StoneBlockSetBuilder(String name, float hardness, float blastResistance,
-                                MapColor mapColor, NoteBlockInstrument instrument, BlockSoundGroup soundGroup, boolean hasMossy, boolean hasCracked){
+                                MapColor mapColor, NoteBlockInstrument instrument, SoundType soundGroup, boolean hasMossy, boolean hasCracked){
         this(name, hardness,blastResistance, mapColor, instrument, soundGroup, hasMossy, hasCracked, false, false, false);
     }
 
     public StoneBlockSetBuilder(String name, float hardness, float blastResistance,
-                                MapColor mapColor, NoteBlockInstrument instrument, BlockSoundGroup soundGroup, boolean hasMossy,
+                                MapColor mapColor, NoteBlockInstrument instrument, SoundType soundGroup, boolean hasMossy,
                                 boolean hasCracked, boolean isVanilla, boolean hasVanillaCobble, boolean hasVanillaPolished){
         this.setName = name;
         this.hardness = hardness;

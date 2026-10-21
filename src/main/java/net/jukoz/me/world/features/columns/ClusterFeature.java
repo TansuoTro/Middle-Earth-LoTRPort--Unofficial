@@ -3,26 +3,25 @@ package net.jukoz.me.world.features.columns;
 import com.mojang.serialization.Codec;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PointedDripstoneBlock;
-import net.minecraft.world.gen.feature.DripstoneClusterFeatureConfig;
+import net.minecraft.world.level.levelgen.feature.configurations.DripstoneClusterConfiguration;
 import net.jukoz.me.block.special.pointedBlocks.PointedDolomiteBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.block.enums.Thickness;
+import net.minecraft.world.level.block.state.properties.DripstoneThickness;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
-import net.minecraft.util.math.floatprovider.ClampedNormalFloatProvider;
+import net.minecraft.util.valueproviders.ClampedNormalFloat;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.StructureWorldAccess;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.level.LevelView;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.gen.feature.util.CaveSurface;
-import net.minecraft.world.gen.feature.util.DripstoneHelper;
-import net.minecraft.world.gen.feature.util.FeatureContext;
-
+import net.minecraft.world.level.levelgen.Column;
+import net.minecraft.world.level.levelgen.feature.DripstoneUtils;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -33,8 +32,8 @@ public class ClusterFeature extends Feature<ClusterFeatureConfig> {
         super(codec);
     }
 
-    public boolean generate(FeatureContext<ClusterFeatureConfig> context) {
-        StructureWorldAccess structureWorldAccess = context.getWorld();
+    public boolean generate(FeaturePlaceContext<ClusterFeatureConfig> context) {
+        WorldGenLevel structureWorldAccess = context.getWorld();
         BlockPos blockPos = context.getOrigin();
         ClusterFeatureConfig ClusterFeatureConfig = context.getConfig();
         RandomSource random = context.getRandom();
@@ -59,9 +58,9 @@ public class ClusterFeature extends Feature<ClusterFeatureConfig> {
         }
     }
 
-    private void generate(StructureWorldAccess world, RandomSource random, BlockPos pos, int localX, int localZ, float wetness, 
+    private void generate(WorldGenLevel world, RandomSource random, BlockPos pos, int localX, int localZ, float wetness, 
                           double dripstoneChance, int height, float density, ClusterFeatureConfig config) {
-        Optional<CaveSurface> optional = CaveSurface.create(world, pos, config.floorToCeilingSearchRange, DripstoneHelper::canGenerate, DripstoneHelper::cannotGenerate);
+        Optional<CaveSurface> optional = CaveSurface.create(world, pos, config.floorToCeilingSearchRange, DripstoneUtils::canGenerate, DripstoneUtils::cannotGenerate);
         if (!optional.isEmpty()) {
             OptionalInt optionalInt = ((CaveSurface)optional.get()).getCeilingHeight();
             OptionalInt optionalInt2 = ((CaveSurface)optional.get()).getFloorHeight();
@@ -136,7 +135,7 @@ public class ClusterFeature extends Feature<ClusterFeatureConfig> {
         }
     }
 
-    public static boolean generateBlock(WorldAccess world, BlockPos pos, BlockState stoneBlockState) {
+    public static boolean generateBlock(LevelAccessor world, BlockPos pos, BlockState stoneBlockState) {
         BlockState blockState = world.getBlockState(pos);
         if (blockState.isIn(BlockTags.DRIPSTONE_REPLACEABLE_BLOCKS)) {
             world.setBlockState(pos, stoneBlockState, 2);
@@ -146,7 +145,7 @@ public class ClusterFeature extends Feature<ClusterFeatureConfig> {
         }
     }
 
-    protected static void generatePointedBlock(WorldAccess world, BlockPos pos, Direction direction, int height, boolean merge, BlockState blockState) {
+    protected static void generatePointedBlock(LevelAccessor world, BlockPos pos, Direction direction, int height, boolean merge, BlockState blockState) {
         if (canReplace(world.getBlockState(pos.offset(direction.getOpposite())))) {
             BlockPos.Mutable mutable = pos.mutableCopy();
             getDripstoneThickness(direction, height, merge, state -> {
@@ -162,16 +161,16 @@ public class ClusterFeature extends Feature<ClusterFeatureConfig> {
 
     public static void getDripstoneThickness(Direction direction, int height, boolean merge, Consumer<BlockState> callback, BlockState blockState) {
         if (height >= 3) {
-            callback.accept(getState(direction, Thickness.BASE, blockState));
+            callback.accept(getState(direction, DripstoneThickness.BASE, blockState));
             for(int i = 0; i < height - 3; ++i) {
-                callback.accept(getState(direction, Thickness.MIDDLE, blockState));
+                callback.accept(getState(direction, DripstoneThickness.MIDDLE, blockState));
             }
         }
         if (height >= 2) {
-            callback.accept(getState(direction, Thickness.FRUSTUM, blockState));
+            callback.accept(getState(direction, DripstoneThickness.FRUSTUM, blockState));
         }
         if (height >= 1) {
-            callback.accept(getState(direction, merge ? Thickness.TIP_MERGE : Thickness.TIP, blockState));
+            callback.accept(getState(direction, merge ? DripstoneThickness.TIP_MERGE : DripstoneThickness.TIP, blockState));
         }
     }
 
@@ -179,23 +178,23 @@ public class ClusterFeature extends Feature<ClusterFeatureConfig> {
         return state.isAir() || state.isOf(Blocks.WATER);
     }
 
-    public static boolean canGenerate(WorldAccess world, BlockPos pos) {
+    public static boolean canGenerate(LevelAccessor world, BlockPos pos) {
         return world.testBlockState(pos, ClusterFeature::canGenerate);
     }
 
-    public static boolean canGenerateOrLava(WorldAccess world, BlockPos pos) {
-        return world.testBlockState(pos, DripstoneHelper::canGenerateOrLava);
+    public static boolean canGenerateOrLava(LevelAccessor world, BlockPos pos) {
+        return world.testBlockState(pos, DripstoneUtils::canGenerateOrLava);
     }
 
     public static boolean canReplace(BlockState state) {
         return state.isIn(BlockTags.BASE_STONE_OVERWORLD);
     }
 
-    private static BlockState getState(Direction direction, Thickness thickness, BlockState blockState) {
+    private static BlockState getState(Direction direction, DripstoneThickness thickness, BlockState blockState) {
         return (blockState.with(PointedDolomiteBlock.VERTICAL_DIRECTION, direction)).with(PointedDolomiteBlock.THICKNESS, thickness);
     }
 
-    private boolean isLava(WorldView world, BlockPos pos) {
+    private boolean isLava(LevelReader world, BlockPos pos) {
         return world.getBlockState(pos).isOf(Blocks.LAVA);
     }
 
@@ -209,7 +208,7 @@ public class ClusterFeature extends Feature<ClusterFeatureConfig> {
         }
     }
 
-    private boolean canWaterSpawn(StructureWorldAccess world, BlockPos pos, BlockState stoneBlockState, BlockState pointedBlockState) {
+    private boolean canWaterSpawn(WorldGenLevel world, BlockPos pos, BlockState stoneBlockState, BlockState pointedBlockState) {
         BlockState blockState = world.getBlockState(pos);
         if (!blockState.isOf(Blocks.WATER) && !blockState.isOf(stoneBlockState.getBlock()) && !blockState.isOf(pointedBlockState.getBlock())) {
             if (world.getBlockState(pos.up()).getFluidState().isIn(FluidTags.WATER)) {
@@ -233,12 +232,12 @@ public class ClusterFeature extends Feature<ClusterFeatureConfig> {
         }
     }
 
-    private boolean isStoneOrWater(WorldAccess world, BlockPos pos) {
+    private boolean isStoneOrWater(LevelAccessor world, BlockPos pos) {
         BlockState blockState = world.getBlockState(pos);
         return blockState.isIn(BlockTags.BASE_STONE_OVERWORLD) || blockState.getFluidState().isIn(FluidTags.WATER);
     }
 
-    private void placeDripstoneBlocks(StructureWorldAccess world, BlockPos pos, int height, Direction direction, BlockState blockState) {
+    private void placeDripstoneBlocks(WorldGenLevel world, BlockPos pos, int height, Direction direction, BlockState blockState) {
         BlockPos.Mutable mutable = pos.mutableCopy();
 
         for(int i = 0; i < height; ++i) {
@@ -259,6 +258,6 @@ public class ClusterFeature extends Feature<ClusterFeatureConfig> {
     }
 
     private static float clampedGaussian(RandomSource random, float min, float max, float mean, float deviation) {
-        return ClampedNormalFloatProvider.get(random, mean, deviation, min, max);
+        return ClampedNormalFloat.get(random, mean, deviation, min, max);
     }
 }

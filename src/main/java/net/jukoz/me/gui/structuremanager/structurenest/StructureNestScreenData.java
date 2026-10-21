@@ -5,7 +5,6 @@ import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
-
 import java.util.Optional;
 
 public class StructureNestScreenData {
@@ -45,7 +44,6 @@ public class StructureNestScreenData {
     public void setStructureNestId(ResourceLocation structureNestId) {
         this.structureNestId = structureNestId;
     }
-
 
     public StructureNestScreenData(BlockPos pos, Optional<ResourceLocation> structureManagerId, Optional<ResourceLocation> structureNestId, int spawnRadius, boolean isEnabled){
         this.pos = pos;

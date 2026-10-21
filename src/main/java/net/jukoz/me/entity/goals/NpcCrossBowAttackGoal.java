@@ -1,8 +1,6 @@
 package net.jukoz.me.entity.goals;
 
-
-
-import net.minecraft.entity.CrossbowUser;
+import net.minecraft.world.entity.monster.CrossbowAttackMob;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.RangedAttackMob;
@@ -11,17 +9,17 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.util.TimeHelper;
-import net.minecraft.util.math.intprovider.UniformIntProvider;
+import net.minecraft.util.TimeUtil;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.jukoz.me.compat.MECrossbow;
 import net.jukoz.me.entity.npcs.NpcEntity;
 import net.jukoz.me.utils.ItemTagsME;
-
 import java.util.EnumSet;
 import java.util.List;
+import net.minecraft.world.entity.ai.control.Control;
 
-public class NpcCrossBowAttackGoal<T extends NpcEntity & RangedAttackMob & CrossbowUser> extends Goal {
-    public static final UniformIntProvider COOLDOWN_RANGE = TimeHelper.betweenSeconds(1, 2);
+public class NpcCrossBowAttackGoal<T extends NpcEntity & RangedAttackMob & CrossbowAttackMob> extends Goal {
+    public static final UniformInt COOLDOWN_RANGE = TimeUtil.betweenSeconds(1, 2);
     private static int USING_ITEM_FLAG = 1;
     private final T actor;
     private Stage stage = Stage.UNCHARGED;

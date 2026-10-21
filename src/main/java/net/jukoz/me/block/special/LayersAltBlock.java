@@ -1,6 +1,5 @@
 package net.jukoz.me.block.special;
 
-import net.minecraft.block.*;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -12,8 +11,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.SnowLayerBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class LayersAltBlock extends SnowBlock implements Waterloggable {
+public class LayersAltBlock extends SnowLayerBlock implements SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public LayersAltBlock(Settings settings) {
@@ -42,7 +46,7 @@ public class LayersAltBlock extends SnowBlock implements Waterloggable {
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (state.get(WATERLOGGED)) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
@@ -59,7 +63,6 @@ public class LayersAltBlock extends SnowBlock implements Waterloggable {
         builder.add(LAYERS, WATERLOGGED);
     }
 
-
     @Override
     public boolean canReplace(BlockState state, BlockPlaceContext context) {
         int i = state.get(LAYERS);
@@ -75,7 +78,7 @@ public class LayersAltBlock extends SnowBlock implements Waterloggable {
     }
 
     @Override
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
         return true;
     }
 }

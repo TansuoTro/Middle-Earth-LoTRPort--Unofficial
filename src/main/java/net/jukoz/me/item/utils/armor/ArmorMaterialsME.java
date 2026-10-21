@@ -12,14 +12,14 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.function.ValueLists;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.ByIdMap;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.compat.SimpleArmorMaterial;
 import net.jukoz.me.utils.ItemTagsME;
-
 import java.util.EnumMap;
 import java.util.function.IntFunction;
+import net.minecraft.network.FriendlyByteBuf;
 
 public interface ArmorMaterialsME {
 
@@ -180,7 +180,7 @@ public interface ArmorMaterialsME {
         return new ExtendedArmorMaterial(material, durabilityMultiplier, tier);
     }
 
-    enum Tiers implements StringIdentifiable {
+    enum Tiers implements StringRepresentable {
         CLOTHING(0, "tier_clothing",11184810),
         BASIC(1, "tier_basic", 16777215),
         LIGHT(2, "tier_light", 5635925),
@@ -189,12 +189,12 @@ public interface ArmorMaterialsME {
         HEAVY(5, "tier_heavy",11141120),
         ;
 
-        private static final IntFunction<Tiers> BY_ID = ValueLists.createIdToValueFunction(Tiers::getId, Tiers.values(), ValueLists.OutOfBoundsHandling.ZERO);;
+        private static final IntFunction<Tiers> BY_ID = ByIdMap.createIdToValueFunction(Tiers::getId, Tiers.values(), ByIdMap.OutOfBoundsHandling.ZERO);;
         private final String name;
         private final int id;
         private final int color;
 
-        public static final Codec<Tiers> CODEC = StringIdentifiable.createCodec(Tiers::values);
+        public static final Codec<Tiers> CODEC = StringRepresentable.createCodec(Tiers::values);
         public static final net.jukoz.me.compat.net.PacketCodec<net.minecraft.network.FriendlyByteBuf, Tiers> PACKET_CODEC =
                 net.jukoz.me.compat.net.PacketCodecs.indexed(Tiers::byId, Tiers::getId);
 

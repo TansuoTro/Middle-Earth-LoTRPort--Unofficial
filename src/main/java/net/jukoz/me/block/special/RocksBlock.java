@@ -2,14 +2,13 @@ package net.jukoz.me.block.special;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.block.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.state.property.IntProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.phys.BlockHitResult;
@@ -22,9 +21,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.level.LevelView;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
 
-public class RocksBlock extends HorizontalFacingBlock implements Waterloggable {
-    public static final IntProperty STAGE = IntProperty.of("stage", 0, 3);
+public class RocksBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
+    public static final IntegerProperty STAGE = IntegerProperty.of("stage", 0, 3);
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -32,8 +37,6 @@ public class RocksBlock extends HorizontalFacingBlock implements Waterloggable {
         super(settings);
         this.setDefaultState((this.stateManager.getDefaultState()).with(FACING, Direction.NORTH).with(STAGE, 0).with(WATERLOGGED, false));
     }
-
-
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
@@ -49,8 +52,8 @@ public class RocksBlock extends HorizontalFacingBlock implements Waterloggable {
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderType(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
@@ -64,7 +67,7 @@ public class RocksBlock extends HorizontalFacingBlock implements Waterloggable {
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (state.get(WATERLOGGED)) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
@@ -78,7 +81,7 @@ public class RocksBlock extends HorizontalFacingBlock implements Waterloggable {
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return switch (state.get(STAGE)) {
             case 3 -> Block.createCuboidShape(0, 0, 0, 16, 10, 16);
             case 2 -> Block.createCuboidShape(0, 0, 0, 16, 8, 16);

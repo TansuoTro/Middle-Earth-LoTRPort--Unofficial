@@ -1,26 +1,32 @@
 package net.jukoz.me.block.special;
 
-import net.minecraft.block.*;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.function.BooleanBiFunction;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.VoxelShapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccess;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import com.mojang.math.Axis;
+import net.minecraft.world.phys.shapes.Shapes;
 
-public class WoodChairBlock extends SeatBlock implements Waterloggable {
-    public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
+public class WoodChairBlock extends SeatBlock implements SimpleWaterloggedBlock {
+    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public WoodChairBlock(Settings settings) {
@@ -38,7 +44,7 @@ public class WoodChairBlock extends SeatBlock implements Waterloggable {
         return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
     }
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (state.get(WATERLOGGED)) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
@@ -52,31 +58,31 @@ public class WoodChairBlock extends SeatBlock implements Waterloggable {
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return switch (state.get(FACING)) {
-            default -> VoxelShapes.combineAndSimplify(Block.createCuboidShape(2, 0, 4, 14, 9, 16), Block.createCuboidShape(2, 9, 13, 14, 16, 16), BooleanBiFunction.OR);
-            case SOUTH -> VoxelShapes.combineAndSimplify(Block.createCuboidShape(2, 0, 0, 14, 9, 12), Block.createCuboidShape(2, 9, 0, 14, 16, 3), BooleanBiFunction.OR);
-            case EAST -> VoxelShapes.combineAndSimplify(Block.createCuboidShape(0, 0, 2, 12, 9, 14), Block.createCuboidShape(0, 9, 2, 3, 16, 14), BooleanBiFunction.OR);
-            case WEST -> VoxelShapes.combineAndSimplify(Block.createCuboidShape(4, 0, 2, 16, 9, 14), Block.createCuboidShape(13, 9, 2, 16, 16, 14), BooleanBiFunction.OR);
+            default -> Shapes.combineAndSimplify(Block.createCuboidShape(2, 0, 4, 14, 9, 16), Block.createCuboidShape(2, 9, 13, 14, 16, 16), BooleanOp.OR);
+            case SOUTH -> Shapes.combineAndSimplify(Block.createCuboidShape(2, 0, 0, 14, 9, 12), Block.createCuboidShape(2, 9, 0, 14, 16, 3), BooleanOp.OR);
+            case EAST -> Shapes.combineAndSimplify(Block.createCuboidShape(0, 0, 2, 12, 9, 14), Block.createCuboidShape(0, 9, 2, 3, 16, 14), BooleanOp.OR);
+            case WEST -> Shapes.combineAndSimplify(Block.createCuboidShape(4, 0, 2, 16, 9, 14), Block.createCuboidShape(13, 9, 2, 16, 16, 14), BooleanOp.OR);
         };
     }
 
     @Override
-    public BlockState rotate(BlockState state, BlockRotation rotation) {
+    public BlockState rotate(BlockState state, Rotation rotation) {
         return state.with(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override
-    public BlockState mirror(BlockState state, BlockMirror mirror) {
+    public BlockState mirror(BlockState state, Mirror mirror) {
         Direction direction = state.get(FACING);
         switch (mirror) {
             case LEFT_RIGHT -> {
                 if (direction.getAxis() != Direction.Axis.Z) break;
-                return state.rotate(BlockRotation.CLOCKWISE_180);
+                return state.rotate(Rotation.CLOCKWISE_180);
             }
             case FRONT_BACK -> {
                 if (direction.getAxis() != Direction.Axis.X) break;
-                return state.rotate(BlockRotation.CLOCKWISE_180);
+                return state.rotate(Rotation.CLOCKWISE_180);
             }
         }
         return super.mirror(state, mirror);

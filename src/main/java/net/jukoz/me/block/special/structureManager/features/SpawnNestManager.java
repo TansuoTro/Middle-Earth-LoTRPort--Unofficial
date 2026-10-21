@@ -4,12 +4,12 @@ import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.level.block.BedBlock;
-import net.minecraft.block.DoubleBlockProperties;
+import net.minecraft.world.level.block.DoubleBlockCombiner;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Uuids;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
@@ -18,14 +18,13 @@ import net.jukoz.me.entity.npcs.NpcEntity;
 import net.jukoz.me.resources.datas.structure_manager_datas.SpawnNestNodeData;
 import net.jukoz.me.resources.datas.structure_manager_datas.StructureManagerData;
 import net.jukoz.me.resources.datas.structure_manager_datas.StructureSpawnNestPool;
-
 import java.util.*;
 import net.jukoz.me.entity.ai.brain.MemoryModulesME;
 
 public class SpawnNestManager {
     public static final Codec<SpawnNestManager> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("id").forGetter(SpawnNestManager::getId),
-            Codec.list(Uuids.CODEC).fieldOf("entity_uuid").forGetter(SpawnNestManager::getEntityUuids),
+            Codec.list(UUIDUtil.CODEC).fieldOf("entity_uuid").forGetter(SpawnNestManager::getEntityUuids),
             Codec.LONG.fieldOf("respawn_event_trigger_tick").forGetter(SpawnNestManager::getRespawnEventTriggerTick),
             Codec.INT.fieldOf("respawn_tick_delay").forGetter(SpawnNestManager::getRespawnTickDelay),
             BlockPos.CODEC.fieldOf("origin_pos").forGetter(SpawnNestManager::getOriginPos),
@@ -149,7 +148,6 @@ public class SpawnNestManager {
         }
     }
 
-
     private void respawnAll(StructureManagerData structureManagerData, ServerLevel world, BlockPos structureManagerPos) {
         if(structureManagerData == null)
             return;
@@ -227,4 +225,3 @@ public class SpawnNestManager {
         }
     }
 }
-

@@ -1,11 +1,18 @@
 package net.jukoz.me.entity.spider;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.SinglePartEntityModel;
+import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
-public class EnwebbedModel extends SinglePartEntityModel<LivingEntity> {
+public class EnwebbedModel extends HierarchicalModel<LivingEntity> {
     private final ModelPart bigBody;
     private final ModelPart smallBody;
 
@@ -17,16 +24,16 @@ public class EnwebbedModel extends SinglePartEntityModel<LivingEntity> {
         this.smallBody = root.getChild("small_body");
     }
 
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = new ModelData();
-        ModelPartData dataRoot = modelData.getRoot();
-        ModelPartData bigBody = dataRoot.addChild("big_body", ModelPartBuilder.create().uv(0, 0)
-                .cuboid(-8.0F, -23.5F, -2.0F, 16.0F, 11.0F, 4.0F, new Dilation(1.15F)), ModelTransform.pivot(0.0F, 24.0F, 0.0F));
+    public static LayerDefinition getTexturedModelData() {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition dataRoot = modelData.getRoot();
+        PartDefinition bigBody = dataRoot.addChild("big_body", CubeListBuilder.create().uv(0, 0)
+                .cuboid(-8.0F, -23.5F, -2.0F, 16.0F, 11.0F, 4.0F, new CubeDeformation(1.15F)), PartPose.pivot(0.0F, 24.0F, 0.0F));
 
-        ModelPartData smallBody = dataRoot.addChild("small_body", ModelPartBuilder.create().uv(0, 0)
-                .cuboid(-8.0F, -23.5F, -2.0F, 16.0F, 11.0F, 4.0F, new Dilation(0.65F)), ModelTransform.pivot(0.0F, 24.0F, 0.0F));
+        PartDefinition smallBody = dataRoot.addChild("small_body", CubeListBuilder.create().uv(0, 0)
+                .cuboid(-8.0F, -23.5F, -2.0F, 16.0F, 11.0F, 4.0F, new CubeDeformation(0.65F)), PartPose.pivot(0.0F, 24.0F, 0.0F));
 
-        return TexturedModelData.of(modelData, 64, 64);
+        return LayerDefinition.of(modelData, 64, 64);
     }
 
     @Override

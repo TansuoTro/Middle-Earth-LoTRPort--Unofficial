@@ -14,16 +14,13 @@ import net.jukoz.me.datageneration.content.models.SimpleItemModel;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.item.utils.ModItemGroups;
 import net.jukoz.me.registries.RegistryAliasesME;
-
 import java.util.function.Function;
-
 
 public class EggItemsME {
 
     /**
      * Middle-earth mod Spawn Eggs registry
      */
-
 
     public static final Item BROADHOOF_GOAT_SPAWN_EGG = registerItem("broadhoof_goat_spawn_egg",
             (settings) -> egg(EntitiesME.BROADHOOF_GOAT, settings), new MESettings());

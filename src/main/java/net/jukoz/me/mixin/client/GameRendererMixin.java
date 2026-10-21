@@ -1,11 +1,11 @@
 package net.jukoz.me.mixin.client;
 
 import net.jukoz.me.entity.EntityAttributesME;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.decoration.ItemFrameEntity;
+import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class GameRendererMixin {
     @Inject(method = "updateTargetedEntity", at = @At("HEAD"), cancellable = true)
     private void me$attributeReach(float tickDelta, CallbackInfo ci) {
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
         Entity camera = client.getCameraEntity();
         if (!(camera instanceof Player player) || client.world == null || client.interactionManager == null) return;
         double blockReach = EntityAttributesME.blockReach(player);
@@ -34,7 +34,7 @@ public abstract class GameRendererMixin {
                 target -> !target.isSpectator() && target.canHit(), limit);
         if (hit != null && eye.squaredDistanceTo(hit.getPos()) <= limit) {
             client.crosshairTarget = hit;
-            if (hit.getEntity() instanceof LivingEntity || hit.getEntity() instanceof ItemFrameEntity) client.targetedEntity = hit.getEntity();
+            if (hit.getEntity() instanceof LivingEntity || hit.getEntity() instanceof ItemFrame) client.targetedEntity = hit.getEntity();
         }
         ci.cancel();
     }

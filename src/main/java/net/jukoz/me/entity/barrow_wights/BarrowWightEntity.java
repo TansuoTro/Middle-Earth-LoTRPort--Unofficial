@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.2.0 (FabricMC d28b102d).
- */
 package net.jukoz.me.entity.barrow_wights;
 
 import net.jukoz.me.entity.beasts.trolls.TrollEntity;
@@ -19,17 +16,16 @@ import net.jukoz.me.statusEffects.ModStatusEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.CreeperEntity;
-import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
@@ -39,15 +35,26 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 
-public class BarrowWightEntity extends HostileEntity {
+/*
+ * Decompiled with CFR 0.2.0 (FabricMC d28b102d).
+ */
+
+public class BarrowWightEntity extends Monster {
     private static final int MAX_HEALTH = 40;
     private static final float MOVEMENT_SPEED = 0.6f;
     private static final float KNOCKBACK_RESISTANCE = 1.0f;
     private static final float ATTACK_KNOCKBACK = 1.2f;
     private static final int ATTACK_DAMAGE = 3;
-    private static final TrackedData<Boolean> CAN_SCREAM;
-    private static final TrackedData<Integer> SCREAMING_TIME;
+    private static final EntityDataAccessor<Boolean> CAN_SCREAM;
+    private static final EntityDataAccessor<Integer> SCREAMING_TIME;
     public static final String LAST_SCREAM_TIME_KEY = "ScreamDelayTime";
     private int lastScreamTime;
     private static final int SCREAM_DELAY = 150;
@@ -55,10 +62,10 @@ public class BarrowWightEntity extends HostileEntity {
 
     public static final int SCREAM_ACTION_TIME = 35;
 
-    public BarrowWightEntity(EntityType<? extends HostileEntity> entityType, Level world) {
+    public BarrowWightEntity(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
     }
-    public static DefaultAttributeContainer.Builder setAttributes() {
+    public static AttributeSupplier.Builder setAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, MOVEMENT_SPEED)
                 .add(Attributes.GENERIC_MAX_HEALTH, MAX_HEALTH)
@@ -70,28 +77,28 @@ public class BarrowWightEntity extends HostileEntity {
     }
 
     protected void initGoals() {
-        this.goalSelector.add(1, new SwimGoal(this));
+        this.goalSelector.add(1, new FloatGoal(this));
 
         this.goalSelector.add(2, new MeleeAttackGoal(this, MOVEMENT_SPEED , false));
-        this.goalSelector.add(3, new WanderAroundFarGoal(this, MOVEMENT_SPEED * 0.8f));
-        this.goalSelector.add(4, new LookAtEntityGoal(this, LivingEntity.class, 32.0F));
-        this.goalSelector.add(5, new LookAroundGoal(this));
+        this.goalSelector.add(3, new WaterAvoidingRandomStrollGoal(this, MOVEMENT_SPEED * 0.8f));
+        this.goalSelector.add(4, new LookAtPlayerGoal(this, LivingEntity.class, 32.0F));
+        this.goalSelector.add(5, new RandomLookAroundGoal(this));
 
         int i = 0;
-        this.targetSelector.add(++i, new RevengeGoal(this));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, Player.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, TrollEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MordorBlackUrukEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MistyHobgoblinEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MordorOrcEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MistyGoblinEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MirkwoodSpiderEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, NazgulEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, GondorHumanEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, RohanHumanEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, GaladhrimElfEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, LongbeardDwarfEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, ShireHobbitEntity.class, true));
+        this.targetSelector.add(++i, new HurtByTargetGoal(this));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, TrollEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, MordorBlackUrukEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, MistyHobgoblinEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, MordorOrcEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, MistyGoblinEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, MirkwoodSpiderEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, NazgulEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, GondorHumanEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, RohanHumanEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, GaladhrimElfEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, LongbeardDwarfEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, ShireHobbitEntity.class, true));
     }
 
     protected void initDataTracker() {
@@ -139,8 +146,8 @@ public class BarrowWightEntity extends HostileEntity {
                         if(value < 5){
                             target.sendMessage(Component.literal("The barrows says BOO!!!!"));
                         }
-                        target.addStatusEffect(new StatusEffectInstance(ModStatusEffects.HALLUCINATION, SCREAM_EFFECT_DURATION), this);
-                        target.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, SCREAM_EFFECT_DURATION), this);
+                        target.addStatusEffect(new MobEffectInstance(ModStatusEffects.HALLUCINATION, SCREAM_EFFECT_DURATION), this);
+                        target.addStatusEffect(new MobEffectInstance(MobEffects.DARKNESS, SCREAM_EFFECT_DURATION), this);
                     }
 
                     this.setScreamingActionTime(-1);
@@ -214,7 +221,7 @@ public class BarrowWightEntity extends HostileEntity {
     protected void dropEquipment(DamageSource source, int lootingMultiplier, boolean allowDrops) {
         super.dropEquipment(source, lootingMultiplier, allowDrops);
         Entity entity = source.getAttacker();
-        if (entity instanceof CreeperEntity creeperEntity) {
+        if (entity instanceof Creeper creeperEntity) {
             if (creeperEntity.shouldDropHead()) {
                 creeperEntity.onHeadDropped();
                 this.dropItem(Items.SKELETON_SKULL);
@@ -227,7 +234,7 @@ public class BarrowWightEntity extends HostileEntity {
     }
 
     static {
-        CAN_SCREAM = DataTracker.registerData(BarrowWightEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-        SCREAMING_TIME = DataTracker.registerData(BarrowWightEntity.class, TrackedDataHandlerRegistry.INTEGER);
+        CAN_SCREAM = SynchedEntityData.registerData(BarrowWightEntity.class, EntityDataSerializers.BOOLEAN);
+        SCREAMING_TIME = SynchedEntityData.registerData(BarrowWightEntity.class, EntityDataSerializers.INTEGER);
     }
 }

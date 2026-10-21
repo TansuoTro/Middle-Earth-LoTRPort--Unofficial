@@ -1,18 +1,18 @@
 package net.jukoz.me.item.items.weapons;
+
 import com.google.common.collect.Multimap;
 import net.jukoz.me.item.MEComponents;
-
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.world.item.Tier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -27,10 +27,10 @@ public class ReachWeaponItem extends Item {
 
     public WeaponTypesME type;
 
-    private final ToolMaterial material;
-    private final Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
+    private final Tier material;
+    private final Multimap<Attribute, AttributeModifier> attributeModifiers;
 
-    public ReachWeaponItem(ToolMaterial toolMaterial, WeaponTypesME type, Item.Settings settings) {
+    public ReachWeaponItem(Tier toolMaterial, WeaponTypesME type, Item.Settings settings) {
         super(ItemSettingsME.createWeaponSettings(toolMaterial, settings, type)
                 .component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(type.name)));
         this.type = type;
@@ -45,7 +45,7 @@ public class ReachWeaponItem extends Item {
      * entity-interaction-range modifier.
      */
     @Override
-    public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
         return slot == EquipmentSlot.MAINHAND ? this.attributeModifiers : super.getAttributeModifiers(slot);
     }
 
@@ -72,7 +72,7 @@ public class ReachWeaponItem extends Item {
                 || Registries.ITEM.getId(this).getPath().contains("uruk_hai")
                 || Registries.ITEM.getId(this).getPath().contains("heyday")
                 || Registries.ITEM.getId(this).getPath().contains("numenorean")){
-            return Component.translatable(this.getTranslationKey()).formatted(Formatting.GOLD);
+            return Component.translatable(this.getTranslationKey()).formatted(ChatFormatting.GOLD);
         }
         return super.getName(stack);
     }

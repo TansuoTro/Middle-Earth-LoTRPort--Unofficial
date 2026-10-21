@@ -6,20 +6,20 @@ import net.jukoz.me.world.biomes.surface.MapBasedCustomBiome;
 import net.jukoz.me.world.map.MiddleEarthMapConfigs;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.util.math.Vec2f;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.level.chunk.ChunkAccess;
 
 public class ProceduralStructures {
     public static final int mapMultiplier = (int) Math.pow(2, MiddleEarthMapConfigs.MAP_ITERATION + MiddleEarthMapConfigs.PIXEL_WEIGHT - 2);
 
-    public static void generateStructures(MapBasedCustomBiome biome, Chunk chunk, int x, int y, int z) {
+    public static void generateStructures(MapBasedCustomBiome biome, ChunkAccess chunk, int x, int y, int z) {
         if(biome.getBiomeKey() == MEBiomeKeys.NAN_CURUNIR || biome.getBiomeKey() == MEBiomeKeys.ISENGARD  || biome.getBiomeKey() == MEBiomeKeys.ISENGARD_HILL) {
             generateIsengard(chunk, x, y, z);
         }
     }
 
     // region Isengard
-    public static final Vec2f centerOrthanc = new Vec2f(1402, 1464).multiply(mapMultiplier);
+    public static final Vec2 centerOrthanc = new Vec2(1402, 1464).multiply(mapMultiplier);
     private static final float radiusOrthanc = 12.12f;
     private static final float topRadiusOrthanc = 4.63f;
     private static final int bottomOrthanc = 72;
@@ -33,8 +33,8 @@ public class ProceduralStructures {
     private static final BlockState isengardBlock = StoneBlockSets.MEDGON_SET.smoothBlocks.base().getDefaultState();
     private static final BlockState isengardWallBlock = StoneBlockSets.MEDGON_SET.cobblestoneBlocks.base().getDefaultState();
 
-    private static void generateIsengard(Chunk chunk, int x, int y, int z) {
-        Vec2f coordinates = new Vec2f(x, z);
+    private static void generateIsengard(ChunkAccess chunk, int x, int y, int z) {
+        Vec2 coordinates = new Vec2(x, z);
         float distance = (float) Math.sqrt(centerOrthanc.distanceSquared(coordinates));
         if(distance < radiusOrthanc) {
             for(int i = bottomOrthanc; i < topOrthanc; i++) {
@@ -58,9 +58,9 @@ public class ProceduralStructures {
 
                 if(distance < isengardRingRadius + isengardRingThickness) { // Walls
                     if (distance > isengardRingRadius - isengardRingThickness) {
-                        Vec2f direction = (centerOrthanc.add(coordinates.negate())).normalize();
+                        Vec2 direction = (centerOrthanc.add(coordinates.negate())).normalize();
                         float dropHeight = (float) Math.pow(Math.abs(Math.abs(isengardRingRadius - distance) / 3), 2);
-                        float dotProduct = Math.abs(direction.dot(Vec2f.EAST_UNIT));
+                        float dotProduct = Math.abs(direction.dot(Vec2.EAST_UNIT));
                         if(dotProduct <= isengardPathSize && z > centerOrthanc.y) {
                             chunk.setBlockState(chunk.getPos().getBlockPos(x, y, z), isengardWallBlock, false);
                             float tunnel = (float) Math.pow(dotProduct + 1, 52);
@@ -79,13 +79,13 @@ public class ProceduralStructures {
     }
 
     public static boolean isInsideIsengard(int x, int z) {
-        Vec2f coordinates = new Vec2f(x, z);
+        Vec2 coordinates = new Vec2(x, z);
         float distance = (float) Math.sqrt(centerOrthanc.distanceSquared(coordinates));
         return distance <= isengardRingRadius - isengardRingThickness;
     }
 
     public static float addRingHillsIsengard(int x, int z) {
-        Vec2f coordinates = new Vec2f(x, z);
+        Vec2 coordinates = new Vec2(x, z);
         float distance = (float) Math.sqrt(centerOrthanc.distanceSquared(coordinates));
         if(distance < isengardRingRadius + isengardRingThickness + isengardRingHillThickness) { // Around Walls
             if (distance > isengardRingRadius - isengardRingThickness - isengardRingHillThickness) {

@@ -1,13 +1,14 @@
 package net.jukoz.me.item;
 
-import net.minecraft.item.FoodComponent;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
-import net.minecraft.resource.featuretoggle.FeatureFlag;
+import net.minecraft.world.flag.FeatureFlag;
 import net.minecraft.world.item.Rarity;
-
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Map;
+import net.minecraft.tags.TagKey;
+import net.minecraft.network.chat.Component;
 
 /**
  * {@link Item.Settings} that also carries data components, so the 1.21.8 donor's
@@ -95,7 +96,7 @@ public class MESettings extends Item.Settings {
     // --- covariant re-declarations so the chain keeps returning MESettings ---
 
     @Override
-    public MESettings food(FoodComponent food) {
+    public MESettings food(FoodProperties food) {
         super.food(food);
         return this;
     }

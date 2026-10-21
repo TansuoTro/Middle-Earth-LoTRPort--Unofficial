@@ -1,19 +1,19 @@
 package net.jukoz.me.entity.npcs.renderer.features.nose;
+
 import net.jukoz.me.entity.npcs.NpcEntity;
 import net.jukoz.me.compat.client.render.MEFeatureRenderer;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.feature.FeatureRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRendererContext;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.model.EntityModel;
 import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.jukoz.me.compat.client.render.state.LivingEntityRenderState;
-import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.texture.SpriteAtlasTexture;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
@@ -27,16 +27,16 @@ import net.jukoz.me.registries.AtlasesME;
 @OnlyIn(Dist.CLIENT)
 public class NoseFeatureRenderer extends MEFeatureRenderer<NpcEntity, NpcEntityRenderState, NpcEntityModel> {
     private final NoseModel noseModel;
-    private final SpriteAtlasTexture characterTexturesAtlas;
+    private final TextureAtlas characterTexturesAtlas;
 
-    public NoseFeatureRenderer(FeatureRendererContext<NpcEntity, NpcEntityModel> context, LoadedEntityModelsCompat loader) {
+    public NoseFeatureRenderer(RenderLayerParent<NpcEntity, NpcEntityModel> context, LoadedEntityModelsCompat loader) {
         super(context);
         this.noseModel = new NoseModel(loader.getModelPart(EntityModelLayersME.NPC_ENTITY_NOSE));
         characterTexturesAtlas = AtlasesME.getAtlasFromPath(ModTexturedRenderLayers.CHARACTER_ATLAS_TEXTURES);
     }
 
     @Override
-    public void render(PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, NpcEntityRenderState state, float limbAngle, float limbDistance) {
+    public void render(PoseStack matrices, MultiBufferSource vertexConsumers, int light, NpcEntityRenderState state, float limbAngle, float limbDistance) {
         boolean isSimplified = ModClientConfigs.ENABLE_SIMPLIFIED_CHARACTER_RENDERING && state.simplifiedSkinId != null;
         ResourceLocation noseId =  (isSimplified) ? state.simplifiedNoseId : MiddleEarth.ofPrefix(state.noseId, AtlasesME.SKIN_PREFIX);
 
@@ -47,7 +47,7 @@ public class NoseFeatureRenderer extends MEFeatureRenderer<NpcEntity, NpcEntityR
         int overlay = state.hurt ? getOverlay(state, 0f) : OverlayTexture.DEFAULT_UV;
 
         if(noseId != null) {
-            Sprite sprite = characterTexturesAtlas.getSprite(noseId);
+            TextureAtlasSprite sprite = characterTexturesAtlas.getSprite(noseId);
             renderModel(sprite, matrices, vertexConsumer, light, overlay);
         }
     }
@@ -56,7 +56,7 @@ public class NoseFeatureRenderer extends MEFeatureRenderer<NpcEntity, NpcEntityR
         return OverlayTexture.packUv(OverlayTexture.getU(whiteOverlayProgress), OverlayTexture.getV(state.hurt));
     }
 
-    private void renderModel(Sprite sprite, PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay){
+    private void renderModel(TextureAtlasSprite sprite, PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay){
         if(sprite != null){
             VertexConsumer newLayerVertexConsumer = sprite.getTextureSpecificVertexConsumer(vertexConsumer);
             noseModel.render(matrices, newLayerVertexConsumer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);

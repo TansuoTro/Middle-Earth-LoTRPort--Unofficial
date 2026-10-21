@@ -3,7 +3,7 @@ package net.jukoz.me.entity;
 import com.google.common.collect.ImmutableMap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
+import net.minecraft.client.model.HumanoidModel;
 import net.jukoz.me.block.special.bellows.BellowsBlockEntityRenderer;
 import net.jukoz.me.block.special.coffers.*;
 import net.jukoz.me.block.special.reinforcedChest.ReinforcedChestEntityRenderer;
@@ -19,16 +19,17 @@ import net.jukoz.me.entity.spider.EnwebbedModel;
 import net.jukoz.me.entity.spider.larva.ShelobiteLarvaModel;
 import net.jukoz.me.entity.spider.scuttler.ShelobiteScuttlerModel;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.TexturedModelData;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.EntityModelLayer;
 import net.jukoz.me.entity.spider.spawn.SpawnOfShelobModel;
-
 import java.util.Map;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.util.profiling.jfr.Environment;
 
 @Environment(value= EnvType.CLIENT)
 public class EntityModelsME {
-    public static Map<EntityModelLayer, TexturedModelData> getModels() {
-        ImmutableMap.Builder<EntityModelLayer, TexturedModelData> builder = ImmutableMap.builder();
+    public static Map<ModelLayerLocation, LayerDefinition> getModels() {
+        ImmutableMap.Builder<ModelLayerLocation, LayerDefinition> builder = ImmutableMap.builder();
 
         builder.put(EntityModelLayersME.NPC, NpcEntityModel.getTexturedModelData(CubeDeformation.NONE));
         builder.put(EntityModelLayersME.NPC_ENTITY_HAIR, HairModel.getTexturedModelData());
@@ -57,7 +58,7 @@ public class EntityModelsME {
         builder.put(EntityModelLayersME.REINFORCED_BARREL, BarrelEntityModel.getTexturedModelData());
         builder.put(EntityModelLayersME.REINFORCED_BARREL_WATER_MASK, BarrelEntityModel.getBaseTexturedModelData());
 
-        ImmutableMap<EntityModelLayer, TexturedModelData> immutableMap = builder.build();
+        ImmutableMap<ModelLayerLocation, LayerDefinition> immutableMap = builder.build();
         return immutableMap;
     }
 }

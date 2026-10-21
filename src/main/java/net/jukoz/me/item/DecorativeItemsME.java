@@ -1,6 +1,5 @@
 package net.jukoz.me.item;
 
-
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
@@ -18,14 +17,13 @@ import net.jukoz.me.item.utils.ModItemGroups;
 import net.jukoz.me.item.items.VerticallyAttachableBlockItemME;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.item.VerticallyAttachableBlockItem;
+import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.core.Direction;
 import net.jukoz.me.registries.RegistryAliasesME;
-
 import java.util.function.Function;
 
 public class DecorativeItemsME {
@@ -50,11 +48,11 @@ public class DecorativeItemsME {
             (settings) -> new VerticallyAttachableBlockItemME(ModDecorativeBlocks.LEAD_LANTERN, ModDecorativeBlocks.WALL_LEAD_LANTERN, settings, new Direction[]{Direction.DOWN, Direction.UP}), new MESettings());
 
     public static final Item SCONCE = registerItem("sconce",
-            (settings) -> new VerticallyAttachableBlockItem(ModDecorativeBlocks.SCONCE, ModDecorativeBlocks.WALL_SCONCE, settings, Direction.DOWN), new MESettings());
+            (settings) -> new StandingAndWallBlockItem(ModDecorativeBlocks.SCONCE, ModDecorativeBlocks.WALL_SCONCE, settings, Direction.DOWN), new MESettings());
     public static final Item GILDED_SCONCE = registerItem("gilded_sconce",
-            (settings) -> new VerticallyAttachableBlockItem(ModDecorativeBlocks.GILDED_SCONCE, ModDecorativeBlocks.GILDED_WALL_SCONCE, settings, Direction.DOWN), new MESettings());
+            (settings) -> new StandingAndWallBlockItem(ModDecorativeBlocks.GILDED_SCONCE, ModDecorativeBlocks.GILDED_WALL_SCONCE, settings, Direction.DOWN), new MESettings());
     public static final Item ORCISH_SCONCE = registerItem("orcish_sconce",
-            (settings) -> new VerticallyAttachableBlockItem(ModDecorativeBlocks.ORCISH_SCONCE, ModDecorativeBlocks.ORCISH_WALL_SCONCE, settings, Direction.DOWN), new MESettings());
+            (settings) -> new StandingAndWallBlockItem(ModDecorativeBlocks.ORCISH_SCONCE, ModDecorativeBlocks.ORCISH_WALL_SCONCE, settings, Direction.DOWN), new MESettings());
 
     public static final Item FORGE = registerItem("forge",
             (settings) -> new BlockItem(ModDecorativeBlocks.FORGE, settings), new MESettings());
@@ -236,9 +234,8 @@ public class DecorativeItemsME {
             (settings) -> new CustomSpawnEggItem(EntitiesME.PETRIFIED_TROLL, settings), new MESettings().maxCount(1));
 
     public static final Item ARKENSTONE = registerItem("arkenstone",
-            (settings) -> new VerticallyAttachableBlockItem(ModDecorativeBlocks.ARKENSTONE, ModDecorativeBlocks.WALL_ARKENSTONE, settings, Direction.DOWN), new MESettings().rarity(Rarity.EPIC).fireproof()
+            (settings) -> new StandingAndWallBlockItem(ModDecorativeBlocks.ARKENSTONE, ModDecorativeBlocks.WALL_ARKENSTONE, settings, Direction.DOWN), new MESettings().rarity(Rarity.EPIC).fireproof()
                     .lore(ArtefactUtils.getArtefactLore("arkenstone")));
-
 
     private static Item registerItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
         Item item = (Item)factory.apply(settings);

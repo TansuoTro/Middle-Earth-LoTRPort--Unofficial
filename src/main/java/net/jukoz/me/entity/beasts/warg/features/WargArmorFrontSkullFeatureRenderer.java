@@ -1,11 +1,11 @@
 package net.jukoz.me.entity.beasts.warg.features;
+
 import net.jukoz.me.entity.beasts.warg.WargEntity;
 import net.jukoz.me.compat.client.render.MEFeatureRenderer;
-
 import net.jukoz.me.item.MEComponents;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.jukoz.me.compat.client.render.equipment.EquipmentRenderer;
 import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -14,9 +14,8 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.beasts.warg.WargEntityRenderState;
 import net.jukoz.me.entity.beasts.warg.WargModel;
 import net.jukoz.me.entity.EntityModelLayersME;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.feature.FeatureRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRendererContext;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.item.EquipmentItemsME;
@@ -25,13 +24,13 @@ import net.jukoz.me.item.dataComponents.MountArmorAddonComponent;
 public class WargArmorFrontSkullFeatureRenderer extends MEFeatureRenderer<WargEntity, WargEntityRenderState, WargModel> {
     private final WargArmorTopAddonsModel model;
 
-    public WargArmorFrontSkullFeatureRenderer(FeatureRendererContext<WargEntity, WargModel> context, LoadedEntityModelsCompat loader, EquipmentRenderer equipmentRenderer) {
+    public WargArmorFrontSkullFeatureRenderer(RenderLayerParent<WargEntity, WargModel> context, LoadedEntityModelsCompat loader, EquipmentRenderer equipmentRenderer) {
         super(context);
         this.model = new WargArmorTopAddonsModel(loader.getModelPart(EntityModelLayersME.WARG_ARMOR_ADDONS_FRONT));
     }
 
     @Override
-    public void render(PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, WargEntityRenderState state, float limbAngle, float limbDistance) {
+    public void render(PoseStack matrices, MultiBufferSource vertexConsumers, int light, WargEntityRenderState state, float limbAngle, float limbDistance) {
         ItemStack itemStack = state.armor;
 
         MountArmorAddonComponent component = MEComponents.get(itemStack, MEComponents.MOUNT_ARMOR_DATA);

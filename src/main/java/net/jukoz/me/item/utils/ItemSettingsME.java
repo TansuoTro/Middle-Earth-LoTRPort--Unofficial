@@ -4,13 +4,12 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.jukoz.me.entity.EntityAttributesME;
 import net.jukoz.me.item.MESettings;
-
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.world.item.Tier;
 import net.jukoz.me.MiddleEarth;
 import net.minecraft.resources.ResourceLocation;
 
@@ -37,22 +36,22 @@ public interface ItemSettingsME {
 
     String ENTITY_INTERACTION_RANGE_MODIFIER_ID = "me.entity_interaction_range";
 
-    static MESettings createWeaponSettings(ToolMaterial material, Item.Settings settings, WeaponTypesME type) {
+    static MESettings createWeaponSettings(Tier material, Item.Settings settings, WeaponTypesME type) {
         // Donor: maxDamage + repairable + enchantable + attributeModifiers + TOOL/WEAPON components.
         // 1.20.1's Item.Settings only holds maxDamage; the rest is served from the weapon classes
         // (see the interface javadoc).
         return settings instanceof MESettings meSettings ? meSettings.maxDamage(material.getDurability()) : new MESettings().maxDamage(material.getDurability());
     }
 
-    static Multimap<EntityAttribute, EntityAttributeModifier> createWeaponAttibutes(
-            ToolMaterial material, float attackDamage, float attackSpeed, float attackRange) {
-        ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(
-                "me.weapon_damage", attackDamage + material.getAttackDamage(), EntityAttributeModifier.Operation.ADDITION));
-        builder.put(Attributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(
-                "me.weapon_speed", attackSpeed, EntityAttributeModifier.Operation.ADDITION));
-        builder.put(EntityAttributesME.ENTITY_INTERACTION_RANGE.value(), new EntityAttributeModifier(
-                ENTITY_INTERACTION_RANGE_MODIFIER_ID, attackRange, EntityAttributeModifier.Operation.ADDITION));
+    static Multimap<Attribute, AttributeModifier> createWeaponAttibutes(
+            Tier material, float attackDamage, float attackSpeed, float attackRange) {
+        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+        builder.put(Attributes.GENERIC_ATTACK_DAMAGE, new AttributeModifier(
+                "me.weapon_damage", attackDamage + material.getAttackDamage(), AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.GENERIC_ATTACK_SPEED, new AttributeModifier(
+                "me.weapon_speed", attackSpeed, AttributeModifier.Operation.ADDITION));
+        builder.put(EntityAttributesME.ENTITY_INTERACTION_RANGE.value(), new AttributeModifier(
+                ENTITY_INTERACTION_RANGE_MODIFIER_ID, attackRange, AttributeModifier.Operation.ADDITION));
         return builder.build();
     }
 
@@ -62,14 +61,14 @@ public interface ItemSettingsME {
      * The modifier names match {@link #createWeaponAttibutes} so the equipped weapon's live
      * modifiers are replaced rather than left behind.
      */
-    static Multimap<EntityAttribute, EntityAttributeModifier> createBluntedWeaponAttibutes() {
-        ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(
-                "me.weapon_damage", 0.0F, EntityAttributeModifier.Operation.ADDITION));
-        builder.put(Attributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(
-                "me.weapon_speed", -3.0F, EntityAttributeModifier.Operation.ADDITION));
-        builder.put(EntityAttributesME.ENTITY_INTERACTION_RANGE.value(), new EntityAttributeModifier(
-                ENTITY_INTERACTION_RANGE_MODIFIER_ID, 0.0F, EntityAttributeModifier.Operation.ADDITION));
+    static Multimap<Attribute, AttributeModifier> createBluntedWeaponAttibutes() {
+        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+        builder.put(Attributes.GENERIC_ATTACK_DAMAGE, new AttributeModifier(
+                "me.weapon_damage", 0.0F, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.GENERIC_ATTACK_SPEED, new AttributeModifier(
+                "me.weapon_speed", -3.0F, AttributeModifier.Operation.ADDITION));
+        builder.put(EntityAttributesME.ENTITY_INTERACTION_RANGE.value(), new AttributeModifier(
+                ENTITY_INTERACTION_RANGE_MODIFIER_ID, 0.0F, AttributeModifier.Operation.ADDITION));
         return builder.build();
     }
 

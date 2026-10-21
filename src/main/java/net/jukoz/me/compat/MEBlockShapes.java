@@ -1,16 +1,16 @@
 package net.jukoz.me.compat;
 
-import net.minecraft.util.math.Box;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.VoxelShapes;
-
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.IntFunction;
+import net.minecraft.world.phys.shapes.Shapes;
 
 /**
  * 1.20.1 shims for block-shape helpers introduced after 1.20.1.
@@ -18,7 +18,7 @@ import java.util.function.IntFunction;
  * <ul>
  *   <li>{@code Block.createShapeArray(int, IntFunction)} (1.21)</li>
  *   <li>{@code Block.createCuboidZShape(...)} (1.21)</li>
- *   <li>{@code VoxelShapes.createHorizontalFacingShapeMap(...)} (1.21)</li>
+ *   <li>{@code Shapes.createHorizontalFacingShapeMap(...)} (1.21)</li>
  * </ul>
  */
 public final class MEBlockShapes {
@@ -48,7 +48,7 @@ public final class MEBlockShapes {
     public static VoxelShape createCuboidZShape(double sizeX, double minY, double maxY, double minZ, double maxZ) {
         double minX = (16.0 - sizeX) / 2.0;
         double maxX = (16.0 + sizeX) / 2.0;
-        return VoxelShapes.cuboid(minX / 16.0, minY / 16.0, minZ / 16.0, maxX / 16.0, maxY / 16.0, maxZ / 16.0);
+        return Shapes.cuboid(minX / 16.0, minY / 16.0, minZ / 16.0, maxX / 16.0, maxY / 16.0, maxZ / 16.0);
     }
 
     public static Map<Direction, VoxelShape> createHorizontalFacingShapeMap(VoxelShape shape) {
@@ -83,7 +83,7 @@ public final class MEBlockShapes {
             return shape;
         }
         List<VoxelShape> parts = new ArrayList<>();
-        for (Box box : shape.getBoundingBoxes()) {
+        for (AABB box : shape.getBoundingBoxes()) {
             double[] xs = {box.minX * 16.0, box.maxX * 16.0};
             double[] zs = {box.minZ * 16.0, box.maxZ * 16.0};
             double minX = Double.POSITIVE_INFINITY;
@@ -106,11 +106,11 @@ public final class MEBlockShapes {
                     maxZ = Math.max(maxZ, rz);
                 }
             }
-            parts.add(VoxelShapes.cuboid(minX / 16.0, box.minY, minZ / 16.0, maxX / 16.0, box.maxY, maxZ / 16.0));
+            parts.add(Shapes.cuboid(minX / 16.0, box.minY, minZ / 16.0, maxX / 16.0, box.maxY, maxZ / 16.0));
         }
-        VoxelShape result = VoxelShapes.empty();
+        VoxelShape result = Shapes.empty();
         for (VoxelShape part : parts) {
-            result = VoxelShapes.union(result, part);
+            result = Shapes.union(result, part);
         }
         return result;
     }

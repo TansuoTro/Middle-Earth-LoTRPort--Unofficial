@@ -3,10 +3,9 @@ package net.jukoz.me.block.utils.setBuilders;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.block.NoteBlockInstrument;
-import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.world.level.block.SoundType;
 import net.jukoz.me.block.utils.BlockRecordTypes;
 import net.jukoz.me.block.utils.WoodBlockTypes;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,10 +36,10 @@ public class WoodBlockSetBuilder {
     public MapColor mapColor;
     public MapColor leavesMapColor;
     public NoteBlockInstrument instrument;
-    public BlockSoundGroup soundGroup;
+    public SoundType soundGroup;
 
     public WoodBlockSetBuilder(String name, float hardness, float blastResistance,
-                               MapColor mapColor, NoteBlockInstrument instrument, BlockSoundGroup soundGroup, Block sapling){
+                               MapColor mapColor, NoteBlockInstrument instrument, SoundType soundGroup, Block sapling){
         this.setName = name;
         this.hardness = hardness;
         this.blastResistance = blastResistance;

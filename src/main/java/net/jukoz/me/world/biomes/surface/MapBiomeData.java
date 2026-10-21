@@ -6,7 +6,6 @@ import net.jukoz.me.world.biomes.MEBiomeKeys;
 import net.jukoz.me.world.biomes.caves.CaveType;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
-
 import java.util.HashMap;
 
 public class MapBiomeData {

@@ -3,10 +3,10 @@ package net.jukoz.me.mixin.client;
 import net.jukoz.me.entity.barrow_wights.BarrowWightEntity;
 import net.jukoz.me.statusEffects.Hallucination;
 import net.jukoz.me.statusEffects.ModStatusEffects;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.Mouse;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.MouseHandler;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.ai.TargetPredicate;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -15,14 +15,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(Mouse.class)
+@Mixin(MouseHandler.class)
 public class MouseMixin {
     LivingEntity lookAt;
     int id;
 
     @Inject(method ="updateMouse()V", at = @At("HEAD"), cancellable = true)
     private void injected(CallbackInfo cir) {
-        Player player = MinecraftClient.getInstance().player;
+        Player player = Minecraft.getInstance().player;
         if ( player != null && player.hasStatusEffect(ModStatusEffects.HALLUCINATION)) {
             if (lookAt != null && !lookAt.isDead() && id != -1) {
                 lookAt = (LivingEntity) player.getWorld().getEntityById(id);
@@ -59,7 +59,7 @@ public class MouseMixin {
                 player.prevYaw = player.getYaw();
             } else if(id == -1){
 
-                this.lookAt = player.getWorld().getClosestEntity(BarrowWightEntity.class, TargetPredicate.createNonAttackable(), null, player.getX(), player.getY(), player.getZ(), player.getBoundingBox().expand(28));
+                this.lookAt = player.getWorld().getClosestEntity(BarrowWightEntity.class, TargetingConditions.createNonAttackable(), null, player.getX(), player.getY(), player.getZ(), player.getBoundingBox().expand(28));
                 if(lookAt != null)
                     this.id = lookAt.getId();
                 cir.cancel();

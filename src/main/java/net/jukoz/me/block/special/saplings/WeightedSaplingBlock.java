@@ -3,13 +3,12 @@ package net.jukoz.me.block.special.saplings;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.SaplingBlock;
-import net.minecraft.block.sapling.SaplingGenerator;
+import net.minecraft.world.level.block.grower.AbstractTreeGrower;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-
 import java.util.List;
 
 public class WeightedSaplingBlock extends SaplingBlock {
@@ -28,7 +27,7 @@ public class WeightedSaplingBlock extends SaplingBlock {
             int totalWeight = trees.stream().mapToInt(obj -> obj.weight).sum();
             int randomWeight = random.nextInt(totalWeight);
             int accumulatedWeight = 0;
-            SaplingGenerator tree = null;
+            AbstractTreeGrower tree = null;
             for(WeightedTree weightedTree : trees) {
                 if(weightedTree.weight + accumulatedWeight > randomWeight) {
                     tree = weightedTree.saplingGenerator;
@@ -42,17 +41,17 @@ public class WeightedSaplingBlock extends SaplingBlock {
     }
 
     public static class WeightedTree {
-        public SaplingGenerator saplingGenerator;
+        public AbstractTreeGrower saplingGenerator;
         public int weight;
 
-        public WeightedTree(SaplingGenerator saplingGenerator, int weight) {
+        public WeightedTree(AbstractTreeGrower saplingGenerator, int weight) {
             this.saplingGenerator = saplingGenerator;
             this.weight = weight;
         }
         public WeightedTree(ResourceKey<ConfiguredFeature<?, ?>> saplingGenerator, int weight, String name) {
-            // 1.20.1 SaplingGenerator has only the no-arg constructor; the tree key is
+            // 1.20.1 AbstractTreeGrower has only the no-arg constructor; the tree key is
             // returned from getTreeFeature instead of being passed through the ctor.
-            this.saplingGenerator = new SaplingGenerator() {
+            this.saplingGenerator = new AbstractTreeGrower() {
                 @Override
                 protected ResourceKey<ConfiguredFeature<?, ?>> getTreeFeature(RandomSource random, boolean large) {
                     return saplingGenerator;

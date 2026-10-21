@@ -5,10 +5,12 @@ import net.jukoz.me.datageneration.content.models.SimpleSpawnEggItemModel;
 import net.jukoz.me.entity.ModEntities;
 import net.jukoz.me.item.utils.ModItemGroups;
 import net.jukoz.me.utils.LoggerUtil;
-import net.minecraft.item.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.SpawnEggItem;
 
 public class ModEggItems {
 
@@ -125,7 +127,6 @@ public class ModEggItems {
             new SpawnEggItem(ModEntities.PHEASANT,6172963, 13740645, new MESettings()));
     public static final Item SNAIL_SPAWN_EGG = registerItem("snail_spawn_egg",
             new SpawnEggItem(ModEntities.SNAIL, 7765379, 7165482, new MESettings()));
-
 
     private static Item registerItem(String name, Item item) {
         ModItemGroups.SPAWN_EGGS_CONTENTS.add(item.getDefaultStack());

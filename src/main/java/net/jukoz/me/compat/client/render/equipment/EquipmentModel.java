@@ -1,5 +1,6 @@
 package net.jukoz.me.compat.client.render.equipment;
 
+
 /**
  * 1.20.1 bridge for 1.21.x {@code net.minecraft.client.render.entity.equipment.EquipmentModel}.
  * Only the LayerType discriminator is used by ported call sites; the data-driven layer JSON

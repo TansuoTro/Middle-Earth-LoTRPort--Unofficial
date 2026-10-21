@@ -2,15 +2,16 @@ package net.jukoz.me.resources.datas.attributes;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.attribute.*;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
+import net.minecraft.resources.ResourceKey;
 
 public class AttributePool {
     private List<AttributePoolElement> pool;
@@ -32,7 +33,7 @@ public class AttributePool {
         if(compound == null) return;
         if(compound.contains("pool")){
             pool = new ArrayList<>();
-            var list =  compound.getList("pool", NbtElement.COMPOUND_TYPE);
+            var list =  compound.getList("pool", Tag.COMPOUND_TYPE);
             for(int i = 0; i < list.size(); i++){
                 pool.add(AttributePoolElement.createFromNbt(list.getCompound(i)));
             }
@@ -41,7 +42,7 @@ public class AttributePool {
 
     public CompoundTag getNbt() {
         CompoundTag nbt = new CompoundTag();
-        NbtList list = new NbtList();
+        ListTag list = new ListTag();
 
         for(var element : pool){
             list.add(element.createNbt());
@@ -65,7 +66,7 @@ public class AttributePool {
                     attributeInstance.setBaseValue(element.getValue());
                     if(element.hasModifiers()){
                         for(AttributeModifierElement modifier : element.getModifiers()){
-                            attributeInstance.addPersistentModifier(new EntityAttributeModifier(modifier.getIdentifier().toString(), modifier.getValue(), modifier.getOperation()));
+                            attributeInstance.addPersistentModifier(new AttributeModifier(modifier.getIdentifier().toString(), modifier.getValue(), modifier.getOperation()));
                         }
                     }
                     couldResolveOneAttribute = true;
@@ -103,7 +104,7 @@ public class AttributePool {
             return -99;
         }
 
-        var defaultAttributeContainer = DefaultAttributeRegistry.get((EntityType<? extends LivingEntity>) entity.getType());
+        var defaultAttributeContainer = DefaultAttributes.get((EntityType<? extends LivingEntity>) entity.getType());
         return defaultAttributeContainer.getBaseValue(defaultAttributeEntry.get().value());
     }
     public static double getDefaultAttributeModifiers(ResourceLocation identifier, LivingEntity entity) {
@@ -117,7 +118,7 @@ public class AttributePool {
             return -99;
         }
 
-        var defaultAttributeContainer = DefaultAttributeRegistry.get((EntityType<? extends LivingEntity>) entity.getType());
+        var defaultAttributeContainer = DefaultAttributes.get((EntityType<? extends LivingEntity>) entity.getType());
         return defaultAttributeContainer.getBaseValue(defaultAttributeEntry.get().value());
     }
 

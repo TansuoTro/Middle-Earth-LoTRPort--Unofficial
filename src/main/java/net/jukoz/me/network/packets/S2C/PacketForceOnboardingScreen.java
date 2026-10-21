@@ -2,10 +2,10 @@ package net.jukoz.me.network.packets.S2C;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.network.FriendlyByteBuf;
@@ -15,7 +15,6 @@ import net.jukoz.me.network.contexts.ClientPacketContext;
 import net.jukoz.me.network.packets.ServerToClientPacket;
 import net.jukoz.me.resources.datas.attributes.AttributePool;
 import net.jukoz.me.resources.datas.attributes.AttributePoolElement;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +60,5 @@ public class PacketForceOnboardingScreen extends ServerToClientPacket<PacketForc
         buf.writeFloat(this.delayOnTeleportationConfirm);
         buf.writeNbt(this.attributeList);
     }
-
 
 }

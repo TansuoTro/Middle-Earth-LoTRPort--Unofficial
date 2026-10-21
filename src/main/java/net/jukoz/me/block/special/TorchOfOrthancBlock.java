@@ -1,13 +1,12 @@
 package net.jukoz.me.block.special;
 
-import net.minecraft.block.*;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -21,12 +20,17 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.TorchBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
 
 public class TorchOfOrthancBlock extends TorchBlock {
     protected static final VoxelShape SHAPE = Block.createCuboidShape(5.0, 0.0, 5.0, 11.0, 18.0, 11.0);
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-    public TorchOfOrthancBlock(BlockBehaviour.Settings settings, DefaultParticleType particleEffect) {
+    public TorchOfOrthancBlock(BlockBehaviour.Settings settings, SimpleParticleType particleEffect) {
         super(settings, particleEffect);
         this.setDefaultState((((this.stateManager.getDefaultState().with(LIT, true)))));
     }
@@ -37,10 +41,10 @@ public class TorchOfOrthancBlock extends TorchBlock {
             return InteractionResult.SUCCESS;
         } else {
             if(player.getStackInHand(player.getActiveHand()).isOf(Items.FLINT_AND_STEEL) && !state.get(LIT)){
-                world.playSound(null, pos, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, 1.5F);
+                world.playSound(null, pos, SoundEvents.ITEM_FIRECHARGE_USE, SoundSource.BLOCKS, 1.0F, 1.5F);
                 world.setBlockState(pos, state.cycle(LIT));
             } else if (player.getStackInHand(player.getActiveHand()).isIn(ItemTags.SHOVELS) && state.get(LIT)) {
-                world.playSound(null, pos, SoundEvents.BLOCK_CANDLE_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.playSound(null, pos, SoundEvents.BLOCK_CANDLE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, 1.0F);
                 world.setBlockState(pos, state.cycle(LIT));
             }
         }
@@ -52,8 +56,8 @@ public class TorchOfOrthancBlock extends TorchBlock {
         builder.add(new Property[]{LIT});
     }
 
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderType(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
@@ -66,7 +70,7 @@ public class TorchOfOrthancBlock extends TorchBlock {
         }
     }
 
-    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 }

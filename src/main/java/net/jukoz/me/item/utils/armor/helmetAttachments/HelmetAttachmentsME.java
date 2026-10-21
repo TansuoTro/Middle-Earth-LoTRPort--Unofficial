@@ -4,12 +4,12 @@ import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.function.ValueLists;
-
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.ByIdMap;
 import java.util.function.IntFunction;
+import net.minecraft.network.FriendlyByteBuf;
 
-public enum HelmetAttachmentsME implements StringIdentifiable {
+public enum HelmetAttachmentsME implements StringRepresentable {
 
     HOOD(0,"hood"),
     TALL_HOOD(1,"tall_hood"),
@@ -29,13 +29,13 @@ public enum HelmetAttachmentsME implements StringIdentifiable {
     SKULL(11,"skull", HelmetAttachmentsStatesME.UP),
     ;
 
-    private static final IntFunction<HelmetAttachmentsME> BY_ID = ValueLists.createIdToValueFunction(HelmetAttachmentsME::getId, HelmetAttachmentsME.values(), ValueLists.OutOfBoundsHandling.ZERO);;
+    private static final IntFunction<HelmetAttachmentsME> BY_ID = ByIdMap.createIdToValueFunction(HelmetAttachmentsME::getId, HelmetAttachmentsME.values(), ByIdMap.OutOfBoundsHandling.ZERO);;
 
     private final String name;
     private final int id;
     private final HelmetAttachmentsStatesME constantState;
 
-    public static final Codec<HelmetAttachmentsME> CODEC = StringIdentifiable.createCodec(HelmetAttachmentsME::values);
+    public static final Codec<HelmetAttachmentsME> CODEC = StringRepresentable.createCodec(HelmetAttachmentsME::values);
     public static final PacketCodec<net.minecraft.network.FriendlyByteBuf, HelmetAttachmentsME> PACKET_CODEC = PacketCodecs.indexed(BY_ID, HelmetAttachmentsME::getId);;
 
     HelmetAttachmentsME(int id, String name){
@@ -56,7 +56,6 @@ public enum HelmetAttachmentsME implements StringIdentifiable {
     public int getId() {
         return id;
     }
-
 
     public HelmetAttachmentsStatesME getConstantState() {
         return constantState;

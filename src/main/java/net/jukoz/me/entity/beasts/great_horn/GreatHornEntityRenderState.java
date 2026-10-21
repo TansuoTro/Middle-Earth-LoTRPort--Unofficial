@@ -3,7 +3,7 @@ package net.jukoz.me.entity.beasts.great_horn;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.jukoz.me.compat.client.render.state.LivingEntityRenderState;
-import net.minecraft.entity.AnimationState;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.item.ItemStack;
 
 @OnlyIn(Dist.CLIENT)

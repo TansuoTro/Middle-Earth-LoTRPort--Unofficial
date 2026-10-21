@@ -9,9 +9,8 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.math.intprovider.ConstantIntProvider;
-import net.minecraft.util.math.intprovider.UniformIntProvider;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.LakeFeature;
@@ -27,9 +26,9 @@ public class ModMiscConfiguredFeatures {
                 new LakeFeature.Config(BlockStateProvider.of(Blocks.LAVA.getDefaultState()), BlockStateProvider.of(Blocks.MAGMA_BLOCK.getDefaultState())));
 
         ConfiguredFeature.register(featureRegisterable, SMALL_PUMICE_COLUMNS, ModFeatures.COLUMNS,
-                new ColumnsFeatureConfig(ConstantIntProvider.create(1), UniformIntProvider.create(1, 4), StoneBlockSets.PUMICE_SET.baseBlocks.base().getDefaultState()));
+                new ColumnsFeatureConfig(ConstantInt.create(1), UniformInt.create(1, 4), StoneBlockSets.PUMICE_SET.baseBlocks.base().getDefaultState()));
         ConfiguredFeature.register(featureRegisterable, LARGE_PUMICE_COLUMNS, ModFeatures.COLUMNS,
-                new ColumnsFeatureConfig(UniformIntProvider.create(2, 3), UniformIntProvider.create(4, 7), StoneBlockSets.PUMICE_SET.baseBlocks.base().getDefaultState()));
+                new ColumnsFeatureConfig(UniformInt.create(2, 3), UniformInt.create(4, 7), StoneBlockSets.PUMICE_SET.baseBlocks.base().getDefaultState()));
     }
 
     public static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {

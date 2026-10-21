@@ -8,25 +8,24 @@ import net.jukoz.me.block.special.alloyfurnace.AlloyFurnaceEntity;
 import net.jukoz.me.gui.artisantable.ArtisanTableScreenHandler;
 import net.jukoz.me.resources.datas.common.DispositionType;
 import net.jukoz.me.resources.persistent_datas.PlayerDataService;
-import net.minecraft.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.block.enums.BedPart;
+import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.ai.pathing.NavigationType;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.screen.StonecutterScreenHandler;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.StonecutterMenu;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -34,7 +33,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.*;
-import net.minecraft.util.function.BooleanBiFunction;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -45,14 +44,21 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccess;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.function.Function;
 import java.util.stream.Stream;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DoubleBlockCombiner;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 
-public class ArtisanTable extends HorizontalFacingBlock {
+public class ArtisanTable extends HorizontalDirectionalBlock {
     public static final EnumProperty<ArtisanTablePart> PART = EnumProperty.of("part", ArtisanTablePart.class);
     private static final Component TITLE = Component.translatable("container.artisan_table");
-
 
     public ArtisanTable(Settings settings) {
         super(settings);
@@ -65,7 +71,7 @@ public class ArtisanTable extends HorizontalFacingBlock {
         return blockState.getBlock() instanceof ArtisanTable ? (Direction)blockState.get(FACING) : null;
     }
 
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (direction == getDirectionTowardsOtherPart((ArtisanTablePart)state.get(PART), (Direction)state.get(FACING).rotateYClockwise())) {
             return neighborState.isOf(this) && neighborState.get(PART) != state.get(PART) ? (BlockState)state : Blocks.AIR.getDefaultState();
         } else {
@@ -107,9 +113,9 @@ public class ArtisanTable extends HorizontalFacingBlock {
         return state.get(PART) == ArtisanTablePart.RIGHT ? direction.getOpposite() : direction;
     }
 
-    public static DoubleBlockProperties.Type getTablePart(BlockState state) {
+    public static DoubleBlockCombiner.Type getTablePart(BlockState state) {
         ArtisanTablePart tablePart = (ArtisanTablePart)state.get(PART);
-        return tablePart == ArtisanTablePart.RIGHT ? DoubleBlockProperties.Type.FIRST : DoubleBlockProperties.Type.SECOND;
+        return tablePart == ArtisanTablePart.RIGHT ? DoubleBlockCombiner.Type.FIRST : DoubleBlockCombiner.Type.SECOND;
     }
 
     public void onPlaced(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
@@ -127,27 +133,27 @@ public class ArtisanTable extends HorizontalFacingBlock {
         return Mth.hashCode(blockPos.getX(), pos.getY(), blockPos.getZ());
     }
 
-    public boolean canPathfindThrough(BlockState state, BlockGetter world, BlockPos pos, NavigationType type) {
+    public boolean canPathfindThrough(BlockState state, BlockGetter world, BlockPos pos, PathComputationType type) {
         return false;
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderType(BlockState state) {
+        return RenderShape.MODEL;
     }
 
-    public ActionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (world.isClient) {
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         } else {
             player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
             player.incrementStat(Stats.INTERACT_WITH_STONECUTTER);
-            return ActionResult.CONSUME;
+            return InteractionResult.CONSUME;
         }
     }
 
     @Nullable
-    public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, Level world, BlockPos pos) {
+    public MenuProvider createScreenHandlerFactory(BlockState state, Level world, BlockPos pos) {
         return new ExtendedScreenHandlerFactory() {
             @Override
             public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
@@ -160,8 +166,8 @@ public class ArtisanTable extends HorizontalFacingBlock {
             }
 
             @Override
-            public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, Player player) {
-                return new ArtisanTableScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, pos), getDispositionData(player, world));
+            public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
+                return new ArtisanTableScreenHandler(syncId, playerInventory, ContainerLevelAccess.create(world, pos), getDispositionData(player, world));
             }
         };
     }
@@ -181,7 +187,7 @@ public class ArtisanTable extends HorizontalFacingBlock {
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return switch (state.get(PART)){
             case LEFT ->
                     switch (state.get(FACING)){
@@ -191,22 +197,22 @@ public class ArtisanTable extends HorizontalFacingBlock {
                                 Block.createCuboidShape(1, 0, 1, 4, 12, 15),
                                 Block.createCuboidShape(0, 12, 0, 16, 16, 16),
                                 Block.createCuboidShape(4, 4, 7, 16, 8, 9)
-                        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+                        ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
                         case SOUTH -> Stream.of(
                                 Block.createCuboidShape(12, 0, 1, 15, 12, 15),
                                 Block.createCuboidShape(0, 12, 0, 16, 16, 16),
                                 Block.createCuboidShape(0, 4, 7, 12, 8, 9)
-                        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+                        ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
                         case WEST -> Stream.of(
                                 Block.createCuboidShape(1, 0, 12, 15, 12, 15),
                                 Block.createCuboidShape(0, 12, 0, 16, 16, 16),
                                 Block.createCuboidShape(7, 4, 0, 9, 8, 12)
-                        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+                        ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
                         case EAST -> Stream.of(
                                 Block.createCuboidShape(1, 0, 1, 15, 12, 4),
                                 Block.createCuboidShape(0, 12, 0, 16, 16, 16),
                                 Block.createCuboidShape(7, 4, 4, 9, 8, 16)
-                        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+                        ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
                     };
             case RIGHT ->
                     switch (state.get(FACING)) {
@@ -216,22 +222,22 @@ public class ArtisanTable extends HorizontalFacingBlock {
                                 Block.createCuboidShape(12, 0, 1, 15, 12, 15),
                                 Block.createCuboidShape(0, 12, 0, 16, 16, 16),
                                 Block.createCuboidShape(0, 4, 7, 12, 8, 9)
-                        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+                        ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
                         case SOUTH -> Stream.of(
                                 Block.createCuboidShape(1, 0, 1, 4, 12, 15),
                                 Block.createCuboidShape(0, 12, 0, 16, 16, 16),
                                 Block.createCuboidShape(4, 4, 7, 16, 8, 9)
-                        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+                        ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
                         case WEST -> Stream.of(
                                 Block.createCuboidShape(1, 0, 1, 15, 12, 4),
                                 Block.createCuboidShape(0, 12, 0, 16, 16, 16),
                                 Block.createCuboidShape(7, 4, 4, 9, 8, 16)
-                        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+                        ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
                         case EAST -> Stream.of(
                                 Block.createCuboidShape(1, 0, 12, 15, 12, 15),
                                 Block.createCuboidShape(0, 12, 0, 16, 16, 16),
                                 Block.createCuboidShape(7, 4, 0, 9, 8, 12)
-                        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+                        ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
                     };
 
         };

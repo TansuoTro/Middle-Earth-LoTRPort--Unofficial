@@ -1,7 +1,7 @@
 package net.jukoz.me.compat;
 
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 
@@ -19,7 +19,7 @@ public final class MEAttributes {
     /** Sum of the main-hand attack-damage modifiers on {@code stack}. */
     public static double weaponAttackDamage(ItemStack stack) {
         double damage = 0.0;
-        for (EntityAttributeModifier modifier : stack.getAttributeModifiers(EquipmentSlot.MAINHAND)
+        for (AttributeModifier modifier : stack.getAttributeModifiers(EquipmentSlot.MAINHAND)
                 .get(Attributes.GENERIC_ATTACK_DAMAGE)) {
             damage += modifier.getValue();
         }

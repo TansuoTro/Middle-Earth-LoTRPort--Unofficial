@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -14,10 +13,10 @@ import net.jukoz.me.recipe.ArtisanRecipe;
 import net.jukoz.me.resources.datas.common.DispositionType;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancement.CriterionMerger;
-import net.minecraft.advancement.criterion.CriterionConditions;
-import net.minecraft.advancement.criterion.RecipeUnlockedCriterion;
-import net.minecraft.data.server.recipe.RecipeJsonProvider;
+import net.minecraft.advancements.RequirementsStrategy;
+import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemConvertible;
 import net.minecraft.world.item.ItemStack;
@@ -43,7 +42,7 @@ public class ArtisanTableRecipeJsonBuilder {
     private final ItemStack output;
     private final DispositionType dispositionType;
     private final int xp;
-    private final Map<String, CriterionConditions> criteria = new LinkedHashMap<>();
+    private final Map<String, CriterionTriggerInstance> criteria = new LinkedHashMap<>();
 
     private ArtisanTableRecipeJsonBuilder(RecipeCategory category, ItemStack output,
                                           String tab, DispositionType dispositionType, int xp) {
@@ -76,11 +75,11 @@ public class ArtisanTableRecipeJsonBuilder {
         return this.input(Ingredient.fromTag(tag));
     }
 
-    public ArtisanTableRecipeJsonBuilder input(ItemConvertible itemProvider) {
+    public ArtisanTableRecipeJsonBuilder input(ItemLike itemProvider) {
         return this.input(itemProvider, 1);
     }
 
-    public ArtisanTableRecipeJsonBuilder input(ItemConvertible itemProvider, int size) {
+    public ArtisanTableRecipeJsonBuilder input(ItemLike itemProvider, int size) {
         for (int i = 0; i < size; ++i) {
             this.input(Ingredient.ofItems(itemProvider));
         }
@@ -132,25 +131,25 @@ public class ArtisanTableRecipeJsonBuilder {
         return trim;
     }
 
-    public ArtisanTableRecipeJsonBuilder criterion(String name, CriterionConditions conditions) {
+    public ArtisanTableRecipeJsonBuilder criterion(String name, CriterionTriggerInstance conditions) {
         this.criteria.put(name, conditions);
         return this;
     }
 
-    public void offerTo(Consumer<RecipeJsonProvider> exporter) {
+    public void offerTo(Consumer<FinishedRecipe> exporter) {
         this.offerTo(exporter, Registries.ITEM.getId(this.getOutputItem()).getPath());
     }
 
-    public void offerTo(Consumer<RecipeJsonProvider> exporter, String path) {
+    public void offerTo(Consumer<FinishedRecipe> exporter, String path) {
         this.offerTo(exporter, new ResourceLocation(net.jukoz.me.MiddleEarth.MOD_ID, path));
     }
 
-    public void offerTo(Consumer<RecipeJsonProvider> exporter, ResourceLocation recipeId) {
+    public void offerTo(Consumer<FinishedRecipe> exporter, ResourceLocation recipeId) {
         this.validate(recipeId);
         Advancement.Builder advancement = Advancement.Builder.createUntelemetered()
-                .criterion("has_the_recipe", RecipeUnlockedCriterion.create(recipeId))
+                .criterion("has_the_recipe", RecipeUnlockedTrigger.create(recipeId))
                 .rewards(AdvancementRewards.Builder.recipe(recipeId))
-                .criteriaMerger(CriterionMerger.OR);
+                .criteriaMerger(RequirementsStrategy.OR);
         this.criteria.forEach(advancement::criterion);
         exporter.accept(new CustomRecipeJsonProvider(Objects.requireNonNull(recipeId), ArtisanRecipe.Serializer.INSTANCE,
                 this::writeRecipeJson, advancement, recipeId.withPrefixedPath("recipes/")));

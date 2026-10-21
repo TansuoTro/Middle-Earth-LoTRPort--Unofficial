@@ -2,7 +2,6 @@ package net.jukoz.me.block.special.plate;
 
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
-
 import java.util.HashMap;
 
 public class PlateFoodModels {

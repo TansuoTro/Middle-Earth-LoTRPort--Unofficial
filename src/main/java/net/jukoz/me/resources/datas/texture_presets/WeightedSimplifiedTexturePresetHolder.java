@@ -1,9 +1,8 @@
 package net.jukoz.me.resources.datas.texture_presets;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.Tag;
 import net.jukoz.me.api.dtos.WeightedItem;
-
 
 public class WeightedSimplifiedTexturePresetHolder extends WeightedItem<SimplifiedTexturePreset> {
 
@@ -20,17 +19,15 @@ public class WeightedSimplifiedTexturePresetHolder extends WeightedItem<Simplifi
         this.weight = weight;
     }
 
-
     @Override
     public WeightedItem<SimplifiedTexturePreset> withWeight(int newWeight) {
         this.weight = newWeight;
         return this;
     }
 
-
     @Override
-    public NbtElement getNbt() {
-        NbtElement newNbt = super.getNbt();
+    public Tag getNbt() {
+        Tag newNbt = super.getNbt();
         if(newNbt == null)
             newNbt = new CompoundTag();
         return this.item.getNbt(newNbt);

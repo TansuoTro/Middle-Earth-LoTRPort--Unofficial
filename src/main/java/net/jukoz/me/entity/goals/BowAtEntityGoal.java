@@ -2,37 +2,37 @@ package net.jukoz.me.entity.goals;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.ai.TargetPredicate;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.EnumSet;
 import java.util.function.Predicate;
+import net.minecraft.world.entity.ai.control.Control;
 
 public class BowAtEntityGoal extends Goal {
 	public static final float DEFAULT_CHANCE = 0.02F;
-	protected final PathAwareEntity mob;
+	protected final PathfinderMob mob;
 	@Nullable
 	protected Entity target;
 	protected final float range;
 	private int lookTime;
 	private final boolean lookForward;
-	private final EntityNavigation navigation;
+	private final PathNavigation navigation;
 	protected final Class<? extends LivingEntity> targetType;
-	protected final TargetPredicate targetPredicate;
+	protected final TargetingConditions targetPredicate;
 	protected final Predicate<LivingEntity> targetSelector;
 
-	public BowAtEntityGoal(PathAwareEntity mob, Class<? extends LivingEntity> targetType, float range, Predicate<LivingEntity> targetSelector) {
+	public BowAtEntityGoal(PathfinderMob mob, Class<? extends LivingEntity> targetType, float range, Predicate<LivingEntity> targetSelector) {
 		this(mob, targetType, range, targetSelector, false);
 	}
 
-	public BowAtEntityGoal(PathAwareEntity mob, Class<? extends LivingEntity> targetType, float range, Predicate<LivingEntity> targetSelector, boolean lookForward) {
+	public BowAtEntityGoal(PathfinderMob mob, Class<? extends LivingEntity> targetType, float range, Predicate<LivingEntity> targetSelector, boolean lookForward) {
 		this.mob = mob;
 		this.targetType = targetType;
 		this.range = range;
@@ -41,10 +41,10 @@ public class BowAtEntityGoal extends Goal {
 		this.targetSelector = targetSelector;
 		this.setControls(EnumSet.of(Control.LOOK));
 		if (targetType == Player.class) {
-			Predicate<Entity> predicate = EntityPredicates.rides(mob);
-			this.targetPredicate = TargetPredicate.createNonAttackable().setBaseMaxDistance((double)range).setPredicate(targetSelector);
+			Predicate<Entity> predicate = EntitySelector.rides(mob);
+			this.targetPredicate = TargetingConditions.createNonAttackable().setBaseMaxDistance((double)range).setPredicate(targetSelector);
 		} else {
-			this.targetPredicate = TargetPredicate.createNonAttackable().setBaseMaxDistance((double)range);
+			this.targetPredicate = TargetingConditions.createNonAttackable().setBaseMaxDistance((double)range);
 		}
 	}
 

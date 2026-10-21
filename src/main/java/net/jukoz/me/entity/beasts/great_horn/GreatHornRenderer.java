@@ -1,9 +1,9 @@
 package net.jukoz.me.entity.beasts.great_horn;
+
 import net.jukoz.me.compat.client.render.equipment.EquipmentRenderer;
 import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.jukoz.me.compat.client.render.MEAnimationStates;
 import net.jukoz.me.compat.client.render.MEMAgeableMobEntityRenderer;
-
 import com.google.common.collect.Maps;
 import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -14,14 +14,14 @@ import net.jukoz.me.entity.EntityModelLayersME;
 import net.jukoz.me.entity.beasts.great_horn.features.GreatHornArmorFeatureRenderer;
 import net.jukoz.me.entity.beasts.great_horn.features.GreatHornNoseFeatureRenderer;
 import net.jukoz.me.entity.beasts.great_horn.features.GreatHornSaddleFeatureRenderer;
-
 import java.util.Map;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 public class GreatHornRenderer extends MEMAgeableMobEntityRenderer<GreatHornEntity, GreatHornEntityRenderState, GreatHornModel> {
     private static final String PATH = "textures/entities/great_horn/";
     private static final float SIZE = 1f;
 
-    public GreatHornRenderer(EntityRendererFactory.Context context) {
+    public GreatHornRenderer(EntityRendererProvider.Context context) {
         super(context, new GreatHornModel(context.getPart(EntityModelLayersME.GREAT_HORN)),
                 new GreatHornModel(context.getPart(EntityModelLayersME.GREAT_HORN_BABY)), 0.95f);
         this.addFeature(new GreatHornSaddleFeatureRenderer(this,  new LoadedEntityModelsCompat(context.getModelLoader()), EquipmentRenderer.INSTANCE));
@@ -53,7 +53,6 @@ public class GreatHornRenderer extends MEMAgeableMobEntityRenderer<GreatHornEnti
                         new ResourceLocation(MiddleEarth.MOD_ID, PATH + "white_great_horn.png"));
 
             });
-
 
     @Override
     public ResourceLocation getTexture(GreatHornEntityRenderState state) {

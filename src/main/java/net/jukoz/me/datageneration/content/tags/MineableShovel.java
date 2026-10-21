@@ -3,7 +3,6 @@ package net.jukoz.me.datageneration.content.tags;
 import net.minecraft.world.level.block.Block;
 import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.block.registration.ModNatureBlocks;
-
 import java.util.ArrayList;
 import java.util.List;
 

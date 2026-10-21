@@ -4,8 +4,8 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.exceptions.FactionIdentifierException;
@@ -13,14 +13,13 @@ import net.jukoz.me.resources.datas.factions.Faction;
 import net.jukoz.me.resources.datas.factions.FactionLookup;
 import net.jukoz.me.resources.datas.factions.data.SpawnDataHandler;
 import net.jukoz.me.resources.persistent_datas.PlayerDataService;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class AllAvailableSpawnSuggestionProvider implements SuggestionProvider<ServerCommandSource> {
+public class AllAvailableSpawnSuggestionProvider implements SuggestionProvider<CommandSourceStack> {
     @Override
-    public CompletableFuture<Suggestions> getSuggestions(CommandContext<ServerCommandSource> context, SuggestionsBuilder builder) {
+    public CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
         try {
             List<ResourceLocation> candidates = null;
             candidates = getAllSpawns(context);
@@ -30,13 +29,13 @@ public class AllAvailableSpawnSuggestionProvider implements SuggestionProvider<S
         }
     }
 
-    private static List<ResourceLocation> getAllSpawns(CommandContext<ServerCommandSource> context) throws FactionIdentifierException {
+    private static List<ResourceLocation> getAllSpawns(CommandContext<CommandSourceStack> context) throws FactionIdentifierException {
         ServerPlayer targettedPlayer = null; // Null for command blocks
         try {
-            targettedPlayer = EntityArgumentType.getPlayer(context, "player");  // Targeted player when the argument is there
+            targettedPlayer = EntityArgument.getPlayer(context, "player");  // Targeted player when the argument is there
         } catch (Exception e){ // There is no player argument in the command
             if(context.getSource().isExecutedByPlayer()){
-                targettedPlayer = context.getSource().getPlayer(); // Source player when no player argument
+                targettedPlayer = context.getSource().getPlayer(); // Channel player when no player argument
             }
         }
 

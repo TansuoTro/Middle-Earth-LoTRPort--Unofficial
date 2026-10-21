@@ -1,5 +1,6 @@
 package net.jukoz.me.resources.datas.combatarchetypes.data;
 
+
 public enum CombatArchetype {
     MELEE,
     RANGED,

@@ -8,9 +8,9 @@ import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
 import net.jukoz.me.api.utils.ModLogger;
 import net.jukoz.me.MiddleEarth;
-
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class StructureNestList {
     ModLogger logger = MiddleEarth.LOGGER;
@@ -38,7 +38,6 @@ public class StructureNestList {
     public List<SpawnNestManager> getManagers() {
         return managers;
     }
-
 
     public List<SpawnNestManager> content() {
         return managers;

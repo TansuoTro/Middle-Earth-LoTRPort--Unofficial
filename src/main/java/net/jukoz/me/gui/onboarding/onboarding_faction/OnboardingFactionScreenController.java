@@ -1,16 +1,16 @@
 package net.jukoz.me.gui.onboarding.onboarding_faction;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
@@ -35,8 +35,8 @@ import net.jukoz.me.resources.datas.races.Race;
 import net.jukoz.me.resources.datas.races.RaceStatTooltip;
 import org.joml.Vector2d;
 import org.joml.Vector2i;
-
 import java.util.*;
+import net.minecraft.util.RandomSource;
 
 public class OnboardingFactionScreenController {
     public static OnboardingFactionScreenController INSTANCE;
@@ -74,7 +74,7 @@ public class OnboardingFactionScreenController {
     }
 
     public void open(){
-        MinecraftClient mc = MinecraftClient.getInstance();
+        Minecraft mc = Minecraft.getInstance();
         if(mc.currentScreen != null)
             mc.currentScreen.close();
         mc.setScreen(screen);
@@ -122,7 +122,7 @@ public class OnboardingFactionScreenController {
             screen.elements.npcRandomizerButton.active = true;
         }
 
-        this.screen.elements.factionName = (selectedFaction.tryGetShortName()).formatted(Formatting.BOLD).formatted(Formatting.DARK_GRAY);
+        this.screen.elements.factionName = (selectedFaction.tryGetShortName()).formatted(ChatFormatting.BOLD).formatted(ChatFormatting.DARK_GRAY);
         if(this.selectedSubfaction != null)
             this.screen.elements.subfactionName = (selectedSubfaction.tryGetShortName());
         else
@@ -168,7 +168,6 @@ public class OnboardingFactionScreenController {
         } else {
             this.screen.elements.spawnPointSelectionWidget.enableVisuals(false);
         }
-
 
         this.screen.elements.raceList.setText(List.of(getRaceText()));
         this.screen.elements.descriptionTextBlock.setText(factionToUse.getDescription());
@@ -386,8 +385,8 @@ public class OnboardingFactionScreenController {
         if(filteredList.isEmpty())
             return;
 
-        ResourceLocation id = filteredList.get((new Random()).nextInt(filteredList.size()));
-        if(world instanceof ClientWorld clientWorld)
+        ResourceLocation id = filteredList.get((new RandomSource()).nextInt(filteredList.size()));
+        if(world instanceof ClientLevel clientWorld)
             this.screen.elements.npcPreviewWidget.updateEntity(id, selectedRace, clientWorld, false);
     }
 
@@ -470,7 +469,7 @@ public class OnboardingFactionScreenController {
     }
 
     private void randomize(){
-        Random random = new Random();
+        RandomSource random = new RandomSource();
         setDisposition(factions.keySet().stream().toList().get(random.nextInt(factions.keySet().size())));
         setFaction(random.nextInt(factions.get(selectedDispositionType).size()));
         if(selectedFaction.getSubFactions() != null && !selectedFaction.getSubFactions().isEmpty())
@@ -498,7 +497,7 @@ public class OnboardingFactionScreenController {
 
         ClientPlayNetworking.send(new PacketSetRace(selectedRace.getId().toString()));
         ClientPlayNetworking.send(new PacketSetAffiliation(selectedDispositionType.name(), faction.getId().toString(), selectedSpawn.getIdentifier().toString()));
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        LocalPlayer player = Minecraft.getInstance().player;
         if(player != null){
             BlockPos overworldBlockPos = player.getBlockPos();
             ClientPlayNetworking.send(new PacketSetSpawnData(overworldBlockPos.getX(), overworldBlockPos.getY(), overworldBlockPos.getZ()));
@@ -597,7 +596,7 @@ public class OnboardingFactionScreenController {
         return selectedFaction.getFullName();
     }
 
-    public void drawRaceTooltip(AbstractClientPlayerEntity player, DrawContext context, TextRenderer textRenderer, int x, int y) {
+    public void drawRaceTooltip(AbstractClientPlayer player, GuiGraphics context, Font textRenderer, int x, int y) {
         if(selectedRace == null)
             return;
         RaceStatTooltip.draw(selectedRace, player, context, textRenderer, x, y, playerAttributes, shouldBeDetailed);

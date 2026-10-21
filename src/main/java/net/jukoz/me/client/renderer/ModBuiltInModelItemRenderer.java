@@ -2,7 +2,7 @@ package net.jukoz.me.client.renderer;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.jukoz.me.MiddleEarthClient;
 import net.jukoz.me.client.MEModelLoader;
 import net.jukoz.me.client.ModTexturedRenderLayers;
@@ -13,27 +13,25 @@ import net.jukoz.me.client.model.hand.shields.RoundShieldEntityModel;
 import net.jukoz.me.item.WeaponItemsME;
 import net.jukoz.me.item.items.HeldBannerItem;
 import net.jukoz.me.item.items.shields.CustomBannerShieldItem;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.render.TexturedRenderLayers;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.renderer.Sheets;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.util.SpriteIdentifier;
+import net.minecraft.client.resources.model.Material;
 import com.mojang.blaze3d.vertex.PoseStack;
-
 import net.jukoz.me.compat.MEBannerPatterns;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.resources.ResourceLocation;
-
 import java.util.Objects;
 
 @OnlyIn(Dist.CLIENT)
 public class ModBuiltInModelItemRenderer {
 
-    private static final SpriteIdentifier BANNER_BASE = new SpriteIdentifier(TexturedRenderLayers.BANNER_PATTERNS_ATLAS_TEXTURE, new ResourceLocation("entity/banner_base"));
+    private static final Material BANNER_BASE = new Material(Sheets.BANNER_PATTERNS_ATLAS_TEXTURE, new ResourceLocation("entity/banner_base"));
 
     private HeaterShieldEntityModel heaterShieldEntityModel;
     private KiteShieldEntityModel kiteShieldEntityModel;
@@ -44,11 +42,11 @@ public class ModBuiltInModelItemRenderer {
     public ModBuiltInModelItemRenderer() {
     }
 
-    public void render(ItemStack stack, ModelTransformationMode mode, PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        this.heaterShieldEntityModel = new HeaterShieldEntityModel(MinecraftClient.getInstance().getEntityModelLoader().getModelPart(MiddleEarthClient.HEATER_SHIELD_LAYER));
-        this.kiteShieldEntityModel = new KiteShieldEntityModel(MinecraftClient.getInstance().getEntityModelLoader().getModelPart(MiddleEarthClient.KITE_SHIELD_LAYER));
-        this.roundShieldEntityModel = new RoundShieldEntityModel(MinecraftClient.getInstance().getEntityModelLoader().getModelPart(MiddleEarthClient.ROUND_SHIELD_LAYER));
-        this.heldBannerEntityModel = new HeldBannerEntityModel(MinecraftClient.getInstance().getEntityModelLoader().getModelPart(MiddleEarthClient.HELD_BANNER_LAYER));
+    public void render(ItemStack stack, ItemDisplayContext mode, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
+        this.heaterShieldEntityModel = new HeaterShieldEntityModel(Minecraft.getInstance().getEntityModelLoader().getModelPart(MiddleEarthClient.HEATER_SHIELD_LAYER));
+        this.kiteShieldEntityModel = new KiteShieldEntityModel(Minecraft.getInstance().getEntityModelLoader().getModelPart(MiddleEarthClient.KITE_SHIELD_LAYER));
+        this.roundShieldEntityModel = new RoundShieldEntityModel(Minecraft.getInstance().getEntityModelLoader().getModelPart(MiddleEarthClient.ROUND_SHIELD_LAYER));
+        this.heldBannerEntityModel = new HeldBannerEntityModel(Minecraft.getInstance().getEntityModelLoader().getModelPart(MiddleEarthClient.HELD_BANNER_LAYER));
 
         if (stack.getItem() instanceof CustomBannerShieldItem) {
             MEBannerPatterns bannerPatternsComponent = MEBannerPatterns.get(stack);
@@ -58,7 +56,7 @@ public class ModBuiltInModelItemRenderer {
             matrices.scale(1.0F, -1.0F, -1.0F);
 
             if (stack.isOf(WeaponItemsME.HEATER_SHIELD)){
-                SpriteIdentifier spriteIdentifier = bl ? MEModelLoader.HEATER_SHIELD_BASE : MEModelLoader.HEATER_SHIELD_BASE_NO_PATTERN;
+                Material spriteIdentifier = bl ? MEModelLoader.HEATER_SHIELD_BASE : MEModelLoader.HEATER_SHIELD_BASE_NO_PATTERN;
                 VertexConsumer vertexConsumer = spriteIdentifier.getSprite().getTextureSpecificVertexConsumer(ItemRenderer.getItemGlintConsumer(vertexConsumers, this.heaterShieldEntityModel.getLayer(spriteIdentifier.getAtlasId()), true, stack.hasGlint()));
                 this.heaterShieldEntityModel.getHandle().render(matrices, vertexConsumer, light, overlay);
                 if (bl) {
@@ -69,7 +67,7 @@ public class ModBuiltInModelItemRenderer {
 
                 matrices.pop();
             } else if (stack.isOf(WeaponItemsME.KITE_SHIELD)){
-                SpriteIdentifier spriteIdentifier = bl ? MEModelLoader.KITE_SHIELD_BASE : MEModelLoader.KITE_SHIELD_BASE_NO_PATTERN;
+                Material spriteIdentifier = bl ? MEModelLoader.KITE_SHIELD_BASE : MEModelLoader.KITE_SHIELD_BASE_NO_PATTERN;
                 VertexConsumer vertexConsumer = spriteIdentifier.getSprite().getTextureSpecificVertexConsumer(ItemRenderer.getItemGlintConsumer(vertexConsumers, this.kiteShieldEntityModel.getLayer(spriteIdentifier.getAtlasId()), true, stack.hasGlint()));
                 this.kiteShieldEntityModel.getHandle().render(matrices, vertexConsumer, light, overlay);
                 if (bl) {
@@ -80,7 +78,7 @@ public class ModBuiltInModelItemRenderer {
 
                 matrices.pop();
             } else if (stack.isOf(WeaponItemsME.ROUND_SHIELD)){
-                SpriteIdentifier spriteIdentifier = bl ? MEModelLoader.ROUND_SHIELD_BASE : MEModelLoader.ROUND_SHIELD_BASE_NO_PATTERN;
+                Material spriteIdentifier = bl ? MEModelLoader.ROUND_SHIELD_BASE : MEModelLoader.ROUND_SHIELD_BASE_NO_PATTERN;
                 VertexConsumer vertexConsumer = spriteIdentifier.getSprite().getTextureSpecificVertexConsumer(ItemRenderer.getItemGlintConsumer(vertexConsumers, this.roundShieldEntityModel.getLayer(spriteIdentifier.getAtlasId()), true, stack.hasGlint()));
                 this.roundShieldEntityModel.getHandle().render(matrices, vertexConsumer, light, overlay);
                 if (bl) {
@@ -101,7 +99,7 @@ public class ModBuiltInModelItemRenderer {
             matrices.scale(1.0F, -1.0F, -1.0F);
 
             if (stack.isOf(WeaponItemsME.HELD_BANNER)){
-                SpriteIdentifier spriteIdentifier = BANNER_BASE;
+                Material spriteIdentifier = BANNER_BASE;
                 VertexConsumer vertexConsumer = spriteIdentifier.getSprite().getTextureSpecificVertexConsumer(ItemRenderer.getItemGlintConsumer(vertexConsumers, this.heldBannerEntityModel.getLayer(spriteIdentifier.getAtlasId()), true, stack.hasGlint()));
                 this.heldBannerEntityModel.getPole().render(matrices, vertexConsumer, light, overlay);
                 if (bl) {
@@ -115,7 +113,7 @@ public class ModBuiltInModelItemRenderer {
         }
     }
 
-    public static void renderCanvas(PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, ModelPart canvas, SpriteIdentifier baseSprite, boolean isBanner, DyeColor color, MEBannerPatterns patterns, boolean glint, ItemStack stack, boolean solid) {
+    public static void renderCanvas(PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay, ModelPart canvas, Material baseSprite, boolean isBanner, DyeColor color, MEBannerPatterns patterns, boolean glint, ItemStack stack, boolean solid) {
         canvas.render(matrices, baseSprite.getVertexConsumer(vertexConsumers, RenderLayer::getEntitySolid), light, overlay);
         if (stack.isOf(WeaponItemsME.HEATER_SHIELD)){
             renderLayer(matrices, vertexConsumers, light, overlay, canvas, isBanner ? BANNER_BASE : ModTexturedRenderLayers.HEATER_SHIELD_BASE, color);
@@ -128,7 +126,7 @@ public class ModBuiltInModelItemRenderer {
         }
         for(int i = 0; i < 16 && i < patterns.layers().size(); ++i) {
             MEBannerPatterns.Layer layer = (MEBannerPatterns.Layer)patterns.layers().get(i);
-            SpriteIdentifier spriteIdentifier = isBanner ? TexturedRenderLayers.getBannerPatternTextureId(layer.pattern().getKey().orElseThrow()) : ModTexturedRenderLayers.getRoundShieldPatternTextureId(layer.pattern());
+            Material spriteIdentifier = isBanner ? Sheets.getBannerPatternTextureId(layer.pattern().getKey().orElseThrow()) : ModTexturedRenderLayers.getRoundShieldPatternTextureId(layer.pattern());
             if (stack.isOf(WeaponItemsME.HEATER_SHIELD)){
                 spriteIdentifier = ModTexturedRenderLayers.getHeaterShieldPatternTextureId(layer.pattern());
             } else if (stack.isOf(WeaponItemsME.KITE_SHIELD)){
@@ -136,15 +134,13 @@ public class ModBuiltInModelItemRenderer {
             }else if (stack.isOf(WeaponItemsME.ROUND_SHIELD)){
                 spriteIdentifier = ModTexturedRenderLayers.getRoundShieldPatternTextureId(layer.pattern());
             } else if (stack.isOf(WeaponItemsME.HELD_BANNER)){
-                spriteIdentifier = TexturedRenderLayers.getBannerPatternTextureId(layer.pattern().getKey().orElseThrow());
+                spriteIdentifier = Sheets.getBannerPatternTextureId(layer.pattern().getKey().orElseThrow());
             }
             renderLayer(matrices, vertexConsumers, light, overlay, canvas, spriteIdentifier, layer.color());
         }
     }
 
-
-
-    private static void renderLayer(PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, ModelPart canvas, SpriteIdentifier textureId, DyeColor color) {
+    private static void renderLayer(PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay, ModelPart canvas, Material textureId, DyeColor color) {
         float[] components = color.getColorComponents();
         canvas.render(matrices, textureId.getVertexConsumer(vertexConsumers, RenderLayer::getEntityNoOutline), light, overlay,
                 components[0], components[1], components[2], 1.0F);

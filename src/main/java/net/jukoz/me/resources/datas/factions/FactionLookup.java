@@ -6,7 +6,6 @@ import net.jukoz.me.exceptions.FactionIdentifierException;
 import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.resources.datas.common.DispositionType;
 import net.jukoz.me.resources.datas.common.FactionType;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

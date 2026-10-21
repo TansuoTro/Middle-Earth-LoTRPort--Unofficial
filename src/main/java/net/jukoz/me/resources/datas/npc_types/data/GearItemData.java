@@ -1,15 +1,14 @@
 package net.jukoz.me.resources.datas.npc_types.data;
+
 import net.jukoz.me.compat.NbtCompat;
 import net.jukoz.me.item.MEComponents;
-
-
 import net.jukoz.me.compat.DyedColorComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtString;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -21,10 +20,11 @@ import net.jukoz.me.item.dataComponents.HelmetAttachmentDataComponent;
 import net.jukoz.me.item.utils.armor.backAttachments.BackAttachmentsME;
 import net.jukoz.me.item.utils.armor.helmetAttachments.HelmetAttachmentsME;
 import net.jukoz.me.item.utils.armor.helmetAttachments.HelmetAttachmentsStatesME;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.nbt.NumericTag;
+import net.minecraft.world.item.DyeableLeatherItem;
 
 public class GearItemData {
     private final static String NO_HOOD_KEY = "no_hood";
@@ -156,15 +156,15 @@ public class GearItemData {
 
         if(this.color != null){
             List<TagKey<Item>> tags = itemStack.streamTags().toList();
-            if(itemStack.getItem() instanceof net.minecraft.item.DyeableItem)
+            if(itemStack.getItem() instanceof net.minecraft.world.item.DyeableLeatherItem)
                 MEComponents.set(itemStack, MEComponents.DYED_COLOR, new DyedColorComponent(this.color));
-            else if(itemStack.getItem() instanceof net.minecraft.item.DyeableItem)
+            else if(itemStack.getItem() instanceof net.minecraft.world.item.DyeableLeatherItem)
                 MEComponents.set(itemStack, MEComponents.DYED_COLOR, new DyedColorComponent(this.color));
         } else if(this.colors != null){
             List<TagKey<Item>> tags = itemStack.streamTags().toList();
-            if(itemStack.getItem() instanceof net.minecraft.item.DyeableItem)
+            if(itemStack.getItem() instanceof net.minecraft.world.item.DyeableLeatherItem)
                 MEComponents.set(itemStack, MEComponents.DYED_COLOR, new DyedColorComponent(getRandomColor(colors)));
-            else if(itemStack.getItem() instanceof net.minecraft.item.DyeableItem)
+            else if(itemStack.getItem() instanceof net.minecraft.world.item.DyeableLeatherItem)
                 MEComponents.set(itemStack, MEComponents.DYED_COLOR, new DyedColorComponent(getRandomColor(colors)));
         }
         if(this.noCape != null && this.noCape && MEComponents.contains(itemStack, MEComponents.BACK_ATTACHMENT_DATA)){
@@ -228,7 +228,7 @@ public class GearItemData {
                 var capeElements = NbtCompat.list(nbt.get("cape_colors"));
                 List<Integer> newList = new ArrayList<>();
                 for (var element : capeElements){
-                    newList.add(((net.minecraft.nbt.AbstractNbtNumber) element).intValue());
+                    newList.add(((net.minecraft.nbt.NumericTag) element).intValue());
                 }
                 capeColors = newList;
             }
@@ -249,14 +249,14 @@ public class GearItemData {
                 var hoodElements = NbtCompat.list(nbt.get("hood_colors"));
                 List<Integer> newList = new ArrayList<>();
                 for (var element : hoodElements){
-                    newList.add(((net.minecraft.nbt.AbstractNbtNumber) element).intValue());
+                    newList.add(((net.minecraft.nbt.NumericTag) element).intValue());
                 }
                 hoodColors = newList;
             }
         }
     }
 
-    public NbtElement getNbt(CompoundTag nbt) {
+    public Tag getNbt(CompoundTag nbt) {
         nbt.putString("id", getItemIdentifier().toString());
 
         if(color != null)
@@ -301,7 +301,7 @@ public class GearItemData {
             if(hoodColors != null)
                 nbt.putIntArray("hood_colors", hoodColors);
         }
-        // Always a compound: gear pools serialise into one NbtList, which cannot mix a bare
+        // Always a compound: gear pools serialise into one ListTag, which cannot mix a bare
         // string with the compound form used by items that carry colour/cape/hood data.
         return nbt;
     }

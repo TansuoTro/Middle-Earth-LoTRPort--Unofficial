@@ -1,22 +1,19 @@
 package net.jukoz.me.entity.beasts.warg;
 
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.passive.*;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.network.chat.Component;
@@ -28,8 +25,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.EntitiesME;
@@ -43,10 +40,30 @@ import net.jukoz.me.resources.datas.common.DispositionType;
 import net.jukoz.me.resources.datas.common.RaceType;
 import net.jukoz.me.resources.datas.races.RaceUtil;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.IntUnaryOperator;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityEvent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.animal.goat.Goat;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.entity.Mob;
 
 public class WargEntity extends AbstractBeastEntity {
 
@@ -56,8 +73,8 @@ public class WargEntity extends AbstractBeastEntity {
     private static final float MAX_ATTACK_DAMAGE_BONUS = (float)WargEntity.getChildAttackDamageBonus(() -> 1.0);
     private static final float MIN_HEALTH_BONUS = WargEntity.getChildHealthBonus(max -> 0);
     private static final float MAX_HEALTH_BONUS = WargEntity.getChildHealthBonus(max -> max - 1);
-    private static final TrackedData<Integer> VARIANT = DataTracker.registerData(WargEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    private static final TrackedData<Integer> EYE_VARIANT = DataTracker.registerData(WargEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.registerData(WargEntity.class, EntityDataSerializers.INTEGER);
+    private static final EntityDataAccessor<Integer> EYE_VARIANT = SynchedEntityData.registerData(WargEntity.class, EntityDataSerializers.INTEGER);
     private static final double PASSENGER_SADDLE_Y_OFFSET = 0.12;
     private static final double PASSENGER_SADDLE_BACKWARD_OFFSET = 0.18;
     public int idleAnimationTimeout = this.random.nextInt(600) + 1700;
@@ -67,7 +84,7 @@ public class WargEntity extends AbstractBeastEntity {
         super(entityType, world);
     }
 
-    public static DefaultAttributeContainer.Builder setAttributes() {
+    public static AttributeSupplier.Builder setAttributes() {
         return net.minecraft.world.entity.Mob.createMobAttributes()
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.4)
                 .add(Attributes.GENERIC_MAX_HEALTH, 24.0d)
@@ -86,20 +103,20 @@ public class WargEntity extends AbstractBeastEntity {
 
     @Override
     protected void initGoals() {
-        this.goalSelector.add(1, new SwimGoal(this));
+        this.goalSelector.add(1, new FloatGoal(this));
         this.goalSelector.add(3, new MeleeAttackGoal(this, 2, false));
         this.goalSelector.add(4, new ChargeAttackGoal(this, this.getDisposition(), maxChargeCooldown()));
-        this.goalSelector.add(5, new AnimalMateGoal(this, 1.5));
+        this.goalSelector.add(5, new BreedGoal(this, 1.5));
         this.goalSelector.add(6, new TemptGoal(this, 0.9, net.minecraft.world.item.crafting.Ingredient.fromTag(TagKey.of(Registries.ITEM, ResourceLocation.of(MiddleEarth.MOD_ID, "warg_food"))), false));
-        this.goalSelector.add(7, new WanderAroundFarGoal(this, 0.5));
-        this.goalSelector.add(8, new LookAtEntityGoal(this, Player.class, 6.0f));
-        this.goalSelector.add(9, new LookAroundGoal(this));
+        this.goalSelector.add(7, new WaterAvoidingRandomStrollGoal(this, 0.5));
+        this.goalSelector.add(8, new LookAtPlayerGoal(this, Player.class, 6.0f));
+        this.goalSelector.add(9, new RandomLookAroundGoal(this));
         this.targetSelector.add(3, new BeastRevengeGoal(this, new Class[0]).setGroupRevenge());
         this.targetSelector.add(4, new BeastTargetPlayerGoal(this, this.getDisposition()));
         this.targetSelector.add(10, new BeastActiveTargetGoal<>(this, BroadhoofGoatEntity.class, true));
         this.targetSelector.add(10, new BeastActiveTargetGoal<>(this, GreatHornEntity.class, true));
-        this.targetSelector.add(11, new BeastActiveTargetGoal<>(this, SheepEntity.class, true));
-        this.targetSelector.add(12, new BeastActiveTargetGoal<>(this, GoatEntity.class, true));
+        this.targetSelector.add(11, new BeastActiveTargetGoal<>(this, Sheep.class, true));
+        this.targetSelector.add(12, new BeastActiveTargetGoal<>(this, Goat.class, true));
     }
 
     @Override
@@ -167,7 +184,7 @@ public class WargEntity extends AbstractBeastEntity {
             if (this.isBreedingItem(itemStack)) {
                 if(this.getHealth() < this.getMaxHealth()) {
                     if (!player.isCreative()) itemStack.decrement(1);
-                    net.minecraft.item.FoodComponent foodComponent = itemStack.getItem().getFoodComponent();
+                    net.minecraft.world.food.FoodProperties foodComponent = itemStack.getItem().getFoodComponent();
                     float f = foodComponent != null ? (float)foodComponent.getHunger() : 1.0f;
                     this.heal(2.0f * f);
                     return InteractionResult.SUCCESS;
@@ -185,7 +202,7 @@ public class WargEntity extends AbstractBeastEntity {
 
     @Override
     @Nullable
-    public PassiveEntity createChild(ServerLevel world, PassiveEntity entity) {
+    public AgeableMob createChild(ServerLevel world, AgeableMob entity) {
         WargEntity wargEntity = (WargEntity) entity;
         WargEntity wargEntity2 = EntitiesME.WARG.create(world);
         if (wargEntity2 != null) {
@@ -201,7 +218,7 @@ public class WargEntity extends AbstractBeastEntity {
     }
 
     @Override
-    protected void setChildAttributes(PassiveEntity other, AbstractHorseEntity child) {
+    protected void setChildAttributes(AgeableMob other, AbstractHorse child) {
         this.setChildAttribute(other, child, Attributes.GENERIC_MAX_HEALTH, MIN_HEALTH_BONUS, MAX_HEALTH_BONUS);
         this.setChildAttribute(other, child, Attributes.GENERIC_ATTACK_DAMAGE, MIN_ATTACK_DAMAGE_BONUS, MAX_ATTACK_DAMAGE_BONUS);
         this.setChildAttribute(other, child, Attributes.GENERIC_MOVEMENT_SPEED, MIN_MOVEMENT_SPEED_BONUS, MAX_MOVEMENT_SPEED_BONUS);
@@ -223,12 +240,12 @@ public class WargEntity extends AbstractBeastEntity {
     }
 
     @Override
-    public EntityDimensions getDimensions(EntityPose pose) {
+    public EntityDimensions getDimensions(Pose pose) {
         return this.isBaby() ? BABY_BASE_DIMENSIONS : super.getDimensions(pose);
     }
 
     @Override
-    public boolean canBreedWith(AnimalEntity other) {
+    public boolean canBreedWith(Animal other) {
         return other instanceof WargEntity;
     }
 
@@ -321,7 +338,7 @@ public class WargEntity extends AbstractBeastEntity {
         boolean result = super.tryAttack(target);
         if(result) {
             this.setRunning(true);
-            this.getWorld().sendEntityStatus(this, EntityStatuses.PLAY_ATTACK_SOUND);
+            this.getWorld().sendEntityStatus(this, EntityEvent.PLAY_ATTACK_SOUND);
         }
         return result;
     }
@@ -394,7 +411,6 @@ public class WargEntity extends AbstractBeastEntity {
         this.playBlockFallSound();
         return true;    }
 
-
     //@Override
     public boolean isHorseArmor(ItemStack stack) {
         return stack.isIn(TagKey.of(Registries.ITEM, ResourceLocation.of(MiddleEarth.MOD_ID, "warg_armor")));
@@ -429,8 +445,8 @@ public class WargEntity extends AbstractBeastEntity {
     }
 
     /* VARIANTS */
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason,
-                                 @Nullable EntityData entityData) {
+    public SpawnGroupData initialize(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason,
+                                 @Nullable SpawnGroupData entityData) {
         WargVariant variant = Util.getRandom(WargVariant.values(), this.random);
         setVariant(variant);
         WargEyeVariant eyeVariant = Util.getRandom(WargEyeVariant.values(), this.random);
@@ -510,7 +526,7 @@ public class WargEntity extends AbstractBeastEntity {
     }
 
     @Override
-    protected void playWalkSound(BlockSoundGroup group) {
+    protected void playWalkSound(SoundType group) {
         this.playSound(SoundEvents.ENTITY_WOLF_STEP, 1.0f, 0.7f);
     }
 

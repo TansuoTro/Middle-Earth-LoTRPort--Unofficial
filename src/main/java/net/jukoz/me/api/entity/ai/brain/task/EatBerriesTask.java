@@ -3,28 +3,29 @@ package net.jukoz.me.api.entity.ai.brain.task;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.block.SweetBerryBushBlock;
+import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.entity.EntityPose;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.MemoryModuleState;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.MultiTickTask;
+import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.particle.BlockStateParticleEffect;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.entity.Pose;
 
-public class EatBerriesTask extends MultiTickTask<LivingEntity> {
+public class EatBerriesTask extends Behavior<LivingEntity> {
     public EatBerriesTask() {
         super(ImmutableMap.of(
-                MemoryModuleType.WALK_TARGET, MemoryModuleState.VALUE_ABSENT,
-                MemoryModuleType.LONG_JUMP_COOLING_DOWN, MemoryModuleState.VALUE_ABSENT), 90);
+                MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT,
+                MemoryModuleType.LONG_JUMP_COOLING_DOWN, MemoryStatus.VALUE_ABSENT), 90);
     }
 
     @Override
@@ -45,19 +46,19 @@ public class EatBerriesTask extends MultiTickTask<LivingEntity> {
         Vec3 rotationVector = entity.getRotationVector().normalize();
         BlockPos pos = entity.getBlockPos().add((int)Math.round(rotationVector.getX()), 0, (int)Math.round(rotationVector.getZ()));
 
-        BlockStateParticleEffect particles = new BlockStateParticleEffect(ParticleTypes.BLOCK, world.getBlockState(pos));
+        BlockParticleOption particles = new BlockParticleOption(ParticleTypes.BLOCK, world.getBlockState(pos));
         world.spawnParticles(particles, (entity.getX() + pos.getX()) / 2, entity.getY() + 0.5, (entity.getZ() + pos.getZ()) / 2, 10, 0.1, 0.4, 0.1, 1);
     }
 
     @Override
     protected void run(ServerLevel world, LivingEntity entity, long time) {
-        entity.setPose(EntityPose.DIGGING);
+        entity.setPose(Pose.DIGGING);
     }
 
     @Override
     protected void finishRunning(ServerLevel world, LivingEntity entity, long time) {
-        world.playSound(entity, entity.getBlockPos(), SoundEvents.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, SoundCategory.BLOCKS, 1.0f, 1.0f);
-        entity.setPose(EntityPose.STANDING);
+        world.playSound(entity, entity.getBlockPos(), SoundEvents.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0f, 1.0f);
+        entity.setPose(Pose.STANDING);
 
         Vec3 rotationVector = entity.getRotationVector().normalize();
         BlockPos pos = entity.getBlockPos().add((int)Math.round(rotationVector.getX()), 0, (int)Math.round(rotationVector.getZ()));
@@ -70,8 +71,6 @@ public class EatBerriesTask extends MultiTickTask<LivingEntity> {
             ItemStack itemStack = new ItemStack(world.getBlockState(pos).getBlock().asItem());
             world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), itemStack));
         }
-
-
 
         // Set cooldown to 3000t = 2min30s
         entity.getBrain().remember(MemoryModuleType.LONG_JUMP_COOLING_DOWN, 3000);

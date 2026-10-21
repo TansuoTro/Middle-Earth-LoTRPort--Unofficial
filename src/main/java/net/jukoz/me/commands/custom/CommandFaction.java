@@ -1,17 +1,17 @@
 package net.jukoz.me.commands.custom;
-import net.jukoz.me.compat.METext;
 
+import net.jukoz.me.compat.METext;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.command.argument.IdentifierArgumentType;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.commands.CommandUtils;
@@ -28,7 +28,6 @@ import net.jukoz.me.resources.datas.factions.FactionUtil;
 import net.jukoz.me.resources.persistent_datas.PlayerDataService;
 import net.jukoz.me.utils.ModColors;
 import org.jetbrains.annotations.Nullable;
-
 import static net.minecraft.server.command.CommandManager.*;
 
 public class CommandFaction {
@@ -41,7 +40,7 @@ public class CommandFaction {
     private static final String PLAYER = "player";
     private static final String BANNER = "banner";
 
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, RegistrationEnvironment registrationEnvironment) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandRegistryAccess, RegistrationEnvironment registrationEnvironment) {
         // [GET]
         CommandUtils.simpleCommand(dispatcher, FACTION_BASE_COMMAND, literal(GET) // With Player Target
         .executes(CommandFaction::getFaction), PLAYER, literal(GET) // With Player Target
@@ -51,7 +50,7 @@ public class CommandFaction {
         dispatcher.register(literal(ModCommands.BASE_COMMAND)
                 .requires(source -> source.hasPermissionLevel(2)) // Require OP
                 .then(literal(FACTION_BASE_COMMAND)
-                .then(argument(PLAYER, EntityArgumentType.player())
+                .then(argument(PLAYER, EntityArgument.player())
                     .then(literal(CLEAR) // With Player Target
                     .executes(CommandFaction::clearTargetFaction))))
                 .then(literal(FACTION_BASE_COMMAND)
@@ -62,13 +61,13 @@ public class CommandFaction {
         dispatcher.register(literal(ModCommands.BASE_COMMAND)
                 .requires(source -> source.hasPermissionLevel(2)) // Require OP
                 .then(literal(FACTION_BASE_COMMAND)
-                .then(argument(PLAYER, EntityArgumentType.player())
+                .then(argument(PLAYER, EntityArgument.player())
                     .then(literal(JOIN) // With Player Target
-                    .then(argument(FACTION_ID, IdentifierArgumentType.identifier())
+                    .then(argument(FACTION_ID, ResourceLocationArgument.identifier())
                     .suggests(new FactionSuggestionProvider())
                     .executes(CommandFaction::forceTargetToJoinFaction))))
                 .then(literal(JOIN) // Without Target
-                .then(argument(FACTION_ID, IdentifierArgumentType.identifier())
+                .then(argument(FACTION_ID, ResourceLocationArgument.identifier())
                 .suggests(new FactionSuggestionProvider())
                 .executes(CommandFaction::joinFaction)))));
 
@@ -76,18 +75,18 @@ public class CommandFaction {
         dispatcher.register((literal(ModCommands.BASE_COMMAND)
                 .requires(source -> source.hasPermissionLevel(2))) // Require OP
                 .then((literal(FACTION_BASE_COMMAND))
-                    .then(argument(PLAYER, EntityArgumentType.player())
+                    .then(argument(PLAYER, EntityArgument.player())
                         .then((literal(JOIN) // With Player Target
-                        .then(argument(FACTION_ID, IdentifierArgumentType.identifier())
+                        .then(argument(FACTION_ID, ResourceLocationArgument.identifier())
                         .suggests(new FactionSuggestionProvider())
-                        .then(argument(SPAWN_ID, IdentifierArgumentType.identifier())
+                        .then(argument(SPAWN_ID, ResourceLocationArgument.identifier())
                         .suggests(new AllAvailableSpawnSuggestionProvider())
                         .executes(CommandFaction::forceTargetToJoinFaction))))))
 
                     .then((literal(JOIN)) // No Player Target
-                    .then(argument(FACTION_ID, IdentifierArgumentType.identifier())
+                    .then(argument(FACTION_ID, ResourceLocationArgument.identifier())
                     .suggests(new FactionSuggestionProvider())
-                    .then(argument(SPAWN_ID, IdentifierArgumentType.identifier())
+                    .then(argument(SPAWN_ID, ResourceLocationArgument.identifier())
                     .suggests(new AllAvailableSpawnSuggestionProvider())
                     .executes(CommandFaction::joinFaction))))));
 
@@ -96,20 +95,20 @@ public class CommandFaction {
                 .requires(source -> source.hasPermissionLevel(2)) // Require OP
                 .then(literal(FACTION_BASE_COMMAND)
                     .then(literal(BANNER)
-                    .then(argument(FACTION_ID, IdentifierArgumentType.identifier())
+                    .then(argument(FACTION_ID, ResourceLocationArgument.identifier())
                     .suggests(new FactionSuggestionProvider())
                     .executes(CommandFaction::getBanner)))));
     }
 
-    private static int getBanner(CommandContext<ServerCommandSource> context) {
+    private static int getBanner(CommandContext<CommandSourceStack> context) {
         if(context.getSource().isExecutedByPlayer()) {
             ServerPlayer source = context.getSource().getPlayer();
-            ResourceLocation factionIdentifier = IdentifierArgumentType.getIdentifier(context, FACTION_ID);;
+            ResourceLocation factionIdentifier = ResourceLocationArgument.getIdentifier(context, FACTION_ID);;
 
             try{
                 Faction faction = FactionLookup.getFactionById(source.getWorld(), factionIdentifier);
                 source.giveItemStack(faction.getBannerItem(source.getWorld().getRegistryManager()));
-                MutableComponent sourceText = Component.translatable("command.%s.faction.banner.success".formatted(MiddleEarth.MOD_ID), faction.getFullName().formatted(Formatting.GOLD));
+                MutableComponent sourceText = Component.translatable("command.%s.faction.banner.success".formatted(MiddleEarth.MOD_ID), faction.getFullName().formatted(ChatFormatting.GOLD));
                 source.sendMessage(METext.withColor(sourceText, ModColors.SUCCESS.color));
             } catch (FactionIdentifierException e){
                 MutableComponent sourceText = Component.translatable("command.%s.faction.banner.fail_id".formatted(MiddleEarth.MOD_ID), Component.of(factionIdentifier.toString()));
@@ -124,7 +123,7 @@ public class CommandFaction {
         return 1;
     }
 
-    private static int getFaction(CommandContext<ServerCommandSource> context) {
+    private static int getFaction(CommandContext<CommandSourceStack> context) {
         if(context.getSource().isExecutedByPlayer()) {
             ServerPlayer source = context.getSource().getPlayer();
             if(source != null){
@@ -141,8 +140,8 @@ public class CommandFaction {
         return 0;
     }
 
-    private static int getTargetFaction(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayer targetedPlayer = EntityArgumentType.getPlayer(context, PLAYER);
+    private static int getTargetFaction(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer targetedPlayer = EntityArgument.getPlayer(context, PLAYER);
         if(targetedPlayer != null && context.getSource().isExecutedByPlayer()) {
             ServerPlayer source = context.getSource().getPlayer();
             if(source != null){
@@ -159,7 +158,7 @@ public class CommandFaction {
         return 0;
     }
 
-    private static int clearFaction(CommandContext<ServerCommandSource> context) {
+    private static int clearFaction(CommandContext<CommandSourceStack> context) {
         if(context.getSource().isExecutedByPlayer()) {
             ServerPlayer source = context.getSource().getPlayer();
             if(source != null) {
@@ -181,8 +180,8 @@ public class CommandFaction {
         return 0;
     }
 
-    private static int clearTargetFaction(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayer targetedPlayer = EntityArgumentType.getPlayer(context, PLAYER);
+    private static int clearTargetFaction(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer targetedPlayer = EntityArgument.getPlayer(context, PLAYER);
         boolean isPlayerSource = context.getSource().isExecutedByPlayer();
 
         if(targetedPlayer != null){
@@ -208,13 +207,13 @@ public class CommandFaction {
 
         return 0;
     }
-    private static int joinFaction(CommandContext<ServerCommandSource> context) {
+    private static int joinFaction(CommandContext<CommandSourceStack> context) {
         ServerPlayer targetedPlayer = context.getSource().getPlayer();
-        ResourceLocation factionIdentifier = IdentifierArgumentType.getIdentifier(context, FACTION_ID);;
+        ResourceLocation factionIdentifier = ResourceLocationArgument.getIdentifier(context, FACTION_ID);;
         if(targetedPlayer != null){
             ResourceLocation spawnIdentifier = null;
             try{
-                spawnIdentifier = IdentifierArgumentType.getIdentifier(context, SPAWN_ID);
+                spawnIdentifier = ResourceLocationArgument.getIdentifier(context, SPAWN_ID);
             } catch (Exception ignored){
             }
             boolean success =  updateFactionFromCommand(targetedPlayer, context.getSource(), factionIdentifier, spawnIdentifier);
@@ -226,12 +225,12 @@ public class CommandFaction {
         return 0;
     }
 
-    private static int forceTargetToJoinFaction(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayer targetedPlayer = EntityArgumentType.getPlayer(context, PLAYER);
-        ResourceLocation factionIdentifier = IdentifierArgumentType.getIdentifier(context, FACTION_ID);
+    private static int forceTargetToJoinFaction(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer targetedPlayer = EntityArgument.getPlayer(context, PLAYER);
+        ResourceLocation factionIdentifier = ResourceLocationArgument.getIdentifier(context, FACTION_ID);
         ResourceLocation spawnIdentifier = null;
         try{
-            spawnIdentifier = IdentifierArgumentType.getIdentifier(context, SPAWN_ID);
+            spawnIdentifier = ResourceLocationArgument.getIdentifier(context, SPAWN_ID);
         } catch (Exception ignored){
         }
 
@@ -253,7 +252,7 @@ public class CommandFaction {
         return 0;
     }
 
-    public static boolean updateFactionFromCommand(ServerPlayer target, ServerCommandSource source, ResourceLocation factionIdentifier, @Nullable ResourceLocation spawnId) {
+    public static boolean updateFactionFromCommand(ServerPlayer target, CommandSourceStack source, ResourceLocation factionIdentifier, @Nullable ResourceLocation spawnId) {
         Faction foundFaction = null;
         boolean commandOnSelf = source.isExecutedByPlayer() && source.getPlayer() == target;
         try {

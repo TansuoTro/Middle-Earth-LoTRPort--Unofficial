@@ -22,8 +22,6 @@ public class PacketTeleportToDynamicWorldCoordinate extends ClientToServerPacket
         this.zCoordinate = zCoordinate;
     }
 
-
-
     public PacketTeleportToDynamicWorldCoordinate(FriendlyByteBuf buf) {
         this(buf.readDouble(), buf.readDouble());
     }

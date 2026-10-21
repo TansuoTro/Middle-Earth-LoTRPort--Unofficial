@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.RodBlock;
-import net.minecraft.block.Waterloggable;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -18,7 +18,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.level.LevelView;
 
-public class DecorativeRodBlock extends RodBlock implements Waterloggable {
+public class DecorativeRodBlock extends RodBlock implements SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public DecorativeRodBlock(Settings settings) {
@@ -33,7 +33,7 @@ public class DecorativeRodBlock extends RodBlock implements Waterloggable {
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (state.get(WATERLOGGED)) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }

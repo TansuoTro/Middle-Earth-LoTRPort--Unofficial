@@ -1,6 +1,6 @@
 package net.jukoz.me.item.items.weapons.artefacts;
-import net.jukoz.me.entity.EntityAttributesME;
 
+import net.jukoz.me.entity.EntityAttributesME;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -8,10 +8,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.compat.BluntWeapon;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.world.item.Tier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.item.items.weapons.CustomDaggerWeaponItem;
@@ -21,7 +21,7 @@ public class ArtefactCustomGlowingDaggerWeaponItem extends CustomDaggerWeaponIte
     public boolean glowing;
     private int counter = 0;
 
-    public ArtefactCustomGlowingDaggerWeaponItem(ToolMaterial toolMaterial, Item.Settings settings) {
+    public ArtefactCustomGlowingDaggerWeaponItem(Tier toolMaterial, Item.Settings settings) {
         super(toolMaterial, settings);
     }
 

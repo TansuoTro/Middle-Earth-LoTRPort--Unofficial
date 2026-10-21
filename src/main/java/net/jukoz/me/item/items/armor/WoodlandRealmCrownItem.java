@@ -1,15 +1,13 @@
 package net.jukoz.me.item.items.armor;
+
 import net.jukoz.me.item.MEComponents;
 import net.jukoz.me.entity.EntityAttributesME;
-
-
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.particle.*;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.resources.ResourceLocation;
@@ -21,6 +19,7 @@ import net.jukoz.me.item.dataComponents.SeasonDataComponent;
 import net.jukoz.me.item.utils.armor.ExtendedArmorMaterial;
 import net.jukoz.me.world.biomes.BiomeTagsME;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.core.particles.ParticleTypes;
 
 public class WoodlandRealmCrownItem extends CustomHelmetItem {
     private static final float OFFSET_XZ = 0.5f;

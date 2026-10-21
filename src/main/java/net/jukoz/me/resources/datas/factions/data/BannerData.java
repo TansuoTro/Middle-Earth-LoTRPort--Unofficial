@@ -1,16 +1,15 @@
 package net.jukoz.me.resources.datas.factions.data;
-import net.jukoz.me.compat.NbtCompat;
 
+import net.jukoz.me.compat.NbtCompat;
 import com.google.gson.JsonParser;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BannerPatterns;
-
 import net.jukoz.me.compat.MEBannerPatterns;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.core.RegistryEntryLookup;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
@@ -20,10 +19,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
 
 public class BannerData {
     public static class BannerPatternWithColor {
@@ -76,12 +76,12 @@ public class BannerData {
 
         baseBannerColor = DyeColor.byName(compound.getString("base_color"), DEFAULT_DYE);
 
-        NbtList patterns = compound.getList("patterns", NbtElement.COMPOUND_TYPE);
+        ListTag patterns = compound.getList("patterns", Tag.COMPOUND_TYPE);
         this.bannerPatternWithColors = new ArrayList<>();
 
         JsonParser jsonParser = new JsonParser();
 
-        for(NbtElement element: patterns){
+        for(Tag element: patterns){
             try{
                 CompoundTag elementCompound = NbtCompat.compound(element);
                 ResourceLocation id = new ResourceLocation(elementCompound.getString("id"));
@@ -118,7 +118,7 @@ public class BannerData {
 
         CompoundTag nbt = new CompoundTag();
         nbt.putString("base_color",  getBaseDye().name().toLowerCase());
-        NbtList list = new NbtList();
+        ListTag list = new ListTag();
         for(BannerPatternWithColor pattern : bannerPatternWithColors){
             CompoundTag compound = new CompoundTag();
             compound.putString("id", pattern.id.toString());
@@ -135,7 +135,7 @@ public class BannerData {
      * @param bannerPatternLookup
      * @return
      */
-    public MEBannerPatterns getBannerPatternComponents(RegistryEntryLookup<BannerPattern> bannerPatternLookup) {
+    public MEBannerPatterns getBannerPatternComponents(HolderGetter<BannerPattern> bannerPatternLookup) {
         MEBannerPatterns.Builder bannerPatternsComponentBuilder = new MEBannerPatterns.Builder();
 
         bannerPatternsComponentBuilder.add(new MEBannerPatterns.Layer(net.minecraft.core.registries.Registries.BANNER_PATTERN.getEntry(net.minecraft.world.level.block.entity.BannerPatterns.BASE).orElseThrow(), baseBannerColor));
@@ -146,9 +146,9 @@ public class BannerData {
         return bannerPatternsComponentBuilder.build();
     }
 
-    public ItemStack getBannerItem(RegistryWrapper.WrapperLookup wrapperLookup, Component text) {
+    public ItemStack getBannerItem(HolderLookup.WrapperLookup wrapperLookup, Component text) {
         MEBannerPatterns.Builder builder = new MEBannerPatterns.Builder();
-        RegistryWrapper.Impl<BannerPattern> registry = wrapperLookup.getWrapperOrThrow(Registries.BANNER_PATTERN);
+        HolderLookup.Impl<BannerPattern> registry = wrapperLookup.getWrapperOrThrow(Registries.BANNER_PATTERN);
         for (BannerPatternWithColor bannerPatternWithColor : bannerPatternWithColors) {
             ResourceKey<BannerPattern> key = ResourceKey.of(
                     Registries.BANNER_PATTERN,

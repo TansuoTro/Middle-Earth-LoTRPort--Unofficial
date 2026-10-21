@@ -12,7 +12,6 @@ import net.jukoz.me.entity.npcs.NpcEntity;
 import net.jukoz.me.resources.datas.common.RaceType;
 import net.jukoz.me.resources.datas.attributes.AttributePool;
 import net.jukoz.me.resources.datas.common.EntityCategories;
-
 import java.util.*;
 
 public class Race {
@@ -39,7 +38,6 @@ public class Race {
     private final HashMap<EntityCategories, AttributePool> categoryBasedAttributePool;
     private final List<String> joinCommands;
     private final List<String> leaveCommands;
-
 
     public Race(String id, String raceTypeValue, CompoundTag baseAttributes, CompoundTag categoryBasedAttributes, Optional<List<String>> joinCommands, Optional<List<String>> leaveCommands){
         // Create id

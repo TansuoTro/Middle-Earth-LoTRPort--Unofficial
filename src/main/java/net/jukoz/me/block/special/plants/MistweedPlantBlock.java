@@ -2,13 +2,13 @@ package net.jukoz.me.block.special.plants;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.block.Fertilizable;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -19,19 +19,19 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelEvents;
-import net.minecraft.world.level.LevelView;import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.jukoz.me.particles.ModParticleTypes;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.block.LevelEvent;
 
-public class MistweedPlantBlock extends CustomPlantBlock implements Fertilizable {
+public class MistweedPlantBlock extends CustomPlantBlock implements BonemealableBlock {
     public static final BooleanProperty ACTIVE = BooleanProperty.of("active");
 
     public MistweedPlantBlock(Settings settings) {
         super(settings);
         this.setDefaultState(this.getDefaultState().with(ACTIVE, true));
     }
-
-
 
     @Override
     protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
@@ -64,19 +64,19 @@ public class MistweedPlantBlock extends CustomPlantBlock implements Fertilizable
 
     protected static void activateState(@Nullable Player player, BlockState state, Level world, BlockPos pos) {
         world.setBlockState(pos, state.with(ACTIVE, true), 11);
-        world.playSound(null, pos, SoundEvents.ITEM_AXE_WAX_OFF, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        world.playSound(null, pos, SoundEvents.ITEM_AXE_WAX_OFF, SoundSource.BLOCKS, 1.0F, 1.0F);
         world.emitGameEvent(player, GameEvent.BLOCK_CHANGE, pos);
-        world.syncWorldEvent(WorldEvents.WAX_REMOVED, pos, 0);
+        world.syncWorldEvent(LevelEvent.WAX_REMOVED, pos, 0);
     }
 
     protected static void deactivateState(@Nullable Player player, BlockState state, Level world, BlockPos pos) {
         world.setBlockState(pos, state.with(ACTIVE, false), 11);
-        world.playSound(null, pos, SoundEvents.ITEM_HONEYCOMB_WAX_ON, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        world.playSound(null, pos, SoundEvents.ITEM_HONEYCOMB_WAX_ON, SoundSource.BLOCKS, 1.0F, 1.0F);
         world.emitGameEvent(player, GameEvent.BLOCK_CHANGE, pos);
-        world.syncWorldEvent(WorldEvents.BLOCK_WAXED, pos, 0);
+        world.syncWorldEvent(LevelEvent.BLOCK_WAXED, pos, 0);
     }
 
-    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isFertilizable(LevelReader world, BlockPos pos, BlockState state, boolean isClient) {
         return true;
     }
 
@@ -85,7 +85,7 @@ public class MistweedPlantBlock extends CustomPlantBlock implements Fertilizable
     }
 
     public void grow(ServerLevel world, RandomSource random, BlockPos pos, BlockState state) {
-        // 1.20.1 Fertilizable has no findPosToSpreadTo helper; do a small random spread search.
+        // 1.20.1 BonemealableBlock has no findPosToSpreadTo helper; do a small random spread search.
         for (int i = 0; i < 8; i++) {
             int dx = random.nextInt(5) - 2;
             int dz = random.nextInt(5) - 2;

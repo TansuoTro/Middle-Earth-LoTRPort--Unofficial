@@ -5,16 +5,16 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider
 import net.jukoz.me.MiddleEarth;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.RegistryWrapper;
-
 import java.util.concurrent.CompletableFuture;
+import net.minecraft.core.HolderLookup;
 
 public class DataWorldGenerator extends FabricDynamicRegistryProvider {
-    public DataWorldGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+    public DataWorldGenerator(FabricDataOutput output, CompletableFuture<HolderLookup.WrapperLookup> registriesFuture) {
         super(output, registriesFuture);
     }
 
     @Override
-    protected void configure(RegistryWrapper.WrapperLookup registries, Entries entries) {
+    protected void configure(HolderLookup.WrapperLookup registries, Entries entries) {
         entries.addAll(registries.getWrapperOrThrow(Registries.BIOME));
         entries.addAll(registries.getWrapperOrThrow(Registries.CONFIGURED_FEATURE));
         entries.addAll(registries.getWrapperOrThrow(Registries.PLACED_FEATURE));

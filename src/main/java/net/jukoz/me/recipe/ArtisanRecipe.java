@@ -6,28 +6,32 @@ import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.recipe.*;
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.JsonHelper;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 
 public class ArtisanRecipe implements Recipe<Inventory> {
     public final ResourceLocation id;
     public final ItemStack output;
-    public final DefaultedList<Ingredient> inputs;
+    public final NonNullList<Ingredient> inputs;
     /** Tab id this recipe is listed under (e.g. "sword"); null matches every tab. */
     public final String category;
     /** Faction disposition gate; null is treated as "neutral" (craftable by everyone). */
     public final String disposition;
     public final int xp;
 
-    public ArtisanRecipe(ResourceLocation id, ItemStack output, DefaultedList<Ingredient> recipeItems) {
+    public ArtisanRecipe(ResourceLocation id, ItemStack output, NonNullList<Ingredient> recipeItems) {
         this(id, output, recipeItems, null, null, 0);
     }
 
-    public ArtisanRecipe(ResourceLocation id, ItemStack output, DefaultedList<Ingredient> recipeItems, String category, String disposition, int xp) {
+    public ArtisanRecipe(ResourceLocation id, ItemStack output, NonNullList<Ingredient> recipeItems, String category, String disposition, int xp) {
         this.id = id;
         this.output = output;
         this.inputs = recipeItems;
@@ -57,7 +61,7 @@ public class ArtisanRecipe implements Recipe<Inventory> {
     }
 
     @Override
-    public ItemStack craft(Inventory inventory, DynamicRegistryManager registryManager) {
+    public ItemStack craft(Inventory inventory, RegistryAccess registryManager) {
         return this.output.copy();
     }
 
@@ -67,12 +71,12 @@ public class ArtisanRecipe implements Recipe<Inventory> {
     }
 
     @Override
-    public ItemStack getOutput(DynamicRegistryManager registryManager) {
+    public ItemStack getOutput(RegistryAccess registryManager) {
         return output;
     }
 
-    public DefaultedList<Ingredient> getIngredients() {
-        DefaultedList<Ingredient> defaultedList = DefaultedList.of();
+    public NonNullList<Ingredient> getIngredients() {
+        NonNullList<Ingredient> defaultedList = NonNullList.of();
         defaultedList.addAll(this.inputs);
         return defaultedList;
     }
@@ -121,18 +125,18 @@ public class ArtisanRecipe implements Recipe<Inventory> {
 
         @Override
         public ArtisanRecipe read(ResourceLocation id, JsonObject json) {
-            ItemStack output = ShapedRecipe.outputFromJson(JsonHelper.getObject(json, "output"));
-            JsonArray ingredients = JsonHelper.getArray(json, "ingredients");
-            DefaultedList<Ingredient> inputs = DefaultedList.ofSize(ingredients.size(), Ingredient.EMPTY);
+            ItemStack output = ShapedRecipe.outputFromJson(GsonHelper.getObject(json, "output"));
+            JsonArray ingredients = GsonHelper.getArray(json, "ingredients");
+            NonNullList<Ingredient> inputs = NonNullList.ofSize(ingredients.size(), Ingredient.EMPTY);
             for (int i = 0; i < ingredients.size(); i++) {
                 Ingredient ingredient = Ingredient.fromJson(ingredients.get(i), true);
                 if (ingredient.isEmpty()) continue;
                 inputs.set(i, ingredient);
             }
 
-            String category = JsonHelper.getString(json, "category", null);
-            String disposition = JsonHelper.getString(json, "disposition", null);
-            int xp = JsonHelper.getInt(json, "xp", 0);
+            String category = GsonHelper.getString(json, "category", null);
+            String disposition = GsonHelper.getString(json, "disposition", null);
+            int xp = GsonHelper.getInt(json, "xp", 0);
             return new ArtisanRecipe(id, output, inputs, category, disposition, xp);
         }
 
@@ -140,7 +144,7 @@ public class ArtisanRecipe implements Recipe<Inventory> {
         public ArtisanRecipe read(ResourceLocation id, FriendlyByteBuf buf) {
             String category = readNullableString(buf);
             ItemStack output = buf.readItemStack();
-            DefaultedList<Ingredient> inputs = DefaultedList.ofSize(buf.readInt(), Ingredient.EMPTY);
+            NonNullList<Ingredient> inputs = NonNullList.ofSize(buf.readInt(), Ingredient.EMPTY);
             for (int i = 0; i < inputs.size(); i++) {
                 inputs.set(i, Ingredient.fromPacket(buf));
             }

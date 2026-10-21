@@ -3,32 +3,28 @@ package net.jukoz.me.block.special.crockpot;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
-
-
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.SidedInventory;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.core.particles.ParticleTypes;
-
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.nbt.CompoundTag;
 import net.jukoz.me.compat.nbt.ReadView;
 import net.jukoz.me.compat.nbt.WriteView;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.world.Containers;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -38,17 +34,16 @@ import net.jukoz.me.block.special.forge.MultipleStackRecipeInput;
 import net.jukoz.me.recipe.CrockpotRecipe;
 import net.jukoz.me.recipe.RecipesME;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory, SidedInventory {
+public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory, WorldlyContainer {
     private static final String ID = "crockpot";
     public static final int OUTPUT_SLOT = 4;
     public static final int COOK_TIME = 60;
-    private final DefaultedList<ItemStack> inventory =
-            DefaultedList.ofSize(5, ItemStack.EMPTY);
-    protected final PropertyDelegate propertyDelegate;
+    private final NonNullList<ItemStack> inventory =
+            NonNullList.ofSize(5, ItemStack.EMPTY);
+    protected final ContainerData propertyDelegate;
     private final RecipeManager.MatchGetter<MultipleStackRecipeInput, ? extends CrockpotRecipe> matchGetter;
     private int progress = 0;
     private RandomSource random;
@@ -60,7 +55,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
 
     public CrockpotBlockEntity(BlockPos pos, BlockState state, float liquidTopLevel) {
         super(null, pos, state);
-        this.propertyDelegate = new PropertyDelegate() {
+        this.propertyDelegate = new ContainerData() {
             @Override
             public int get(int index) {
                 return switch (index) {
@@ -128,7 +123,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
             double y = (double)pos.getY() + 0.5;
             double z = (double)pos.getZ() + 0.5;
             if (blockEntity.random.nextDouble() < 0.12) {
-                world.playSound(null, pos, SoundEvents.BLOCK_BUBBLE_COLUMN_BUBBLE_POP, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.playSound(null, pos, SoundEvents.BLOCK_BUBBLE_COLUMN_BUBBLE_POP, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
 
             double i = blockEntity.random.nextDouble() * 0.4 - 0.2;
@@ -144,7 +139,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
             double y = (double)pos.getY() + 0.5;
             double z = (double)pos.getZ() + 0.5;
             if (random.nextDouble() < 0.12) {
-                world.playSound(null, pos, SoundEvents.BLOCK_BUBBLE_COLUMN_BUBBLE_POP, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.playSound(null, pos, SoundEvents.BLOCK_BUBBLE_COLUMN_BUBBLE_POP, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
 
             double i = random.nextDouble() * 0.4 - 0.2;
@@ -153,8 +148,8 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
         }
     }
 
-    private static boolean craftRecipe(DynamicRegistryManager dynamicRegistryManager, @Nullable CrockpotRecipe recipe,
-                                       MultipleStackRecipeInput input, DefaultedList<ItemStack> inventory) {
+    private static boolean craftRecipe(RegistryAccess dynamicRegistryManager, @Nullable CrockpotRecipe recipe,
+                                       MultipleStackRecipeInput input, NonNullList<ItemStack> inventory) {
         if (recipe != null) {
             ItemStack craftedStack = recipe.craft(input, dynamicRegistryManager);
             inventory.set(OUTPUT_SLOT, craftedStack.copy());
@@ -171,12 +166,12 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
         double x = (double)pos.getX() + 0.5;
         double y = (double)pos.getY() + 0.5;
         double z = (double)pos.getZ() + 0.5;
-        world.playSound(null, pos, SoundEvents.BLOCK_BREWING_STAND_BREW, SoundCategory.BLOCKS, 1.1F, 0.8F);
+        world.playSound(null, pos, SoundEvents.BLOCK_BREWING_STAND_BREW, SoundSource.BLOCKS, 1.1F, 0.8F);
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, Player player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new CrockpotScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
@@ -242,7 +237,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
             List<ItemStack> items = new ArrayList<>(getList());
             items.remove(items.size()-1);
             for (ItemStack item : items) {
-                ItemScatterer.spawn(this.world, pos.getX(), pos.getY(), pos.getZ(), item);
+                Containers.spawn(this.world, pos.getX(), pos.getY(), pos.getZ(), item);
             }
         }
     }
@@ -287,12 +282,12 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
 
     @Override
     public ItemStack removeStack(int slot, int amount) {
-        return Inventories.splitStack(this.inventory, slot, amount);
+        return ContainerHelper.splitStack(this.inventory, slot, amount);
     }
 
     @Override
     public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(inventory, slot);
+        return ContainerHelper.removeStack(inventory, slot);
     }
 
     @Override
@@ -322,7 +317,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
     protected void writeNbt(CompoundTag nbt) {
         super.writeNbt(nbt);
         WriteView view = new WriteView(nbt);
-        Inventories.writeNbt(view.nbt(), this.inventory, false);
+        ContainerHelper.writeNbt(view.nbt(), this.inventory, false);
         view.putInt(ID + ".progress", this.progress);
     }
 
@@ -331,7 +326,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
         super.readNbt(nbt);
         ReadView view = new ReadView(nbt);
         this.inventory.clear();
-        Inventories.readNbt(view.nbt(), this.inventory);
+        ContainerHelper.readNbt(view.nbt(), this.inventory);
         this.progress = view.getInt(ID + ".progress", 0);
     }
 

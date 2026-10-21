@@ -11,23 +11,21 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.util.function.BooleanBiFunction;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.VoxelShapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.stream.Stream;
+import net.minecraft.world.phys.shapes.Shapes;
 
 public class DwarvenShapingAnvilBlock extends AbstractShapingAnvilBlock {
 
     public DwarvenShapingAnvilBlock(Settings settings) {
         super(settings);
     }
-
-
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
@@ -39,7 +37,7 @@ public class DwarvenShapingAnvilBlock extends AbstractShapingAnvilBlock {
                         Block.createCuboidShape(0, 12, 3, 16, 16, 13),
                         Block.createCuboidShape(0, 0, 5, 2, 7, 11),
                         Block.createCuboidShape(14, 0, 5, 16, 7, 11)
-                ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+                ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
             }
             case EAST, WEST -> {
                 return Stream.of(
@@ -48,7 +46,7 @@ public class DwarvenShapingAnvilBlock extends AbstractShapingAnvilBlock {
                         Block.createCuboidShape(3, 12, 0, 13, 16, 16),
                         Block.createCuboidShape(5, 0, 14, 11, 7, 16),
                         Block.createCuboidShape(5, 0, 0, 11, 7, 2)
-                ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+                ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
             }
             default -> {
                 return Block.createCuboidShape(1, 0, 1, 15, 16, 15);

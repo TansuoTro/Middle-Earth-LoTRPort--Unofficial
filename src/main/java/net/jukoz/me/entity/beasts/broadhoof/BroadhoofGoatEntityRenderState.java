@@ -3,9 +3,9 @@ package net.jukoz.me.entity.beasts.broadhoof;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.jukoz.me.compat.client.render.state.LivingEntityRenderState;
-import net.minecraft.entity.AnimationState;
-import net.minecraft.entity.passive.HorseColor;
-import net.minecraft.entity.passive.HorseMarking;
+import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.animal.horse.Variant;
+import net.minecraft.world.entity.animal.horse.Markings;
 import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.entity.beasts.BeastEntityRenderState;
 
@@ -27,6 +27,5 @@ public class BroadhoofGoatEntityRenderState extends BeastEntityRenderState {
     public AnimationState attackAnimationState = new AnimationState();
     public AnimationState sittingAnimationState = new AnimationState();
     public AnimationState jumpAnimationState = new AnimationState();
-
 
 }

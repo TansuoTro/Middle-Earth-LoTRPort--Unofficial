@@ -1,27 +1,26 @@
 package net.jukoz.me.entity.spider;
 
-
 import com.google.common.collect.Maps;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.model.EntityModelLayer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
-
 import java.util.Map;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
-public class MirkwoodSpiderRenderer extends MobEntityRenderer<MirkwoodSpiderEntity, MirkwoodSpiderModel> {
+public class MirkwoodSpiderRenderer extends MobRenderer<MirkwoodSpiderEntity, MirkwoodSpiderModel> {
     private static final String PATH = "textures/entities/spiders/";
 
-    public MirkwoodSpiderRenderer(EntityRendererFactory.Context context) {
+    public MirkwoodSpiderRenderer(EntityRendererProvider.Context context) {
         this(context, 0.45F, ModEntityModelLayers.SPIDER);
     }
 
-    protected MirkwoodSpiderRenderer(EntityRendererFactory.Context ctx, float shadowRadius, EntityModelLayer layer) {
+    protected MirkwoodSpiderRenderer(EntityRendererProvider.Context ctx, float shadowRadius, ModelLayerLocation layer) {
         super(ctx, new MirkwoodSpiderModel(ctx.getPart(layer)), shadowRadius);
     }
 
@@ -42,7 +41,7 @@ public class MirkwoodSpiderRenderer extends MobEntityRenderer<MirkwoodSpiderEnti
 
     @Override
     public void render(MirkwoodSpiderEntity entity, float entityYaw, float partialTick, PoseStack poseStack,
-                       VertexConsumerProvider bufferSource, int packedLight) {
+                       MultiBufferSource bufferSource, int packedLight) {
         if(entity.age > MirkwoodSpiderEntity.ADULT_AGE){
             poseStack.scale(1,1,1);
         } else {

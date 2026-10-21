@@ -5,13 +5,13 @@ import net.jukoz.me.network.connections.IConnectionToServer;
 import net.jukoz.me.network.contexts.ClientPacketContext;
 import net.jukoz.me.network.packets.S2C.*;
 import net.jukoz.me.network.packets.ServerToClientPacket;
-
 import java.util.function.BiConsumer;
+import net.minecraft.client.Minecraft;
 
 public class ModClientNetworkHandler {
     public static void register(IConnectionToServer connection) {
         net.jukoz.me.compat.net.PacketCodecs.setClientRegistries(() -> {
-            var handler = net.minecraft.client.MinecraftClient.getInstance().getNetworkHandler();
+            var handler = net.minecraft.client.Minecraft.getInstance().getNetworkHandler();
             return handler == null ? null : handler.getRegistryManager();
         });
         // Application [CLIENT SIDE]

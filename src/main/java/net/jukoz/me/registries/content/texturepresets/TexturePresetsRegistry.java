@@ -26,10 +26,10 @@ import net.jukoz.me.registries.content.texturepresets.pools.wildgoblin.WildGobli
 import net.jukoz.me.registries.content.texturepresets.pools.woodlandrealm.WoodlandRealmTexturePresetsPool;
 import net.jukoz.me.resources.datas.factions.Faction;
 import net.jukoz.me.resources.datas.texture_presets.TexturePresetDataPool;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import net.minecraft.core.HolderGetter;
 
 public class TexturePresetsRegistry {
     private static final ResourceKey<Registry<TexturePresetDataPool>> NPC_TEXTURE_DATA_KEY = DynamicRegistriesME.TEXTURE_PRESETS;
@@ -51,7 +51,6 @@ public class TexturePresetsRegistry {
     public final static ResourceKey<TexturePresetDataPool> DALE_PEASANT        = of(FactionRegistry.DALE, "peasant");
     public final static ResourceKey<TexturePresetDataPool> DALE_SOLDIER        = of(FactionRegistry.DALE, "soldier");
     public final static ResourceKey<TexturePresetDataPool> DALE_LORD           = of(FactionRegistry.DALE, "lord");
-
 
     /* [GONDOR] */
     public final static ResourceKey<TexturePresetDataPool> GONDOR_PEASANT        = of(FactionRegistry.GONDOR, "peasant");
@@ -84,7 +83,6 @@ public class TexturePresetsRegistry {
     public final static ResourceKey<TexturePresetDataPool> WOODLAND_REALM_COMMANDER = of(FactionRegistry.WOODLAND_REALM, "commander");
     public final static ResourceKey<TexturePresetDataPool> WOODLAND_REALM_WARDEN_OF_THE_GLADE = of(FactionRegistry.WOODLAND_REALM, "warden_of_the_glade");
 
-
     /* [MORDOR] */
     public final static ResourceKey<TexturePresetDataPool> MORDOR_BLACK_NUMENOREAN     = of(FactionRegistry.MORDOR, "black_numenorean");
     public final static ResourceKey<TexturePresetDataPool> MORDOR_ORC                  = of(FactionRegistry.MORDOR, "orc");
@@ -105,9 +103,8 @@ public class TexturePresetsRegistry {
     public final static ResourceKey<TexturePresetDataPool> ISENGARD_URUK_HAI = of(FactionRegistry.ISENGARD, "uruk_hai");
     public final static ResourceKey<TexturePresetDataPool> ISENGARD_HUMAN = of(FactionRegistry.ISENGARD, "human");
 
-
     public static void bootstrap(BootstrapContext<TexturePresetDataPool> context) {
-        RegistryEntryLookup<TexturePresetDataPool> registryEntryLookup = context.getRegistryLookup(NPC_TEXTURE_DATA_KEY);
+        HolderGetter<TexturePresetDataPool> registryEntryLookup = context.getRegistryLookup(NPC_TEXTURE_DATA_KEY);
 
         /* [ADD ALL POOLS BELOW] */
         registerAll(context, registryEntryLookup, GenericTexturePresetsPool.fetchAll());
@@ -130,13 +127,13 @@ public class TexturePresetsRegistry {
         registerAll(context, registryEntryLookup, IsengardTexturePresetsPool.fetchAll());
     }
 
-    private static void registerAll(BootstrapContext<TexturePresetDataPool> context, RegistryEntryLookup<TexturePresetDataPool> registryEntryLookup, List<RegisterableNpcTextureData> npcTextureDatas) {
+    private static void registerAll(BootstrapContext<TexturePresetDataPool> context, HolderGetter<TexturePresetDataPool> registryEntryLookup, List<RegisterableNpcTextureData> npcTextureDatas) {
         for(RegisterableNpcTextureData registerable : npcTextureDatas){
             register(context, registryEntryLookup, registerable.npcTextureDataRegistryKey, registerable.content);
         }
     }
 
-    private static void register(BootstrapContext<TexturePresetDataPool> context, RegistryEntryLookup<TexturePresetDataPool> registryEntryLookup, ResourceKey<TexturePresetDataPool> registryKey, TexturePresetDataPool element){
+    private static void register(BootstrapContext<TexturePresetDataPool> context, HolderGetter<TexturePresetDataPool> registryEntryLookup, ResourceKey<TexturePresetDataPool> registryKey, TexturePresetDataPool element){
         DynamicRegistriesME.register(context, registryEntryLookup, registryKey, element);
         // [LANG datagen]
         // N/A

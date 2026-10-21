@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.jukoz.me.gui.utils.widgets.ModWidget;
 import net.jukoz.me.gui.utils.widgets.UiDirections;
 import net.jukoz.me.gui.utils.widgets.backgrounds.types.BackgroundContainerTypes;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.GuiGraphics;
 import org.joml.Vector2i;
 
 public class BackgroundContainerWidget extends ModWidget {
@@ -13,7 +13,7 @@ public class BackgroundContainerWidget extends ModWidget {
         this.type = type;
     }
 
-    public void draw(DrawContext context, int startX, int startY, int sizeX, int sizeY){
+    public void draw(GuiGraphics context, int startX, int startY, int sizeX, int sizeY){
         // TODO : Find a fix for looping texture efficiently
 
         int size = type.size;

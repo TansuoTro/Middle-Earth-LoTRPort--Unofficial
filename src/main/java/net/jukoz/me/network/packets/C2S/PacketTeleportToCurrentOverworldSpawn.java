@@ -12,15 +12,10 @@ import net.jukoz.me.world.dimension.ModDimensions;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.resources.ResourceLocation;
 
-
 public class PacketTeleportToCurrentOverworldSpawn extends ClientToServerPacket<PacketTeleportToCurrentOverworldSpawn> {
     public static final ResourceLocation ID = new ResourceLocation(MiddleEarth.MOD_ID, "packet_teleport_to_current_overworld_spawn");
     public static final PacketTeleportToCurrentOverworldSpawn INSTANCE = new PacketTeleportToCurrentOverworldSpawn();
     public static final PacketType<PacketTeleportToCurrentOverworldSpawn> TYPE = PacketType.create(ID, PacketTeleportToCurrentOverworldSpawn::new);
-
-
-
-
 
     private PacketTeleportToCurrentOverworldSpawn() {
     }

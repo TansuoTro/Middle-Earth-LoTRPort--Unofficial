@@ -1,6 +1,5 @@
 package net.jukoz.me.block.special;
 
-import net.minecraft.block.*;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.material.Fluid;
@@ -19,9 +18,15 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.DoublePlantBlock;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import com.mojang.math.Axis;
 
-
-public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements Fertilizable, Waterloggable {
+public class CustomWaterloggableTallPlantBlock extends DoublePlantBlock implements BonemealableBlock, SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private final boolean randomBoneMeal;
@@ -31,13 +36,13 @@ public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements
         this.setDefaultState((BlockState)((BlockState)this.stateManager.getDefaultState()).with(HALF, DoubleBlockHalf.LOWER).with(WATERLOGGED, false));
     }
 
-    public void placeAt(WorldAccess world, BlockPos pos, boolean waterlogged, int flags) {
+    public void placeAt(LevelAccessor world, BlockPos pos, boolean waterlogged, int flags) {
         world.setBlockState(pos, this.getDefaultState().with(HALF, DoubleBlockHalf.LOWER).with(WATERLOGGED, waterlogged), flags);
         world.setBlockState(pos.up(), this.getDefaultState().with(HALF, DoubleBlockHalf.UPPER).with(WATERLOGGED, false), flags);
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (state.get(HALF) == DoubleBlockHalf.LOWER && state.get(WATERLOGGED)) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
@@ -104,11 +109,11 @@ public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements
         if (state.get(HALF) == DoubleBlockHalf.UPPER) {
             return true;
         }
-        return Waterloggable.super.canFillWithFluid(world, pos, state, fluid);
+        return SimpleWaterloggedBlock.super.canFillWithFluid(world, pos, state, fluid);
     }
 
     @Override
-    public boolean tryFillWithFluid(WorldAccess world, BlockPos pos, BlockState state, FluidState fluidState) {
+    public boolean tryFillWithFluid(LevelAccessor world, BlockPos pos, BlockState state, FluidState fluidState) {
         if (!fluidState.isOf(Fluids.WATER)) {
             return false;
         }
@@ -117,7 +122,7 @@ public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements
             this.breakUpperFromWater(world, pos, Blocks.WATER.getDefaultState());
             return true;
         }
-        return Waterloggable.super.tryFillWithFluid(world, pos, state, fluidState);
+        return SimpleWaterloggedBlock.super.tryFillWithFluid(world, pos, state, fluidState);
     }
 
     @Override
@@ -126,7 +131,7 @@ public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements
     }
 
     @Override
-    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isFertilizable(LevelReader world, BlockPos pos, BlockState state, boolean isClient) {
         return true;
     }
 
@@ -145,7 +150,7 @@ public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements
         }
     }
 
-    private void breakUpperFromWater(WorldAccess world, BlockPos upperPos, BlockState upperReplacementState) {
+    private void breakUpperFromWater(LevelAccessor world, BlockPos upperPos, BlockState upperReplacementState) {
         BlockState upperState = world.getBlockState(upperPos);
         if (!upperState.isOf(this) || upperState.get(HALF) != DoubleBlockHalf.UPPER) {
             return;

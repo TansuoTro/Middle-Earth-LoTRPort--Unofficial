@@ -1,25 +1,24 @@
 package net.jukoz.me.entity.ai.brain.task.npc;
 
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.EntityLookTarget;
+import net.minecraft.world.entity.ai.behavior.EntityTracker;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.SingleTickTask;
-import net.minecraft.entity.ai.brain.task.TaskTriggerer;
+import net.minecraft.world.entity.ai.behavior.OneShot;
+import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.item.RangedWeaponItem;
+import net.minecraft.world.item.ProjectileWeaponItem;
 import net.jukoz.me.entity.npcs.NpcEntity;
-
 import java.util.function.Predicate;
 
 public class NpcRangedAttackTask {
-    public static <T extends NpcEntity> SingleTickTask<T> create(int cooldown) {
+    public static <T extends NpcEntity> OneShot<T> create(int cooldown) {
         return create((target) -> true, cooldown);
     }
 
-    public static <T extends NpcEntity> SingleTickTask<T> create(Predicate<T> targetPredicate, int cooldown) {
-        return TaskTriggerer.task((context) -> context.group(
+    public static <T extends NpcEntity> OneShot<T> create(Predicate<T> targetPredicate, int cooldown) {
+        return BehaviorBuilder.task((context) -> context.group(
                 context.queryMemoryOptional(MemoryModuleType.LOOK_TARGET),
                 context.queryMemoryValue(MemoryModuleType.ATTACK_TARGET),
                 context.queryMemoryAbsent(MemoryModuleType.ATTACK_COOLING_DOWN),
@@ -34,7 +33,7 @@ public class NpcRangedAttackTask {
             boolean canSeeIt = (context.getValue(visibleMobs)).contains(targetEntity);
 
             if (targetPredicateResult && isHoldingRangedWeapon && isInAttackRange && canSeeIt) {
-                lookTarget.remember(new EntityLookTarget(targetEntity, true));
+                lookTarget.remember(new EntityTracker(targetEntity, true));
                 attackCoolingDown.remember(true, cooldown);
 
                 entity.aim();
@@ -55,7 +54,6 @@ public class NpcRangedAttackTask {
                         canForget = true;
                 }
 
-
                 if(canForget)
                     entity.getBrain().forget(MemoryModuleType.ATTACK_TARGET);
 
@@ -67,7 +65,7 @@ public class NpcRangedAttackTask {
     private static boolean isHoldingUsableRangedWeapon(Mob mob) {
         return mob.isHolding((stack) -> {
             Item item = stack.getItem();
-            return item instanceof RangedWeaponItem && mob.canUseRangedWeapon((RangedWeaponItem)item);
+            return item instanceof ProjectileWeaponItem && mob.canUseRangedWeapon((ProjectileWeaponItem)item);
         });
     }
 }

@@ -5,8 +5,8 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.network.packets.C2S.HoodStateTogglePacket;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
+import net.minecraft.client.KeyMapping;
+import com.mojang.blaze3d.platform.InputConstants;
 import org.lwjgl.glfw.GLFW;
 
 public class KeyInputHandler {
@@ -16,10 +16,10 @@ public class KeyInputHandler {
     public static final String ME_KEY_MAP_TELEPORT = "key.%s.map_teleport".formatted(MiddleEarth.MOD_ID);
     public static final String ME_KEY_MAP_FULLSCREEN_TOGGLE = "key.%s.map_fullscreen_toggle".formatted(MiddleEarth.MOD_ID);
 
-    public static KeyBinding hoodStateToggleKey;
+    public static KeyMapping hoodStateToggleKey;
     // Used in MapScreen
-    public static KeyBinding mapTeleportKey;
-    public static KeyBinding mapFullscreenToggle;
+    public static KeyMapping mapTeleportKey;
+    public static KeyMapping mapFullscreenToggle;
 
     public static void registerKeyInputs(){
         var ref = new Object() {
@@ -40,23 +40,23 @@ public class KeyInputHandler {
     }
 
     public static void register(){
-        hoodStateToggleKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        hoodStateToggleKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 ME_KEY_HOOD_STATE_TOGGLE,
-                InputUtil.Type.KEYSYM,
+                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_J,
                 ME_KEY_CATEGORY
         ));
 
-        mapTeleportKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        mapTeleportKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 ME_KEY_MAP_TELEPORT,
-                InputUtil.Type.KEYSYM,
+                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_N,
                 ME_KEY_CATEGORY
         ));
 
-        mapFullscreenToggle = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        mapFullscreenToggle = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 ME_KEY_MAP_FULLSCREEN_TOGGLE,
-                InputUtil.Type.KEYSYM,
+                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_M,
                 ME_KEY_CATEGORY
         ));

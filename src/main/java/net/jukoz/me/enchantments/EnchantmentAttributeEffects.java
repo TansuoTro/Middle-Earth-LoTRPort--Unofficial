@@ -7,13 +7,13 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceKey;
 
-/** Equipment effects from the donor's committed enchantment JSON, including NPC equipment. */
+/** Equipable effects from the donor's committed enchantment JSON, including NPC equipment. */
 public final class EnchantmentAttributeEffects {
     private static final UUID MINER_REACH = UUID.nameUUIDFromBytes("me:enchantment.miner_reach".getBytes(StandardCharsets.UTF_8));
     private static final UUID STRIDE = UUID.nameUUIDFromBytes("me:enchantment.stride".getBytes(StandardCharsets.UTF_8));
@@ -46,12 +46,12 @@ public final class EnchantmentAttributeEffects {
                 "me:enchantment.stride", level(EnchantmentsME.STRIDE, entity.getEquippedStack(EquipmentSlot.LEGS)) * 0.005);
     }
 
-    private static void setBonus(LivingEntity entity, EntityAttribute attribute, UUID id, String name, double value) {
+    private static void setBonus(LivingEntity entity, Attribute attribute, UUID id, String name, double value) {
         var instance = entity.getAttributeInstance(attribute);
         if (instance == null) return;
         var existing = instance.getModifier(id);
         if (existing != null && existing.getValue() == value) return;
         instance.removeModifier(id);
-        if (value != 0.0) instance.addTemporaryModifier(new EntityAttributeModifier(id, name, value, EntityAttributeModifier.Operation.ADDITION));
+        if (value != 0.0) instance.addTemporaryModifier(new AttributeModifier(id, name, value, AttributeModifier.Operation.ADDITION));
     }
 }

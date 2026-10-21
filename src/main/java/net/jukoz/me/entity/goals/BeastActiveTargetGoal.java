@@ -3,18 +3,18 @@ package net.jukoz.me.entity.goals;
 import net.minecraft.server.level.ServerLevel;
 import net.jukoz.me.entity.beasts.AbstractBeastEntity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.ai.TargetPredicate;
-import net.minecraft.entity.ai.goal.ActiveTargetGoal;
-import net.minecraft.entity.ai.goal.TrackTargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.math.Box;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.EnumSet;
 import java.util.function.Predicate;
+import net.minecraft.world.entity.ai.control.Control;
 
-public class BeastActiveTargetGoal<T extends LivingEntity> extends TrackTargetGoal {
+public class BeastActiveTargetGoal<T extends LivingEntity> extends TargetGoal {
     private static final int DEFAULT_RECIPROCAL_CHANCE = 10;
     protected final Class<T> targetClass;
     /**
@@ -25,7 +25,7 @@ public class BeastActiveTargetGoal<T extends LivingEntity> extends TrackTargetGo
     protected final int reciprocalChance;
     @Nullable
     protected LivingEntity targetEntity;
-    protected TargetPredicate targetPredicate;
+    protected TargetingConditions targetPredicate;
 
     public BeastActiveTargetGoal(AbstractBeastEntity mob, Class<T> targetClass, boolean checkVisibility) {
         this(mob, targetClass, 10, checkVisibility, false, null);
@@ -42,9 +42,9 @@ public class BeastActiveTargetGoal<T extends LivingEntity> extends TrackTargetGo
     public BeastActiveTargetGoal(AbstractBeastEntity mob, Class<T> targetClass, int reciprocalChance, boolean checkVisibility, boolean checkCanNavigate, @Nullable Predicate<LivingEntity> targetPredicate) {
         super(mob, checkVisibility, checkCanNavigate);
         this.targetClass = targetClass;
-        this.reciprocalChance = ActiveTargetGoal.toGoalTicks(reciprocalChance);
+        this.reciprocalChance = NearestAttackableTargetGoal.toGoalTicks(reciprocalChance);
         this.setControls(EnumSet.of(Control.TARGET));
-        this.targetPredicate = TargetPredicate.createAttackable().setBaseMaxDistance(this.getFollowRange()).setPredicate(targetPredicate);
+        this.targetPredicate = TargetingConditions.createAttackable().setBaseMaxDistance(this.getFollowRange()).setPredicate(targetPredicate);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class BeastActiveTargetGoal<T extends LivingEntity> extends TrackTargetGo
         return this.targetEntity != null;
     }
 
-    protected Box getSearchBox(double distance) {
+    protected AABB getSearchBox(double distance) {
         return this.mob.getBoundingBox().expand(distance, 4.0, distance);
     }
 

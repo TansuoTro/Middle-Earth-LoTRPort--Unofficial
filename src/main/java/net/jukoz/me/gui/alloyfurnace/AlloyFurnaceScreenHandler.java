@@ -3,24 +3,23 @@ package net.jukoz.me.gui.alloyfurnace;
 import net.jukoz.me.block.special.alloyfurnace.AlloyFurnaceEntity;
 import net.jukoz.me.gui.ModScreenHandlers;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 
-public class AlloyFurnaceScreenHandler extends ScreenHandler{
+public class AlloyFurnaceScreenHandler extends AbstractContainerMenu{
     private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+    private final ContainerData propertyDelegate;
 
-    public AlloyFurnaceScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(6), new ArrayPropertyDelegate(3));
+    public AlloyFurnaceScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(6), new SimpleContainerData(3));
     }
 
-    public AlloyFurnaceScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate delegate) {
+    public AlloyFurnaceScreenHandler(int syncId, Inventory playerInventory, Inventory inventory, ContainerData delegate) {
         super(ModScreenHandlers.ALLOY_SCREEN_HANDLER, syncId);
         checkSize(inventory, 6);
         this.inventory = inventory;
@@ -90,7 +89,7 @@ public class AlloyFurnaceScreenHandler extends ScreenHandler{
         return (float) progress / AlloyFurnaceEntity.MAX_PROGRESS;
     }
 
-    private void addPlayerInventory(PlayerInventory playerInventory) {
+    private void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
@@ -98,7 +97,7 @@ public class AlloyFurnaceScreenHandler extends ScreenHandler{
         }
     }
 
-    private void addPlayerHotbar(PlayerInventory playerInventory) {
+    private void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
         }

@@ -1,8 +1,7 @@
 package net.jukoz.me.block.special;
 
 import com.google.common.collect.Maps;
-import net.minecraft.block.*;
-import net.minecraft.entity.ai.pathing.NavigationType;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -24,10 +23,17 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.level.LevelView;
 import net.jukoz.me.block.registration.ModBlocks;
-
 import java.util.List;
 import java.util.Map;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.AbstractCandleBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CakeBlock;
+import net.minecraft.world.level.block.CandleBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 
 public class CandleLayeredCakeBlock extends AbstractCandleBlock {
     public static final BooleanProperty LIT;
@@ -35,8 +41,6 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
     private static final Map<CandleBlock, CandleLayeredCakeBlock> CANDLES_TO_CANDLE_CAKES;
     private static final Iterable<Vec3> PARTICLE_OFFSETS;
     private final CandleBlock candle;
-
-
 
     public CandleLayeredCakeBlock(Block candle, BlockBehaviour.Settings settings) {
         super(settings);
@@ -54,7 +58,7 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
         return PARTICLE_OFFSETS;
     }
 
-    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 
@@ -80,7 +84,7 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
         }
     }
 
-    private static void setLit(WorldAccess world, BlockState state, BlockPos pos, boolean lit) {
+    private static void setLit(LevelAccessor world, BlockState state, BlockPos pos, boolean lit) {
         world.setBlockState(pos, state.with(LIT, lit), 11);
     }
 
@@ -92,15 +96,15 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
         builder.add(new Property[]{LIT});
     }
 
-    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state, boolean includeData) {
+    public ItemStack getPickStack(LevelReader world, BlockPos pos, BlockState state, boolean includeData) {
         return new ItemStack(ModBlocks.LAYERED_CAKE);
     }
 
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         return direction == Direction.DOWN && !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
         return world.getBlockState(pos.down()).isSolid();
     }
 
@@ -112,7 +116,7 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
         return true;
     }
 
-    public boolean canPathfindThrough(BlockState state, net.minecraft.world.level.BlockGetter world, BlockPos pos, NavigationType type) {
+    public boolean canPathfindThrough(BlockState state, net.minecraft.world.level.BlockGetter world, BlockPos pos, PathComputationType type) {
         return false;
     }
 
@@ -126,7 +130,7 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
 
     static {
         LIT = AbstractCandleBlock.LIT;
-        SHAPE = VoxelShapes.union(Block.createCuboidShape(0, 0.0, 0, 16.0, 8.0, 16.0),
+        SHAPE = Shapes.union(Block.createCuboidShape(0, 0.0, 0, 16.0, 8.0, 16.0),
                 Block.createCuboidShape(2, 8, 2, 14, 16, 14));
         CANDLES_TO_CANDLE_CAKES = Maps.newHashMap();
         PARTICLE_OFFSETS = List.of((new Vec3(5.0, 23, 5.0)).multiply(0.0625),

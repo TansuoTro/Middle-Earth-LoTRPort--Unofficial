@@ -7,6 +7,13 @@ import net.minecraft.client.model.geom.PartNames;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class RohirricHelmetArmorModel<T extends LivingEntity> extends CustomHelmetModel<T> {
     private static final float MAX_ANGLE_HAIR = 75f;
@@ -20,28 +27,28 @@ public class RohirricHelmetArmorModel<T extends LivingEntity> extends CustomHelm
         HELMET_ADDON_TEXTURE = new ResourceLocation(MiddleEarth.MOD_ID, "textures/models/armor/" + name + "_helmet_addon.png");
     }
 
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = new ModelData();
-        ModelPartData modelPartData = modelData.getRoot();
+    public static LayerDefinition getTexturedModelData() {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
 
-        modelPartData.addChild(PartNames.HAT, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.HAT, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData head = modelPartData.addChild(PartNames.HEAD, ModelPartBuilder.create().uv(0, -1)
-                .cuboid(0.0F, -16.0F, -7.0F, 0.0F, 11.0F, 17.0F, new Dilation(0.0F)),
-                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition head = modelPartData.addChild(PartNames.HEAD, CubeListBuilder.create().uv(0, -1)
+                .cuboid(0.0F, -16.0F, -7.0F, 0.0F, 11.0F, 17.0F, new CubeDeformation(0.0F)),
+                PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        head.addChild("hair", ModelPartBuilder.create().uv(0, 27)
-                .cuboid(-1.0F, -2.0F, 0.0F, 2.0F, 3.0F, 18.0F, new Dilation(0.0F)),
-                ModelTransform.of(0.0F, -9.0F, 5.0F, -1.5708F, 0.0F, 0.0F));
+        head.addChild("hair", CubeListBuilder.create().uv(0, 27)
+                .cuboid(-1.0F, -2.0F, 0.0F, 2.0F, 3.0F, 18.0F, new CubeDeformation(0.0F)),
+                PartPose.of(0.0F, -9.0F, 5.0F, -1.5708F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.BODY, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.RIGHT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.BODY, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.RIGHT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.LEFT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.RIGHT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        return TexturedModelData.of(modelData, 64, 48);
+        return LayerDefinition.of(modelData, 64, 48);
     }
 
     @Override

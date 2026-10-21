@@ -1,27 +1,26 @@
 package net.jukoz.me.entity.ai.brain.task;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.entity.ai.brain.MemoryModuleState;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.MultiTickTask;
+import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.server.level.ServerLevel;
 import net.jukoz.me.entity.ai.brain.MemoryModulesME;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntity;
-
 import java.util.Optional;
 
-public class CaveTrollSleepTask extends MultiTickTask<CaveTrollEntity> {
+public class CaveTrollSleepTask extends Behavior<CaveTrollEntity> {
     public CaveTrollSleepTask() {
         super(
                 ImmutableMap.of(
                         MemoryModuleType.WALK_TARGET,
-                        MemoryModuleState.VALUE_ABSENT,
+                        MemoryStatus.VALUE_ABSENT,
                         MemoryModuleType.ATTACK_TARGET,
-                        MemoryModuleState.VALUE_ABSENT,
+                        MemoryStatus.VALUE_ABSENT,
                         MemoryModuleType.HURT_BY_ENTITY,
-                        MemoryModuleState.REGISTERED,
+                        MemoryStatus.REGISTERED,
                         MemoryModulesME.FOOD_EATEN_COUNT,
-                        MemoryModuleState.VALUE_PRESENT
+                        MemoryStatus.VALUE_PRESENT
                 ),1200, 3600
         );
     }

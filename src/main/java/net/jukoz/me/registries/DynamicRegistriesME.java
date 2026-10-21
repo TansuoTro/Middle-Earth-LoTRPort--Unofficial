@@ -77,7 +77,7 @@ public class DynamicRegistriesME extends net.jukoz.me.api.registries.DynamicRegi
         DynamicRegistries.registerSynced(GREAT_HORN_VARIANTS, GreatHornVariant.CODEC);
     }
 
-    public static void prepareBoostrap(RegistryBuilder registryBuilder) {
+    public static void prepareBoostrap(RegistrySetBuilder registryBuilder) {
         registryBuilder.addRegistry(RACE, RaceRegistry::bootstrap);
         registryBuilder.addRegistry(NPC_TYPE, NpcRegistry::bootstrap);
         registryBuilder.addRegistry(FACTION, FactionRegistry::bootstrap);

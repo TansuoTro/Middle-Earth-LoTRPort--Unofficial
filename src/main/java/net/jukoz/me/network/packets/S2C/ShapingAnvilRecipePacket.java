@@ -2,8 +2,8 @@ package net.jukoz.me.network.packets.S2C;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
@@ -31,7 +31,7 @@ public class ShapingAnvilRecipePacket extends ServerToClientPacket<ShapingAnvilR
     @Override
     @OnlyIn(Dist.CLIENT)
     public void process(ClientPacketContext context) {
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
         ShapingAnvilScreen screen = (ShapingAnvilScreen)client.currentScreen;
         if (screen != null) screen.addRecipe(this.index, this.output);
     }
@@ -50,6 +50,5 @@ public class ShapingAnvilRecipePacket extends ServerToClientPacket<ShapingAnvilR
         buf.writeInt(this.index);
         buf.writeItemStack(this.output);
     }
-
 
 }

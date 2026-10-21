@@ -8,18 +8,18 @@ import net.jukoz.me.world.features.vegetation.ModVegetationPlacedFeatures;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.gen.feature.MiscPlacedFeatures;
+import net.minecraft.data.worldgen.placement.MiscOverworldPlacements;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.world.level.levelgen.feature.Feature;
 
 public class ModBiomeFeatures {
 
     public static void addDisks(ArrayList<ResourceKey<PlacedFeature>> ores) {
-        ores.add(MiscPlacedFeatures.DISK_SAND);
-        ores.add(MiscPlacedFeatures.DISK_CLAY);
-        ores.add(MiscPlacedFeatures.DISK_GRAVEL);
+        ores.add(MiscOverworldPlacements.DISK_SAND);
+        ores.add(MiscOverworldPlacements.DISK_CLAY);
+        ores.add(MiscOverworldPlacements.DISK_GRAVEL);
     }
 
     public static void addRiverSand(ArrayList<ResourceKey<PlacedFeature>> ores) {
@@ -28,8 +28,8 @@ public class ModBiomeFeatures {
     public static void addRiverDisks(ArrayList<ResourceKey<PlacedFeature>> ores) {
         ores.add(OrePlacedFeatures.RIVER_SAND);
         ores.add(OrePlacedFeatures.DISK_SAND);
-        ores.add(MiscPlacedFeatures.DISK_CLAY);
-        ores.add(MiscPlacedFeatures.DISK_GRAVEL);
+        ores.add(MiscOverworldPlacements.DISK_CLAY);
+        ores.add(MiscOverworldPlacements.DISK_GRAVEL);
     }
 
     // region TREES
@@ -566,7 +566,6 @@ public class ModBiomeFeatures {
     public static void addWildWheatField(List<ResourceKey<PlacedFeature>> vegetation) {
         vegetation.add(ModVegetationPlacedFeatures.FIELD_WILD_WHEAT);
     }
-
 
     // endregion
     public static void addMirkwoodVines(List<ResourceKey<PlacedFeature>> vegetation) {

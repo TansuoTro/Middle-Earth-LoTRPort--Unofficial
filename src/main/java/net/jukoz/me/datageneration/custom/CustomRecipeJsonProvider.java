@@ -1,10 +1,9 @@
 package net.jukoz.me.datageneration.custom;
 
 import java.util.function.Consumer;
-
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.data.server.recipe.RecipeJsonProvider;
+import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.resources.ResourceLocation;
 
@@ -12,13 +11,13 @@ import net.minecraft.resources.ResourceLocation;
  * 1.20.1 stand-in for the donor's 1.21.5 recipe-object exporter.
  *
  * <p>1.21.5 hands a live {@code Recipe<?>} to {@code RecipeExporter}; 1.20.1 datagen only
- * consumes a {@link RecipeJsonProvider} whose {@link #serialize(JsonObject)} fills the raw
+ * consumes a {@link FinishedRecipe} whose {@link #serialize(JsonObject)} fills the raw
  * recipe JSON (the {@code type} field is added by the default {@code toJson()}). The four
  * custom builders hand in their serializer and a JSON writer; the JSON shape must match
  * what the mod's {@code RecipeSerializer#read(ResourceLocation, JsonObject)} implementations
  * parse on the runtime side.
  */
-public class CustomRecipeJsonProvider implements RecipeJsonProvider {
+public class CustomRecipeJsonProvider implements FinishedRecipe {
     private final ResourceLocation recipeId;
     private final RecipeSerializer<?> serializer;
     private final Consumer<JsonObject> recipeJsonWriter;

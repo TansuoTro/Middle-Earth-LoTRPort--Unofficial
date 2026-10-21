@@ -1,22 +1,24 @@
 package net.jukoz.me.block.special.artefact.arkenstone;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
 
-public class ArkenstoneWallBlock extends HorizontalFacingBlock {
+public class ArkenstoneWallBlock extends HorizontalDirectionalBlock {
 
     public ArkenstoneWallBlock(Settings settings) {
         super(settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH));
     }
-
-
 
     public BlockState getPlacementState(BlockPlaceContext ctx) {
         return (BlockState)((BlockState)this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing()));
@@ -26,12 +28,12 @@ public class ArkenstoneWallBlock extends HorizontalFacingBlock {
         builder.add(FACING);
     }
 
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderType(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return switch (state.get(FACING)){
             default -> Block.createCuboidShape(6, 6, 0, 10, 10, 4);
             case SOUTH -> Block.createCuboidShape(6, 6, 12, 10, 10, 16);

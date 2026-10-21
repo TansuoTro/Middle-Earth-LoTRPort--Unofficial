@@ -12,10 +12,18 @@ import net.jukoz.me.block.special.OxidizableVerticalSlabBlock;
 import net.jukoz.me.block.special.OxidizableWallBlock;
 import net.jukoz.me.block.special.verticalSlabs.VerticalSlabBlock;
 import net.jukoz.me.utils.LoggerUtil;
-import net.minecraft.block.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.WallBlock;
+import net.minecraft.world.level.block.WeatheringCopper;
+import net.minecraft.world.level.block.WeatheringCopperFullBlock;
+import net.minecraft.world.level.block.WeatheringCopperSlabBlock;
+import net.minecraft.world.level.block.WeatheringCopperStairBlock;
 
 public class RoofBlockSets {
 
@@ -68,10 +76,10 @@ public class RoofBlockSets {
     public static RoofBlockSet WHITE_CLAY_TILING = registerClaySet("white_clay_tiling", Blocks.WHITE_TERRACOTTA);
     public static RoofBlockSet YELLOW_CLAY_TILING = registerClaySet("yellow_clay_tiling", Blocks.YELLOW_TERRACOTTA);
 
-    public static RoofBlockSet THATCH = registerThatchSet("thatch", Oxidizable.OxidationLevel.UNAFFECTED);
-    public static RoofBlockSet WEATHERED_THATCH = registerThatchSet("weathered_thatch", Oxidizable.OxidationLevel.EXPOSED);
-    public static RoofBlockSet AGED_THATCH = registerThatchSet("aged_thatch", Oxidizable.OxidationLevel.WEATHERED);
-    public static RoofBlockSet OLD_THATCH = registerThatchSet("old_thatch", Oxidizable.OxidationLevel.OXIDIZED);
+    public static RoofBlockSet THATCH = registerThatchSet("thatch", WeatheringCopper.OxidationLevel.UNAFFECTED);
+    public static RoofBlockSet WEATHERED_THATCH = registerThatchSet("weathered_thatch", WeatheringCopper.OxidationLevel.EXPOSED);
+    public static RoofBlockSet AGED_THATCH = registerThatchSet("aged_thatch", WeatheringCopper.OxidationLevel.WEATHERED);
+    public static RoofBlockSet OLD_THATCH = registerThatchSet("old_thatch", WeatheringCopper.OxidationLevel.OXIDIZED);
 
     public static RoofBlockSet WAXED_THATCH = registerWaxedThatchSet("waxed_thatch");
     public static RoofBlockSet WAXED_WEATHERED_THATCH = registerWaxedThatchSet("waxed_weathered_thatch");
@@ -169,7 +177,7 @@ public class RoofBlockSets {
 
         Block stairs = existingBlock(name + "_stairs");
         if (stairs == null) {
-            stairs = ModBlocks.registerWoodBlock(name + "_stairs", new StairsBlock(block.getDefaultState(),
+            stairs = ModBlocks.registerWoodBlock(name + "_stairs", new StairBlock(block.getDefaultState(),
                     FabricBlockSettings.copyOf(block)), true);
         }
 
@@ -213,7 +221,7 @@ public class RoofBlockSets {
 
         Block stairs = existingBlock(name + "_stairs");
         if (stairs == null) {
-            stairs = ModBlocks.registerStoneBlock(name + "_stairs", new StairsBlock(block.getDefaultState(),
+            stairs = ModBlocks.registerStoneBlock(name + "_stairs", new StairBlock(block.getDefaultState(),
                     FabricBlockSettings.copyOf(block).requiresTool()), true);
         }
 
@@ -225,15 +233,15 @@ public class RoofBlockSets {
         return new RoofBlockSet(block, slab, verticalSlab, stairs, wall, origin);
     }
 
-    private static RoofBlockSet registerThatchSet(String name, Oxidizable.OxidationLevel level) {
+    private static RoofBlockSet registerThatchSet(String name, WeatheringCopper.OxidationLevel level) {
         Block block = existingBlock(name);
         if (block == null) {
-            block = ModBlocks.registerMiscBlock(name, new OxidizableBlock(level, BlockBehaviour.Settings.copy(Blocks.HAY_BLOCK)), true);
+            block = ModBlocks.registerMiscBlock(name, new WeatheringCopperFullBlock(level, BlockBehaviour.Settings.copy(Blocks.HAY_BLOCK)), true);
         }
 
         Block slab = existingBlock(name + "_slab");
         if (slab == null) {
-            slab = ModBlocks.registerMiscBlock(name + "_slab", new OxidizableSlabBlock(level, FabricBlockSettings.copyOf(block)), true);
+            slab = ModBlocks.registerMiscBlock(name + "_slab", new WeatheringCopperSlabBlock(level, FabricBlockSettings.copyOf(block)), true);
         }
 
         Block verticalSlab = existingBlock(name + "_vertical_slab");
@@ -243,7 +251,7 @@ public class RoofBlockSets {
 
         Block stairs = existingBlock(name + "_stairs");
         if (stairs == null) {
-            stairs = ModBlocks.registerMiscBlock(name + "_stairs", new OxidizableStairsBlock(level, block.getDefaultState(),
+            stairs = ModBlocks.registerMiscBlock(name + "_stairs", new WeatheringCopperStairBlock(level, block.getDefaultState(),
                     FabricBlockSettings.copyOf(block)), true);
         }
 
@@ -279,7 +287,7 @@ public class RoofBlockSets {
 
         Block stairs = existingBlock(name + "_stairs");
         if (stairs == null) {
-            stairs = ModBlocks.registerMiscBlock(name + "_stairs", new StairsBlock(block.getDefaultState(),
+            stairs = ModBlocks.registerMiscBlock(name + "_stairs", new StairBlock(block.getDefaultState(),
                     FabricBlockSettings.copyOf(block)), true);
         }
 

@@ -1,13 +1,13 @@
 package net.jukoz.me.block.special;
 
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.block.Oxidizable;
-import net.minecraft.block.PaneBlock;
+import net.minecraft.world.level.block.WeatheringCopper;
+import net.minecraft.world.level.block.IronBarsBlock;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 
-public class OxidizablePaneBlock extends PaneBlock implements Oxidizable {
+public class OxidizablePaneBlock extends IronBarsBlock implements WeatheringCopper {
     private final OxidationLevel oxidationLevel;
 
     public OxidizablePaneBlock(OxidationLevel oxidationLevel, Settings settings) {
@@ -20,7 +20,7 @@ public class OxidizablePaneBlock extends PaneBlock implements Oxidizable {
     }
 
     public boolean hasRandomTicks(BlockState state) {
-        return Oxidizable.getIncreasedOxidationBlock(state.getBlock()).isPresent();
+        return WeatheringCopper.getIncreasedOxidationBlock(state.getBlock()).isPresent();
     }
 
     public OxidationLevel getDegradationLevel() {

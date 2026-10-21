@@ -11,12 +11,11 @@ import net.jukoz.me.world.biomes.caves.ModCaveBiomes;
 import net.jukoz.me.world.features.underground.CavesPlacedFeatures;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.Holder;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.biome.source.BiomeCoords;
+import net.minecraft.core.QuartPos;
 import net.minecraft.world.level.biome.BiomeSource;
-import net.minecraft.world.biome.source.util.MultiNoiseUtil;
-
+import net.minecraft.world.level.biome.Climate;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
@@ -43,14 +42,14 @@ public class ModBiomeSource extends BiomeSource {
     private ResourceKey<Biome> getCaveBiome(int x, int z, MEBiome surfaceBiome) {
         float temperature = (float) SimplexNoise.noise((double) x / CAVE_NOISE,  (double) z / CAVE_NOISE);
         float humidity = (float) SimplexNoise.noise((double) (x + CAVE_OFFSET) / CAVE_NOISE, (double)(z + CAVE_OFFSET) / CAVE_NOISE);
-        return ModCaveBiomes.getBiome(new Vec2f(temperature, humidity), surfaceBiome);
+        return ModCaveBiomes.getBiome(new Vec2(temperature, humidity), surfaceBiome);
     }
 
     @Override
-    public Holder<Biome> getBiome(int x, int y, int z, MultiNoiseUtil.MultiNoiseSampler noise) {
-        int i = BiomeCoords.toBlock(x);
-        int j = BiomeCoords.toBlock(y);
-        int k = BiomeCoords.toBlock(z);
+    public Holder<Biome> getBiome(int x, int y, int z, Climate.MultiNoiseSampler noise) {
+        int i = QuartPos.toBlock(x);
+        int j = QuartPos.toBlock(y);
+        int k = QuartPos.toBlock(z);
 
         MEBiome meBiome = middleEarthMapRuntime.getBiome(i, k);
         

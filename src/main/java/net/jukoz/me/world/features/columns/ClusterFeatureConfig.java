@@ -71,4 +71,3 @@ public class ClusterFeatureConfig implements FeatureConfiguration {
         this.maxDistanceFromCenterAffectingHeightBias = maxDistanceFromCenterAffectingHeightBias;
     }
 }
-

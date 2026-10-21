@@ -6,9 +6,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.screen.ScreenHandler;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.jukoz.me.compat.nbt.ReadView;
@@ -24,7 +24,6 @@ import net.jukoz.me.block.special.structureManager.features.StructureManagerServ
 import net.jukoz.me.gui.structuremanager.structurenest.StructureNestScreenData;
 import net.jukoz.me.gui.structuremanager.structurenest.StructureNestScreenHandler;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -62,7 +61,7 @@ public class StructureNestBlockEntity extends BlockEntity implements ExtendedScr
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, Player player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new StructureNestScreenHandler(syncId, playerInventory, new StructureNestScreenData(this.pos,
                 Optional.ofNullable(this.managerId),
                 Optional.ofNullable(this.nestId),
@@ -95,8 +94,8 @@ public class StructureNestBlockEntity extends BlockEntity implements ExtendedScr
     }
 
     @Override
-    public BlockEntityUpdateS2CPacket toUpdatePacket() {
-        return BlockEntityUpdateS2CPacket.create(this);
+    public ClientboundBlockEntityDataPacket toUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     public void setStructureManagerId(ResourceLocation structureManagerId) {

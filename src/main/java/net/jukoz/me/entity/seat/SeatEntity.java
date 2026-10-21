@@ -1,4 +1,6 @@
-package net.jukoz.me.entity.seat;import net.jukoz.me.MiddleEarth;
+package net.jukoz.me.entity.seat;
+
+import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.SeatBlock;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -8,7 +10,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;public class SeatEntity extends Entity {    public SeatEntity(EntityType<?> type, Level world) {
+import net.minecraft.world.level.Level;
+
+public class SeatEntity extends Entity {    public SeatEntity(EntityType<?> type, Level world) {
         super(type, world);
     }    @Override
     protected void initDataTracker() {

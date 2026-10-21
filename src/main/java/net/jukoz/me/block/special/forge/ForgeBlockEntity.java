@@ -1,10 +1,10 @@
 package net.jukoz.me.block.special.forge;
+
 import net.jukoz.me.compat.MEArmorTrim;
 import net.jukoz.me.compat.NbtCompat;
 import net.jukoz.me.item.MEComponents;
-
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.entity.ExperienceOrbEntity;
+import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.item.armortrim.ArmorTrim;
 import net.minecraft.world.item.armortrim.ArmorTrimMaterial;
 import net.minecraft.world.item.armortrim.ArmorTrimPattern;
@@ -26,53 +26,52 @@ import net.minecraft.world.level.block.AbstractFurnaceBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
-
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.RegistryWrapper;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.recipe.RecipesME;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.*;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.world.item.armortrim.TrimMaterial;
+import net.minecraft.world.item.armortrim.TrimPattern;
 
-public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory, SidedInventory {
+public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory, WorldlyContainer {
     private static final String ID = "forge";
     public static final int MAX_PROGRESS = 1200;
     public static final int MAX_STORAGE = 2304;
     public static final int MAX_BOOST_TIME = 10;
     public static final int FUEL_SLOT = 0;
     public static final int OUTPUT_SLOT = 5;
-    private final DefaultedList<ItemStack> inventory =
-            DefaultedList.ofSize(6, ItemStack.EMPTY);
-    protected final PropertyDelegate propertyDelegate;
+    private final NonNullList<ItemStack> inventory =
+            NonNullList.ofSize(6, ItemStack.EMPTY);
+    protected final ContainerData propertyDelegate;
     private int progress = 0;
     private int boostTime = 0;
     private int fuelTime = 0;
@@ -90,7 +89,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
 
     public ForgeBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.FORGE, pos, state);
-        this.propertyDelegate = new PropertyDelegate() {
+        this.propertyDelegate = new ContainerData() {
             @Override
             public int get(int index) {
                 return switch (index) {
@@ -147,7 +146,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, Player player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new ForgeAlloyingScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
@@ -190,15 +189,15 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
 
     @Nullable
     @Override
-    public Packet<ClientPlayPacketListener> toUpdatePacket() {
-        return BlockEntityUpdateS2CPacket.create(this);
+    public Packet<ClientGamePacketListener> toUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
     protected void writeNbt(CompoundTag nbt) {
         super.writeNbt(nbt);
         WriteView view = new WriteView(nbt);
-        Inventories.writeNbt(view.nbt(), this.inventory, true);
+        ContainerHelper.writeNbt(view.nbt(), this.inventory, true);
         view.putInt(ID + ".progress", this.progress);
         view.putInt(ID + ".boost-time", this.boostTime);
         view.putInt(ID + ".fuel-time", this.fuelTime);
@@ -213,7 +212,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
         super.readNbt(nbt);
         ReadView view = new ReadView(nbt);
         this.inventory.clear();
-        Inventories.readNbt(view.nbt(), this.inventory);
+        ContainerHelper.readNbt(view.nbt(), this.inventory);
         this.progress = view.getInt(ID + ".progress", 0);
         this.boostTime = view.getInt(ID + ".boost-time", 0);
         this.fuelTime = view.getInt(ID + ".fuel-time", 0);
@@ -233,7 +232,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
         return createNbt();
     }
 
-    public void setInventory(DefaultedList<ItemStack> inventory) {
+    public void setInventory(NonNullList<ItemStack> inventory) {
         for (int i = 0; i < inventory.size(); i++) {
             this.inventory.set(i, inventory.get(i));
         }
@@ -296,12 +295,12 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
 
     @Override
     public ItemStack removeStack(int slot, int amount) {
-        return Inventories.splitStack(this.inventory, slot, amount);
+        return ContainerHelper.splitStack(this.inventory, slot, amount);
     }
 
     @Override
     public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(inventory, slot);
+        return ContainerHelper.removeStack(inventory, slot);
     }
 
     @Override
@@ -352,8 +351,8 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
 
             if (entity.getStack(OUTPUT_SLOT).getMaxCount() <= entity.getStack(OUTPUT_SLOT).getCount()) return;
 
-            RegistryWrapper.Impl<ArmorTrimMaterial>  armorTrimMaterialRegistry = entity.getWorld().getRegistryManager().getWrapperOrThrow(Registries.TRIM_MATERIAL);
-            RegistryWrapper.Impl<ArmorTrimPattern>  armorTrimPatternRegistry = entity.getWorld().getRegistryManager().getWrapperOrThrow(Registries.TRIM_PATTERN);
+            HolderLookup.Impl<TrimMaterial>  armorTrimMaterialRegistry = entity.getWorld().getRegistryManager().getWrapperOrThrow(Registries.TRIM_MATERIAL);
+            HolderLookup.Impl<TrimPattern>  armorTrimPatternRegistry = entity.getWorld().getRegistryManager().getWrapperOrThrow(Registries.TRIM_PATTERN);
 
             switch (amount){
                 case 16 -> {
@@ -448,11 +447,11 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
     }
 
     private static void playExtractSound(Level world, BlockPos pos){
-        world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1.0f, 1.0f);
+        world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0f, 1.0f);
     }
 
     private static void playFailedExtractSound(Level world, BlockPos pos){
-        world.playSound(null, pos, SoundEvents.BLOCK_DECORATED_POT_PLACE, SoundCategory.BLOCKS, 1.0f, 1.0f);
+        world.playSound(null, pos, SoundEvents.BLOCK_DECORATED_POT_PLACE, SoundSource.BLOCKS, 1.0f, 1.0f);
     }
 
     public static void tick(ServerLevel world, BlockPos blockPos, BlockState blockState, ForgeBlockEntity entity) {
@@ -517,7 +516,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
     }
 
     private static void craftItem(ForgeBlockEntity entity, ServerLevel world) {
-        SimpleInventory inventory1 = new SimpleInventory(entity.size());
+        SimpleContainer inventory1 = new SimpleContainer(entity.size());
         List<ItemStack> inputs = new ArrayList<>();
         for (int i = 0; i < entity.size(); i++) {
             inventory1.setStack(i, entity.getStack(i));
@@ -529,7 +528,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
 
         if(match == null) throw new RuntimeException("Somehow... you crafted an item without recipe?!");
 
-        ExperienceOrbEntity.spawn(world, entity.getPos().toCenterPos().add(0, 1, 0), match.getXp());
+        ExperienceOrb.spawn(world, entity.getPos().toCenterPos().add(0, 1, 0), match.getXp());
 
         if(hasAlloyingRecipe(entity, world)) {
             for (int i = 1; i <= 4; i++) {
@@ -542,7 +541,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
     }
 
     private static boolean hasAlloyingRecipe(ForgeBlockEntity entity, ServerLevel world) {
-        SimpleInventory inventory1 = new SimpleInventory(entity.size());
+        SimpleContainer inventory1 = new SimpleContainer(entity.size());
         List<ItemStack> inputs = new ArrayList<>();
         for (int i = 0; i < entity.size(); i++) {
             inventory1.setStack(i, entity.getStack(i));
@@ -617,7 +616,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
 
     private boolean hasFuel(ForgeBlockEntity entity) {
 
-        SimpleInventory inventory1 = new SimpleInventory(entity.size());
+        SimpleContainer inventory1 = new SimpleContainer(entity.size());
         for (int i = 0; i < entity.size(); i++) {
             inventory1.setStack(i, entity.getStack(i));
         }

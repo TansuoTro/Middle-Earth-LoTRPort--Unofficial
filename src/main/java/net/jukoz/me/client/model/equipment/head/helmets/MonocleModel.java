@@ -2,6 +2,13 @@ package net.jukoz.me.client.model.equipment.head.helmets;
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.PartNames;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class MonocleModel extends HelmetAddonModel {
 
@@ -9,27 +16,27 @@ public class MonocleModel extends HelmetAddonModel {
         super(root);
     }
 
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = new ModelData();
-        ModelPartData modelPartData = modelData.getRoot();
+    public static LayerDefinition getTexturedModelData() {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
 
-        ModelPartData head = modelPartData.addChild(PartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        head.addChild(PartNames.HAT, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition head = modelPartData.addChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        head.addChild(PartNames.HAT, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData addon_monocle = head.addChild("addon_monocle", ModelPartBuilder.create().uv(36, 31)
+        PartDefinition addon_monocle = head.addChild("addon_monocle", CubeListBuilder.create().uv(36, 31)
                 .cuboid(-3.25F, -4.5F, -6.75F, 2.0F, 2.0F, 1.0F,
-                        new Dilation(0.3F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+                        new CubeDeformation(0.3F)), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData monocle = head.addChild("monocle", ModelPartBuilder.create().uv(32, 23)
+        PartDefinition monocle = head.addChild("monocle", CubeListBuilder.create().uv(32, 23)
                 .cuboid(1.0F, -1.0F, -4.0F, 5.0F, 2.0F, 5.0F,
-                        new Dilation(0.0F)), ModelTransform.of(-5.0F, -3.0F, 0.0F, 0.0F, 0.5236F, 0.0F));
+                        new CubeDeformation(0.0F)), PartPose.of(-5.0F, -3.0F, 0.0F, 0.0F, 0.5236F, 0.0F));
 
-        modelPartData.addChild(PartNames.BODY, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.RIGHT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.BODY, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.RIGHT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.LEFT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.RIGHT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        return TexturedModelData.of(modelData, 64, 64);
+        modelPartData.addChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        return LayerDefinition.of(modelData, 64, 64);
     }
 }

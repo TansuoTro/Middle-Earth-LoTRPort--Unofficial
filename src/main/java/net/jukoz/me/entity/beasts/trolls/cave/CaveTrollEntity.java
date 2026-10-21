@@ -1,12 +1,12 @@
 package net.jukoz.me.entity.beasts.trolls.cave;
 
 import net.jukoz.me.entity.beasts.trolls.TrollEntity;
-import net.minecraft.entity.*;
-import net.minecraft.entity.passive.AbstractDonkeyEntity;
+import net.minecraft.world.entity.animal.horse.AbstractChestedHorse;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.EntityType;
 
 public class CaveTrollEntity extends TrollEntity {
-    public CaveTrollEntity(EntityType<? extends AbstractDonkeyEntity> entityType, Level world) {
+    public CaveTrollEntity(EntityType<? extends AbstractChestedHorse> entityType, Level world) {
         super(entityType, world);
     }
 

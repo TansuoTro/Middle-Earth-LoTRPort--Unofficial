@@ -3,6 +3,7 @@ package net.jukoz.me.resources.persistent_datas;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.Tag;
 
 public class PlayerData {
     private ResourceLocation faction;
@@ -33,17 +34,17 @@ public class PlayerData {
     public PlayerData() {}
 
     public PlayerData(CompoundTag nbtCompound) {
-        if(nbtCompound.contains("faction", net.minecraft.nbt.NbtElement.STRING_TYPE))
+        if(nbtCompound.contains("faction", net.minecraft.nbt.Tag.STRING_TYPE))
             faction = new ResourceLocation(nbtCompound.getString("faction"));
-        if(nbtCompound.contains("spawn", net.minecraft.nbt.NbtElement.STRING_TYPE))
+        if(nbtCompound.contains("spawn", net.minecraft.nbt.Tag.STRING_TYPE))
             spawn = new ResourceLocation(nbtCompound.getString("spawn"));
-        if(nbtCompound.contains("race", net.minecraft.nbt.NbtElement.STRING_TYPE))
+        if(nbtCompound.contains("race", net.minecraft.nbt.Tag.STRING_TYPE))
             race = new ResourceLocation(nbtCompound.getString("race"));
         int[] intArray = nbtCompound.getIntArray("origin_pos");
         if(intArray.length >= 3) {
             posOrigin = new BlockPos(intArray[0], intArray[1], intArray[2]);
         }
-        if(nbtCompound.contains("dimensionOrigin", net.minecraft.nbt.NbtElement.STRING_TYPE))
+        if(nbtCompound.contains("dimensionOrigin", net.minecraft.nbt.Tag.STRING_TYPE))
             dimensionOrigin = new ResourceLocation(nbtCompound.getString("dimensionOrigin"));
 
         delversFearCountInSeconds = nbtCompound.getInt("delversFearCountInSeconds");
@@ -80,7 +81,6 @@ public class PlayerData {
     public BlockPos getOriginPos(){
         return this.posOrigin;
     }
-
 
     public int getDelversFearCountInSeconds(){
         return this.delversFearCountInSeconds;

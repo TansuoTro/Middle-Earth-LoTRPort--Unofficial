@@ -2,7 +2,7 @@ package net.jukoz.me.mixin;
 
 import net.jukoz.me.compat.DyedColorComponent;
 import net.jukoz.me.item.MEComponents;
-import net.minecraft.item.DyeableItem;
+import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,11 +18,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * leather armour set would render white until dyed. An explicit NBT colour still wins,
  * so dyeing keeps working.
  */
-@Mixin(DyeableItem.class)
+@Mixin(DyeableLeatherItem.class)
 public interface DyeableItemMixin {
     @Inject(method = "getColor", at = @At("HEAD"), cancellable = true)
     private void me$defaultDyedColor(ItemStack stack, CallbackInfoReturnable<Integer> cir) {
-        if (stack.hasNbt() && stack.getNbt().getCompound(DyeableItem.DISPLAY_KEY).contains(DyeableItem.COLOR_KEY)) {
+        if (stack.hasNbt() && stack.getNbt().getCompound(DyeableLeatherItem.DISPLAY_KEY).contains(DyeableLeatherItem.COLOR_KEY)) {
             return;
         }
         DyedColorComponent dyed = MEComponents.get(stack, MEComponents.DYED_COLOR);

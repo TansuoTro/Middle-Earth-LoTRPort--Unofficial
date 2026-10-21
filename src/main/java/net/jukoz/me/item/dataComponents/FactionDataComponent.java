@@ -5,6 +5,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.resources.datas.factions.Faction;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 
 /**
  * Faction tag carried by items and NPC equipment.
@@ -34,13 +36,13 @@ public class FactionDataComponent implements net.jukoz.me.compat.TooltipAppender
     }
 
     @Override
-    public void appendTooltip(net.minecraft.world.item.ItemStack stack, net.minecraft.client.item.TooltipContext context,
+    public void appendTooltip(net.minecraft.world.item.ItemStack stack, net.minecraft.world.item.TooltipFlag context,
                               java.util.List<net.minecraft.network.chat.Component> tooltip) {
         appendFaction(tooltip, factionId, false);
     }
 
     @Override
-    public void appendTooltip(net.minecraft.world.item.ItemStack stack, net.minecraft.client.item.TooltipContext context,
+    public void appendTooltip(net.minecraft.world.item.ItemStack stack, net.minecraft.world.item.TooltipFlag context,
                               java.util.List<net.minecraft.network.chat.Component> tooltip, net.minecraft.world.level.Level world) {
         Faction faction = world == null ? null : world.getRegistryManager()
                 .getOptional(net.jukoz.me.registries.DynamicRegistriesME.FACTION)
@@ -56,9 +58,9 @@ public class FactionDataComponent implements net.jukoz.me.compat.TooltipAppender
 
     private static void appendFaction(java.util.List<net.minecraft.network.chat.Component> tooltip, ResourceLocation id, boolean sub) {
         tooltip.add(net.minecraft.network.chat.Component.translatable(sub ? "tooltip.me.sub_faction" : "tooltip.me.faction")
-                .formatted(sub ? net.minecraft.util.Formatting.GRAY : net.minecraft.util.Formatting.GOLD)
+                .formatted(sub ? net.minecraft.util.ChatFormatting.GRAY : net.minecraft.util.ChatFormatting.GOLD)
                 .append(net.minecraft.network.chat.Component.translatable(id.toTranslationKey("faction"))
-                        .formatted(net.minecraft.util.Formatting.WHITE)));
+                        .formatted(net.minecraft.util.ChatFormatting.WHITE)));
     }
 
     @Override

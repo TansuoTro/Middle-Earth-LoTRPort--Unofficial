@@ -9,8 +9,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.resources.datas.common.CharacterPatternTypes;
 import net.jukoz.me.resources.datas.texture_presets.CharacterTexturePattern;
-
 import java.util.Optional;
+import net.minecraft.core.HolderLookup;
 
 /**
  * Middle-earth mod npc texture patterns registry<br>
@@ -261,7 +261,7 @@ public class CharacterPatternsRegistryME {
         };
     }
 
-    public static Optional<Holder.Reference<CharacterTexturePattern>> get(RegistryWrapper.WrapperLookup registries, CharacterPatternTypes type, ResourceLocation id) {
+    public static Optional<Holder.Reference<CharacterTexturePattern>> get(HolderLookup.WrapperLookup registries, CharacterPatternTypes type, ResourceLocation id) {
         return registries.getWrapperOrThrow(getKey(type)).streamEntries().filter((pattern) ->
                 pattern.value().getPatternType() == type && pattern.matchesId(id)).findFirst();
     }

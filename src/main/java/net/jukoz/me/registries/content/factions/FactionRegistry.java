@@ -11,6 +11,7 @@ import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.registries.content.factions.pools.*;
 import net.jukoz.me.resources.datas.factions.Faction;
 import net.jukoz.me.resources.datas.factions.data.SpawnDataHandler;
+import net.minecraft.core.HolderGetter;
 
 public class FactionRegistry {
     private static final ResourceKey<Registry<Faction>> FACTION_KEY = DynamicRegistriesME.FACTION;
@@ -33,7 +34,7 @@ public class FactionRegistry {
     public final static ResourceKey<Faction> WILD_GOBLINS =  DynamicRegistriesME.of(FACTION_KEY, MiddleEarth.of("wild_goblins"));
 
     public static void bootstrap(BootstrapContext<Faction> context) {
-        RegistryEntryLookup<Faction> registryEntryLookup = context.getRegistryLookup(FACTION_KEY);
+        HolderGetter<Faction> registryEntryLookup = context.getRegistryLookup(FACTION_KEY);
 
         register(context, registryEntryLookup, GONDOR, GondorFactionPool.GONDOR);
         register(context, registryEntryLookup, ROHAN, RohanFactionPool.ROHAN);
@@ -53,7 +54,7 @@ public class FactionRegistry {
         register(context, registryEntryLookup, WILD_GOBLINS, WildGoblinsFactionPool.WILD_GOBLIN);
     }
 
-    private static void register(BootstrapContext<Faction> context, RegistryEntryLookup<Faction> registryEntryLookup, ResourceKey<Faction> registryKey, Faction element){
+    private static void register(BootstrapContext<Faction> context, HolderGetter<Faction> registryEntryLookup, ResourceKey<Faction> registryKey, Faction element){
         DynamicRegistriesME.register(context, registryEntryLookup, registryKey, element);
         // [LANG datagen]
         TranslationEntries.factionEntries.add(registryKey.getValue().getPath());

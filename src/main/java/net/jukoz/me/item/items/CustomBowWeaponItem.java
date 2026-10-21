@@ -2,16 +2,15 @@ package net.jukoz.me.item.items;
 
 import net.jukoz.me.MiddleEarth;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.world.item.Tier;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.List;
 
 public class CustomBowWeaponItem extends BowItem {
@@ -35,9 +34,8 @@ public class CustomBowWeaponItem extends BowItem {
         this.subFaction = subFaction;
     }
 
-
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag context) {
         tooltip.add(Component.of(""));
         if (Screen.hasShiftDown()) {
             if(this.faction != null){

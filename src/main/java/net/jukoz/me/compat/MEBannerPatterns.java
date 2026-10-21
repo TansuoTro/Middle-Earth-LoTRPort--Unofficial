@@ -1,15 +1,14 @@
 package net.jukoz.me.compat;
 
-import net.minecraft.block.entity.BannerBlockEntity;
+import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.DyeColor;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,7 @@ import java.util.List;
  * through {@link #get}/{@link #set} and the nested {@link Builder}.
  *
  * <p>R3: layers hold a {@link Holder} (1.20.1's {@code BannerPattern.byId} and
- * {@code TexturedRenderLayers.getBannerPatternTextureId} work on registry entries/keys).
+ * {@code Sheets.getBannerPatternTextureId} work on registry entries/keys).
  */
 public record MEBannerPatterns(List<Layer> layers) {
 
@@ -64,7 +63,7 @@ public record MEBannerPatterns(List<Layer> layers) {
         List<Layer> layers = new ArrayList<>();
         CompoundTag blockEntityTag = stack.getSubNbt("BlockEntityTag");
         if (blockEntityTag != null) {
-            NbtList patterns = blockEntityTag.getList(BannerBlockEntity.PATTERNS_KEY, NbtElement.COMPOUND_TYPE);
+            ListTag patterns = blockEntityTag.getList(BannerBlockEntity.PATTERNS_KEY, Tag.COMPOUND_TYPE);
             for (int i = 0; i < patterns.size(); i++) {
                 CompoundTag entry = patterns.getCompound(i);
                 Holder<BannerPattern> pattern = BannerPattern.byId(entry.getString(BannerBlockEntity.PATTERN_KEY));
@@ -83,7 +82,7 @@ public record MEBannerPatterns(List<Layer> layers) {
         if (patterns.layers().isEmpty()) {
             blockEntityTag.remove(BannerBlockEntity.PATTERNS_KEY);
         } else {
-            NbtList list = new NbtList();
+            ListTag list = new ListTag();
             for (Layer layer : patterns.layers()) {
                 CompoundTag entry = new CompoundTag();
                 entry.putString(BannerBlockEntity.PATTERN_KEY, layer.pattern().value().getId());

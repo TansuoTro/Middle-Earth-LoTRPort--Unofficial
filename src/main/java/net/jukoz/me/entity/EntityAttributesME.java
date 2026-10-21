@@ -1,18 +1,21 @@
 package net.jukoz.me.entity;
 
-import net.minecraft.entity.attribute.ClampedEntityAttribute;
-import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.world.entity.ai.attributes.RangedAttribute;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.player.Player;
 
 /**
  * Attributes the 1.21 tree relies on.
  *
  * <p>Most of them moved out of vanilla in the 1.20.5 attribute rework, where
- * {@code EntityAttributes.GENERIC_MAX_HEALTH} lost its {@code GENERIC_} prefix and a
+ * {@code Attributes.GENERIC_MAX_HEALTH} lost its {@code GENERIC_} prefix and a
  * batch of new attributes appeared. On 1.20.1 the renames are handled by the importer;
  * the ones that simply did not exist yet are registered here under the mod namespace so
  * the 1.21 data (race pools, npc type pools, weapon modifiers) still loads.
@@ -20,27 +23,27 @@ import net.jukoz.me.MiddleEarth;
  * Attribute compatibility mixins consume the values in movement, reach, damage and rendering.
  */
 public class EntityAttributesME {
-    public static final Holder<EntityAttribute> POWDERED_SNOW_IMMUNITY;
-    public static final Holder<EntityAttribute> DELVERS_FEAR_STRENGTH;
-    public static final Holder<EntityAttribute> CLIMBING_STRENGTH;
-    public static final Holder<EntityAttribute> DETECTION_RANGE;
-    public static final Holder<EntityAttribute> WIDTH_SCALE;
+    public static final Holder<Attribute> POWDERED_SNOW_IMMUNITY;
+    public static final Holder<Attribute> DELVERS_FEAR_STRENGTH;
+    public static final Holder<Attribute> CLIMBING_STRENGTH;
+    public static final Holder<Attribute> DETECTION_RANGE;
+    public static final Holder<Attribute> WIDTH_SCALE;
 
     // 1.20.5+ vanilla attributes, registered locally so the ported data still resolves.
-    public static final Holder<EntityAttribute> SCALE;
-    public static final Holder<EntityAttribute> ENTITY_INTERACTION_RANGE;
-    public static final Holder<EntityAttribute> BLOCK_INTERACTION_RANGE;
-    public static final Holder<EntityAttribute> SAFE_FALL_DISTANCE;
-    public static final Holder<EntityAttribute> SNEAKING_SPEED;
-    public static final Holder<EntityAttribute> MINING_EFFICIENCY;
-    public static final Holder<EntityAttribute> FALL_DAMAGE_MULTIPLIER;
-    public static final Holder<EntityAttribute> WATER_MOVEMENT_EFFICIENCY;
-    public static final Holder<EntityAttribute> MOVEMENT_EFFICIENCY;
-    public static final Holder<EntityAttribute> BURNING_TIME;
+    public static final Holder<Attribute> SCALE;
+    public static final Holder<Attribute> ENTITY_INTERACTION_RANGE;
+    public static final Holder<Attribute> BLOCK_INTERACTION_RANGE;
+    public static final Holder<Attribute> SAFE_FALL_DISTANCE;
+    public static final Holder<Attribute> SNEAKING_SPEED;
+    public static final Holder<Attribute> MINING_EFFICIENCY;
+    public static final Holder<Attribute> FALL_DAMAGE_MULTIPLIER;
+    public static final Holder<Attribute> WATER_MOVEMENT_EFFICIENCY;
+    public static final Holder<Attribute> MOVEMENT_EFFICIENCY;
+    public static final Holder<Attribute> BURNING_TIME;
 
-    private static Holder<EntityAttribute> register(String name, double defaultValue, double minValue, double maxValue, boolean tracked) {
+    private static Holder<Attribute> register(String name, double defaultValue, double minValue, double maxValue, boolean tracked) {
         ResourceLocation id = MiddleEarth.of(name);
-        EntityAttribute attribute = new ClampedEntityAttribute(id.toTranslationKey(), defaultValue, minValue, maxValue).setTracked(tracked);
+        Attribute attribute = new RangedAttribute(id.toTranslationKey(), defaultValue, minValue, maxValue).setTracked(tracked);
         return Registry.registerReference(Registries.ATTRIBUTE, id, attribute);
     }
 
@@ -51,9 +54,9 @@ public class EntityAttributesME {
                 addDefaults(net.minecraft.world.entity.player.Player.createPlayerAttributes()));
     }
 
-    public static net.minecraft.entity.attribute.DefaultAttributeContainer.Builder addDefaults(
-            net.minecraft.entity.attribute.DefaultAttributeContainer.Builder builder) {
-        for (Holder<EntityAttribute> attribute : java.util.List.of(POWDERED_SNOW_IMMUNITY,
+    public static net.minecraft.world.entity.ai.attributes.AttributeSupplier$Builder addDefaults(
+            net.minecraft.world.entity.ai.attributes.AttributeSupplier$Builder builder) {
+        for (Holder<Attribute> attribute : java.util.List.of(POWDERED_SNOW_IMMUNITY,
                 DELVERS_FEAR_STRENGTH, CLIMBING_STRENGTH, DETECTION_RANGE, WIDTH_SCALE, SCALE,
                 ENTITY_INTERACTION_RANGE, BLOCK_INTERACTION_RANGE, SAFE_FALL_DISTANCE, SNEAKING_SPEED,
                 MINING_EFFICIENCY, FALL_DAMAGE_MULTIPLIER, WATER_MOVEMENT_EFFICIENCY,
@@ -63,7 +66,7 @@ public class EntityAttributesME {
         return builder;
     }
 
-    public static double value(net.minecraft.world.entity.LivingEntity entity, Holder<EntityAttribute> attribute) {
+    public static double value(net.minecraft.world.entity.LivingEntity entity, Holder<Attribute> attribute) {
         var attributes = entity.getAttributes();
         return attributes != null && attributes.hasAttribute(attribute.value())
                 ? entity.getAttributeValue(attribute.value()) : attribute.value().getDefaultValue();

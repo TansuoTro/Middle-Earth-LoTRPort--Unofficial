@@ -7,9 +7,6 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
-
-
-
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.entity.player.Player;
@@ -32,10 +29,11 @@ import net.jukoz.me.resources.datas.races.RaceUtil;
 import net.jukoz.me.resources.persistent_datas.PlayerData;
 import net.jukoz.me.world.chunkgen.map.MiddleEarthHeightMap;
 import net.jukoz.me.world.dimension.ModDimensions;
-
 import java.util.Objects;
 import net.jukoz.me.compat.MEEnchants;
 import net.jukoz.me.compat.MEDirection;
+import com.mojang.math.Axis;
+import net.minecraft.nbt.NbtUtils;
 
 public class ModEvents {
     private static final String GOT_STARTER_ITEM = MiddleEarth.MOD_ID + ".received_starter_item";
@@ -75,7 +73,7 @@ public class ModEvents {
                     ItemStack drop = ItemStack.EMPTY;
                     if(killedEntity instanceof Player killedPlayer) {
                         drop = new ItemStack(Items.PLAYER_HEAD);
-                        net.minecraft.nbt.NbtHelper.writeGameProfile(drop.getOrCreateSubNbt("SkullOwner"), killedPlayer.getGameProfile());
+                        net.minecraft.nbt.NbtUtils.writeGameProfile(drop.getOrCreateSubNbt("SkullOwner"), killedPlayer.getGameProfile());
                     }
                     if(!drop.isEmpty()) {
                         killedEntity.dropStack(drop);

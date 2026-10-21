@@ -11,7 +11,6 @@ import net.jukoz.me.resources.datas.texture_presets.TexturePresetDataPool;
 import net.jukoz.me.resources.datas.common.EntityCategories;
 import net.jukoz.me.api.dtos.WeightedIdentifier;
 import net.jukoz.me.resources.datas.texture_presets.WeightedTexturePresetHolder;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,7 +23,6 @@ public class MordorTexturePresetsPool {
     public final static TexturePresetDataPool BLACK_NUMENOREAN;
     public final static TexturePresetDataPool ORC;
     public final static TexturePresetDataPool BLACK_URUK;
-
 
     public static List<TexturePresetsRegistry.RegisterableNpcTextureData> fetchAll() {
         return List.of(
@@ -98,7 +96,6 @@ public class MordorTexturePresetsPool {
                 TexturePreset.EMPTY_VALUE_KEY.withWeight(2),
                 WeightedIdentifier.fromKey(CharacterPatternsRegistryME.Hairs.Beard.SHORT)
             ));
-
 
         ORC_PRESET = new WeightedTexturePresetHolder()
             .withPatterns(CharacterPatternTypes.BODY, List.of(

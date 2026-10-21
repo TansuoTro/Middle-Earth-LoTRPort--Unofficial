@@ -2,33 +2,33 @@ package net.jukoz.me.item.items;
 
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.block.FarmlandBlock;
-
+import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUsageContext;
-import net.minecraft.util.UseAction;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.util.Arm;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.RaycastContext;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.jukoz.me.utils.BlockTagsME;
 import net.jukoz.me.utils.item.DamageableItemUtils;
+import net.minecraft.world.InteractionResultHolder;
 
 public class WateringCanItem extends BlockItem {
     private static final int MAX_WATER_LEVEL = 48;
@@ -45,7 +45,7 @@ public class WateringCanItem extends BlockItem {
     }
 
     @Override
-    public InteractionResult useOnBlock(ItemUsageContext context) {
+    public InteractionResult useOnBlock(UseOnContext context) {
         Player player = context.getPlayer();
         if (player == null) {
             return super.useOnBlock(context);
@@ -74,21 +74,21 @@ public class WateringCanItem extends BlockItem {
     }
 
     @Override
-    public net.minecraft.util.TypedActionResult<ItemStack> use(Level world, Player user, InteractionHand hand) {
+    public net.minecraft.world.InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
         ItemStack stack = user.getStackInHand(hand);
 
-        BlockHitResult blockHitResult = raycast(world, user, RaycastContext.FluidHandling.SOURCE_ONLY);
+        BlockHitResult blockHitResult = raycast(world, user, ClipContext.FluidHandling.SOURCE_ONLY);
         if (blockHitResult.getType() == HitResult.Type.BLOCK
                 && tryRefilling(world, user, stack, blockHitResult.getBlockPos())) {
-            return net.minecraft.util.TypedActionResult.success(stack);
+            return net.minecraft.util.InteractionResultHolder.success(stack);
         }
 
         if (!canWater(stack)) {
-            return net.minecraft.util.TypedActionResult.pass(stack);
+            return net.minecraft.util.InteractionResultHolder.pass(stack);
         }
 
         startWatering(world, user, hand);
-        return net.minecraft.util.TypedActionResult.consume(stack);
+        return net.minecraft.util.InteractionResultHolder.consume(stack);
     }
 
     @Override
@@ -118,8 +118,8 @@ public class WateringCanItem extends BlockItem {
     }
 
     @Override
-    public UseAction getUseAction(ItemStack stack) {
-        return UseAction.BOW;
+    public UseAnim getUseAction(ItemStack stack) {
+        return UseAnim.BOW;
     }
 
     @Override
@@ -145,7 +145,7 @@ public class WateringCanItem extends BlockItem {
     private void startWatering(Level world, Player user, InteractionHand hand) {
         user.setCurrentHand(hand);
         user.incrementStat(Stats.USED.getOrCreateStat(this));
-        world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 0.35F, 1.35F);
+        world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_BUCKET_EMPTY, SoundSource.PLAYERS, 0.35F, 1.35F);
     }
 
     private boolean tryRefilling(Level world, Player user, ItemStack stack, BlockPos pos) {
@@ -158,7 +158,7 @@ public class WateringCanItem extends BlockItem {
         }
 
         DamageableItemUtils.resetDamage(stack);
-        world.playSound(user, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_BUCKET_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+        world.playSound(user, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_BUCKET_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
         world.emitGameEvent(user, GameEvent.FLUID_PICKUP, pos);
         return true;
     }
@@ -172,7 +172,7 @@ public class WateringCanItem extends BlockItem {
             side = side.normalize();
         }
 
-        double handOffset = user.getMainArm() == Arm.RIGHT ? 0.2D : -0.2D;
+        double handOffset = user.getMainArm() == HumanoidArm.RIGHT ? 0.2D : -0.2D;
         if(user.getOffHandStack().getItem() == this && user.getMainHandStack().getItem() != this) handOffset *= -1;
         Vec3 origin = user.getEyePos()
                 .add(look.multiply(0.35D))
@@ -215,8 +215,8 @@ public class WateringCanItem extends BlockItem {
     }
 
     private void hydrateFarmland(ServerLevel world, BlockPos pos, BlockState state) {
-        if (state.contains(BlockStateProperties.MOISTURE) && state.isIn(BlockTagsME.FARMLANDS) && state.get(BlockStateProperties.MOISTURE) < FarmlandBlock.MAX_MOISTURE) {
-            world.setBlockState(pos, state.with(BlockStateProperties.MOISTURE, FarmlandBlock.MAX_MOISTURE), 2);
+        if (state.contains(BlockStateProperties.MOISTURE) && state.isIn(BlockTagsME.FARMLANDS) && state.get(BlockStateProperties.MOISTURE) < FarmBlock.MAX_MOISTURE) {
+            world.setBlockState(pos, state.with(BlockStateProperties.MOISTURE, FarmBlock.MAX_MOISTURE), 2);
         }
     }
 

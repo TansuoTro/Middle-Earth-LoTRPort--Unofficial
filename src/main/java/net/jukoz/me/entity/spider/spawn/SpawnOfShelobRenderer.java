@@ -1,17 +1,18 @@
 package net.jukoz.me.entity.spider.spawn;
+
 import net.jukoz.me.compat.client.render.MEAnimationStates;
 import net.jukoz.me.compat.client.render.MEMobEntityRenderer;
-
 import net.minecraft.client.renderer.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.model.EntityModelLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.entity.EntityModelLayersME;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 public class SpawnOfShelobRenderer extends MEMobEntityRenderer<SpawnOfShelobEntity, SpawnOfShelobRenderState, SpawnOfShelobModel> {
     private static final String PATH = "textures/entities/spiders/";
 
-    public SpawnOfShelobRenderer(EntityRendererFactory.Context context) {
+    public SpawnOfShelobRenderer(EntityRendererProvider.Context context) {
         this(context, 0.75F, EntityModelLayersME.SPAWN_OF_SHELOB);
     }
 
@@ -20,7 +21,7 @@ public class SpawnOfShelobRenderer extends MEMobEntityRenderer<SpawnOfShelobEnti
         return new SpawnOfShelobRenderState();
     }
 
-    protected SpawnOfShelobRenderer(EntityRendererFactory.Context ctx, float shadowRadius, EntityModelLayer layer) {
+    protected SpawnOfShelobRenderer(EntityRendererProvider.Context ctx, float shadowRadius, ModelLayerLocation layer) {
         super(ctx, new SpawnOfShelobModel(ctx.getPart(layer)), shadowRadius);
     }
 

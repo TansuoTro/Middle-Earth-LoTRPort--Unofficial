@@ -9,11 +9,11 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.spider.SpiderVariant;
+import net.minecraft.core.HolderSet;
 
 public class SpiderVariantRegistryHelper {
     private static final String TEXTURE_PATH = "entities/spiders/";
     private static final String ENTITY_NAME = "_shelobite_";
-
 
     public static SpiderVariant.SpiderAssetInfo createAssetInfos(String textureName){
         return new SpiderVariant.SpiderAssetInfo(
@@ -26,7 +26,7 @@ public class SpiderVariantRegistryHelper {
         return createSpawnConditions(registry.getRegistryLookup(Registries.BIOME).getOrThrow(biomeTag), priority);
     }
 
-    public static SpawnConditionSelectors createSpawnConditions(RegistryEntryList<Biome> requiredBiomes, int priority) {
+    public static SpawnConditionSelectors createSpawnConditions(HolderSet<Biome> requiredBiomes, int priority) {
         return SpawnConditionSelectors.createSingle(new BiomeSpawnCondition(requiredBiomes), priority);
     }
 }

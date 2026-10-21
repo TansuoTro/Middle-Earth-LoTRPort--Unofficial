@@ -6,7 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-
 import java.util.List;
 
 public class ModOreFeatureConfig implements FeatureConfiguration {

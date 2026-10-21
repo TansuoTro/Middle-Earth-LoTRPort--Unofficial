@@ -1,5 +1,6 @@
 package net.jukoz.me.item.utils;
 
+
 public enum WeaponTypesME {
 
     SWORD("sword", 4, -2.4f, 0.0F, false),

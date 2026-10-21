@@ -3,10 +3,10 @@ package net.jukoz.me.gui.onboarding.onboarding_faction;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.world.level.block.entity.BannerPattern;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.EntityModelLayers;
 import net.jukoz.me.compat.MEBannerPatterns;
@@ -14,9 +14,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Colors;
+import net.minecraft.util.CommonColors;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.utils.CycledSelectionButtonType;
@@ -27,10 +27,10 @@ import net.jukoz.me.gui.utils.widgets.SearchBarWidget;
 import net.jukoz.me.gui.utils.widgets.map.FactionSelectionMapWidget;
 import net.jukoz.me.gui.utils.widgets.text.TextBlockWidget;
 import net.jukoz.me.resources.datas.factions.data.BannerData;
-
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
+import net.minecraft.client.model.geom.ModelLayers;
 
 @OnlyIn(Dist.CLIENT)
 public class OnboardingFactionScreen extends Screen {
@@ -88,7 +88,7 @@ public class OnboardingFactionScreen extends Screen {
             this.texture = texture;
         }
 
-        public void draw(DrawContext context, int startX, int startY){
+        public void draw(GuiGraphics context, int startX, int startY){
             this.startX = startX;
             this.startY = startY;
             context.drawTexture(texture, startX, startY, uvX, uvY, width, height, 256, 256);
@@ -96,7 +96,6 @@ public class OnboardingFactionScreen extends Screen {
     }
 
     private static final Component TITLE = Component.translatable("screen." + MiddleEarth.MOD_ID + ".onboarding_faction_screen");
-
 
     // Public fields
     public OnboardingFactionScreenElements elements;
@@ -119,7 +118,7 @@ public class OnboardingFactionScreen extends Screen {
         super.init();
         elements = new OnboardingFactionScreenElements();
 
-        elements.bannerField = this.client.getEntityModelLoader().getModelPart(EntityModelLayers.BANNER).getChild("flag");
+        elements.bannerField = this.client.getEntityModelLoader().getModelPart(ModelLayers.BANNER).getChild("flag");
 
         elements.searchBarWidget = new SearchBarWidget(9, controller.getAllSearchBarResults(), x -> controller.updateScreenInformation(), CycledSelectionWidget.TOTAL_WIDTH);
         addDrawableChild(elements.searchBarWidget.getSearchBarToggleButton());
@@ -158,7 +157,7 @@ public class OnboardingFactionScreen extends Screen {
                 x -> this.controller.randomizeNpc()).build();
         addDrawableChild(elements.npcRandomizerButton);
 
-        // Map Widget
+        // Map LayoutElement
         elements.mapFocusButton = ButtonWidget.builder(Component.translatable("screen." + MiddleEarth.MOD_ID + ".button.focus_current"), this::mapFocusToggle).build(); // TODO
         net.jukoz.me.compat.client.gui.MEGui.setSize(elements.mapFocusButton, 10, 10);
         addDrawableChild(elements.mapFocusButton);
@@ -188,8 +187,7 @@ public class OnboardingFactionScreen extends Screen {
                 CycledSelectionButtonType.NORMAL);
         elements.spawnPointSelectionWidget.getButtons().forEach(this::addDrawableChild);
 
-
-        // Random spawn selection
+        // RandomSource spawn selection
         elements.fullRandomizerButton = ButtonWidget.builder(Component.translatable("screen." + MiddleEarth.MOD_ID + ".button.full_randomizer"),
                 x -> controller.randomizeAll()).build();
         addDrawableChild(elements.fullRandomizerButton);
@@ -198,7 +196,7 @@ public class OnboardingFactionScreen extends Screen {
                 x -> controller.confirmSelection()).build();
         addDrawableChild(elements.spawnConfirmButton);
 
-        elements.factionName = ((MutableComponent)Component.of("N/A")).formatted(Formatting.BOLD).formatted(Formatting.DARK_GRAY);
+        elements.factionName = ((MutableComponent)Component.of("N/A")).formatted(ChatFormatting.BOLD).formatted(ChatFormatting.DARK_GRAY);
         elements.subfactionName = Component.of("N/A");
         elements.raceList.setText(List.of(Component.of("N/A")));
         elements.descriptionTextBlock = new TextBlockWidget(0,0, elements.informationPanel.width - 9,textRenderer.fontHeight * 10);
@@ -210,15 +208,15 @@ public class OnboardingFactionScreen extends Screen {
 
     //region [GUI Render]
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         ModWidget.updateMouse(mouseX, mouseY);
 
         this.renderDisplays(context, mouseX, mouseY, delta);
     }
 
     @Override
-    public void renderBackground(DrawContext context) {
-        //DiffuseLighting.disableGuiDepthLighting();
+    public void renderBackground(GuiGraphics context) {
+        //Lighting.disableGuiDepthLighting();
         super.renderBackground(context);
 
         // Display center panel
@@ -237,8 +235,8 @@ public class OnboardingFactionScreen extends Screen {
         this.elements.mapPanel.draw(context, rightPanelStartX, rightPanelStartY);
     }
 
-    private void renderDisplays(DrawContext context, int mouseX, int mouseY, float delta) {
-        //DiffuseLighting.disableGuiDepthLighting();
+    private void renderDisplays(GuiGraphics context, int mouseX, int mouseY, float delta) {
+        //Lighting.disableGuiDepthLighting();
 
         int startX = elements.informationPanel.startX + 5;
         int startY = elements.informationPanel.startY + 5;
@@ -265,7 +263,7 @@ public class OnboardingFactionScreen extends Screen {
             boolean hasManyRaces = text.contains(",");
             Component raceTitle = Component.translatable((hasManyRaces)
                     ? "screen." + MiddleEarth.MOD_ID + ".information.races.many"
-                    : "screen." + MiddleEarth.MOD_ID + ".information.races").formatted(Formatting.UNDERLINE);
+                    : "screen." + MiddleEarth.MOD_ID + ".information.races").formatted(ChatFormatting.UNDERLINE);
             context.drawText(client.textRenderer, raceTitle, startX, startY, TEXT_COLOR, false);
             startY += textRenderer.fontHeight + 3;
 
@@ -277,7 +275,7 @@ public class OnboardingFactionScreen extends Screen {
 
         startY =  elements.informationPanel.startY + 90;
 
-        context.drawText(client.textRenderer, Component.translatable("screen." + MiddleEarth.MOD_ID + ".information.description").formatted(Formatting.UNDERLINE),
+        context.drawText(client.textRenderer, Component.translatable("screen." + MiddleEarth.MOD_ID + ".information.description").formatted(ChatFormatting.UNDERLINE),
                 startX,startY - textRenderer.fontHeight, TEXT_COLOR, false);
         startY += 3;
         elements.descriptionTextBlock.setStartX(startX);
@@ -344,7 +342,6 @@ public class OnboardingFactionScreen extends Screen {
 
         context.drawTexture(BUTTON_UI_IDENTIFIER, this.elements.fullRandomizerButton.getX(), this.elements.fullRandomizerButton.getY(), 103, this.elements.fullRandomizerButton.isFocused() || this.elements.fullRandomizerButton.isMouseOver(mouseX, mouseY) ? 129 : 111, this.elements.fullRandomizerButton.getWidth(), this.elements.fullRandomizerButton.getHeight(), 256, 256);
 
-
         startX = this.elements.mapPanel.startX + this.elements.mapPanel.width - this.elements.spawnConfirmButton.getWidth() - 4;
 
         this.elements.spawnConfirmButton.setPosition(startX, startY);
@@ -358,7 +355,7 @@ public class OnboardingFactionScreen extends Screen {
             Component delayText = Component.literal(String.valueOf(controller.getCurrentDelay()));
             context.drawText(textRenderer, delayText,
                     this.elements.spawnConfirmButton.getX() + (52 / 2) - (textRenderer.getWidth(delayText) / 2),
-                    this.elements.spawnConfirmButton.getY() + 5, Colors.RED, true);
+                    this.elements.spawnConfirmButton.getY() + 5, CommonColors.RED, true);
         }
 
         // Left panel
@@ -367,7 +364,7 @@ public class OnboardingFactionScreen extends Screen {
 
         int endY = (int) ((context.getScaledWindowHeight() / 2f) - (this.elements.informationPanel.height / 2f)) + this.elements.informationPanel.height;
 
-        // Search Bar Widget
+        // Search Bar LayoutElement
         startY += elements.searchBarWidget.drawSearchBarCentered(context, startX - (CycledSelectionWidget.TOTAL_WIDTH / 2), startY, textRenderer);
         elements.searchBarWidget.setEndY(elements.informationPanel.startY + elements.informationPanel.height);
 
@@ -394,11 +391,9 @@ public class OnboardingFactionScreen extends Screen {
 
         context.drawTexture(BUTTON_UI_IDENTIFIER, this.elements.npcRandomizerButton.getX(), this.elements.npcRandomizerButton.getY(), 103, this.elements.npcRandomizerButton.isFocused() || this.elements.npcRandomizerButton.isMouseOver(mouseX, mouseY) ? 92 : 74, this.elements.npcRandomizerButton.getWidth(), this.elements.npcRandomizerButton.getHeight(), 256, 256);
 
-
         this.elements.npcPreviewWidget.drawCenteredAnchoredBottom(context, startX, startY - 6);
     }
     //endregion
-
 
     //region [Button Events]
     private void mapFocusToggle(ButtonWidget buttonWidget) {
@@ -414,7 +409,7 @@ public class OnboardingFactionScreen extends Screen {
     }
 
     @Override
-    public void resize(MinecraftClient client, int width, int height) {
+    public void resize(Minecraft client, int width, int height) {
         super.resize(client, width, height);
         controller.screenResize();
     }

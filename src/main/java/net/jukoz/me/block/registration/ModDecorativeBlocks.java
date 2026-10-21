@@ -1,6 +1,6 @@
 package net.jukoz.me.block.registration;
 
-import net.minecraft.block.piston.PistonBehavior;
+import net.minecraft.world.level.material.PushReaction;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.*;
 import net.jukoz.me.block.special.artefact.arkenstone.ArkenstoneBlock;
@@ -41,19 +41,26 @@ import net.jukoz.me.block.special.torches.OrcSconceBlock;
 import net.jukoz.me.block.special.wood_pile.WoodPileBlock;
 import net.jukoz.me.datageneration.content.TranslationEntries;
 import net.jukoz.me.item.utils.ModItemGroups;
-import net.minecraft.block.*;
 import net.minecraft.world.level.block.NoteBlockInstrument;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
-import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.item.DyeColor;
 import net.jukoz.me.registries.RegistryAliasesME;
-
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChainBlock;
+import net.minecraft.world.level.block.ChiseledBookShelfBlock;
+import net.minecraft.world.level.block.FlowerPotBlock;
+import net.minecraft.world.level.block.HalfTransparentBlock;
+import net.minecraft.world.level.block.IronBarsBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.MapColor;
 
 public class ModDecorativeBlocks {
 
@@ -122,7 +129,7 @@ public class ModDecorativeBlocks {
     public static final Block ORC_STRUCTURE_MANAGER = registerBlock("orc_structure_manager",
             StructureManagerBlock::new, BlockBehaviour.Settings.copy(Blocks.DARK_OAK_PLANKS).nonOpaque());
     public static final Block STRUCTURE_NEST = registerBlock("structure_nest",
-            StructureNestBlock::new, BlockBehaviour.Settings.create().strength(-1.0F, 3600000.8F).noCollision().dropsNothing().nonOpaque().allowsSpawning(Blocks::never).noBlockBreakParticles().pistonBehavior(PistonBehavior.BLOCK));
+            StructureNestBlock::new, BlockBehaviour.Settings.create().strength(-1.0F, 3600000.8F).noCollision().dropsNothing().nonOpaque().allowsSpawning(Blocks::never).noBlockBreakParticles().pistonBehavior(PushReaction.BLOCK));
 
     public static final Block BRIGAND_TRIAL_SPAWNER = registerBlock("brigand_trial_spawner",
             net.jukoz.me.compat.structure.TrialSpawnerBlock::new, BlockBehaviour.Settings.copy(Blocks.SPAWNER));
@@ -134,47 +141,47 @@ public class ModDecorativeBlocks {
             net.jukoz.me.compat.structure.VaultBlock::new, BlockBehaviour.Settings.copy(Blocks.SPAWNER).nonOpaque());
 
     public static final Block SMALL_CRATE = registerBlock("small_crate",
-            CrateBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
+            CrateBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sounds(SoundType.WOOD).nonOpaque());
     public static final Block THIN_BARREL = registerBlock("thin_barrel",
-            ThinBarrelBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
+            ThinBarrelBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sounds(SoundType.WOOD).nonOpaque());
     public static final Block LARCH_COFFER = registerBlock("larch_coffer",
             LarchCofferBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.OAK_TAN)
-                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
+                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(SoundType.WOOD).nonOpaque());
     public static final Block PINE_COFFER = registerBlock("pine_coffer",
             PineCofferBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.OAK_TAN)
-                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
+                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(SoundType.WOOD).nonOpaque());
     public static final Block SPRUCE_COFFER = registerBlock("spruce_coffer",
             SpruceCofferBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.SPRUCE_BROWN)
-                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
+                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(SoundType.WOOD).nonOpaque());
     public static final Block FIR_COFFER = registerBlock("fir_coffer",
             FirCofferBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.OAK_TAN)
-                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
+                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(SoundType.WOOD).nonOpaque());
     public static final Block BEECH_COFFER = registerBlock("beech_coffer",
             BeechCofferBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.OAK_TAN)
-                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
+                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(SoundType.WOOD).nonOpaque());
     public static final Block CHESTNUT_COFFER = registerBlock("chestnut_coffer",
             ChestnutCofferBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.OAK_TAN)
-                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
+                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(SoundType.WOOD).nonOpaque());
     public static final Block OAK_COFFER = registerBlock("oak_coffer",
             OakCofferBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.OAK_TAN)
-                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
+                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(SoundType.WOOD).nonOpaque());
     public static final Block WILLOW_COFFER = registerBlock("willow_coffer",
             WillowCofferBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.OAK_TAN)
-                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(BlockSoundGroup.WOOD).nonOpaque());
+                    .instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0F).sounds(SoundType.WOOD).nonOpaque());
     public static final Block REINFORCED_CHEST = registerBlock("reinforced_chest",
-            ReinforcedChestBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(5.0f).sounds(BlockSoundGroup.WOOD).nonOpaque().requiresTool());
+            ReinforcedChestBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(5.0f).sounds(SoundType.WOOD).nonOpaque().requiresTool());
 
     public static final Block SACK = registerBlock("sack",
-            SackBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.TERRACOTTA_WHITE).sounds(BlockSoundGroup.WOOL).nonOpaque());
+            SackBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.TERRACOTTA_WHITE).sounds(SoundType.WOOL).nonOpaque());
 
     public static final Block WOOD_PILE = registerBlock("wood_pile",
             WoodPileBlock::new, BlockBehaviour.Settings.copy(Blocks.OAK_PLANKS).strength(1.0f).nonOpaque());
 
     public static final Block OLD_SKULL = registerBlockWithItem("old_skull",
-            OldSkullBlock::new, BlockBehaviour.Settings.copy(Blocks.SKELETON_SKULL).nonOpaque().sounds(BlockSoundGroup.BONE));
+            OldSkullBlock::new, BlockBehaviour.Settings.copy(Blocks.SKELETON_SKULL).nonOpaque().sounds(SoundType.BONE));
     public static final Block SKELETON = registerBlockWithItem("skeleton",
             SkeletonBlock::new, BlockBehaviour.Settings.create().mapColor(MapColor.PALE_YELLOW)
-                    .instrument(NoteBlockInstrument.XYLOPHONE).strength(0.5F).sounds(BlockSoundGroup.BONE));
+                    .instrument(NoteBlockInstrument.XYLOPHONE).strength(0.5F).sounds(SoundType.BONE));
 
     public static final Block CANDLESTICK = registerBlockWithItem("candlestick",
             CandleStickBlock::new, BlockBehaviour.Settings.copy(Blocks.CANDLE).luminance(createLightLevelFromLitBlockState(15)).nonOpaque());
@@ -198,7 +205,7 @@ public class ModDecorativeBlocks {
     public static final Block STONE_LECTERN = registerBlockWithItem("stone_lectern",
             StoneLecternBlock::new, BlockBehaviour.Settings.copy(Blocks.STONE).nonOpaque().requiresTool());
     public static final Block CHISELED_DOLOMITE_BOOKSHELF = registerBlockWithItem("chiseled_dolomite_bookshelf",
-            ChiseledBookshelfBlock::new, BlockBehaviour.Settings.copy(Blocks.CHISELED_BOOKSHELF).nonOpaque().requiresTool().sounds(BlockSoundGroup.STONE));
+            ChiseledBookShelfBlock::new, BlockBehaviour.Settings.copy(Blocks.CHISELED_BOOKSHELF).nonOpaque().requiresTool().sounds(SoundType.STONE));
 
     public static final Block BASALT_STATUE = registerBlock("basalt_statue",
             StatueBlock::new, BlockBehaviour.Settings.copy(Blocks.BASALT).nonOpaque().requiresTool());
@@ -228,7 +235,7 @@ public class ModDecorativeBlocks {
 
     public static final Block FIRE_OF_ORTHANC = registerBlock("fire_of_orthanc",
             FireOfOrthancBlock::new, BlockBehaviour.Settings.create().requiresTool().mapColor(MapColor.BLACK)
-                    .sounds(BlockSoundGroup.METAL).strength(6f).burnable().solidBlock(Blocks::never).nonOpaque());
+                    .sounds(SoundType.METAL).strength(6f).burnable().solidBlock(Blocks::never).nonOpaque());
     public static final Block TORCH_OF_ORTHANC = registerBlock("torch_of_orthanc",
             (settings) -> new TorchOfOrthancBlock(settings, ParticleTypes.FLAME), BlockBehaviour.Settings.copy(Blocks.TORCH).luminance(createLightLevelFromLitBlockState(15)).nonOpaque().requiresTool());
 
@@ -242,156 +249,156 @@ public class ModDecorativeBlocks {
             TapperBlock::new, BlockBehaviour.Settings.copy(Blocks.OAK_WOOD).breakInstantly().nonOpaque());
 
     public static final Block WOOD_FRAMED_WINDOW = registerBlockWithItem("wood_framed_window",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block WOOD_FRAMED_WINDOW_PANE = registerBlockWithItem("wood_framed_window_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
 
     public static final Block AGED_WOOD_WINDOW = registerBlockWithItem("aged_wood_window",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS).sounds(BlockSoundGroup.WOOD).burnable());
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS).sounds(SoundType.WOOD).burnable());
     public static final Block AGED_WOOD_WINDOW_PANE = registerBlockWithItem("aged_wood_window_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE).sounds(BlockSoundGroup.WOOD).burnable());
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE).sounds(SoundType.WOOD).burnable());
 
     public static final Block SIMPLE_OAK_WINDOW = registerBlockWithItem("simple_oak_window",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS).sounds(BlockSoundGroup.WOOD).burnable());
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS).sounds(SoundType.WOOD).burnable());
     public static final Block SIMPLE_OAK_WINDOW_PANE = registerBlockWithItem("simple_oak_window_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE).sounds(BlockSoundGroup.WOOD).burnable());
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE).sounds(SoundType.WOOD).burnable());
 
     public static final Block WATTLE_AND_BRICK_WINDOW = registerBlockWithItem("wattle_and_brick_window",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block WATTLE_AND_BRICK_WINDOW_PANE = registerBlockWithItem("wattle_and_brick_window_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
 
     public static final Block WATTLE_FRAMED_WINDOW = registerBlockWithItem("wattle_framed_window",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block WATTLE_FRAMED_WINDOW_PANE = registerBlockWithItem("wattle_framed_window_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
 
     public static final Block DARK_WATTLE_FRAMED_WINDOW = registerBlockWithItem("dark_wattle_framed_window",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block DARK_WATTLE_FRAMED_WINDOW_PANE = registerBlockWithItem("dark_wattle_framed_window_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
 
     public static final Block BLACK_WATTLE_FRAMED_WINDOW = registerBlockWithItem("black_wattle_framed_window",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block BLACK_WATTLE_FRAMED_WINDOW_PANE = registerBlockWithItem("black_wattle_framed_window_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
 
     public static final Block GREEN_WATTLE_FRAMED_WINDOW = registerBlockWithItem("green_wattle_framed_window",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block GREEN_WATTLE_FRAMED_WINDOW_PANE = registerBlockWithItem("green_wattle_framed_window_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
 
     public static final Block RED_WATTLE_FRAMED_WINDOW = registerBlockWithItem("red_wattle_framed_window",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block RED_WATTLE_FRAMED_WINDOW_PANE = registerBlockWithItem("red_wattle_framed_window_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
 
     public static final Block WHITE_WATTLE_FRAMED_WINDOW = registerBlockWithItem("white_wattle_framed_window",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block WHITE_WATTLE_FRAMED_WINDOW_PANE = registerBlockWithItem("white_wattle_framed_window_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
 
     public static final Block MUD_BRICK_ROUND_WINDOW = registerBlockWithItem("mud_brick_round_window",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block MUD_BRICK_ROUND_WINDOW_PANE = registerBlockWithItem("mud_brick_round_window_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
 
     public static final Block WHITE_DAUB_ROUND_WINDOW = registerBlockWithItem("white_daub_round_window",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block WHITE_DAUB_ROUND_WINDOW_PANE = registerBlockWithItem("white_daub_round_window_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
     public static final Block YELLOW_DAUB_ROUND_WINDOW = registerBlockWithItem("yellow_daub_round_window",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block YELLOW_DAUB_ROUND_WINDOW_PANE = registerBlockWithItem("yellow_daub_round_window_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
 
     public static final Block WHITE_DAUB_HOBBIT_WINDOW = registerBlockWithItem("white_daub_hobbit_window",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block WHITE_DAUB_HOBBIT_WINDOW_PANE = registerBlockWithItem("white_daub_hobbit_window_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
     public static final Block YELLOW_DAUB_HOBBIT_WINDOW = registerBlockWithItem("yellow_daub_hobbit_window",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block YELLOW_DAUB_HOBBIT_WINDOW_PANE = registerBlockWithItem("yellow_daub_hobbit_window_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
 
     public static final Block PLASTER_HOBBIT_WINDOW = registerBlockWithItem("plaster_hobbit_window",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block PLASTER_HOBBIT_WINDOW_PANE = registerBlockWithItem("plaster_hobbit_window_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
 
     public static final Block PLASTER_ROUND_WINDOW = registerBlockWithItem("plaster_round_window",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block PLASTER_ROUND_WINDOW_PANE = registerBlockWithItem("plaster_round_window_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
 
     public static final Block LEAD_GLASS = registerBlockWithItem("lead_glass",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block BLACK_STAINED_LEAD_GLASS = registerBlockWithItem("black_stained_lead_glass",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block BLUE_STAINED_LEAD_GLASS = registerBlockWithItem("blue_stained_lead_glass",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block BROWN_STAINED_LEAD_GLASS = registerBlockWithItem("brown_stained_lead_glass",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block CYAN_STAINED_LEAD_GLASS = registerBlockWithItem("cyan_stained_lead_glass",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block GRAY_STAINED_LEAD_GLASS = registerBlockWithItem("gray_stained_lead_glass",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block GREEN_STAINED_LEAD_GLASS = registerBlockWithItem("green_stained_lead_glass",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block LIGHT_BLUE_STAINED_LEAD_GLASS = registerBlockWithItem("light_blue_stained_lead_glass",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block LIGHT_GRAY_STAINED_LEAD_GLASS = registerBlockWithItem("light_gray_stained_lead_glass",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block LIME_STAINED_LEAD_GLASS = registerBlockWithItem("lime_stained_lead_glass",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block MAGENTA_STAINED_LEAD_GLASS = registerBlockWithItem("magenta_stained_lead_glass",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block ORANGE_STAINED_LEAD_GLASS = registerBlockWithItem("orange_stained_lead_glass",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block PINK_STAINED_LEAD_GLASS = registerBlockWithItem("pink_stained_lead_glass",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block PURPLE_STAINED_LEAD_GLASS = registerBlockWithItem("purple_stained_lead_glass",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block RED_STAINED_LEAD_GLASS = registerBlockWithItem("red_stained_lead_glass",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block WHITE_STAINED_LEAD_GLASS = registerBlockWithItem("white_stained_lead_glass",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block YELLOW_STAINED_LEAD_GLASS = registerBlockWithItem("yellow_stained_lead_glass",
-            TransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
+            HalfTransparentBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS));
     public static final Block LEAD_GLASS_PANE = registerBlockWithItem("lead_glass_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
     public static final Block BLACK_STAINED_LEAD_GLASS_PANE = registerBlockWithItem("black_stained_lead_glass_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
     public static final Block BLUE_STAINED_LEAD_GLASS_PANE = registerBlockWithItem("blue_stained_lead_glass_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
     public static final Block BROWN_STAINED_LEAD_GLASS_PANE = registerBlockWithItem("brown_stained_lead_glass_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
     public static final Block CYAN_STAINED_LEAD_GLASS_PANE = registerBlockWithItem("cyan_stained_lead_glass_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
     public static final Block GRAY_STAINED_LEAD_GLASS_PANE = registerBlockWithItem("gray_stained_lead_glass_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
     public static final Block GREEN_STAINED_LEAD_GLASS_PANE = registerBlockWithItem("green_stained_lead_glass_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
     public static final Block LIGHT_BLUE_STAINED_LEAD_GLASS_PANE = registerBlockWithItem("light_blue_stained_lead_glass_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
     public static final Block LIGHT_GRAY_STAINED_LEAD_GLASS_PANE = registerBlockWithItem("light_gray_stained_lead_glass_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
     public static final Block LIME_STAINED_LEAD_GLASS_PANE = registerBlockWithItem("lime_stained_lead_glass_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
     public static final Block MAGENTA_STAINED_LEAD_GLASS_PANE = registerBlockWithItem("magenta_stained_lead_glass_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
     public static final Block ORANGE_STAINED_LEAD_GLASS_PANE = registerBlockWithItem("orange_stained_lead_glass_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
     public static final Block PINK_STAINED_LEAD_GLASS_PANE = registerBlockWithItem("pink_stained_lead_glass_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
     public static final Block PURPLE_STAINED_LEAD_GLASS_PANE = registerBlockWithItem("purple_stained_lead_glass_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
     public static final Block RED_STAINED_LEAD_GLASS_PANE = registerBlockWithItem("red_stained_lead_glass_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
     public static final Block WHITE_STAINED_LEAD_GLASS_PANE = registerBlockWithItem("white_stained_lead_glass_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
     public static final Block YELLOW_STAINED_LEAD_GLASS_PANE = registerBlockWithItem("yellow_stained_lead_glass_pane",
-            PaneBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
+            IronBarsBlock::new, BlockBehaviour.Settings.copy(Blocks.GLASS_PANE));
 
     public static final Block BLUE_CUSHION = registerBlockWithItem("blue_cushion",
             CushionBlock::new, BlockBehaviour.Settings.copy(Blocks.OAK_SLAB).nonOpaque());
@@ -411,78 +418,78 @@ public class ModDecorativeBlocks {
             CushionBlock::new, BlockBehaviour.Settings.copy(Blocks.OAK_SLAB).nonOpaque());
 
     public static final Block SMALL_BLACK_CURTAIN = registerBlockWithItem("small_black_curtain",
-            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block SMALL_BLUE_CURTAIN = registerBlockWithItem("small_blue_curtain",
-            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block SMALL_BROWN_CURTAIN = registerBlockWithItem("small_brown_curtain",
-            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block SMALL_BURNT_CURTAIN = registerBlockWithItem("small_burnt_curtain",
-            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block SMALL_DARK_BLUE_CURTAIN = registerBlockWithItem("small_dark_blue_curtain",
-            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block SMALL_DARK_BROWN_CURTAIN = registerBlockWithItem("small_dark_brown_curtain",
-            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block SMALL_DARK_GREEN_CURTAIN = registerBlockWithItem("small_dark_green_curtain",
-            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block SMALL_DARK_RED_CURTAIN = registerBlockWithItem("small_dark_red_curtain",
-            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block SMALL_FANCY_BLUE_CURTAIN = registerBlockWithItem("small_fancy_blue_curtain",
-            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block SMALL_FANCY_GREEN_CURTAIN = registerBlockWithItem("small_fancy_green_curtain",
-            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block SMALL_FANCY_RED_CURTAIN = registerBlockWithItem("small_fancy_red_curtain",
-            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block SMALL_GRAY_CURTAIN = registerBlockWithItem("small_gray_curtain",
-            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block SMALL_GREEN_CURTAIN = registerBlockWithItem("small_green_curtain",
-            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block SMALL_PURPLE_CURTAIN = registerBlockWithItem("small_purple_curtain",
-            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block SMALL_RED_CURTAIN = registerBlockWithItem("small_red_curtain",
-            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block SMALL_ROTTEN_CURTAIN = registerBlockWithItem("small_rotten_curtain",
-            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block SMALL_WHITE_CURTAIN = registerBlockWithItem("small_white_curtain",
-            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block SMALL_YELLOW_CURTAIN = registerBlockWithItem("small_yellow_curtain",
-            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            SmallCurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
 
     public static final Block BLACK_CURTAIN = registerBlockWithItem("black_curtain",
-            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block BLUE_CURTAIN = registerBlockWithItem("blue_curtain",
-            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block BROWN_CURTAIN = registerBlockWithItem("brown_curtain",
-            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block BURNT_CURTAIN = registerBlockWithItem("burnt_curtain",
-            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block DARK_BLUE_CURTAIN = registerBlockWithItem("dark_blue_curtain",
-            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block DARK_BROWN_CURTAIN = registerBlockWithItem("dark_brown_curtain",
-            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block DARK_GREEN_CURTAIN = registerBlockWithItem("dark_green_curtain",
-            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block DARK_RED_CURTAIN = registerBlockWithItem("dark_red_curtain",
-            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block FANCY_BLUE_CURTAIN = registerBlockWithItem("fancy_blue_curtain",
-            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block FANCY_GREEN_CURTAIN = registerBlockWithItem("fancy_green_curtain",
-            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block FANCY_RED_CURTAIN = registerBlockWithItem("fancy_red_curtain",
-            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block GRAY_CURTAIN = registerBlockWithItem("gray_curtain",
-            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block GREEN_CURTAIN = registerBlockWithItem("green_curtain",
-            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block PURPLE_CURTAIN = registerBlockWithItem("purple_curtain",
-            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block RED_CURTAIN = registerBlockWithItem("red_curtain",
-            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block ROTTEN_CURTAIN = registerBlockWithItem("rotten_curtain",
-            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block WHITE_CURTAIN = registerBlockWithItem("white_curtain",
-            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block YELLOW_CURTAIN = registerBlockWithItem("yellow_curtain",
-            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            CurtainsBlock::new, BlockBehaviour.Settings.copy(Blocks.RED_CARPET).noCollision().nonOpaque().pistonBehavior(PushReaction.DESTROY));
 
     public static final Block PAPER_SHEET = registerBlockWithItem("paper_sheet",
             PaperSheetBlock::new, BlockBehaviour.Settings.copy(Blocks.SUGAR_CANE).nonOpaque());
@@ -503,89 +510,89 @@ public class ModDecorativeBlocks {
     public static final Block WATERING_CAN = registerBlock("watering_can",
             WateringCanBlock::new, BlockBehaviour.Settings.copy(Blocks.IRON_BLOCK).nonOpaque().requiresTool());
     public static final Block POTTED_ASPEN_SAPLING = registerBlock("potted_aspen_sapling",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.ASPEN_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.ASPEN_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_BEECH_SAPLING = registerBlock("potted_beech_sapling",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.BEECH_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.BEECH_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_CHESTNUT_SAPLING = registerBlock("potted_chestnut_sapling",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.CHESTNUT_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.CHESTNUT_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_HOLLY_SAPLING = registerBlock("potted_holly_sapling",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.HOLLY_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.HOLLY_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_FIR_SAPLING = registerBlock("potted_fir_sapling",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.FIR_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.FIR_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_LARCH_SAPLING = registerBlock("potted_larch_sapling",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.LARCH_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.LARCH_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_LEBETHRON_SAPLING = registerBlock("potted_lebethron_sapling",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.LEBETHRON_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.LEBETHRON_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_WHITE_LEBETHRON_SAPLING = registerBlock("potted_white_lebethron_sapling",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.WHITE_LEBETHRON_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.WHITE_LEBETHRON_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_MALLORN_SAPLING = registerBlock("potted_mallorn_sapling",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.MALLORN_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.MALLORN_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_MAPLE_SAPLING = registerBlock("potted_maple_sapling",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.MAPLE_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.MAPLE_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_SILVER_MAPLE_SAPLING = registerBlock("potted_silver_maple_sapling",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.SILVER_MAPLE_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.SILVER_MAPLE_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_MIRKWOOD_SAPLING = registerBlock("potted_mirkwood_sapling",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.MIRKWOOD_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.MIRKWOOD_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_PALM_SAPLING = registerBlock("potted_palm_sapling",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.PALM_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.PALM_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_WHITE_PALM_SAPLING = registerBlock("potted_white_palm_sapling",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.WHITE_PALM_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.WHITE_PALM_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_PINE_SAPLING = registerBlock("potted_pine_sapling",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.PINE_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.PINE_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_BLACK_PINE_SAPLING = registerBlock("potted_black_pine_sapling",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.BLACK_PINE_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.BLACK_PINE_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_WHITE_SPRUCE_SAPLING = registerBlock("potted_white_spruce_sapling",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.WHITE_SPRUCE_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.WHITE_SPRUCE_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_WILLOW_SAPLING = registerBlock("potted_willow_sapling",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.WILLOW_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.WILLOW_SAPLING, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
 
     public static final Block POTTED_GREEN_SHRUB = registerBlock("potted_green_shrub",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.GREEN_SHRUB, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.GREEN_SHRUB, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_ELANOR = registerBlock("potted_elanor",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.ELANOR, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.ELANOR, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_MALLOS = registerBlock("potted_mallos",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.MALLOS, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.MALLOS, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_NIPHREDIL = registerBlock("potted_niphredil",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.NIPHREDIL, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.NIPHREDIL, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_SIMBELMYNE = registerBlock("potted_simbelmyne",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.SIMBELMYNE, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.SIMBELMYNE, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_YELLOW_FLOWER = registerBlock("potted_yellow_flower",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.YELLOW_FLOWER, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.YELLOW_FLOWER, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_YELLOW_TROLLIUS = registerBlock("potted_yellow_trollius",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.YELLOW_TROLLIUS, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.YELLOW_TROLLIUS, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_TAN_SHRUB = registerBlock("potted_tan_shrub",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.TAN_SHRUB, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.TAN_SHRUB, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_BLUE_GENTIAN = registerBlock("potted_blue_gentian",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.BLUE_GENTIAN, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.BLUE_GENTIAN, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_GREEN_JEWEL_CORNFLOWER = registerBlock("potted_green_jewel_cornflower",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.GREEN_JEWEL_CORNFLOWER, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.GREEN_JEWEL_CORNFLOWER, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_NOBLEWHITE = registerBlock("potted_noblewhite",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.NOBLEWHITE, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.NOBLEWHITE, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_SCORCHED_SHRUB = registerBlock("potted_scorched_shrub",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.SCORCHED_SHRUB, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.SCORCHED_SHRUB, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_FROZEN_SHRUB = registerBlock("potted_frozen_shrub",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.FROZEN_SHRUB, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.FROZEN_SHRUB, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     
     public static final Block POTTED_CAVE_AMANITA = registerBlock("potted_cave_amanita",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.CAVE_AMANITA, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.CAVE_AMANITA, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_DEEP_FIRECAP = registerBlock("potted_deep_firecap",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.DEEP_FIRECAP, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.DEEP_FIRECAP, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_GHOSTSHROOM = registerBlock("potted_ghostshroom",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.GHOSTSHROOM, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.GHOSTSHROOM, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_MORSEL = registerBlock("potted_morsel",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.MORSEL, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.MORSEL, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_SKYFIRECAP = registerBlock("potted_sky_firecap",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.SKY_FIRECAP, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.SKY_FIRECAP, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_TRUMPET_SHROOM = registerBlock("potted_trumpet_shroom",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.TRUMPET_SHROOM, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.TRUMPET_SHROOM, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_TUBESHROOM = registerBlock("potted_tubeshroom",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.TUBESHRROM, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.TUBESHRROM, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_VIOLET_CAPS = registerBlock("potted_violet_caps",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.VIOLET_CAPS, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.VIOLET_CAPS, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_WHITE_MUSHROOM = registerBlock("potted_white_mushroom",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.WHITE_MUSHROOM, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.WHITE_MUSHROOM, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
     public static final Block POTTED_YELLOW_AMANITA = registerBlock("potted_yellow_amanita",
-            (settings) -> new FlowerPotBlock(ModNatureBlocks.YELLOW_AMANITA, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+            (settings) -> new FlowerPotBlock(ModNatureBlocks.YELLOW_AMANITA, settings),  BlockBehaviour.Settings.create().breakInstantly().nonOpaque().pistonBehavior(PushReaction.DESTROY));
 
     public static final Block BROWN_JUG = registerBlockWithItem("brown_jug",
             JugBlock::new, BlockBehaviour.Settings.copy(Blocks.DECORATED_POT).nonOpaque());
@@ -693,10 +700,10 @@ public class ModDecorativeBlocks {
             DwarvenGroundBookBlock::new, BlockBehaviour.Settings.create().breakInstantly().nonOpaque().noCollision());
 
     public static final Block TREATED_WOOD_LADDER = registerBlockWithItem("treated_wood_ladder",
-            ThickLadderBlock::new, BlockBehaviour.Settings.copy(Blocks.OAK_PLANKS).sounds(BlockSoundGroup.LADDER).burnable());
+            ThickLadderBlock::new, BlockBehaviour.Settings.copy(Blocks.OAK_PLANKS).sounds(SoundType.LADDER).burnable());
 
     public static final Block ROPE_LADDER = registerBlockWithItem("rope_ladder",
-            ThickLadderBlock::new, BlockBehaviour.Settings.copy(Blocks.WHITE_WOOL).sounds(BlockSoundGroup.WOOL).burnable());
+            ThickLadderBlock::new, BlockBehaviour.Settings.copy(Blocks.WHITE_WOOL).sounds(SoundType.WOOL).burnable());
 
     public static final Block TALL_BLACK_PINE_DOOR = registerBlock("tall_black_pine_door",
             LargeDoor3x1::new, BlockBehaviour.Settings.copy(Blocks.OAK_PLANKS));
@@ -770,7 +777,7 @@ public class ModDecorativeBlocks {
 
     public static final Block REINFORCED_SCAFFOLDING = registerBlock("reinforced_scaffolding",
             ReinforcedScaffoldingBlock::new, BlockBehaviour.Settings.copy(Blocks.SCAFFOLDING).mapColor(MapColor.SPRUCE_BROWN)
-                    .sounds(BlockSoundGroup.WOOD).allowsSpawning(Blocks::never).pistonBehavior(PistonBehavior.DESTROY).solidBlock(Blocks::never));
+                    .sounds(SoundType.WOOD).allowsSpawning(Blocks::never).pistonBehavior(PushReaction.DESTROY).solidBlock(Blocks::never));
 
     public static Block registerBlock(String name, Function<BlockBehaviour.Settings, Block> factory, BlockBehaviour.Settings settings) {
         Block block = (Block)factory.apply(settings);

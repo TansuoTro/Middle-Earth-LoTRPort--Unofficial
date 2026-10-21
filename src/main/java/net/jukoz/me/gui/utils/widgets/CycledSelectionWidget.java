@@ -1,15 +1,14 @@
 package net.jukoz.me.gui.utils.widgets;
 
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Colors;
+import net.minecraft.util.CommonColors;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.utils.CycledSelectionButtonType;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,25 +80,25 @@ public class CycledSelectionWidget extends ModWidget{
         this.text = text;
     }
 
-    public int drawAnchored(DrawContext context, int anchorX, int startY, boolean isLeftAnchor, TextRenderer textRenderer){
+    public int drawAnchored(GuiGraphics context, int anchorX, int startY, boolean isLeftAnchor, Font textRenderer){
         int startX = anchorX;
         if(!isLeftAnchor)
             startX -= TOTAL_WIDTH;
         return draw(context, startX, startY, this.text, textRenderer);
     }
-    public int drawAnchored(DrawContext context, int anchorX, int startY, boolean isLeftAnchor, MutableComponent text, TextRenderer textRenderer){
+    public int drawAnchored(GuiGraphics context, int anchorX, int startY, boolean isLeftAnchor, MutableComponent text, Font textRenderer){
         int startX = anchorX;
         if(!isLeftAnchor)
             startX -= TOTAL_WIDTH;
         return draw(context, startX, startY, text, textRenderer);
     }
 
-    public int drawCentered(DrawContext context, int centerX, int startY, MutableComponent text, TextRenderer textRenderer){
+    public int drawCentered(GuiGraphics context, int centerX, int startY, MutableComponent text, Font textRenderer){
         int startX = centerX - (TOTAL_WIDTH / 2);
         return draw(context, startX, startY, text, textRenderer);
     }
 
-    protected int draw(DrawContext context, int startX, int startY, MutableComponent text, TextRenderer textRenderer){
+    protected int draw(GuiGraphics context, int startX, int startY, MutableComponent text, Font textRenderer){
         if(!shouldDisplay){
             return 0;
         }
@@ -136,8 +135,7 @@ public class CycledSelectionWidget extends ModWidget{
         context.drawText(textRenderer, text,
                 x + (int)((PANEL_SIZE_X - textRenderer.getWidth(text)) / 2f),
                 startY + (int) ((PANEL_SIZE_Y / 2f) - (textRenderer.fontHeight / 2f)) + 1,
-                Colors.BLACK, false);
-
+                CommonColors.BLACK, false);
 
         x += PANEL_SIZE_X + MARGIN;
         // Left arrow

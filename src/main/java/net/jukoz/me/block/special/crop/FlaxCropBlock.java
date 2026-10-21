@@ -6,22 +6,22 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.item.ItemConvertible;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.state.property.IntProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class FlaxCropBlock extends CropBlock {
     public static final int MAX_AGE = 3;
-    public static final IntProperty AGE = BlockStateProperties.AGE_3;
+    public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
     public FlaxCropBlock(Settings settings) {
         super(settings);
     }
     @Override
-    protected ItemConvertible getSeedsItem() {
+    protected ItemLike getSeedsItem() {
         return ResourceItemsME.FLAX_SEEDS;
     }
 
     @Override
-    public IntProperty getAgeProperty() {
+    public IntegerProperty getAgeProperty() {
         return AGE;
     }
 

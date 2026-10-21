@@ -8,12 +8,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.TestableWorld;
+import net.minecraft.world.level.LevelSimulatedReader;
 import net.minecraft.world.level.levelgen.feature.TreeFeatureConfig;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -56,8 +55,8 @@ public class ArcTrunkPlacer extends TrunkPlacer {
     }
 
     @Override
-    public List<FoliagePlacer.TreeNode> generate(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random,
-                                                 int height, BlockPos startPos, TreeFeatureConfig config) {
+    public List<FoliagePlacer.TreeNode> generate(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random,
+                                                 int height, BlockPos startPos, TreeConfiguration config) {
         BlockPos blockPos = startPos.down();
         BlockPos.Mutable mutable = new BlockPos.Mutable();
 
@@ -68,8 +67,8 @@ public class ArcTrunkPlacer extends TrunkPlacer {
         return ImmutableList.copyOf(treeNodes);
     }
 
-    protected List<FoliagePlacer.TreeNode> createArcBranch(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable mutable,
-                                          TreeFeatureConfig config, BlockPos startPos, int height, double angle, float acceleration, float velocity) {
+    protected List<FoliagePlacer.TreeNode> createArcBranch(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable mutable,
+                                          TreeConfiguration config, BlockPos startPos, int height, double angle, float acceleration, float velocity) {
         if(height < 0) {
             height *= -1;
         }
@@ -89,8 +88,8 @@ public class ArcTrunkPlacer extends TrunkPlacer {
         return treeNodes;
     }
 
-    protected void setLog(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable tmpPos,
-                          TreeFeatureConfig config, BlockPos startPos, int dx, int dy, int dz) {
+    protected void setLog(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable tmpPos,
+                          TreeConfiguration config, BlockPos startPos, int dx, int dy, int dz) {
         tmpPos.set(startPos, dx, dy, dz);
         this.trySetState(world, replacer, random, tmpPos, config);
     }

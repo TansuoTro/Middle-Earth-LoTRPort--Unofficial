@@ -9,10 +9,10 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -24,8 +24,9 @@ import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.level.LevelView;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.Random;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.shapes.Shapes;
 
 public class MirkwoodSpiderEggBlock extends Block {
     private static final DirectionProperty FACING;
@@ -45,12 +46,12 @@ public class MirkwoodSpiderEggBlock extends Block {
                 .with(FACING, ctx.getHorizontalPlayerFacing());
     }
 
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
         BlockPos blockPos = pos.down();
         return world.getBlockState(blockPos).isSolidBlock(world, blockPos);
     }
 
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         return !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
@@ -69,10 +70,10 @@ public class MirkwoodSpiderEggBlock extends Block {
     }
 
     private void breakEgg(Level world, BlockPos pos, BlockState state) {
-        world.playSound((Player)null, pos, SoundEvents.ENTITY_TURTLE_EGG_BREAK, SoundCategory.BLOCKS, 0.7F, 0.9F + world.random.nextFloat() * 0.2F);
+        world.playSound((Player)null, pos, SoundEvents.ENTITY_TURTLE_EGG_BREAK, SoundSource.BLOCKS, 0.7F, 0.9F + world.random.nextFloat() * 0.2F);
         world.emitGameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Emitter.of(state));
         world.syncWorldEvent(2001, pos, Block.getRawIdFromState(state));
-        Random random = new Random();
+        RandomSource random = new RandomSource();
         int amountOfSpider = random.nextInt(1, 4);
         for(int i = 0; i < amountOfSpider; i++)
             SpawnSpider(pos, world);
@@ -88,7 +89,7 @@ public class MirkwoodSpiderEggBlock extends Block {
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return VoxelShapes.union(
+        return Shapes.union(
                 Block.createCuboidShape(5.0, 0.0, 5.0, 11.0, 7.0, 11.0));
     }
 
@@ -96,4 +97,3 @@ public class MirkwoodSpiderEggBlock extends Block {
         FACING = BlockStateProperties.HORIZONTAL_FACING;
     }
 }
-

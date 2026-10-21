@@ -3,7 +3,6 @@ package net.jukoz.me.registries.content.biomevents.pools;
 import net.jukoz.me.registries.content.npctypes.NpcRegistry;
 import net.jukoz.me.resources.datas.biome_events.BiomeEventData;
 import net.jukoz.me.resources.datas.biome_events.data.WildSpawnEventData;
-
 import java.util.List;
 
 public class GundabadBiomeEventPool {
@@ -20,7 +19,6 @@ public class GundabadBiomeEventPool {
             new WildSpawnEventData(NpcRegistry.GUNDABAD_VETERAN).withWeight(2).withSameNpcType(0, 256),
             new WildSpawnEventData(NpcRegistry.GUNDABAD_LEADER).withSameNpcType(0, 512)
         ));
-
 
         SCOUTS = new BiomeEventData(false, List.of(
             new WildSpawnEventData(NpcRegistry.GUNDABAD_SCOUT).withWeight(4).withSameNpcType(1, 256),

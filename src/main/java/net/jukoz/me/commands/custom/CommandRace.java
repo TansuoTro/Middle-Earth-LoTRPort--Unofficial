@@ -1,6 +1,6 @@
 package net.jukoz.me.commands.custom;
-import net.jukoz.me.compat.METext;
 
+import net.jukoz.me.compat.METext;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -15,16 +15,15 @@ import net.jukoz.me.resources.datas.races.RaceUtil;
 import net.jukoz.me.resources.persistent_datas.PlayerData;
 import net.jukoz.me.resources.persistent_datas.PlayerDataService;
 import net.jukoz.me.utils.ModColors;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.command.argument.IdentifierArgumentType;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
@@ -36,7 +35,7 @@ public class CommandRace {
     private static final String PLAYER = "player";
     private static final String RACE_ID = "race_id";
     private static final int RACE_COLOR = ModColors.WARNING.color;
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandRegistryAccess, Commands.RegistrationEnvironment registrationEnvironment) {
         // [GET]
         CommandUtils.simpleCommand(dispatcher, RACE_BASE_COMMAND, literal(GET)
             .executes(CommandRace::getRace), PLAYER, literal(GET)
@@ -46,13 +45,13 @@ public class CommandRace {
         dispatcher.register(literal(ModCommands.BASE_COMMAND)
                 .requires(source -> source.hasPermissionLevel(2)) // Require OP
                 .then(literal(RACE_BASE_COMMAND)
-                .then(argument(PLAYER, EntityArgumentType.player())
+                .then(argument(PLAYER, EntityArgument.player())
                     .then(literal(SET) // With Player Target
-                    .then(argument(RACE_ID, IdentifierArgumentType.identifier())
+                    .then(argument(RACE_ID, ResourceLocationArgument.identifier())
                     .suggests(new AllRaceSuggestionProvider())
                     .executes(CommandRace::setTargetRace))))
                 .then(literal(SET) // Without Target
-                .then(argument(RACE_ID, IdentifierArgumentType.identifier())
+                .then(argument(RACE_ID, ResourceLocationArgument.identifier())
                 .suggests(new AllRaceSuggestionProvider())
                 .executes(CommandRace::setRace)))));
 
@@ -60,14 +59,14 @@ public class CommandRace {
         dispatcher.register(literal(ModCommands.BASE_COMMAND)
                 .requires(source -> source.hasPermissionLevel(2)) // Require OP
                 .then(literal(RACE_BASE_COMMAND)
-                .then(argument(PLAYER, EntityArgumentType.player())
+                .then(argument(PLAYER, EntityArgument.player())
                     .then(literal(RESET) // With Player Target
                     .executes(CommandRace::resetTargetRace)))
                 .then(literal(RESET) // Without Target
                 .executes(CommandRace::resetRace))));
     }
 
-    private static int getRace(CommandContext<ServerCommandSource> context) {
+    private static int getRace(CommandContext<CommandSourceStack> context) {
         if(context.getSource().isExecutedByPlayer()) {
             ServerPlayer playerSource = context.getSource().getPlayer();
             if(playerSource != null){
@@ -85,9 +84,9 @@ public class CommandRace {
         return 0;
     }
 
-    private static int getTargetRace(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+    private static int getTargetRace(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         if(context.getSource().isExecutedByPlayer()) {
-            ServerPlayer targetPlayer = EntityArgumentType.getPlayer(context, PLAYER);
+            ServerPlayer targetPlayer = EntityArgument.getPlayer(context, PLAYER);
             ServerPlayer source = context.getSource().getPlayer();
             if(source != null){
                 PlayerData playerData = StateSaverAndLoader.getPlayerState(targetPlayer);
@@ -110,9 +109,9 @@ public class CommandRace {
         return 0;
     }
 
-    private static int setRace(CommandContext<ServerCommandSource> context) {
+    private static int setRace(CommandContext<CommandSourceStack> context) {
         if(context.getSource().isExecutedByPlayer()) {
-            ResourceLocation raceId = IdentifierArgumentType.getIdentifier(context, RACE_ID);
+            ResourceLocation raceId = ResourceLocationArgument.getIdentifier(context, RACE_ID);
             ServerPlayer source = context.getSource().getPlayer();
 
             if(raceId != null && source != null) {
@@ -134,9 +133,9 @@ public class CommandRace {
         return 0;
     }
 
-    private static int setTargetRace(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ResourceLocation raceId = IdentifierArgumentType.getIdentifier(context, RACE_ID);
-        ServerPlayer targetPlayer = EntityArgumentType.getPlayer(context, PLAYER);
+    private static int setTargetRace(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ResourceLocation raceId = ResourceLocationArgument.getIdentifier(context, RACE_ID);
+        ServerPlayer targetPlayer = EntityArgument.getPlayer(context, PLAYER);
         ServerPlayer source = context.getSource().getPlayer();
 
         if(raceId != null && targetPlayer != null) {
@@ -164,8 +163,7 @@ public class CommandRace {
         return 0;
     }
 
-
-    private static int resetRace(CommandContext<ServerCommandSource> context) {
+    private static int resetRace(CommandContext<CommandSourceStack> context) {
         if(context.getSource().isExecutedByPlayer()) {
             ServerPlayer source = context.getSource().getPlayer();
 
@@ -185,8 +183,8 @@ public class CommandRace {
         return 0;
     }
 
-    private static int resetTargetRace(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayer targetPlayer = EntityArgumentType.getPlayer(context, PLAYER);
+    private static int resetTargetRace(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer targetPlayer = EntityArgument.getPlayer(context, PLAYER);
         ServerPlayer source = context.getSource().getPlayer();
 
         PlayerData playerData = StateSaverAndLoader.getPlayerState(targetPlayer);

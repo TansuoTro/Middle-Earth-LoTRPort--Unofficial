@@ -3,13 +3,13 @@ package net.jukoz.me.entity.beasts.trolls.petrified;
 import net.jukoz.me.item.items.CustomSpawnEggItem;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.PickaxeItem;
+import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -23,7 +23,7 @@ public class PetrifiedTrollEntity extends Mob {
         this.setAiDisabled(true);
     }
 
-    public static DefaultAttributeContainer.Builder setAttributes() {
+    public static AttributeSupplier.Builder setAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.GENERIC_MAX_HEALTH, 30.0);
     }

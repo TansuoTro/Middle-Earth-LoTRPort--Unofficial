@@ -3,21 +3,20 @@ package net.jukoz.me.gui.onboarding;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Colors;
+import net.minecraft.util.CommonColors;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.onboarding.onboarding_faction.OnboardingFactionScreenController;
 import net.jukoz.me.network.packets.C2S.PacketTeleportToCurrentSpawn;
 import net.jukoz.me.resources.datas.attributes.AttributePool;
 import net.jukoz.me.resources.datas.attributes.AttributePoolElement;
-
 import java.awt.event.KeyEvent;
 import java.util.List;
 
@@ -32,7 +31,7 @@ private static final Component ONBOARDING_SELECTION_TITLE = Component.translatab
     private int mouseX;
     private int mouseY;
     private final boolean canResetCharacter;
-    private ClientPlayerEntity player;
+    private LocalPlayer player;
     float currentDelay;
 
     List<AttributePoolElement> playerAttributes;
@@ -70,10 +69,10 @@ private static final Component ONBOARDING_SELECTION_TITLE = Component.translatab
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         Entity cameraEntity = this.client.getCameraEntity();
         if (cameraEntity != null) {
-            if (cameraEntity instanceof ClientPlayerEntity clientPlayerEntity) {
+            if (cameraEntity instanceof LocalPlayer clientPlayerEntity) {
                 this.player = clientPlayerEntity;
                 this.mouseX = mouseX;
                 this.mouseY = mouseY;
@@ -95,7 +94,7 @@ private static final Component ONBOARDING_SELECTION_TITLE = Component.translatab
         super.tick();
     }
 
-    private void drawContent(DrawContext context) {
+    private void drawContent(GuiGraphics context) {
         int panelSizeX = 102;
         int panelSizeY = 18;
         int margin = 5;
@@ -110,7 +109,7 @@ private static final Component ONBOARDING_SELECTION_TITLE = Component.translatab
             context.drawText(textRenderer, continueText,
                     startX + (int)((panelSizeX - textRenderer.getWidth(continueText)) / 2f),
                     startY + (int) ((panelSizeY / 2f) - (textRenderer.fontHeight / 2f)) + 1,
-                    Colors.BLACK, false);
+                    CommonColors.BLACK, false);
 
             net.jukoz.me.compat.client.gui.MEGui.setBounds(continueAsCharacterButton, panelSizeX, panelSizeY, startX, startY);
             if(focusEnabled && continueAsCharacterButton.isFocused()){
@@ -121,7 +120,7 @@ private static final Component ONBOARDING_SELECTION_TITLE = Component.translatab
             Component delayText = Component.literal(String.valueOf((Math.round(this.currentDelay * 10f) /10f)));
             context.drawText(textRenderer, delayText,
                     startX + (panelSizeX / 2) - (textRenderer.getWidth(delayText) / 2),
-                    startY + 5, Colors.RED, true);
+                    startY + 5, CommonColors.RED, true);
         }
 
         if(canResetCharacter) {
@@ -134,7 +133,7 @@ private static final Component ONBOARDING_SELECTION_TITLE = Component.translatab
             context.drawText(textRenderer, resetText,
                     startX + (int) ((panelSizeX - textRenderer.getWidth(resetText)) / 2f),
                     startY + (int) ((panelSizeY / 2f) - (textRenderer.fontHeight / 2f)) + 1,
-                    Colors.BLACK, false);
+                    CommonColors.BLACK, false);
             net.jukoz.me.compat.client.gui.MEGui.setBounds(resetCharacterButton, panelSizeX, panelSizeY, startX, startY);
             if(focusEnabled && resetCharacterButton.isFocused()){
                 context.drawTexture(BUTTON_WIDGET, startX, startY, 0, 103, 0, panelSizeX, panelSizeY, 256, 256);

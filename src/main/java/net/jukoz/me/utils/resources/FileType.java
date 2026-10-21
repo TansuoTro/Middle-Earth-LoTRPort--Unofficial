@@ -1,5 +1,6 @@
 package net.jukoz.me.utils.resources;
 
+
 public enum FileType {
     Png ("png"),
     Jpg("jpg");

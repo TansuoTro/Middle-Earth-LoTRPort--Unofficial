@@ -4,7 +4,6 @@ import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.world.biomes.MEBiomeKeys;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
-
 import java.util.HashMap;
 import java.util.List;
 

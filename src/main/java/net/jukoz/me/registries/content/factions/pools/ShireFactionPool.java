@@ -16,7 +16,6 @@ import net.jukoz.me.resources.datas.factions.data.SpawnDataHandler;
 import net.jukoz.me.resources.datas.common.NpcRank;
 import net.jukoz.me.registries.content.npctypes.pools.ShireNpcTypePool;
 import org.joml.Vector2d;
-
 import java.util.HashMap;
 import java.util.List;
 

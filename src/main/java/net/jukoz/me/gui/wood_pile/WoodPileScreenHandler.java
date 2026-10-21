@@ -2,21 +2,20 @@ package net.jukoz.me.gui.wood_pile;
 
 import net.jukoz.me.gui.ModScreenHandlers;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.screen.ScreenHandler;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 
-public class WoodPileScreenHandler extends ScreenHandler {
+public class WoodPileScreenHandler extends AbstractContainerMenu {
 
     private final Inventory inventory;
 
-    public WoodPileScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(9));
+    public WoodPileScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(9));
     }
-    public WoodPileScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory) {
+    public WoodPileScreenHandler(int syncId, Inventory playerInventory, Inventory inventory) {
         super(ModScreenHandlers.WOOD_PILE_SCREEN_HANDLER, syncId);
         checkSize(inventory, 9);
         this.inventory = inventory;
@@ -71,7 +70,7 @@ public class WoodPileScreenHandler extends ScreenHandler {
 
     }
 
-    private void addPlayerInventory(PlayerInventory playerInventory) {
+    private void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
@@ -79,7 +78,7 @@ public class WoodPileScreenHandler extends ScreenHandler {
         }
     }
 
-    private void addPlayerHotbar(PlayerInventory playerInventory) {
+    private void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
         }

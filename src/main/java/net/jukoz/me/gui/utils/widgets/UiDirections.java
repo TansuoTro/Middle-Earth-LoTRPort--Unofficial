@@ -1,5 +1,6 @@
 package net.jukoz.me.gui.utils.widgets;
 
+
 public enum UiDirections {
     NONE,
     NORTH,

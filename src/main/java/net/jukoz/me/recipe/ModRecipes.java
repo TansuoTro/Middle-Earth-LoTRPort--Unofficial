@@ -3,7 +3,7 @@ package net.jukoz.me.recipe;
 import net.jukoz.me.MiddleEarth;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.recipe.SmithingRecipe;
+import net.minecraft.world.item.crafting.SmithingRecipe;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;

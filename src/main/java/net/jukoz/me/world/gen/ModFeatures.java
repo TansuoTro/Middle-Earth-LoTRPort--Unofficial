@@ -18,14 +18,18 @@ import net.jukoz.me.world.features.pillar.PillarFeatureConfig;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.gen.feature.*;
 import net.jukoz.me.world.features.platedfood.PlatedFoodFeature;
 import net.jukoz.me.world.features.platedfood.PlatedFoodFeatureConfig;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.DeltaFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 
 public class ModFeatures {
-    public static Feature<DeltaFeatureConfig> DELTA_FEATURE = register("delta_feature", new ModDeltaFeatures(DeltaFeatureConfig.CODEC));
+    public static Feature<DeltaFeatureConfiguration> DELTA_FEATURE = register("delta_feature", new ModDeltaFeatures(DeltaFeatureConfiguration.CODEC));
 
-    public static Feature<OreFeatureConfig> SURFACE_ORE = register("surface_ore", new SurfaceOreFeature(OreFeatureConfig.CODEC));
+    public static Feature<OreConfiguration> SURFACE_ORE = register("surface_ore", new SurfaceOreFeature(OreConfiguration.CODEC));
     public static Feature<ClusterFeatureConfig> CLUSTER = register("cluster", new ClusterFeature(ClusterFeatureConfig.CODEC));
     public static Feature<SmallPointedStoneFeatureConfig> SMALL_POINTED_STONE = register("small_pointed_stone", new SmallPointedStoneFeature(SmallPointedStoneFeatureConfig.CODEC));
     public static Feature<PillarFeatureConfig> PILLAR = register("pillar", new PillarFeature(PillarFeatureConfig.CODEC));
@@ -36,14 +40,14 @@ public class ModFeatures {
     public static Feature<ModOreFeatureConfig> ORE = register("ore", new ModOreFeature(ModOreFeatureConfig.CODEC));
     public static Feature<ChainFeatureConfig> CHAIN = register("chain", new ChainFeature(ChainFeatureConfig.CODEC));
     public static Feature<PlatedFoodFeatureConfig> PLATED_FOOD = register("plated_food", new PlatedFoodFeature(PlatedFoodFeatureConfig.CODEC));
-    public static final Feature<DefaultFeatureConfig> MIRKWOOD_VINE = register("mirkwood_vine", new MirkwoodVinesFeature(DefaultFeatureConfig.CODEC));
-    public static final Feature<DefaultFeatureConfig> WILLOW_VINE = register("willow_vine", new WillowVinesFeature(DefaultFeatureConfig.CODEC));
+    public static final Feature<NoneFeatureConfiguration> MIRKWOOD_VINE = register("mirkwood_vine", new MirkwoodVinesFeature(NoneFeatureConfiguration.CODEC));
+    public static final Feature<NoneFeatureConfiguration> WILLOW_VINE = register("willow_vine", new WillowVinesFeature(NoneFeatureConfiguration.CODEC));
 
     public static void init() {
         LoggerUtil.getInstance().logInfoMsg("Registering new features");
     }
 
-    private static <C extends FeatureConfig, F extends Feature<C>> F register(String name, F feature) {
+    private static <C extends FeatureConfiguration, F extends Feature<C>> F register(String name, F feature) {
         return (F) Registry.register(Registries.FEATURE, new ResourceLocation(MiddleEarth.MOD_ID, name), feature);
     }
 }

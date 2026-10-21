@@ -4,9 +4,8 @@ import net.jukoz.me.MiddleEarth;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.block.ExperienceDroppingBlock;
-import net.minecraft.util.math.intprovider.UniformIntProvider;
-
+import net.minecraft.world.level.block.DropExperienceBlock;
+import net.minecraft.util.valueproviders.UniformInt;
 import java.util.Arrays;
 import java.util.List;
 
@@ -105,7 +104,7 @@ public class OreRockSets {
 
         if(ores.contains(ORES.COAL_ORE)){
             coal_ore = ModNatureBlocks.registerBlock(
-                    rockName + "coal_ore", (settings) -> new ExperienceDroppingBlock(settings, UniformIntProvider.create(0, 2)),
+                    rockName + "coal_ore", (settings) -> new DropExperienceBlock(settings, UniformInt.create(0, 2)),
                     BlockBehaviour.Settings.copy(Blocks.COAL_ORE).strength(STONE_STRENGTH * strength_mult, 3*strength_mult).requiresTool(), true);
         }
 

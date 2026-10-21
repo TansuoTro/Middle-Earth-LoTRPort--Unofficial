@@ -1,14 +1,13 @@
 package net.jukoz.me.utils;
 
 import net.minecraft.world.entity.Entity;
-import net.minecraft.util.Pair;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.util.math.Box;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.RaycastContext;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -36,7 +35,7 @@ public class ModCollisionUtils {
      */
     public static boolean checkBlockFanCollision(
             Level world,
-            Box box,
+            AABB box,
             Vec3 velocity,
             Entity contextEntity,
             Consumer<HitResult> onCollision) {
@@ -46,20 +45,20 @@ public class ModCollisionUtils {
         }
 
         // Generate rays for all 6 faces of the bounding box
-        List<Pair<Vec3, Vec3>> rays = getFanRaysFromBoxFaces(box, velocity);
+        List<Tuple<Vec3, Vec3>> rays = getFanRaysFromBoxFaces(box, velocity);
 
         // Check each ray for collisions
-        for (Pair<Vec3, Vec3> ray : rays) {
+        for (Tuple<Vec3, Vec3> ray : rays) {
             Vec3 origin = ray.getLeft();
             Vec3 dir = ray.getRight();
             Vec3 end = origin.add(dir.multiply(DEFAULT_RAY_LENGTH));
 
             // Perform the raycast to check for a collision
-            HitResult hit = world.raycast(new RaycastContext(origin,
+            HitResult hit = world.raycast(new ClipContext(origin,
                     end,
-                    RaycastContext.ShapeType.OUTLINE,
+                    ClipContext.ShapeType.OUTLINE,
                     // We use OUTLINE shape for detecting blocks
-                    RaycastContext.FluidHandling.NONE,
+                    ClipContext.FluidHandling.NONE,
                     // No fluid handling
                     contextEntity));
 
@@ -80,8 +79,8 @@ public class ModCollisionUtils {
      * @param velocity the velocity of the entity/projectile
      * @return a list of rays to check for collisions
      */
-    public static List<Pair<Vec3, Vec3>> getFanRaysFromBoxFaces(Box box, Vec3 velocity) {
-        List<Pair<Vec3, Vec3>> rays = new ArrayList<>();
+    public static List<Tuple<Vec3, Vec3>> getFanRaysFromBoxFaces(AABB box, Vec3 velocity) {
+        List<Tuple<Vec3, Vec3>> rays = new ArrayList<>();
 
         // Loop through all 6 directions (faces)
         for (Direction faceDir : Direction.values()) {
@@ -99,8 +98,8 @@ public class ModCollisionUtils {
      * @param velocity the velocity of the entity/projectile
      * @return a list of rays originating from the specified face
      */
-    private static List<Pair<Vec3, Vec3>> getFaceRays(
-            Box box,
+    private static List<Tuple<Vec3, Vec3>> getFaceRays(
+            AABB box,
             Direction faceDir,
             Vec3 velocity) {
         Vec3 normal = Vec3.of(faceDir.getVector()).normalize();
@@ -111,7 +110,7 @@ public class ModCollisionUtils {
         // Choose the corner points and center on the face
         List<Vec3> facePoints = getFacePoints(faceDir, minX, minY, minZ, maxX, maxY, maxZ, center);
 
-        List<Pair<Vec3, Vec3>> rays = new ArrayList<>();
+        List<Tuple<Vec3, Vec3>> rays = new ArrayList<>();
 
         // Generate rays by applying a slight outward offset and angle bias
         for (Vec3 point : facePoints) {
@@ -119,7 +118,7 @@ public class ModCollisionUtils {
             Vec3 diagonalBias = point.subtract(center).normalize().multiply(ANGLE_SPREAD);  // Apply angle bias
             Vec3 direction = velocity.normalize().add(diagonalBias).normalize();  // Final ray direction
 
-            rays.add(new Pair<>(origin, direction));  // Add the ray to the list
+            rays.add(new Tuple<>(origin, direction));  // Add the ray to the list
         }
 
         return rays;

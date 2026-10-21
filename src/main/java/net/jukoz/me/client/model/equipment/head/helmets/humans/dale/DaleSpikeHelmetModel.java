@@ -3,6 +3,13 @@ package net.jukoz.me.client.model.equipment.head.helmets.humans.dale;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.PartNames;
 import net.jukoz.me.client.model.equipment.head.helmets.HelmetAddonModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class DaleSpikeHelmetModel extends HelmetAddonModel {
 
@@ -10,31 +17,31 @@ public class DaleSpikeHelmetModel extends HelmetAddonModel {
         super(root);
     }
 
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = getModelData();
-        return TexturedModelData.of(modelData, 64, 64);
+    public static LayerDefinition getTexturedModelData() {
+        MeshDefinition modelData = getModelData();
+        return LayerDefinition.of(modelData, 64, 64);
     }
 
-    public static ModelData getModelData() {
-        ModelData modelData = new ModelData();
-        ModelPartData modelPartData = modelData.getRoot();
+    public static MeshDefinition getModelData() {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
 
-        ModelPartData head = modelPartData.addChild(PartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        head.addChild(PartNames.HAT, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition head = modelPartData.addChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        head.addChild(PartNames.HAT, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData addon = head.addChild("addon", ModelPartBuilder.create()
-                .uv(37, 0).cuboid(-2.5F, -11.75F, -3.0F, 5.0F, 3.0F, 6.0F, new Dilation(0.0F)),
-                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        addon.addChild("tall_spike", ModelPartBuilder.create()
-                .uv(6, 0).cuboid(-0.5F, -3.75F, -0.5F, 1.0F, 8.0F, 1.0F, new Dilation(0.0F)),
-                ModelTransform.of(0.0F, -12.5F, 0.0F, 0.0F, -0.7854F, 0.0F));
+        PartDefinition addon = head.addChild("addon", CubeListBuilder.create()
+                .uv(37, 0).cuboid(-2.5F, -11.75F, -3.0F, 5.0F, 3.0F, 6.0F, new CubeDeformation(0.0F)),
+                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        addon.addChild("tall_spike", CubeListBuilder.create()
+                .uv(6, 0).cuboid(-0.5F, -3.75F, -0.5F, 1.0F, 8.0F, 1.0F, new CubeDeformation(0.0F)),
+                PartPose.of(0.0F, -12.5F, 0.0F, 0.0F, -0.7854F, 0.0F));
 
-        modelPartData.addChild(PartNames.BODY, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.RIGHT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.BODY, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.RIGHT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.LEFT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.RIGHT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
         return modelData;
     }

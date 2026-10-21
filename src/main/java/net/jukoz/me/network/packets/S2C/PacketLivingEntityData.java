@@ -2,7 +2,7 @@ package net.jukoz.me.network.packets.S2C;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.nbt.CompoundTag;
@@ -16,17 +16,15 @@ public class PacketLivingEntityData extends ServerToClientPacket<PacketLivingEnt
     public static final PacketType<PacketLivingEntityData> TYPE = PacketType.create(ID, PacketLivingEntityData::new);
 
     private final int entityId;
-    private final StatusEffectInstance statusEffectInstance;
+    private final MobEffectInstance statusEffectInstance;
 
-    public PacketLivingEntityData(int entityId, StatusEffectInstance statusEffectInstance) {
+    public PacketLivingEntityData(int entityId, MobEffectInstance statusEffectInstance) {
         this.entityId = entityId;
         this.statusEffectInstance = statusEffectInstance;
     }
 
-
-
     public PacketLivingEntityData(FriendlyByteBuf buf) {
-        this(buf.readInt(), StatusEffectInstance.fromNbt(buf.readNbt()));
+        this(buf.readInt(), MobEffectInstance.fromNbt(buf.readNbt()));
     }
 
     @Override

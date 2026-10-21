@@ -1,24 +1,26 @@
 package net.jukoz.me.recipe.inscription;
-import net.jukoz.me.compat.NbtCompat;
 
+import net.jukoz.me.compat.NbtCompat;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.recipe.*;
 import net.jukoz.me.compat.SingleStackRecipeInput;
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.JsonHelper;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
-
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 
 public class InscriptionRecipe implements Recipe<SingleStackRecipeInput> {
     public final ResourceLocation id;
@@ -47,7 +49,7 @@ public class InscriptionRecipe implements Recipe<SingleStackRecipeInput> {
     }
 
     @Override
-    public ItemStack craft(SingleStackRecipeInput input, DynamicRegistryManager registries) {
+    public ItemStack craft(SingleStackRecipeInput input, RegistryAccess registries) {
         ItemStack result = input.getStack(0).copy();
         int currentLevel = EnchantmentHelper.getLevel(this.enchant.value(), result);
         if(currentLevel == this.level - 1) {
@@ -62,7 +64,7 @@ public class InscriptionRecipe implements Recipe<SingleStackRecipeInput> {
     }
 
     @Override
-    public ItemStack getOutput(DynamicRegistryManager registryManager) {
+    public ItemStack getOutput(RegistryAccess registryManager) {
         return ItemStack.EMPTY;
     }
 
@@ -98,16 +100,16 @@ public class InscriptionRecipe implements Recipe<SingleStackRecipeInput> {
 
         @Override
         public InscriptionRecipe read(ResourceLocation id, JsonObject json) {
-            ResourceLocation enchantmentId = new ResourceLocation(JsonHelper.getString(json, "enchantment"));
+            ResourceLocation enchantmentId = new ResourceLocation(GsonHelper.getString(json, "enchantment"));
             Holder<Enchantment> enchant = Holder.of(Registries.ENCHANTMENT.get(enchantmentId));
-            int level = JsonHelper.getInt(json, "level");
-            JsonArray words = JsonHelper.getArray(json, "words");
+            int level = GsonHelper.getInt(json, "level");
+            JsonArray words = GsonHelper.getArray(json, "words");
             List<String> inputWords = new ArrayList<>(words.size());
             for (int i = 0; i < words.size(); i++) {
                 inputWords.add(words.get(i).getAsString());
             }
-            Ingredient chisel = Ingredient.fromJson(JsonHelper.getElement(json, "chisel"), true);
-            int levelCost = JsonHelper.getInt(json, "level_cost");
+            Ingredient chisel = Ingredient.fromJson(GsonHelper.getElement(json, "chisel"), true);
+            int levelCost = GsonHelper.getInt(json, "level_cost");
 
             return new InscriptionRecipe(id, enchant, level, inputWords, chisel, levelCost);
         }

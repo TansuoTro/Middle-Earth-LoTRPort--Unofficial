@@ -27,8 +27,6 @@ public class PacketStructureManagerUpdateBlockEntityRequest extends ClientToServ
         this.isActive = isActive;
     }
 
-
-
     public PacketStructureManagerUpdateBlockEntityRequest(FriendlyByteBuf buf) {
         this(buf.readBlockPos(), buf.readIdentifier(), buf.readBoolean(), buf.readBoolean());
     }

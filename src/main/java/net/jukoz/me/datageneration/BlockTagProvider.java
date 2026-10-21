@@ -9,21 +9,20 @@ import net.jukoz.me.datageneration.content.tags.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.core.RegistryWrapper;
 import net.minecraft.tags.TagKey;
 import net.minecraft.resources.ResourceLocation;
-
 import java.util.concurrent.CompletableFuture;
+import net.minecraft.core.HolderLookup;
 
 public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
-    public BlockTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+    public BlockTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.WrapperLookup> registriesFuture) {
         super(output, registriesFuture);
     }
 
     @Override
-    protected void configure(RegistryWrapper.WrapperLookup arg) {
+    protected void configure(HolderLookup.WrapperLookup arg) {
         var mineablePickaxe = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "mineable/pickaxe")));
         var mineableAxe = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "mineable/axe")));
         var mineableShovel = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "mineable/shovel")));
@@ -75,8 +74,6 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         TagKey<Block> lead_ores = TagKey.of(Registries.BLOCK, new ResourceLocation("me", "lead_ores"));
         TagKey<Block> silver_ores = TagKey.of(Registries.BLOCK, new ResourceLocation("me", "silver_ores"));
         TagKey<Block> mithril_ores = TagKey.of(Registries.BLOCK, new ResourceLocation("me", "mithril_ores"));
-
-
 
         for (OreRockSets.OreRockSet set : OreRockSets.sets) {
             if(set.coal_ore() != null) {
@@ -432,4 +429,3 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         return values.stream().filter(java.util.Objects::nonNull).toArray(Block[]::new);
     }
 }
-

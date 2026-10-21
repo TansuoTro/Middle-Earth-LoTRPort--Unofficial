@@ -1,17 +1,17 @@
 package net.jukoz.me.block.special;
-import net.minecraft.world.level.LevelAccess;
 
+import net.minecraft.world.level.LevelAccess;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
-import net.minecraft.block.enums.Thickness;
+import net.minecraft.world.level.block.state.properties.DripstoneThickness;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.entity.projectile.TridentEntity;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -34,20 +34,18 @@ public class SpikesBlock extends Block {
         setDefaultState(getDefaultState().with(HALF, DoubleBlockHalf.LOWER));
     }
 
-
-
     protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(HALF);
     }
 
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
         BlockPos blockPos = pos.down();
         BlockState blockState = world.getBlockState(blockPos);
         return blockState.isSideSolidFullSquare(world, blockPos, Direction.UP) || blockState.isOf(this);
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         DoubleBlockHalf doubleBlockHalf = state.get(HALF);
         BlockState downState = world.getBlockState(pos.down());
 
@@ -70,12 +68,12 @@ public class SpikesBlock extends Block {
         }
     }
 
-    public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
+    public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
         if (!world.isClient) {
             BlockPos blockPos = hit.getBlockPos();
             if (world instanceof ServerLevel) {
                 ServerLevel serverWorld = (ServerLevel)world;
-                if (projectile.canModifyAt(serverWorld, blockPos) && projectile instanceof TridentEntity && projectile.getVelocity().length() > 0.6) {
+                if (projectile.canModifyAt(serverWorld, blockPos) && projectile instanceof ThrownTrident && projectile.getVelocity().length() > 0.6) {
                     world.breakBlock(blockPos, true);
                 }
             }

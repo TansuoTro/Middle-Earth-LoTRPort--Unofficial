@@ -4,28 +4,32 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.jukoz.me.item.items.SmithingHammerItem;
-import net.minecraft.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.ItemScatterer;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.Containers;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
 
-public abstract class AbstractShapingAnvilBlock extends BlockWithEntity implements BlockEntityProvider {
+public abstract class AbstractShapingAnvilBlock extends BaseEntityBlock implements EntityBlock {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public AbstractShapingAnvilBlock(Settings settings) {
@@ -34,26 +38,26 @@ public abstract class AbstractShapingAnvilBlock extends BlockWithEntity implemen
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderType(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
     public void onStateReplaced(BlockState state, Level world, BlockPos pos, BlockState newState, boolean moved) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof Inventory inventory) {
-            ItemScatterer.spawn(world, pos, inventory);
+            Containers.spawn(world, pos, inventory);
         }
         super.onStateReplaced(state, world, pos, newState, moved);
     }
 
     @Override
-    public BlockState rotate(BlockState state, BlockRotation rotation) {
+    public BlockState rotate(BlockState state, Rotation rotation) {
         return state.with(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override
-    public BlockState mirror(BlockState state, BlockMirror mirror) {
+    public BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.get(FACING)));
     }
 
@@ -82,7 +86,7 @@ public abstract class AbstractShapingAnvilBlock extends BlockWithEntity implemen
                 player.equipStack(EquipmentSlot.MAINHAND, blockEntity.getStack(0));
                 blockEntity.removeStack(0);
             } else {
-                NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+                MenuProvider screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
                 if (screenHandlerFactory != null) {
                     player.openHandledScreen(screenHandlerFactory);
                 }

@@ -4,7 +4,6 @@ import net.minecraft.world.item.ItemStack;
 
 public class DamageableItemUtils {
 
-
     /**
      * Checks if an ItemStack is damageable and fully used (ex. its damage equals or exceeds max damage).
      *

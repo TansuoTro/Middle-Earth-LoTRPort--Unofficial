@@ -18,26 +18,26 @@ import net.jukoz.me.item.ModWeaponItems;
 import net.minecraft.world.entity.EntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.goal.ActiveTargetGoal;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.item.DyeableItem;
+import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 public class BanditHumanEntity extends NpcEntity{
 
-    public BanditHumanEntity(EntityType<? extends PathAwareEntity> entityType, Level world) {
+    public BanditHumanEntity(EntityType<? extends PathfinderMob> entityType, Level world) {
         super(entityType, world);
         String name = this.getDefaultName().toString();
         if(name.contains("militia")){
@@ -53,14 +53,14 @@ public class BanditHumanEntity extends NpcEntity{
 
     @Nullable
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable CompoundTag entityNbt) {
+    public SpawnGroupData initialize(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, @Nullable CompoundTag entityNbt) {
         entityData = super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
         RandomSource random = world.getRandom();
         this.initEquipment(random, difficulty);
         return entityData;
     }
 
-    public static DefaultAttributeContainer.Builder setSoldierAttributes() {
+    public static AttributeSupplier.Builder setSoldierAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25f)
                 .add(Attributes.GENERIC_MAX_HEALTH, 20.0)
@@ -68,7 +68,7 @@ public class BanditHumanEntity extends NpcEntity{
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 32.0)
                 .add(Attributes.GENERIC_ATTACK_DAMAGE, 2.0);
     }
-    public static DefaultAttributeContainer.Builder setKnightAttributes() {
+    public static AttributeSupplier.Builder setKnightAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25f)
                 .add(Attributes.GENERIC_MAX_HEALTH, 22.0)
@@ -81,23 +81,23 @@ public class BanditHumanEntity extends NpcEntity{
     protected void initGoals() {
         super.initGoals();
         int i = 2;
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, Player.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, TrollEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MordorBlackUrukEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MistyHobgoblinEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MordorOrcEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MistyGoblinEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MirkwoodSpiderEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, NazgulEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, GondorHumanEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, RohanHumanEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, GaladhrimElfEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, LongbeardDwarfEntity.class, true));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, ShireHobbitEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, TrollEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, MordorBlackUrukEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, MistyHobgoblinEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, MordorOrcEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, MistyGoblinEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, MirkwoodSpiderEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, NazgulEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, GondorHumanEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, RohanHumanEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, GaladhrimElfEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, LongbeardDwarfEntity.class, true));
+        this.targetSelector.add(++i, new NearestAttackableTargetGoal<>(this, ShireHobbitEntity.class, true));
     }
 
     @Override
-    protected void initEquipment(RandomSource random, LocalDifficulty localDifficulty) {
+    protected void initEquipment(RandomSource random, DifficultyInstance localDifficulty) {
         super.initEquipment(random, localDifficulty);
         switch (this.getRank()){
             case MILITIA -> militiaEquipment(random);
@@ -113,7 +113,7 @@ public class BanditHumanEntity extends NpcEntity{
                 0x6d685b,
                 0x504e48
         };
-        DyeableItem item = (DyeableItem)ModEquipmentItems.GAMBESON;
+        DyeableLeatherItem item = (DyeableLeatherItem)ModEquipmentItems.GAMBESON;
         ItemStack leatherHelmet = new ItemStack(Items.LEATHER_HELMET);
         ItemStack leatherChestplate = new ItemStack(Items.LEATHER_CHESTPLATE);
         ItemStack leatherLeggings = new ItemStack(Items.LEATHER_LEGGINGS);
@@ -147,7 +147,7 @@ public class BanditHumanEntity extends NpcEntity{
     }
 
     private void soldierEquipment(RandomSource random){
-        DyeableItem item = (DyeableItem)ModEquipmentItems.GAMBESON;
+        DyeableLeatherItem item = (DyeableLeatherItem)ModEquipmentItems.GAMBESON;
         ItemStack gambeson = new ItemStack(ModEquipmentItems.GAMBESON);
         ItemStack leatherBoots = new ItemStack(Items.LEATHER_BOOTS);
         item.setColor(gambeson, 0x897f64);

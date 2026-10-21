@@ -3,17 +3,16 @@ package net.jukoz.me.api.entity.ai.brain.task;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.block.SweetBerryBushBlock;
+import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.WalkTarget;
-import net.minecraft.entity.ai.brain.task.SingleTickTask;
-import net.minecraft.entity.ai.brain.task.TaskTriggerer;
+import net.minecraft.world.entity.ai.behavior.OneShot;
+import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
-
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -23,26 +22,25 @@ public class MoveTowardsBlockTask {
     private static final int DEFAULT_VERTICAL_RADIUS = 7;
     private boolean shouldRun;
 
-
-    public static SingleTickTask<LivingEntity> create(float speed, TagKey<Block> blockTag) {
+    public static OneShot<LivingEntity> create(float speed, TagKey<Block> blockTag) {
         return create(speed, blockTag, null);
     }
 
-    public static SingleTickTask<LivingEntity> create(float speed, TagKey<Block> blockTag, TagKey<Block> lowPrioBlockTag) {
+    public static OneShot<LivingEntity> create(float speed, TagKey<Block> blockTag, TagKey<Block> lowPrioBlockTag) {
         return create(speed, null, null, blockTag, lowPrioBlockTag, LivingEntity::isOnGround);
     }
 
-    public static SingleTickTask<LivingEntity> create(float speed, Block block) {
+    public static OneShot<LivingEntity> create(float speed, Block block) {
         return create(speed, block, null);
     }
 
-    public static SingleTickTask<LivingEntity> create(float speed, Block block, Block lowPrioBlock) {
+    public static OneShot<LivingEntity> create(float speed, Block block, Block lowPrioBlock) {
         return create(speed, block, lowPrioBlock, null, null, LivingEntity::isOnGround);
     }
 
     // main create method
-    private static SingleTickTask<LivingEntity> create(float speed, Block block, Block lowPrioBlock, TagKey<Block> blockTag, TagKey<Block> lowPrioBlockTag, Predicate<LivingEntity> shouldRun) {
-        return TaskTriggerer.task((context) -> {
+    private static OneShot<LivingEntity> create(float speed, Block block, Block lowPrioBlock, TagKey<Block> blockTag, TagKey<Block> lowPrioBlockTag, Predicate<LivingEntity> shouldRun) {
+        return BehaviorBuilder.task((context) -> {
             return context.group(context.queryMemoryAbsent(MemoryModuleType.WALK_TARGET)).apply(context, (walkTarget) -> {
                 return (world, entity, time) -> {
                     if (!shouldRun.test(entity)) {

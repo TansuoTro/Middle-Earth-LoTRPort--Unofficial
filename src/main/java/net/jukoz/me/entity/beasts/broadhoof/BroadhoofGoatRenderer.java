@@ -1,18 +1,18 @@
 package net.jukoz.me.entity.beasts.broadhoof;
+
 import net.jukoz.me.compat.client.render.equipment.EquipmentRenderer;
 import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.jukoz.me.compat.client.render.MEMobEntityRenderer;
-
 import com.google.common.collect.Maps;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.jukoz.me.compat.client.render.equipment.EquipmentModel;
-import net.minecraft.client.render.entity.feature.HorseMarkingFeatureRenderer;
+import net.minecraft.client.renderer.entity.layers.HorseMarkingLayer;
 import net.jukoz.me.compat.client.render.equipment.SaddleFeatureRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.entity.passive.HorseColor;
+import net.minecraft.world.entity.animal.horse.Variant;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
 import net.jukoz.me.MiddleEarth;
@@ -20,14 +20,14 @@ import net.jukoz.me.entity.EntityModelLayersME;
 import net.jukoz.me.entity.beasts.broadhoof.features.BroadhoofGoatBeadsFeatureRenderer;
 import net.jukoz.me.entity.beasts.broadhoof.features.BroadhoofGoatPatternFeatureRenderer;
 import net.jukoz.me.entity.beasts.broadhoof.features.BroadhoofGoatSaddleFeatureRenderer;
-
 import java.util.Map;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 public class BroadhoofGoatRenderer extends MEMobEntityRenderer<BroadhoofGoatEntity, BroadhoofGoatEntityRenderState, BroadhoofGoatModel> {
     private static final String PATH = "textures/entities/broadhoof_goat/";
     private static final float SIZE = 1f;
 
-    public BroadhoofGoatRenderer(EntityRendererFactory.Context context) {
+    public BroadhoofGoatRenderer(EntityRendererProvider.Context context) {
         super(context, new BroadhoofGoatModel(context.getPart(EntityModelLayersME.BROADHOOF_GOAT)), 0.8f);
         this.addFeature(new BroadhoofGoatPatternFeatureRenderer(this));
         this.addFeature(new BroadhoofGoatBeadsFeatureRenderer(this));
@@ -45,7 +45,7 @@ public class BroadhoofGoatRenderer extends MEMobEntityRenderer<BroadhoofGoatEnti
     }
 
     @Override
-    public void render(BroadhoofGoatEntityRenderState state, PoseStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
+    public void render(BroadhoofGoatEntityRenderState state, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         if(state.baby) {
             matrixStack.scale(SIZE/2, SIZE/2, SIZE/2);
         }

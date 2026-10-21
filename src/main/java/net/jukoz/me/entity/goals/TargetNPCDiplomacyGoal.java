@@ -1,6 +1,6 @@
 package net.jukoz.me.entity.goals;
 
-import net.minecraft.entity.ai.goal.ActiveTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.Difficulty;
@@ -9,7 +9,7 @@ import net.jukoz.me.entity.npcs.NpcEntity;
 import net.jukoz.me.resources.datas.factions.Faction;
 import net.jukoz.me.resources.datas.factions.FactionLookup;
 
-public class TargetNPCDiplomacyGoal extends ActiveTargetGoal<NpcEntity> {
+public class TargetNPCDiplomacyGoal extends NearestAttackableTargetGoal<NpcEntity> {
     NpcEntity mob;
     public TargetNPCDiplomacyGoal(NpcEntity mob) {
         super(mob, NpcEntity.class, true);

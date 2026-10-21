@@ -3,11 +3,10 @@ package net.jukoz.me.datageneration;
 import net.fabricmc.fabric.api.client.model.ExtraModelProvider;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.datageneration.content.models.SimpleBigItemModel;
-import net.minecraft.client.util.ModelIdentifier;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.resource.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.resources.ResourceLocation;
-
 import java.util.function.Consumer;
 
 public class VariantsModelProvider implements ExtraModelProvider {
@@ -19,8 +18,8 @@ public class VariantsModelProvider implements ExtraModelProvider {
         }
     }
 
-    public static ModelIdentifier getInventoryModelIdentifierVariant(Item item) {
-        return new ModelIdentifier(
+    public static ModelResourceLocation getInventoryModelIdentifierVariant(Item item) {
+        return new ModelResourceLocation(
                 MiddleEarth.MOD_ID, VariantsModelProvider.getKey(item.getTranslationKey()) + "_inventory", "inventory");
     }
 

@@ -1,6 +1,6 @@
 package net.jukoz.me.item.dataComponents;
-import net.jukoz.me.compat.METext;
 
+import net.jukoz.me.compat.METext;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
@@ -11,12 +11,11 @@ import net.jukoz.me.compat.TooltipAppender;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.math.ColorHelper;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.FastColor;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.item.utils.armor.ArmorMaterialsME;
 import net.jukoz.me.item.utils.armor.backAttachments.BackAttachmentsME;
-
 import java.util.List;
 
 public record ArmorTierDataComponent(ArmorMaterialsME.Tiers tier) implements TooltipAppender {
@@ -36,7 +35,7 @@ public record ArmorTierDataComponent(ArmorMaterialsME.Tiers tier) implements Too
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, net.minecraft.client.item.TooltipContext context, List<Component> tooltip) {
+    public void appendTooltip(ItemStack stack, net.minecraft.world.item.TooltipFlag context, List<Component> tooltip) {
         tooltip.add(METext.withColor( Component.translatable("tooltip.%s.%s".formatted(MiddleEarth.MOD_ID, tier.getName())), tier.getColor()));
     }
 

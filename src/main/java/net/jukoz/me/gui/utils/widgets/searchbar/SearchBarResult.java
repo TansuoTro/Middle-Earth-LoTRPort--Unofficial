@@ -1,6 +1,6 @@
 package net.jukoz.me.gui.utils.widgets.searchbar;
 
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 

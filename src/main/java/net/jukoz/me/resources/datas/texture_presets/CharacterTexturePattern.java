@@ -5,12 +5,11 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
-import net.minecraft.registry.entry.RegistryElementCodec;
+import net.minecraft.resources.RegistryFileCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.resources.datas.common.CharacterPatternTypes;
-
 import java.util.Optional;
 
 public class CharacterTexturePattern {
@@ -70,7 +69,6 @@ public class CharacterTexturePattern {
         return hasAddon;
     }
 
-
     static {
         PACKET_CODEC = PacketCodec.tuple(
                 PacketCodecs.IDENTIFIER,
@@ -80,7 +78,7 @@ public class CharacterTexturePattern {
                 PacketCodecs.BOOLEAN,
                 CharacterTexturePattern::hasAddonRawValue,
                 CharacterTexturePattern::new);
-        ENTRY_CODEC = RegistryElementCodec.of(DynamicRegistriesME.SKIN_PATTERN, CODEC);
+        ENTRY_CODEC = RegistryFileCodec.of(DynamicRegistriesME.SKIN_PATTERN, CODEC);
         ENTRY_PACKET_CODEC = PacketCodecs.registryEntry(DynamicRegistriesME.SKIN_PATTERN, PACKET_CODEC);
     }
 }

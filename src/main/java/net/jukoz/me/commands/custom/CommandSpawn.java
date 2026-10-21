@@ -1,17 +1,17 @@
 package net.jukoz.me.commands.custom;
-import net.jukoz.me.compat.METext;
 
+import net.jukoz.me.compat.METext;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.command.argument.BlockPosArgumentType;
-import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.command.argument.IdentifierArgumentType;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
@@ -19,7 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.dimension.DimensionTypes;
+import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.commands.ModCommands;
 import net.jukoz.me.commands.suggestions.AllAvailableSpawnSuggestionProvider;
@@ -32,7 +32,6 @@ import net.jukoz.me.resources.persistent_datas.PlayerDataService;
 import net.jukoz.me.utils.ModColors;
 import net.jukoz.me.world.dimension.ModDimensions;
 import org.joml.Vector3i;
-
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
@@ -50,12 +49,12 @@ public class CommandSpawn {
     private static final String SPAWN_ID = "spawn_id";
     private static final String PLAYER = "player";
 
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandRegistryAccess, Commands.RegistrationEnvironment registrationEnvironment) {
         // [GET OVERWORLD SPAWN]
         dispatcher.register(literal(ModCommands.BASE_COMMAND)
                 .requires(source -> source.hasPermissionLevel(2)) // Require OP
                 .then(literal(SPAWN_BASE_COMMAND)
-                .then(argument(PLAYER, EntityArgumentType.player()) // With Player Target
+                .then(argument(PLAYER, EntityArgument.player()) // With Player Target
                     .then(literal(GET)
                     .then(literal(OVERWORLD)
                     .executes(CommandSpawn::getPlayerSpawnOverworld))))
@@ -67,7 +66,7 @@ public class CommandSpawn {
         dispatcher.register(literal(ModCommands.BASE_COMMAND)
                 .requires(source -> source.hasPermissionLevel(2)) // Require OP
                 .then(literal(SPAWN_BASE_COMMAND)
-                    .then(argument(PLAYER, EntityArgumentType.player()) // With Player Target
+                    .then(argument(PLAYER, EntityArgument.player()) // With Player Target
                         .then(literal(GET)
                         .then(literal(MIDDLE_EARTH)
                         .executes(CommandSpawn::getPlayerSpawnMiddleEarth))))
@@ -79,7 +78,7 @@ public class CommandSpawn {
         dispatcher.register(literal(ModCommands.BASE_COMMAND)
                 .requires(source -> source.hasPermissionLevel(2)) // Require OP
                 .then(literal(SPAWN_BASE_COMMAND)
-                    .then(argument(PLAYER, EntityArgumentType.player())
+                    .then(argument(PLAYER, EntityArgument.player())
                         .then(literal(TP) // With Player Target
                         .then(literal(MIDDLE_EARTH)
                         .then(argument(WELCOME, BoolArgumentType.bool())
@@ -93,7 +92,7 @@ public class CommandSpawn {
         dispatcher.register(literal(ModCommands.BASE_COMMAND)
                 .requires(source -> source.hasPermissionLevel(2)) // Require OP
                 .then(literal(SPAWN_BASE_COMMAND)
-                .then(argument(PLAYER, EntityArgumentType.player())
+                .then(argument(PLAYER, EntityArgument.player())
                     .then(literal(TP) // With Player Target
                     .then(literal(OVERWORLD)
                     .executes(CommandSpawn::teleportPlayerToSpawnOverworld))))
@@ -105,29 +104,29 @@ public class CommandSpawn {
         dispatcher.register(literal(ModCommands.BASE_COMMAND)
                 .requires(source -> source.hasPermissionLevel(2)) // Require OP
                 .then(literal(SPAWN_BASE_COMMAND)
-                        .then(argument(PLAYER, EntityArgumentType.player())
+                        .then(argument(PLAYER, EntityArgument.player())
                                 .then(literal(SET)
                                 .then(literal(OVERWORLD) // With Player Target
-                                .then(argument(OVERWORLD_COORD, BlockPosArgumentType.blockPos())
+                                .then(argument(OVERWORLD_COORD, BlockPosArgument.blockPos())
                                 .executes(CommandSpawn::setPlayerSpawnOverworld)))))
                         .then(literal(SET) // Without Target
                         .then(literal(OVERWORLD)
-                        .then(argument(OVERWORLD_COORD, BlockPosArgumentType.blockPos())
+                        .then(argument(OVERWORLD_COORD, BlockPosArgument.blockPos())
                         .executes(CommandSpawn::setSpawnOverworld))))));
 
         // [SET - MIDDLE_EARTH]
         dispatcher.register(literal(ModCommands.BASE_COMMAND)
                 .requires(source -> source.hasPermissionLevel(2)) // Require OP
                 .then(literal(SPAWN_BASE_COMMAND)
-                    .then(argument(PLAYER, EntityArgumentType.player())
+                    .then(argument(PLAYER, EntityArgument.player())
                         .then(literal(SET)
                         .then(literal(MIDDLE_EARTH) // With Player Target
-                        .then(argument(SPAWN_ID, IdentifierArgumentType.identifier())
+                        .then(argument(SPAWN_ID, ResourceLocationArgument.identifier())
                         .suggests(new AllAvailableSpawnSuggestionProvider())
                         .executes(CommandSpawn::setPlayerSpawnMiddleEarth)))))
                     .then(literal(SET) // Without Target
                     .then(literal(MIDDLE_EARTH)
-                    .then(argument(SPAWN_ID, IdentifierArgumentType.identifier())
+                    .then(argument(SPAWN_ID, ResourceLocationArgument.identifier())
                     .suggests(new AllAvailableSpawnSuggestionProvider())
                     .executes(CommandSpawn::setSpawnMiddleEarth))))));
 
@@ -135,7 +134,7 @@ public class CommandSpawn {
         dispatcher.register(literal(ModCommands.BASE_COMMAND)
             .requires(source -> source.hasPermissionLevel(2)) // Require OP
             .then(literal(SPAWN_BASE_COMMAND)
-            .then(argument(PLAYER, EntityArgumentType.player())
+            .then(argument(PLAYER, EntityArgument.player())
                 .then(literal(RESET) // With Player Target
                 .then(literal(OVERWORLD)
                 .executes(CommandSpawn::resetPlayerSpawnOverworld))))
@@ -147,7 +146,7 @@ public class CommandSpawn {
         dispatcher.register(literal(ModCommands.BASE_COMMAND)
                 .requires(source -> source.hasPermissionLevel(2)) // Require OP
                 .then(literal(SPAWN_BASE_COMMAND)
-                .then(argument(PLAYER, EntityArgumentType.player())
+                .then(argument(PLAYER, EntityArgument.player())
                     .then(literal(RESET) // With Player Target
                     .then(literal(MIDDLE_EARTH)
                     .executes(CommandSpawn::resetPlayerSpawnMiddleEarth))))
@@ -159,19 +158,19 @@ public class CommandSpawn {
         dispatcher.register(literal(ModCommands.BASE_COMMAND)
                 .requires(source -> source.hasPermissionLevel(2)) // Require OP
                 .then(literal(TP)
-                    .then(argument(PLAYER, EntityArgumentType.player())
+                    .then(argument(PLAYER, EntityArgument.player())
                     .then(literal(TO)
-                    .then(argument(SPAWN_ID, IdentifierArgumentType.identifier())
+                    .then(argument(SPAWN_ID, ResourceLocationArgument.identifier())
                     .suggests(new AllSpawnSuggestionProvider())
                     .executes(CommandSpawn::forceTeleportPlayerToSpawnMiddleEarth))))
                 .then(literal(TO) // Without Target
-                .then(argument(SPAWN_ID, IdentifierArgumentType.identifier())
+                .then(argument(SPAWN_ID, ResourceLocationArgument.identifier())
                 .suggests(new AllSpawnSuggestionProvider())
                 .executes(CommandSpawn::forceTeleportToSpawnMiddleEarth)))));
     }
 
     // region Getters
-    private static int getSpawnOverworld(CommandContext<ServerCommandSource> context) {
+    private static int getSpawnOverworld(CommandContext<CommandSourceStack> context) {
         if(!context.getSource().isExecutedByPlayer() || context.getSource().getPlayer() == null)
             return 0;
         ServerPlayer playerSource = context.getSource().getPlayer();
@@ -183,8 +182,8 @@ public class CommandSpawn {
         return 0;
     }
 
-    private static int getPlayerSpawnOverworld(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayer playerTarget = EntityArgumentType.getPlayer(context, PLAYER);
+    private static int getPlayerSpawnOverworld(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer playerTarget = EntityArgument.getPlayer(context, PLAYER);
         PlayerData data = StateSaverAndLoader.getPlayerState(playerTarget);
         PlayerDataService.OriginAggregate originAggregate = PlayerDataService.getOriginAggregateOrDefault(playerTarget, playerTarget.getWorld());
         BlockPos pos = originAggregate.origin();
@@ -194,7 +193,7 @@ public class CommandSpawn {
         return 0;
     }
 
-    private static int getSpawnMiddleEarth(CommandContext<ServerCommandSource> context) {
+    private static int getSpawnMiddleEarth(CommandContext<CommandSourceStack> context) {
         if(!context.getSource().isExecutedByPlayer() || context.getSource().getPlayer() == null)
             return 0;
         Player playerSource = context.getSource().getPlayer();
@@ -211,10 +210,10 @@ public class CommandSpawn {
 
     }
 
-    private static int getPlayerSpawnMiddleEarth(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+    private static int getPlayerSpawnMiddleEarth(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         if(!context.getSource().isExecutedByPlayer()) return 0;
 
-        ServerPlayer playerTarget = EntityArgumentType.getPlayer(context, PLAYER);
+        ServerPlayer playerTarget = EntityArgument.getPlayer(context, PLAYER);
         SpawnData spawnData = PlayerDataService.getPlayerSpawnData(playerTarget, playerTarget.getWorld());
         if(spawnData != null){
             BlockPos pos = spawnData.getBlockPos();
@@ -229,12 +228,12 @@ public class CommandSpawn {
     // endregion
 
     // region Setters
-    private static int setSpawnMiddleEarth(CommandContext<ServerCommandSource> context) {
+    private static int setSpawnMiddleEarth(CommandContext<CommandSourceStack> context) {
         if(!context.getSource().isExecutedByPlayer() || context.getSource().getPlayer() == null)
             return 0;
         ServerPlayer playerSource = context.getSource().getPlayer();
 
-        ResourceLocation spawnIdInput = IdentifierArgumentType.getIdentifier(context, SPAWN_ID);
+        ResourceLocation spawnIdInput = ResourceLocationArgument.getIdentifier(context, SPAWN_ID);
 
         if(!PlayerDataService.playerPassedOnboarding(playerSource)){
             MutableComponent sourceText = Component.translatable("command.%s.set.spawn.middle_earth.no_faction".formatted(MiddleEarth.MOD_ID));
@@ -259,10 +258,10 @@ public class CommandSpawn {
         return 0;
     }
 
-    private static int setPlayerSpawnMiddleEarth(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayer playerTarget = EntityArgumentType.getPlayer(context, PLAYER);
+    private static int setPlayerSpawnMiddleEarth(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer playerTarget = EntityArgument.getPlayer(context, PLAYER);
 
-        ResourceLocation spawnIdInput = IdentifierArgumentType.getIdentifier(context, SPAWN_ID);
+        ResourceLocation spawnIdInput = ResourceLocationArgument.getIdentifier(context, SPAWN_ID);
 
         if(!PlayerDataService.playerPassedOnboarding(playerTarget)){
             MutableComponent sourceText = Component.translatable("command.%s.set.player.spawn.middle_earth.no_faction".formatted(MiddleEarth.MOD_ID), playerTarget.getName());
@@ -288,14 +287,13 @@ public class CommandSpawn {
         MutableComponent sourceText = Component.translatable("command.%s.set.spawn.middle_earth.no_spawn_found".formatted(MiddleEarth.MOD_ID), spawnIdInput.toString());
         context.getSource().sendMessage(METext.withColor(sourceText, ModColors.WARNING.color));
 
-
         return 0;
     }
 
-    private static int setSpawnOverworld(CommandContext<ServerCommandSource> context) {
+    private static int setSpawnOverworld(CommandContext<CommandSourceStack> context) {
         if(!context.getSource().isExecutedByPlayer() || context.getSource().getPlayer() == null)
             return 0;
-        BlockPos posInput = BlockPosArgumentType.getBlockPos(context, OVERWORLD_COORD);
+        BlockPos posInput = BlockPosArgument.getBlockPos(context, OVERWORLD_COORD);
 
         ServerPlayer playerSource = context.getSource().getPlayer();
 
@@ -310,9 +308,9 @@ public class CommandSpawn {
         return 0;
     }
 
-    private static int setPlayerSpawnOverworld(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        BlockPos posInput = BlockPosArgumentType.getBlockPos(context, OVERWORLD_COORD);
-        ServerPlayer playerTarget = EntityArgumentType.getPlayer(context, PLAYER);
+    private static int setPlayerSpawnOverworld(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        BlockPos posInput = BlockPosArgument.getBlockPos(context, OVERWORLD_COORD);
+        ServerPlayer playerTarget = EntityArgument.getPlayer(context, PLAYER);
 
         PlayerDataService.setOrigin(playerTarget, playerTarget.getWorld(), DimensionTypes.OVERWORLD.getRegistry(), posInput);
 
@@ -328,8 +326,8 @@ public class CommandSpawn {
     // endregion
 
     // region Resets
-    private static int resetPlayerSpawnOverworld(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayer playerTarget = EntityArgumentType.getPlayer(context, PLAYER);
+    private static int resetPlayerSpawnOverworld(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer playerTarget = EntityArgument.getPlayer(context, PLAYER);
         BlockPos posInput = context.getSource().getServer().getOverworld().getSpawnPos();
         PlayerDataService.setOrigin(playerTarget, playerTarget.getWorld(), DimensionTypes.OVERWORLD.getRegistry(), posInput);
 
@@ -340,7 +338,7 @@ public class CommandSpawn {
         return 0;
     }
 
-    private static int resetSpawnOverworld(CommandContext<ServerCommandSource> context) {
+    private static int resetSpawnOverworld(CommandContext<CommandSourceStack> context) {
         if(!context.getSource().isExecutedByPlayer() || context.getSource().getPlayer() == null)
             return 0;
         ServerPlayer playerSource = context.getSource().getPlayer();
@@ -351,8 +349,8 @@ public class CommandSpawn {
         return 0;
     }
 
-    private static int resetPlayerSpawnMiddleEarth(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayer playerTarget = EntityArgumentType.getPlayer(context, PLAYER);
+    private static int resetPlayerSpawnMiddleEarth(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer playerTarget = EntityArgument.getPlayer(context, PLAYER);
 
         if(!PlayerDataService.playerPassedOnboarding(playerTarget)){
             MutableComponent sourceText = Component.translatable("command.%s.reset.player.spawn.middle_earth.no_faction".formatted(MiddleEarth.MOD_ID), playerTarget.getName());
@@ -376,7 +374,7 @@ public class CommandSpawn {
         return 0;
     }
 
-    private static int resetSpawnMiddleEarth(CommandContext<ServerCommandSource> context) {
+    private static int resetSpawnMiddleEarth(CommandContext<CommandSourceStack> context) {
         if(!context.getSource().isExecutedByPlayer() || context.getSource().getPlayer() == null)
             return 0;
         ServerPlayer playerSource = context.getSource().getPlayer();
@@ -399,7 +397,7 @@ public class CommandSpawn {
     // endregion
 
     // region Teleports
-    private static int teleportToSpawnMiddleEarth(CommandContext<ServerCommandSource> context) {
+    private static int teleportToSpawnMiddleEarth(CommandContext<CommandSourceStack> context) {
         if(!context.getSource().isExecutedByPlayer() || context.getSource().getPlayer() == null)
             return 0;
 
@@ -434,8 +432,8 @@ public class CommandSpawn {
         return 0;
     }
 
-    private static int teleportPlayerToSpawnMiddleEarth(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayer playerTarget = EntityArgumentType.getPlayer(context, PLAYER);
+    private static int teleportPlayerToSpawnMiddleEarth(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer playerTarget = EntityArgument.getPlayer(context, PLAYER);
         boolean welcomeNeeded = BoolArgumentType.getBool(context, WELCOME);
 
         if(PlayerDataService.playerPassedOnboarding(playerTarget)){
@@ -467,8 +465,7 @@ public class CommandSpawn {
         return 0;
     }
 
-
-    private static int teleportToSpawnOverworld(CommandContext<ServerCommandSource> context) {
+    private static int teleportToSpawnOverworld(CommandContext<CommandSourceStack> context) {
         if(!context.getSource().isExecutedByPlayer() || context.getSource().getPlayer() == null)
             return 0;
 
@@ -483,8 +480,8 @@ public class CommandSpawn {
         return 0;
     }
 
-    private static int teleportPlayerToSpawnOverworld(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayer player = EntityArgumentType.getPlayer(context, PLAYER);
+    private static int teleportPlayerToSpawnOverworld(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer player = EntityArgument.getPlayer(context, PLAYER);
 
         if(ModDimensions.teleportPlayerToOverworld(player)){
             MutableComponent sourceText = Component.translatable("command.%s.teleport.player.spawn.middle_earth.success".formatted(MiddleEarth.MOD_ID), player.getName(), player.getX(), player.getY(), player.getZ());
@@ -496,10 +493,10 @@ public class CommandSpawn {
         return 0;
     }
 
-    private static int forceTeleportToSpawnMiddleEarth(CommandContext<ServerCommandSource> context) {
+    private static int forceTeleportToSpawnMiddleEarth(CommandContext<CommandSourceStack> context) {
         if(!context.getSource().isExecutedByPlayer() || context.getSource().getPlayer() == null)
             return 0;
-        ResourceLocation spawnId = IdentifierArgumentType.getIdentifier(context, SPAWN_ID);
+        ResourceLocation spawnId = ResourceLocationArgument.getIdentifier(context, SPAWN_ID);
 
         if(FactionUtil.forceTeleportToSpawnMiddleEarthId(context.getSource().getPlayer(), spawnId)){
             BlockPos pos = FactionUtil.getSpawnBlockPos(context.getSource().getWorld(), spawnId);
@@ -512,9 +509,9 @@ public class CommandSpawn {
         return 0;
     }
 
-    private static int forceTeleportPlayerToSpawnMiddleEarth(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayer targetedPlayer = EntityArgumentType.getPlayer(context, PLAYER);
-        ResourceLocation spawnId = IdentifierArgumentType.getIdentifier(context, SPAWN_ID);
+    private static int forceTeleportPlayerToSpawnMiddleEarth(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer targetedPlayer = EntityArgument.getPlayer(context, PLAYER);
+        ResourceLocation spawnId = ResourceLocationArgument.getIdentifier(context, SPAWN_ID);
 
         if(FactionUtil.forceTeleportToSpawnMiddleEarthId(targetedPlayer, spawnId)){
             BlockPos pos = FactionUtil.getSpawnBlockPos(context.getSource().getWorld(), spawnId);

@@ -5,7 +5,6 @@ import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
 import net.jukoz.me.recipe.ArtisanRecipe;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

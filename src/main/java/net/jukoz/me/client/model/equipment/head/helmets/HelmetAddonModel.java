@@ -1,8 +1,8 @@
 package net.jukoz.me.client.model.equipment.head.helmets;
-import net.jukoz.me.compat.client.render.MEBipedEntityModel;
 
+import net.jukoz.me.compat.client.render.MEBipedEntityModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
+import net.minecraft.client.model.HumanoidModel;
 import net.jukoz.me.compat.client.render.state.BipedEntityRenderState;
 import net.minecraft.world.entity.LivingEntity;
 

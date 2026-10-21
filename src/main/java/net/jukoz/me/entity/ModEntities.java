@@ -36,7 +36,7 @@ import net.jukoz.me.utils.LoggerUtil;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.entity.SpawnGroup;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -46,70 +46,70 @@ public class ModEntities {
     //TODO Npc weird animation/item holding -> model fucked
 
     // Barrow Wights
-    public static final EntityType<BarrowWightEntity> BARROW_WIGHT = registerEntity("barrow_wight", BarrowWightEntity::new, SpawnGroup.CREATURE, 0.9f, 2.1f);
+    public static final EntityType<BarrowWightEntity> BARROW_WIGHT = registerEntity("barrow_wight", BarrowWightEntity::new, MobCategory.CREATURE, 0.9f, 2.1f);
 
     // Hobbits
-    public static final EntityType<ShireHobbitEntity> HOBBIT_CIVILIAN = registerEntity("hobbit_civilian", ShireHobbitEntity::new, SpawnGroup.CREATURE, 0.6f, 1.9f);
-    public static final EntityType<ShireHobbitEntity> HOBBIT_BOUNDER = registerEntity("hobbit_bounder", ShireHobbitEntity::new, SpawnGroup.CREATURE, 0.6f, 1.9f);
-    public static final EntityType<ShireHobbitEntity> HOBBIT_SHIRRIFF = registerEntity("hobbit_shirriff", ShireHobbitEntity::new, SpawnGroup.CREATURE, 0.6f, 1.9f);
+    public static final EntityType<ShireHobbitEntity> HOBBIT_CIVILIAN = registerEntity("hobbit_civilian", ShireHobbitEntity::new, MobCategory.CREATURE, 0.6f, 1.9f);
+    public static final EntityType<ShireHobbitEntity> HOBBIT_BOUNDER = registerEntity("hobbit_bounder", ShireHobbitEntity::new, MobCategory.CREATURE, 0.6f, 1.9f);
+    public static final EntityType<ShireHobbitEntity> HOBBIT_SHIRRIFF = registerEntity("hobbit_shirriff", ShireHobbitEntity::new, MobCategory.CREATURE, 0.6f, 1.9f);
 
     //HUMANS
     //Gondor
-    public static final EntityType<GondorHumanEntity> GONDORIAN_MILITIA = registerEntity("gondorian_militia", GondorHumanEntity::new, SpawnGroup.CREATURE, 0.7F, 1.9F);
-    public static final EntityType<GondorHumanEntity> GONDORIAN_SOLDIER = registerEntity("gondorian_soldier", GondorHumanEntity::new, SpawnGroup.CREATURE, 0.7F, 1.9F);
-    public static final EntityType<GondorHumanEntity> GONDORIAN_KNIGHT = registerEntity("gondorian_knight", GondorHumanEntity::new, SpawnGroup.CREATURE, 0.7F, 1.9F);
-    public static final EntityType<GondorHumanEntity> GONDORIAN_VETERAN = registerEntity("gondorian_veteran", GondorHumanEntity::new, SpawnGroup.CREATURE, 0.7F, 1.9F);
-    public static final EntityType<GondorHumanEntity> GONDORIAN_LEADER = registerEntity("gondorian_leader", GondorHumanEntity::new, SpawnGroup.CREATURE, 0.7F, 1.9F);
+    public static final EntityType<GondorHumanEntity> GONDORIAN_MILITIA = registerEntity("gondorian_militia", GondorHumanEntity::new, MobCategory.CREATURE, 0.7F, 1.9F);
+    public static final EntityType<GondorHumanEntity> GONDORIAN_SOLDIER = registerEntity("gondorian_soldier", GondorHumanEntity::new, MobCategory.CREATURE, 0.7F, 1.9F);
+    public static final EntityType<GondorHumanEntity> GONDORIAN_KNIGHT = registerEntity("gondorian_knight", GondorHumanEntity::new, MobCategory.CREATURE, 0.7F, 1.9F);
+    public static final EntityType<GondorHumanEntity> GONDORIAN_VETERAN = registerEntity("gondorian_veteran", GondorHumanEntity::new, MobCategory.CREATURE, 0.7F, 1.9F);
+    public static final EntityType<GondorHumanEntity> GONDORIAN_LEADER = registerEntity("gondorian_leader", GondorHumanEntity::new, MobCategory.CREATURE, 0.7F, 1.9F);
 
     //Rohan
-    public static final EntityType<RohanHumanEntity> ROHIRRIM_MILITIA = registerEntity("rohirrim_militia", RohanHumanEntity::new, SpawnGroup.CREATURE, 0.7F, 1.9F);
-    public static final EntityType<RohanHumanEntity> ROHIRRIM_SOLDIER = registerEntity("rohirrim_soldier", RohanHumanEntity::new, SpawnGroup.CREATURE, 0.7F, 1.9F);
-    public static final EntityType<RohanHumanEntity> ROHIRRIM_KNIGHT = registerEntity("rohirrim_knight", RohanHumanEntity::new, SpawnGroup.CREATURE, 0.7F, 1.9F);
-    public static final EntityType<RohanHumanEntity> ROHIRRIM_VETERAN = registerEntity("rohirrim_veteran", RohanHumanEntity::new, SpawnGroup.CREATURE, 0.7F, 1.9F);
-    public static final EntityType<RohanHumanEntity> ROHIRRIM_LEADER = registerEntity("rohirrim_leader", RohanHumanEntity::new, SpawnGroup.CREATURE, 0.7F, 1.9F);
+    public static final EntityType<RohanHumanEntity> ROHIRRIM_MILITIA = registerEntity("rohirrim_militia", RohanHumanEntity::new, MobCategory.CREATURE, 0.7F, 1.9F);
+    public static final EntityType<RohanHumanEntity> ROHIRRIM_SOLDIER = registerEntity("rohirrim_soldier", RohanHumanEntity::new, MobCategory.CREATURE, 0.7F, 1.9F);
+    public static final EntityType<RohanHumanEntity> ROHIRRIM_KNIGHT = registerEntity("rohirrim_knight", RohanHumanEntity::new, MobCategory.CREATURE, 0.7F, 1.9F);
+    public static final EntityType<RohanHumanEntity> ROHIRRIM_VETERAN = registerEntity("rohirrim_veteran", RohanHumanEntity::new, MobCategory.CREATURE, 0.7F, 1.9F);
+    public static final EntityType<RohanHumanEntity> ROHIRRIM_LEADER = registerEntity("rohirrim_leader", RohanHumanEntity::new, MobCategory.CREATURE, 0.7F, 1.9F);
 
     //Bandits
-    public static final EntityType<BanditHumanEntity> BANDIT_MILITIA = registerEntity("bandit_militia", BanditHumanEntity::new, SpawnGroup.CREATURE, 0.7F, 1.9F);
-    public static final EntityType<BanditHumanEntity> BANDIT_SOLDIER = registerEntity("bandit_soldier", BanditHumanEntity::new, SpawnGroup.CREATURE, 0.7F, 1.9F);
-    public static final EntityType<BanditHumanEntity> BANDIT_CHIEFTAIN = registerEntity("bandit_chieftain", BanditHumanEntity::new, SpawnGroup.CREATURE, 0.7F, 1.9F);
+    public static final EntityType<BanditHumanEntity> BANDIT_MILITIA = registerEntity("bandit_militia", BanditHumanEntity::new, MobCategory.CREATURE, 0.7F, 1.9F);
+    public static final EntityType<BanditHumanEntity> BANDIT_SOLDIER = registerEntity("bandit_soldier", BanditHumanEntity::new, MobCategory.CREATURE, 0.7F, 1.9F);
+    public static final EntityType<BanditHumanEntity> BANDIT_CHIEFTAIN = registerEntity("bandit_chieftain", BanditHumanEntity::new, MobCategory.CREATURE, 0.7F, 1.9F);
 
     // Dwarfs
-    public static final EntityType<LongbeardDwarfEntity> LONGBEARD_MILITIA = registerEntity("longbeard_militia", LongbeardDwarfEntity::new, SpawnGroup.CREATURE, 0.8f, 1.9f);
-    public static final EntityType<LongbeardDwarfEntity> LONGBEARD_SOLDIER = registerEntity("longbeard_soldier", LongbeardDwarfEntity::new, SpawnGroup.CREATURE, 0.8f, 1.9f);
-    public static final EntityType<LongbeardDwarfEntity> LONGBEARD_ELITE = registerEntity("longbeard_elite", LongbeardDwarfEntity::new, SpawnGroup.CREATURE, 0.8f, 1.9f);
-    public static final EntityType<LongbeardDwarfEntity> LONGBEARD_VETERAN = registerEntity("longbeard_veteran", LongbeardDwarfEntity::new, SpawnGroup.CREATURE, 0.8f, 1.9f);
-    public static final EntityType<LongbeardDwarfEntity> LONGBEARD_LEADER = registerEntity("longbeard_leader", LongbeardDwarfEntity::new, SpawnGroup.CREATURE, 0.8f, 1.9f);
+    public static final EntityType<LongbeardDwarfEntity> LONGBEARD_MILITIA = registerEntity("longbeard_militia", LongbeardDwarfEntity::new, MobCategory.CREATURE, 0.8f, 1.9f);
+    public static final EntityType<LongbeardDwarfEntity> LONGBEARD_SOLDIER = registerEntity("longbeard_soldier", LongbeardDwarfEntity::new, MobCategory.CREATURE, 0.8f, 1.9f);
+    public static final EntityType<LongbeardDwarfEntity> LONGBEARD_ELITE = registerEntity("longbeard_elite", LongbeardDwarfEntity::new, MobCategory.CREATURE, 0.8f, 1.9f);
+    public static final EntityType<LongbeardDwarfEntity> LONGBEARD_VETERAN = registerEntity("longbeard_veteran", LongbeardDwarfEntity::new, MobCategory.CREATURE, 0.8f, 1.9f);
+    public static final EntityType<LongbeardDwarfEntity> LONGBEARD_LEADER = registerEntity("longbeard_leader", LongbeardDwarfEntity::new, MobCategory.CREATURE, 0.8f, 1.9f);
 
     // Elves
-    public static final EntityType<GaladhrimElfEntity> LORIEN_MILITIA = registerEntity("lorien_militia", GaladhrimElfEntity::new, SpawnGroup.CREATURE, 0.75f, 1.9f);
-    public static final EntityType<GaladhrimElfEntity> LORIEN_SOLDIER = registerEntity("lorien_soldier", GaladhrimElfEntity::new, SpawnGroup.CREATURE, 0.75f, 1.9f);
-    public static final EntityType<GaladhrimElfEntity> LORIEN_KNIGHT = registerEntity("lorien_knight", GaladhrimElfEntity::new, SpawnGroup.CREATURE, 0.75f, 1.9f);
-    public static final EntityType<GaladhrimElfEntity> LORIEN_VETERAN = registerEntity("lorien_veteran", GaladhrimElfEntity::new, SpawnGroup.CREATURE, 0.75f, 1.9f);
-    public static final EntityType<GaladhrimElfEntity> LORIEN_LEADER = registerEntity("lorien_leader", GaladhrimElfEntity::new, SpawnGroup.CREATURE, 0.75f, 1.9f);
+    public static final EntityType<GaladhrimElfEntity> LORIEN_MILITIA = registerEntity("lorien_militia", GaladhrimElfEntity::new, MobCategory.CREATURE, 0.75f, 1.9f);
+    public static final EntityType<GaladhrimElfEntity> LORIEN_SOLDIER = registerEntity("lorien_soldier", GaladhrimElfEntity::new, MobCategory.CREATURE, 0.75f, 1.9f);
+    public static final EntityType<GaladhrimElfEntity> LORIEN_KNIGHT = registerEntity("lorien_knight", GaladhrimElfEntity::new, MobCategory.CREATURE, 0.75f, 1.9f);
+    public static final EntityType<GaladhrimElfEntity> LORIEN_VETERAN = registerEntity("lorien_veteran", GaladhrimElfEntity::new, MobCategory.CREATURE, 0.75f, 1.9f);
+    public static final EntityType<GaladhrimElfEntity> LORIEN_LEADER = registerEntity("lorien_leader", GaladhrimElfEntity::new, MobCategory.CREATURE, 0.75f, 1.9f);
 
     //ORCS
     //Mordor
-    public static final EntityType<MordorOrcEntity> MORDOR_ORC_SNAGA = registerEntity("mordor_orc_snaga", MordorOrcEntity::new, SpawnGroup.CREATURE, 0.7f, 1.9f);
-    public static final EntityType<MordorOrcEntity> MORDOR_ORC_SOLDIER = registerEntity("mordor_orc_soldier", MordorOrcEntity::new, SpawnGroup.CREATURE, 0.7f, 1.9f);
+    public static final EntityType<MordorOrcEntity> MORDOR_ORC_SNAGA = registerEntity("mordor_orc_snaga", MordorOrcEntity::new, MobCategory.CREATURE, 0.7f, 1.9f);
+    public static final EntityType<MordorOrcEntity> MORDOR_ORC_SOLDIER = registerEntity("mordor_orc_soldier", MordorOrcEntity::new, MobCategory.CREATURE, 0.7f, 1.9f);
     //Misties
-    public static final EntityType<MistyGoblinEntity> MISTY_GOBLIN_SNAGA = registerEntity("misty_goblin_snaga", MistyGoblinEntity::new, SpawnGroup.CREATURE, 0.7f, 1.9f);
-    public static final EntityType<MistyGoblinEntity> MISTY_GOBLIN_WARRIOR = registerEntity("misty_goblin_warrior", MistyGoblinEntity::new, SpawnGroup.CREATURE, 0.7f, 1.9f);
+    public static final EntityType<MistyGoblinEntity> MISTY_GOBLIN_SNAGA = registerEntity("misty_goblin_snaga", MistyGoblinEntity::new, MobCategory.CREATURE, 0.7f, 1.9f);
+    public static final EntityType<MistyGoblinEntity> MISTY_GOBLIN_WARRIOR = registerEntity("misty_goblin_warrior", MistyGoblinEntity::new, MobCategory.CREATURE, 0.7f, 1.9f);
 
     //URUKS
     //Mordor
-    public static final EntityType<MordorBlackUrukEntity> MORDOR_BLACK_URUK_SOLDIER = registerEntity("mordor_black_uruk_soldier", MordorBlackUrukEntity::new, SpawnGroup.CREATURE, 0.85f, 1.9f);
-    public static final EntityType<MordorBlackUrukEntity> MORDOR_BLACK_URUK_VETERAN = registerEntity("mordor_black_uruk_veteran", MordorBlackUrukEntity::new, SpawnGroup.CREATURE, 0.85f, 1.9f);
-    public static final EntityType<MordorBlackUrukEntity> MORDOR_BLACK_URUK_LEADER = registerEntity("mordor_black_uruk_leader", MordorBlackUrukEntity::new, SpawnGroup.CREATURE, 0.85f, 1.9f);
+    public static final EntityType<MordorBlackUrukEntity> MORDOR_BLACK_URUK_SOLDIER = registerEntity("mordor_black_uruk_soldier", MordorBlackUrukEntity::new, MobCategory.CREATURE, 0.85f, 1.9f);
+    public static final EntityType<MordorBlackUrukEntity> MORDOR_BLACK_URUK_VETERAN = registerEntity("mordor_black_uruk_veteran", MordorBlackUrukEntity::new, MobCategory.CREATURE, 0.85f, 1.9f);
+    public static final EntityType<MordorBlackUrukEntity> MORDOR_BLACK_URUK_LEADER = registerEntity("mordor_black_uruk_leader", MordorBlackUrukEntity::new, MobCategory.CREATURE, 0.85f, 1.9f);
     //Misties
-    public static final EntityType<MistyHobgoblinEntity> MISTY_HOBGOBLIN_SOLDIER = registerEntity("misty_hobgoblin_soldier", MistyHobgoblinEntity::new, SpawnGroup.CREATURE, 0.85f, 1.9f);
-    public static final EntityType<MistyHobgoblinEntity> MISTY_HOBGOBLIN_VETERAN = registerEntity("misty_hobgoblin_veteran", MistyHobgoblinEntity::new, SpawnGroup.CREATURE, 0.85f, 1.9f);
-    public static final EntityType<MistyHobgoblinEntity> MISTY_HOBGOBLIN_LEADER = registerEntity("misty_hobgoblin_leader", MistyHobgoblinEntity::new, SpawnGroup.CREATURE, 0.85f, 1.9f);
+    public static final EntityType<MistyHobgoblinEntity> MISTY_HOBGOBLIN_SOLDIER = registerEntity("misty_hobgoblin_soldier", MistyHobgoblinEntity::new, MobCategory.CREATURE, 0.85f, 1.9f);
+    public static final EntityType<MistyHobgoblinEntity> MISTY_HOBGOBLIN_VETERAN = registerEntity("misty_hobgoblin_veteran", MistyHobgoblinEntity::new, MobCategory.CREATURE, 0.85f, 1.9f);
+    public static final EntityType<MistyHobgoblinEntity> MISTY_HOBGOBLIN_LEADER = registerEntity("misty_hobgoblin_leader", MistyHobgoblinEntity::new, MobCategory.CREATURE, 0.85f, 1.9f);
 
     // Nazgul
-    public static final EntityType<NazgulEntity> NAZGUL = registerEntity("nazgul", NazgulEntity::new, SpawnGroup.CREATURE, 0.8f, 1.9f);
+    public static final EntityType<NazgulEntity> NAZGUL = registerEntity("nazgul", NazgulEntity::new, MobCategory.CREATURE, 0.8f, 1.9f);
 
     // Spiders
-    public static final EntityType<MirkwoodSpiderEntity> MIRKWOOD_SPIDER = registerEntity("mirkwood_spider", MirkwoodSpiderEntity::new, SpawnGroup.CREATURE, 1.15f, 0.9f);
+    public static final EntityType<MirkwoodSpiderEntity> MIRKWOOD_SPIDER = registerEntity("mirkwood_spider", MirkwoodSpiderEntity::new, MobCategory.CREATURE, 1.15f, 0.9f);
 
     // Trolls
     public static final EntityType<CaveTrollEntity> CAVE_TROLL = EntitiesME.CAVE_TROLL;
@@ -125,16 +125,15 @@ public class ModEntities {
     public static final EntityType<SpearEntity> SPEAR = EntitiesME.SPEAR;
 
     ///* Animals *///
-    public static final EntityType<CrabEntity> CRAB = registerEntity("crab", CrabEntity::new, SpawnGroup.CREATURE, 0.4f, 0.4f);
-    public static final EntityType<GooseEntity> GOOSE = registerEntity("goose", GooseEntity::new, SpawnGroup.CREATURE, 0.6f, 1.25f);
-    public static final EntityType<DuckEntity> DUCK = registerEntity("duck", DuckEntity::new, SpawnGroup.CREATURE, 0.6f, 0.8f);
-    public static final EntityType<SwanEntity> SWAN = registerEntity("swan", SwanEntity::new, SpawnGroup.CREATURE, 0.6f, 0.9f);
-    public static final EntityType<PheasantEntity> PHEASANT = registerEntity("pheasant", PheasantEntity::new, SpawnGroup.CREATURE, 0.6f, 0.8f);
-    public static final EntityType<SnailEntity> SNAIL = registerEntity("snail", SnailEntity::new, SpawnGroup.CREATURE, 0.3f, 0.3f);
-    public static final EntityType<DeerEntity> DEER = registerEntity("deer", DeerEntity::new, SpawnGroup.CREATURE, 1.3f, 1.8f);
+    public static final EntityType<CrabEntity> CRAB = registerEntity("crab", CrabEntity::new, MobCategory.CREATURE, 0.4f, 0.4f);
+    public static final EntityType<GooseEntity> GOOSE = registerEntity("goose", GooseEntity::new, MobCategory.CREATURE, 0.6f, 1.25f);
+    public static final EntityType<DuckEntity> DUCK = registerEntity("duck", DuckEntity::new, MobCategory.CREATURE, 0.6f, 0.8f);
+    public static final EntityType<SwanEntity> SWAN = registerEntity("swan", SwanEntity::new, MobCategory.CREATURE, 0.6f, 0.9f);
+    public static final EntityType<PheasantEntity> PHEASANT = registerEntity("pheasant", PheasantEntity::new, MobCategory.CREATURE, 0.6f, 0.8f);
+    public static final EntityType<SnailEntity> SNAIL = registerEntity("snail", SnailEntity::new, MobCategory.CREATURE, 0.3f, 0.3f);
+    public static final EntityType<DeerEntity> DEER = registerEntity("deer", DeerEntity::new, MobCategory.CREATURE, 1.3f, 1.8f);
 
-
-    public static <T extends Entity> EntityType<T> registerEntity(String name, EntityType.EntityFactory<T> entity, SpawnGroup spawnGroup,
+    public static <T extends Entity> EntityType<T> registerEntity(String name, EntityType.EntityFactory<T> entity, MobCategory spawnGroup,
                                                                   float width, float height) {
         return Registry.register(Registries.ENTITY_TYPE,
                 new ResourceLocation(MiddleEarth.MOD_ID, name),FabricEntityTypeBuilder.create(spawnGroup, entity).dimensions(EntityDimensions.fixed(width, height)).build());

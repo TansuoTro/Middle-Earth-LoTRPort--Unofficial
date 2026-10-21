@@ -1,24 +1,23 @@
 package net.jukoz.me.compat.client.render;
 
 import java.util.function.Function;
-
 import net.jukoz.me.compat.client.render.state.BipedEntityRenderStateCompat;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.resources.ResourceLocation;
 
 /**
  * R2 bridge for donor-style 1.21.8 models written as
- * {@code BipedEntityModel<S extends BipedEntityRenderState>}.
+ * {@code HumanoidModel<S extends BipedEntityRenderState>}.
  *
- * <p>The entity-typed 1.20.1 {@link BipedEntityModel#setAngles} entry is intercepted:
+ * <p>The entity-typed 1.20.1 {@link HumanoidModel#setAngles} entry is intercepted:
  * the render state published on {@link MEEntityRenderContext} is copied onto the model
  * fields and the vanilla posing math is run against the state's owning entity.
  */
 public abstract class MEBipedEntityModel<T extends LivingEntity, S extends BipedEntityRenderStateCompat>
-        extends BipedEntityModel<T> {
+        extends HumanoidModel<T> {
 
     public MEBipedEntityModel(ModelPart root) {
         super(root);

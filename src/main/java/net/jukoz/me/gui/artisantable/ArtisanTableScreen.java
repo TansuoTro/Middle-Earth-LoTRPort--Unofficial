@@ -6,32 +6,31 @@ import net.jukoz.me.item.EquipmentItemsME;
 import net.jukoz.me.item.ToolItemsME;
 import net.jukoz.me.item.WeaponItemsME;
 import net.jukoz.me.network.packets.C2S.ArtisanTableTabPacket;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.decoration.ArmorStandEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.CraftingResultInventory;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ResultContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerListener;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ArtisanTableScreen extends HandledScreen<ArtisanTableScreenHandler> implements ScreenHandlerListener {
+public class ArtisanTableScreen extends AbstractContainerScreen<ArtisanTableScreenHandler> implements ContainerListener {
     private static final ResourceLocation TEXTURE = new ResourceLocation(MiddleEarth.MOD_ID, "textures/gui/artisan_table.png");
     public static final int SLOT_SCALE = 18;
     public static final int SLOT_OFFSET_X = 12;
@@ -45,14 +44,14 @@ public class ArtisanTableScreen extends HandledScreen<ArtisanTableScreenHandler>
 
     private static final Quaternionf ARMOR_STAND_ROTATION = new Quaternionf().rotationXYZ(0.43633232f, 0.0f, (float) Math.PI);
 
-    private ArmorStandEntity armorStand;
+    private ArmorStand armorStand;
     private final List<ArtisanTableTab> categories = new ArrayList<>();
     private final HashMap<Integer, List<ArtisanTableTab>> tabs = new HashMap<>();
     @Nullable
     private ArtisanTableTab selectedCategory;
     private ArtisanTableTab selectedTab;
 
-    public ArtisanTableScreen(ArtisanTableScreenHandler handler, PlayerInventory inventory, Component title) {
+    public ArtisanTableScreen(ArtisanTableScreenHandler handler, Inventory inventory, Component title) {
         super(handler, inventory, title);
         this.backgroundWidth = 232;
         this.backgroundHeight = 166;
@@ -113,7 +112,7 @@ public class ArtisanTableScreen extends HandledScreen<ArtisanTableScreenHandler>
         (this.handler).addListener(this);
         changeTab();
 
-        this.armorStand = new ArmorStandEntity(this.client.world, 0.0, 0.0, 0.0);
+        this.armorStand = new ArmorStand(this.client.world, 0.0, 0.0, 0.0);
         this.armorStand.setHideBasePlate(true);
         this.armorStand.setShowArms(true);
         this.armorStand.bodyYaw = 210.0f;
@@ -123,14 +122,14 @@ public class ArtisanTableScreen extends HandledScreen<ArtisanTableScreenHandler>
     }
 
     @Override
-    public void onSlotUpdate(ScreenHandler handler, int slotId, ItemStack stack) {
+    public void onSlotUpdate(AbstractContainerMenu handler, int slotId, ItemStack stack) {
         if (slotId == 9) {
             this.equipArmorStand(stack);
         }
     }
 
     @Override
-    public void onPropertyUpdate(ScreenHandler handler, int property, int value) {
+    public void onPropertyUpdate(AbstractContainerMenu handler, int property, int value) {
     }
 
     private boolean canCraft() {
@@ -140,7 +139,7 @@ public class ArtisanTableScreen extends HandledScreen<ArtisanTableScreenHandler>
     @Override
     protected void handledScreenTick() {
         super.handledScreenTick();
-        CraftingResultInventory resultInventory = this.handler.output;
+        ResultContainer resultInventory = this.handler.output;
         if (resultInventory != null && !resultInventory.getStack(0).isEmpty()) {
             equipArmorStand(resultInventory.getStack(0));
         }
@@ -160,7 +159,7 @@ public class ArtisanTableScreen extends HandledScreen<ArtisanTableScreenHandler>
     }
 
     @Override
-    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
+    protected void drawBackground(GuiGraphics context, float delta, int mouseX, int mouseY) {
         int i = this.x;
         int j = this.y;
         context.drawTexture(TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight);
@@ -198,7 +197,7 @@ public class ArtisanTableScreen extends HandledScreen<ArtisanTableScreenHandler>
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         renderBackground(context);
 
         super.render(context, mouseX, mouseY, delta);
@@ -223,7 +222,7 @@ public class ArtisanTableScreen extends HandledScreen<ArtisanTableScreenHandler>
         drawMouseoverTooltip(context, mouseX, mouseY);
     }
 
-    protected void drawMouseoverTooltip(DrawContext context, int x, int y) {
+    protected void drawMouseoverTooltip(GuiGraphics context, int x, int y) {
         super.drawMouseoverTooltip(context, x, y);
         if (canCraft()) {
             int i = this.x + 76;
@@ -242,7 +241,7 @@ public class ArtisanTableScreen extends HandledScreen<ArtisanTableScreenHandler>
         }
     }
 
-    private void renderRecipeBackground(DrawContext context, int mouseX, int mouseY, int x, int y, int scrollOffset) {
+    private void renderRecipeBackground(GuiGraphics context, int mouseX, int mouseY, int x, int y, int scrollOffset) {
         for (int i = this.scrollOffset; i < scrollOffset && i < ((ArtisanTableScreenHandler) this.handler).getAvailableOutputs().size(); ++i) {
             int j = i - this.scrollOffset;
             int k = x + j % 4 * 16;
@@ -259,7 +258,7 @@ public class ArtisanTableScreen extends HandledScreen<ArtisanTableScreenHandler>
         }
     }
 
-    private void renderRecipeIcons(DrawContext context, int x, int y, int scrollOffset) {
+    private void renderRecipeIcons(GuiGraphics context, int x, int y, int scrollOffset) {
         List<ItemStack> list = this.handler.getAvailableOutputs();
         for (int i = this.scrollOffset; i < scrollOffset && i < (this.handler).getAvailableOutputs().size(); ++i) {
             int j = i - this.scrollOffset;
@@ -277,14 +276,14 @@ public class ArtisanTableScreen extends HandledScreen<ArtisanTableScreenHandler>
                 if (category.isClickOnTab(x, y, mouseX, mouseY)) continue;
                 this.selectedCategory = category;
                 selectedTab = tabs.get(selectedCategory.getIndex()).get(0);
-                MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                 changeTab();
                 break;
             }
             for (ArtisanTableTab tab : tabs.get(selectedCategory.getIndex())) {
                 if (tab.isClickOnTab(x, y, mouseX, mouseY)) continue;
                 this.selectedTab = tab;
-                MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                 changeTab();
                 break;
             }
@@ -299,7 +298,7 @@ public class ArtisanTableScreen extends HandledScreen<ArtisanTableScreenHandler>
                 double d = mouseX - (double) (i + m % 4 * 16);
                 double e = mouseY - (double) (j + m / 4 * 18);
                 if (d >= 0.0 && e >= 0.0 && d < 16.0 && e < 18.0 && (this.handler).onButtonClick(this.client.player, l)) {
-                    MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                    Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                     this.handler.setSelectedRecipe(l);
                     return true;
                 }

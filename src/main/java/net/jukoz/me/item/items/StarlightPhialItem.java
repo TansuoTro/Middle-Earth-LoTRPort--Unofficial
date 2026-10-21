@@ -5,7 +5,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.level.Level;
 
 public class StarlightPhialItem extends Item {
@@ -19,10 +19,10 @@ public class StarlightPhialItem extends Item {
      * vanilla interact packet ({@code use} runs there too) and without spending the item.
      */
     @Override
-    public TypedActionResult<ItemStack> use(Level world, Player user, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
         if (!ModDimensions.isInMiddleEarth(world) && !world.isClient) {
             ModDimensions.teleportPlayerToME(user);
         }
-        return TypedActionResult.success(user.getStackInHand(hand));
+        return InteractionResultHolder.success(user.getStackInHand(hand));
     }
 }

@@ -36,7 +36,7 @@ import net.jukoz.me.item.utils.armor.backAttachments.BackAttachmentsME;
 import net.jukoz.me.item.utils.armor.helmetAttachments.HelmetAttachmentModelsME;
 import net.jukoz.me.item.utils.armor.helmetAttachments.HelmetAttachmentsME;
 import net.minecraft.world.item.Item;
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.StringRepresentable;
 
 public class ArmorModelsME {
 
@@ -269,7 +269,7 @@ public class ArmorModelsME {
         }
     }
 
-    public enum ModBackAttachmentPairedModels implements StringIdentifiable {
+    public enum ModBackAttachmentPairedModels implements StringRepresentable {
         CAPE(BackAttachmentsME.CAPE, BackAttachmentModelsME.MEDIUM_MODELS),
         SHOULDER_CAPE_LEFT(BackAttachmentsME.SHOULDER_CAPE_LEFT, BackAttachmentModelsME.WIDE_MODELS),
         SHOULDER_CAPE_RIGHT(BackAttachmentsME.SHOULDER_CAPE_RIGHT, BackAttachmentModelsME.WIDE_MODELS),
@@ -352,7 +352,6 @@ public class ArmorModelsME {
         private final BackAttachmentsME backAttachment;
         private final BackAttachmentModelsME models;
 
-
         ModBackAttachmentPairedModels(BackAttachmentsME backAttachment, BackAttachmentModelsME models){
             this.backAttachment = backAttachment;
             this.models = models;
@@ -368,8 +367,7 @@ public class ArmorModelsME {
         }
     }
 
-
-    public enum ModHelmetAttachmentPairedModels implements StringIdentifiable {
+    public enum ModHelmetAttachmentPairedModels implements StringRepresentable {
         HOOD(HelmetAttachmentsME.HOOD, HelmetAttachmentModelsME.REGULAR_MODELS),
         TALL_HOOD(HelmetAttachmentsME.TALL_HOOD, HelmetAttachmentModelsME.TALL_MODELS),
 

@@ -27,4 +27,3 @@ public enum GaladhrimElfVariant {
         return BY_ID[id % BY_ID.length];
     }
 }
-

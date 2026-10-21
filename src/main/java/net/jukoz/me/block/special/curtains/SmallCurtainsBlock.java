@@ -4,7 +4,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.block.HorizontalFacingBlock;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -20,15 +20,14 @@ import net.minecraft.world.phys.shapes.VoxelShapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.phys.shapes.Shapes;
 
-public class SmallCurtainsBlock extends HorizontalFacingBlock {
+public class SmallCurtainsBlock extends HorizontalDirectionalBlock {
     public static final BooleanProperty OPEN;
 
     public SmallCurtainsBlock(BlockBehaviour.Settings settings) {
         super(settings);
     }
-
-
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
@@ -50,7 +49,7 @@ public class SmallCurtainsBlock extends HorizontalFacingBlock {
             case EAST -> Block.createCuboidShape(0, 2, 0, 2, 16, 16);
             case SOUTH -> Block.createCuboidShape(0, 2, 0, 16, 16, 2);
             case NORTH -> Block.createCuboidShape(0, 2, 14, 16, 16, 16);
-            default -> VoxelShapes.cuboid(0, 2, 0, 16, 16, 16);
+            default -> Shapes.cuboid(0, 2, 0, 16, 16, 16);
         };
     }
 

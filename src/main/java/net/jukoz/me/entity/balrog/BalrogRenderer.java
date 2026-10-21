@@ -3,25 +3,25 @@ package net.jukoz.me.entity.balrog;
 import com.google.common.collect.Maps;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.model.EntityModelLayer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
-
 import java.util.Map;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
-public class BalrogRenderer extends MobEntityRenderer<BalrogEntity, BalrogModel<BalrogEntity>> {
+public class BalrogRenderer extends MobRenderer<BalrogEntity, BalrogModel<BalrogEntity>> {
     private static final String PATH = "textures/entities/balrog/";
     private static final float SIZE = 2f;
 
-    public BalrogRenderer(EntityRendererFactory.Context context) {
+    public BalrogRenderer(EntityRendererProvider.Context context) {
         this(context, 0.35F, ModEntityModelLayers.BALROG);
     }
 
-    protected BalrogRenderer(EntityRendererFactory.Context ctx, float shadowRadius, EntityModelLayer layer) {
+    protected BalrogRenderer(EntityRendererProvider.Context ctx, float shadowRadius, ModelLayerLocation layer) {
         super(ctx, new BalrogModel(ctx.getPart(layer)), shadowRadius);
     }
 
@@ -41,7 +41,7 @@ public class BalrogRenderer extends MobEntityRenderer<BalrogEntity, BalrogModel<
 
     @Override
     public void render(BalrogEntity entity, float entityYaw, float partialTick, PoseStack poseStack,
-                       VertexConsumerProvider bufferSource, int packedLight) {
+                       MultiBufferSource bufferSource, int packedLight) {
         poseStack.scale(SIZE, SIZE, SIZE);
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
     }

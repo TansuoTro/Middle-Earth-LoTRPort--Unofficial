@@ -3,10 +3,10 @@ package net.jukoz.me.block.special.curtains;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.block.LichenGrower;
-import net.minecraft.block.MultifaceGrowthBlock;
+import net.minecraft.world.level.block.MultifaceSpreader;
+import net.minecraft.world.level.block.MultifaceBlock;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.block.Waterloggable;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -24,19 +24,19 @@ import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.level.LevelView;
 import net.jukoz.me.utils.BlockTagsME;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
+import net.minecraft.world.phys.shapes.Shapes;
 
 /**
  * 1.20.1 port: the donor extends 1.21.x MultifaceBlock, which is named
- * MultifaceGrowthBlock in 1.20.1 and does not provide WATERLOGGED, the
- * createShapeFunction helpers or VoxelShapes.createFacingShapeMap, so those
+ * MultifaceBlock in 1.20.1 and does not provide WATERLOGGED, the
+ * createShapeFunction helpers or Shapes.createFacingShapeMap, so those
  * pieces are implemented here.
  */
-public class CurtainsBlock extends MultifaceGrowthBlock implements Waterloggable {
+public class CurtainsBlock extends MultifaceBlock implements SimpleWaterloggedBlock {
     public static final BooleanProperty TIP = BooleanProperty.of("tip");
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -47,7 +47,7 @@ public class CurtainsBlock extends MultifaceGrowthBlock implements Waterloggable
             Direction.EAST, Block.createCuboidShape(13.0, 0.0, 0.0, 16.0, 3.0, 16.0));
 
     private final Function<BlockState, VoxelShape> shapeFunction;
-    private final LichenGrower grower = new LichenGrower(this);
+    private final MultifaceSpreader grower = new MultifaceSpreader(this);
 
     public CurtainsBlock(BlockBehaviour.Settings settings) {
         super(settings);
@@ -55,7 +55,7 @@ public class CurtainsBlock extends MultifaceGrowthBlock implements Waterloggable
     }
 
     @Override
-    public LichenGrower getGrower() {
+    public MultifaceSpreader getGrower() {
         return grower;
     }
 
@@ -84,7 +84,7 @@ public class CurtainsBlock extends MultifaceGrowthBlock implements Waterloggable
     }
 
     @Override
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
         return true;
     }
 
@@ -117,7 +117,7 @@ public class CurtainsBlock extends MultifaceGrowthBlock implements Waterloggable
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         BlockState updated = super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
         return updated.with(TIP, !world.getBlockState(pos.down()).isIn(BlockTagsME.CURTAINS));
     }
@@ -147,18 +147,18 @@ public class CurtainsBlock extends MultifaceGrowthBlock implements Waterloggable
 
     private Function<BlockState, VoxelShape> createShapeFunction() {
         return (state) -> {
-            VoxelShape voxelShape = VoxelShapes.empty();
+            VoxelShape voxelShape = Shapes.empty();
             Direction[] var3 = DIRECTIONS;
             int var4 = var3.length;
 
             for (int var5 = 0; var5 < var4; ++var5) {
                 Direction direction = var3[var5];
                 if (hasDirection(state, direction)) {
-                    voxelShape = VoxelShapes.union(voxelShape, (VoxelShape) FACING_SHAPES.get(direction));
+                    voxelShape = Shapes.union(voxelShape, (VoxelShape) FACING_SHAPES.get(direction));
                 }
             }
 
-            return voxelShape.isEmpty() ? VoxelShapes.fullCube() : voxelShape;
+            return voxelShape.isEmpty() ? Shapes.fullCube() : voxelShape;
         };
     }
 
@@ -168,5 +168,4 @@ public class CurtainsBlock extends MultifaceGrowthBlock implements Waterloggable
         super.appendProperties(builder);
     }
 
-    
 }

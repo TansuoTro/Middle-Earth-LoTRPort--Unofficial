@@ -2,11 +2,10 @@ package net.jukoz.me.world.map;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.jukoz.me.utils.resources.FileUtils;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import org.joml.Vector2i;
-
 import java.awt.image.BufferedImage;
 import java.util.List;
 

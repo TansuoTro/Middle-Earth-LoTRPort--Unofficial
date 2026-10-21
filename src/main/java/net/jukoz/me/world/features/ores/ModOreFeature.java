@@ -3,16 +3,15 @@ package net.jukoz.me.world.features.ores;
 import com.mojang.serialization.Codec;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.math.ChunkSectionPos;
+import net.minecraft.core.SectionPos;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.ChunkSectionCache;
+import net.minecraft.world.level.chunk.BulkSectionAccess;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.chunk.ChunkSection;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
-
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import java.util.BitSet;
 import java.util.Iterator;
 import java.util.Objects;
@@ -23,10 +22,10 @@ public class ModOreFeature extends Feature<ModOreFeatureConfig> {
         super(codec);
     }
 
-    public boolean generate(FeatureContext<ModOreFeatureConfig> context) {
+    public boolean generate(FeaturePlaceContext<ModOreFeatureConfig> context) {
         RandomSource random = context.getRandom();
         BlockPos blockPos = context.getOrigin();
-        StructureWorldAccess structureWorldAccess = context.getWorld();
+        WorldGenLevel structureWorldAccess = context.getWorld();
         ModOreFeatureConfig modOreFeatureConfig = context.getConfig();
         float f = random.nextFloat() * 3.1415927F;
         float g = (float)modOreFeatureConfig.size / 8.0F;
@@ -56,7 +55,7 @@ public class ModOreFeature extends Feature<ModOreFeatureConfig> {
         return false;
     }
 
-    protected boolean generateVeinPart(StructureWorldAccess world, RandomSource random, ModOreFeatureConfig config, double startX, double endX, double startZ, double endZ, double startY, double endY, int x, int y, int z, int horizontalSize, int verticalSize) {
+    protected boolean generateVeinPart(WorldGenLevel world, RandomSource random, ModOreFeatureConfig config, double startX, double endX, double startZ, double endZ, double startY, double endY, int x, int y, int z, int horizontalSize, int verticalSize) {
         int i = 0;
         BitSet bitSet = new BitSet(horizontalSize * verticalSize * horizontalSize);
         BlockPos.Mutable mutable = new BlockPos.Mutable();
@@ -102,7 +101,7 @@ public class ModOreFeature extends Feature<ModOreFeatureConfig> {
             }
         }
 
-        ChunkSectionCache chunkSectionCache = new ChunkSectionCache(world);
+        BulkSectionAccess chunkSectionCache = new BulkSectionAccess(world);
 
         try {
             for(m = 0; m < j; ++m) {
@@ -132,11 +131,11 @@ public class ModOreFeature extends Feature<ModOreFeatureConfig> {
                                                 bitSet.set(ac);
                                                 mutable.set(t, v, aa);
                                                 if (world.isValidForSetBlock(mutable)) {
-                                                    ChunkSection chunkSection = chunkSectionCache.getSection(mutable);
+                                                    LevelChunkSection chunkSection = chunkSectionCache.getSection(mutable);
                                                     if (chunkSection != null) {
-                                                        int ad = ChunkSectionPos.getLocalCoord(t);
-                                                        int ae = ChunkSectionPos.getLocalCoord(v);
-                                                        int af = ChunkSectionPos.getLocalCoord(aa);
+                                                        int ad = SectionPos.getLocalCoord(t);
+                                                        int ae = SectionPos.getLocalCoord(v);
+                                                        int af = SectionPos.getLocalCoord(aa);
                                                         BlockState blockState = chunkSection.getBlockState(ad, ae, af);
                                                         Iterator var57 = config.targets.iterator();
 

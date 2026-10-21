@@ -6,7 +6,6 @@ import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.C2S.*;
 import net.jukoz.me.network.packets.ClientToServerPacket;
 import net.minecraft.server.level.ServerPlayer;
-
 import java.util.function.BiConsumer;
 
 /**

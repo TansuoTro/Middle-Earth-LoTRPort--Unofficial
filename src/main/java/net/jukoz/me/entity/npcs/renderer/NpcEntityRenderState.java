@@ -1,7 +1,7 @@
 package net.jukoz.me.entity.npcs.renderer;
 
 import net.jukoz.me.compat.client.render.state.BipedEntityRenderState;
-import net.minecraft.entity.AnimationState;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
 

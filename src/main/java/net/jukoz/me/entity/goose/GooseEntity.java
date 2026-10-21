@@ -11,27 +11,25 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.entity.ai.FuzzyTargeting;
+import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.ai.pathing.BirdNavigation;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.entity.mob.PiglinActivity;
-import net.minecraft.entity.mob.PiglinBrain;
-import net.minecraft.entity.passive.*;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.monster.piglin.PiglinArmPose;
+import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.particle.ItemStackParticleEffect;
+import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.tags.BlockTags;
@@ -44,13 +42,28 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.ai.control.Control;
 
-public class GooseEntity extends AnimalEntity {
+public class GooseEntity extends Animal {
     static final Predicate<ItemEntity> PICKABLE_DROP_FILTER;
     public float flapProgress;
     public float maxWingDeviation;
@@ -62,7 +75,7 @@ public class GooseEntity extends AnimalEntity {
     //protected static final ImmutableList<SensorType<? extends Sensor<? super GooseEntity>>> SENSORS;
     //protected static final ImmutableList MEMORY_MODULES;
 
-    public GooseEntity(EntityType<? extends AnimalEntity> entityType, Level world) {
+    public GooseEntity(EntityType<? extends Animal> entityType, Level world) {
         super(entityType, world);
         this.setCanPickUpLoot(true);
     }
@@ -90,29 +103,28 @@ public class GooseEntity extends AnimalEntity {
     }*/
 
     protected void initGoals() {
-        this.goalSelector.add(0, new SwimGoal(this));
+        this.goalSelector.add(0, new FloatGoal(this));
 
-        this.targetSelector.add(1, new RevengeGoal(this, new Class[0]));
+        this.targetSelector.add(1, new HurtByTargetGoal(this, new Class[0]));
 
         this.goalSelector.add(2, new MeleeAttackGoal(this, 0.9f, false));
-        this.goalSelector.add(3, new EscapeDangerGoal(this, 1.15));
-        this.goalSelector.add(4, new AnimalMateGoal(this, 1.0));
+        this.goalSelector.add(3, new PanicGoal(this, 1.15));
+        this.goalSelector.add(4, new BreedGoal(this, 1.0));
         this.goalSelector.add(5, new TemptGoal(this, 1.1, DuckEntity.SEEDS_BREEDING_INGREDIENT, false));
 
         this.goalSelector.add(6, new FollowParentGoal(this, 1.05));
         this.goalSelector.add(7, new GooseEntity.PickupItemGoal());
 
-        this.goalSelector.add(8, new LookAtEntityGoal(this, Player.class, 6.0F));
-        this.goalSelector.add(9, new LookAroundGoal(this));
-        this.goalSelector.add(10, new WanderAroundGoal(this, 1.0F));
+        this.goalSelector.add(8, new LookAtPlayerGoal(this, Player.class, 6.0F));
+        this.goalSelector.add(9, new RandomLookAroundGoal(this));
+        this.goalSelector.add(10, new RandomStrollGoal(this, 1.0F));
 
-        this.goalSelector.add(12, new FleeEntityGoal<>(this, WolfEntity.class, 8.0F, 0.9, 1.2));
+        this.goalSelector.add(12, new AvoidEntityGoal<>(this, Wolf.class, 8.0F, 0.9, 1.2));
 
         //this.goalSelector.add(13, new BirdFlightGoal(this));
     }
 
-
-    public static DefaultAttributeContainer.Builder createGooseAttributes() {
+    public static AttributeSupplier.Builder createGooseAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.GENERIC_MAX_HEALTH, 8.0)
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.4)
@@ -127,7 +139,7 @@ public class GooseEntity extends AnimalEntity {
             if (!itemStack.isEmpty()) {
                 for(int i = 0; i < 8; ++i) {
                     Vec3 vec3d = (new Vec3(((double)this.random.nextFloat() - 0.5) * 0.1, Math.random() * 0.1 + 0.1, 0.0)).rotateX(-this.getPitch() * 0.017453292F).rotateY(-this.getYaw() * 0.017453292F);
-                    this.getWorld().addParticle(new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack), this.getX() + this.getRotationVector().x / 2.0, this.getY(), this.getZ() + this.getRotationVector().z / 2.0, vec3d.x, vec3d.y + 0.05, vec3d.z);
+                    this.getWorld().addParticle(new ItemParticleOption(ParticleTypes.ITEM, itemStack), this.getX() + this.getRotationVector().x / 2.0, this.getY(), this.getZ() + this.getRotationVector().z / 2.0, vec3d.x, vec3d.y + 0.05, vec3d.z);
                 }
             }
         } else {
@@ -186,8 +198,8 @@ public class GooseEntity extends AnimalEntity {
         super.drop(source);
     }
 
-    protected EntityNavigation createNavigation(Level world) {
-        BirdNavigation birdNavigation = new BirdNavigation(this, world);
+    protected PathNavigation createNavigation(Level world) {
+        FlyingPathNavigation birdNavigation = new FlyingPathNavigation(this, world);
         birdNavigation.setCanPathThroughDoors(true);
         birdNavigation.setCanSwim(true);
         birdNavigation.setCanEnterOpenDoors(true);
@@ -247,7 +259,7 @@ public class GooseEntity extends AnimalEntity {
     }
 
     @Nullable
-    public GooseEntity createChild(ServerLevel serverWorld, PassiveEntity passiveEntity) {
+    public GooseEntity createChild(ServerLevel serverWorld, AgeableMob passiveEntity) {
         return (GooseEntity) ModEntities.GOOSE.create(serverWorld);
     }
 
@@ -258,7 +270,6 @@ public class GooseEntity extends AnimalEntity {
     public GooseVariant getVariant() {
         return GooseVariant.byId(this.getId());
     }
-
 
     public boolean canBreatheInWater() {
         return false;

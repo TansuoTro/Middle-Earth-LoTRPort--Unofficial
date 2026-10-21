@@ -1,16 +1,20 @@
 package net.jukoz.me.recipe;
-import net.jukoz.me.item.MEComponents;
 
+import net.jukoz.me.item.MEComponents;
 import com.google.gson.JsonObject;
-import net.minecraft.recipe.*;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.compat.SingleStackRecipeInput;
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.JsonHelper;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 
 public class AnvilShapingRecipe implements Recipe<SingleStackRecipeInput> {
     public final ResourceLocation id;
@@ -37,7 +41,7 @@ public class AnvilShapingRecipe implements Recipe<SingleStackRecipeInput> {
     }
 
     @Override
-    public ItemStack craft(SingleStackRecipeInput input, DynamicRegistryManager lookup) {
+    public ItemStack craft(SingleStackRecipeInput input, RegistryAccess lookup) {
         return this.output.copy();
     }
 
@@ -51,7 +55,7 @@ public class AnvilShapingRecipe implements Recipe<SingleStackRecipeInput> {
     }
 
     @Override
-    public ItemStack getOutput(DynamicRegistryManager registryManager) {
+    public ItemStack getOutput(RegistryAccess registryManager) {
         return output;
     }
 
@@ -95,9 +99,9 @@ public class AnvilShapingRecipe implements Recipe<SingleStackRecipeInput> {
 
         @Override
         public AnvilShapingRecipe read(ResourceLocation id, JsonObject json) {
-            Ingredient input = Ingredient.fromJson(JsonHelper.getElement(json, "ingredient"), true);
-            ItemStack output = ShapedRecipe.outputFromJson(JsonHelper.getObject(json, "output"));
-            int amount = JsonHelper.getInt(json, "amount");
+            Ingredient input = Ingredient.fromJson(GsonHelper.getElement(json, "ingredient"), true);
+            ItemStack output = ShapedRecipe.outputFromJson(GsonHelper.getObject(json, "output"));
+            int amount = GsonHelper.getInt(json, "amount");
             return new AnvilShapingRecipe(id, input, output, amount);
         }
 

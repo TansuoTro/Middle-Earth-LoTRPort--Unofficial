@@ -30,7 +30,6 @@ public class RaceUtil {
             player.heal(player.getMaxHealth());
     }
 
-
     public static RaceType getRaceType(Player player){
         Race race = PlayerDataService.getPlayerRace(player, player.getWorld());
         if(race != null)

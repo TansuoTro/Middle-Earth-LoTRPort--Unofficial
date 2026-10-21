@@ -8,7 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.TestableWorld;
+import net.minecraft.world.level.LevelSimulatedReader;
 import net.minecraft.world.level.levelgen.feature.TreeFeatureConfig;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
@@ -48,7 +48,7 @@ public class PalmFoliagePlacer extends FoliagePlacer {
     }
 
     @Override
-    protected void generate(TestableWorld world, BlockPlacer placer, RandomSource random, TreeFeatureConfig config, int trunkHeight, TreeNode treeNode, int foliageHeight, int radius, int offset) {
+    protected void generate(LevelSimulatedReader world, BlockPlacer placer, RandomSource random, TreeConfiguration config, int trunkHeight, TreeNode treeNode, int foliageHeight, int radius, int offset) {
         BlockPos.Mutable mutable = new BlockPos.Mutable();
 
         int count = 6 + (int) (Math.random() * 2);
@@ -69,8 +69,8 @@ public class PalmFoliagePlacer extends FoliagePlacer {
         }
     }
 
-    protected void createArcBranch(TestableWorld world, BlockPlacer placer, RandomSource random, BlockPos.Mutable mutable,
-                                                           TreeFeatureConfig config, BlockPos startPos, int height, double angle, float acceleration, float velocity) {
+    protected void createArcBranch(LevelSimulatedReader world, BlockPlacer placer, RandomSource random, BlockPos.Mutable mutable,
+                                                           TreeConfiguration config, BlockPos startPos, int height, double angle, float acceleration, float velocity) {
         if(height < 0) {
             height *= -1;
         }
@@ -93,7 +93,7 @@ public class PalmFoliagePlacer extends FoliagePlacer {
     }
 
     @Override
-    public int getRandomHeight(RandomSource random, int trunkHeight, TreeFeatureConfig config) {
+    public int getRandomHeight(RandomSource random, int trunkHeight, TreeConfiguration config) {
         return 4;
     }
 

@@ -3,6 +3,13 @@ package net.jukoz.me.client.model.equipment.head.helmets.elves.woodlandrealm;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.PartNames;
 import net.jukoz.me.client.model.equipment.head.helmets.HelmetAddonModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class WardenGladeHelmetModel extends HelmetAddonModel {
     private static final float Y_OFFSET = 0.75f;
@@ -11,42 +18,42 @@ public class WardenGladeHelmetModel extends HelmetAddonModel {
         super(root);
     }
 
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = new ModelData();
-        ModelPartData modelPartData = modelData.getRoot();
+    public static LayerDefinition getTexturedModelData() {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
 
-        ModelPartData head = modelPartData.addChild(PartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        head.addChild(PartNames.HAT, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition head = modelPartData.addChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        head.addChild(PartNames.HAT, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData addon = head.addChild("addon", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 1.75F, -0.25F));
+        PartDefinition addon = head.addChild("addon", CubeListBuilder.create(), PartPose.pivot(0.0F, 1.75F, -0.25F));
 
-        addon.addChild("central_spine", ModelPartBuilder.create().uv(0, 45).cuboid(-5.0F, 2.0F + Y_OFFSET, 0.0F, 1.0F, 10.0F, 9.0F,
-                new Dilation(0.1F)), ModelTransform.of(4.5F, -3.25F, -7.5F, 1.5708F, 0.0F, 0.0F));
+        addon.addChild("central_spine", CubeListBuilder.create().uv(0, 45).cuboid(-5.0F, 2.0F + Y_OFFSET, 0.0F, 1.0F, 10.0F, 9.0F,
+                new CubeDeformation(0.1F)), PartPose.of(4.5F, -3.25F, -7.5F, 1.5708F, 0.0F, 0.0F));
 
-        ModelPartData crest = addon.addChild("crest", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, -0.5F, 1.08F));
+        PartDefinition crest = addon.addChild("crest", CubeListBuilder.create(), PartPose.pivot(0.0F, -0.5F, 1.08F));
 
-        crest.addChild("crest_left", ModelPartBuilder.create().uv(46, 51).cuboid(-3.0F, -6.0F + Y_OFFSET, 0.0F, 9.0F, 12.0F, 0.0F,
-                new Dilation(0.0F)), ModelTransform.of(2.654F, -15.0819F, -2.0603F, -0.4363F, -0.6109F, 0.2094F));
+        crest.addChild("crest_left", CubeListBuilder.create().uv(46, 51).cuboid(-3.0F, -6.0F + Y_OFFSET, 0.0F, 9.0F, 12.0F, 0.0F,
+                new CubeDeformation(0.0F)), PartPose.of(2.654F, -15.0819F, -2.0603F, -0.4363F, -0.6109F, 0.2094F));
 
-        crest.addChild("crest_right", ModelPartBuilder.create().uv(46, 51).mirrored().cuboid(-5.0F, -6.0F + Y_OFFSET, 0.0F, 9.0F, 12.0F, 0.0F,
-                new Dilation(0.0F)).mirrored(false), ModelTransform.of(-3.404F, -14.8899F, -1.4963F, -0.4363F, 0.6109F, -0.2094F));
+        crest.addChild("crest_right", CubeListBuilder.create().uv(46, 51).mirrored().cuboid(-5.0F, -6.0F + Y_OFFSET, 0.0F, 9.0F, 12.0F, 0.0F,
+                new CubeDeformation(0.0F)).mirrored(false), PartPose.of(-3.404F, -14.8899F, -1.4963F, -0.4363F, 0.6109F, -0.2094F));
 
-        addon.addChild("lower_extension", ModelPartBuilder.create().uv(0, 11)
-                .cuboid(-4.0F, -11.5F + Y_OFFSET, -3.8F, 8.0F, 8.0F, 8.0F, new Dilation(0.55F))
+        addon.addChild("lower_extension", CubeListBuilder.create().uv(0, 11)
+                .cuboid(-4.0F, -11.5F + Y_OFFSET, -3.8F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.55F))
                 .uv(32, 11).cuboid(-4.0F, -10.0F + Y_OFFSET, -4.5F, 8.0F, 8.0F, 8.0F,
-                        new Dilation(0.9F)), ModelTransform.pivot(0.0F, 9.8F, 0.0F));
+                        new CubeDeformation(0.9F)), PartPose.pivot(0.0F, 9.8F, 0.0F));
 
-        addon.addChild("addon_eye", ModelPartBuilder.create()
-                        .uv(46, 63).cuboid(-4.5F, -4.3F + Y_OFFSET, -4.475F, 9.0F, 1.0F, 0.0F, new Dilation(0.0F)),
-                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        addon.addChild("addon_eye", CubeListBuilder.create()
+                        .uv(46, 63).cuboid(-4.5F, -4.3F + Y_OFFSET, -4.475F, 9.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)),
+                PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.BODY, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.RIGHT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.BODY, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.RIGHT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.LEFT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.RIGHT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
 
-        return TexturedModelData.of(modelData, 64, 64);
+        return LayerDefinition.of(modelData, 64, 64);
     }
 }

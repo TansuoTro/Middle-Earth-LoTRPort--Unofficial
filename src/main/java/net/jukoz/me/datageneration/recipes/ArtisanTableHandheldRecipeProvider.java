@@ -2,7 +2,6 @@ package net.jukoz.me.datageneration.recipes;
 
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.jukoz.me.MiddleEarth;
@@ -20,7 +19,7 @@ import net.jukoz.me.item.WeaponItemsME;
 import net.jukoz.me.resources.datas.common.DispositionType;
 import net.jukoz.me.utils.ItemTagsME;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.data.server.recipe.RecipeJsonProvider;
+import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.Item;
@@ -31,7 +30,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.resources.ResourceLocation;
@@ -65,9 +63,7 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
     }
 
     @Override
-    public void generate(Consumer<RecipeJsonProvider> exporter) {
-
-        
+    public void generate(Consumer<FinishedRecipe> exporter) {
 
                 //region WEAPONS
                 createArtisanTableSwordRecipe(exporter, MetalTypes.IRON, Items.IRON_SWORD.getDefaultStack(), false, DispositionType.NEUTRAL);
@@ -193,7 +189,6 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
 
                 createArtisanTableSpearRecipe(exporter, MetalTypes.EDHEL_STEEL, WeaponItemsME.WOODLAND_REALM_SPEAR.getDefaultStack(), false, DispositionType.GOOD);
                 createArtisanTableSpearRecipe(exporter, MetalTypes.EDHEL_STEEL, WeaponItemsME.WOODLAND_REALM_NOBLE_SPEAR.getDefaultStack(), true, DispositionType.GOOD);
-
 
                 createArtisanTableSwordRecipe(exporter, MetalTypes.BURZUM_STEEL, WeaponItemsME.BURZUM_STEEL_SWORD.getDefaultStack(), false, DispositionType.EVIL);
                 createArtisanTableSwordRecipe(exporter, MetalTypes.BURZUM_STEEL, WeaponItemsME.ORC_SWORD.getDefaultStack(), false, DispositionType.EVIL);
@@ -973,9 +968,6 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                                 conditionsFromItem(ResourceItemsME.SHIELD_PLATE))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.WOODLAND_REALM_NIGHTSHADE_ORNAMENTED_SHIELD).getPath() + "_artisan");
 
-
-
-
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.EREBOR_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
                         .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.BRONZE_NUGGET)
@@ -1299,7 +1291,6 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                                 conditionsFromItem(ResourceItemsME.SHIELD_PLATE))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.DOL_GULDUR_HEAVY_SKULL_SHIELD).getPath() + "_artisan");
 
-
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.GONDORIAN_CONVERTED_SHIELD.getDefaultStack(), "medium_shield", DispositionType.EVIL, XP_MEDIUM_SHIELD)
                         .input(WeaponItemsME.GONDORIAN_SHIELD)
                         .input(ResourceItemsME.MORDOR_BANNER_PATTERN)
@@ -1560,8 +1551,6 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.RUINED_DWARVEN_REINFORCED_TOWER_SHIELD).getPath() + "_artisan");
 
-
-
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.GOBLIN_TOWN_BONE_SHIELD.getDefaultStack(), "light_shield", DispositionType.EVIL)
                         .input(Items.BONE)
                         .input(Items.BONE)
@@ -1676,9 +1665,7 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                                 conditionsFromItem(Items.STICK))
                         .offerTo(exporter, Registries.ITEM.getId(ToolItemsME.LONGBOTTOM_PIPE).getPath() + "_artisan");
 
-            
     }
-
 
     private int getXpFor(MetalTypes metalTypes) {
         return switch (metalTypes) {
@@ -1693,18 +1680,18 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
         };
     }
 
-    private void createToolSet(Consumer<RecipeJsonProvider> exporter, MetalTypes metal, ItemStack outputPickaxe, ItemStack outputAxe, ItemStack outputShovel, ItemStack outputHoe, Optional<MetalTypes> rodMetal, DispositionType dispositionType) {
+    private void createToolSet(Consumer<FinishedRecipe> exporter, MetalTypes metal, ItemStack outputPickaxe, ItemStack outputAxe, ItemStack outputShovel, ItemStack outputHoe, Optional<MetalTypes> rodMetal, DispositionType dispositionType) {
         createArtisanTablePickaxeRecipe(exporter, metal, outputPickaxe, rodMetal, dispositionType);
         createArtisanTableAxeRecipe(exporter, metal, outputAxe, false, rodMetal, dispositionType);
         createArtisanTableShovelRecipe(exporter, metal, outputShovel, rodMetal, dispositionType);
         createArtisanTableHoeRecipe(exporter, metal, outputHoe, rodMetal, dispositionType);
     }
 
-    private void createArtisanTableSwordRecipe(Consumer<RecipeJsonProvider> exporter, MetalTypes metal, ItemStack output, boolean noble, DispositionType dispositionType) {
+    private void createArtisanTableSwordRecipe(Consumer<FinishedRecipe> exporter, MetalTypes metal, ItemStack output, boolean noble, DispositionType dispositionType) {
         createArtisanTableSwordRecipe(exporter, metal, Items.STICK, output, noble, dispositionType);
     }
 
-    private void createArtisanTableSwordRecipe(Consumer<RecipeJsonProvider> exporter, MetalTypes metal, Item stick, ItemStack output, boolean noble, DispositionType dispositionType) {
+    private void createArtisanTableSwordRecipe(Consumer<FinishedRecipe> exporter, MetalTypes metal, Item stick, ItemStack output, boolean noble, DispositionType dispositionType) {
         ItemStack blade = new ItemStack(ResourceItemsME.BLADE);
         blade.setSubNbt("Trim", trimNbt(getMetalIdentifier(metal)));
 
@@ -1727,11 +1714,11 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                 .offerTo(exporter);
     }
 
-    private void createArtisanTableLongswordRecipe(Consumer<RecipeJsonProvider> exporter, MetalTypes metal, ItemStack output, boolean noble, DispositionType dispositionType) {
+    private void createArtisanTableLongswordRecipe(Consumer<FinishedRecipe> exporter, MetalTypes metal, ItemStack output, boolean noble, DispositionType dispositionType) {
         createArtisanTableLongswordRecipe(exporter, metal, Items.STICK, output, noble, dispositionType);
     }
 
-    private void createArtisanTableLongswordRecipe(Consumer<RecipeJsonProvider> exporter, MetalTypes metal, Item stick, ItemStack output, boolean noble, DispositionType dispositionType) {
+    private void createArtisanTableLongswordRecipe(Consumer<FinishedRecipe> exporter, MetalTypes metal, Item stick, ItemStack output, boolean noble, DispositionType dispositionType) {
         ItemStack longBlade = new ItemStack(ResourceItemsME.LONG_BLADE);
         longBlade.setSubNbt("Trim", trimNbt(getMetalIdentifier(metal)));
 
@@ -1754,11 +1741,11 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                 .offerTo(exporter);
     }
 
-    private void createArtisanTableDaggerRecipe(Consumer<RecipeJsonProvider> exporter, MetalTypes metal, ItemStack output, boolean noble, DispositionType dispositionType) {
+    private void createArtisanTableDaggerRecipe(Consumer<FinishedRecipe> exporter, MetalTypes metal, ItemStack output, boolean noble, DispositionType dispositionType) {
         createArtisanTableDaggerRecipe(exporter, metal, Items.STICK, output, noble, dispositionType);
     }
 
-    private void createArtisanTableDaggerRecipe(Consumer<RecipeJsonProvider> exporter, MetalTypes metal, Item stick, ItemStack output, boolean noble, DispositionType dispositionType) {
+    private void createArtisanTableDaggerRecipe(Consumer<FinishedRecipe> exporter, MetalTypes metal, Item stick, ItemStack output, boolean noble, DispositionType dispositionType) {
         ItemStack shortBlade = new ItemStack(ResourceItemsME.SHORT_BLADE);
         shortBlade.setSubNbt("Trim", trimNbt(getMetalIdentifier(metal)));
 
@@ -1781,11 +1768,11 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                 .offerTo(exporter);
     }
 
-    private void createArtisanTableSpearRecipe(Consumer<RecipeJsonProvider> exporter, MetalTypes metal, ItemStack output, boolean noble, DispositionType dispositionType) {
+    private void createArtisanTableSpearRecipe(Consumer<FinishedRecipe> exporter, MetalTypes metal, ItemStack output, boolean noble, DispositionType dispositionType) {
         createArtisanTableSpearRecipe(exporter, metal, Items.STICK, output, noble, dispositionType);
     }
 
-    private void createArtisanTableSpearRecipe(Consumer<RecipeJsonProvider> exporter, MetalTypes metal, Item stick, ItemStack output, boolean noble, DispositionType dispositionType) {
+    private void createArtisanTableSpearRecipe(Consumer<FinishedRecipe> exporter, MetalTypes metal, Item stick, ItemStack output, boolean noble, DispositionType dispositionType) {
         ItemStack blade = new ItemStack(ResourceItemsME.SHORT_BLADE);
         blade.setSubNbt("Trim", trimNbt(getMetalIdentifier(metal)));
         int xp = (int) (getXpFor(metal) * 0.5f);
@@ -1812,7 +1799,7 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
         }
     }
 
-    private void createArtisanTableBowRecipe(Consumer<RecipeJsonProvider> exporter, ItemStack output, DispositionType dispositionType) {
+    private void createArtisanTableBowRecipe(Consumer<FinishedRecipe> exporter, ItemStack output, DispositionType dispositionType) {
         ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, output, "bow", dispositionType)
                 .input(Items.STICK)
                 .input(Items.STRING)
@@ -1825,7 +1812,7 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                 .offerTo(exporter);
     }
 
-    private void createArtisanTableNobleBowRecipe(Consumer<RecipeJsonProvider> exporter, ItemStack output, DispositionType dispositionType) {
+    private void createArtisanTableNobleBowRecipe(Consumer<FinishedRecipe> exporter, ItemStack output, DispositionType dispositionType) {
         ItemStack rod = new ItemStack(ResourceItemsME.ROD);
         rod.setSubNbt("Trim", trimNbt(new ResourceLocation(MetalTypes.GOLD.getName())));
         ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, output, "bow", dispositionType, XP_MEDIUM_SHIELD)
@@ -1840,7 +1827,7 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                 .offerTo(exporter);
     }
 
-    private void createArtisanTableLongbowRecipe(Consumer<RecipeJsonProvider> exporter, ItemStack output, DispositionType dispositionType) {
+    private void createArtisanTableLongbowRecipe(Consumer<FinishedRecipe> exporter, ItemStack output, DispositionType dispositionType) {
         ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, output, "bow", dispositionType)
                 .input(TagKey.of(Registries.ITEM, new ResourceLocation("wooden_fences")))
                 .input(Items.STRING)
@@ -1853,7 +1840,7 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                 .offerTo(exporter);
     }
 
-    private void createArtisanTableNobleLongbowRecipe(Consumer<RecipeJsonProvider> exporter, ItemStack output, DispositionType dispositionType) {
+    private void createArtisanTableNobleLongbowRecipe(Consumer<FinishedRecipe> exporter, ItemStack output, DispositionType dispositionType) {
         ItemStack rod = new ItemStack(ResourceItemsME.ROD);
         rod.setSubNbt("Trim", trimNbt(new ResourceLocation(MetalTypes.GOLD.getName())));
         ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, output, "bow", dispositionType, 2)
@@ -1868,7 +1855,7 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                 .offerTo(exporter);
     }
 
-    private void createArtisanTableCrossbowRecipe(Consumer<RecipeJsonProvider> exporter, ItemStack output, DispositionType dispositionType) {
+    private void createArtisanTableCrossbowRecipe(Consumer<FinishedRecipe> exporter, ItemStack output, DispositionType dispositionType) {
         ItemStack rod = new ItemStack(ResourceItemsME.ROD);
         rod.setSubNbt("Trim", trimNbt(new ResourceLocation(MetalTypes.IRON.getName())));
 
@@ -1885,7 +1872,7 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                 .offerTo(exporter);
     }
 
-    private void createArtisanTableNobleCrossbowRecipe(Consumer<RecipeJsonProvider> exporter, ItemStack output, DispositionType dispositionType) {
+    private void createArtisanTableNobleCrossbowRecipe(Consumer<FinishedRecipe> exporter, ItemStack output, DispositionType dispositionType) {
         ItemStack rod = new ItemStack(ResourceItemsME.ROD);
         rod.setSubNbt("Trim", trimNbt(new ResourceLocation(MetalTypes.GOLD.getName())));
 
@@ -1902,7 +1889,7 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                 .offerTo(exporter);
     }
 
-    private void createArtisanTablePickaxeRecipe(Consumer<RecipeJsonProvider> exporter, MetalTypes metal, ItemStack output, Optional<MetalTypes> rodMetal, DispositionType dispositionType) {
+    private void createArtisanTablePickaxeRecipe(Consumer<FinishedRecipe> exporter, MetalTypes metal, ItemStack output, Optional<MetalTypes> rodMetal, DispositionType dispositionType) {
         ItemStack pickaxeHead = new ItemStack(ResourceItemsME.PICKAXE_HEAD);
         pickaxeHead.setSubNbt("Trim", trimNbt(getMetalIdentifier(metal)));
         int xp = (int) (getXpFor(metal) * 1.5f);
@@ -1928,11 +1915,11 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
         }
     }
 
-    private void createArtisanTableAxeRecipe(Consumer<RecipeJsonProvider> exporter, MetalTypes metal, ItemStack output, boolean noble, Optional<MetalTypes> rodMetal, DispositionType dispositionType) {
+    private void createArtisanTableAxeRecipe(Consumer<FinishedRecipe> exporter, MetalTypes metal, ItemStack output, boolean noble, Optional<MetalTypes> rodMetal, DispositionType dispositionType) {
         createArtisanTableAxeRecipe(exporter, metal, Items.STICK, output, noble, rodMetal, dispositionType);
     }
 
-    private void createArtisanTableAxeRecipe(Consumer<RecipeJsonProvider> exporter, MetalTypes metal, Item stick, ItemStack output, boolean noble, Optional<MetalTypes> rodMetal, DispositionType dispositionType) {
+    private void createArtisanTableAxeRecipe(Consumer<FinishedRecipe> exporter, MetalTypes metal, Item stick, ItemStack output, boolean noble, Optional<MetalTypes> rodMetal, DispositionType dispositionType) {
         ItemStack axeHead = new ItemStack(ResourceItemsME.AXE_HEAD);
         axeHead.setSubNbt("Trim", trimNbt(getMetalIdentifier(metal)));
         int xp = (int) (getXpFor(metal) * 1.5f);
@@ -1970,7 +1957,7 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
         }
     }
 
-    private void createArtisanTableShovelRecipe(Consumer<RecipeJsonProvider> exporter, MetalTypes metal, ItemStack output, Optional<MetalTypes> rodMetal, DispositionType dispositionType) {
+    private void createArtisanTableShovelRecipe(Consumer<FinishedRecipe> exporter, MetalTypes metal, ItemStack output, Optional<MetalTypes> rodMetal, DispositionType dispositionType) {
         ItemStack shovelHead = new ItemStack(ResourceItemsME.SHOVEL_HEAD);
         shovelHead.setSubNbt("Trim", trimNbt(getMetalIdentifier(metal)));
         int xp = (int) (getXpFor(metal) * 0.5f);
@@ -1996,7 +1983,7 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
         }
     }
 
-    private void createArtisanTableHoeRecipe(Consumer<RecipeJsonProvider> exporter, MetalTypes metal, ItemStack output, Optional<MetalTypes> rodMetal, DispositionType dispositionType) {
+    private void createArtisanTableHoeRecipe(Consumer<FinishedRecipe> exporter, MetalTypes metal, ItemStack output, Optional<MetalTypes> rodMetal, DispositionType dispositionType) {
         ItemStack hoeHead = new ItemStack(ResourceItemsME.HOE_HEAD);
         hoeHead.setSubNbt("Trim", trimNbt(getMetalIdentifier(metal)));
         int xp = getXpFor(metal);
@@ -2023,7 +2010,7 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
         }
     }
 
-    private void createArtisanTableChiselRecipe(Consumer<RecipeJsonProvider> exporter, MetalTypes metal, Item nugget, ItemStack output) {
+    private void createArtisanTableChiselRecipe(Consumer<FinishedRecipe> exporter, MetalTypes metal, Item nugget, ItemStack output) {
         ItemStack shortBlade = new ItemStack(ResourceItemsME.SHORT_BLADE);
         shortBlade.setSubNbt("Trim", trimNbt(getMetalIdentifier(metal)));
         int xp = (int) (getXpFor(metal) * 0.5f);
@@ -2036,7 +2023,5 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         conditionsFromItem(shortBlade.getItem()))
                     .offerTo(exporter, Registries.ITEM.getId(output.getItem()).getPath() + "_" + metal.getName() + "_artisan");
     }
-
-    
 
 }

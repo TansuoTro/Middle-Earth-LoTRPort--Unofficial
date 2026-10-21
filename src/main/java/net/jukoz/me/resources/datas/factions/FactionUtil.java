@@ -1,9 +1,9 @@
 package net.jukoz.me.resources.datas.factions;
-import net.jukoz.me.compat.METext;
 
+import net.jukoz.me.compat.METext;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.network.packet.s2c.play.SubtitleS2CPacket;
-import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
+import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
@@ -23,12 +23,10 @@ import net.jukoz.me.resources.persistent_datas.PlayerDataService;
 import net.jukoz.me.utils.ModColors;
 import net.jukoz.me.world.dimension.ModDimensions;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.List;
 import java.util.Optional;
 
 public class FactionUtil {
-
 
     public static boolean updateFaction(ServerPlayer player, @Nullable Faction faction, @Nullable ResourceLocation spawnId) throws IdenticalFactionException, SpawnIdentifierException, FactionIdentifierException, NoFactionException {
         if(!assertUpdateFactionValues(player, faction, spawnId))
@@ -134,13 +132,12 @@ public class FactionUtil {
             return;
         }
 
-
         MutableComponent targetText = Component.translatable("event.%s.join.faction.success".formatted(MiddleEarth.MOD_ID), faction.getFullName());
         ((ServerPlayer) player).networkHandler.sendPacket(
-            new TitleS2CPacket(Component.of(""))
+            new ClientboundSetTitleTextPacket(Component.of(""))
         );
         ((ServerPlayer) player).networkHandler.sendPacket(
-                new SubtitleS2CPacket(METext.withColor(targetText, ModColors.SUCCESS.color))
+                new ClientboundSetSubtitleTextPacket(METext.withColor(targetText, ModColors.SUCCESS.color))
         );
 
     }

@@ -3,35 +3,34 @@ package net.jukoz.me.item.items;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.block.FluidBlock;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.entity.passive.PassiveEntity;
+import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUsageContext;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.resource.featuretoggle.FeatureSet;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.RaycastContext;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -46,7 +45,7 @@ public class CustomSpawnEggItem extends Item {
     }
 
     @Override
-    public InteractionResult useOnBlock(ItemUsageContext context) {
+    public InteractionResult useOnBlock(UseOnContext context) {
         Level world = context.getWorld();
         if (!(world instanceof ServerLevel)) {
             return InteractionResult.SUCCESS;
@@ -57,7 +56,7 @@ public class CustomSpawnEggItem extends Item {
         BlockState blockState = world.getBlockState(blockPos);
         BlockPos blockPos2 = blockState.getCollisionShape(world, blockPos).isEmpty() ? blockPos : blockPos.offset(direction);
         EntityType<?> entityType2 = this.getEntityType(itemStack.getNbt());
-        if (entityType2.spawnFromItemStack((ServerLevel)world, itemStack, context.getPlayer(), blockPos2, SpawnReason.SPAWN_EGG, true, !Objects.equals(blockPos, blockPos2) && direction == Direction.UP) != null) {
+        if (entityType2.spawnFromItemStack((ServerLevel)world, itemStack, context.getPlayer(), blockPos2, MobSpawnType.SPAWN_EGG, true, !Objects.equals(blockPos, blockPos2) && direction == Direction.UP) != null) {
             itemStack.decrement(1);
             world.emitGameEvent((Entity)context.getPlayer(), GameEvent.ENTITY_PLACE, blockPos);
         }
@@ -65,34 +64,34 @@ public class CustomSpawnEggItem extends Item {
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(Level world, Player user, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
-        BlockHitResult blockHitResult = SpawnEggItem.raycast(world, user, RaycastContext.FluidHandling.SOURCE_ONLY);
+        BlockHitResult blockHitResult = SpawnEggItem.raycast(world, user, ClipContext.FluidHandling.SOURCE_ONLY);
         if (blockHitResult.getType() != HitResult.Type.BLOCK) {
-            return TypedActionResult.pass(itemStack);
+            return InteractionResultHolder.pass(itemStack);
         }
         if (!(world instanceof ServerLevel)) {
-            return TypedActionResult.success(itemStack);
+            return InteractionResultHolder.success(itemStack);
         }
         BlockHitResult blockHitResult2 = blockHitResult;
         BlockPos blockPos = blockHitResult2.getBlockPos();
-        if (!(world.getBlockState(blockPos).getBlock() instanceof FluidBlock)) {
-            return TypedActionResult.pass(itemStack);
+        if (!(world.getBlockState(blockPos).getBlock() instanceof LiquidBlock)) {
+            return InteractionResultHolder.pass(itemStack);
         }
         if (!world.canPlayerModifyAt(user, blockPos) || !user.canPlaceOn(blockPos, blockHitResult2.getSide(), itemStack)) {
-            return TypedActionResult.fail(itemStack);
+            return InteractionResultHolder.fail(itemStack);
         }
         EntityType<?> entityType = this.getEntityType(itemStack.getNbt());
-        Object entity = entityType.spawnFromItemStack((ServerLevel)world, itemStack, user, blockPos, SpawnReason.SPAWN_EGG, false, false);
+        Object entity = entityType.spawnFromItemStack((ServerLevel)world, itemStack, user, blockPos, MobSpawnType.SPAWN_EGG, false, false);
         if (entity == null) {
-            return TypedActionResult.pass(itemStack);
+            return InteractionResultHolder.pass(itemStack);
         }
         if (!user.getAbilities().creativeMode) {
             itemStack.decrement(1);
         }
         user.incrementStat(Stats.USED.getOrCreateStat(this));
         world.emitGameEvent((Entity)user, GameEvent.ENTITY_PLACE, ((Entity)entity).getPos());
-        return TypedActionResult.consume(itemStack);
+        return InteractionResultHolder.consume(itemStack);
     }
 
     public boolean isOfSameEntityType(@Nullable CompoundTag nbt, EntityType<?> type) {
@@ -110,14 +109,14 @@ public class CustomSpawnEggItem extends Item {
 
     public EntityType<?> getEntityType(@Nullable CompoundTag nbt) {
         CompoundTag nbtCompound;
-        if (nbt != null && nbt.contains("EntityTag", NbtElement.COMPOUND_TYPE) && (nbtCompound = nbt.getCompound("EntityTag")).contains("id", NbtElement.STRING_TYPE)) {
+        if (nbt != null && nbt.contains("EntityTag", Tag.COMPOUND_TYPE) && (nbtCompound = nbt.getCompound("EntityTag")).contains("id", Tag.STRING_TYPE)) {
             return EntityType.get(nbtCompound.getString("id")).orElse(this.type);
         }
         return this.type;
     }
 
     @Override
-    public FeatureSet getRequiredFeatures() {
+    public FeatureFlagSet getRequiredFeatures() {
         return this.type.getRequiredFeatures();
     }
 
@@ -125,7 +124,7 @@ public class CustomSpawnEggItem extends Item {
         if (!this.isOfSameEntityType(stack.getNbt(), entityType)) {
             return Optional.empty();
         }
-        Mob mobEntity = entity instanceof PassiveEntity ? ((PassiveEntity)entity).createChild(world, (PassiveEntity)entity) : entityType.create(world);
+        Mob mobEntity = entity instanceof AgeableMob ? ((AgeableMob)entity).createChild(world, (AgeableMob)entity) : entityType.create(world);
         if (mobEntity == null) {
             return Optional.empty();
         }

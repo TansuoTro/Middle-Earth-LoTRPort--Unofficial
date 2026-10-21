@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.server.level.ServerLevel;
@@ -13,7 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.npcs.NpcEntity;
@@ -21,7 +21,6 @@ import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.resources.datas.biome_events.data.SpawnEventDataUtil;
 import net.jukoz.me.resources.datas.biome_events.data.WildSpawnEventData;
 import net.jukoz.me.resources.datas.npc_types.NpcType;
-
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,8 +57,6 @@ public class BiomeEventData {
         return this;
     }
 
-
-
     private List<WildSpawnEventData> getWildSpawnEventDatas() {
         return this.wildSpawnEventDatas;
     }
@@ -75,7 +72,7 @@ public class BiomeEventData {
 
     public ContextualizedBiomeData findNpcData(Level world, NpcEntity entity) {
         List<WildSpawnEventData> weightedData = new ArrayList<>();
-        DynamicRegistryManager manager = world.getRegistryManager();
+        RegistryAccess manager = world.getRegistryManager();
 
         for(WildSpawnEventData data : getWildSpawnEventDatas()){
             if(SpawnEventDataUtil.isConsideredForSpawning(data, Registries.ENTITY_TYPE.getId(EntitiesME.NPC), world, entity.getBlockPos()))
@@ -144,7 +141,6 @@ public class BiomeEventData {
         disabledChunkSpawningCache.remove(chunkPos);
         disabledChunkSpawningCache.put(chunkPos, world.getTime() + 20 * 5);
     }
-
 
     public record ContextualizedBiomeData(NpcType npcType){
 

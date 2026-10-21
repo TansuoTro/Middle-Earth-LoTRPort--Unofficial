@@ -4,6 +4,7 @@ import net.jukoz.me.compat.client.render.state.LivingEntityRenderStateCompat;
 import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 /**
  * R2 base for donor-style renderers that used 1.21.8's {@code AgeableMobEntityRenderer}
@@ -15,7 +16,7 @@ public abstract class MEMAgeableMobEntityRenderer<T extends Mob, S extends Livin
 
     private final M babyModel;
 
-    protected MEMAgeableMobEntityRenderer(EntityRendererFactory.Context ctx, M adultModel, M babyModel, float shadowRadius) {
+    protected MEMAgeableMobEntityRenderer(EntityRendererProvider.Context ctx, M adultModel, M babyModel, float shadowRadius) {
         super(ctx, adultModel, shadowRadius);
         this.babyModel = babyModel;
     }

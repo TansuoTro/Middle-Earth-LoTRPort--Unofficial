@@ -1,7 +1,5 @@
 package net.jukoz.me.item;
 
-
-import net.minecraft.item.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.util.Unit;
@@ -19,10 +17,11 @@ import net.jukoz.me.item.items.weapons.CustomAxeWeaponItem;
 import net.jukoz.me.item.utils.ModItemGroups;
 import net.jukoz.me.item.utils.ToolMaterialsME;
 import net.jukoz.me.registries.RegistryAliasesME;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 
 public class ToolItemsME {
     /**

@@ -1,32 +1,34 @@
 package net.jukoz.me.recipe;
-import net.jukoz.me.compat.NbtCompat;
 
+import net.jukoz.me.compat.NbtCompat;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.recipe.*;
-import net.minecraft.recipe.book.CraftingRecipeCategory;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.jukoz.me.block.special.forge.MultipleStackRecipeInput;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.JsonHelper;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.level.Level;
-
 import java.util.List;
 import java.util.Locale;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 
 public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
     public final ResourceLocation id;
     public final String output;
     public final int amount;
     public final List<Ingredient> inputs;
-    private final CraftingRecipeCategory category;
+    private final CraftingBookCategory category;
     private final String group;
     private final int xp;
 
-    public AlloyingRecipe(ResourceLocation id, String group, CraftingRecipeCategory category, String output, List<Ingredient> recipeItems, int amount, int xp) {
+    public AlloyingRecipe(ResourceLocation id, String group, CraftingBookCategory category, String output, List<Ingredient> recipeItems, int amount, int xp) {
         this.id = id;
         this.output = output;
         this.group = group;
@@ -36,8 +38,8 @@ public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
         this.xp = xp;
     }
 
-    public DefaultedList<Ingredient> getIngredients() {
-        DefaultedList<Ingredient> defaultedList = DefaultedList.of();
+    public NonNullList<Ingredient> getIngredients() {
+        NonNullList<Ingredient> defaultedList = NonNullList.of();
         defaultedList.addAll(this.inputs);
         return defaultedList;
     }
@@ -51,7 +53,7 @@ public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
         return true;
     }
 
-    public CraftingRecipeCategory getCategory() {
+    public CraftingBookCategory getCategory() {
         return this.category;
     }
 
@@ -73,7 +75,7 @@ public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
     }
 
     @Override
-    public ItemStack craft(MultipleStackRecipeInput input, DynamicRegistryManager lookup) {
+    public ItemStack craft(MultipleStackRecipeInput input, RegistryAccess lookup) {
         return null;
     }
 
@@ -83,7 +85,7 @@ public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
     }
 
     @Override
-    public ItemStack getOutput(DynamicRegistryManager registryManager) {
+    public ItemStack getOutput(RegistryAccess registryManager) {
         return ItemStack.EMPTY;
     }
 
@@ -92,7 +94,7 @@ public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
         return id;
     }
 
-    public String craftAlloy(MultipleStackRecipeInput input, DynamicRegistryManager lookup) {
+    public String craftAlloy(MultipleStackRecipeInput input, RegistryAccess lookup) {
         return output;
     }
 
@@ -130,23 +132,23 @@ public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
 
         @Override
         public AlloyingRecipe read(ResourceLocation id, JsonObject json) {
-            String group = JsonHelper.getString(json, "group", "");
-            CraftingRecipeCategory category = CraftingRecipeCategory.MISC;
-            if (JsonHelper.hasString(json, "category")) {
+            String group = GsonHelper.getString(json, "group", "");
+            CraftingBookCategory category = CraftingBookCategory.MISC;
+            if (GsonHelper.hasString(json, "category")) {
                 try {
-                    category = CraftingRecipeCategory.valueOf(JsonHelper.getString(json, "category").toUpperCase(Locale.ROOT));
+                    category = CraftingBookCategory.valueOf(GsonHelper.getString(json, "category").toUpperCase(Locale.ROOT));
                 } catch (IllegalArgumentException ignored) {}
             }
-            String output = JsonHelper.getString(json, "output");
-            JsonArray ingredients = JsonHelper.getArray(json, "ingredients");
-            DefaultedList<Ingredient> inputs = DefaultedList.ofSize(ingredients.size(), Ingredient.EMPTY);
+            String output = GsonHelper.getString(json, "output");
+            JsonArray ingredients = GsonHelper.getArray(json, "ingredients");
+            NonNullList<Ingredient> inputs = NonNullList.ofSize(ingredients.size(), Ingredient.EMPTY);
             for (int i = 0; i < ingredients.size(); i++) {
                 Ingredient ingredient = Ingredient.fromJson(ingredients.get(i), true);
                 if (ingredient.isEmpty()) continue;
                 inputs.set(i, ingredient);
             }
-            int amount = JsonHelper.getInt(json, "amount");
-            int xp = JsonHelper.getInt(json, "xp");
+            int amount = GsonHelper.getInt(json, "amount");
+            int xp = GsonHelper.getInt(json, "xp");
 
             return new AlloyingRecipe(id, group, category, output, inputs, amount, xp);
         }
@@ -154,10 +156,10 @@ public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
         @Override
         public AlloyingRecipe read(ResourceLocation id, FriendlyByteBuf buf) {
             String group = buf.readString();
-            CraftingRecipeCategory category = buf.readEnumConstant(CraftingRecipeCategory.class);
+            CraftingBookCategory category = buf.readEnumConstant(CraftingBookCategory.class);
             String output = buf.readString();
             int amount = buf.readInt();
-            DefaultedList<Ingredient> inputs = DefaultedList.ofSize(buf.readVarInt(), Ingredient.EMPTY);
+            NonNullList<Ingredient> inputs = NonNullList.ofSize(buf.readVarInt(), Ingredient.EMPTY);
             for (int i = 0; i < inputs.size(); i++) {
                 inputs.set(i, Ingredient.fromPacket(buf));
             }

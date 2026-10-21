@@ -19,8 +19,6 @@ public class PacketOnboardingRequest extends ClientToServerPacket<PacketOnboardi
     public static final PacketOnboardingRequest INSTANCE = new PacketOnboardingRequest();
     public static final PacketType<PacketOnboardingRequest> TYPE = PacketType.create(ID, PacketOnboardingRequest::new);
 
-
-
     private PacketOnboardingRequest() {
     }
 

@@ -1,5 +1,6 @@
 package net.jukoz.me.block.utils;
 
+
 public enum WoodBlockTypes {
     LOG_BLOCKS("", ""),
     MUSHROOM_STEM_BLOCKS("", ""),

@@ -6,12 +6,12 @@ import net.minecraft.core.RegistryEntryLookup;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
-
 import java.util.Optional;
+import net.minecraft.core.HolderGetter;
 
 public class DynamicRegistries {
 
-    public static <T> T register(BootstrapContext<T> context, RegistryEntryLookup<T> registryEntryLookup, ResourceKey<T> registryKey, T element) {
+    public static <T> T register(BootstrapContext<T> context, HolderGetter<T> registryEntryLookup, ResourceKey<T> registryKey, T element) {
         Optional<Holder.Reference<T>> optionalRegistryEntry = registryEntryLookup.getOptional(registryKey);
         optionalRegistryEntry.ifPresent(reference -> context.register(registryKey, element));
         return element;

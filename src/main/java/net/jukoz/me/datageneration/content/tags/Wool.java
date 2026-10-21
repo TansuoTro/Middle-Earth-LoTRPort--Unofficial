@@ -4,7 +4,6 @@ import net.jukoz.me.block.registration.GenericBlockSets;
 import net.jukoz.me.block.registration.ModBlocks;
 import net.minecraft.world.level.block.Block;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
-
 import java.util.ArrayList;
 import java.util.List;
 

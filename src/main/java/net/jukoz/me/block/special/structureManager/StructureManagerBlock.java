@@ -2,7 +2,6 @@ package net.jukoz.me.block.special.structureManager;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -10,13 +9,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,8 +24,14 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
 
-public class StructureManagerBlock extends BlockWithEntity implements BlockEntityProvider {
+public class StructureManagerBlock extends BaseEntityBlock implements EntityBlock {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public StructureManagerBlock(Settings settings) {
@@ -34,16 +39,14 @@ public class StructureManagerBlock extends BlockWithEntity implements BlockEntit
         this.setDefaultState(((this.stateManager.getDefaultState()).with(FACING, Direction.NORTH)));
     }
 
-
-
     @Override
     public void onPlaced(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
         super.onPlaced(world, pos, state, placer, itemStack);
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderType(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Nullable
@@ -54,12 +57,12 @@ public class StructureManagerBlock extends BlockWithEntity implements BlockEntit
     }
 
     @Override
-    public BlockState rotate(BlockState state, BlockRotation rotation) {
+    public BlockState rotate(BlockState state, Rotation rotation) {
         return state.with(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override
-    public BlockState mirror(BlockState state, BlockMirror mirror) {
+    public BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.get(FACING)));
     }
 
@@ -69,7 +72,7 @@ public class StructureManagerBlock extends BlockWithEntity implements BlockEntit
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return switch (state.get(FACING)){
             case DOWN, UP -> null;
             case NORTH -> Block.createCuboidShape(0, 0, 2, 16, 16, 16);
@@ -84,7 +87,7 @@ public class StructureManagerBlock extends BlockWithEntity implements BlockEntit
         if (world.isClient) {
             return InteractionResult.SUCCESS;
         } else if(player.isCreative() && player.isCreativeLevelTwoOp()) {
-            NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+            MenuProvider screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
             if(screenHandlerFactory != null) {
                 player.openHandledScreen(screenHandlerFactory);
             }

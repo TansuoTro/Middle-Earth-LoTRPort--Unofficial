@@ -11,7 +11,6 @@ import net.jukoz.me.resources.datas.common.EntityCategories;
 import net.jukoz.me.resources.datas.texture_presets.TexturePreset;
 import net.jukoz.me.resources.datas.texture_presets.TexturePresetDataPool;
 import net.jukoz.me.resources.datas.texture_presets.WeightedTexturePresetHolder;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,7 +19,6 @@ public class MoriaTexturePresetsPool {
     private final static WeightedTexturePresetHolder GOBLIN_PRESET;
 
     public final static TexturePresetDataPool GOBLIN;
-
 
     public static List<TexturePresetsRegistry.RegisterableNpcTextureData> fetchAll() {
         return List.of(

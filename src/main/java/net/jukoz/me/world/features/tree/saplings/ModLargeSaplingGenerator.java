@@ -1,12 +1,12 @@
 package net.jukoz.me.world.features.tree.saplings;
 
-import net.minecraft.block.sapling.LargeTreeSaplingGenerator;
+import net.minecraft.world.level.block.grower.AbstractMegaTreeGrower;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import org.jetbrains.annotations.Nullable;
 
-public class ModLargeSaplingGenerator extends LargeTreeSaplingGenerator {
+public class ModLargeSaplingGenerator extends AbstractMegaTreeGrower {
     private final ResourceKey<ConfiguredFeature<?, ?>> treeKey;
     private final ResourceKey<ConfiguredFeature<?, ?>> largeTreeKey;
 

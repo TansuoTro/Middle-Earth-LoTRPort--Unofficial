@@ -1,6 +1,6 @@
 package net.jukoz.me.registries.content.npctypes.pools;
-import net.jukoz.me.compat.METext;
 
+import net.jukoz.me.compat.METext;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Items;
@@ -21,7 +21,6 @@ import net.jukoz.me.resources.datas.npc_types.data.GearSlotPool;
 import net.jukoz.me.resources.datas.npc_types.data.MountData;
 import net.jukoz.me.resources.datas.npc_types.data.WeightedGearData;
 import net.jukoz.me.resources.datas.npc_types.data.WeightedItemData;
-
 import java.util.List;
 
 public class ShireNpcTypePool {

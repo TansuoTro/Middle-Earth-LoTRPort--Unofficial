@@ -2,12 +2,13 @@ package net.jukoz.me.datageneration;
 
 import com.google.gson.JsonElement;
 import net.minecraft.resources.ResourceLocation;
-
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.data.models.blockstates.BlockStateGenerator;
 
 /**
  * Port shim (datagen only): the 1.21 tree could register the same model twice without consequence,
@@ -15,7 +16,7 @@ import java.util.function.Supplier;
  * {@code IllegalStateException: Duplicate model definition for ...} on the second write. That single
  * exception used to abort the whole provider, leaving thousands of items without item models.
  *
- * <p>The collector fields on {@code ItemModelGenerator}/{@code BlockStateModelGenerator} are
+ * <p>The collector fields on {@code ItemModelGenerator}/{@code BlockModelGenerators} are
  * {@code public final}, so they can only be swapped through {@code sun.misc.Unsafe}. Everything is
  * best-effort: if the swap fails the provider behaves exactly as before.
  */
@@ -63,10 +64,10 @@ public final class DedupingModelCollector {
                 return;
             }
             Set<net.minecraft.world.level.block.Block> seen = new HashSet<>();
-            java.util.function.Consumer<net.minecraft.data.client.BlockStateSupplier> wrapper = supplier -> {
+            java.util.function.Consumer<net.minecraft.data.models.blockstates.BlockStateGenerator> wrapper = supplier -> {
                 if (seen.add(supplier.getBlock())) {
                     //noinspection unchecked
-                    ((java.util.function.Consumer<net.minecraft.data.client.BlockStateSupplier>) original).accept(supplier);
+                    ((java.util.function.Consumer<net.minecraft.data.models.blockstates.BlockStateGenerator>) original).accept(supplier);
                 }
             };
             setFinalField(generator, field, wrapper);

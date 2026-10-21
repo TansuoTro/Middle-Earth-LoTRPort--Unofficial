@@ -1,12 +1,11 @@
 package net.jukoz.me.item.items;
 
 import net.jukoz.me.item.MEComponents;
-
 import net.jukoz.me.resources.datas.common.RaceType;
 import net.jukoz.me.resources.datas.races.RaceUtil;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

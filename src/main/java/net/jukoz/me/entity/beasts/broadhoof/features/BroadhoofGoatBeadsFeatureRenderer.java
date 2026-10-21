@@ -1,15 +1,14 @@
 package net.jukoz.me.entity.beasts.broadhoof.features;
+
 import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatEntity;
 import net.jukoz.me.compat.client.render.MEFeatureRenderer;
-
 import com.google.common.collect.Maps;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRendererContext;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
@@ -17,7 +16,6 @@ import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatBeads;
 import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatEntityRenderState;
 import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatModel;
 import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatPattern;
-
 import java.util.Map;
 
 public class BroadhoofGoatBeadsFeatureRenderer extends MEFeatureRenderer<BroadhoofGoatEntity, BroadhoofGoatEntityRenderState, BroadhoofGoatModel> {
@@ -41,12 +39,12 @@ public class BroadhoofGoatBeadsFeatureRenderer extends MEFeatureRenderer<Broadho
             )
     );
 
-    public BroadhoofGoatBeadsFeatureRenderer(FeatureRendererContext<BroadhoofGoatEntity, BroadhoofGoatModel> featureRendererContext) {
+    public BroadhoofGoatBeadsFeatureRenderer(RenderLayerParent<BroadhoofGoatEntity, BroadhoofGoatModel> featureRendererContext) {
         super(featureRendererContext);
     }
 
     public void render(
-            PoseStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, BroadhoofGoatEntityRenderState state, float f, float g
+            PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, BroadhoofGoatEntityRenderState state, float f, float g
     ) {
         ResourceLocation identifier = (ResourceLocation)TEXTURES.get(state.beads);
         if (identifier != INVISIBLE_ID && !state.invisible) {

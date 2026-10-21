@@ -2,21 +2,21 @@ package net.jukoz.me.entity.ai.brain.task.npc;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.MemoryModuleState;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.MultiTickTask;
+import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.server.level.ServerLevel;
 import net.jukoz.me.entity.ai.brain.MemoryModulesME;
 import net.jukoz.me.entity.npcs.NpcEntity;
 
-public class NpcOnGroundApproachTask extends MultiTickTask<NpcEntity> {
+public class NpcOnGroundApproachTask extends Behavior<NpcEntity> {
     public NpcOnGroundApproachTask() {
         super(
                 ImmutableMap.of(
                         MemoryModuleType.ATTACK_TARGET,
-                        MemoryModuleState.VALUE_PRESENT,
+                        MemoryStatus.VALUE_PRESENT,
                         MemoryModulesME.SMASH_COOLDOWN,
-                        MemoryModuleState.VALUE_ABSENT
+                        MemoryStatus.VALUE_ABSENT
                 )
         );
     }
@@ -50,4 +50,3 @@ public class NpcOnGroundApproachTask extends MultiTickTask<NpcEntity> {
         entity.setBlocking(false);
     }
 }
-

@@ -12,7 +12,6 @@ public class BirdFlightGoal extends Goal {
         this.mob = mob;
     }
 
-
     @Override
     public boolean canStart() {
         this.target = this.mob.getTarget();

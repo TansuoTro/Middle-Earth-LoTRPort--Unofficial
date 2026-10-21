@@ -9,8 +9,9 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeKeys;
 import net.jukoz.me.registries.content.biomevents.BiomeEventRegistry;
 import net.jukoz.me.registries.content.biomevents.BiomeEventRegistryUtil;
+import net.minecraft.world.level.biome.Biomes;
 
-public class MEBiomeKeys extends BiomeKeys {
+public class MEBiomeKeys extends Biomes {
     // region SURFACE
     public static final ResourceKey<Biome> ANDUIN_VALES = MEBiomeKeys.register("anduin_vales");
     public static final ResourceKey<Biome> ANDUIN_VALES_FOREST = MEBiomeKeys.register("anduin_vales_forest");

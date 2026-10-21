@@ -1,6 +1,6 @@
 package net.jukoz.me.world.features.boulder;
 
-import net.minecraft.util.collection.Pool;
+import net.minecraft.util.random.WeightedRandomList;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.block.registration.ModNatureBlocks;
@@ -14,12 +14,15 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.stateprovider.WeightedBlockStateProvider;
-
+import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 import java.util.Arrays;
 import java.util.List;
-import net.minecraft.util.collection.DataPool;
+import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.data.worldgen.features.FeatureUtils;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.BlockPileConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
 
 public class BoulderConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> ANDESITE_BOULDER = registerKey("andesite_boulder");
@@ -31,7 +34,6 @@ public class BoulderConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> STONE_BOULDER = registerKey("stone_boulder");
     public static final ResourceKey<ConfiguredFeature<?, ?>> MIRKWOOD_ROOTS_BOULDER = registerKey("mirkwood_roots_boulder");
     public static final ResourceKey<ConfiguredFeature<?, ?>> MOSSY_BOULDER = registerKey("mossy_boulder");
-
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_BOULDER_ANDESITE = registerKey("small_boulder_andesite");
     public static final ResourceKey<ConfiguredFeature<?, ?>> MEDIUM_BOULDER_ANDESITE = registerKey("medium_boulder_andesite");
@@ -235,158 +237,158 @@ public class BoulderConfiguredFeatures {
             StoneBlockSets.GABBRO_SET.mossySmoothBlocks.base().getDefaultState());
 
     public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> featureRegisterable) {
-        ConfiguredFeatures.register(featureRegisterable, ANDESITE_BOULDER, Feature.FOREST_ROCK,
-                new SingleStateFeatureConfig(Blocks.ANDESITE.getDefaultState()));
-        ConfiguredFeatures.register(featureRegisterable, CALCITE_BOULDER, Feature.FOREST_ROCK,
-                new SingleStateFeatureConfig(Blocks.CALCITE.getDefaultState()));
-        ConfiguredFeatures.register(featureRegisterable, DIORITE_BOULDER, Feature.FOREST_ROCK,
-                new SingleStateFeatureConfig(Blocks.DIORITE.getDefaultState()));
-        ConfiguredFeatures.register(featureRegisterable, GRANITE_BOULDER, Feature.FOREST_ROCK,
-                new SingleStateFeatureConfig(Blocks.GRANITE.getDefaultState()));
-        ConfiguredFeatures.register(featureRegisterable, LIMESTONE_BOULDER, Feature.FOREST_ROCK,
-                new SingleStateFeatureConfig(StoneBlockSets.LIMESTONE_SET.baseBlocks.base().getDefaultState()));
-        ConfiguredFeatures.register(featureRegisterable, SANDSTONE_BOULDER, Feature.FOREST_ROCK,
-                new SingleStateFeatureConfig(Blocks.SANDSTONE.getDefaultState()));
-        ConfiguredFeatures.register(featureRegisterable, STONE_BOULDER, Feature.FOREST_ROCK,
-                new SingleStateFeatureConfig(Blocks.STONE.getDefaultState()));
-        ConfiguredFeatures.register(featureRegisterable, MIRKWOOD_ROOTS_BOULDER, Feature.FOREST_ROCK,
-                new SingleStateFeatureConfig(ModNatureBlocks.MIRKWOOD_ROOTS.getDefaultState()));
+        FeatureUtils.register(featureRegisterable, ANDESITE_BOULDER, Feature.FOREST_ROCK,
+                new BlockStateConfiguration(Blocks.ANDESITE.getDefaultState()));
+        FeatureUtils.register(featureRegisterable, CALCITE_BOULDER, Feature.FOREST_ROCK,
+                new BlockStateConfiguration(Blocks.CALCITE.getDefaultState()));
+        FeatureUtils.register(featureRegisterable, DIORITE_BOULDER, Feature.FOREST_ROCK,
+                new BlockStateConfiguration(Blocks.DIORITE.getDefaultState()));
+        FeatureUtils.register(featureRegisterable, GRANITE_BOULDER, Feature.FOREST_ROCK,
+                new BlockStateConfiguration(Blocks.GRANITE.getDefaultState()));
+        FeatureUtils.register(featureRegisterable, LIMESTONE_BOULDER, Feature.FOREST_ROCK,
+                new BlockStateConfiguration(StoneBlockSets.LIMESTONE_SET.baseBlocks.base().getDefaultState()));
+        FeatureUtils.register(featureRegisterable, SANDSTONE_BOULDER, Feature.FOREST_ROCK,
+                new BlockStateConfiguration(Blocks.SANDSTONE.getDefaultState()));
+        FeatureUtils.register(featureRegisterable, STONE_BOULDER, Feature.FOREST_ROCK,
+                new BlockStateConfiguration(Blocks.STONE.getDefaultState()));
+        FeatureUtils.register(featureRegisterable, MIRKWOOD_ROOTS_BOULDER, Feature.FOREST_ROCK,
+                new BlockStateConfiguration(ModNatureBlocks.MIRKWOOD_ROOTS.getDefaultState()));
 
-        ConfiguredFeatures.register(featureRegisterable, MOSSY_BOULDER, Feature.BLOCK_PILE,
-                new BlockPileFeatureConfig(new WeightedBlockStateProvider(DataPool.<BlockState>builder()
+        FeatureUtils.register(featureRegisterable, MOSSY_BOULDER, Feature.BLOCK_PILE,
+                new BlockPileConfiguration(new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
                         .add(Blocks.STONE.getDefaultState(), 3)
                         .add(Blocks.ANDESITE.getDefaultState(), 2)
                         .add(Blocks.STONE_SLAB.getDefaultState().with(SlabBlock.TYPE, SlabType.BOTTOM).with(SlabBlock.WATERLOGGED, false), 1)
                         .add(Blocks.MOSSY_COBBLESTONE_SLAB.getDefaultState().with(SlabBlock.TYPE, SlabType.BOTTOM).with(SlabBlock.WATERLOGGED, false), 2)
                         .add(Blocks.MOSSY_COBBLESTONE.getDefaultState(), 6))));
 
-        ConfiguredFeatures.register(featureRegisterable, SMALL_BOULDER_ANDESITE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, SMALL_BOULDER_ANDESITE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(smallWidth, smallLength, smallHeight, smallRandomSize, smallRandomness, andesite));
-        ConfiguredFeatures.register(featureRegisterable, MEDIUM_BOULDER_ANDESITE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, MEDIUM_BOULDER_ANDESITE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(mediumWidth, mediumLength, mediumHeight, mediumRandomSize, mediumRandomness, andesite));
-        ConfiguredFeatures.register(featureRegisterable, BIG_BOULDER_ANDESITE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, BIG_BOULDER_ANDESITE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(bigWidth, bigLength, bigHeight, bigRandomSize, bigRandomness, andesite));
 
-        ConfiguredFeatures.register(featureRegisterable, SMALL_BOULDER_ASHEN_STONE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, SMALL_BOULDER_ASHEN_STONE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(smallWidth, smallLength, smallHeight, smallRandomSize, smallRandomness, ashenStone));
-        ConfiguredFeatures.register(featureRegisterable, MEDIUM_BOULDER_ASHEN_STONE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, MEDIUM_BOULDER_ASHEN_STONE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(mediumWidth, mediumLength, mediumHeight, mediumRandomSize, mediumRandomness, ashenStone));
-        ConfiguredFeatures.register(featureRegisterable, BIG_BOULDER_ASHEN_STONE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, BIG_BOULDER_ASHEN_STONE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(bigWidth, bigLength, bigHeight, bigRandomSize, bigRandomness, ashenStone));
 
-        ConfiguredFeatures.register(featureRegisterable, SMALL_BOULDER_BASALT, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, SMALL_BOULDER_BASALT, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(smallWidth, smallLength, smallHeight, smallRandomSize, smallRandomness, basalt));
-        ConfiguredFeatures.register(featureRegisterable, MEDIUM_BOULDER_BASALT, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, MEDIUM_BOULDER_BASALT, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(mediumWidth, mediumLength, mediumHeight, mediumRandomSize, mediumRandomness, basalt));
-        ConfiguredFeatures.register(featureRegisterable, BIG_BOULDER_BASALT, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, BIG_BOULDER_BASALT, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(bigWidth, bigLength, bigHeight, bigRandomSize, bigRandomness, basalt));
 
-        ConfiguredFeatures.register(featureRegisterable, SMALL_BOULDER_BLUE_TUFF, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, SMALL_BOULDER_BLUE_TUFF, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(smallWidth, smallLength, smallHeight, smallRandomSize, smallRandomness, blueTuff));
-        ConfiguredFeatures.register(featureRegisterable, MEDIUM_BOULDER_BLUE_TUFF, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, MEDIUM_BOULDER_BLUE_TUFF, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(mediumWidth, mediumLength, mediumHeight, mediumRandomSize, mediumRandomness, blueTuff));
-        ConfiguredFeatures.register(featureRegisterable, BIG_BOULDER_BLUE_TUFF, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, BIG_BOULDER_BLUE_TUFF, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(bigWidth, bigLength, bigHeight, bigRandomSize, bigRandomness, blueTuff));
 
-        ConfiguredFeatures.register(featureRegisterable, SMALL_BOULDER_CALCITE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, SMALL_BOULDER_CALCITE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(smallWidth, smallLength, smallHeight, smallRandomSize, smallRandomness, calcite));
-        ConfiguredFeatures.register(featureRegisterable, MEDIUM_BOULDER_CALCITE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, MEDIUM_BOULDER_CALCITE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(mediumWidth, mediumLength, mediumHeight, mediumRandomSize, mediumRandomness, calcite));
-        ConfiguredFeatures.register(featureRegisterable, BIG_BOULDER_CALCITE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, BIG_BOULDER_CALCITE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(bigWidth, bigLength, bigHeight, bigRandomSize, bigRandomness, calcite));
 
-        ConfiguredFeatures.register(featureRegisterable, SMALL_BOULDER_DIORITE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, SMALL_BOULDER_DIORITE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(smallWidth, smallLength, smallHeight, smallRandomSize, smallRandomness, diorite));
-        ConfiguredFeatures.register(featureRegisterable, MEDIUM_BOULDER_DIORITE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, MEDIUM_BOULDER_DIORITE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(mediumWidth, mediumLength, mediumHeight, mediumRandomSize, mediumRandomness, diorite));
-        ConfiguredFeatures.register(featureRegisterable, BIG_BOULDER_DIORITE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, BIG_BOULDER_DIORITE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(bigWidth, bigLength, bigHeight, bigRandomSize, bigRandomness, diorite));
 
-        ConfiguredFeatures.register(featureRegisterable, SMALL_BOULDER_DOLOMITE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, SMALL_BOULDER_DOLOMITE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(smallWidth, smallLength, smallHeight, smallRandomSize, smallRandomness, dolomite));
-        ConfiguredFeatures.register(featureRegisterable, MEDIUM_BOULDER_DOLOMITE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, MEDIUM_BOULDER_DOLOMITE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(mediumWidth, mediumLength, mediumHeight, mediumRandomSize, mediumRandomness, dolomite));
-        ConfiguredFeatures.register(featureRegisterable, BIG_BOULDER_DOLOMITE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, BIG_BOULDER_DOLOMITE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(bigWidth, bigLength, bigHeight, bigRandomSize, bigRandomness, dolomite));
 
-        ConfiguredFeatures.register(featureRegisterable, SMALL_BOULDER_SMOOTH_DOLOMITE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, SMALL_BOULDER_SMOOTH_DOLOMITE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(smallWidth, smallLength, smallHeight, smallRandomSize, smallRandomness, smoothDolomite));
-        ConfiguredFeatures.register(featureRegisterable, MEDIUM_BOULDER_SMOOTH_DOLOMITE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, MEDIUM_BOULDER_SMOOTH_DOLOMITE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(mediumWidth, mediumLength, mediumHeight, mediumRandomSize, mediumRandomness, smoothDolomite));
-        ConfiguredFeatures.register(featureRegisterable, BIG_BOULDER_SMOOTH_DOLOMITE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, BIG_BOULDER_SMOOTH_DOLOMITE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(bigWidth, bigLength, bigHeight, bigRandomSize, bigRandomness, smoothDolomite));
 
-        ConfiguredFeatures.register(featureRegisterable, SMALL_BOULDER_GALONN, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, SMALL_BOULDER_GALONN, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(smallWidth, smallLength, smallHeight, smallRandomSize, smallRandomness, galonn));
-        ConfiguredFeatures.register(featureRegisterable, MEDIUM_BOULDER_GALONN, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, MEDIUM_BOULDER_GALONN, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(mediumWidth, mediumLength, mediumHeight, mediumRandomSize, mediumRandomness, galonn));
-        ConfiguredFeatures.register(featureRegisterable, BIG_BOULDER_GALONN, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, BIG_BOULDER_GALONN, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(bigWidth, bigLength, bigHeight, bigRandomSize, bigRandomness, galonn));
 
-        ConfiguredFeatures.register(featureRegisterable, SMALL_BOULDER_GNEISS, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, SMALL_BOULDER_GNEISS, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(smallWidth, smallLength, smallHeight, smallRandomSize, smallRandomness, gneiss));
-        ConfiguredFeatures.register(featureRegisterable, MEDIUM_BOULDER_GNEISS, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, MEDIUM_BOULDER_GNEISS, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(mediumWidth, mediumLength, mediumHeight, mediumRandomSize, mediumRandomness, gneiss));
-        ConfiguredFeatures.register(featureRegisterable, BIG_BOULDER_GNEISS, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, BIG_BOULDER_GNEISS, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(bigWidth, bigLength, bigHeight, bigRandomSize, bigRandomness, gneiss));
 
-        ConfiguredFeatures.register(featureRegisterable, SMALL_BOULDER_GRANITE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, SMALL_BOULDER_GRANITE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(smallWidth, smallLength, smallHeight, smallRandomSize, smallRandomness, granite));
-        ConfiguredFeatures.register(featureRegisterable, MEDIUM_BOULDER_GRANITE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, MEDIUM_BOULDER_GRANITE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(mediumWidth, mediumLength, mediumHeight, mediumRandomSize, mediumRandomness, granite));
-        ConfiguredFeatures.register(featureRegisterable, BIG_BOULDER_GRANITE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, BIG_BOULDER_GRANITE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(bigWidth, bigLength, bigHeight, bigRandomSize, bigRandomness, granite));
 
-        ConfiguredFeatures.register(featureRegisterable, SMALL_BOULDER_HEMATITE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, SMALL_BOULDER_HEMATITE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(smallWidth, smallLength, smallHeight, smallRandomSize, smallRandomness, hematite));
-        ConfiguredFeatures.register(featureRegisterable, MEDIUM_BOULDER_HEMATITE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, MEDIUM_BOULDER_HEMATITE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(mediumWidth, mediumLength, mediumHeight, mediumRandomSize, mediumRandomness, hematite));
-        ConfiguredFeatures.register(featureRegisterable, BIG_BOULDER_HEMATITE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, BIG_BOULDER_HEMATITE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(bigWidth, bigLength, bigHeight, bigRandomSize, bigRandomness, hematite));
 
-        ConfiguredFeatures.register(featureRegisterable, SMALL_BOULDER_IRONSTONE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, SMALL_BOULDER_IRONSTONE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(smallWidth, smallLength, smallHeight, smallRandomSize, smallRandomness, ironStone));
-        ConfiguredFeatures.register(featureRegisterable, MEDIUM_BOULDER_IRONSTONE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, MEDIUM_BOULDER_IRONSTONE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(mediumWidth, mediumLength, mediumHeight, mediumRandomSize, mediumRandomness, ironStone));
-        ConfiguredFeatures.register(featureRegisterable, BIG_BOULDER_IRONSTONE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, BIG_BOULDER_IRONSTONE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(bigWidth, bigLength, bigHeight, bigRandomSize, bigRandomness, ironStone));
 
-        ConfiguredFeatures.register(featureRegisterable, SMALL_BOULDER_LIMESTONE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, SMALL_BOULDER_LIMESTONE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(smallWidth, smallLength, smallHeight, smallRandomSize, smallRandomness, limeStone));
-        ConfiguredFeatures.register(featureRegisterable, MEDIUM_BOULDER_LIMESTONE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, MEDIUM_BOULDER_LIMESTONE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(mediumWidth, mediumLength, mediumHeight, mediumRandomSize, mediumRandomness, limeStone));
-        ConfiguredFeatures.register(featureRegisterable, BIG_BOULDER_LIMESTONE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, BIG_BOULDER_LIMESTONE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(bigWidth, bigLength, bigHeight, bigRandomSize, bigRandomness, limeStone));
 
-        ConfiguredFeatures.register(featureRegisterable, SMALL_BOULDER_MOSSY_STONE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, SMALL_BOULDER_MOSSY_STONE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(smallWidth, smallLength, smallHeight, smallRandomSize, smallRandomness, mossyStone));
-        ConfiguredFeatures.register(featureRegisterable, MEDIUM_BOULDER_MOSSY_STONE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, MEDIUM_BOULDER_MOSSY_STONE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(mediumWidth, mediumLength, mediumHeight, mediumRandomSize, mediumRandomness, mossyStone));
-        ConfiguredFeatures.register(featureRegisterable, BIG_BOULDER_MOSSY_STONE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, BIG_BOULDER_MOSSY_STONE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(bigWidth, bigLength, bigHeight, bigRandomSize, bigRandomness, mossyStone));
 
-        ConfiguredFeatures.register(featureRegisterable, SMALL_BOULDER_SANDSTONE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, SMALL_BOULDER_SANDSTONE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(smallWidth, smallLength, smallHeight, smallRandomSize, smallRandomness, sandStone));
-        ConfiguredFeatures.register(featureRegisterable, MEDIUM_BOULDER_SANDSTONE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, MEDIUM_BOULDER_SANDSTONE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(mediumWidth, mediumLength, mediumHeight, mediumRandomSize, mediumRandomness, sandStone));
-        ConfiguredFeatures.register(featureRegisterable, BIG_BOULDER_SANDSTONE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, BIG_BOULDER_SANDSTONE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(bigWidth, bigLength, bigHeight, bigRandomSize, bigRandomness, sandStone));
 
-        ConfiguredFeatures.register(featureRegisterable, SMALL_BOULDER_STONE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, SMALL_BOULDER_STONE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(smallWidth, smallLength, smallHeight, smallRandomSize, smallRandomness, stone));
-        ConfiguredFeatures.register(featureRegisterable, MEDIUM_BOULDER_STONE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, MEDIUM_BOULDER_STONE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(mediumWidth, mediumLength, mediumHeight, mediumRandomSize, mediumRandomness, stone));
-        ConfiguredFeatures.register(featureRegisterable, BIG_BOULDER_STONE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, BIG_BOULDER_STONE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(bigWidth, bigLength, bigHeight, bigRandomSize, bigRandomness, stone));
         
-        ConfiguredFeatures.register(featureRegisterable, SMALL_BOULDER_SLATE, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, SMALL_BOULDER_SLATE, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(smallWidth, smallLength, smallHeight, smallRandomSize, smallRandomness, slate));
 
-        ConfiguredFeatures.register(featureRegisterable, SMALL_BOULDER_GABBRO, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, SMALL_BOULDER_GABBRO, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(smallWidth, smallLength, smallHeight, smallRandomSize, smallRandomness, gabbro));
-        ConfiguredFeatures.register(featureRegisterable, MEDIUM_BOULDER_GABBRO, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, MEDIUM_BOULDER_GABBRO, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(mediumWidth, mediumLength, mediumHeight, mediumRandomSize, mediumRandomness, gabbro));
-        ConfiguredFeatures.register(featureRegisterable, BIG_BOULDER_GABBRO, ModFeatures.BIG_BOULDER,
+        FeatureUtils.register(featureRegisterable, BIG_BOULDER_GABBRO, ModFeatures.BIG_BOULDER,
                 new BigBoulderFeatureConfig(bigWidth, bigLength, bigHeight, bigRandomSize, bigRandomness, gabbro));
     }
 

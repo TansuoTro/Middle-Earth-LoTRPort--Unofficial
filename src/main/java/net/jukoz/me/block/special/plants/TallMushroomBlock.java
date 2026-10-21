@@ -1,19 +1,19 @@
 package net.jukoz.me.block.special.plants;
 
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.block.TallPlantBlock;
+import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelView;
 
-public class TallMushroomBlock extends TallPlantBlock {
+public class TallMushroomBlock extends DoublePlantBlock {
     public TallMushroomBlock(Settings settings) {
         super(settings);
     }
 
     @Override
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
         if (state.get(HALF) == DoubleBlockHalf.UPPER) {
             BlockState blockState = world.getBlockState(pos.down());
             return blockState.isOf(this) && blockState.get(HALF) == DoubleBlockHalf.LOWER;

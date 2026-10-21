@@ -1,6 +1,5 @@
 package net.jukoz.me.block.special.bellows;
 
-
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.resources.ResourceLocation;
@@ -12,11 +11,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
@@ -24,15 +23,15 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class BellowsBlockEntity extends BlockEntity {
     public static final int MAX_TICKS = 30;
     public static final int AVERAGE_PARTICLES = 3;
     public static final int PARTICLE_AMOUNT_MODIFIER = 2;
 
-    public static Random RANDOM;
+    public static RandomSource RANDOM;
 
     public int animationProgress;
     private static final String ID = "bellows";
@@ -41,13 +40,13 @@ public class BellowsBlockEntity extends BlockEntity {
     public BellowsBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.BELLOWS, pos, state);
         if(RANDOM == null)
-            RANDOM = new Random();
+            RANDOM = new RandomSource();
     }
 
     @Nullable
     @Override
-    public Packet<ClientPlayPacketListener> toUpdatePacket() {
-        return BlockEntityUpdateS2CPacket.create(this);
+    public Packet<ClientGamePacketListener> toUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     public boolean tryPumpingBellow(BlockState state, Level world, BlockPos pos, BellowsBlockEntity blockEntity, Direction direction, Entity entity) {
@@ -61,7 +60,7 @@ public class BellowsBlockEntity extends BlockEntity {
                             forgeBlockEntity.bellowsBoost();
                         }
                     }
-                    world.playSound((Player)null,  pos, SoundsME.BELLOWS_PUSH, SoundCategory.BLOCKS, 2.0F, 1.0F);
+                    world.playSound((Player)null,  pos, SoundsME.BELLOWS_PUSH, SoundSource.BLOCKS, 2.0F, 1.0F);
                     world.emitGameEvent(entity, GameEvent.BLOCK_CHANGE, pos);
                     return true;
                 }

@@ -5,24 +5,26 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.BipedEntityRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
+import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.model.EntityModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
-
 import java.util.Map;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.util.profiling.jfr.Environment;
 
 @Environment(value= EnvType.CLIENT)
-public class GaladhrimElfRenderer extends BipedEntityRenderer<GaladhrimElfEntity, GaladhrimElfModel<GaladhrimElfEntity>> {
+public class GaladhrimElfRenderer extends HumanoidMobRenderer<GaladhrimElfEntity, GaladhrimElfModel<GaladhrimElfEntity>> {
     private static final String PATH = "textures/entities/elves/galadhrim/";
 
-    public GaladhrimElfRenderer(EntityRendererFactory.Context ctx) {
+    public GaladhrimElfRenderer(EntityRendererProvider.Context ctx) {
         super(ctx, new GaladhrimElfModel<>(ctx.getPart(ModEntityModelLayers.ELF)), 0.5f);
-        this.addFeature(new ArmorFeatureRenderer<>(this, new GaladhrimElfModel(ctx.getPart(EntityModelLayers.PLAYER_INNER_ARMOR)), new GaladhrimElfModel(ctx.getPart(EntityModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
+        this.addFeature(new HumanoidArmorLayer<>(this, new GaladhrimElfModel(ctx.getPart(ModelLayers.PLAYER_INNER_ARMOR)), new GaladhrimElfModel(ctx.getPart(ModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
     }
 
     public static final Map<GaladhrimElfVariant, String> LOCATION_BY_VARIANT =
@@ -44,7 +46,7 @@ public class GaladhrimElfRenderer extends BipedEntityRenderer<GaladhrimElfEntity
 
     @Override
     public void render(GaladhrimElfEntity entity, float entityYaw, float partialTick, PoseStack poseStack,
-                       VertexConsumerProvider bufferSource, int packedLight) {
+                       MultiBufferSource bufferSource, int packedLight) {
 
         poseStack.scale(0.95f, 1.0f, 0.95f);
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);

@@ -3,7 +3,6 @@ package net.jukoz.me.resources.datas.npc_types.data;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.server.level.ServerLevel;
-
 import java.util.Optional;
 
 public class LootData {

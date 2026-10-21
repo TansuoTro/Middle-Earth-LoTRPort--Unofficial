@@ -4,7 +4,6 @@ import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.registries.content.npctypes.NpcRegistry;
 import net.jukoz.me.resources.datas.biome_events.BiomeEventData;
 import net.jukoz.me.resources.datas.biome_events.data.WildSpawnEventData;
-
 import java.util.List;
 
 public class MordorBiomeEventPool {

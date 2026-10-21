@@ -7,13 +7,14 @@ import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import net.minecraft.world.entity.Pose;
 
 @Mixin(Player.class)
 public abstract class PlayerAttributeCompatMixin {
     @Inject(method = "getDimensions", at = @At("RETURN"), cancellable = true)
-    private void me$dimensions(EntityPose pose, CallbackInfoReturnable<EntityDimensions> cir) {
+    private void me$dimensions(Pose pose, CallbackInfoReturnable<EntityDimensions> cir) {
         Player player = (Player) (Object) this;
-        if (pose != EntityPose.SLEEPING) {
+        if (pose != Pose.SLEEPING) {
             float scale = EntityAttributesME.scale(player);
             cir.setReturnValue(cir.getReturnValue().scaled(scale * (float) EntityAttributesME.value(player, EntityAttributesME.WIDTH_SCALE), scale));
         }

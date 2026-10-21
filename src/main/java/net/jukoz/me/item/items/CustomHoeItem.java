@@ -1,18 +1,18 @@
 package net.jukoz.me.item.items;
 
-import net.minecraft.item.HoeItem;
+import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.world.item.Tier;
 
 /**
  * HoeItem that restores the donor's tool durability, repair material and
  * enchantability (1.20.1 has no data-component settings, so these come from the
- * ToolMaterial via overrides, mirroring {@code ReachWeaponItem}).
+ * Tier via overrides, mirroring {@code ReachWeaponItem}).
  */
 public class CustomHoeItem extends HoeItem {
-    private final ToolMaterial material;
+    private final Tier material;
 
-    public CustomHoeItem(ToolMaterial material, int attackDamage, float attackSpeed, Settings settings) {
+    public CustomHoeItem(Tier material, int attackDamage, float attackSpeed, Settings settings) {
         super(material, attackDamage, attackSpeed, settings);
         this.material = material;
     }

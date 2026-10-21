@@ -1,11 +1,17 @@
 package net.jukoz.me.entity.beasts.great_horn;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.SinglePartEntityModel;
-
+import net.minecraft.client.model.HierarchicalModel;
 import java.util.Set;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
-public class GreatHornModel extends SinglePartEntityModel<GreatHornEntity> {
+public class GreatHornModel extends HierarchicalModel<GreatHornEntity> {
     private final ModelPart root;
     private final ModelPart body;
     private final ModelPart frontHalf;
@@ -25,94 +31,94 @@ public class GreatHornModel extends SinglePartEntityModel<GreatHornEntity> {
         this.leftAntler = this.topHead.getChild("left_antler");
         this.beard = this.topHead.getChild("beard");
     }
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = new ModelData();
-        ModelPartData modelPartData = modelData.getRoot();
-        ModelPartData root = modelPartData.addChild("root", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 8.0F, -10.0F));
+    public static LayerDefinition getTexturedModelData() {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
+        PartDefinition root = modelPartData.addChild("root", CubeListBuilder.create(), PartPose.pivot(0.0F, 8.0F, -10.0F));
 
-        ModelPartData body = root.addChild("body", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, -8.5F, 12.0F));
+        PartDefinition body = root.addChild("body", CubeListBuilder.create(), PartPose.pivot(0.0F, -8.5F, 12.0F));
 
-        ModelPartData front_half = body.addChild("front_half", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, -13.0F));
+        PartDefinition front_half = body.addChild("front_half", CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, -13.0F));
 
-        ModelPartData front_body = front_half.addChild("front_body", ModelPartBuilder.create().uv(0, 15).cuboid(-6.5F, -8.0F, -6.5F, 13.0F, 16.0F, 13.0F, new Dilation(0.0F))
-                .uv(0, 15).cuboid(-6.5F, -8.0F, -6.5F, 13.0F, 16.0F, 13.0F, new Dilation(0.2F))
-                .uv(37, 133).cuboid(-6.5F, 8.4F, -6.5F, 13.0F, 4.0F, 13.0F, new Dilation(0.2F)), ModelTransform.pivot(0.0F, 0.5F, 2.5F));
+        PartDefinition front_body = front_half.addChild("front_body", CubeListBuilder.create().uv(0, 15).cuboid(-6.5F, -8.0F, -6.5F, 13.0F, 16.0F, 13.0F, new CubeDeformation(0.0F))
+                .uv(0, 15).cuboid(-6.5F, -8.0F, -6.5F, 13.0F, 16.0F, 13.0F, new CubeDeformation(0.2F))
+                .uv(37, 133).cuboid(-6.5F, 8.4F, -6.5F, 13.0F, 4.0F, 13.0F, new CubeDeformation(0.2F)), PartPose.pivot(0.0F, 0.5F, 2.5F));
 
-        ModelPartData saddle = front_body.addChild("saddle", ModelPartBuilder.create().uv(88, 50).cuboid(-7.0F, -1.0F, 2.0F, 14.0F, 22.0F, 6.0F, new Dilation(0.3F))
-                .uv(84, 18).cuboid(-7.0F, -2.0F, -6.6F, 14.0F, 23.0F, 8.0F, new Dilation(0.3F)), ModelTransform.pivot(0.0F, -6.5F, 6.5F));
+        PartDefinition saddle = front_body.addChild("saddle", CubeListBuilder.create().uv(88, 50).cuboid(-7.0F, -1.0F, 2.0F, 14.0F, 22.0F, 6.0F, new CubeDeformation(0.3F))
+                .uv(84, 18).cuboid(-7.0F, -2.0F, -6.6F, 14.0F, 23.0F, 8.0F, new CubeDeformation(0.3F)), PartPose.pivot(0.0F, -6.5F, 6.5F));
 
-        ModelPartData seat_back_r1 = saddle.addChild("seat_back_r1", ModelPartBuilder.create().uv(49, 78).cuboid(-4.5F, -4.5F, -1.0F, 9.0F, 5.0F, 2.0F, new Dilation(0.3F)), ModelTransform.of(0.0F, 1.0F, 8.4F, -0.2182F, 0.0F, 0.0F));
+        PartDefinition seat_back_r1 = saddle.addChild("seat_back_r1", CubeListBuilder.create().uv(49, 78).cuboid(-4.5F, -4.5F, -1.0F, 9.0F, 5.0F, 2.0F, new CubeDeformation(0.3F)), PartPose.of(0.0F, 1.0F, 8.4F, -0.2182F, 0.0F, 0.0F));
 
-        ModelPartData frontLeftLeg = front_half.addChild("front_left_leg", ModelPartBuilder.create().uv(0, 108).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 16.0F, 4.0F, new Dilation(0.0F))
-                .uv(0, 108).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 16.0F, 4.0F, new Dilation(0.2F)), ModelTransform.pivot(4.5F, 8.5F, -1.0F));
+        PartDefinition frontLeftLeg = front_half.addChild("front_left_leg", CubeListBuilder.create().uv(0, 108).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 16.0F, 4.0F, new CubeDeformation(0.0F))
+                .uv(0, 108).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 16.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.pivot(4.5F, 8.5F, -1.0F));
 
-        ModelPartData frontRightLeg = front_half.addChild("front_right_leg", ModelPartBuilder.create().uv(16, 108).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 16.0F, 4.0F, new Dilation(0.0F))
-                .uv(16, 108).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 16.0F, 4.0F, new Dilation(0.2F)), ModelTransform.pivot(-4.5F, 8.5F, -1.0F));
+        PartDefinition frontRightLeg = front_half.addChild("front_right_leg", CubeListBuilder.create().uv(16, 108).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 16.0F, 4.0F, new CubeDeformation(0.0F))
+                .uv(16, 108).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 16.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.pivot(-4.5F, 8.5F, -1.0F));
 
-        ModelPartData head_neck = front_half.addChild("head_neck", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, -6.0F, -3.0F));
+        PartDefinition head_neck = front_half.addChild("head_neck", CubeListBuilder.create(), PartPose.pivot(0.0F, -6.0F, -3.0F));
 
-        ModelPartData neck = head_neck.addChild("neck", ModelPartBuilder.create().uv(40, 0).cuboid(-3.5F, -6.0F, -2.0F, 7.0F, 18.0F, 7.0F, new Dilation(0.0F))
-                .uv(40, 0).cuboid(-3.5F, -6.0F, -2.0F, 7.0F, 18.0F, 7.0F, new Dilation(0.0F))
-                .uv(53, 53).cuboid(-3.5F, -6.0F, -2.0F, 7.0F, 18.0F, 7.0F, new Dilation(0.3F)), ModelTransform.pivot(0.0F, -1.5F, -2.0F));
+        PartDefinition neck = head_neck.addChild("neck", CubeListBuilder.create().uv(40, 0).cuboid(-3.5F, -6.0F, -2.0F, 7.0F, 18.0F, 7.0F, new CubeDeformation(0.0F))
+                .uv(40, 0).cuboid(-3.5F, -6.0F, -2.0F, 7.0F, 18.0F, 7.0F, new CubeDeformation(0.0F))
+                .uv(53, 53).cuboid(-3.5F, -6.0F, -2.0F, 7.0F, 18.0F, 7.0F, new CubeDeformation(0.3F)), PartPose.pivot(0.0F, -1.5F, -2.0F));
 
-        ModelPartData top_head = head_neck.addChild("top_head", ModelPartBuilder.create().uv(96, 0).cuboid(-3.5F, -7.0F, -6.0F, 7.0F, 7.0F, 9.0F, new Dilation(0.0F))
-                .uv(96, 0).cuboid(-3.5F, -7.0F, -6.0F, 7.0F, 7.0F, 9.0F, new Dilation(0.2F))
-                .uv(51, 35).cuboid(-3.5F, -7.0F, -6.0F, 7.0F, 7.0F, 9.0F, new Dilation(0.3F))
-                .uv(69, 0).cuboid(-2.5F, -4.0F, -11.0F, 5.0F, 4.0F, 5.0F, new Dilation(0.0F))
-                .uv(69, 0).cuboid(-2.5F, -4.0F, -11.0F, 5.0F, 4.0F, 5.0F, new Dilation(0.2F))
-                .uv(52, 26).cuboid(-2.5F, -4.0F, -11.0F, 5.0F, 4.0F, 5.0F, new Dilation(0.3F))
-                .uv(86, 99).cuboid(3.9F, -2.0F, -7.0F, 0.0F, 7.0F, 21.0F, new Dilation(0.0F))
-                .uv(86, 91).cuboid(-3.9F, -2.0F, -7.0F, 0.0F, 7.0F, 21.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, -7.5F, 0.0F));
+        PartDefinition top_head = head_neck.addChild("top_head", CubeListBuilder.create().uv(96, 0).cuboid(-3.5F, -7.0F, -6.0F, 7.0F, 7.0F, 9.0F, new CubeDeformation(0.0F))
+                .uv(96, 0).cuboid(-3.5F, -7.0F, -6.0F, 7.0F, 7.0F, 9.0F, new CubeDeformation(0.2F))
+                .uv(51, 35).cuboid(-3.5F, -7.0F, -6.0F, 7.0F, 7.0F, 9.0F, new CubeDeformation(0.3F))
+                .uv(69, 0).cuboid(-2.5F, -4.0F, -11.0F, 5.0F, 4.0F, 5.0F, new CubeDeformation(0.0F))
+                .uv(69, 0).cuboid(-2.5F, -4.0F, -11.0F, 5.0F, 4.0F, 5.0F, new CubeDeformation(0.2F))
+                .uv(52, 26).cuboid(-2.5F, -4.0F, -11.0F, 5.0F, 4.0F, 5.0F, new CubeDeformation(0.3F))
+                .uv(86, 99).cuboid(3.9F, -2.0F, -7.0F, 0.0F, 7.0F, 21.0F, new CubeDeformation(0.0F))
+                .uv(86, 91).cuboid(-3.9F, -2.0F, -7.0F, 0.0F, 7.0F, 21.0F, new CubeDeformation(0.0F)), PartPose.pivot(0.0F, -7.5F, 0.0F));
 
-        ModelPartData earLeft = top_head.addChild("ear_left", ModelPartBuilder.create().uv(0, 0).cuboid(0.0F, -4.0F, -1.0F, 1.0F, 5.0F, 3.0F, new Dilation(0.0F))
-                .uv(0, 0).cuboid(0.0F, -4.0F, -1.0F, 1.0F, 5.0F, 3.0F, new Dilation(0.2F)), ModelTransform.of(2.5F, -6.0F, 1.0F, -0.7854F, 0.4363F, 0.0F));
+        PartDefinition earLeft = top_head.addChild("ear_left", CubeListBuilder.create().uv(0, 0).cuboid(0.0F, -4.0F, -1.0F, 1.0F, 5.0F, 3.0F, new CubeDeformation(0.0F))
+                .uv(0, 0).cuboid(0.0F, -4.0F, -1.0F, 1.0F, 5.0F, 3.0F, new CubeDeformation(0.2F)), PartPose.of(2.5F, -6.0F, 1.0F, -0.7854F, 0.4363F, 0.0F));
 
-        ModelPartData earRight = top_head.addChild("ear_right", ModelPartBuilder.create().uv(9, 0).cuboid(-0.5F, -4.0F, -1.0F, 1.0F, 5.0F, 3.0F, new Dilation(0.0F))
-                .uv(9, 0).cuboid(-0.5F, -4.0F, -1.0F, 1.0F, 5.0F, 3.0F, new Dilation(0.2F)), ModelTransform.of(-3.0F, -6.0F, 1.0F, -0.7854F, -0.4363F, 0.0F));
+        PartDefinition earRight = top_head.addChild("ear_right", CubeListBuilder.create().uv(9, 0).cuboid(-0.5F, -4.0F, -1.0F, 1.0F, 5.0F, 3.0F, new CubeDeformation(0.0F))
+                .uv(9, 0).cuboid(-0.5F, -4.0F, -1.0F, 1.0F, 5.0F, 3.0F, new CubeDeformation(0.2F)), PartPose.of(-3.0F, -6.0F, 1.0F, -0.7854F, -0.4363F, 0.0F));
 
-        ModelPartData right_antler = top_head.addChild("right_antler", ModelPartBuilder.create().uv(34, 120).mirrored().cuboid(-8.0F, 0.0F, -2.0F, 8.0F, 2.0F, 2.0F, new Dilation(0.0F)).mirrored(false)
-                .uv(34, 120).mirrored().cuboid(-8.0F, 0.0F, -2.0F, 8.0F, 2.0F, 2.0F, new Dilation(0.2F)).mirrored(false), ModelTransform.of(-3.0F, -7.0F, 0.0F, 0.1812F, -0.3808F, 0.4252F));
+        PartDefinition right_antler = top_head.addChild("right_antler", CubeListBuilder.create().uv(34, 120).mirrored().cuboid(-8.0F, 0.0F, -2.0F, 8.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)).mirrored(false)
+                .uv(34, 120).mirrored().cuboid(-8.0F, 0.0F, -2.0F, 8.0F, 2.0F, 2.0F, new CubeDeformation(0.2F)).mirrored(false), PartPose.of(-3.0F, -7.0F, 0.0F, 0.1812F, -0.3808F, 0.4252F));
 
-        ModelPartData tip_r_armor_r1 = right_antler.addChild("tip_r_armor_r1", ModelPartBuilder.create().uv(34, 124).mirrored().cuboid(-8.0F, -1.0F, -1.0F, 8.0F, 2.0F, 2.0F, new Dilation(0.2F)).mirrored(false), ModelTransform.of(-7.0F, 1.0F, 0.425F, 0.0F, 1.5708F, 0.0F));
+        PartDefinition tip_r_armor_r1 = right_antler.addChild("tip_r_armor_r1", CubeListBuilder.create().uv(34, 124).mirrored().cuboid(-8.0F, -1.0F, -1.0F, 8.0F, 2.0F, 2.0F, new CubeDeformation(0.2F)).mirrored(false), PartPose.of(-7.0F, 1.0F, 0.425F, 0.0F, 1.5708F, 0.0F));
 
-        ModelPartData tip_r_r1 = right_antler.addChild("tip_r_r1", ModelPartBuilder.create().uv(34, 124).mirrored().cuboid(-8.0F, -1.0F, -1.0F, 8.0F, 2.0F, 2.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.of(-7.0F, 1.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+        PartDefinition tip_r_r1 = right_antler.addChild("tip_r_r1", CubeListBuilder.create().uv(34, 124).mirrored().cuboid(-8.0F, -1.0F, -1.0F, 8.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)).mirrored(false), PartPose.of(-7.0F, 1.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
 
-        ModelPartData tip_r_horn_r1 = right_antler.addChild("tip_r_horn_r1", ModelPartBuilder.create().uv(27, 87).mirrored().cuboid(-16.0F, 0.0F, -12.0F, 16.0F, 0.0F, 23.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.of(-8.0F, 0.0F, 7.0F, 0.0F, 0.0F, 0.6109F));
+        PartDefinition tip_r_horn_r1 = right_antler.addChild("tip_r_horn_r1", CubeListBuilder.create().uv(27, 87).mirrored().cuboid(-16.0F, 0.0F, -12.0F, 16.0F, 0.0F, 23.0F, new CubeDeformation(0.0F)).mirrored(false), PartPose.of(-8.0F, 0.0F, 7.0F, 0.0F, 0.0F, 0.6109F));
 
-        ModelPartData base_r_horn_r1 = right_antler.addChild("base_r_horn_r1", ModelPartBuilder.create().uv(27, 112).cuboid(-5.0F, 0.0F, -7.0F, 11.0F, 0.0F, 7.0F, new Dilation(0.0F)), ModelTransform.of(-7.0F, 0.0F, -2.0F, -1.1781F, 0.0F, 0.0F));
+        PartDefinition base_r_horn_r1 = right_antler.addChild("base_r_horn_r1", CubeListBuilder.create().uv(27, 112).cuboid(-5.0F, 0.0F, -7.0F, 11.0F, 0.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.of(-7.0F, 0.0F, -2.0F, -1.1781F, 0.0F, 0.0F));
 
-        ModelPartData left_antler = top_head.addChild("left_antler", ModelPartBuilder.create().uv(54, 120).cuboid(0.0F, 0.0F, -2.0F, 8.0F, 2.0F, 2.0F, new Dilation(0.0F))
-                .uv(54, 120).cuboid(0.0F, 0.0F, -2.0F, 8.0F, 2.0F, 2.0F, new Dilation(0.2F)), ModelTransform.of(3.0F, -7.0F, 0.0F, 0.1812F, 0.3808F, -0.4252F));
+        PartDefinition left_antler = top_head.addChild("left_antler", CubeListBuilder.create().uv(54, 120).cuboid(0.0F, 0.0F, -2.0F, 8.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+                .uv(54, 120).cuboid(0.0F, 0.0F, -2.0F, 8.0F, 2.0F, 2.0F, new CubeDeformation(0.2F)), PartPose.of(3.0F, -7.0F, 0.0F, 0.1812F, 0.3808F, -0.4252F));
 
-        ModelPartData base_l_horn_r1 = left_antler.addChild("base_l_horn_r1", ModelPartBuilder.create().uv(50, 112).cuboid(-6.0F, 0.0F, -7.0F, 11.0F, 0.0F, 7.0F, new Dilation(0.0F)), ModelTransform.of(7.0F, 0.0F, -2.0F, -1.1781F, 0.0F, 0.0F));
+        PartDefinition base_l_horn_r1 = left_antler.addChild("base_l_horn_r1", CubeListBuilder.create().uv(50, 112).cuboid(-6.0F, 0.0F, -7.0F, 11.0F, 0.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.of(7.0F, 0.0F, -2.0F, -1.1781F, 0.0F, 0.0F));
 
-        ModelPartData tip_l_horn_r1 = left_antler.addChild("tip_l_horn_r1", ModelPartBuilder.create().uv(62, 87).cuboid(0.0F, 0.0F, -12.0F, 16.0F, 0.0F, 23.0F, new Dilation(0.0F)), ModelTransform.of(8.0F, 0.0F, 7.0F, 0.0F, 0.0F, -0.6109F));
+        PartDefinition tip_l_horn_r1 = left_antler.addChild("tip_l_horn_r1", CubeListBuilder.create().uv(62, 87).cuboid(0.0F, 0.0F, -12.0F, 16.0F, 0.0F, 23.0F, new CubeDeformation(0.0F)), PartPose.of(8.0F, 0.0F, 7.0F, 0.0F, 0.0F, -0.6109F));
 
-        ModelPartData tip_l_armor_r1 = left_antler.addChild("tip_l_armor_r1", ModelPartBuilder.create().uv(54, 124).cuboid(0.0F, -1.0F, -1.0F, 8.0F, 2.0F, 2.0F, new Dilation(0.2F)), ModelTransform.of(7.0F, 1.0F, 0.375F, 0.0F, -1.5708F, 0.0F));
+        PartDefinition tip_l_armor_r1 = left_antler.addChild("tip_l_armor_r1", CubeListBuilder.create().uv(54, 124).cuboid(0.0F, -1.0F, -1.0F, 8.0F, 2.0F, 2.0F, new CubeDeformation(0.2F)), PartPose.of(7.0F, 1.0F, 0.375F, 0.0F, -1.5708F, 0.0F));
 
-        ModelPartData tip_l_r1 = left_antler.addChild("tip_l_r1", ModelPartBuilder.create().uv(54, 124).cuboid(0.0F, -1.0F, -1.0F, 8.0F, 2.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(7.0F, 1.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
+        PartDefinition tip_l_r1 = left_antler.addChild("tip_l_r1", CubeListBuilder.create().uv(54, 124).cuboid(0.0F, -1.0F, -1.0F, 8.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.of(7.0F, 1.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
 
-        ModelPartData beard = top_head.addChild("beard", ModelPartBuilder.create().uv(69, 3).cuboid(0.0F, -1.0F, -6.0F, 0.0F, 18.0F, 7.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.5F, -5.0F));
+        PartDefinition beard = top_head.addChild("beard", CubeListBuilder.create().uv(69, 3).cuboid(0.0F, -1.0F, -6.0F, 0.0F, 18.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.pivot(0.0F, 0.5F, -5.0F));
 
-        ModelPartData back_body = front_half.addChild("back_body", ModelPartBuilder.create().uv(0, 44).cuboid(-5.5F, -4.55F, -3.6F, 11.0F, 13.0F, 14.0F, new Dilation(0.2F))
-                .uv(0, 44).cuboid(-5.5F, -4.5F, -4.0F, 11.0F, 13.0F, 14.0F, new Dilation(0.0F))
-                .uv(0, 128).cuboid(-5.5F, 8.825F, -3.6F, 11.0F, 4.0F, 14.0F, new Dilation(0.2F)), ModelTransform.pivot(0.0F, 0.0F, 13.0F));
+        PartDefinition back_body = front_half.addChild("back_body", CubeListBuilder.create().uv(0, 44).cuboid(-5.5F, -4.55F, -3.6F, 11.0F, 13.0F, 14.0F, new CubeDeformation(0.2F))
+                .uv(0, 44).cuboid(-5.5F, -4.5F, -4.0F, 11.0F, 13.0F, 14.0F, new CubeDeformation(0.0F))
+                .uv(0, 128).cuboid(-5.5F, 8.825F, -3.6F, 11.0F, 4.0F, 14.0F, new CubeDeformation(0.2F)), PartPose.pivot(0.0F, 0.0F, 13.0F));
 
-        ModelPartData tail = back_body.addChild("tail", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, -4.5F, 10.0F));
+        PartDefinition tail = back_body.addChild("tail", CubeListBuilder.create(), PartPose.pivot(0.0F, -4.5F, 10.0F));
 
-        ModelPartData tail_armor_r1 = tail.addChild("tail_armor_r1", ModelPartBuilder.create().uv(39, 47).cuboid(-1.5F, -2.0F, 0.0F, 3.0F, 2.0F, 4.0F, new Dilation(0.2F))
-                .uv(39, 47).cuboid(-1.5F, -2.0F, 0.0F, 3.0F, 2.0F, 4.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 2.0F, 0.0F, 0.5236F, 0.0F, 0.0F));
+        PartDefinition tail_armor_r1 = tail.addChild("tail_armor_r1", CubeListBuilder.create().uv(39, 47).cuboid(-1.5F, -2.0F, 0.0F, 3.0F, 2.0F, 4.0F, new CubeDeformation(0.2F))
+                .uv(39, 47).cuboid(-1.5F, -2.0F, 0.0F, 3.0F, 2.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.of(0.0F, 2.0F, 0.0F, 0.5236F, 0.0F, 0.0F));
 
-        ModelPartData backLeftLeg = root.addChild("back_left_leg", ModelPartBuilder.create().uv(0, 72).cuboid(-2.25F, -4.25F, -3.75F, 5.0F, 10.0F, 7.0F, new Dilation(0.0F))
-                .uv(0, 72).cuboid(-2.25F, -4.25F, -3.75F, 5.0F, 10.0F, 7.0F, new Dilation(0.2F))
-                .uv(4, 89).cuboid(-2.25F, 5.75F, 0.25F, 4.0F, 15.0F, 4.0F, new Dilation(0.0F))
-                .uv(4, 89).cuboid(-2.25F, 5.75F, 0.25F, 4.0F, 15.0F, 4.0F, new Dilation(0.2F)), ModelTransform.pivot(4.75F, -4.75F, 19.75F));
+        PartDefinition backLeftLeg = root.addChild("back_left_leg", CubeListBuilder.create().uv(0, 72).cuboid(-2.25F, -4.25F, -3.75F, 5.0F, 10.0F, 7.0F, new CubeDeformation(0.0F))
+                .uv(0, 72).cuboid(-2.25F, -4.25F, -3.75F, 5.0F, 10.0F, 7.0F, new CubeDeformation(0.2F))
+                .uv(4, 89).cuboid(-2.25F, 5.75F, 0.25F, 4.0F, 15.0F, 4.0F, new CubeDeformation(0.0F))
+                .uv(4, 89).cuboid(-2.25F, 5.75F, 0.25F, 4.0F, 15.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.pivot(4.75F, -4.75F, 19.75F));
 
-        ModelPartData backRightLeg = root.addChild("back_right_leg", ModelPartBuilder.create().uv(24, 72).cuboid(-2.75F, -4.25F, -3.75F, 5.0F, 10.0F, 7.0F, new Dilation(0.0F))
-                .uv(24, 72).cuboid(-2.75F, -4.25F, -3.75F, 5.0F, 10.0F, 7.0F, new Dilation(0.2F))
-                .uv(28, 89).cuboid(-1.75F, 5.75F, 0.25F, 4.0F, 15.0F, 4.0F, new Dilation(0.0F))
-                .uv(28, 89).cuboid(-1.75F, 5.75F, 0.25F, 4.0F, 15.0F, 4.0F, new Dilation(0.2F)), ModelTransform.pivot(-4.75F, -4.75F, 19.75F));
-        return TexturedModelData.of(modelData, 128, 160);
+        PartDefinition backRightLeg = root.addChild("back_right_leg", CubeListBuilder.create().uv(24, 72).cuboid(-2.75F, -4.25F, -3.75F, 5.0F, 10.0F, 7.0F, new CubeDeformation(0.0F))
+                .uv(24, 72).cuboid(-2.75F, -4.25F, -3.75F, 5.0F, 10.0F, 7.0F, new CubeDeformation(0.2F))
+                .uv(28, 89).cuboid(-1.75F, 5.75F, 0.25F, 4.0F, 15.0F, 4.0F, new CubeDeformation(0.0F))
+                .uv(28, 89).cuboid(-1.75F, 5.75F, 0.25F, 4.0F, 15.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.pivot(-4.75F, -4.75F, 19.75F));
+        return LayerDefinition.of(modelData, 128, 160);
     }
 
     @Override

@@ -6,27 +6,26 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
-import net.minecraft.block.entity.LootableContainerBlockEntity;
-import net.minecraft.block.entity.ViewerCountManager;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.SidedInventory;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.screen.GenericContainerScreenHandler;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.screen.ShulkerBoxScreenHandler;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.ShulkerBoxMenu;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.nbt.CompoundTag;
 import net.jukoz.me.compat.nbt.ReadView;
 import net.jukoz.me.compat.nbt.WriteView;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -34,19 +33,18 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import net.jukoz.me.gui.sack.SackScreenHandler;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.stream.IntStream;
 
-public class SackBlockEntity extends LootableContainerBlockEntity implements SidedInventory {
+public class SackBlockEntity extends RandomizableContainerBlockEntity implements WorldlyContainer {
     private static final int[] AVAILABLE_SLOTS = IntStream.range(0, 9).toArray();
-    private DefaultedList<ItemStack> inventory;
-    private final ViewerCountManager stateManager;
+    private NonNullList<ItemStack> inventory;
+    private final ContainerOpenersCounter stateManager;
 
     public SackBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.SACK, pos, state);
-        this.inventory = DefaultedList.ofSize(size(), ItemStack.EMPTY);
-        this.setInvStackList(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
-        this.stateManager = new ViewerCountManager() {
+        this.inventory = NonNullList.ofSize(size(), ItemStack.EMPTY);
+        this.setInvStackList(NonNullList.ofSize(this.size(), ItemStack.EMPTY));
+        this.stateManager = new ContainerOpenersCounter() {
             protected void onContainerOpen(Level world, BlockPos pos, BlockState state) {
                 SackBlockEntity.this.setOpen(state, true);
             }
@@ -59,8 +57,8 @@ public class SackBlockEntity extends LootableContainerBlockEntity implements Sid
             }
 
             protected boolean isPlayerViewing(Player player) {
-                if (player.currentScreenHandler instanceof GenericContainerScreenHandler) {
-                    Inventory inventory = ((GenericContainerScreenHandler)player.currentScreenHandler).getInventory();
+                if (player.currentScreenHandler instanceof ChestMenu) {
+                    Inventory inventory = ((ChestMenu)player.currentScreenHandler).getInventory();
                     return inventory == SackBlockEntity.this;
                 } else {
                     return false;
@@ -75,7 +73,7 @@ public class SackBlockEntity extends LootableContainerBlockEntity implements Sid
     }
 
     @Override
-    protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {
+    protected AbstractContainerMenu createScreenHandler(int syncId, Inventory playerInventory) {
         return new SackScreenHandler(syncId, playerInventory, this);
     }
 
@@ -99,15 +97,15 @@ public class SackBlockEntity extends LootableContainerBlockEntity implements Sid
         super.writeNbt(nbt);
         WriteView view = new WriteView(nbt);
         if (!this.serializeLootTable(view.nbt())) {
-            Inventories.writeNbt(view.nbt(), this.inventory, false);
+            ContainerHelper.writeNbt(view.nbt(), this.inventory, false);
         }
 
     }
 
     public void readInventoryNbt(ReadView readView) {
-        this.inventory = DefaultedList.ofSize(this.size(), ItemStack.EMPTY);
+        this.inventory = NonNullList.ofSize(this.size(), ItemStack.EMPTY);
         if (!this.deserializeLootTable(readView.nbt())) {
-            Inventories.readNbt(readView.nbt(), this.inventory);
+            ContainerHelper.readNbt(readView.nbt(), this.inventory);
         }
     }
 
@@ -133,18 +131,18 @@ public class SackBlockEntity extends LootableContainerBlockEntity implements Sid
         }
     }
 
-    protected DefaultedList<ItemStack> getHeldStacks() {
+    protected NonNullList<ItemStack> getHeldStacks() {
         return this.inventory;
     }
 
-    protected void setHeldStacks(DefaultedList<ItemStack> inventory) {
+    protected void setHeldStacks(NonNullList<ItemStack> inventory) {
         this.inventory = inventory;
     }
 
     @Nullable
     @Override
-    public Packet<ClientPlayPacketListener> toUpdatePacket() {
-        return BlockEntityUpdateS2CPacket.create(this);
+    public Packet<ClientGamePacketListener> toUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
@@ -172,12 +170,12 @@ public class SackBlockEntity extends LootableContainerBlockEntity implements Sid
     }
 
     @Override
-    protected DefaultedList<ItemStack> getInvStackList() {
+    protected NonNullList<ItemStack> getInvStackList() {
         return this.inventory;
     }
 
     @Override
-    protected void setInvStackList(DefaultedList<ItemStack> list) {
+    protected void setInvStackList(NonNullList<ItemStack> list) {
         this.inventory = list;
     }
 

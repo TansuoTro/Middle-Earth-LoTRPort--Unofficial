@@ -5,28 +5,27 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.entity.EntityData;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.math.Box;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.LocalDifficulty;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.spawner.Spawner;
-
+import net.minecraft.world.level.CustomSpawner;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpawnerNPCs implements Spawner {
+public class SpawnerNPCs implements CustomSpawner {
     private static final int SPAWN_COUNT_CAP = 32;
     private static final int SPAWN_DISTANCE = 32;
     private static final int SPAWN_RAND = 8;
@@ -50,12 +49,12 @@ public class SpawnerNPCs implements Spawner {
             if (playerEntity.isSpectator()) continue;
             BlockPos blockPos = playerEntity.getBlockPos();
             BlockPos targetBlockPos = new BlockPos(blockPos);
-            LocalDifficulty localDifficulty = world.getLocalDifficulty(blockPos);
+            DifficultyInstance localDifficulty = world.getLocalDifficulty(blockPos);
 
             Vec3 offset = new Vec3(MAX_SPAWN_RAD, 0, MAX_SPAWN_RAD);
             Vec3 pos1 = blockPos.toCenterPos().add(offset).add(0, 321 - playerEntity.getPos().y, 0);
             Vec3 pos2 = blockPos.toCenterPos().subtract(offset).add(0, -63 - playerEntity.getPos().y, 0);
-            int size = world.getEntitiesByClass(NpcEntity.class, new Box(pos1, pos2), (entity) -> true).size();
+            int size = world.getEntitiesByClass(NpcEntity.class, new AABB(pos1, pos2), (entity) -> true).size();
             if(size <= SPAWN_COUNT_CAP) {
                 float randomAngle = random.nextInt(360);
                 int distance = SPAWN_DISTANCE + random.nextInt(SPAWN_RAND);
@@ -67,7 +66,7 @@ public class SpawnerNPCs implements Spawner {
                 if(world.getBiome(targetBlockPos).getKey().isEmpty()) continue;
                 ResourceKey<Biome> biomeRegistryKey = world.getBiome(targetBlockPos).getKey().get();
 
-                EntityData entityData = null;
+                SpawnGroupData entityData = null;
                 List<EntitySpawningSettings> biomeSpawnSettings = ModEntitySpawning.getSpawnsAt(biomeRegistryKey);
                 if(biomeSpawnSettings == null) continue;
                 ArrayList<EntitySpawningSettings> spawningSettings = new ArrayList<>(biomeSpawnSettings);
@@ -97,10 +96,10 @@ public class SpawnerNPCs implements Spawner {
                         targetBlockPos.subtract(new Vec3i(0, 1, 0)), entitySpawningSettings.getEntity(), blockState)) continue;
 
                 for (int m = 0; m < entityCount; ++m) {
-                    PathAwareEntity entity = (PathAwareEntity) entitySpawningSettings.getEntity().create(world);
+                    PathfinderMob entity = (PathfinderMob) entitySpawningSettings.getEntity().create(world);
                     if (entity == null) continue;
                     entity.refreshPositionAndAngles(targetBlockPos, 0.0f, 0.0f);
-                    entityData = entity.initialize(world, localDifficulty, SpawnReason.NATURAL, entityData, null);
+                    entityData = entity.initialize(world, localDifficulty, MobSpawnType.NATURAL, entityData, null);
                     world.spawnEntityAndPassengers(entity);
                     ++i;
                 }
@@ -118,4 +117,3 @@ public class SpawnerNPCs implements Spawner {
         return (!blockState.isOf(Blocks.WATER) && !blockState.isOf(Blocks.LAVA) && !blockState.isIn(BlockTags.LOGS));
     }
 }
-

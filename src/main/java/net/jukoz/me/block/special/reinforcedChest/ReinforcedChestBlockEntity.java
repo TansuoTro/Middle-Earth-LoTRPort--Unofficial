@@ -5,29 +5,28 @@ import net.jukoz.me.block.registration.ModBlockEntities;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
-import net.minecraft.block.entity.ViewerCountManager;
+import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.DoubleInventory;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.CompoundContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.screen.GenericContainerScreenHandler;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 public class ReinforcedChestBlockEntity extends ChestBlockEntity {
 
-    private final ViewerCountManager stateManager = new ViewerCountManager(){
+    private final ContainerOpenersCounter stateManager = new ContainerOpenersCounter(){
         @Override
         protected void onContainerOpen(Level world, BlockPos pos, BlockState state) {
             ReinforcedChestBlockEntity.playSound(world, pos, state, SoundEvents.BLOCK_CHEST_OPEN);
@@ -45,9 +44,9 @@ public class ReinforcedChestBlockEntity extends ChestBlockEntity {
 
         @Override
         protected boolean isPlayerViewing(Player player) {
-            if (player.currentScreenHandler instanceof GenericContainerScreenHandler) {
-                Inventory inventory = ((GenericContainerScreenHandler)player.currentScreenHandler).getInventory();
-                return inventory == ReinforcedChestBlockEntity.this || inventory instanceof DoubleInventory && ((DoubleInventory)inventory).isPart(ReinforcedChestBlockEntity.this);
+            if (player.currentScreenHandler instanceof ChestMenu) {
+                Inventory inventory = ((ChestMenu)player.currentScreenHandler).getInventory();
+                return inventory == ReinforcedChestBlockEntity.this || inventory instanceof CompoundContainer && ((CompoundContainer)inventory).isPart(ReinforcedChestBlockEntity.this);
             }
             return false;
         }
@@ -56,12 +55,12 @@ public class ReinforcedChestBlockEntity extends ChestBlockEntity {
     public ReinforcedChestBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.REINFORCED_CHEST, pos, state);
 
-        this.setInvStackList(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
+        this.setInvStackList(NonNullList.ofSize(this.size(), ItemStack.EMPTY));
     }
 
     @Override
-    protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {
-        return GenericContainerScreenHandler.createGeneric9x6(syncId, playerInventory, this);
+    protected AbstractContainerMenu createScreenHandler(int syncId, Inventory playerInventory) {
+        return ChestMenu.createGeneric9x6(syncId, playerInventory, this);
     }
 
     static void playSound(Level world, BlockPos pos, BlockState state, SoundEvent soundEvent) {
@@ -69,9 +68,8 @@ public class ReinforcedChestBlockEntity extends ChestBlockEntity {
         double e = (double)pos.getY() + 0.5;
         double f = (double)pos.getZ() + 0.5;
 
-        world.playSound(null, d, e, f, soundEvent, SoundCategory.BLOCKS, 0.5f, world.random.nextFloat() * 0.1f - 1.0f);
+        world.playSound(null, d, e, f, soundEvent, SoundSource.BLOCKS, 0.5f, world.random.nextFloat() * 0.1f - 1.0f);
     }
-
 
     protected void onViewerCountUpdate(Level world, BlockPos pos, BlockState state, int oldViewerCount, int newViewerCount) {
         Block block = state.getBlock();
@@ -94,8 +92,8 @@ public class ReinforcedChestBlockEntity extends ChestBlockEntity {
 
     @Nullable
     @Override
-    public Packet<ClientPlayPacketListener> toUpdatePacket() {
-        return BlockEntityUpdateS2CPacket.create(this);
+    public Packet<ClientGamePacketListener> toUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override

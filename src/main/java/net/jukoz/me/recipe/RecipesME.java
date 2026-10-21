@@ -9,12 +9,11 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.jukoz.me.recipe.inscription.InscriptionRecipe;
-
 import java.util.function.Supplier;
 
 public class RecipesME {
-    /** Lazy: ModRecipes.registerRecipes() already owns the artisan type + serializer, and this
-     *  class's static initialiser used to re-register the same objects, which SimpleRegistry
+    /** LazyLoadedValue: ModRecipes.registerRecipes() already owns the artisan type + serializer, and this
+     *  class's static initialiser used to re-register the same objects, which MappedRegistry
      *  rejects ("Attempted to register object ... twice"). */
     public static final Supplier<RecipeType<ArtisanRecipe>> ARTISAN_TABLE_SUPPLIER = () -> ModRecipes.ARTISAN_TABLE;
 

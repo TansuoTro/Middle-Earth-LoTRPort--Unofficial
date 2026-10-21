@@ -13,8 +13,8 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUsage;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -35,8 +35,10 @@ import net.jukoz.me.block.registration.ModBlockEntities;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.block.special.bellows.BellowsBlock;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.level.block.BaseEntityBlock;
 
-public class CrockpotBlock extends BlockWithEntity {
+public class CrockpotBlock extends BaseEntityBlock {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty HANGING = BooleanProperty.of("hanging");
 
@@ -44,8 +46,6 @@ public class CrockpotBlock extends BlockWithEntity {
         super(settings);
         setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(HANGING, false));
     }
-
-
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
@@ -56,14 +56,14 @@ public class CrockpotBlock extends BlockWithEntity {
             boolean filled = crockpotBlockEntity.fill(stack);
             if(filled) {
                 ItemStack remainder = stack.getRecipeRemainder();
-                player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, remainder).copy());
+                player.setStackInHand(hand, ItemUtils.exchangeStack(stack, player, remainder).copy());
                 player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
-                world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.1F);
+                world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.1F);
                 world.emitGameEvent(null, GameEvent.FLUID_PLACE, pos);
                 return InteractionResult.SUCCESS;
             } else {
                 if(stack.isEmpty()) {
-                    NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+                    MenuProvider screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
                     if(screenHandlerFactory != null) {
                         player.openHandledScreen(screenHandlerFactory);
                     }
@@ -72,7 +72,7 @@ public class CrockpotBlock extends BlockWithEntity {
                     ItemStack stackResult = crockpotBlockEntity.fillBowl(stack.getItem());
                     if(!stackResult.isEmpty()) {
                         stack.decrement(1);
-                        world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 1.0F, 0.9F);
+                        world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 0.9F);
 
                         if(world.isClient) {
                             if (stack.isEmpty()) {

@@ -8,12 +8,11 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.StructureWorldAccess;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.Iterator;
 
 public class ColumnsFeature extends Feature<ColumnsFeatureConfig> {
@@ -23,10 +22,10 @@ public class ColumnsFeature extends Feature<ColumnsFeatureConfig> {
         super(codec);
     }
 
-    public boolean generate(FeatureContext<ColumnsFeatureConfig> context) {
+    public boolean generate(FeaturePlaceContext<ColumnsFeatureConfig> context) {
         int i = context.getGenerator().getSeaLevel();
         BlockPos blockPos = context.getOrigin();
-        StructureWorldAccess structureWorldAccess = context.getWorld();
+        WorldGenLevel structureWorldAccess = context.getWorld();
         RandomSource random = context.getRandom();
         ColumnsFeatureConfig ColumnsFeatureConfig = (ColumnsFeatureConfig)context.getConfig();
         if (!canPlaceAt(structureWorldAccess, i, blockPos.mutableCopy())) {
@@ -51,7 +50,7 @@ public class ColumnsFeature extends Feature<ColumnsFeatureConfig> {
         }
     }
 
-    private boolean placeColumn(WorldAccess world, int seaLevel, BlockPos pos, int height, int reach, BlockState blockState) {
+    private boolean placeColumn(LevelAccessor world, int seaLevel, BlockPos pos, int height, int reach, BlockState blockState) {
         boolean bl = false;
         Iterator var7 = BlockPos.iterate(pos.getX() - reach, pos.getY(), pos.getZ() - reach, pos.getX() + reach, pos.getY(), pos.getZ() + reach).iterator();
 
@@ -87,7 +86,7 @@ public class ColumnsFeature extends Feature<ColumnsFeatureConfig> {
     }
 
     @Nullable
-    private static BlockPos moveDownToGround(WorldAccess world, int seaLevel, BlockPos.Mutable mutablePos, int distance) {
+    private static BlockPos moveDownToGround(LevelAccessor world, int seaLevel, BlockPos.Mutable mutablePos, int distance) {
         while(mutablePos.getY() > world.getBottomY() + 1 && distance > 0) {
             --distance;
             if (canPlaceAt(world, seaLevel, mutablePos)) {
@@ -100,7 +99,7 @@ public class ColumnsFeature extends Feature<ColumnsFeatureConfig> {
         return null;
     }
 
-    private static boolean canPlaceAt(WorldAccess world, int seaLevel, BlockPos.Mutable mutablePos) {
+    private static boolean canPlaceAt(LevelAccessor world, int seaLevel, BlockPos.Mutable mutablePos) {
         if (!isAirOrLavaOcean(world, seaLevel, mutablePos)) {
             return false;
         } else {
@@ -111,7 +110,7 @@ public class ColumnsFeature extends Feature<ColumnsFeatureConfig> {
     }
 
     @Nullable
-    private static BlockPos moveUpToAir(WorldAccess world, BlockPos.Mutable mutablePos, int distance) {
+    private static BlockPos moveUpToAir(LevelAccessor world, BlockPos.Mutable mutablePos, int distance) {
         while(mutablePos.getY() < world.getTopY() && distance > 0) {
             --distance;
             BlockState blockState = world.getBlockState(mutablePos);
@@ -129,7 +128,7 @@ public class ColumnsFeature extends Feature<ColumnsFeatureConfig> {
         return null;
     }
 
-    private static boolean isAirOrLavaOcean(WorldAccess world, int seaLevel, BlockPos pos) {
+    private static boolean isAirOrLavaOcean(LevelAccessor world, int seaLevel, BlockPos pos) {
         BlockState blockState = world.getBlockState(pos);
         return blockState.isAir() || blockState.isOf(Blocks.LAVA) && pos.getY() <= seaLevel;
     }

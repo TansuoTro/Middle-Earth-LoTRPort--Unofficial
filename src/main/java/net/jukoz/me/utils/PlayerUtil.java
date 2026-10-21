@@ -5,7 +5,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.math.Box;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.Level;
@@ -20,12 +20,11 @@ import net.jukoz.me.resources.datas.races.Race;
 import net.jukoz.me.resources.datas.races.RaceLookup;
 import net.jukoz.me.resources.persistent_datas.PlayerData;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 
 public class PlayerUtil {
     public static boolean isAgainstWall(Player entity) {
-        Box boundingBox = entity.getBoundingBox();
+        AABB boundingBox = entity.getBoundingBox();
         Level world = entity.getWorld();
         double testMovementAmount = 0.0001;
 

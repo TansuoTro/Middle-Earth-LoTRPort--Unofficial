@@ -8,7 +8,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.item.ItemConvertible;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.state.property.IntProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -18,7 +18,7 @@ import net.minecraft.world.level.Level;
 
 public class PipeweedCropBlock extends CropBlock {
     public static final int MAX_AGE = 3;
-    public static final IntProperty AGE = BlockStateProperties.AGE_3;
+    public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
     //protected static final VoxelShape SHAPE = Block.createCuboidShape(2.0, 0.0, 2.0, 14.0, 30.0, 14.0);
 
     private static final VoxelShape[] AGE_TO_SHAPE = new VoxelShape[]{
@@ -31,12 +31,12 @@ public class PipeweedCropBlock extends CropBlock {
         super(settings);
     }
     @Override
-    protected ItemConvertible getSeedsItem() {
+    protected ItemLike getSeedsItem() {
         return ResourceItemsME.PIPEWEED_SEEDS;
     }
 
     @Override
-    public IntProperty getAgeProperty() {
+    public IntegerProperty getAgeProperty() {
         return AGE;
     }
 

@@ -3,12 +3,12 @@ package net.jukoz.me.entity.npcs.initializer;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.passive.AbstractHorseEntity;
-import net.minecraft.entity.passive.HorseEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Holder;
@@ -26,9 +26,9 @@ import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.resources.datas.biome_events.BiomeEventData;
 import net.jukoz.me.resources.datas.biome_events.BiomeEventDataLookup;
 import net.jukoz.me.resources.datas.npc_types.NpcType;
-
 import java.util.List;
 import java.util.Optional;
+import net.minecraft.resources.ResourceKey;
 
 public class NpcEntityInitializer {
     public static void initializeNpcEntity(ServerLevel serverWorld, NpcEntity npcEntity){
@@ -85,9 +85,8 @@ public class NpcEntityInitializer {
         if(currentNpcDataId == null)
             return true;
 
-        DynamicRegistryManager registryManager = serverWorld.getRegistryManager();
+        RegistryAccess registryManager = serverWorld.getRegistryManager();
         Optional<Holder.Reference<NpcType>> optionalEntry = registryManager.getOptional(DynamicRegistriesME.NPC_TYPE).get().getEntry(net.minecraft.resources.ResourceKey.of(DynamicRegistriesME.NPC_TYPE, currentNpcDataId));
-
 
         if(!npcEntity.hasTextureData())
             return true;

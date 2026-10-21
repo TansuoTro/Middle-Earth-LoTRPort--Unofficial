@@ -1,5 +1,15 @@
 package net.jukoz.me.config;
 
+import net.fabricmc.loader.api.FabricLoader;
+import net.jukoz.me.MiddleEarth;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Scanner;
+
 /*
  * Copyright (c) 2021 magistermaks
  * Slightly modified by Kaupenjoe 2021
@@ -23,17 +33,6 @@ package net.jukoz.me.config;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-import net.fabricmc.loader.api.FabricLoader;
-import net.jukoz.me.MiddleEarth;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Scanner;
 
 public class SimpleConfig {
 

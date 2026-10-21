@@ -1,6 +1,6 @@
 package net.jukoz.me.network.packets.C2S;
 
-import net.minecraft.screen.ScreenHandler;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
@@ -32,8 +32,6 @@ public class ArtisanIndexPacket extends ClientToServerPacket<ArtisanIndexPacket>
         this.syncId = syncId;
     }
 
-
-
     public ArtisanIndexPacket(FriendlyByteBuf buf) {
         this(buf.readInt(), buf.readInt());
     }
@@ -54,7 +52,7 @@ public class ArtisanIndexPacket extends ClientToServerPacket<ArtisanIndexPacket>
         try{
             context.player().getServer().execute(() -> {
                 ServerPlayer player = context.player();
-                ScreenHandler screenHandler = player.currentScreenHandler;
+                AbstractContainerMenu screenHandler = player.currentScreenHandler;
                 if (screenHandler.syncId == this.syncId && screenHandler instanceof ArtisanTableScreenHandler artisanTableScreenHandler) {
                     artisanTableScreenHandler.updateIndex(index);
                 }

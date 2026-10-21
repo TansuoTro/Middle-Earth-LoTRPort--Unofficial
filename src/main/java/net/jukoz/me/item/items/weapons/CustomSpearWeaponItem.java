@@ -6,7 +6,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.InteractionHand;
 import net.jukoz.me.compat.BluntWeapon;
 import net.jukoz.me.item.utils.WeaponTypesME;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.entity.EquipmentSlot;
 
 public class CustomSpearWeaponItem extends ReachWeaponItem {
     private static final float BASE_STRENGTH = 0.75f;
@@ -16,7 +17,7 @@ public class CustomSpearWeaponItem extends ReachWeaponItem {
     public float pullProgress = 0;
     public WeaponTypesME type;
 
-    public CustomSpearWeaponItem(ToolMaterial toolMaterial, Item.Settings settings) {
+    public CustomSpearWeaponItem(Tier toolMaterial, Item.Settings settings) {
         super(toolMaterial, WeaponTypesME.SPEAR, settings);
         this.type = WeaponTypesME.SPEAR;
     }
@@ -32,15 +33,15 @@ public class CustomSpearWeaponItem extends ReachWeaponItem {
         return true;
     }
 
-    /*public TypedActionResult<ItemStack> use(World world, PlayerEntity user, InteractionHand hand) {
+    /*public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
         user.setCurrentHand(hand);
-        return TypedActionResult.success(itemStack, world.isClient());
+        return InteractionResultHolder.success(itemStack, world.isClient());
     }
 
     @Override
-    public UseAction getUseAction(ItemStack stack) {
-        return UseAction.SPEAR;
+    public UseAnim getUseAction(ItemStack stack) {
+        return UseAnim.SPEAR;
     }
 
     @Override
@@ -49,11 +50,11 @@ public class CustomSpearWeaponItem extends ReachWeaponItem {
     }
 
     @Override
-    public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-        if (!(user instanceof PlayerEntity)) {
+    public void onStoppedUsing(ItemStack stack, Level world, LivingEntity user, int remainingUseTicks) {
+        if (!(user instanceof Player)) {
             return;
         }
-        PlayerEntity playerEntity = (PlayerEntity)user;
+        Player playerEntity = (Player)user;
         int i = this.getMaxUseTime(stack) - remainingUseTicks;
         if (i < 7) {
             return;
@@ -69,7 +70,7 @@ public class CustomSpearWeaponItem extends ReachWeaponItem {
             SpearEntity spearEntity = new SpearEntity(world, stack, user, damage);
             spearEntity.setVelocity(playerEntity, playerEntity.getPitch(), playerEntity.getYaw(), 0.0f, BASE_STRENGTH + (CHARGE_STRENGTH * pullProgress), 1.0f);
             world.spawnEntity(spearEntity);
-            world.playSoundFromEntity(null, spearEntity, SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.PLAYERS, 1.0f, 0.7f);
+            world.playSoundFromEntity(null, spearEntity, SoundEvents.ENTITY_SNOWBALL_THROW, SoundSource.PLAYERS, 1.0f, 0.7f);
 
             if (!playerEntity.getAbilities().creativeMode) {
                 stack.decrement(1);

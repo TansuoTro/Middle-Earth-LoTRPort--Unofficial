@@ -1,6 +1,6 @@
 package net.jukoz.me.item.items;
 
-import net.minecraft.util.UseAction;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.InteractionResult;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.projectile.smoke.SmokeRingProjectileEntity;
@@ -12,15 +12,16 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.Arm;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.utils.item.DamageableItemUtils;
 import net.jukoz.me.utils.item.ItemSearchUtils;
 import net.jukoz.me.utils.sounds.SoundUtils;
+import net.minecraft.world.InteractionResultHolder;
 
 public class PipeItem extends Item {
     private static final int MAX_USE_TIME_TICKS = 200;
@@ -53,16 +54,16 @@ public class PipeItem extends Item {
     }
 
     @Override
-    public net.minecraft.util.TypedActionResult<ItemStack> use(Level world, Player user, InteractionHand hand) {
+    public net.minecraft.world.InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
         ItemStack pipe = user.getStackInHand(hand);
 
         if (DamageableItemUtils.isFullyDamaged(pipe)) {
             boolean refilled = tryRefillPipe(pipe, user, world);
-            return refilled ? net.minecraft.util.TypedActionResult.consume(pipe) : net.minecraft.util.TypedActionResult.fail(pipe);
+            return refilled ? net.minecraft.util.InteractionResultHolder.consume(pipe) : net.minecraft.util.InteractionResultHolder.fail(pipe);
         }
 
         startSmoking(pipe, user, world, hand);
-        return net.minecraft.util.TypedActionResult.consume(pipe);
+        return net.minecraft.util.InteractionResultHolder.consume(pipe);
     }
 
     @Override
@@ -96,8 +97,8 @@ public class PipeItem extends Item {
     }
 
     @Override
-    public UseAction getUseAction(ItemStack stack) {
-        return UseAction.TOOT_HORN;
+    public UseAnim getUseAction(ItemStack stack) {
+        return UseAnim.TOOT_HORN;
     }
 
     private boolean tryRefillPipe(ItemStack pipe, Player user, Level world) {
@@ -115,13 +116,13 @@ public class PipeItem extends Item {
         DamageableItemUtils.resetDamage(pipe);
         applyCooldown(user, pipe);
 
-        SoundUtils.playSoundAtEntity(world, user, SoundsME.PIPE_REFILL, SoundCategory.PLAYERS);
+        SoundUtils.playSoundAtEntity(world, user, SoundsME.PIPE_REFILL, SoundSource.PLAYERS);
 
         return true;
     }
 
     private void startSmoking(ItemStack pipe, Player user, Level world, InteractionHand hand) {
-        SoundUtils.playSoundAtEntity(world, user, SoundsME.PIPE_IGNITE, SoundCategory.PLAYERS);
+        SoundUtils.playSoundAtEntity(world, user, SoundsME.PIPE_IGNITE, SoundSource.PLAYERS);
         user.setCurrentHand(hand);
         user.incrementStat(Stats.USED.getOrCreateStat(this));
         DamageableItemUtils.incrementDamage(pipe, 1);
@@ -141,7 +142,7 @@ public class PipeItem extends Item {
     }
 
     public void spawnSmokeRing(LivingEntity user, Level world) {
-        SoundUtils.playSoundAtEntity(world, user, SoundsME.PIPE_EXHALE, SoundCategory.PLAYERS);
+        SoundUtils.playSoundAtEntity(world, user, SoundsME.PIPE_EXHALE, SoundSource.PLAYERS);
         spawnSmokeRingEntity(user, world, false, SMOKE_RING_SPEED);
     }
 
@@ -174,7 +175,7 @@ public class PipeItem extends Item {
 //            SoundUtils.playSoundAtEntity(player.getWorld(),
 //                    player,
 //                    SoundsME.PIPE_COUGH,
-//                    SoundCategory.PLAYERS);
+//                    SoundSource.PLAYERS);
 //        }
 //    }
 
@@ -206,7 +207,7 @@ public class PipeItem extends Item {
             return 1.0;
         }
 
-        boolean mainHandRight = player.getMainArm() == Arm.RIGHT;
+        boolean mainHandRight = player.getMainArm() == HumanoidArm.RIGHT;
         boolean usingMainHand = user.getActiveHand() == InteractionHand.MAIN_HAND;
         return usingMainHand == mainHandRight ? -1.0 : 1.0;
     }

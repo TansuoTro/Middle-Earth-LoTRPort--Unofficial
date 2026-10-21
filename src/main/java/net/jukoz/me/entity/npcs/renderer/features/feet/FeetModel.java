@@ -3,14 +3,20 @@ package net.jukoz.me.entity.npcs.renderer.features.feet;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.SinglePartEntityModel;
+import net.minecraft.client.model.HierarchicalModel;
 import net.jukoz.me.entity.npcs.NpcEntity;
-
 import net.minecraft.util.Mth;
 import net.jukoz.me.entity.npcs.renderer.NpcEntityRenderState;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
 @OnlyIn(Dist.CLIENT)
-public class FeetModel extends SinglePartEntityModel<NpcEntity> {
+public class FeetModel extends HierarchicalModel<NpcEntity> {
     private final ModelPart root;
     public final ModelPart toeCubeLeft;
     public final ModelPart toeCubeRight;
@@ -28,22 +34,22 @@ public class FeetModel extends SinglePartEntityModel<NpcEntity> {
         this.toeCubeRight = rightLeg.getChild("feet");
     }
 
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = new ModelData();
-        ModelPartData modelPartData = modelData.getRoot();
+    public static LayerDefinition getTexturedModelData() {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
 
-        var rightLeg = modelPartData.addChild("right_leg", ModelPartBuilder.create().uv(0,0).cuboid(-2.0F, 0.0F, -2.0F, 0.0F, 12.0F, 0.0F, Dilation.NONE), ModelTransform.pivot(-1.9F, 12.0F, 0.0F));
-        var leftLeg = modelPartData.addChild("left_leg", ModelPartBuilder.create().uv(0,0).cuboid(-2.0F, 0.0F, -2.0F, 0.0F, 0.0F, 0.0F,  Dilation.NONE), ModelTransform.pivot(1.9F, 12.0F, 0.0F));
+        var rightLeg = modelPartData.addChild("right_leg", CubeListBuilder.create().uv(0,0).cuboid(-2.0F, 0.0F, -2.0F, 0.0F, 12.0F, 0.0F, CubeDeformation.NONE), PartPose.pivot(-1.9F, 12.0F, 0.0F));
+        var leftLeg = modelPartData.addChild("left_leg", CubeListBuilder.create().uv(0,0).cuboid(-2.0F, 0.0F, -2.0F, 0.0F, 0.0F, 0.0F,  CubeDeformation.NONE), PartPose.pivot(1.9F, 12.0F, 0.0F));
 
         rightLeg.addChild("feet",
-                                ModelPartBuilder.create().uv(0, 4).mirrored().cuboid(0,0,0,4,2,2, Dilation.NONE),
-                                ModelTransform.pivot(-2f,10f,-4f));
+                                CubeListBuilder.create().uv(0, 4).mirrored().cuboid(0,0,0,4,2,2, CubeDeformation.NONE),
+                                PartPose.pivot(-2f,10f,-4f));
 
         leftLeg.addChild("feet",
-                                ModelPartBuilder.create().uv(0, 4).cuboid(0,0,0,4,2,2, Dilation.NONE),
-                                ModelTransform.pivot(-2f,10f,-4f));
+                                CubeListBuilder.create().uv(0, 4).cuboid(0,0,0,4,2,2, CubeDeformation.NONE),
+                                PartPose.pivot(-2f,10f,-4f));
 
-        return TexturedModelData.of(modelData, 16, 16);
+        return LayerDefinition.of(modelData, 16, 16);
     }
 
     public void setAngles(NpcEntityRenderState state) {

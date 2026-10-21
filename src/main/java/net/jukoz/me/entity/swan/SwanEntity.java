@@ -7,21 +7,20 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.ai.pathing.BirdNavigation;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.particle.ItemStackParticleEffect;
+import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.server.level.ServerLevel;
@@ -32,12 +31,22 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 
-public class SwanEntity extends AnimalEntity {
+public class SwanEntity extends Animal {
     public float flapProgress;
     public float maxWingDeviation;
     public float prevMaxWingDeviation;
@@ -45,35 +54,33 @@ public class SwanEntity extends AnimalEntity {
     private float flapSpeed = 1.0F;
     private float field_28640 = 1.0F;
 
-
-    public SwanEntity(EntityType<? extends AnimalEntity> entityType, Level world) {
+    public SwanEntity(EntityType<? extends Animal> entityType, Level world) {
         super(entityType, world);
         this.setCanPickUpLoot(true);
     }
 
     protected void initGoals() {
-        this.goalSelector.add(0, new SwimGoal(this));
+        this.goalSelector.add(0, new FloatGoal(this));
 
-        this.targetSelector.add(1, new RevengeGoal(this, new Class[0]));
+        this.targetSelector.add(1, new HurtByTargetGoal(this, new Class[0]));
 
         this.goalSelector.add(2, new MeleeAttackGoal(this, 0.9f, false));
-        this.goalSelector.add(3, new EscapeDangerGoal(this, 1.15));
-        this.goalSelector.add(4, new AnimalMateGoal(this, 1.0));
+        this.goalSelector.add(3, new PanicGoal(this, 1.15));
+        this.goalSelector.add(4, new BreedGoal(this, 1.0));
         this.goalSelector.add(5, new TemptGoal(this, 1.1, DuckEntity.SEEDS_BREEDING_INGREDIENT, false));
 
         this.goalSelector.add(6, new FollowParentGoal(this, 1.05));
 
-        this.goalSelector.add(7, new LookAtEntityGoal(this, Player.class, 6.0F));
-        this.goalSelector.add(8, new LookAroundGoal(this));
-        this.goalSelector.add(9, new WanderAroundGoal(this, 1.0F));
+        this.goalSelector.add(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
+        this.goalSelector.add(8, new RandomLookAroundGoal(this));
+        this.goalSelector.add(9, new RandomStrollGoal(this, 1.0F));
 
-        this.goalSelector.add(10, new FleeEntityGoal<>(this, WolfEntity.class, 8.0F, 0.9, 1.2));
+        this.goalSelector.add(10, new AvoidEntityGoal<>(this, Wolf.class, 8.0F, 0.9, 1.2));
 
         //this.goalSelector.add(13, new BirdFlightGoal(this));
     }
 
-
-    public static DefaultAttributeContainer.Builder createSwanAttributes() {
+    public static AttributeSupplier.Builder createSwanAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.GENERIC_MAX_HEALTH, 10.0)
                 .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.35)
@@ -82,8 +89,8 @@ public class SwanEntity extends AnimalEntity {
                 .add(Attributes.GENERIC_FLYING_SPEED, 0.4000000059604645);
     }
 
-    protected EntityNavigation createNavigation(Level world) {
-        BirdNavigation birdNavigation = new BirdNavigation(this, world);
+    protected PathNavigation createNavigation(Level world) {
+        FlyingPathNavigation birdNavigation = new FlyingPathNavigation(this, world);
         birdNavigation.setCanPathThroughDoors(true);
         birdNavigation.setCanSwim(true);
         birdNavigation.setCanEnterOpenDoors(true);
@@ -143,7 +150,7 @@ public class SwanEntity extends AnimalEntity {
     }
 
     @Nullable
-    public SwanEntity createChild(ServerLevel serverWorld, PassiveEntity passiveEntity) {
+    public SwanEntity createChild(ServerLevel serverWorld, AgeableMob passiveEntity) {
         return (SwanEntity) ModEntities.SWAN.create(serverWorld);
     }
 
@@ -154,7 +161,6 @@ public class SwanEntity extends AnimalEntity {
     public SwanVariant getVariant() {
         return SwanVariant.byId(this.getId());
     }
-
 
     public boolean canBreatheInWater() {
         return false;

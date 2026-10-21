@@ -6,7 +6,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.api.SevenStarsApi;
-
 import java.util.function.Supplier;
 
 public class SensorsAPI {

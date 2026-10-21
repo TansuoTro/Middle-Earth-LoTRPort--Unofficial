@@ -3,8 +3,8 @@ package net.jukoz.me.mixin;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.passive.AbstractHorseEntity;
-import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.server.level.ServerLevel;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(AbstractHorseEntity.class)
+@Mixin(AbstractHorse.class)
 public abstract class AbstractHorseEntityMixin {
 
     @Shadow
@@ -25,7 +25,7 @@ public abstract class AbstractHorseEntityMixin {
     public abstract LivingEntity getControllingPassenger();
     @Shadow
     @Nullable
-    protected SimpleInventory items;
+    protected SimpleContainer items;
 
     @Shadow
     protected abstract void dropInventory(ServerLevel world);

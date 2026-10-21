@@ -1,5 +1,6 @@
 package net.jukoz.me.block.utils;
 
+
 public enum StoneBlockTypes {
     BASE_BLOCKS("", ""),
     PILLAR_BASE_BLOCKS("", ""),

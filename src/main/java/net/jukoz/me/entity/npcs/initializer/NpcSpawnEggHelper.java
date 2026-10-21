@@ -1,13 +1,12 @@
 package net.jukoz.me.entity.npcs.initializer;
 
 import net.jukoz.me.item.MEComponents;
-import net.minecraft.client.MinecraftClient;
-
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.core.RegistryWrapper;
 import net.minecraft.network.chat.Component;
@@ -21,11 +20,11 @@ import net.jukoz.me.item.dataComponents.FactionDataComponent;
 import net.jukoz.me.item.dataComponents.RaceDataComponent;
 import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.resources.datas.npc_types.NpcType;
-
 import java.util.List;
+import net.minecraft.core.HolderLookup;
 
 public class NpcSpawnEggHelper {
-    public static ItemStack getSpawnEgg(NpcType npcType, RegistryWrapper.WrapperLookup wrapper) {
+    public static ItemStack getSpawnEgg(NpcType npcType, HolderLookup.WrapperLookup wrapper) {
         if(npcType == null)
             return ItemStack.EMPTY;
         return buildItemStackBasedOnNpcData(npcType, wrapper);
@@ -33,11 +32,11 @@ public class NpcSpawnEggHelper {
 
     public static ItemStack getSpawnEgg(Level world, ResourceLocation identifier) {
         NpcType npcType = world.getRegistryManager().get(DynamicRegistriesME.NPC_TYPE).get(identifier);
-        RegistryWrapper.WrapperLookup wrapperLookup = world.getRegistryManager();
+        HolderLookup.WrapperLookup wrapperLookup = world.getRegistryManager();
         return buildItemStackBasedOnNpcData(npcType, wrapperLookup);
     }
 
-    private static ItemStack buildItemStackBasedOnNpcData(NpcType npcType, RegistryWrapper.WrapperLookup wrapper) {
+    private static ItemStack buildItemStackBasedOnNpcData(NpcType npcType, HolderLookup.WrapperLookup wrapper) {
         if(npcType == null)
             return ItemStack.EMPTY;
 
@@ -49,12 +48,12 @@ public class NpcSpawnEggHelper {
 
         NpcInitializationData npcInitializationData = new NpcInitializationData(npcType.getId(), false);
 
-        RegistryOps<NbtElement> ops = RegistryOps.of(
+        RegistryOps<Tag> ops = RegistryOps.of(
                 NbtOps.INSTANCE,
                 wrapper
         );
 
-        NbtElement element = NpcInitializationData.CODEC
+        Tag element = NpcInitializationData.CODEC
                 .encodeStart(ops, npcInitializationData)
                 .result().orElse(new CompoundTag());
         compoundData.put(NpcEntity.KeyStrings.INITIALIZATION_DATA, element);

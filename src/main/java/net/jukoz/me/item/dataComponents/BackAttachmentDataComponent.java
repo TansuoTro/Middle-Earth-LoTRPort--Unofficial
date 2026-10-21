@@ -8,15 +8,14 @@ import net.jukoz.me.compat.DyedColorComponent;
 import net.minecraft.world.item.Item;
 import net.jukoz.me.compat.TooltipAppender;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.item.utils.armor.DyeablePiecesME;
 import net.jukoz.me.item.utils.armor.backAttachments.BackAttachmentsME;
 import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
-import net.minecraft.util.math.ColorHelper;
-
+import net.minecraft.util.FastColor;
 import java.util.List;
 
 public record BackAttachmentDataComponent(BackAttachmentsME backAttachment, int backAttachmentColor) implements TooltipAppender {
@@ -64,7 +63,6 @@ public record BackAttachmentDataComponent(BackAttachmentsME backAttachment, int 
         return itemStack;
     }
 
-
     public BackAttachmentsME getBackAttachment(){
         return backAttachment();
     }
@@ -74,7 +72,7 @@ public record BackAttachmentDataComponent(BackAttachmentsME backAttachment, int 
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, net.minecraft.client.item.TooltipContext context, List<Component> tooltip) {
-        tooltip.add(Component.translatable("tooltip.%s.%s".formatted(MiddleEarth.MOD_ID, this.backAttachment().getName())).formatted(Formatting.GRAY));
+    public void appendTooltip(ItemStack stack, net.minecraft.world.item.TooltipFlag context, List<Component> tooltip) {
+        tooltip.add(Component.translatable("tooltip.%s.%s".formatted(MiddleEarth.MOD_ID, this.backAttachment().getName())).formatted(ChatFormatting.GRAY));
     }
 }

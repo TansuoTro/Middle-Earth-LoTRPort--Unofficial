@@ -4,12 +4,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.particle.BlockStateParticleEffect;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Holder;
@@ -24,7 +24,6 @@ import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.EntityTypeTagsME;
 import net.jukoz.me.statusEffects.ModStatusEffects;
 import net.jukoz.me.world.features.vegetation.ModVegetationConfiguredFeatures;
-
 import java.util.Optional;
 
 public class WebbedEntity extends AbstractProjectileEntity {
@@ -69,10 +68,10 @@ public class WebbedEntity extends AbstractProjectileEntity {
         if(this.getWorld() instanceof ServerLevel serverWorld) {
             entity.damage(this.getDamageSources().thrown(this, this.getOwner()), this.damage);
             if(entity instanceof LivingEntity livingEntity) {
-                livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 200));
-                livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 200));
-                livingEntity.addStatusEffect(new StatusEffectInstance(ModStatusEffects.RESTRAINED, 200));
-                //if(entity instanceof ServerPlayerEntity playerEntity) {
+                livingEntity.addStatusEffect(new MobEffectInstance(MobEffects.SLOWNESS, 200));
+                livingEntity.addStatusEffect(new MobEffectInstance(MobEffects.SLOWNESS, 200));
+                livingEntity.addStatusEffect(new MobEffectInstance(ModStatusEffects.RESTRAINED, 200));
+                //if(entity instanceof ServerPlayer playerEntity) {
                 //    ServerPlayNetworking.send(playerEntity, new PacketLivingEntityData(1));
                 //}
             }
@@ -110,7 +109,7 @@ public class WebbedEntity extends AbstractProjectileEntity {
             for (int j = 0; j < amount; j++) {
                 this.getWorld()
                         .addParticle(
-                                new BlockStateParticleEffect(ParticleTypes.BLOCK, ModNatureBlocks.WEBBING.getDefaultState()),
+                                new BlockParticleOption(ParticleTypes.BLOCK, ModNatureBlocks.WEBBING.getDefaultState()),
                                 this.getParticleX(0.5), this.getRandomBodyY(), this.getParticleZ(0.5), 0.0, 0.0, 0.0
                         );
             }

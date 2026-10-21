@@ -1,14 +1,14 @@
 package net.jukoz.me.commands.custom;
-import net.jukoz.me.compat.METext;
 
+import net.jukoz.me.compat.METext;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
@@ -19,7 +19,6 @@ import net.jukoz.me.config.ModServerConfigs;
 import net.jukoz.me.network.packets.S2C.PacketForceOnboardingScreen;
 import net.jukoz.me.resources.persistent_datas.PlayerDataService;
 import net.jukoz.me.utils.ModColors;
-
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
@@ -28,14 +27,14 @@ public class CommandOnboarding {
     private static final String OPEN = "open";
     private static final String TRY = "try";
     private static final String PLAYER = "player";
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandRegistryAccess, Commands.RegistrationEnvironment registrationEnvironment) {
         // [TRY OPEN]
         dispatcher.register(literal(ModCommands.BASE_COMMAND)
                 .requires(source -> source.hasPermissionLevel(2)) // Require OP
                 .then(literal(ONBOARDING_BASE_COMMAND)
                         .then(literal(TRY)
                         .then(literal(OPEN)
-                        .then(argument(PLAYER, EntityArgumentType.player())
+                        .then(argument(PLAYER, EntityArgument.player())
                         .executes(CommandOnboarding::tryOpenForTarget)))))
                 .then(literal(ONBOARDING_BASE_COMMAND)
                         .then(literal(TRY)
@@ -48,7 +47,7 @@ public class CommandOnboarding {
                 PLAYER, literal(OPEN).executes(CommandOnboarding::openForTarget));
     }
 
-    private static int open(CommandContext<ServerCommandSource> context) {
+    private static int open(CommandContext<CommandSourceStack> context) {
         if(context.getSource().isExecutedByPlayer()) {
             ServerPlayer source = context.getSource().getPlayer();
             if(source != null){
@@ -58,8 +57,8 @@ public class CommandOnboarding {
         return 0;
     }
 
-    private static int openForTarget(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayer targetPlayer = EntityArgumentType.getPlayer(context, PLAYER);
+    private static int openForTarget(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer targetPlayer = EntityArgument.getPlayer(context, PLAYER);
         if(targetPlayer != null){
             ServerPlayNetworking.send(targetPlayer, new PacketForceOnboardingScreen(ModServerConfigs.DELAY_ON_TELEPORT_CONFIRMATION, targetPlayer));
         }
@@ -67,7 +66,7 @@ public class CommandOnboarding {
         return 0;
     }
 
-    private static int tryOpen(CommandContext<ServerCommandSource> context) {
+    private static int tryOpen(CommandContext<CommandSourceStack> context) {
         if(context.getSource().isExecutedByPlayer()) {
             ServerPlayer playerSource = context.getSource().getPlayer();
             if(playerSource != null){
@@ -83,8 +82,8 @@ public class CommandOnboarding {
         return 0;
     }
 
-    private static int tryOpenForTarget(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayer playerTarget = EntityArgumentType.getPlayer(context, PLAYER);
+    private static int tryOpenForTarget(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer playerTarget = EntityArgument.getPlayer(context, PLAYER);
         if(playerTarget != null){
             boolean playerPassedOnboarding = PlayerDataService.playerPassedOnboarding(playerTarget);
             if(playerPassedOnboarding){

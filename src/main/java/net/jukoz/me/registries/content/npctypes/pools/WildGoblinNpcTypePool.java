@@ -1,6 +1,6 @@
 package net.jukoz.me.registries.content.npctypes.pools;
-import net.jukoz.me.compat.METext;
 
+import net.jukoz.me.compat.METext;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Items;
@@ -25,7 +25,6 @@ import net.jukoz.me.resources.datas.common.EntityCategories;
 import net.jukoz.me.resources.datas.factions.Faction;
 import net.jukoz.me.resources.datas.npc_types.NpcType;
 import net.jukoz.me.resources.datas.npc_types.data.*;
-
 import java.util.HashMap;
 import java.util.List;
 

@@ -8,12 +8,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.TestableWorld;
+import net.minecraft.world.level.LevelSimulatedReader;
 import net.minecraft.world.level.levelgen.feature.TreeFeatureConfig;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -64,8 +63,8 @@ public class LargeTrunkPlacer extends TrunkPlacer {
     }
 
     @Override
-    public List<FoliagePlacer.TreeNode> generate(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random,
-                                                 int height, BlockPos startPos, TreeFeatureConfig config) {
+    public List<FoliagePlacer.TreeNode> generate(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random,
+                                                 int height, BlockPos startPos, TreeConfiguration config) {
         BlockPos blockPos = startPos.down();
         setToDirt(world, replacer, random, blockPos, config);
         setToDirt(world, replacer, random, blockPos.east(), config);
@@ -79,8 +78,8 @@ public class LargeTrunkPlacer extends TrunkPlacer {
         return ImmutableList.copyOf(treeNodes);
     }
 
-    private List<FoliagePlacer.TreeNode> createBranches(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable mutable,
-                                                        TreeFeatureConfig config, BlockPos startPos, int height, float radiusA, float radiusB) {
+    private List<FoliagePlacer.TreeNode> createBranches(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable mutable,
+                                                        TreeConfiguration config, BlockPos startPos, int height, float radiusA, float radiusB) {
         List<FoliagePlacer.TreeNode> treeNodes = new ArrayList<>();
         float heightProgress = 0;
         List<BlockPos> currentTopBranches = List.of(startPos);
@@ -121,8 +120,8 @@ public class LargeTrunkPlacer extends TrunkPlacer {
         return treeNodes;
     }
 
-    protected void createRoots(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable mutable,
-                             TreeFeatureConfig config, BlockPos startPos, int height, float radiusA, float radiusB) {
+    protected void createRoots(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable mutable,
+                             TreeConfiguration config, BlockPos startPos, int height, float radiusA, float radiusB) {
         int rootsNb = 4 + (int)(Math.random() * 3);
         startPos = startPos.add(0, (int) (height * 0.6f), 0);
         double angle = Math.random() * (360/Math.PI);
@@ -132,9 +131,8 @@ public class LargeTrunkPlacer extends TrunkPlacer {
         }
     }
 
-
-    protected BlockPos createBranch(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable mutable,
-                                  TreeFeatureConfig config, BlockPos startPos, int height, double direction, float radiusA, float radiusB) {
+    protected BlockPos createBranch(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable mutable,
+                                  TreeConfiguration config, BlockPos startPos, int height, double direction, float radiusA, float radiusB) {
         int multiplier = 1;
         if(height < 0) {
             multiplier = -1;
@@ -168,8 +166,8 @@ public class LargeTrunkPlacer extends TrunkPlacer {
         return new BlockPos(startPos).add((int) offsetX, multiplier * height, (int) offsetZ);
     }
 
-    protected void setLog(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable tmpPos,
-                        TreeFeatureConfig config, BlockPos startPos, int dx, int dy, int dz) {
+    protected void setLog(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable tmpPos,
+                        TreeConfiguration config, BlockPos startPos, int dx, int dy, int dz) {
         tmpPos.set(startPos, dx, dy, dz);
         this.trySetState(world, replacer, random, tmpPos, config);
     }

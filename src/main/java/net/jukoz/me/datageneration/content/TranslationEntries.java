@@ -7,7 +7,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.registries.content.races.RacePools;
 import net.jukoz.me.resources.datas.structure_manager_datas.StructureManagerData;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +54,7 @@ public class TranslationEntries {
             put("itemGroup." + MiddleEarth.MOD_ID + ".decorative_blocks", "Middle-earth Decorative Blocks");
             put("itemGroup." + MiddleEarth.MOD_ID + ".food_items", "Middle-earth Food");
             put("itemGroup." + MiddleEarth.MOD_ID + ".weapon_items", "Middle-earth Weapons");
-            put("itemGroup." + MiddleEarth.MOD_ID + ".equipment_items", "Middle-earth Equipment");
+            put("itemGroup." + MiddleEarth.MOD_ID + ".equipment_items", "Middle-earth Equipable");
             put("itemGroup." + MiddleEarth.MOD_ID + ".tool_items", "Middle-earth Tools");
             put("itemGroup." + MiddleEarth.MOD_ID + ".resource_items", "Middle-earth Resources");
             put("itemGroup." + MiddleEarth.MOD_ID + ".spawn_egg_items", "Middle-earth Spawn Eggs");
@@ -297,12 +296,12 @@ public class TranslationEntries {
             put("item."+ MiddleEarth.MOD_ID +".lothlorien_banner_pattern.desc", "Tree of Lórien");
             put("item."+ MiddleEarth.MOD_ID +".mordor_banner_pattern.desc", "The Great Eye of Sauron");
             put("item."+ MiddleEarth.MOD_ID +".misty_mountains_orcs_banner_pattern.desc", "The symbols of the Orcs of the Misty Mountains");
-            put("item."+ MiddleEarth.MOD_ID +".isengard_banner_pattern.desc", "The White Hand of Saruman");
+            put("item."+ MiddleEarth.MOD_ID +".isengard_banner_pattern.desc", "The White InteractionHand of Saruman");
             put("item."+ MiddleEarth.MOD_ID +".goblin_skull_banner_pattern.desc", "The Skull of a Goblin");
-            put("item."+ MiddleEarth.MOD_ID +".anvil_banner_pattern.desc", "Anvil Icons");
-            put("item."+ MiddleEarth.MOD_ID +".bell_banner_pattern.desc", "Bell Icons");
-            put("item."+ MiddleEarth.MOD_ID +".bow_banner_pattern.desc", "Bow Icons");
-            put("item."+ MiddleEarth.MOD_ID +".dwarf_crown_banner_pattern.desc", "Dwarf Crown Icons");
+            put("item."+ MiddleEarth.MOD_ID +".anvil_banner_pattern.desc", "Anvil IconSet");
+            put("item."+ MiddleEarth.MOD_ID +".bell_banner_pattern.desc", "Bell IconSet");
+            put("item."+ MiddleEarth.MOD_ID +".bow_banner_pattern.desc", "Bow IconSet");
+            put("item."+ MiddleEarth.MOD_ID +".dwarf_crown_banner_pattern.desc", "Dwarf Crown IconSet");
             put("item."+ MiddleEarth.MOD_ID +".great_horn_pattern.desc", "Elk and Stag");
             put("item."+ MiddleEarth.MOD_ID +".oak_leaf.desc", "Oak Leaf");
             put("item."+ MiddleEarth.MOD_ID +".antlers.desc", "Lost Antlers");
@@ -376,8 +375,8 @@ public class TranslationEntries {
             put("screen."+ MiddleEarth.MOD_ID +".artisan_table.heavy_shield", "Heavy Shield");
             put("screen."+ MiddleEarth.MOD_ID +".artisan_table.misc", "Misc");
             put("screen."+ MiddleEarth.MOD_ID +".artisan_table.hat", "Hat");
-            put("screen."+ MiddleEarth.MOD_ID +".artisan_table.helmet_attachment", "Helmet Attachment");
-            put("screen."+ MiddleEarth.MOD_ID +".artisan_table.back_attachment", "Back Attachment");
+            put("screen."+ MiddleEarth.MOD_ID +".artisan_table.helmet_attachment", "Helmet BellAttachType");
+            put("screen."+ MiddleEarth.MOD_ID +".artisan_table.back_attachment", "Back BellAttachType");
             put("screen."+ MiddleEarth.MOD_ID +".artisan_table.pipe", "Pipe");
             
             put("tooltip."+ MiddleEarth.MOD_ID +".type", "Type: ");
@@ -566,7 +565,6 @@ public class TranslationEntries {
             put("command."+ MiddleEarth.MOD_ID +".open_target.onboarding.error", "Impossible to open the onboarding screen for %s, their faction is already chosen.");
             put("command."+ MiddleEarth.MOD_ID +".open.onboarding.error", "Impossible to open the onboarding screen, you already have your chosen faction.");
 
-
             put("command."+ MiddleEarth.MOD_ID +".get.faction.success", "Your initial faction is %s");
             put("command."+ MiddleEarth.MOD_ID +".get.faction.no_faction", "You have no initial faction");
             put("command."+ MiddleEarth.MOD_ID +".get.player.faction.success", "%s initial faction is %s");
@@ -629,17 +627,17 @@ public class TranslationEntries {
             put("command."+ MiddleEarth.MOD_ID +".race.reset.target.success", "%s race is reset");
             put("command."+ MiddleEarth.MOD_ID +".race.reset.target.fail", "Failed to reset race for %s");
 
-            put("command."+ MiddleEarth.MOD_ID +".back_attachment.success", "Back Attachment successfully applied, ");
-            put("command."+ MiddleEarth.MOD_ID +".back_attachment.fail", "Failed to apply Back Attachment.");
+            put("command."+ MiddleEarth.MOD_ID +".back_attachment.success", "Back BellAttachType successfully applied, ");
+            put("command."+ MiddleEarth.MOD_ID +".back_attachment.fail", "Failed to apply Back BellAttachType.");
 
-            put("command."+ MiddleEarth.MOD_ID +".helmet_attachment.success", "Helmet Attachment successfully applied, ");
-            put("command."+ MiddleEarth.MOD_ID +".helmet_attachment.fail", "Failed to apply Helmet Attachment.");
+            put("command."+ MiddleEarth.MOD_ID +".helmet_attachment.success", "Helmet BellAttachType successfully applied, ");
+            put("command."+ MiddleEarth.MOD_ID +".helmet_attachment.fail", "Failed to apply Helmet BellAttachType.");
 
-            put("command."+ MiddleEarth.MOD_ID +".back_attachment.hand_empty", "Hand Empty. Take a Middle-earth Mod chestplate in your main hand to apply a Back Attachment.");
-            put("command."+ MiddleEarth.MOD_ID +".helmet_attachment.hand_empty", "Hand Empty. Take a Middle-earth Mod helmet in your main hand to apply a Helmet Attachment.");
+            put("command."+ MiddleEarth.MOD_ID +".back_attachment.hand_empty", "InteractionHand Empty. Take a Middle-earth Mod chestplate in your main hand to apply a Back BellAttachType.");
+            put("command."+ MiddleEarth.MOD_ID +".helmet_attachment.hand_empty", "InteractionHand Empty. Take a Middle-earth Mod helmet in your main hand to apply a Helmet BellAttachType.");
 
-            put("command."+ MiddleEarth.MOD_ID +".back_attachment.wrong_item", "Wrong Item type. Take a Middle-earth Mod chestplate in your main hand to apply a Back Attachment.");
-            put("command."+ MiddleEarth.MOD_ID +".helmet_attachment.wrong_item", "Wrong Item type. Take a Middle-earth Mod helmet in your main hand to apply a Helmet Attachment.");
+            put("command."+ MiddleEarth.MOD_ID +".back_attachment.wrong_item", "Wrong Item type. Take a Middle-earth Mod chestplate in your main hand to apply a Back BellAttachType.");
+            put("command."+ MiddleEarth.MOD_ID +".helmet_attachment.wrong_item", "Wrong Item type. Take a Middle-earth Mod helmet in your main hand to apply a Helmet BellAttachType.");
 
             put("alert."+ MiddleEarth.MOD_ID +".large_door.blocked", "Something seems to prevent the door from moving.");
 
@@ -875,12 +873,12 @@ public class TranslationEntries {
 
             put("attribute.name.powdered_snow_immunity", "Powdered Snow Immunity");
             put("attribute.name.climbing_strength", "Climbing Strength");
-            put("attribute.name.detection_range", "Detection Range");
+            put("attribute.name.detection_range", "Detection InclusiveRange");
             put("attribute.name.width_scale", "Width Scale");
 
             put("attribute.modifiers." + RacePools.RaceAttributes.TOTAL_DAMAGE_MODIFIER.getPath(), "Add Total Damage Multiplied");
-            put("attribute.modifiers.creative_mode_block_range", "Creative Mode Block Range");
-            put("attribute.modifiers.creative_mode_entity_range", "Creative Mode Entity Range");
+            put("attribute.modifiers.creative_mode_block_range", "Creative Mode Block InclusiveRange");
+            put("attribute.modifiers.creative_mode_entity_range", "Creative Mode Entity InclusiveRange");
 
             put("npc_data."+ MiddleEarth.MOD_ID +".npc", "NPC");
 

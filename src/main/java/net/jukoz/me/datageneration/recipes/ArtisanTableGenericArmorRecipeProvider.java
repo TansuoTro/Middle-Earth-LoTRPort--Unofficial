@@ -2,7 +2,6 @@ package net.jukoz.me.datageneration.recipes;
 
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.jukoz.me.MiddleEarth;
@@ -20,7 +19,7 @@ import net.jukoz.me.item.WeaponItemsME;
 import net.jukoz.me.resources.datas.common.DispositionType;
 import net.jukoz.me.utils.ItemTagsME;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.data.server.recipe.RecipeJsonProvider;
+import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.Item;
@@ -31,7 +30,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.resources.ResourceLocation;
@@ -59,7 +57,7 @@ public class ArtisanTableGenericArmorRecipeProvider extends FabricRecipeProvider
     }
 
     @Override
-    public void generate(Consumer<RecipeJsonProvider> exporter) {
+    public void generate(Consumer<FinishedRecipe> exporter) {
 
         ItemStack goldArmorPlate = new ItemStack(ResourceItemsME.ARMOR_PLATE);
         goldArmorPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MetalTypes.GOLD.getName())));
@@ -71,7 +69,6 @@ public class ArtisanTableGenericArmorRecipeProvider extends FabricRecipeProvider
         bronzeChainmail.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.BRONZE.getName())));
         ItemStack crudeChainmail = new ItemStack(ResourceItemsME.MAIL);
         crudeChainmail.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.CRUDE.getName())));
-
 
         ItemStack steelArmorPlate = new ItemStack(ResourceItemsME.ARMOR_PLATE);
         steelArmorPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.STEEL.getName())));
@@ -120,8 +117,6 @@ public class ArtisanTableGenericArmorRecipeProvider extends FabricRecipeProvider
         bronzeArmorPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.BRONZE.getName())));
         ItemStack crudeArmorPlate = new ItemStack(ResourceItemsME.ARMOR_PLATE);
         crudeArmorPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.CRUDE.getName())));
-
-        
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, EquipmentItemsME.SHIRRIFF_HAT.getDefaultStack(), "hat", DispositionType.GOOD)
                         .input(Items.STRING)
@@ -1198,7 +1193,6 @@ public class ArtisanTableGenericArmorRecipeProvider extends FabricRecipeProvider
                                 conditionsFromItem(ironChainmail.getItem()))
                         .offerTo(exporter);
 
-
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, EquipmentItemsME.ORCISH_LEATHER_SKIRT.getDefaultStack(), "leggings", DispositionType.EVIL, XP_T2)
                         .input(ResourceItemsME.FUR)
                         .input(Items.LEATHER)
@@ -1803,6 +1797,5 @@ public class ArtisanTableGenericArmorRecipeProvider extends FabricRecipeProvider
                 //endregion
             
     }
-
 
 }

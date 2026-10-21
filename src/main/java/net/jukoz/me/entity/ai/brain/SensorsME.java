@@ -8,7 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.ai.brain.sensor.CaveTrollAttackablesSensor;
 import net.jukoz.me.entity.ai.brain.sensor.NpcAttackablesSensor;
-
 import java.util.function.Supplier;
 
 public class SensorsME {

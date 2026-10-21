@@ -9,7 +9,6 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.structureManager.nest.StructureNestBlockEntity;
 import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
-
 import java.util.Optional;
 
 public class PacketStructureNestUpdateBlockEntityRequest extends ClientToServerPacket<PacketStructureNestUpdateBlockEntityRequest>
@@ -47,8 +46,6 @@ public class PacketStructureNestUpdateBlockEntityRequest extends ClientToServerP
         else
             this.structureNestId = null;
     }
-
-
 
     public PacketStructureNestUpdateBlockEntityRequest(FriendlyByteBuf buf) {
         this(buf.readBlockPos(),

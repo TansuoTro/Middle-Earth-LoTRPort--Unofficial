@@ -2,7 +2,7 @@ package net.jukoz.me.block.special.hangingstuff;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.block.MultifaceGrowthBlock;
+import net.minecraft.world.level.block.MultifaceBlock;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -29,18 +29,18 @@ public class CustomHangingBlock extends Block {
     }
 
     @Override
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
         return this.canPlaceAt(world, pos);
     }
 
     private boolean canPlaceAt(BlockGetter world, BlockPos pos) {
         BlockPos blockPos = pos.offset(Direction.UP);
         BlockState blockState = world.getBlockState(blockPos);
-        return MultifaceGrowthBlock.canGrowOn(world, Direction.UP, blockPos, blockState) || blockState.isOf(this);
+        return MultifaceBlock.canGrowOn(world, Direction.UP, blockPos, blockState) || blockState.isOf(this);
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (!this.canPlaceAt(world, pos)) {
             world.scheduleBlockTick(pos, this, 1);
         }

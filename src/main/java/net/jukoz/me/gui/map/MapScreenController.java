@@ -1,7 +1,7 @@
 package net.jukoz.me.gui.map;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.event.KeyInputHandler;
@@ -10,7 +10,6 @@ import net.jukoz.me.network.packets.C2S.PacketTeleportToDynamicWorldCoordinate;
 import net.jukoz.me.world.dimension.ModDimensions;
 import net.jukoz.me.world.map.MiddleEarthMapConfigs;
 import org.joml.Vector2d;
-
 import java.awt.event.KeyEvent;
 
 public class MapScreenController {
@@ -27,7 +26,7 @@ public class MapScreenController {
     }
 
     public boolean open(boolean canTeleport) {
-        MinecraftClient mc = MinecraftClient.getInstance();
+        Minecraft mc = Minecraft.getInstance();
 
         if(world.isClient) {
             if (mc.currentScreen == null) {

@@ -1,6 +1,5 @@
 package net.jukoz.me.block.special;
 
-import net.minecraft.block.*;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.server.level.ServerLevel;
@@ -9,7 +8,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelView;
-import net.minecraft.world.chunk.light.ChunkLightProvider;
+import net.minecraft.world.level.lighting.LightEngine;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SnowLayerBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class StoneMyceliumBlock extends Block {
 
@@ -42,20 +45,20 @@ public class StoneMyceliumBlock extends Block {
         }
     }
 
-    private static boolean canSurvive(BlockState state, WorldView world, BlockPos pos) {
+    private static boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
         BlockPos blockPos = pos.up();
         BlockState blockState = world.getBlockState(blockPos);
-        if (blockState.isOf(Blocks.SNOW) && (Integer)blockState.get(SnowBlock.LAYERS) == 1) {
+        if (blockState.isOf(Blocks.SNOW) && (Integer)blockState.get(SnowLayerBlock.LAYERS) == 1) {
             return true;
         } else if (blockState.getFluidState().getLevel() == 8) {
             return false;
         } else {
-            int i = ChunkLightProvider.getRealisticOpacity(world, state, pos, blockState, blockPos, Direction.UP, blockState.getOpacity(world, blockPos));
+            int i = LightEngine.getRealisticOpacity(world, state, pos, blockState, blockPos, Direction.UP, blockState.getOpacity(world, blockPos));
             return i < world.getMaxLightLevel();
         }
     }
 
-    private static boolean canSpread(BlockState state, WorldView world, BlockPos pos) {
+    private static boolean canSpread(BlockState state, LevelReader world, BlockPos pos) {
         BlockPos blockPos = pos.up();
         return canSurvive(state, world, pos) && !world.getFluidState(blockPos).isIn(FluidTags.WATER);
     }

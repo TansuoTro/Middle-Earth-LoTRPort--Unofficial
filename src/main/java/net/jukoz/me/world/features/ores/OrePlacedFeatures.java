@@ -9,14 +9,20 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.gen.YOffset;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.MiscConfiguredFeatures;
+import net.minecraft.data.worldgen.features.MiscOverworldFeatures;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraft.world.gen.heightprovider.TrapezoidHeightProvider;
-import net.minecraft.world.gen.placementmodifier.*;
+import net.minecraft.world.level.levelgen.heightproviders.TrapezoidHeight;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.placement.RarityFilter;
+import net.minecraft.core.HolderGetter;
 
 public class OrePlacedFeatures {
     public static final ResourceKey<PlacedFeature> ANDESITE_ORE = registerKey("andesite_ore");
@@ -96,7 +102,7 @@ public class OrePlacedFeatures {
     public static final ResourceKey<PlacedFeature> WHITE_SAND_ORE = registerKey("white_sand_ore");
 
     public static void bootstrap(BootstrapContext<PlacedFeature> featureRegisterable) {
-        RegistryEntryLookup<ConfiguredFeature<?, ?>> registryEntryLookup = featureRegisterable.getRegistryLookup(Registries.CONFIGURED_FEATURE);
+        HolderGetter<ConfiguredFeature<?, ?>> registryEntryLookup = featureRegisterable.getRegistryLookup(Registries.CONFIGURED_FEATURE);
         Holder.Reference<ConfiguredFeature<?, ?>> andesite = registryEntryLookup.getOrThrow(OreConfiguredFeatures.ANDESITE_ORE);
         Holder.Reference<ConfiguredFeature<?, ?>> ashBlock = registryEntryLookup.getOrThrow(OreConfiguredFeatures.ASH_BLOCK_ORE);
         Holder.Reference<ConfiguredFeature<?, ?>> ashenDirt = registryEntryLookup.getOrThrow(OreConfiguredFeatures.ASHEN_DIRT_ORE);
@@ -156,7 +162,7 @@ public class OrePlacedFeatures {
         Holder.Reference<ConfiguredFeature<?, ?>> podzol = registryEntryLookup.getOrThrow(OreConfiguredFeatures.PODZOL_ORE);
         Holder.Reference<ConfiguredFeature<?, ?>> powderSnow = registryEntryLookup.getOrThrow(OreConfiguredFeatures.POWDER_SNOW_ORE);
         Holder.Reference<ConfiguredFeature<?, ?>> riverSand = registryEntryLookup.getOrThrow(OreConfiguredFeatures.RIVER_SAND_ORE);
-        Holder.Reference<ConfiguredFeature<?, ?>> diskSand = registryEntryLookup.getOrThrow(MiscConfiguredFeatures.DISK_SAND);
+        Holder.Reference<ConfiguredFeature<?, ?>> diskSand = registryEntryLookup.getOrThrow(MiscOverworldFeatures.DISK_SAND);
         Holder.Reference<ConfiguredFeature<?, ?>> sand = registryEntryLookup.getOrThrow(OreConfiguredFeatures.SAND_ORE);
         Holder.Reference<ConfiguredFeature<?, ?>> calciteStone = registryEntryLookup.getOrThrow(OreConfiguredFeatures.CALCITE_STONE_ORE);
         Holder.Reference<ConfiguredFeature<?, ?>> grassStone = registryEntryLookup.getOrThrow(OreConfiguredFeatures.GRASS_TO_STONE_ORE);
@@ -168,166 +174,166 @@ public class OrePlacedFeatures {
 
         PlacementModifier abundant = PlacedFeature.createCountExtraModifier(2, 0.5f, 1);
         PlacementModifier frequent = PlacedFeature.createCountExtraModifier(1, 0.5f, 1);
-        PlacementModifier veryCommon = RarityFilterPlacementModifier.of(1);
-        PlacementModifier common = RarityFilterPlacementModifier.of(2);
+        PlacementModifier veryCommon = RarityFilter.of(1);
+        PlacementModifier common = RarityFilter.of(2);
         PlacementModifier uncommon = PlacedFeature.createCountExtraModifier(0, 0.25f, 1);
         PlacementModifier rare = PlacedFeature.createCountExtraModifier(0, 0.1f, 1);
 
         PlacedFeature.register(featureRegisterable, ANDESITE_ORE, andesite, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, ASH_BLOCK_ORE, ashBlock, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, ASHEN_DIRT_ORE, ashenDirt, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, ASHEN_STONE_DIRT_ORE, ashenStoneDirt, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, ASHEN_STONE_DIRT_COMMON_ORE, ashenStoneDirt, veryCommon,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, ASHEN_GRAVEL, ashenGravel, veryCommon,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, ASHEN_SAND, ashenSand, veryCommon,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, ASHEN_GRAVEL_DIRT, ashenGravelDirt, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, ASHEN_GRAVEL_SAND, ashenGravelSand, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, ASHEN_STONE_GRAVEL, ashenStoneGravel, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, ASHEN_STONE_SAND, ashenStoneSand, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, BASALT_ORE, basalt, uncommon,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, SMOOTH_BASALT_ORE, smoothBasalt, frequent,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, BLACK_SAND_ORE, blackSand, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, BLUE_TUFF_ORE, blueTuff, veryCommon,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, CALCITE_ORE, calcite, veryCommon,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, RARE_CALCITE_ORE, calcite, uncommon,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, COARSE_DIRT_ORE, coarseDirt, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, COARSE_CHALKSOIL_ORE, coarseChalksoil, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, COARSE_LOAM_ORE, coarseLoam, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, COARSE_PEAT_ORE, coarsePeat, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, COARSE_SILT_ORE, coarseSilt, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, CORRUPTED_MOSS_DISK, corruptedMoss, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, DIORITE_ORE, diorite, abundant,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, DIRT_TO_GRASS_ORE, dirtToGrass, abundant,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, ROOTED_DIRT_ORE, rootedDirt, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, GRASSY_DIRT_ORE, grassyDirt, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, GRASSY_CHALKSOIL_ORE, grassyChalksoil, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, GRASSY_LOAM_ORE, grassyLoam, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, GRASSY_PEAT_ORE, grassyPeat, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, GRASSY_SILT_ORE, grassySilt, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
 
         PlacedFeature.register(featureRegisterable, COARSE_LOAM_TO_GRASSY, coarseLoamToGrassy, frequent,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, GRASSY_LOAM_TO_GRASS, grassyLoamToGrass, frequent,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, COARSE_LOAM_TO_FOUL_DIRT, coarseLoamToFoulDirt, frequent,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, FOUL_DIRT_TO_WASTE_PILE, foulDirtToWastePile, frequent,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, GRAVEL_TO_SILT_ORE, gravelToSilt, frequent,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
 
         PlacedFeature.register(featureRegisterable, SILT_TO_GRASSY_ORE, siltToGrassy, frequent,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, SILT_TO_COARSE_ORE, siltToCoarse, frequent,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, DIRTY_ROOTS_ORE, dirtyRoots, frequent,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, DOLOMITE_ORE, dolomite, veryCommon,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, DRIPSTONE_ORE, dripstone, veryCommon,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, DRY_DIRT_ORE, dryDirt, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, FOREST_MOSS_DISK, forestMoss, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, GRANITE_ORE, granite, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, GRAVEL_ORE, gravel, rare,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, SNOWY_DIRT_ORE, snowyDirt, rare,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, SNOWY_GRASS_ORE, snowyGrass, rare,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, STONE_GRASS_ORE, stoneGrass, veryCommon,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, STONE_GRASS_ABUNDANT_ORE, stoneGrass, abundant,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, SAND_TO_GRASS_ORE, sandToGrass, veryCommon,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, OLD_PODZOL_ORE, oldPodzol, veryCommon,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, STONE_OLD_PODZOL_ORE, stoneOldPodzol, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, LIMESTONE_ORE, limestone, veryCommon,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, LORIEN_PODZOL_ORE, lorienPodzol, frequent,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, MIRE_ORE, mire, veryCommon,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, ABUNDANT_MUD_ORE, mud, abundant,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, MUD_ORE, mud, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, PACKED_MUD_ORE, packedMud, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, PODZOL_ORE, podzol, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, ABUNDANT_PODZOL_ORE, podzol, abundant,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, POWDER_SNOW_ORE, powderSnow, veryCommon,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, RIVER_SAND, riverSand,
-                CountPlacementModifier.of(2), SquarePlacementModifier.of(), PlacedFeature.OCEAN_FLOOR_WG_HEIGHTMAP,
-                BlockFilterPlacementModifier.of(BlockPredicate.matchingFluids(Fluids.WATER)), BiomePlacementModifier.of());
+                CountPlacement.of(2), InSquarePlacement.of(), PlacedFeature.OCEAN_FLOOR_WG_HEIGHTMAP,
+                BlockPredicateFilter.of(BlockPredicate.matchingFluids(Fluids.WATER)), BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, DISK_SAND, diskSand,
-                CountPlacementModifier.of(1), SquarePlacementModifier.of(), PlacedFeature.OCEAN_FLOOR_WG_HEIGHTMAP,
-                BlockFilterPlacementModifier.of(BlockPredicate.matchingFluids(Fluids.WATER)), BiomePlacementModifier.of());
+                CountPlacement.of(1), InSquarePlacement.of(), PlacedFeature.OCEAN_FLOOR_WG_HEIGHTMAP,
+                BlockPredicateFilter.of(BlockPredicate.matchingFluids(Fluids.WATER)), BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, SAND_ORE, sand, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, SNOW_ORE, snowBlock, PlacedFeature.createCountExtraModifier(3, 0.5f, 1),
-                HeightRangePlacementModifier.of(TrapezoidHeightProvider.create(YOffset.fixed(180), YOffset.fixed(460))),
-                PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                HeightRangePlacement.of(TrapezoidHeight.create(VerticalAnchor.fixed(180), VerticalAnchor.fixed(460))),
+                PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, SOUL_SAND_ORE, soulSand, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, CALCITE_STONE_ORE, calciteStone, abundant,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, GRASS_TO_STONE_ORE, grassStone, veryCommon,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, GRASS_TO_GRANITE_ORE, grassGranite, veryCommon,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, TERRACOTTA_ORE, terracotta, veryCommon,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, TUFF_ORE, stoneTuff, veryCommon,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, TURF_ORE, turf, veryCommon,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, COMMON_TURF_ORE, turf, frequent,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, ABUNDANT_TUFF_ORE, stoneTuff, abundant,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
         PlacedFeature.register(featureRegisterable, WHITE_SAND_ORE, lightGrayConcretePowder, common,
-                SquarePlacementModifier.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, BiomeFilter.of());
     }
 
     public static ResourceKey<PlacedFeature> registerKey(String name) {

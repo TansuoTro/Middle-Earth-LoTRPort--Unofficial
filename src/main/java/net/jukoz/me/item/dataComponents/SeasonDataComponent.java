@@ -1,6 +1,6 @@
 package net.jukoz.me.item.dataComponents;
-import net.jukoz.me.compat.METext;
 
+import net.jukoz.me.compat.METext;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.item.Item;
@@ -10,13 +10,12 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.StringRepresentable;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.exceptions.FactionIdentifierException;
 import net.jukoz.me.utils.ModColors;
-
 import java.util.List;
 
 public record SeasonDataComponent(Season season) implements TooltipAppender {
@@ -30,26 +29,26 @@ public record SeasonDataComponent(Season season) implements TooltipAppender {
             PacketCodec.tuple(Season.PACKET_CODEC, SeasonDataComponent::season, SeasonDataComponent::new);
 
     @Override
-    public void appendTooltip(ItemStack stack, net.minecraft.client.item.TooltipContext context, List<Component> tooltip) {
+    public void appendTooltip(ItemStack stack, net.minecraft.world.item.TooltipFlag context, List<Component> tooltip) {
         // 1.21 read the biome registry out of the tooltip context just to fail when no world
-        // was attached; 1.20.1's TooltipContext has no registry lookup and the season is a
+        // was attached; 1.20.1's TooltipFlag has no registry lookup and the season is a
         // plain enum, so the line is always available.
-        tooltip.add(Component.translatable("tooltip.%s.season".formatted(MiddleEarth.MOD_ID)).formatted(Formatting.GOLD)
-                .append(Component.translatable("season.%s.".formatted(MiddleEarth.MOD_ID) + season.toString()).formatted(Formatting.WHITE)));
+        tooltip.add(Component.translatable("tooltip.%s.season".formatted(MiddleEarth.MOD_ID)).formatted(ChatFormatting.GOLD)
+                .append(Component.translatable("season.%s.".formatted(MiddleEarth.MOD_ID) + season.toString()).formatted(ChatFormatting.WHITE)));
     }
 
     public Season season() {
         return season;
     }
 
-    public enum Season implements StringIdentifiable {
+    public enum Season implements StringRepresentable {
         SPRING("spring"),
         SUMMER("summer"),
         AUTUMN("autumn"),
         WINTER("winter"),
         DEAD("dead");
 
-        public static final Codec<Season> CODEC = StringIdentifiable.createCodec(Season::values);
+        public static final Codec<Season> CODEC = StringRepresentable.createCodec(Season::values);
         public static final PacketCodec<FriendlyByteBuf, Season> PACKET_CODEC =
                 PacketCodec.ofStatic(Season::writeToBuf, Season::readFromBuf);
         private final String name;

@@ -1,19 +1,19 @@
 package net.jukoz.me.block.special.plants;
 
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.block.FlowerbedBlock;
+import net.minecraft.world.level.block.PinkPetalsBlock;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelView;
 
-public class FlowerbedMushroomBlock extends FlowerbedBlock {
+public class FlowerbedMushroomBlock extends PinkPetalsBlock {
     public FlowerbedMushroomBlock(Settings settings) {
         super(settings);
     }
 
     @Override
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
         BlockPos blockPos = pos.down();
         BlockState blockState = world.getBlockState(blockPos);
         if (blockState.isIn(BlockTags.MUSHROOM_GROW_BLOCK)) {

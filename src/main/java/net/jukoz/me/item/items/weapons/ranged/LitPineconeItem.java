@@ -4,7 +4,7 @@ import net.jukoz.me.entity.projectile.pinecone.LitPineconeEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.level.Level;
@@ -17,7 +17,6 @@ public class LitPineconeItem extends PineconeItem {
     public LitPineconeItem(Settings settings) {
         super(settings);
     }
-
 
     @Override
     public void onStoppedUsing(ItemStack stack, Level world, LivingEntity user, int remainingUseTicks) {
@@ -37,7 +36,7 @@ public class LitPineconeItem extends PineconeItem {
             litPineconeEntity.setVelocity(playerEntity, playerEntity.getPitch(), playerEntity.getYaw(), 0.0f, BASE_STRENGTH + (CHARGE_STRENGTH * percentage), 1.0f);
 
             world.spawnEntity(litPineconeEntity);
-            world.playSoundFromEntity(null, litPineconeEntity, SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.PLAYERS, 1.0f, 0.7f);
+            world.playSoundFromEntity(null, litPineconeEntity, SoundEvents.ENTITY_SNOWBALL_THROW, SoundSource.PLAYERS, 1.0f, 0.7f);
             if (!playerEntity.getAbilities().creativeMode) {
                 stack.decrement(1);
             }

@@ -8,16 +8,15 @@ import net.jukoz.me.exceptions.FactionIdentifierException;
 import net.jukoz.me.resources.datas.factions.Faction;
 import net.jukoz.me.resources.datas.factions.FactionLookup;
 import net.jukoz.me.resources.datas.factions.data.SpawnDataHandler;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.resources.ResourceLocation;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class AllSpawnSuggestionProvider implements SuggestionProvider<ServerCommandSource> {
+public class AllSpawnSuggestionProvider implements SuggestionProvider<CommandSourceStack> {
     @Override
-    public CompletableFuture<Suggestions> getSuggestions(CommandContext<ServerCommandSource> context, SuggestionsBuilder builder) {
+    public CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
         try {
             List<ResourceLocation> candidates = null;
             candidates = getAllSpawns(context);
@@ -27,7 +26,7 @@ public class AllSpawnSuggestionProvider implements SuggestionProvider<ServerComm
         }
     }
 
-    private static List<ResourceLocation> getAllSpawns(CommandContext<ServerCommandSource> context) throws FactionIdentifierException {
+    private static List<ResourceLocation> getAllSpawns(CommandContext<CommandSourceStack> context) throws FactionIdentifierException {
         List<Faction> factions = FactionLookup.getAllFactions(context.getSource().getWorld());
         List<ResourceLocation> candidates = new ArrayList<>();
 

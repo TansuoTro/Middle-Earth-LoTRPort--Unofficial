@@ -1,8 +1,8 @@
 package net.jukoz.me.resources.datas.texture_presets;
-import net.jukoz.me.compat.NbtCompat;
 
+import net.jukoz.me.compat.NbtCompat;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 
@@ -23,7 +23,6 @@ public class SimplifiedTexturePreset {
         if (source.contains("nose")) this.nose = MiddleEarth.fetchId(source.getString("nose"));
         if (source.contains("ear")) this.ear = MiddleEarth.fetchId(source.getString("ear"));
     }
-
 
     public static SimplifiedTexturePreset create(ResourceLocation base) {
         SimplifiedTexturePreset texturePreset = new SimplifiedTexturePreset();
@@ -51,8 +50,7 @@ public class SimplifiedTexturePreset {
         return this;
     }
 
-
-    public NbtElement getNbt(NbtElement newNbt) {
+    public Tag getNbt(Tag newNbt) {
         if(base != null){
             NbtCompat.compound(newNbt).putString("base", this.base.toString());
         }

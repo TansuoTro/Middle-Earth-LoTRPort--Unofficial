@@ -2,28 +2,29 @@ package net.jukoz.me.compat.client.render;
 
 import net.jukoz.me.compat.client.render.state.LivingEntityRenderStateCompat;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRenderer;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.model.EntityModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 /**
- * R2 base for donor-style 1.21.8 {@code MobEntityRenderer<T, S, M>} renderers.
+ * R2 base for donor-style 1.21.8 {@code MobRenderer<T, S, M>} renderers.
  *
  * <p>Mirrors the donor state pipeline: build the state, fill it, publish it on
  * {@link MEEntityRenderContext}, then let the donor subclass draw from the state. Also
  * re-implements the basic model + feature pass that 1.20.1's
- * {@link MobEntityRenderer#render} performs from the entity.
+ * {@link MobRenderer#render} performs from the entity.
  */
 public abstract class MEMobEntityRenderer<T extends Mob, S extends LivingEntityRenderStateCompat, M extends EntityModel<T>>
-        extends MobEntityRenderer<T, M> {
+        extends MobRenderer<T, M> {
 
-    protected MEMobEntityRenderer(EntityRendererFactory.Context ctx, M model, float shadowRadius) {
+    protected MEMobEntityRenderer(EntityRendererProvider.Context ctx, M model, float shadowRadius) {
         super(ctx, model, shadowRadius);
     }
 
@@ -79,11 +80,11 @@ public abstract class MEMobEntityRenderer<T extends Mob, S extends LivingEntityR
     }
 
     protected void renderLabelIfPresent(S state, net.minecraft.network.chat.Component text, PoseStack matrices,
-                                        VertexConsumerProvider vertexConsumers, int light) {
+                                        MultiBufferSource vertexConsumers, int light) {
         super.renderLabelIfPresent(entityOf(state), text, matrices, vertexConsumers, light);
     }
 
-    public void render(S state, PoseStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+    public void render(S state, PoseStack matrices, MultiBufferSource vertexConsumers, int light) {
         M model = this.getModel(state);
         ResourceLocation texture = this.getTexture(state);
         VertexConsumer vertices = vertexConsumers.getBuffer(model.getLayer(texture));
@@ -92,7 +93,7 @@ public abstract class MEMobEntityRenderer<T extends Mob, S extends LivingEntityR
         model.setAngles(entity, state.limbSwingAnimationProgress, state.limbSwingAmplitude,
                 state.age, state.relativeHeadYaw, state.relativeHeadPitch);
         model.render(matrices, vertices, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
-        for (FeatureRenderer<T, M> feature : this.features) {
+        for (RenderLayer<T, M> feature : this.features) {
             feature.render(matrices, vertexConsumers, light, entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
         }
     }
@@ -107,7 +108,7 @@ public abstract class MEMobEntityRenderer<T extends Mob, S extends LivingEntityR
 
     @Override
     public void render(T entity, float yaw, float tickDelta, PoseStack matrices,
-                             VertexConsumerProvider vertexConsumers, int light) {
+                             MultiBufferSource vertexConsumers, int light) {
         S state = createRenderState();
         state.entity = entity;
         state.tickDelta = tickDelta;

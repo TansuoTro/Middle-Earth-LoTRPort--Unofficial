@@ -3,28 +3,27 @@ package net.jukoz.me.entity.ai.brain.task;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.MemoryModuleState;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.MultiTickTask;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.jukoz.me.entity.ai.brain.MemoryModulesME;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntity;
-
 import java.util.List;
 
-public class CaveTrollRoarTask extends MultiTickTask<CaveTrollEntity> {
+public class CaveTrollRoarTask extends Behavior<CaveTrollEntity> {
     long startTime;
     public CaveTrollRoarTask() {
         super(
                 ImmutableMap.of(
                         MemoryModuleType.ATTACK_TARGET,
-                        MemoryModuleState.VALUE_PRESENT,
+                        MemoryStatus.VALUE_PRESENT,
                         MemoryModulesME.ROAR_COOLDOWN,
-                        MemoryModuleState.VALUE_ABSENT
+                        MemoryStatus.VALUE_ABSENT
                 ),
                 35
         );
@@ -44,12 +43,11 @@ public class CaveTrollRoarTask extends MultiTickTask<CaveTrollEntity> {
         List<Entity> entities = world.getOtherEntities(troll, troll.getBoundingBox().expand(15, 15, 15)); // Get nearby entities
         for(Entity entity : entities) { // Run through all entities
             if(troll.isValidTarget(entity)) { // Apply bad effects if entity is valid target
-                ((LivingEntity)entity).addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 200), troll);
-                ((LivingEntity)entity).addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100), troll);
+                ((LivingEntity)entity).addStatusEffect(new MobEffectInstance(MobEffects.WEAKNESS, 200), troll);
+                ((LivingEntity)entity).addStatusEffect(new MobEffectInstance(MobEffects.SLOWNESS, 100), troll);
             }
         }
     }
-
 
     @Override
     protected void keepRunning(ServerLevel world, CaveTrollEntity entity, long time) {

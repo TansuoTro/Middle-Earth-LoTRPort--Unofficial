@@ -10,5 +10,4 @@ public class BonfireBlockEntity extends ToggleableFireBlockEntity {
         super(ModBlockEntities.BONFIRE, pos, state);
     }
 
-
 }

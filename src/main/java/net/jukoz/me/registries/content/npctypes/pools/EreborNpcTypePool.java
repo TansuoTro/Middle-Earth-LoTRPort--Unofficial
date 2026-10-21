@@ -1,6 +1,6 @@
 package net.jukoz.me.registries.content.npctypes.pools;
-import net.jukoz.me.compat.METext;
 
+import net.jukoz.me.compat.METext;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Items;
 import net.minecraft.resources.ResourceKey;
@@ -19,7 +19,6 @@ import net.jukoz.me.resources.datas.npc_types.NpcType;
 import net.jukoz.me.resources.datas.npc_types.data.WeightedGearData;
 import net.jukoz.me.resources.datas.npc_types.data.WeightedItemData;
 import net.jukoz.me.resources.datas.npc_types.data.GearSlotPool;
-
 import java.util.List;
 
 public class EreborNpcTypePool {
@@ -318,7 +317,6 @@ public class EreborNpcTypePool {
                                 .add(WeightedItemData.create(WeaponItemsME.EREBOR_BUCKLER_SHIELD))
                         )
         ), NpcRegistry.COMMON_NPC_ATTRIBUTES , CombatArchetypePool.DEFAULT, NpcLoot.FROM_13_TO_20);
-
 
         LEADER = new NpcType(NpcRegistry.EREBOR_LEADER.getValue(), RaceRegistry.DWARF, FACTION, TexturePresetsRegistry.LONGBEARDS_EREBOR_MIGHTY_DWARF, List.of(
                 WeightedGearData.create()

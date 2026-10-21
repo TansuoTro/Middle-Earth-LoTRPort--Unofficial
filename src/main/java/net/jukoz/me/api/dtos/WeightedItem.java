@@ -1,8 +1,8 @@
 package net.jukoz.me.api.dtos;
-import net.jukoz.me.compat.NbtCompat;
 
+import net.jukoz.me.compat.NbtCompat;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.Tag;
 
 public abstract class WeightedItem<T> {
     protected int weight;
@@ -22,7 +22,7 @@ public abstract class WeightedItem<T> {
         this(item, 1);
     }
 
-    public WeightedItem(NbtElement element) {
+    public WeightedItem(Tag element) {
         this.weight = 1;
         if(NbtCompat.isCompound(element)){
             CompoundTag compound = NbtCompat.compound(element);
@@ -42,7 +42,7 @@ public abstract class WeightedItem<T> {
 
     public abstract WeightedItem<T> withWeight(int newWeight);
 
-    public NbtElement getNbt(){
+    public Tag getNbt(){
         if(weight != 1){
             CompoundTag compound = new CompoundTag();
             if(weight != 1)

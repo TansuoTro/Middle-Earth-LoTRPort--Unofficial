@@ -7,7 +7,6 @@ import net.minecraft.client.animation.AnimationChannel;
 
 public class TrollAnimations {
 
-
     public static final AnimationDefinition GOSLEEPING = AnimationDefinition.Builder.create(0.68f)
             .addBoneAnimation("body",
                     new AnimationChannel(AnimationChannel.Targets.TRANSLATE,

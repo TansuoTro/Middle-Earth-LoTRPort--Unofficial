@@ -3,7 +3,7 @@ package net.jukoz.me.compat;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.core.NonNullList;
 
 /**
  * 1.20.1 stand-in for 1.21.8's {@code net.minecraft.recipe.input.SingleStackRecipeInput}.
@@ -13,7 +13,7 @@ import net.minecraft.util.collection.DefaultedList;
  * retained so recipe bodies keep their shape.
  */
 public class SingleStackRecipeInput implements Inventory {
-    private final DefaultedList<ItemStack> stacks = DefaultedList.ofSize(1, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> stacks = NonNullList.ofSize(1, ItemStack.EMPTY);
 
     public SingleStackRecipeInput(ItemStack stack) {
         this.stacks.set(0, stack);

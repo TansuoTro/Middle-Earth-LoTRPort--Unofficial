@@ -1,24 +1,23 @@
 package net.jukoz.me.gui.forge;
-import net.jukoz.me.compat.METext;
 
+import net.jukoz.me.compat.METext;
 import com.google.common.collect.Lists;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.components.Tooltip;
-import net.minecraft.client.gui.widget.TexturedButtonWidget;
-import net.minecraft.client.gui.widget.ToggleButtonWidget;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.StateSwitchingButton;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.forge.MetalTypes;
 import net.jukoz.me.network.packets.C2S.ForgeModeSwitchPacket;
 import net.jukoz.me.network.packets.C2S.ForgeOutputPacket;
-
 import java.util.List;
 
-public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandler> {
+public class ForgeAlloyingScreen extends AbstractContainerScreen<ForgeAlloyingScreenHandler> {
     private static final ResourceLocation TEXTURE = MiddleEarth.ofPath( "textures", "gui", "forge.png");
 
     private static final ResourceLocation EXTRACT_BUTTON = MiddleEarth.of("extract");
@@ -46,17 +45,17 @@ public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandle
 
     private static final int TEXTURE_SIZE = 256;
 
-    public TexturedButtonWidget extractButton;
-    public ToggleButtonWidget leftExtractCycleButton;
-    public ToggleButtonWidget rightExtractCycleButton;
+    public ImageButton extractButton;
+    public StateSwitchingButton leftExtractCycleButton;
+    public StateSwitchingButton rightExtractCycleButton;
 
-    public TexturedButtonWidget modeSwitchToAlloyButton;
-    public TexturedButtonWidget modeSwitchToHeatingButton;
+    public ImageButton modeSwitchToAlloyButton;
+    public ImageButton modeSwitchToHeatingButton;
 
     private int outputMode = 0;
     private boolean heatingMode = true;
 
-    public ForgeAlloyingScreen(ForgeAlloyingScreenHandler handler, PlayerInventory inventory, Component title) {
+    public ForgeAlloyingScreen(ForgeAlloyingScreenHandler handler, Inventory inventory, Component title) {
         super(handler, inventory, title);
     }
 
@@ -68,15 +67,15 @@ public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandle
         int y = (height - backgroundHeight) / 2;
         this.heatingMode = handler.heatingMode();
 
-        this.leftExtractCycleButton = new ToggleButtonWidget(x + 121, y + 24, 7 ,11, true);
+        this.leftExtractCycleButton = new StateSwitchingButton(x + 121, y + 24, 7 ,11, true);
         this.leftExtractCycleButton.setTextureUV(0, 0, 0, 0, LEFT_CYCLE_EXTRACT_BUTTON);
         this.leftExtractCycleButton.visible = false;
 
-        this.rightExtractCycleButton = new ToggleButtonWidget(x + 162, y + 24, 7,11, true);
+        this.rightExtractCycleButton = new StateSwitchingButton(x + 162, y + 24, 7,11, true);
         this.rightExtractCycleButton.setTextureUV(0, 0, 0, 0, RIGHT_CYCLE_EXTRACT_BUTTON);
         this.rightExtractCycleButton.visible = false;
 
-        this.extractButton = new TexturedButtonWidget(x + 131, y + 12, 28 ,36, 0, 0, 0, EXTRACT_BUTTON, 256, 256, (button)-> {
+        this.extractButton = new ImageButton(x + 131, y + 12, 28 ,36, 0, 0, 0, EXTRACT_BUTTON, 256, 256, (button)-> {
             int amount = 0;
             switch (outputMode){
                 case 1 -> amount = 16;
@@ -95,14 +94,14 @@ public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandle
             setExtractButtonTooltip();
         }
 
-        this.modeSwitchToAlloyButton = new TexturedButtonWidget(x + 23, y + 68, 10 ,10, 0, 0, 0, HEATING_SWITCH_BUTTON, 256, 256, (button)-> {
+        this.modeSwitchToAlloyButton = new ImageButton(x + 23, y + 68, 10 ,10, 0, 0, 0, HEATING_SWITCH_BUTTON, 256, 256, (button)-> {
             ClientPlayNetworking.send(new ForgeModeSwitchPacket(handler.getPos().getX(),handler.getPos().getY(),handler.getPos().getZ()));
             this.modeSwitchToAlloyButton.visible = false;
             this.modeSwitchToAlloyButton.active = false;
             this.modeSwitchToHeatingButton.visible = true;
             this.modeSwitchToHeatingButton.active = true;
         }, Component.translatable("button." + MiddleEarth.MOD_ID + ".switch_mode"));
-        this.modeSwitchToHeatingButton = new TexturedButtonWidget(x + 23, y + 60, 10 ,10, 0, 0, 0, ALLOYING_SWITCH_BUTTON, 256, 256, (button)-> {
+        this.modeSwitchToHeatingButton = new ImageButton(x + 23, y + 60, 10 ,10, 0, 0, 0, ALLOYING_SWITCH_BUTTON, 256, 256, (button)-> {
             ClientPlayNetworking.send(new ForgeModeSwitchPacket(handler.getPos().getX(),handler.getPos().getY(),handler.getPos().getZ()));
             this.modeSwitchToHeatingButton.visible = false;
             this.modeSwitchToHeatingButton.active = false;
@@ -211,7 +210,7 @@ public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandle
     }
 
     @Override
-    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
+    protected void drawBackground(GuiGraphics context, float delta, int mouseX, int mouseY) {
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
 
@@ -223,7 +222,7 @@ public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandle
         renderLiquidStorage(context, x, y);
     }
 
-    private void renderProgressArrow(DrawContext context, int x, int y) {
+    private void renderProgressArrow(GuiGraphics context, int x, int y) {
         if(heatingMode) {
             context.drawTexture(TEXTURE, x + 36, y + 45, 202, 0, COOKING_FIRE_SIZE, COOKING_FIRE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
             if(handler.isCooking()) {
@@ -243,12 +242,12 @@ public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandle
         }
     }
 
-    private void renderLiquidStorage(DrawContext context, int x, int y) {
+    private void renderLiquidStorage(GuiGraphics context, int x, int y) {
         int storedLiquid = (int) (handler.getScaledStoredLiquid() * LIQUID_HEIGHT);
         context.drawTexture(TEXTURE, x + 73, y + 77 - storedLiquid, 211, 76 - storedLiquid, 20, storedLiquid, TEXTURE_SIZE, TEXTURE_SIZE);
     }
 
-    private void renderLiquidStorageTooltip(DrawContext context, int mouseX, int mouseY) {
+    private void renderLiquidStorageTooltip(GuiGraphics context, int mouseX, int mouseY) {
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
 
@@ -265,13 +264,13 @@ public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandle
     }
 
     @Override
-    protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
+    protected void drawForeground(GuiGraphics context, int mouseX, int mouseY) {
         context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, -12566464, false);
         context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY + 7, -12566464, false);
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         renderBackground(context);
         super.render(context, mouseX, mouseY, delta);
         int x = (width - backgroundWidth) / 2;

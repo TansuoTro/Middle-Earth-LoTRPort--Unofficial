@@ -3,13 +3,13 @@ package net.jukoz.me.entity.goals;
 import net.jukoz.me.entity.beasts.BeastEntity;
 import net.jukoz.me.entity.beasts.trolls.TrollEntity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.ai.TargetPredicate;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.TrackTargetGoal;
-
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import java.util.EnumSet;
+import net.minecraft.world.entity.ai.control.Control;
 
-public class BeastTrackOwnerAttackerGoal extends TrackTargetGoal {
+public class BeastTrackOwnerAttackerGoal extends TargetGoal {
     private final BeastEntity mob;
     private LivingEntity attacker;
     private int lastAttackedTime;
@@ -31,7 +31,7 @@ public class BeastTrackOwnerAttackerGoal extends TrackTargetGoal {
         }
         this.attacker = livingEntity.getAttacker();
         int i = livingEntity.getLastAttackedTime();
-        return i != this.lastAttackedTime && this.canTrack(this.attacker, TargetPredicate.DEFAULT);
+        return i != this.lastAttackedTime && this.canTrack(this.attacker, TargetingConditions.DEFAULT);
     }
 
     @Override

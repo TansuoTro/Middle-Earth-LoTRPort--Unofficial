@@ -1,10 +1,10 @@
 package net.jukoz.me.resources.datas.factions.data;
-import net.jukoz.me.compat.NbtCompat;
 
+import net.jukoz.me.compat.NbtCompat;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
@@ -31,7 +31,7 @@ public class InitialDiplomacy {
         this.affinity = affinity;
     }
 
-    public InitialDiplomacy(NbtElement nbtElement) {
+    public InitialDiplomacy(Tag nbtElement) {
         CompoundTag compound = NbtCompat.compound(nbtElement);
         compound.get("faction");
     }
@@ -44,7 +44,7 @@ public class InitialDiplomacy {
         return this.affinity.toString();
     }
 
-    public NbtElement getNbt() {
+    public Tag getNbt() {
         CompoundTag compound = new CompoundTag();
         compound.putString("faction", getFactionIdentifierForNbt());
         compound.putString("affinity", getAffinityForNbt());

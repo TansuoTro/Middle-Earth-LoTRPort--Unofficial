@@ -11,15 +11,15 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.util.function.BooleanBiFunction;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.VoxelShapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.stream.Stream;
+import net.minecraft.world.phys.shapes.Shapes;
 
 public class OrcishTreatedAnvilblock extends AbstractShapingAnvilBlock {
     public OrcishTreatedAnvilblock(Settings settings) {
@@ -36,7 +36,7 @@ public class OrcishTreatedAnvilblock extends AbstractShapingAnvilBlock {
                         Block.createCuboidShape(4, 13, 5, 12, 16, 11),
                         Block.createCuboidShape(12, 14, 7, 15, 16, 9),
                         Block.createCuboidShape(5, 7, 5, 11, 13, 11)
-                ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+                ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
             }
             case EAST, WEST -> {
                 return Stream.of(
@@ -45,15 +45,13 @@ public class OrcishTreatedAnvilblock extends AbstractShapingAnvilBlock {
                         Block.createCuboidShape(5, 13, 4, 11, 16, 12),
                         Block.createCuboidShape(7, 14, 1, 9, 16, 4),
                         Block.createCuboidShape(5, 7, 5, 11, 13, 11)
-                ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+                ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
             }
             default -> {
                 return Block.createCuboidShape(1, 0, 1, 15, 16, 15);
             }
         }
     }
-
-
 
     @Nullable
     @Override

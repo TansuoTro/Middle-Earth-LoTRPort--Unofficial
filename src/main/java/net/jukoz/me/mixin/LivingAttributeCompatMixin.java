@@ -8,13 +8,14 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityPose;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import net.minecraft.world.entity.Pose;
 
 /** 1.20.1 engine consumers for the later-version attributes used by race and NPC data. */
 @Mixin(LivingEntity.class)
@@ -36,16 +37,16 @@ public abstract class LivingAttributeCompatMixin {
     }
 
     @Inject(method = "getDimensions", at = @At("RETURN"), cancellable = true)
-    private void me$dimensions(EntityPose pose, CallbackInfoReturnable<EntityDimensions> cir) {
+    private void me$dimensions(Pose pose, CallbackInfoReturnable<EntityDimensions> cir) {
         LivingEntity entity = (LivingEntity) (Object) this;
-        if (pose != EntityPose.SLEEPING) {
+        if (pose != Pose.SLEEPING) {
             float scale = EntityAttributesME.scale(entity);
             cir.setReturnValue(cir.getReturnValue().scaled(scale * (float) EntityAttributesME.value(entity, EntityAttributesME.WIDTH_SCALE), scale));
         }
     }
 
     // Pass unscaled dimensions to species-specific eye-height calculations, then scale their result.
-    @ModifyVariable(method = "getEyeHeight(Lnet/minecraft/entity/EntityPose;Lnet/minecraft/entity/EntityDimensions;)F",
+    @ModifyVariable(method = "getEyeHeight(Lnet/minecraft/entity/Pose;Lnet/minecraft/entity/EntityDimensions;)F",
             at = @At("HEAD"), argsOnly = true)
     private EntityDimensions me$eyeDimensions(EntityDimensions dimensions) {
         LivingEntity entity = (LivingEntity) (Object) this;
@@ -54,10 +55,10 @@ public abstract class LivingAttributeCompatMixin {
         return dimensions.scaled(1.0F / (scale * width), 1.0F / scale);
     }
 
-    @Inject(method = "getEyeHeight(Lnet/minecraft/entity/EntityPose;Lnet/minecraft/entity/EntityDimensions;)F",
+    @Inject(method = "getEyeHeight(Lnet/minecraft/entity/Pose;Lnet/minecraft/entity/EntityDimensions;)F",
             at = @At("RETURN"), cancellable = true)
-    private void me$eyeHeight(EntityPose pose, EntityDimensions dimensions, CallbackInfoReturnable<Float> cir) {
-        if (pose != EntityPose.SLEEPING) cir.setReturnValue(cir.getReturnValue() * EntityAttributesME.scale((LivingEntity) (Object) this));
+    private void me$eyeHeight(Pose pose, EntityDimensions dimensions, CallbackInfoReturnable<Float> cir) {
+        if (pose != Pose.SLEEPING) cir.setReturnValue(cir.getReturnValue() * EntityAttributesME.scale((LivingEntity) (Object) this));
     }
 
     @ModifyConstant(method = "computeFallDamage", constant = @Constant(floatValue = 3.0F))
@@ -75,16 +76,16 @@ public abstract class LivingAttributeCompatMixin {
         return Math.max(depthStrider, 3.0F * (float) EntityAttributesME.value((LivingEntity) (Object) this, EntityAttributesME.WATER_MOVEMENT_EFFICIENCY));
     }
 
-    @ModifyVariable(method = "addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z",
+    @ModifyVariable(method = "addStatusEffect(Lnet/minecraft/entity/effect/MobEffectInstance;Lnet/minecraft/entity/Entity;)Z",
             at = @At("HEAD"), argsOnly = true)
-    private StatusEffectInstance me$ailmentProtection(StatusEffectInstance effect) {
+    private MobEffectInstance me$ailmentProtection(MobEffectInstance effect) {
         var enchantment = EnchantmentsME.get(EnchantmentsME.AILMENT_PROTECTION);
-        if (enchantment == null || effect.getEffectType().getCategory() != StatusEffectCategory.HARMFUL || effect.isInfinite()) return effect;
+        if (enchantment == null || effect.getEffectType().getCategory() != MobEffectCategory.HARMFUL || effect.isInfinite()) return effect;
         int level = 0;
         for (var stack : ((LivingEntity) (Object) this).getArmorItems()) level += EnchantmentHelper.getLevel(enchantment, stack);
         if (level == 0) return effect;
         int duration = Math.max(1, Math.round(effect.getDuration() * (1.0F - Math.min(0.8F, 0.08F * level))));
-        return new StatusEffectInstance(effect.getEffectType(), duration, effect.getAmplifier(), effect.isAmbient(), effect.shouldShowParticles(), effect.shouldShowIcon());
+        return new MobEffectInstance(effect.getEffectType(), duration, effect.getAmplifier(), effect.isAmbient(), effect.shouldShowParticles(), effect.shouldShowIcon());
     }
 
     @Inject(method = "getAttackDistanceScalingFactor", at = @At("RETURN"), cancellable = true)
