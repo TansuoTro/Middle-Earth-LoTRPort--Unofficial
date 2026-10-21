@@ -37,12 +37,62 @@ BLOCK_MAP = {
     'minecraft:oxidized_copper_trapdoor': 'me:bronze_trapdoor',
     'minecraft:waxed_exposed_copper_trapdoor': 'me:bronze_trapdoor',
     'minecraft:waxed_exposed_copper_door': 'me:bronze_door',
+    'minecraft:dry_dirt': 'me:dry_dirt',
 }
 for _tuff in ['chiseled_tuff', 'chiseled_tuff_bricks', 'polished_tuff', 'polished_tuff_slab',
               'polished_tuff_stairs', 'polished_tuff_wall', 'tuff_brick_slab',
               'tuff_brick_stairs', 'tuff_bricks', 'tuff_slab', 'tuff_stairs', 'tuff_wall']:
     BLOCK_MAP['minecraft:' + _tuff] = 'me:' + _tuff
-ITEM_MAP = {'minecraft:trial_key': 'me:brigand_key', 'wild-things:cooked_swan': 'minecraft:cooked_chicken'}
+# Donor stone-set renames and 1.21->1.20.1 id changes. The donor's RegistryAliasesME
+# remaps these at world load; structure NBT written with the old ids must be rewritten too.
+_BLOCK_ALIAS = {
+    'me:mordor_lichen': 'me:morgul_ivy',
+    'me:hanging_cobweb': 'me:hanging_webs',
+    'me:alloy_furnace': 'me:forge',
+    'me:mirkwood_spider_egg': 'minecraft:cobweb',
+    'me:ashen_tiles': 'me:ashenstone',
+    'me:frozen_stone': 'minecraft:stone',
+    'me:frozen_stone_slab': 'minecraft:stone_slab',
+    'me:frozen_cobblestone': 'minecraft:cobblestone',
+    'me:frozen_cobblestone_slab': 'minecraft:cobblestone_slab',
+}
+
+
+def map_block(name):
+    """Resolve a donor block id to one the 1.20.1 port actually registers."""
+    if name in BLOCK_MAP:
+        return BLOCK_MAP[name]
+    if name in _BLOCK_ALIAS:
+        return _BLOCK_ALIAS[name]
+    ns, _, path = name.partition(':')
+    if ns != 'me' or not REGISTRY:
+        return name
+    path = re.sub(r'^(white|yellow)_wattle_and_daub', r'wattle_and_\1_daub', path)
+    bases = {path,
+             path.replace('galonn', 'gonluin'),
+             path.replace('bricks', 'brick').replace('tiles', 'tile')}
+    bases |= {b.replace('galonn', 'gonluin').replace('bricks', 'brick').replace('tiles', 'tile') for b in list(bases)}
+    bases |= {re.sub(r'^ashen_cobblestone', 'cobbled_ashenstone', b) for b in list(bases)}
+    bases |= {re.sub(r'^ashen_stone', 'ashenstone', b) for b in list(bases)}
+    for cand in bases:
+        if 'me:' + cand in REGISTRY['blocks']:
+            return 'me:' + cand
+    return name
+
+
+ITEM_MAP = {
+    'minecraft:trial_key': 'me:brigand_key',
+    'wild-things:cooked_swan': 'minecraft:cooked_chicken',
+    'wild-things:cooked_poultry': 'me:cooked_duck',
+    'wild-things:cooked_venison': 'minecraft:cooked_beef',
+    'wild-things:raw_venison': 'minecraft:beef',
+    'minecraft:firefly_bush': 'me:large_bush',
+    'minecraft:scrape_pottery_sherd': 'minecraft:angler_pottery_sherd',
+    'minecraft:experience_orb': 'minecraft:experience_bottle',
+}
+# 1.21 split the bundle into 16 colours; 1.20.1 only has the plain bundle.
+for _colour in COLORS:
+    ITEM_MAP['minecraft:' + _colour + '_bundle'] = 'minecraft:bundle'
 PROPERTY_REMOVE = {
     'minecraft:leaf_litter': {'segment_amount'}, 'minecraft:wildflowers': {'flower_amount', 'facing'},
     'minecraft:pale_hanging_moss': {'tip'}, 'minecraft:resin_clump': {'waterlogged'},
@@ -194,7 +244,7 @@ def convert_nbt(value):
 
 def convert_state(state):
     old = rewrite(str(state['Name']))
-    state['Name'] = n.String(BLOCK_MAP.get(old, old))
+    state['Name'] = n.String(map_block(old))
     if old != str(state['Name']): STATS['block:' + old + ' -> ' + str(state['Name'])] += 1
     props = state.get('Properties', {})
     for key in PROPERTY_REMOVE.get(old, set()):
@@ -218,6 +268,10 @@ def convert_json(value):
     if isinstance(value, list): return [convert_json(v) for v in value]
     if not isinstance(value, dict): return value
     value = {k: convert_json(v) for k,v in value.items()}
+    if value.get('type') == 'minecraft:jigsaw':
+        # 1.20.1 codes jigsaw size as [0,7] and max_distance_from_center as [1,128].
+        if isinstance(value.get('size'), int) and value['size'] > 7: value['size'] = 7
+        if isinstance(value.get('max_distance_from_center'), int) and value['max_distance_from_center'] > 128: value['max_distance_from_center'] = 128
     if value.get('type') == 'minecraft:loot_table' and 'value' in value: value['name'] = value.pop('value')
     if value.get('type') == 'minecraft:item': value['name'] = ITEM_MAP.get(value['name'], value['name'])
     if value.get('function') == 'minecraft:set_components':
@@ -231,7 +285,7 @@ def convert_json(value):
         options = value.pop('options')
         if isinstance(options, list): value['enchantments'] = options
     if 'Name' in value: value = convert_state(tagify(value)).unpack()
-    if 'block' in value: value['block'] = BLOCK_MAP.get(value['block'], value['block'])
+    if 'block' in value: value['block'] = map_block(value['block'])
     return value
 
 
@@ -249,14 +303,14 @@ def write_nbt(path, data):
     path.write_bytes(gzip.compress(raw.getvalue(), mtime=0))
 
 
-def import_data(repo):
+def import_data(repo, force=False):
     files = donor_files(repo)
     for rel, raw in sorted(files.items()):
         if rel.startswith('structure/') and rel.endswith('.nbt'):
             target = TARGET / rel.replace('structure/', 'structures/', 1)
             # Keep original 1.20.1 templates that overlap with unchanged donor baseline.
             parsed = n.File.parse(io.BytesIO(gzip.decompress(raw)))
-            if int(parsed.get('DataVersion',0)) <= 3465 and target.exists(): continue
+            if not force and int(parsed.get('DataVersion',0)) <= 3465 and target.exists(): continue
             for palette in [parsed.get('palette',[]), *parsed.get('palettes',[])]:
                 for state in palette: convert_state(state)
             for block in parsed.get('blocks',[]):
@@ -282,6 +336,18 @@ def import_data(repo):
             target = TARGET / rel.replace('loot_table/', 'loot_tables/',1)
             target.parent.mkdir(parents=True,exist_ok=True)
             target.write_text(json.dumps(convert_json(json.loads(raw)),indent=2)+'\n',encoding='utf-8'); STATS['loot_tables_imported'] += 1
+    # Port-only 1.20.1 baseline templates are absent from the donor tree, so the loop above
+    # never touches them; re-map their palette/nbt block ids through map_block as well.
+    for path in TARGET.joinpath('structures').rglob('*.nbt'):
+        parsed = n.load(path)
+        for palette in [parsed.get('palette', []), *parsed.get('palettes', [])]:
+            for state in palette:
+                convert_state(state)
+        for block in parsed.get('blocks', []):
+            if 'nbt' in block:
+                block['nbt'] = convert_nbt(block['nbt'])
+        write_nbt(path, parsed)
+        STATS['templates_remapped'] += 1
 
 
 def validate():
@@ -299,7 +365,8 @@ def validate():
         block = REGISTRY['blocks'].get(name)
         if block is None: errors.add(f'{file}: unknown block {name}'); return
         for key,val in state.get('Properties',{}).items():
-            if str(val) not in block.get(key,[]): errors.add(f'{name}: invalid {key}={val}')
+            allowed = {v.lower() for v in block.get(key,[])}
+            if str(val).lower() not in allowed: errors.add(f'{name}: invalid {key}={val}')
     def walk(value, file):
         if isinstance(value,dict):
             ident = str(value.get('id',''))
@@ -359,9 +426,10 @@ def main():
     parser.add_argument('--donor',default=str(ROOT.parent/'.tmp_me_upstream'))
     parser.add_argument('--registry',type=pathlib.Path,default=ROOT/'build/structure-registry.json')
     parser.add_argument('--check',action='store_true')
+    parser.add_argument('--force',action='store_true',help='re-convert templates that already exist')
     args=parser.parse_args()
     if args.registry.exists(): REGISTRY=json.loads(args.registry.read_text(encoding='utf-8-sig'))
-    if not args.check: import_data(args.donor)
+    if not args.check: import_data(args.donor, args.force)
     counts,errors=validate()
     report={'statistics':dict(STATS),'inventory':dict(counts),'runtime_registry_checked':bool(REGISTRY),'block_mappings':BLOCK_MAP,'item_mappings':ITEM_MAP,'errors':errors}
     report_path=ROOT/'build/structure-import-report.json'
