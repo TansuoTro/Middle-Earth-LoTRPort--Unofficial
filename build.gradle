@@ -40,10 +40,7 @@ sourceSets.main.java.exclude 'net/jukoz/me/compat/REICommonPluginME.java'
 sourceSets.main.java.exclude 'net/jukoz/me/compat/alloyFurnace/**'
 sourceSets.main.java.exclude 'net/jukoz/me/compat/artisanTable/**'
 sourceSets.main.java.exclude 'net/jukoz/me/compat/forge/**'
-// Datagen providers still target Fabric's datagen API (FabricDataOutput / FabricModelProvider /
-// the varargs criterion(...) builder calls). Their output is already committed under
-// src/main/generated, so the Forge build excludes the providers themselves and reuses the data.
-sourceSets.main.java.exclude 'net/jukoz/me/datageneration/**'
+// Datagen providers compile against FFAPI's fabric-data-generation-api-v1 (Fabric API surface).
 
 
 processResources {
@@ -75,4 +72,14 @@ tasks.withType(JavaCompile).configureEach {
 
 repositories {
     mavenCentral()
+    maven {
+        name = "Sinytra"
+        url = "https://maven.su5ed.dev/releases"
+    }
+}
+
+// Forgified Fabric API: the Fabric API surface, implemented for Forge. Used as the
+// compile-time API; see FORGE_PORT.md for the runtime (shim) story.
+dependencies {
+    compileOnly group: "dev.su5ed.sinytra.fabric-api", name: "fabric-api", version: "0.92.6+1.11.15+1.20.1"
 }
