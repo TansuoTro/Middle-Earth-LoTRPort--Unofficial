@@ -86,6 +86,8 @@ public final class MEComponents {
     /** 1.21's EQUIPPABLE asset id; only the mod's own renderers read it. */
     public static final MEComponent<Identifier> EQUIPPABLE_ASSET =
             register("equippable_asset", Identifier.CODEC);
+    public static final MEComponent<MountEquippableComponent> MOUNT_EQUIPPABLE =
+            register("mount_equippable", MountEquippableComponent.CODEC);
 
     /** Per-stack durability override; read by {@code ItemStackDurabilityMixin}. */
     public static final MEComponent<Integer> MAX_DAMAGE =
@@ -134,11 +136,16 @@ public final class MEComponents {
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static void appendTooltips(ItemStack stack, net.minecraft.client.item.TooltipContext context, java.util.List<net.minecraft.text.Text> tooltip) {
+        appendTooltips(stack, context, tooltip, null);
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static void appendTooltips(ItemStack stack, net.minecraft.client.item.TooltipContext context, java.util.List<net.minecraft.text.Text> tooltip, net.minecraft.world.World world) {
         tooltip.addAll(net.jukoz.me.item.ItemExtras.lore(stack.getItem()));
         for (MEComponent<?> key : ALL) {
             Object value = get(stack, (MEComponent) key);
             if (value instanceof net.jukoz.me.compat.TooltipAppender appender) {
-                appender.appendTooltip(stack, context, tooltip);
+                appender.appendTooltip(stack, context, tooltip, world);
             }
         }
     }

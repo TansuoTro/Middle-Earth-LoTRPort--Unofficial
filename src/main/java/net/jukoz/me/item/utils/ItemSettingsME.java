@@ -74,23 +74,34 @@ public interface ItemSettingsME {
     }
 
     static MESettings goatArmor(net.minecraft.item.ArmorMaterial material) {
-        return mountArmor();
+        return mountArmor(material, "broadhoof_goat", "beast_armor/");
     }
 
     static MESettings wargArmor(net.minecraft.item.ArmorMaterial material) {
-        return mountArmor();
+        return mountArmor(material, "warg", "beast_armor/");
     }
 
     static MESettings greatHornArmor(net.minecraft.item.ArmorMaterial material) {
-        return mountArmor();
+        return mountArmor(material, "great_horn", "");
     }
 
     /**
-     * TODO(port): the donor's EQUIPPABLE component carried the equip sound, the armour model,
-     * the allowed-entity tag and the "no damage on hurt" flag. None of that exists on 1.20.1,
-     * where mount armour is a HorseArmorItem with a hard-coded texture and a fixed bonus.
+     * Mount armor is consumed by AbstractBeastEntity and its render features. It has no
+     * damageable item setting, preserving the donor's no-damage-on-hurt equipment behavior.
      */
-    private static MESettings mountArmor() {
-        return new MESettings().maxCount(1);
+    private static MESettings mountArmor(net.minecraft.item.ArmorMaterial material, String entity, String assetPrefix) {
+        int bodyDefense = switch (material.getProtection(net.minecraft.item.ArmorItem.Type.CHESTPLATE)) {
+            case 4 -> 5;
+            case 5 -> 6;
+            case 6 -> 8;
+            case 7 -> 10;
+            default -> 4;
+        };
+        return new MESettings().maxCount(1)
+                .component(net.jukoz.me.item.MEComponents.EQUIPPABLE_ASSET, MiddleEarth.of(assetPrefix + material.getName()))
+                .component(net.jukoz.me.item.MEComponents.MOUNT_EQUIPPABLE,
+                        new net.jukoz.me.item.dataComponents.MountEquippableComponent(MiddleEarth.of(entity), bodyDefense,
+                                material.getToughness(), material.getKnockbackResistance(),
+                                net.minecraft.registry.Registries.SOUND_EVENT.getId(material.getEquipSound())));
     }
 }

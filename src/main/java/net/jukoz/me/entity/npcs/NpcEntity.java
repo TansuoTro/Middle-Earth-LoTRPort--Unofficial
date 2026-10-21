@@ -1,11 +1,13 @@
 package net.jukoz.me.entity.npcs;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.Dynamic;
 import net.minecraft.block.BlockState;
 
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -227,7 +229,8 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
     }
 
     public static DefaultAttributeContainer.Builder setAttributes() {
-        return MobEntity.createMobAttributes()
+        return EntityAttributesME.addDefaults(MobEntity.createMobAttributes())
+                .add(EntityAttributes.GENERIC_ATTACK_SPEED, 4.0)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1.0);
     }
@@ -262,7 +265,7 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
-        WriteView view = new WriteView(nbt);
+        WriteView view = new WriteView(nbt, this.getWorld().getRegistryManager());
         view.put(KeyStrings.DATA, NpcData.CODEC, this.retrieveNpcData());
         view.put(KeyStrings.INITIALIZATION_DATA, NpcInitializationData.CODEC, this.retrieveNpcInitializationData());
         view.put(KeyStrings.TEXTURE_DATA, NpcTextureData.CODEC, this.retrieveNpcTextureData());
@@ -274,7 +277,7 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        ReadView view = new ReadView(nbt);
+        ReadView view = new ReadView(nbt, this.getWorld().getRegistryManager());
         NpcData foundNpcData = view.read(KeyStrings.DATA, NpcData.CODEC).orElse(new NpcData());
         NpcInitializationData foundNpcInitializationData = view.read(KeyStrings.INITIALIZATION_DATA, NpcInitializationData.CODEC).orElse(new NpcInitializationData());
         NpcTextureData foundNpcTextureData = view.read(KeyStrings.TEXTURE_DATA, NpcTextureData.CODEC).orElse(new NpcTextureData());
@@ -442,13 +445,16 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
         }
     }
 
-    /*protected Brain<?> deserializeBrain(Dynamic<?> dynamic) {
+    @Override
+    protected Brain<?> deserializeBrain(Dynamic<?> dynamic) {
         return NpcBrain.create(dynamic);
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
     public Brain<NpcEntity> getBrain() {
         return (Brain<NpcEntity>) super.getBrain();
-    }*/
+    }
 
     public float getFightingMovementSpeed(){
         double currentSpeed = this.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);

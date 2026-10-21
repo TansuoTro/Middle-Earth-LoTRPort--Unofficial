@@ -302,7 +302,11 @@ public class ResourceItemsME {
             HotChickenFoodItem::new, new MESettings().maxCount(16).food(new FoodComponent.Builder().hunger(14).saturationModifier(0.85f).build()));
 
     private static Item registerItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
-        Item item = factory.apply(settings);
+        Item item = settings instanceof MESettings meSettings && meSettings.bannerPatternTag() != null
+                ? new net.minecraft.item.BannerPatternItem(net.minecraft.registry.tag.TagKey.of(
+                        net.minecraft.registry.RegistryKeys.BANNER_PATTERN,
+                        new Identifier(meSettings.bannerPatternTag())), settings)
+                : factory.apply(settings);
         ItemGroupsME.RESOURCES_CONTENTS.add(item.getDefaultStack());
         TranslationEntries.itemEntries.add(item);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ITEM, name));

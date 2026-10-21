@@ -10,6 +10,10 @@ import java.util.function.BiConsumer;
 
 public class ModClientNetworkHandler {
     public static void register(IConnectionToServer connection) {
+        net.jukoz.me.compat.net.PacketCodecs.setClientRegistries(() -> {
+            var handler = net.minecraft.client.MinecraftClient.getInstance().getNetworkHandler();
+            return handler == null ? null : handler.getRegistryManager();
+        });
         // Application [CLIENT SIDE]
         ClientPlayNetworking.registerGlobalReceiver(PacketForceOnboardingScreen.TYPE, wrapClientHandler(connection, PacketForceOnboardingScreen::process));
         ClientPlayNetworking.registerGlobalReceiver(PacketOnboardingResult.TYPE, wrapClientHandler(connection, PacketOnboardingResult::process));

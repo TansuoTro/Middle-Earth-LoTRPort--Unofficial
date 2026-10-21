@@ -16,4 +16,9 @@ import java.util.List;
  */
 public interface TooltipAppender {
     void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip);
+
+    default void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip,
+                               net.minecraft.world.World world) {
+        appendTooltip(stack, context, tooltip);
+    }
 }

@@ -17,9 +17,7 @@ import net.jukoz.me.MiddleEarth;
  * the ones that simply did not exist yet are registered here under the mod namespace so
  * the 1.21 data (race pools, npc type pools, weapon modifiers) still loads.
  *
- * <p>Registering them is not the same as honouring them: 1.20.1 has no engine code that
- * reads {@code entity_interaction_range} or {@code scale}, so those keep their value but
- * do nothing until a mixin consumes them. See PORTING_NOTES.md.
+ * Attribute compatibility mixins consume the values in movement, reach, damage and rendering.
  */
 public class EntityAttributesME {
     public static final RegistryEntry<EntityAttribute> POWDERED_SNOW_IMMUNITY;
@@ -48,6 +46,39 @@ public class EntityAttributesME {
 
     public static void register() {
         MiddleEarth.LOGGER.logDebugMsg("Registering Mod attributes");
+        net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry.register(
+                net.minecraft.entity.EntityType.PLAYER,
+                addDefaults(net.minecraft.entity.player.PlayerEntity.createPlayerAttributes()));
+    }
+
+    public static net.minecraft.entity.attribute.DefaultAttributeContainer.Builder addDefaults(
+            net.minecraft.entity.attribute.DefaultAttributeContainer.Builder builder) {
+        for (RegistryEntry<EntityAttribute> attribute : java.util.List.of(POWDERED_SNOW_IMMUNITY,
+                DELVERS_FEAR_STRENGTH, CLIMBING_STRENGTH, DETECTION_RANGE, WIDTH_SCALE, SCALE,
+                ENTITY_INTERACTION_RANGE, BLOCK_INTERACTION_RANGE, SAFE_FALL_DISTANCE, SNEAKING_SPEED,
+                MINING_EFFICIENCY, FALL_DAMAGE_MULTIPLIER, WATER_MOVEMENT_EFFICIENCY,
+                MOVEMENT_EFFICIENCY, BURNING_TIME)) {
+            builder.add(attribute.value());
+        }
+        return builder;
+    }
+
+    public static double value(net.minecraft.entity.LivingEntity entity, RegistryEntry<EntityAttribute> attribute) {
+        var attributes = entity.getAttributes();
+        return attributes != null && attributes.hasAttribute(attribute.value())
+                ? entity.getAttributeValue(attribute.value()) : attribute.value().getDefaultValue();
+    }
+
+    public static float scale(net.minecraft.entity.LivingEntity entity) {
+        return (float) value(entity, SCALE);
+    }
+
+    public static double entityReach(net.minecraft.entity.player.PlayerEntity player) {
+        return value(player, ENTITY_INTERACTION_RANGE) + (player.getAbilities().creativeMode ? 2.0 : 0.0);
+    }
+
+    public static double blockReach(net.minecraft.entity.player.PlayerEntity player) {
+        return value(player, BLOCK_INTERACTION_RANGE) + (player.getAbilities().creativeMode ? 0.5 : 0.0);
     }
 
     static {

@@ -12,6 +12,8 @@ import net.jukoz.me.world.biomes.surface.ModBiomes;
 import net.jukoz.me.world.biomes.caves.ModCaveBiomes;
 import net.jukoz.me.world.features.boulder.BoulderConfiguredFeatures;
 import net.jukoz.me.world.features.boulder.BoulderPlacedFeatures;
+import net.jukoz.me.world.features.chain.ChainConfiguredFeatures;
+import net.jukoz.me.world.features.chain.ChainPlacedFeatures;
 import net.jukoz.me.world.features.misc.ModMiscConfiguredFeatures;
 import net.jukoz.me.world.features.misc.ModMiscPlacedFeatures;
 import net.jukoz.me.world.features.ores.OreConfiguredFeatures;
@@ -68,12 +70,14 @@ public class DataGeneration implements DataGeneratorEntrypoint {
         registryBuilder.addRegistry(RegistryKeys.CONFIGURED_FEATURE, CavesConfiguredFeatures::bootstrap);
         registryBuilder.addRegistry(RegistryKeys.CONFIGURED_FEATURE, ModMiscConfiguredFeatures::bootstrap);
         registryBuilder.addRegistry(RegistryKeys.CONFIGURED_FEATURE, MushroomTreeConfiguredFeatures::bootstrap);
+        registryBuilder.addRegistry(RegistryKeys.CONFIGURED_FEATURE, ChainConfiguredFeatures::bootstrap);
         registryBuilder.addRegistry(RegistryKeys.PLACED_FEATURE, ModTreePlacedFeatures::bootstrap);
         registryBuilder.addRegistry(RegistryKeys.PLACED_FEATURE, ModVegetationPlacedFeatures::bootstrap);
         registryBuilder.addRegistry(RegistryKeys.PLACED_FEATURE, BoulderPlacedFeatures::bootstrap);
         registryBuilder.addRegistry(RegistryKeys.PLACED_FEATURE, OrePlacedFeatures::bootstrap);
         registryBuilder.addRegistry(RegistryKeys.PLACED_FEATURE, CavesPlacedFeatures::bootstrap);
         registryBuilder.addRegistry(RegistryKeys.PLACED_FEATURE, ModMiscPlacedFeatures::bootstrap);
+        registryBuilder.addRegistry(RegistryKeys.PLACED_FEATURE, ChainPlacedFeatures::bootstrap);
         // The mod's own dynamic registries (races, factions, npc types, spider/great-horn
         // variants, ...) are bootstrapped here so DataWorldGenerator can emit their JSON.
         net.jukoz.me.registries.DynamicRegistriesME.prepareBoostrap(registryBuilder);

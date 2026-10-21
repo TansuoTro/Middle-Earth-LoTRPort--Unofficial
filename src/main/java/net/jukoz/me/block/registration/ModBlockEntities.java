@@ -26,6 +26,10 @@ import net.minecraft.util.Identifier;
 import net.jukoz.me.registries.RegistryAliasesME;
 
 public class ModBlockEntities {
+    public static BlockEntityType<net.jukoz.me.compat.structure.TrialSpawnerBlockEntity> TRIAL_SPAWNER = register("trial_spawner", net.jukoz.me.compat.structure.TrialSpawnerBlockEntity::new,
+            ModDecorativeBlocks.BRIGAND_TRIAL_SPAWNER, ModDecorativeBlocks.SPIDER_TRIAL_SPAWNER);
+    public static BlockEntityType<net.jukoz.me.compat.structure.VaultBlockEntity> VAULT = register("vault", net.jukoz.me.compat.structure.VaultBlockEntity::new,
+            ModDecorativeBlocks.BRIGAND_VAULT, ModDecorativeBlocks.SPIDER_VAULT);
     public static BlockEntityType<ForgeBlockEntity> FORGE = register("forge", ForgeBlockEntity::new,
             ModDecorativeBlocks.FORGE);
     public static BlockEntityType<StoneAnvilBlockEntity> STONE_ANVIL = register("stone_anvil", StoneAnvilBlockEntity::new,

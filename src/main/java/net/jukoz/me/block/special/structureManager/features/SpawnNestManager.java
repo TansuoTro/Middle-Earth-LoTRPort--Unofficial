@@ -19,10 +19,8 @@ import net.jukoz.me.resources.datas.structure_manager_datas.SpawnNestNodeData;
 import net.jukoz.me.resources.datas.structure_manager_datas.StructureManagerData;
 import net.jukoz.me.resources.datas.structure_manager_datas.StructureSpawnNestPool;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.function.Predicate;
+import java.util.*;
+import net.jukoz.me.entity.ai.brain.MemoryModulesME;
 
 public class SpawnNestManager {
     public static final Codec<SpawnNestManager> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -31,7 +29,9 @@ public class SpawnNestManager {
             Codec.LONG.fieldOf("respawn_event_trigger_tick").forGetter(SpawnNestManager::getRespawnEventTriggerTick),
             Codec.INT.fieldOf("respawn_tick_delay").forGetter(SpawnNestManager::getRespawnTickDelay),
             BlockPos.CODEC.fieldOf("origin_pos").forGetter(SpawnNestManager::getOriginPos),
-            Codec.INT.fieldOf("spawn_radius").forGetter(SpawnNestManager::getSpawnRadius)
+            Codec.INT.fieldOf("spawn_radius").forGetter(SpawnNestManager::getSpawnRadius),
+            Codec.unboundedMap(Codec.STRING, BlockPos.CODEC).optionalFieldOf("bed_assignments", Map.of())
+                    .forGetter(SpawnNestManager::getBedAssignments)
     ).apply(instance, SpawnNestManager::new));
 
     private static final String ID = "spawn_nest_data";
@@ -43,9 +43,13 @@ public class SpawnNestManager {
     private BlockPos originPos;
     private int spawnRadius;
 
-    private List<BedBlock> beds = new ArrayList<>();
+    private final Map<String, BlockPos> bedAssignments;
 
     public SpawnNestManager(Identifier dataId, List<UUID> dataEntities, long dataRespawnEventTriggerTick, int dataRespawnTickDelay, BlockPos position, int spawnRadius) {
+        this(dataId, dataEntities, dataRespawnEventTriggerTick, dataRespawnTickDelay, position, spawnRadius, Map.of());
+    }
+
+    public SpawnNestManager(Identifier dataId, List<UUID> dataEntities, long dataRespawnEventTriggerTick, int dataRespawnTickDelay, BlockPos position, int spawnRadius, Map<String, BlockPos> beds) {
         this.id = dataId;
         this.entities =  Lists.newArrayList();
         this.entities.addAll(dataEntities);
@@ -53,6 +57,7 @@ public class SpawnNestManager {
         this.respawnTickDelay = dataRespawnTickDelay;
         this.originPos = position;
         this.spawnRadius = spawnRadius;
+        this.bedAssignments = new LinkedHashMap<>(beds);
     }
 
     public SpawnNestManager(SpawnNestNodeData spawnNestNodeData, BlockPos position, int spawnRadius) {
@@ -62,6 +67,7 @@ public class SpawnNestManager {
         this.respawnEventTriggerTick = 0;
         this.originPos = position;
         this.spawnRadius = spawnRadius;
+        this.bedAssignments = new LinkedHashMap<>();
     }
 
     public Identifier getId() {
@@ -134,7 +140,8 @@ public class SpawnNestManager {
             List<UUID> toRemove = new ArrayList<>();
             for (UUID uuid : entities){ // Wellness check
                 var entity = world instanceof net.minecraft.server.world.ServerWorld sw ? sw.getEntity(uuid) : null;
-                if(entity == null || !entity.isAlive())
+                // An unloaded entity is not dead. Removing it here duplicates residents on respawn.
+                if(entity != null && !entity.isAlive())
                     toRemove.add(uuid);
             }
             for (UUID uuid : toRemove)
@@ -180,28 +187,44 @@ public class SpawnNestManager {
         }
         entities = new ArrayList<UUID>();
 
-        refreshBeds(structureManagerData, world);
         respawnAll(structureManagerData, world, structureManagerPos);
+        if (world.getBlockEntity(structureManagerPos) instanceof StructureManagerBlockEntity manager) {
+            manager.redistributeBeds();
+        }
     }
 
-    public void refreshBeds(StructureManagerData structureManagerData, World world){
-        // TODO : Connect with the @StructureManagerBlockEntity.fetchBeds() / Redistribute
+    public Map<String, BlockPos> getBedAssignments() {
+        return Collections.unmodifiableMap(bedAssignments);
+    }
 
-        BlockPos origin = getOriginPos();
-        int bedRadius = 10;
-        List<BlockPos> bedBlockPositions = new ArrayList<>();
-        BlockPos.findClosest(origin, bedRadius, 5, new Predicate<BlockPos>() {
-            @Override
-            public boolean test(BlockPos blockPos) {
-                var blockState = world.getBlockState(blockPos);
-                if(blockState.getBlock() instanceof BedBlock bedBlock){
-                    if(BedBlock.getBedPart(blockState) == DoubleBlockProperties.Type.FIRST){
-                        bedBlockPositions.add(blockPos);
-                    }
+    /** Reserve existing valid assignments before any nest allocates another resident's bed. */
+    public void retainBeds(List<BlockPos> candidates, Set<BlockPos> claimed, ServerWorld world) {
+        Set<String> residents = new HashSet<>();
+        for (UUID uuid : entities) residents.add(uuid.toString());
+        bedAssignments.entrySet().removeIf(entry -> !residents.contains(entry.getKey())
+                || (world.isChunkLoaded(entry.getValue()) && !candidates.contains(entry.getValue()))
+                || !claimed.add(entry.getValue()));
+    }
+
+    public void assignBeds(List<BlockPos> candidates, Set<BlockPos> claimed, ServerWorld world) {
+        for (UUID uuid : entities) {
+            if (!(world.getEntity(uuid) instanceof NpcEntity npc)) continue;
+            String key = uuid.toString();
+            BlockPos bed = bedAssignments.get(key);
+            if (bed == null) {
+                for (BlockPos candidate : candidates) {
+                    if (world.getBlockState(candidate).get(BedBlock.OCCUPIED) || !claimed.add(candidate)) continue;
+                    bed = candidate;
+                    bedAssignments.put(key, bed);
+                    break;
                 }
-                return false;
             }
-        });
+            if (bed == null) {
+                npc.getBrain().forget(MemoryModulesME.ASSIGNED_BED_POS);
+            } else {
+                npc.getBrain().remember(MemoryModulesME.ASSIGNED_BED_POS, bed);
+            }
+        }
     }
 }
 

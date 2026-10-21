@@ -24,6 +24,7 @@ public class ItemStackTooltipMixin {
     @Inject(method = "getTooltip", at = @At("RETURN"))
     private void me$componentTooltips(PlayerEntity player, TooltipContext context,
                                       CallbackInfoReturnable<List<Text>> cir) {
-        MEComponents.appendTooltips((ItemStack) (Object) this, context, cir.getReturnValue());
+        MEComponents.appendTooltips((ItemStack) (Object) this, context, cir.getReturnValue(),
+                player == null ? null : player.getWorld());
     }
 }

@@ -7,6 +7,9 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Identifier;
 import net.minecraft.registry.entry.RegistryEntry;
 
 import java.util.ArrayList;
@@ -14,16 +17,48 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.function.ToIntFunction;
+import java.util.function.Supplier;
 
 /**
  * Stand-in for 1.20.5+'s {@code net.minecraft.network.codec.PacketCodecs}.
  *
- * <p>Only the members the donor actually uses are here. {@link #registryEntry} is the one
- * that cannot be finished on 1.20.1: a dynamic-registry entry has no static registry to
- * resolve an id against while decoding a packet, so the id is written but the decode side
- * returns {@code null}. See PORTING_NOTES.md.
+ * Registry entries resolve against the receiving connection's synced registries. Explicit
+ * decode contexts take precedence over the client/server lifecycle suppliers.
  */
 public final class PacketCodecs {
+    private static final ThreadLocal<DynamicRegistryManager> REGISTRIES = new ThreadLocal<>();
+    private static volatile MinecraftServer server;
+    private static volatile Supplier<DynamicRegistryManager> clientRegistries = () -> null;
+
+    public static void setServer(MinecraftServer value) {
+        server = value;
+    }
+
+    public static void setClientRegistries(Supplier<DynamicRegistryManager> supplier) {
+        clientRegistries = supplier;
+    }
+
+    public static <T> T decode(PacketCodec<PacketByteBuf, T> codec, PacketByteBuf buf,
+                               DynamicRegistryManager registries) {
+        DynamicRegistryManager previous = REGISTRIES.get();
+        REGISTRIES.set(registries);
+        try {
+            return codec.decode(buf);
+        } finally {
+            if (previous == null) REGISTRIES.remove();
+            else REGISTRIES.set(previous);
+        }
+    }
+
+    private static DynamicRegistryManager registries() {
+        DynamicRegistryManager explicit = REGISTRIES.get();
+        if (explicit != null) return explicit;
+        MinecraftServer activeServer = server;
+        if (activeServer != null && activeServer.isOnThread()) return activeServer.getRegistryManager();
+        DynamicRegistryManager client = clientRegistries.get();
+        if (client != null) return client;
+        return activeServer == null ? null : activeServer.getRegistryManager();
+    }
 
     public static final PacketCodec<PacketByteBuf, net.minecraft.util.Identifier> IDENTIFIER =
             PacketCodec.of((buf, value) -> buf.writeIdentifier(value), PacketByteBuf::readIdentifier);
@@ -113,9 +148,8 @@ public final class PacketCodecs {
     /**
      * Dynamic-registry entry, by id.
      *
-     * <p>TODO(port): 1.20.1 cannot resolve a dynamic registry id from inside a packet decode -
-     * there is no registry manager on the wire. The id is written correctly, but decoding
-     * returns {@code null} until the value is rebound against the world's registry manager.
+     * Named entries retain their registry identity. Inline entries require an element codec;
+     * unresolved named entries fail decoding instead of silently erasing tracked entity data.
      */
     public static <T> PacketCodec<PacketByteBuf, RegistryEntry<T>> registryEntry(
             RegistryKey<? extends Registry<T>> registryKey) {
@@ -130,9 +164,11 @@ public final class PacketCodecs {
                 return;
             }
             buf.writeBoolean(true);
-            value.getKey().ifPresentOrElse(
-                    key -> buf.writeIdentifier(key.getValue()),
-                    () -> buf.writeIdentifier(new net.minecraft.util.Identifier("unknown", "unknown")));
+            Identifier id = value.getKey().map(RegistryKey::getValue).orElse(null);
+            if (id == null && element == null) {
+                throw new IllegalArgumentException("Inline registry entry requires a codec: " + registryKey.getValue());
+            }
+            buf.writeIdentifier(id == null ? new Identifier("unknown", "unknown") : id);
             if (element != null) {
                 element.encode(buf, value.value());
             }
@@ -140,11 +176,15 @@ public final class PacketCodecs {
             if (!buf.readBoolean()) {
                 return null;
             }
-            buf.readIdentifier();
-            if (element != null) {
-                element.decode(buf);
-            }
-            return null;
+            Identifier id = buf.readIdentifier();
+            T inline = element == null ? null : element.decode(buf);
+            DynamicRegistryManager manager = registries();
+            RegistryEntry<T> resolved = manager == null ? null : manager.getOptional(registryKey)
+                    .flatMap(registry -> registry.getEntry(RegistryKey.of(registryKey, id))).orElse(null);
+            if (resolved != null) return resolved;
+            if (inline != null) return RegistryEntry.of(inline);
+            throw new io.netty.handler.codec.DecoderException("Unknown registry entry " + registryKey.getValue()
+                    + "/" + id + (manager == null ? " (no registry context)" : ""));
         });
     }
 }

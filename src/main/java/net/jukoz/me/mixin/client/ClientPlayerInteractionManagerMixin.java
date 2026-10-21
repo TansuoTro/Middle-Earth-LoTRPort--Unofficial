@@ -14,8 +14,8 @@ public class ClientPlayerInteractionManagerMixin {
     @Inject(method="getReachDistance", at=@At("HEAD"), cancellable = true)
     public void getReachDistance(CallbackInfoReturnable<Float> cir){
         PlayerEntity player = MinecraftClient.getInstance().player;
-        if(player != null && player.getMainHandStack().getItem() instanceof ReachWeaponItem rangedWeaponItem){
-            cir.setReturnValue(rangedWeaponItem.getRangeDistance());
+        if(player != null){
+            cir.setReturnValue((float) net.jukoz.me.entity.EntityAttributesME.blockReach(player));
         }
     }
 }

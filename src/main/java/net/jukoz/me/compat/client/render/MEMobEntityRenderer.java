@@ -41,6 +41,9 @@ public abstract class MEMobEntityRenderer<T extends MobEntity, S extends LivingE
         state.hurt = entity.hurtTime > 0;
         state.isGliding = entity.isFallFlying();
         state.hasVehicle = entity.hasVehicle();
+        if (state instanceof net.jukoz.me.compat.client.render.state.BipedEntityRenderStateCompat biped) {
+            biped.baseScale = net.jukoz.me.entity.EntityAttributesME.scale(entity);
+        }
     }
 
     public Identifier getTexture(S state) {

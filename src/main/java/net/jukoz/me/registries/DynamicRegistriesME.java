@@ -51,6 +51,11 @@ public class DynamicRegistriesME extends net.jukoz.me.api.registries.DynamicRegi
     public static final RegistryKey<Registry<GreatHornVariant>> GREAT_HORN_VARIANTS = RegistryKey.ofRegistry(MiddleEarth.of("great_horn_variants"));
 
     public static void register() {
+        net.jukoz.me.entity.EntityAttributesME.register();
+        net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STARTED.register(
+                net.jukoz.me.compat.net.PacketCodecs::setServer);
+        net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STOPPED.register(
+                server -> net.jukoz.me.compat.net.PacketCodecs.setServer(null));
         MiddleEarth.LOGGER.logDebugMsg("Registering Dynamic Entries for " + MiddleEarth.MOD_ID);
         DynamicRegistries.registerSynced(RACE, Race.CODEC);
         DynamicRegistries.registerSynced(NPC_TYPE, NpcType.CODEC);

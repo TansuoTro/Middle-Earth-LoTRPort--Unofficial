@@ -31,4 +31,12 @@ public abstract class PlayerEntityRendererMixin
         this.addFeature(new EnwebbedFeatureRenderer<>(this,
                 new LoadedEntityModelsCompat(ctx.getModelLoader()), EquipmentRenderer.INSTANCE));
     }
+
+    @Inject(method = "scale(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/client/util/math/MatrixStack;F)V", at = @At("HEAD"))
+    private void me$raceScale(AbstractClientPlayerEntity player, net.minecraft.client.util.math.MatrixStack matrices,
+                              float tickDelta, CallbackInfo ci) {
+        float scale = net.jukoz.me.entity.EntityAttributesME.scale(player);
+        float width = (float) net.jukoz.me.entity.EntityAttributesME.value(player, net.jukoz.me.entity.EntityAttributesME.WIDTH_SCALE);
+        matrices.scale(scale * width, scale, scale * width);
+    }
 }

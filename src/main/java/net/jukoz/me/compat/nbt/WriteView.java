@@ -1,10 +1,13 @@
 package net.jukoz.me.compat.nbt;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DynamicOps;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.RegistryOps;
 
 import java.util.function.Consumer;
 
@@ -15,9 +18,15 @@ import java.util.function.Consumer;
  */
 public final class WriteView {
     private final NbtCompound nbt;
+    private final DynamicOps<NbtElement> ops;
 
     public WriteView(NbtCompound nbt) {
+        this(nbt, null);
+    }
+
+    public WriteView(NbtCompound nbt, DynamicRegistryManager registries) {
         this.nbt = nbt;
+        this.ops = registries == null ? NbtOps.INSTANCE : RegistryOps.of(NbtOps.INSTANCE, registries);
     }
 
     public NbtCompound nbt() {
@@ -29,7 +38,7 @@ public final class WriteView {
             this.nbt.remove(key);
             return;
         }
-        codec.encodeStart(NbtOps.INSTANCE, value).result().ifPresent(encoded -> this.nbt.put(key, encoded));
+        codec.encodeStart(ops, value).result().ifPresent(encoded -> this.nbt.put(key, encoded));
     }
 
     public ListAppender<NbtElement> getListAppender(String key, int type) {
@@ -41,7 +50,7 @@ public final class WriteView {
     public <T> ListAppender<T> getListAppender(String key, Codec<T> codec) {
         NbtList list = new NbtList();
         this.nbt.put(key, list);
-        return new ListAppender<>(list, codec);
+        return new ListAppender<>(list, codec, ops);
     }
 
     public void putInt(String key, int value) {
@@ -76,14 +85,16 @@ public final class WriteView {
     public static final class ListAppender<T> {
         private final NbtList list;
         private final Codec<T> codec;
+        private final DynamicOps<NbtElement> ops;
 
         ListAppender(NbtList list) {
-            this(list, null);
+            this(list, null, NbtOps.INSTANCE);
         }
 
-        ListAppender(NbtList list, Codec<T> codec) {
+        ListAppender(NbtList list, Codec<T> codec, DynamicOps<NbtElement> ops) {
             this.list = list;
             this.codec = codec;
+            this.ops = ops;
         }
 
         @SuppressWarnings("unchecked")
@@ -92,7 +103,7 @@ public final class WriteView {
                 this.list.add((NbtElement) value);
                 return;
             }
-            this.codec.encodeStart(NbtOps.INSTANCE, value).result().ifPresent(this.list::add);
+            this.codec.encodeStart(ops, value).result().ifPresent(this.list::add);
         }
 
         public void forEach(Consumer<T> consumer) {
@@ -100,7 +111,7 @@ public final class WriteView {
                 return;
             }
             for (int i = 0; i < this.list.size(); i++) {
-                this.codec.parse(NbtOps.INSTANCE, this.list.get(i)).result().ifPresent(consumer);
+                this.codec.parse(ops, this.list.get(i)).result().ifPresent(consumer);
             }
         }
     }

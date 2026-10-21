@@ -35,7 +35,7 @@ public final class VariantsME {
     public static <T> RegistryEntry<T> getOrDefaultOrThrow(DynamicRegistryManager manager, RegistryKey<T> key) {
         Registry<T> registry = registry(manager, RegistryKey.ofRegistry(key.getRegistry()));
         if (registry == null) {
-            return null;
+            throw new IllegalStateException("Missing variant registry " + key.getRegistry());
         }
         RegistryEntry<T> entry = registry.getEntry(key).orElse(null);
         if (entry != null) {
@@ -46,9 +46,8 @@ public final class VariantsME {
         // whole server tick down. Fall back to whatever the registry does hold.
         Optional<RegistryEntry.Reference<T>> any = registry.getRandom(net.minecraft.util.math.random.Random.create());
         if (any.isEmpty()) {
-            MiddleEarth.LOGGER.logError("VariantsME: registry " + key.getRegistry() + " holds no entry at all, "
-                    + key.getValue() + " cannot be resolved");
-            return null;
+            throw new IllegalStateException("Empty variant registry " + key.getRegistry()
+                    + ": cannot initialize tracked variant " + key.getValue());
         }
         MiddleEarth.LOGGER.logError("VariantsME: " + key.getValue() + " is missing from " + key.getRegistry()
                 + ", falling back to " + any.get().getKey().map(k -> k.getValue().toString()).orElse("?"));

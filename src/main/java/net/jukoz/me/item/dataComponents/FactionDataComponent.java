@@ -9,11 +9,9 @@ import net.jukoz.me.resources.datas.factions.Faction;
 /**
  * Faction tag carried by items and NPC equipment.
  *
- * <p>Ported from the 1.21.8 donor. The tooltip body is not ported yet: it needs the
- * faction registry ({@code DynamicRegistriesME.FACTION}), which does not exist in the
- * 1.20.1 tree until the faction system is ported.
+ * Resolves parent factions against the current world's synced dynamic registry.
  */
-public class FactionDataComponent {
+public class FactionDataComponent implements net.jukoz.me.compat.TooltipAppender {
     private static final Codec<FactionDataComponent> BASE_CODEC = RecordCodecBuilder.create(instance ->
             instance.group(Identifier.CODEC.fieldOf("faction").forGetter(FactionDataComponent::getFactionId))
                     .apply(instance, FactionDataComponent::new));
@@ -33,6 +31,34 @@ public class FactionDataComponent {
 
     public Identifier getFactionId() {
         return factionId;
+    }
+
+    @Override
+    public void appendTooltip(net.minecraft.item.ItemStack stack, net.minecraft.client.item.TooltipContext context,
+                              java.util.List<net.minecraft.text.Text> tooltip) {
+        appendFaction(tooltip, factionId, false);
+    }
+
+    @Override
+    public void appendTooltip(net.minecraft.item.ItemStack stack, net.minecraft.client.item.TooltipContext context,
+                              java.util.List<net.minecraft.text.Text> tooltip, net.minecraft.world.World world) {
+        Faction faction = world == null ? null : world.getRegistryManager()
+                .getOptional(net.jukoz.me.registries.DynamicRegistriesME.FACTION)
+                .map(registry -> registry.get(factionId)).orElse(null);
+        Faction parent = faction == null ? null : faction.getParentFaction(world);
+        if (parent != null) {
+            appendFaction(tooltip, parent.getId(), false);
+            appendFaction(tooltip, factionId, true);
+        } else {
+            appendFaction(tooltip, factionId, false);
+        }
+    }
+
+    private static void appendFaction(java.util.List<net.minecraft.text.Text> tooltip, Identifier id, boolean sub) {
+        tooltip.add(net.minecraft.text.Text.translatable(sub ? "tooltip.me.sub_faction" : "tooltip.me.faction")
+                .formatted(sub ? net.minecraft.util.Formatting.GRAY : net.minecraft.util.Formatting.GOLD)
+                .append(net.minecraft.text.Text.translatable(id.toTranslationKey("faction"))
+                        .formatted(net.minecraft.util.Formatting.WHITE)));
     }
 
     @Override

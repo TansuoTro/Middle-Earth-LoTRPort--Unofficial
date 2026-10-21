@@ -97,6 +97,7 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
+        if (!this.items.getStack(1).isEmpty()) nbt.put("ArmorItem", this.items.getStack(1).writeNbt(new NbtCompound()));
         nbt.putBoolean("Sitting", this.isSitting());
         nbt.putBoolean("ChestedBeast", this.hasChest());
         nbt.putInt("Tameness", this.getTameness());
@@ -135,6 +136,11 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
                 }
             }
         }
+        if (nbt.contains("ArmorItem", 10)) {
+            ItemStack armor = ItemStack.fromNbt(nbt.getCompound("ArmorItem"));
+            if (this.isHorseArmor(armor)) this.items.setStack(1, armor);
+        }
+        this.updateSaddle();
     }
 
     // endregion
@@ -447,6 +453,15 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
         }
 
         if(this.isTame()) {
+            if (this.isHorseArmor(itemStack) && this.items.getStack(1).isEmpty() && player == getOwner()) {
+                if (!getWorld().isClient) {
+                    ItemStack armor = itemStack.copy();
+                    armor.setCount(1);
+                    this.items.setStack(1, armor);
+                    if (!player.getAbilities().creativeMode) itemStack.decrement(1);
+                }
+                return ActionResult.success(getWorld().isClient);
+            }
             if(isFoodItem(itemStack) && getOwner() == player) {
                 int tamenessIncrease;
 
@@ -479,7 +494,7 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
             }
 
             if(!(isCommandItem(itemStack) || isBreedingItem(itemStack) || itemStack.isOf(Items.CHEST)) && this.isMountable()) {
-                super.interactMob(player, hand);
+                return super.interactMob(player, hand);
             }
         }
 
@@ -663,5 +678,51 @@ public abstract class AbstractBeastEntity extends AbstractHorseEntity {
 
     public ItemStack getBodyArmor() {
         return this.getEquippedStack(EquipmentSlot.CHEST);
+    }
+
+    @Override
+    public boolean hasArmorSlot() {
+        return true;
+    }
+
+    @Override
+    public boolean isHorseArmor(ItemStack stack) {
+        var equipment = net.jukoz.me.item.MEComponents.get(stack, net.jukoz.me.item.MEComponents.MOUNT_EQUIPPABLE);
+        return equipment != null && equipment.allows(this);
+    }
+
+    @Override
+    protected void updateSaddle() {
+        super.updateSaddle();
+        if (this.items == null || this.items.size() < 2 || getWorld().isClient) return;
+        ItemStack armor = this.items.getStack(1);
+        var equipment = net.jukoz.me.item.MEComponents.get(armor, net.jukoz.me.item.MEComponents.MOUNT_EQUIPPABLE);
+        boolean allowed = equipment != null && equipment.allows(this);
+        equipStack(EquipmentSlot.CHEST, allowed ? armor.copy() : ItemStack.EMPTY);
+        setEquipmentDropChance(EquipmentSlot.CHEST, 0.0F);
+        me$mountArmorBonus(EntityAttributes.GENERIC_ARMOR, "armor", allowed ? equipment.armor() : 0);
+        me$mountArmorBonus(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, "toughness", allowed ? equipment.toughness() : 0);
+        me$mountArmorBonus(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, "knockback", allowed ? equipment.knockbackResistance() : 0);
+    }
+
+    private void me$mountArmorBonus(EntityAttribute attribute, String name, double amount) {
+        var instance = getAttributeInstance(attribute);
+        if (instance == null) return;
+        var id = java.util.UUID.nameUUIDFromBytes(("me:mount_armor_" + name).getBytes(java.nio.charset.StandardCharsets.UTF_8));
+        instance.removeModifier(id);
+        if (amount != 0) instance.addTemporaryModifier(new net.minecraft.entity.attribute.EntityAttributeModifier(
+                id, "me:mount_armor_" + name, amount, net.minecraft.entity.attribute.EntityAttributeModifier.Operation.ADDITION));
+    }
+
+    @Override
+    public void onInventoryChanged(net.minecraft.inventory.Inventory inventory) {
+        ItemStack previous = getBodyArmor().copy();
+        super.onInventoryChanged(inventory);
+        var current = getBodyArmor();
+        var equipment = net.jukoz.me.item.MEComponents.get(current, net.jukoz.me.item.MEComponents.MOUNT_EQUIPPABLE);
+        if (age > 20 && equipment != null && !ItemStack.areEqual(previous, current)) {
+            var sound = net.minecraft.registry.Registries.SOUND_EVENT.get(equipment.equipSound());
+            if (sound != null) playSound(sound, 0.5F, 1.0F);
+        }
     }
 }

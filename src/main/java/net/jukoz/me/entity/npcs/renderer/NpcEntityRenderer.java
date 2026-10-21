@@ -194,7 +194,7 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
 
         matrices.scale(g * widthScale, g, g * widthScale);
         this.setupTransforms(state, matrices, state.bodyYaw, g);
-        matrices.scale(-widthScale, -1.0f, widthScale);
+        matrices.scale(-1.0f, -1.0f, 1.0f);
         this.scale(state, matrices);
         matrices.translate(0.0f, -1.501f, 0.0f);
 

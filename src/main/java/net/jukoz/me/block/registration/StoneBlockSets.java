@@ -307,7 +307,7 @@ public class StoneBlockSets {
             .addToSet(StoneBlockTypes.OLD_BLOCKS)
             .addToSet(StoneBlockTypes.CARVED_WINDOW));
 
-    public static StoneBlockSetBuilder GALONN_SET = registerStoneSet(new StoneBlockSetBuilder("gonluin",
+    public static StoneBlockSetBuilder GALONN_SET = registerStoneSet(new StoneBlockSetBuilder("galonn",
             STONE_HARDNESS, STONE_BLAST_RESISTANCE, MapColor.PALE_YELLOW, Instrument.BASEDRUM, BlockSoundGroup.STONE, true, true)
             .addToSet(StoneBlockTypes.BASE_BLOCKS)
             .addToSet(StoneBlockTypes.COBBLED_BLOCKS)

@@ -59,7 +59,21 @@ public class MapBasedBiomePool {
         throw new RuntimeException("MeBiomes::No registered biome has %s for color".formatted(rgb));
     }
 
+    public static java.util.Map<Color, MapBasedCustomBiome> getColorPalette() {
+        return java.util.Collections.unmodifiableMap(biomeHashMap);
+    }
+
     public static void loadBiomes() {
+        coastalBiomes.clear();
+        waterBiomes.clear();
+        riverbiomes.clear();
+        frozenBiomes.clear();
+        wastePondBiomes.clear();
+        mirkwoodSwampBiomes.clear();
+        oasisBiomes.clear();
+        anduinWaterBiomes.clear();
+        deadMarshesBiomes.clear();
+        mangrovePondBiomes.clear();
         biomeHashMap = new HashMap<>();
 
         SubBiomes.loadSubBiomes();

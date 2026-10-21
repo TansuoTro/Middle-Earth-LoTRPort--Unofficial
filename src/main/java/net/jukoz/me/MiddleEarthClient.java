@@ -196,6 +196,7 @@ public class MiddleEarthClient implements ClientModInitializer {
         BlockEntityRendererRegistry.register(ModBlockEntities.ALLOY_FURNACE, AlloyFurnaceEntityRenderer::new);
 
         ModNetworks.registerS2CPackets();
+        net.jukoz.me.network.ModClientNetworkHandler.register(new net.jukoz.me.network.connections.ConnectionToServer());
 
         // Port shim: initialise both entity model-layer registries during client init. A lazy
         // <clinit> triggered from a renderer constructor runs after the EntityModelLoader has

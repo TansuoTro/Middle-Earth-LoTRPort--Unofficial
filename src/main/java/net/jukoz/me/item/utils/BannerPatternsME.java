@@ -9,6 +9,7 @@ import net.minecraft.util.Identifier;
 import net.jukoz.me.datageneration.content.TranslationEntries;
 
 public class BannerPatternsME {
+    private static final java.util.List<RegistryKey<BannerPattern>> ALL = new java.util.ArrayList<>();
     public static final RegistryKey<BannerPattern> TREE = key("tree");
     public static final RegistryKey<BannerPattern> HORSE = key("horse");
     public static final RegistryKey<BannerPattern> HORSE_HEAD = key("horse_head");
@@ -66,10 +67,19 @@ public class BannerPatternsME {
 
     public static final RegistryKey<BannerPattern> SMALL_CIRCLE = key("small_circle");
     public static final RegistryKey<BannerPattern> PIPE = key("pipe");
+    public static final RegistryKey<BannerPattern> SPIDER = key("spider");
 
     private static RegistryKey<BannerPattern> key(String id) {
         TranslationEntries.bannerPatternEntries.add(id);
-        return RegistryKey.of(RegistryKeys.BANNER_PATTERN, new Identifier(MiddleEarth.MOD_ID, id));
+        RegistryKey<BannerPattern> key = RegistryKey.of(RegistryKeys.BANNER_PATTERN, new Identifier(MiddleEarth.MOD_ID, id));
+        ALL.add(key);
+        return key;
+    }
+
+    public static void registerRuntime(net.minecraft.registry.Registry<BannerPattern> registry) {
+        for (RegistryKey<BannerPattern> key : ALL) {
+            net.minecraft.registry.Registry.register(registry, key, new BannerPattern(key.getValue().toString()));
+        }
     }
 
     public static void register(Registerable<BannerPattern> registry) {
@@ -88,6 +98,7 @@ public class BannerPatternsME {
         register(registry, SCREECHING_SKULL);
         register(registry, GOBLIN_SKULL);
         register(registry, ANTLERS);
+        register(registry, ANTLERS_TOP);
         register(registry, ELK);
         register(registry, ELK_ANTLERS);
         register(registry, ELK_SHED);
@@ -129,9 +140,10 @@ public class BannerPatternsME {
 
         register(registry, SMALL_CIRCLE);
         register(registry, PIPE);
+        register(registry, SPIDER);
     }
 
     public static void register(Registerable<BannerPattern> registry, RegistryKey<BannerPattern> key) {
-        registry.register(key, new BannerPattern(key.getValue().getPath()));
+        registry.register(key, new BannerPattern(key.getValue().toString()));
     }
 }

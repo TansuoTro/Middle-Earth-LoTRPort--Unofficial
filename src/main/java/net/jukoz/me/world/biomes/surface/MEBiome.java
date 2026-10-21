@@ -8,6 +8,7 @@ import net.minecraft.world.biome.Biome;
 import java.awt.*;
 
 public class MEBiome {
+    public BiomeData data;
     public int height;
     public Color color;
     public RegistryKey<Biome> biome;

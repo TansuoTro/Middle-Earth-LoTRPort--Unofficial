@@ -1,40 +1,41 @@
 package net.jukoz.me.mixin.client;
 
-import net.jukoz.me.enchantments.EnchantmentsME;
 import net.jukoz.me.entity.EntityAttributesME;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.decoration.ItemFrameEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileUtil;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameRenderer.class)
-public class GameRendererMixin {
-    @ModifyConstant(method="updateTargetedEntity", constant = @Constant(doubleValue = 3.0))
-    public double injectedConstant(double constant) {
-        return 6.5f + me$vantageBonus();
-    }
-
-    /**
-     * The donor's vantage enchantment raises {@code entity_interaction_range}; 1.20.1 has no
-     * engine support for it, so the bonus {@code PlayerMixin} stores on that attribute is added
-     * to the entity targeting reach here.
-     */
-    @Unique
-    private static double me$vantageBonus() {
+public abstract class GameRendererMixin {
+    @Inject(method = "updateTargetedEntity", at = @At("HEAD"), cancellable = true)
+    private void me$attributeReach(float tickDelta, CallbackInfo ci) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (client.player == null) {
-            return 0.0;
+        Entity camera = client.getCameraEntity();
+        if (!(camera instanceof PlayerEntity player) || client.world == null || client.interactionManager == null) return;
+        double blockReach = EntityAttributesME.blockReach(player);
+        double entityReach = EntityAttributesME.entityReach(player);
+        var eye = camera.getCameraPosVec(tickDelta);
+        var direction = camera.getRotationVec(tickDelta);
+        client.crosshairTarget = camera.raycast(blockReach, tickDelta, false);
+        client.targetedEntity = null;
+        // Long weapons stop at walls even when the wall is outside block-use reach.
+        var obstruction = camera.raycast(entityReach, tickDelta, false);
+        double limit = Math.min(entityReach * entityReach, eye.squaredDistanceTo(obstruction.getPos()));
+        var hit = ProjectileUtil.raycast(camera, eye, eye.add(direction.multiply(entityReach)),
+                camera.getBoundingBox().stretch(direction.multiply(entityReach)).expand(1.0),
+                target -> !target.isSpectator() && target.canHit(), limit);
+        if (hit != null && eye.squaredDistanceTo(hit.getPos()) <= limit) {
+            client.crosshairTarget = hit;
+            if (hit.getEntity() instanceof LivingEntity || hit.getEntity() instanceof ItemFrameEntity) client.targetedEntity = hit.getEntity();
         }
-        EntityAttributeInstance instance =
-                client.player.getAttributeInstance(EntityAttributesME.ENTITY_INTERACTION_RANGE.value());
-        if (instance == null) {
-            return 0.0;
-        }
-        EntityAttributeModifier modifier = instance.getModifier(EnchantmentsME.VANTAGE_MODIFIER_ID);
-        return modifier == null ? 0.0 : modifier.getValue();
+        ci.cancel();
     }
 }

@@ -25,5 +25,6 @@ public class BannerPatternRegisterMixin {
             CallbackInfoReturnable<BannerPattern> cir
     ) {
         ModBannerPatterns.register(registry);
+        net.jukoz.me.item.utils.BannerPatternsME.registerRuntime(registry);
     }
 }

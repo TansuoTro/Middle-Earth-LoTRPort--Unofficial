@@ -1110,7 +1110,7 @@ public class WeaponItemsME {
     }
 
     private static Item registerCrossbowItem(String name, Function<Item.Settings, Item> factory, MESettings settings) {
-        Item item = (Item)factory.apply(settings.maxCount(1).maxDamage(465)
+        Item item = (Item)factory.apply(settings.maxDamageIfAbsent(465)
                 .enchantable(1)
 
                 );

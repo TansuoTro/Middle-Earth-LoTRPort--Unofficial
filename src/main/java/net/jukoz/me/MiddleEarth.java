@@ -61,11 +61,17 @@ public class MiddleEarth implements ModInitializer {
 		loggerUtil.logInfoMsg("");
                 loggerUtil.logInfoMsg("================ MiddleEarth ================");
 
+                // The donor shipped these brain registries as a separate sevenstars-api mod.
+                // In the port they live in-tree, so their initialiser has to run before any
+                // entity class touches a lazily-registered memory module (registry freeze).
+                new net.jukoz.me.api.SevenStarsApi().onInitialize();
+
                 // Custom tracked-data handlers and dynamic registries have to exist before any
                 // entity class initialises, otherwise the 1.21 donor's variant lookups and the
                 // entity tracker serialisers have nothing to resolve against.
                 net.jukoz.me.entity.TrackedDataHandlerRegistryME.register();
                 net.jukoz.me.registries.DynamicRegistriesME.register();
+                net.jukoz.me.network.ModServerNetworkHandler.register(new net.jukoz.me.network.connections.ConnectionToClient());
 
                 ModCommandRegistry.register();
 		ModStatusEffects.registerStatusEffects();
@@ -114,6 +120,7 @@ public class MiddleEarth implements ModInitializer {
 		ModDimensions.register();
 		net.jukoz.me.world.biomes.surface.MapBiomeData.loadBiomes();MEBiomeKeys.registerModBiomes();
 		EnchantmentsME.register();
+        net.jukoz.me.event.ModEvents.register();
 		MEBiomesData.loadBiomes();
 		ModWorldGeneration.generateModWorldGen();
 

@@ -285,24 +285,20 @@ public class OnboardingFactionScreen extends Screen {
         elements.descriptionTextBlock.draw(context, true);
 
         // Banner
-        if(elements.bannerComponents != null && !elements.bannerComponents.isEmpty()) {
+        if(elements.bannerComponents != null && this.client.world != null) {
             var bannerPatternRegistry = this.client.world.getRegistryManager().getOptional(RegistryKeys.BANNER_PATTERN);
             MEBannerPatterns.Builder bannerBuilder = new MEBannerPatterns.Builder();
             for(BannerData.BannerPatternWithColor entry : elements.bannerComponents){
                 if(entry == null) continue;
+                if (bannerPatternRegistry.isEmpty()) continue;
                 RegistryEntry<BannerPattern> pattern = bannerPatternRegistry.get().getEntry(entry.pattern);
-                bannerBuilder.add(pattern, entry.color);
+                if (pattern != null) bannerBuilder.add(pattern, entry.color);
             }
             int bannerX = elements.informationPanel.startX + elements.informationPanel.width - 48;
             int bannerY = elements.informationPanel.startY + 8;
-            // R3: 1.20.1 has no GUI render-state pipeline; draw the banner as an item stack.
-            net.minecraft.item.ItemStack bannerPreview = new net.minecraft.item.ItemStack(net.minecraft.item.Items.WHITE_BANNER);
-            MEBannerPatterns.set(bannerPreview, bannerBuilder.build());
-            context.getMatrices().push();
-            context.getMatrices().translate(bannerX, bannerY, 0);
-            context.getMatrices().scale(2.0F, 2.0F, 1.0F);
-            context.drawItem(bannerPreview, 0, 0);
-            context.getMatrices().pop();
+            net.jukoz.me.gui.render.BannerResultWithScaleGuiElementRenderer.render(context,
+                    elements.bannerField, elements.bannerColor == null ? DyeColor.WHITE : elements.bannerColor,
+                    bannerBuilder.build(), bannerX, bannerY, 24.0F);
         }
 
         // Right panel

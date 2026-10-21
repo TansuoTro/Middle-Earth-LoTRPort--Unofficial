@@ -3,6 +3,8 @@ package net.jukoz.me.block.special.structureManager;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.BedBlock;
+import net.minecraft.block.enums.BedPart;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -32,8 +34,7 @@ import net.jukoz.me.resources.datas.structure_manager_datas.SpawnNestNodeData;
 import net.jukoz.me.resources.datas.structure_manager_datas.StructureManagerData;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class StructureManagerBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory {
     private static final String ID = "structure_manager";
@@ -63,6 +64,7 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
     private StructureManagerData managerData;
     private boolean worldWasSet = false;
     private boolean registered = false;
+    private final Map<SpawnNestManager, List<BlockPos>> bedsByNest = new LinkedHashMap<>();
 
     @Override
     public void markRemoved() {
@@ -170,22 +172,26 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
             return false;
 
         SpawnNestNodeData data = managerData.getNpcSpawnNest(nestId);
+        if (data == null || this.structureNestList == null) return false;
+        if (this.structureNestList.getManagers().stream().anyMatch(nest -> nest.getOriginPos().equals(nestPos))) return true;
         SpawnNestManager manager = new SpawnNestManager(data, nestPos, spawnRadius);
         this.structureNestList.addNest(manager);
+        markDirty();
         return true;
     }
 
     public static void triggerDeathSignal(BlockPos pos, LivingEntity entity) {
         if(entity.getWorld().isClient)
             return;
-        StructureManagerBlockEntity blockEntity = (StructureManagerBlockEntity) entity.getWorld().getBlockEntity(pos);
-        if(blockEntity != null && !blockEntity.isRemoved()){
+        if(entity.getWorld().getBlockEntity(pos) instanceof StructureManagerBlockEntity blockEntity
+                && !blockEntity.isRemoved() && blockEntity.structureNestList != null){
             blockEntity.structureNestList.computeDeath(entity);
             blockEntity.world.markDirty(pos);
         }
     }
 
     private void tickEvent(World world, BlockPos blockPos, BlockState blockState) {
+        if (world.isClient) return;
         if(!world.isClient && worldWasSet){
             tryToInitializeManager(world);
             this.worldWasSet = false;
@@ -205,10 +211,10 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
 
         long timeOfDay = serverWorld.getTime() % 24000;
         long gameTick = serverWorld.getTime();
-        if((timeOfDay > 0 && timeOfDay < 11000) || (timeOfDay > 12000 && timeOfDay < 23000) && wellnessChecked)
+        if(((timeOfDay > 0 && timeOfDay < 11000) || (timeOfDay > 12000 && timeOfDay < 23000)) && wellnessChecked)
             wellnessChecked = false;
 
-        boolean haveToDoWellnessCheck = (timeOfDay > 11000 && timeOfDay < 12000) || (timeOfDay >= 23000) && !wellnessChecked;
+        boolean haveToDoWellnessCheck = ((timeOfDay > 11000 && timeOfDay < 12000) || (timeOfDay >= 23000)) && !wellnessChecked;
         for(SpawnNestManager data : structureNestList.getManagers()){
             if(managerData == null)
                 managerData = StructureManagerService.getStructureManagerData(serverWorld, structureManagerIdentifier);
@@ -219,6 +225,7 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
         }
         if(haveToDoWellnessCheck && !wellnessChecked)
             wellnessChecked = true;
+        if (gameTick % 200 == 0) redistributeBeds();
     }
 
     private void tryToInitializeManager(World world){
@@ -261,21 +268,35 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
     }
 
     public void fetchBeds(){
-        // TODO : Fetch all beds surrounding the nodes, making sure there's no duplicate
-        StructureManagerData managerData = getWorld().getRegistryManager().getOptional(DynamicRegistriesME.STRUCTURE_MANAGER_DATA).get().get(structureManagerIdentifier);
-        for(SpawnNestManager data : structureNestList.getManagers()) {
-            SpawnNestNodeData nodeData = managerData.getNpcSpawnNest(data.getId());
-            if(nodeData == null)
-                continue;
-
-            int bedRadius = nodeData.getBedRadius();
-            BlockPos origin = data.getOriginPos();
+        bedsByNest.clear();
+        if (!(world instanceof ServerWorld) || structureNestList == null || structureManagerIdentifier == null) return;
+        StructureManagerData data = StructureManagerService.getStructureManagerData(world, structureManagerIdentifier);
+        if (data == null) return;
+        for (SpawnNestManager nest : structureNestList.getManagers()) {
+            SpawnNestNodeData node = data.getNpcSpawnNest(nest.getId());
+            if (node == null) continue;
+            int radius = Math.max(0, node.getBedRadius());
+            BlockPos origin = nest.getOriginPos();
+            List<BlockPos> beds = new ArrayList<>();
+            for (BlockPos candidate : BlockPos.iterate(origin.add(-radius, -5, -radius), origin.add(radius, 5, radius))) {
+                if (!world.isChunkLoaded(candidate)) continue;
+                BlockState state = world.getBlockState(candidate);
+                if (state.getBlock() instanceof BedBlock && state.get(BedBlock.PART) == BedPart.HEAD) {
+                    beds.add(candidate.toImmutable());
+                }
+            }
+            beds.sort(Comparator.comparingDouble(origin::getSquaredDistance));
+            bedsByNest.put(nest, beds);
         }
     }
 
     public void redistributeBeds(){
-        // TODO : Redistribute beds to the nest nodes
-        // TODO : Makes sure the beds are still distributed to the correct npcs
+        if (!(world instanceof ServerWorld serverWorld)) return;
+        fetchBeds();
+        Set<BlockPos> claimed = new HashSet<>();
+        bedsByNest.forEach((nest, beds) -> nest.retainBeds(beds, claimed, serverWorld));
+        bedsByNest.forEach((nest, beds) -> nest.assignBeds(beds, claimed, serverWorld));
+        markDirty();
     }
 
     @Override
