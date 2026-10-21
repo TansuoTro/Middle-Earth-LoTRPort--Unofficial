@@ -1,19 +1,19 @@
 package net.jukoz.me.mixin.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.jukoz.me.world.biomes.MEBiomeFogData;
 import net.jukoz.me.world.dimension.ModDimensions;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.FogShape;
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.biome.Biome;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Optional;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 @Mixin(BackgroundRenderer.class)
 public class BackgroundRendererMixin {
     private static final float TICK_SPEED = 0.001f;
@@ -39,7 +39,7 @@ public class BackgroundRendererMixin {
                     !clientPlayerEntity.isSubmergedInWater() &&
                     ModDimensions.isInMiddleEarth(clientPlayerEntity.getWorld()))
             {
-                Optional<RegistryKey<Biome>> biomeRegistry = clientPlayerEntity.getWorld().getBiome(clientPlayerEntity.getBlockPos()).getKey();
+                Optional<ResourceKey<Biome>> biomeRegistry = clientPlayerEntity.getWorld().getBiome(clientPlayerEntity.getBlockPos()).getKey();
                 if(biomeRegistry.isPresent() && MEBiomeFogData.DATA.containsKey(biomeRegistry.get())){
                     MEBiomeFogData fogData = MEBiomeFogData.DATA.get(biomeRegistry.get());
                     
@@ -59,7 +59,7 @@ public class BackgroundRendererMixin {
                     fogStartMultiplier = Math.min(fogStartMultiplier + (tickDelta * TICK_SPEED), 1);
                 }
 
-                float f = MathHelper.clamp(viewDistance / 10.0F, 4.0F, 64.0F);
+                float f = Mth.clamp(viewDistance / 10.0F, 4.0F, 64.0F);
                 float fogStart = (viewDistance - f) * fogStartMultiplier;
                 float fogEnd = viewDistance * fogEndMultiplier;
 

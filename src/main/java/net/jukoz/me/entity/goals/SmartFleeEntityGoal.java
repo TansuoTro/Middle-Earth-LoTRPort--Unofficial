@@ -1,6 +1,6 @@
 package net.jukoz.me.entity.goals;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.FleeEntityGoal;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.jukoz.me.entity.goals.interfaces.Evader;

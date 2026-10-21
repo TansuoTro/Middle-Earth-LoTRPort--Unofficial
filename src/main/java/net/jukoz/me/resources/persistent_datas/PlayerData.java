@@ -1,20 +1,20 @@
 package net.jukoz.me.resources.persistent_datas;
 
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 
 public class PlayerData {
-    private Identifier faction;
-    private Identifier spawn;
-    private Identifier race;
+    private ResourceLocation faction;
+    private ResourceLocation spawn;
+    private ResourceLocation race;
     private BlockPos posOrigin;
-    private Identifier dimensionOrigin;
+    private ResourceLocation dimensionOrigin;
 
     private int delversFearCountInSeconds = 0;
 
-    public NbtCompound createNbt() {
-        NbtCompound nbtCompound = new NbtCompound();
+    public CompoundTag createNbt() {
+        CompoundTag nbtCompound = new CompoundTag();
         if(faction != null)
             nbtCompound.putString("faction", faction.toString());
         if(spawn != null)
@@ -32,49 +32,49 @@ public class PlayerData {
     }
     public PlayerData() {}
 
-    public PlayerData(NbtCompound nbtCompound) {
+    public PlayerData(CompoundTag nbtCompound) {
         if(nbtCompound.contains("faction", net.minecraft.nbt.NbtElement.STRING_TYPE))
-            faction = new Identifier(nbtCompound.getString("faction"));
+            faction = new ResourceLocation(nbtCompound.getString("faction"));
         if(nbtCompound.contains("spawn", net.minecraft.nbt.NbtElement.STRING_TYPE))
-            spawn = new Identifier(nbtCompound.getString("spawn"));
+            spawn = new ResourceLocation(nbtCompound.getString("spawn"));
         if(nbtCompound.contains("race", net.minecraft.nbt.NbtElement.STRING_TYPE))
-            race = new Identifier(nbtCompound.getString("race"));
+            race = new ResourceLocation(nbtCompound.getString("race"));
         int[] intArray = nbtCompound.getIntArray("origin_pos");
         if(intArray.length >= 3) {
             posOrigin = new BlockPos(intArray[0], intArray[1], intArray[2]);
         }
         if(nbtCompound.contains("dimensionOrigin", net.minecraft.nbt.NbtElement.STRING_TYPE))
-            dimensionOrigin = new Identifier(nbtCompound.getString("dimensionOrigin"));
+            dimensionOrigin = new ResourceLocation(nbtCompound.getString("dimensionOrigin"));
 
         delversFearCountInSeconds = nbtCompound.getInt("delversFearCountInSeconds");
     }
-    public boolean assignNewFactionInformation(Identifier factionId, Identifier spawnId){
+    public boolean assignNewFactionInformation(ResourceLocation factionId, ResourceLocation spawnId){
         this.faction = factionId;
         this.spawn = spawnId;
         return true;
     }
 
-    public boolean assignNewRace(Identifier raceId){
+    public boolean assignNewRace(ResourceLocation raceId){
         this.race = raceId;
         return true;
     }
 
-    public boolean assignNewOrigin(Identifier dimensionOrigin, BlockPos newBlockPos){
+    public boolean assignNewOrigin(ResourceLocation dimensionOrigin, BlockPos newBlockPos){
         this.dimensionOrigin = dimensionOrigin;
         this.posOrigin = newBlockPos;
         return true;
     }
-    public Identifier getFaction(){
+    public ResourceLocation getFaction(){
         return this.faction;
     }
-    public Identifier getRace(){
+    public ResourceLocation getRace(){
         return this.race;
     }
-    public Identifier getSpawn(){
+    public ResourceLocation getSpawn(){
         return this.spawn;
     }
 
-    public Identifier getDimensionOrigin(){
+    public ResourceLocation getDimensionOrigin(){
         return this.dimensionOrigin;
     }
     public BlockPos getOriginPos(){

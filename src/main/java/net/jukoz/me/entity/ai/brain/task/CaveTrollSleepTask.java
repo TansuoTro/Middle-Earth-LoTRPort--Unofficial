@@ -2,9 +2,9 @@ package net.jukoz.me.entity.ai.brain.task;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.entity.ai.brain.MemoryModuleState;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.MultiTickTask;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
 import net.jukoz.me.entity.ai.brain.MemoryModulesME;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntity;
 
@@ -27,25 +27,25 @@ public class CaveTrollSleepTask extends MultiTickTask<CaveTrollEntity> {
     }
 
     @Override
-    protected boolean shouldRun(ServerWorld world, CaveTrollEntity entity) {
+    protected boolean shouldRun(ServerLevel world, CaveTrollEntity entity) {
         Optional<Integer> foodCount = entity.getBrain().getOptionalRegisteredMemory(MemoryModulesME.FOOD_EATEN_COUNT);
 
         return foodCount.isPresent() && foodCount.get() >= 3;
     }
 
     @Override
-    protected boolean shouldKeepRunning(ServerWorld world, CaveTrollEntity entity, long time) {
+    protected boolean shouldKeepRunning(ServerLevel world, CaveTrollEntity entity, long time) {
         return entity.getBrain().getOptionalRegisteredMemory(MemoryModuleType.ATTACK_TARGET).isEmpty();
     }
 
     @Override
-    protected void run(ServerWorld world, CaveTrollEntity entity, long time) {
+    protected void run(ServerLevel world, CaveTrollEntity entity, long time) {
         entity.getBrain().remember(MemoryModulesME.FOOD_EATEN_COUNT, 0);
         entity.startSleeping();
     }
 
     @Override
-    protected void finishRunning(ServerWorld world, CaveTrollEntity entity, long time) {
+    protected void finishRunning(ServerLevel world, CaveTrollEntity entity, long time) {
         entity.stopSleeping();
         entity.getBrain().remember(MemoryModulesME.DIG_FOR_FOOD_COOLDOWN, 600);
         entity.getBrain().remember(MemoryModulesME.ACTION_TIMEOUT, 200);

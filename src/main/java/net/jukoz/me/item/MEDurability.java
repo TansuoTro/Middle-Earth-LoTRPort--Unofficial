@@ -1,6 +1,6 @@
 package net.jukoz.me.item;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Per-stack durability override, backing 1.21's {@code MAX_DAMAGE} component.

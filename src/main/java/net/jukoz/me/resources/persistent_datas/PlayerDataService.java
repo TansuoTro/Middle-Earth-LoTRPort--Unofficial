@@ -1,12 +1,12 @@
 package net.jukoz.me.resources.persistent_datas;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.dimension.DimensionTypes;
 import net.jukoz.me.exceptions.FactionIdentifierException;
@@ -21,26 +21,26 @@ import net.jukoz.me.resources.datas.races.RaceLookup;
 import net.jukoz.me.world.dimension.ModDimensions;
 
 public class PlayerDataService {
-    private static PlayerData getPlayerData(PlayerEntity player){
+    private static PlayerData getPlayerData(Player player){
         return StateSaverAndLoader.getPlayerState(player);
     }
 
-    public static boolean clearPlayerData(PlayerEntity player){
+    public static boolean clearPlayerData(Player player){
         PlayerData data = getPlayerData(player);
         data.assignNewRace(null);
         data.assignNewFactionInformation(null, null);
         data.assignNewOrigin(null, null);
         return true;
     }
-    public static boolean playerPassedOnboarding(PlayerEntity player){
+    public static boolean playerPassedOnboarding(Player player){
         PlayerData playerData = getPlayerData(player);
         if(playerData == null) return false;
         return !(playerData.getFaction() == null || playerData.getSpawn() == null);
     }
-    public static Faction getPlayerFaction(PlayerEntity player, World world){
+    public static Faction getPlayerFaction(Player player, Level world){
         PlayerData playerData = getPlayerData(player);
         if(playerData == null) return null;
-        Identifier factionId = playerData.getFaction();
+        ResourceLocation factionId = playerData.getFaction();
         if(factionId == null) return null;
         try{
             return FactionLookup.getFactionById(world, factionId);
@@ -48,7 +48,7 @@ public class PlayerDataService {
             return null;
         }
     }
-    public static boolean setNewFactionInformation(PlayerEntity player, World world, Identifier factionId){
+    public static boolean setNewFactionInformation(Player player, Level world, ResourceLocation factionId){
         PlayerData playerData = getPlayerData(player);
         try{
             Faction faction = FactionLookup.getFactionById(world, factionId);
@@ -58,20 +58,20 @@ public class PlayerDataService {
             return false;
         }
     }
-    public static boolean setNewFactionInformation(PlayerEntity player, World world, Identifier factionId, Identifier spawnId){
+    public static boolean setNewFactionInformation(Player player, Level world, ResourceLocation factionId, ResourceLocation spawnId){
         PlayerData playerData = getPlayerData(player);
         playerData.assignNewFactionInformation(factionId, spawnId);
         return true;
     }
-    public static DispositionType getPlayerDisposition(PlayerEntity player, World world){
+    public static DispositionType getPlayerDisposition(Player player, Level world){
         Faction faction = getPlayerFaction(player, world);
         if(faction == null) return DispositionType.NEUTRAL;
         return faction.getDisposition();
     }
-    public static Race getPlayerRace(PlayerEntity player, World world){
+    public static Race getPlayerRace(Player player, Level world){
         PlayerData playerData = getPlayerData(player);
         if(playerData == null) return null;
-        Identifier raceId = playerData.getRace();
+        ResourceLocation raceId = playerData.getRace();
         if(raceId == null) return null;
         try{
             return RaceLookup.getRace(world, raceId);
@@ -79,7 +79,7 @@ public class PlayerDataService {
             return null;
         }
     }
-    public static boolean setRace(PlayerEntity player, World world, Identifier raceId){
+    public static boolean setRace(Player player, Level world, ResourceLocation raceId){
         Race newRace = RaceLookup.getRace(world, raceId);
         if(newRace == null) return false;
         PlayerData playerData = getPlayerData(player);
@@ -87,16 +87,16 @@ public class PlayerDataService {
         newRace.applyPlayerAttributes(player);
         return true;
     }
-    public static SpawnData getPlayerSpawnData(PlayerEntity player, World world){
+    public static SpawnData getPlayerSpawnData(Player player, Level world){
         Faction faction = getPlayerFaction(player, world);
         if(faction == null) return null;
         PlayerData playerData = getPlayerData(player);
         if(playerData == null) return null;
-        Identifier spawnId = playerData.getSpawn();
+        ResourceLocation spawnId = playerData.getSpawn();
         if(spawnId == null) return null;
         return faction.getSpawnData().findSpawn(spawnId);
     }
-    public static boolean setSpawn(ServerPlayerEntity player, World world, Identifier spawnId) {
+    public static boolean setSpawn(ServerPlayer player, Level world, ResourceLocation spawnId) {
         Faction faction = getPlayerFaction(player, world);
         if(faction == null) return false;
         if(faction.getSpawnData().findSpawn(spawnId) != null){
@@ -112,7 +112,7 @@ public class PlayerDataService {
         }
         return false;
     }
-    public static boolean resetSpawn(ServerPlayerEntity player, World world) {
+    public static boolean resetSpawn(ServerPlayer player, Level world) {
         Faction faction = getPlayerFaction(player, world);
         if(faction == null) return false;
         SpawnDataHandler spawnDataHandler= faction.getSpawnData();
@@ -120,11 +120,11 @@ public class PlayerDataService {
         setSpawn(player, world, spawnDataHandler.getDefaultSpawn());
         return true;
     }
-    public static OriginAggregate getOriginAggregateOrDefault(PlayerEntity player, World world){
+    public static OriginAggregate getOriginAggregateOrDefault(Player player, Level world){
         PlayerData playerData = getPlayerData(player);
         if(playerData == null) return getDefaultOriginAggregate(world);
         BlockPos originPos = playerData.getOriginPos();
-        Identifier dimensionId = playerData.getDimensionOrigin();
+        ResourceLocation dimensionId = playerData.getDimensionOrigin();
         if(originPos == null){
             return getDefaultOriginAggregate(world);
         }
@@ -133,11 +133,11 @@ public class PlayerDataService {
         }
         return new OriginAggregate(dimensionId, originPos);
     }
-    public static OriginAggregate getOriginAggregate(PlayerEntity player, World world){
+    public static OriginAggregate getOriginAggregate(Player player, Level world){
         PlayerData playerData = getPlayerData(player);
         if(playerData == null) return null;
         BlockPos originPos = playerData.getOriginPos();
-        Identifier dimensionId = playerData.getDimensionOrigin();
+        ResourceLocation dimensionId = playerData.getDimensionOrigin();
         if(originPos == null){
             return null;
         }
@@ -146,8 +146,8 @@ public class PlayerDataService {
         }
         return new OriginAggregate(dimensionId, originPos);
     }
-    public static boolean setOrigin(ServerPlayerEntity player, World world, Identifier dimensionId, BlockPos originPos) {
-        Registry<DimensionType> registry = world.getRegistryManager().getOptional(RegistryKeys.DIMENSION_TYPE).orElse(null);
+    public static boolean setOrigin(ServerPlayer player, Level world, ResourceLocation dimensionId, BlockPos originPos) {
+        Registry<DimensionType> registry = world.getRegistryManager().getOptional(Registries.DIMENSION_TYPE).orElse(null);
         if(registry != null){
             if(registry.get(dimensionId) == null){
                 PlayerData data = getPlayerData(player);
@@ -157,20 +157,20 @@ public class PlayerDataService {
         }
         return false;
     }
-    public static boolean resetOrigin(ServerPlayerEntity player, World world) {
+    public static boolean resetOrigin(ServerPlayer player, Level world) {
         OriginAggregate newOrigin = getDefaultOriginAggregate(world);
         PlayerData data = getPlayerData(player);
         data.assignNewOrigin(newOrigin.dimensionId, newOrigin.origin);
         return true;
     }
-    private static OriginAggregate getDefaultOriginAggregate(World world){
+    private static OriginAggregate getDefaultOriginAggregate(Level world){
         return new OriginAggregate(
                 DimensionTypes.OVERWORLD.getValue(),
                 world.getServer().getOverworld().getSpawnPos()
         );
     }
 
-    public record OriginAggregate(Identifier dimensionId, BlockPos origin){
+    public record OriginAggregate(ResourceLocation dimensionId, BlockPos origin){
 
     }
 }

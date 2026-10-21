@@ -1,9 +1,9 @@
 package net.jukoz.me.item;
 
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 
 import net.minecraft.item.FoodComponents;
-import net.minecraft.item.BlockItem;
+import net.minecraft.world.item.BlockItem;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.block.registration.ModNatureBlocks;
@@ -12,12 +12,12 @@ import net.jukoz.me.item.items.BottledDrinkItem;
 import net.jukoz.me.item.items.OrcishFoodItem;
 import net.jukoz.me.item.utils.ModItemGroups;
 import net.minecraft.item.FoodComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.registries.RegistryAliasesME;
 
 import java.util.function.Function;
@@ -131,7 +131,7 @@ public class FoodItemsME {
         ModItemGroups.FOOD_CONTENTS.add(item.getDefaultStack());
         TranslationEntries.itemEntries.add(item);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ITEM, name));
-        return Registry.register(Registries.ITEM, new Identifier(MiddleEarth.MOD_ID, name), item);
+        return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);
     }
 
     public static void registerModItems() {

@@ -1,15 +1,15 @@
 package net.jukoz.me.entity.beasts.broadhoof;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.jukoz.me.compat.client.render.state.LivingEntityRenderState;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.passive.HorseColor;
 import net.minecraft.entity.passive.HorseMarking;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.entity.beasts.BeastEntityRenderState;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class BroadhoofGoatEntityRenderState extends BeastEntityRenderState {
 
     public BroadhoofGoatColor color = BroadhoofGoatColor.WHITE;

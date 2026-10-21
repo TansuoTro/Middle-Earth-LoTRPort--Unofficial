@@ -3,13 +3,13 @@ package net.jukoz.me.entity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.*;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.Heightmap;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.fire_of_orthanc.FireOfOrthancEntity;
 import net.jukoz.me.datageneration.content.TranslationEntries;
@@ -96,14 +96,14 @@ public class EntitiesME {
                 FabricEntityTypeBuilder.create(spawnGroup, entity).dimensions(EntityDimensions.fixed(width, height)).build());
     }
 
-    private static <T extends Entity> EntityType<T> register(RegistryKey<EntityType<?>> key, EntityType<T> type) {
+    private static <T extends Entity> EntityType<T> register(ResourceKey<EntityType<?>> key, EntityType<T> type) {
         EntityType<T> entityType = Registry.register(Registries.ENTITY_TYPE, key, type);
         TranslationEntries.entityEntries.add(entityType);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ENTITY_TYPE, entityType.getUntranslatedName()));
         return entityType;
     }
 
-    private static EntityType.EntityFactory<BarrelEntity> getBoatFactory(Supplier<net.minecraft.item.Item> itemSupplier) {
+    private static EntityType.EntityFactory<BarrelEntity> getBoatFactory(Supplier<net.minecraft.world.item.Item> itemSupplier) {
         return (type, world) -> new BarrelEntity(type, world, itemSupplier);
     }
 
@@ -111,8 +111,8 @@ public class EntitiesME {
         return register(keyOf(id), builder.build());
     }
 
-    private static RegistryKey<EntityType<?>> keyOf(String id) {
-        return RegistryKey.of(RegistryKeys.ENTITY_TYPE, new Identifier(MiddleEarth.MOD_ID, id));
+    private static ResourceKey<EntityType<?>> keyOf(String id) {
+        return ResourceKey.of(Registries.ENTITY_TYPE, new ResourceLocation(MiddleEarth.MOD_ID, id));
     }
 
 
@@ -149,7 +149,7 @@ public class EntitiesME {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static <T extends MobEntity> void registerSpawnRestriction(EntityType<T> type, SpawnRestriction.Location location, Heightmap.Type heightmap,
+    private static <T extends Mob> void registerSpawnRestriction(EntityType<T> type, SpawnRestriction.Location location, Heightmap.Type heightmap,
                                                                        SpawnRestriction.SpawnPredicate<T> predicate) {
         try {
             Method method = SpawnRestriction.class.getDeclaredMethod("register", EntityType.class,

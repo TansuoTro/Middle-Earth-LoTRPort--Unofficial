@@ -2,11 +2,11 @@ package net.jukoz.me.client.model.equipment;
 import net.jukoz.me.compat.client.render.MEBipedEntityModel;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
+import net.minecraft.client.model.geom.PartNames;
 import net.jukoz.me.compat.client.render.state.BipedEntityRenderState;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 
 public class CustomBootsModel extends MEBipedEntityModel<LivingEntity, BipedEntityRenderState> {
 
@@ -19,19 +19,19 @@ public class CustomBootsModel extends MEBipedEntityModel<LivingEntity, BipedEnti
         ModelPartData modelPartData = modelData.getRoot();
 
 
-        ModelPartData head = modelPartData.addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(),
+        ModelPartData head = modelPartData.addChild(PartNames.HEAD, ModelPartBuilder.create(),
                 ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        head.addChild(EntityModelPartNames.HAT, ModelPartBuilder.create(),
-                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-
-        modelPartData.addChild(EntityModelPartNames.BODY, ModelPartBuilder.create(),
-                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(EntityModelPartNames.RIGHT_ARM, ModelPartBuilder.create(),
-                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(EntityModelPartNames.LEFT_ARM, ModelPartBuilder.create(),
+        head.addChild(PartNames.HAT, ModelPartBuilder.create(),
                 ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData rightLeg = modelPartData.addChild(EntityModelPartNames.RIGHT_LEG, ModelPartBuilder.create(),
+        modelPartData.addChild(PartNames.BODY, ModelPartBuilder.create(),
+                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.RIGHT_ARM, ModelPartBuilder.create(),
+                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.LEFT_ARM, ModelPartBuilder.create(),
+                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+
+        ModelPartData rightLeg = modelPartData.addChild(PartNames.RIGHT_LEG, ModelPartBuilder.create(),
                 ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         rightLeg.addChild("rightBoot", ModelPartBuilder.create()
@@ -41,7 +41,7 @@ public class CustomBootsModel extends MEBipedEntityModel<LivingEntity, BipedEnti
                         .uv(0, 16).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new Dilation(0.7F)),
                 ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData leftLeg = modelPartData.addChild(EntityModelPartNames.LEFT_LEG, ModelPartBuilder.create(),
+        ModelPartData leftLeg = modelPartData.addChild(PartNames.LEFT_LEG, ModelPartBuilder.create(),
                 ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         leftLeg.addChild("leftBoot", ModelPartBuilder.create()

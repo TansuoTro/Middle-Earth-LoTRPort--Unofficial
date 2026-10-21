@@ -1,6 +1,6 @@
 package net.jukoz.me.compat;
 
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.jukoz.me.block.registration.GenericBlockSets;
 import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
@@ -179,28 +179,28 @@ public final class MEBlocksLegacy {
     // these legacy datagen aliases never NPE during class init.
     private static Block woodSlab(WoodBlockSetBuilder set) {
         if (set.logBlocks != null) return set.logBlocks.slab();
-        return set.planksBlocks != null ? set.planksBlocks.slab() : net.minecraft.block.Blocks.AIR;
+        return set.planksBlocks != null ? set.planksBlocks.slab() : net.minecraft.world.level.block.Blocks.AIR;
     }
 
     private static Block woodVerticalSlab(WoodBlockSetBuilder set) {
         if (set.logBlocks != null) return set.logBlocks.verticalSlab();
-        return set.planksBlocks != null ? set.planksBlocks.verticalSlab() : net.minecraft.block.Blocks.AIR;
+        return set.planksBlocks != null ? set.planksBlocks.verticalSlab() : net.minecraft.world.level.block.Blocks.AIR;
     }
 
     private static Block strippedSlab(WoodBlockSetBuilder set) {
         if (set.strippedLogBlocks != null) return set.strippedLogBlocks.slab();
-        return set.planksBlocks != null ? set.planksBlocks.slab() : net.minecraft.block.Blocks.AIR;
+        return set.planksBlocks != null ? set.planksBlocks.slab() : net.minecraft.world.level.block.Blocks.AIR;
     }
 
     private static Block strippedVerticalSlab(WoodBlockSetBuilder set) {
         if (set.strippedLogBlocks != null) return set.strippedLogBlocks.verticalSlab();
-        return set.planksBlocks != null ? set.planksBlocks.verticalSlab() : net.minecraft.block.Blocks.AIR;
+        return set.planksBlocks != null ? set.planksBlocks.verticalSlab() : net.minecraft.world.level.block.Blocks.AIR;
     }
 
 
     private static Block strippedStairs(WoodBlockSetBuilder set) {
         if (set.strippedLogBlocks != null) return set.strippedLogBlocks.stairs();
-        return set.planksBlocks != null ? set.planksBlocks.stairs() : net.minecraft.block.Blocks.AIR;
+        return set.planksBlocks != null ? set.planksBlocks.stairs() : net.minecraft.world.level.block.Blocks.AIR;
     }
 
 }

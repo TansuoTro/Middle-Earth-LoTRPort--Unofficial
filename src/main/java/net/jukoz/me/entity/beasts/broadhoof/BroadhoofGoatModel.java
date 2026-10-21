@@ -1,7 +1,7 @@
 package net.jukoz.me.entity.beasts.broadhoof;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
+import net.minecraft.client.model.geom.PartNames;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 
 public class BroadhoofGoatModel extends SinglePartEntityModel<BroadhoofGoatEntity> {
@@ -16,7 +16,7 @@ public class BroadhoofGoatModel extends SinglePartEntityModel<BroadhoofGoatEntit
 
     public BroadhoofGoatModel(ModelPart root) {
         this.broadhoofGoat = root.getChild("broadhoof_goat");
-        this.head = broadhoofGoat.getChild(EntityModelPartNames.BODY).getChild(EntityModelPartNames.HEAD);
+        this.head = broadhoofGoat.getChild(PartNames.BODY).getChild(PartNames.HEAD);
 
         this.wildBeard = this.head.getChild("wild_beard");
         this.brushedBeard = this.head.getChild("brushed_beard");
@@ -50,14 +50,14 @@ public class BroadhoofGoatModel extends SinglePartEntityModel<BroadhoofGoatEntit
         ModelData modelData = getModelData();
         ModelPartData root = modelData.getRoot();
         ModelPartData broadhoof_goat = root.getChild("broadhoof_goat");
-        ModelPartData body = broadhoof_goat.getChild(EntityModelPartNames.BODY);
-        ModelPartData head = body.getChild(EntityModelPartNames.HEAD);
+        ModelPartData body = broadhoof_goat.getChild(PartNames.BODY);
+        ModelPartData head = body.getChild(PartNames.HEAD);
 
-        ModelPartData head_cube = head.addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create().uv(0, 0).mirrored().cuboid(2.9F, -11.0F, -6.0F, 3.0F, 2.0F, 1.0F, new Dilation(0.0F)).mirrored(false)
+        ModelPartData head_cube = head.addChild(PartNames.HEAD, ModelPartBuilder.create().uv(0, 0).mirrored().cuboid(2.9F, -11.0F, -6.0F, 3.0F, 2.0F, 1.0F, new Dilation(0.0F)).mirrored(false)
                 .uv(0, 0).cuboid(-5.9F, -11.0F, -6.0F, 3.0F, 2.0F, 1.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
 
 
-        ModelPartData body_cube = body.addChild(EntityModelPartNames.BODY, ModelPartBuilder.create().uv(2, 48).cuboid(-6.0F, -9.0F, -11.0F, 12.0F, 11.0F, 20.0F, new Dilation(0.0F))
+        ModelPartData body_cube = body.addChild(PartNames.BODY, ModelPartBuilder.create().uv(2, 48).cuboid(-6.0F, -9.0F, -11.0F, 12.0F, 11.0F, 20.0F, new Dilation(0.0F))
                 .uv(0, 18).cuboid(-7.0F, -11.0F, -12.0F, 14.0F, 16.0F, 13.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         ModelPartData tail_r1 = body.addChild("tail_r1", ModelPartBuilder.create().uv(86, 1).cuboid(-2.0F, -3.0F, 0.0F, 4.0F, 3.0F, 4.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -6.0F, 9.0F, 0.4363F, 0.0F, 0.0F));
@@ -154,9 +154,9 @@ public class BroadhoofGoatModel extends SinglePartEntityModel<BroadhoofGoatEntit
         ModelPartData modelPartData = modelData.getRoot();
         ModelPartData broadhoof_goat = modelPartData.addChild("broadhoof_goat", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 24.0F, 0.0F));
 
-        ModelPartData body = broadhoof_goat.addChild(EntityModelPartNames.BODY, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, -11.0F, 2.0F));
+        ModelPartData body = broadhoof_goat.addChild(PartNames.BODY, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, -11.0F, 2.0F));
 
-        ModelPartData head = body.addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(), ModelTransform.of(0.0F, -6.0F, -9.0F, -0.2182F, 0.0F, 0.0F));
+        ModelPartData head = body.addChild(PartNames.HEAD, ModelPartBuilder.create(), ModelTransform.of(0.0F, -6.0F, -9.0F, -0.2182F, 0.0F, 0.0F));
 
         ModelPartData wild_beard = head.addChild("wild_beard", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 2.0F, -4.0F));
 

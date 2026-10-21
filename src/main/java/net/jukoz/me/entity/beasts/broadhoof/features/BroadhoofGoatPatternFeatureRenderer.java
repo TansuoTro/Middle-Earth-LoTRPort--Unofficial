@@ -3,20 +3,20 @@ import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatEntity;
 import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
 import com.google.common.collect.Maps;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.OverlayTexture;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.HorseEntityModel;
 import net.jukoz.me.compat.client.render.state.HorseEntityRenderState;
-import net.minecraft.client.util.math.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.entity.passive.HorseMarking;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatEntityRenderState;
 import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatModel;
@@ -24,12 +24,12 @@ import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatPattern;
 
 import java.util.Map;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class BroadhoofGoatPatternFeatureRenderer extends MEFeatureRenderer<BroadhoofGoatEntity, BroadhoofGoatEntityRenderState, BroadhoofGoatModel> {
     private static final String PATH = "textures/entities/broadhoof_goat/patterns/";
-    private static final Identifier INVISIBLE_ID = new Identifier("minecraft", "invisible");
+    private static final ResourceLocation INVISIBLE_ID = new ResourceLocation("minecraft", "invisible");
 
-    private static final Map<BroadhoofGoatPattern, Identifier> TEXTURES = Maps.newEnumMap(
+    private static final Map<BroadhoofGoatPattern, ResourceLocation> TEXTURES = Maps.newEnumMap(
             Map.ofEntries(
                     Map.entry(BroadhoofGoatPattern.NONE, INVISIBLE_ID),
 
@@ -78,9 +78,9 @@ public class BroadhoofGoatPatternFeatureRenderer extends MEFeatureRenderer<Broad
     }
 
     public void render(
-            MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, BroadhoofGoatEntityRenderState state, float f, float g
+            PoseStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, BroadhoofGoatEntityRenderState state, float f, float g
     ) {
-        Identifier identifier = (Identifier)TEXTURES.get(state.pattern);
+        ResourceLocation identifier = (ResourceLocation)TEXTURES.get(state.pattern);
         if (identifier != INVISIBLE_ID && !state.invisible) {
             VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEntityTranslucent(identifier));
             this.getContextModel().render(matrixStack, vertexConsumer, i, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);

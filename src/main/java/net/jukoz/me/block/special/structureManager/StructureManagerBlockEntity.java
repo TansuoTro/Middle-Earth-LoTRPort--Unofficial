@@ -1,27 +1,27 @@
 package net.jukoz.me.block.special.structureManager;
 
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BedBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.block.enums.BedPart;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.nbt.CompoundTag;
 import net.jukoz.me.compat.nbt.ReadView;
 import net.jukoz.me.compat.nbt.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import net.jukoz.me.block.special.structureManager.features.SpawnNestManager;
@@ -43,7 +43,7 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
         ENABLED("%s.Enabled".formatted(ID)),
         TO_INITIALIZE("%s.ToInitialize".formatted(ID)),
         SPAWN_NEST_LIST("%s.Nests".formatted(ID)),
-        IDENTIFIER("%s.Identifier".formatted(ID));
+        IDENTIFIER("%s.ResourceLocation".formatted(ID));
 
         public final String name;
         SyncedData(String name){
@@ -55,7 +55,7 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
     private boolean enabled;
     private boolean toInitialize;
     @Nullable
-    protected Identifier structureManagerIdentifier;
+    protected ResourceLocation structureManagerIdentifier;
     private StructureNestList structureNestList;
     private boolean wellnessChecked;
 
@@ -84,7 +84,7 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
     }
 
     // region [Basic Overrides]
-    public void updateData(Identifier structureManagerId, boolean isActive, boolean toInitialize) {
+    public void updateData(ResourceLocation structureManagerId, boolean isActive, boolean toInitialize) {
         this.structureManagerIdentifier = structureManagerId;
         this.enabled = isActive;
         this.toInitialize = toInitialize;
@@ -92,8 +92,8 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("screen.%s.%s".formatted(MiddleEarth.MOD_ID, ID));
+    public Component getDisplayName() {
+        return Component.translatable("screen.%s.%s".formatted(MiddleEarth.MOD_ID, ID));
     }
 
     @Override
@@ -103,35 +103,35 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, Player player) {
         return new StructureManagerScreenHandler(syncId, playerInventory,
                 new StructureManagerScreenData(this.pos, this.enabled, this.toInitialize, Optional.ofNullable(this.structureManagerIdentifier))
         );
     }
 
-    public static void tickEvent(World world, BlockPos blockPos, BlockState blockState, StructureManagerBlockEntity entity) {
+    public static void tickEvent(Level world, BlockPos blockPos, BlockState blockState, StructureManagerBlockEntity entity) {
         entity.tickEvent(world, blockPos, blockState);
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt) {
+    protected void writeNbt(CompoundTag nbt) {
         super.writeNbt(nbt);
         WriteView view = new WriteView(nbt);
         view.putBoolean(SyncedData.ENABLED.name, this.enabled);
         view.putBoolean(SyncedData.TO_INITIALIZE.name, this.toInitialize);
         if(structureManagerIdentifier != null)
-            view.put(SyncedData.IDENTIFIER.name, Identifier.CODEC, this.structureManagerIdentifier);
+            view.put(SyncedData.IDENTIFIER.name, ResourceLocation.CODEC, this.structureManagerIdentifier);
         if(structureNestList != null)
             view.put(SyncedData.SPAWN_NEST_LIST.name, StructureNestList.CODEC, this.structureNestList);
     }
 
     @Override
-    public void readNbt(NbtCompound nbt) {
+    public void readNbt(CompoundTag nbt) {
         super.readNbt(nbt);
         ReadView view = new ReadView(nbt);
         this.enabled = view.getBoolean(SyncedData.ENABLED.name, false);
         this.toInitialize = view.getBoolean(SyncedData.TO_INITIALIZE.name, false);
-        view.read(SyncedData.IDENTIFIER.name, Identifier.CODEC)
+        view.read(SyncedData.IDENTIFIER.name, ResourceLocation.CODEC)
                 .ifPresent(x -> structureManagerIdentifier = x);
         view.read(SyncedData.SPAWN_NEST_LIST.name, StructureNestList.CODEC)
                 .ifPresent(x -> structureNestList = x);
@@ -140,7 +140,7 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
 
 
     @Override
-    public void setWorld(World world) {
+    public void setWorld(Level world) {
         super.setWorld(world);
         worldWasSet = true;
     }
@@ -150,7 +150,7 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
             return;
         for(SpawnNestManager nest : structureNestList.getManagers()){
             for(UUID uuid : nest.getEntityUuids()){
-                if((world instanceof net.minecraft.server.world.ServerWorld sw ? sw.getEntity(uuid) : null) instanceof LivingEntity livingEntity){
+                if((world instanceof net.minecraft.server.level.ServerLevel sw ? sw.getEntity(uuid) : null) instanceof LivingEntity livingEntity){
                     livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 10*20));
                 }
             }
@@ -163,11 +163,11 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
         if(world == null || world.isClient)
             return;
         for(var nest : structureNestList.getManagers()){
-            nest.forceRespawn(managerData, (ServerWorld) world, pos);
+            nest.forceRespawn(managerData, (ServerLevel) world, pos);
         }
     }
 
-    public boolean subscribeNest(BlockPos nestPos, Identifier managerId, Identifier nestId, int spawnRadius) {
+    public boolean subscribeNest(BlockPos nestPos, ResourceLocation managerId, ResourceLocation nestId, int spawnRadius) {
         if(!enabled || managerId == null || structureManagerIdentifier == null || managerData == null || managerId.compareTo(this.structureManagerIdentifier) != 0)
             return false;
 
@@ -190,7 +190,7 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
         }
     }
 
-    private void tickEvent(World world, BlockPos blockPos, BlockState blockState) {
+    private void tickEvent(Level world, BlockPos blockPos, BlockState blockState) {
         if (world.isClient) return;
         if(!world.isClient && worldWasSet){
             tryToInitializeManager(world);
@@ -205,7 +205,7 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
         if(!enabled)
             return;
 
-        ServerWorld serverWorld = (ServerWorld) world;
+        ServerLevel serverWorld = (ServerLevel) world;
         if(structureNestList == null)
             return;
 
@@ -228,7 +228,7 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
         if (gameTick % 200 == 0) redistributeBeds();
     }
 
-    private void tryToInitializeManager(World world){
+    private void tryToInitializeManager(Level world){
         if(world.isClient)
             return;
         if(!toInitialize || enabled)
@@ -257,7 +257,7 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
         updateListeners();
     }
 
-    public void setStructureManagerId(Identifier identifier) {
+    public void setStructureManagerId(ResourceLocation identifier) {
         this.structureManagerIdentifier = identifier;
         updateListeners();
     }
@@ -269,7 +269,7 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
 
     public void fetchBeds(){
         bedsByNest.clear();
-        if (!(world instanceof ServerWorld) || structureNestList == null || structureManagerIdentifier == null) return;
+        if (!(world instanceof ServerLevel) || structureNestList == null || structureManagerIdentifier == null) return;
         StructureManagerData data = StructureManagerService.getStructureManagerData(world, structureManagerIdentifier);
         if (data == null) return;
         for (SpawnNestManager nest : structureNestList.getManagers()) {
@@ -291,7 +291,7 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
     }
 
     public void redistributeBeds(){
-        if (!(world instanceof ServerWorld serverWorld)) return;
+        if (!(world instanceof ServerLevel serverWorld)) return;
         fetchBeds();
         Set<BlockPos> claimed = new HashSet<>();
         bedsByNest.forEach((nest, beds) -> nest.retainBeds(beds, claimed, serverWorld));
@@ -300,7 +300,7 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
     }
 
     @Override
-    public void writeScreenOpeningData(net.minecraft.server.network.ServerPlayerEntity player, net.minecraft.network.PacketByteBuf buf) {
+    public void writeScreenOpeningData(net.minecraft.server.level.ServerPlayer player, net.minecraft.network.FriendlyByteBuf buf) {
         net.jukoz.me.gui.structuremanager.StructureManagerScreenData.PACKET_CODEC.encode(buf,
                 new net.jukoz.me.gui.structuremanager.StructureManagerScreenData(this.pos, this.enabled, this.toInitialize, java.util.Optional.ofNullable(this.structureManagerIdentifier)));
     }

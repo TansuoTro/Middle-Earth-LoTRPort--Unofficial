@@ -1,28 +1,28 @@
 package net.jukoz.me.block.special.bellows;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.phys.Vec3;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.entity.EntityModelLayersME;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ChestBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.block.entity.BlockEntityRenderer;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererFactory;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.SpriteIdentifier;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Direction;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Direction;
 import net.minecraft.util.math.RotationAxis;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class BellowsBlockEntityRenderer implements BlockEntityRenderer<BellowsBlockEntity>  {
     private final float BELLOW_MAX_ANGLE = 0.72f;
     private final ModelPart bottom;
@@ -63,8 +63,8 @@ public class BellowsBlockEntityRenderer implements BlockEntityRenderer<BellowsBl
     }
 
     @Override
-    public void render(BellowsBlockEntity entity, float tickProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        World world = entity.getWorld();
+    public void render(BellowsBlockEntity entity, float tickProgress, PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+        Level world = entity.getWorld();
         BlockState blockState = world != null
                 ? entity.getCachedState()
                 : ModDecorativeBlocks.BELLOWS.getDefaultState().with(BellowsBlock.FACING, Direction.SOUTH);
@@ -98,6 +98,6 @@ public class BellowsBlockEntityRenderer implements BlockEntityRenderer<BellowsBl
     private SpriteIdentifier getSpriteIdentifier(float animationProgress){
         int spriteState = (int) Math.max(0, Math.min(2, animationProgress * 7.5f));
         return new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE,
-                new Identifier(MiddleEarth.MOD_ID, "model/bellows/bellows_" + spriteState));
+                new ResourceLocation(MiddleEarth.MOD_ID, "model/bellows/bellows_" + spriteState));
     }
 }

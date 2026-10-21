@@ -2,11 +2,11 @@ package net.jukoz.me.resources.datas.biome_events.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,20 +20,20 @@ public class BroadcastData {
 
     public static final Codec<BroadcastData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.INT.optionalFieldOf(BroadcastData.Fields.DISTANCE).forGetter(BroadcastData::getBroadcastMessageDistance),
-            Identifier.CODEC.optionalFieldOf(BroadcastData.Fields.LANG_KEY).forGetter(BroadcastData::getBroadcastMessageLangKey)
+            ResourceLocation.CODEC.optionalFieldOf(BroadcastData.Fields.LANG_KEY).forGetter(BroadcastData::getBroadcastMessageLangKey)
     ).apply(instance, BroadcastData::new));
 
     private Integer broadcastDistance = null;
-    private Identifier broadcastLangKey = null;
+    private ResourceLocation broadcastLangKey = null;
 
     private BroadcastData(
             Optional<Integer> broadcastDistance,
-            Optional<Identifier> broadcastLangKey) {
+            Optional<ResourceLocation> broadcastLangKey) {
         this.broadcastDistance = broadcastDistance.orElse(null);
         this.broadcastLangKey = broadcastLangKey.orElse(null);
     }
 
-    public BroadcastData(Integer broadcastDistance, Identifier broadcastLangKey) {
+    public BroadcastData(Integer broadcastDistance, ResourceLocation broadcastLangKey) {
         this.broadcastDistance = broadcastDistance;
         this.broadcastLangKey = broadcastLangKey;
     }
@@ -48,26 +48,26 @@ public class BroadcastData {
     }
 
 
-    private Optional<Identifier> getBroadcastMessageLangKey() {
+    private Optional<ResourceLocation> getBroadcastMessageLangKey() {
         return Optional.ofNullable(broadcastLangKey);
     }
 
-    public BroadcastData withBroadcastMessageLangKey(Identifier langKey) {
+    public BroadcastData withBroadcastMessageLangKey(ResourceLocation langKey) {
         this.broadcastLangKey = langKey;
         return this;
     }
 
-    public void broadcastMessage(ServerWorld world, BlockPos pos){
+    public void broadcastMessage(ServerLevel world, BlockPos pos){
         if(broadcastLangKey == null)
             return;
         int distanceToBroadcast =  getBroadcastMessageDistance().orElse(200);
-        List<ServerPlayerEntity> playerNearby = new ArrayList<>();
-        for(ServerPlayerEntity player : world.getPlayers()) {
+        List<ServerPlayer> playerNearby = new ArrayList<>();
+        for(ServerPlayer player : world.getPlayers()) {
             if(pos.isWithinDistance(player.getPos(), distanceToBroadcast))
                 playerNearby.add(player);
         }
-        for(ServerPlayerEntity player : playerNearby){
-            player.sendMessage(Text.translatable(broadcastLangKey.toTranslationKey("biome_event")) ,true);
+        for(ServerPlayer player : playerNearby){
+            player.sendMessage(Component.translatable(broadcastLangKey.toTranslationKey("biome_event")) ,true);
         }
     }
 }

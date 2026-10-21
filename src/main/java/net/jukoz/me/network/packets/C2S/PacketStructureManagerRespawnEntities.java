@@ -1,17 +1,17 @@
 package net.jukoz.me.network.packets.C2S;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.structureManager.StructureManagerBlockEntity;
 import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
 
 public class PacketStructureManagerRespawnEntities extends ClientToServerPacket<PacketStructureManagerRespawnEntities> {
-    public static final Identifier ID = new Identifier(MiddleEarth.MOD_ID, "structure_manager_respawn_entities");
+    public static final ResourceLocation ID = new ResourceLocation(MiddleEarth.MOD_ID, "structure_manager_respawn_entities");
 
     public static final PacketType<PacketStructureManagerRespawnEntities> TYPE = PacketType.create(ID, PacketStructureManagerRespawnEntities::new);
 
@@ -23,7 +23,7 @@ public class PacketStructureManagerRespawnEntities extends ClientToServerPacket<
 
 
 
-    public PacketStructureManagerRespawnEntities(PacketByteBuf buf) {
+    public PacketStructureManagerRespawnEntities(FriendlyByteBuf buf) {
         this(buf.readBlockPos());
     }
 
@@ -33,7 +33,7 @@ public class PacketStructureManagerRespawnEntities extends ClientToServerPacket<
     }
 
     @Override
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
         buf.writeBlockPos(this.pos);
     }
 

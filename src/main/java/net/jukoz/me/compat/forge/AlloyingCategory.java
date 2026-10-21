@@ -9,10 +9,10 @@ import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.util.EntryStacks;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.compat.REICommonPluginME;
@@ -21,9 +21,9 @@ import net.jukoz.me.gui.forge.ForgeAlloyingScreen;
 import java.util.LinkedList;
 import java.util.List;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class AlloyingCategory implements DisplayCategory<AlloyingDisplay> {
-    public static final Identifier TEXTURE = MiddleEarth.of('/', "textures", "gui", "forge_rei.png");
+    public static final ResourceLocation TEXTURE = MiddleEarth.of('/', "textures", "gui", "forge_rei.png");
 
     @Override
     public CategoryIdentifier<? extends AlloyingDisplay> getCategoryIdentifier() {
@@ -31,8 +31,8 @@ public class AlloyingCategory implements DisplayCategory<AlloyingDisplay> {
     }
 
     @Override
-    public Text getTitle() {
-        return Text.translatable("screen." + MiddleEarth.MOD_ID + ".forge");
+    public Component getTitle() {
+        return Component.translatable("screen." + MiddleEarth.MOD_ID + ".forge");
     }
 
     @Override
@@ -63,7 +63,7 @@ public class AlloyingCategory implements DisplayCategory<AlloyingDisplay> {
         widgets.add(Widgets.createTexturedWidget(TEXTURE,startPoint.x + 106, startPoint.y + 75 - storedLiquid, 211, 76 - storedLiquid, 20, storedLiquid));
 
         widgets.add(Widgets.createLabel(new Point(startPoint.x + 77, startPoint.y + 5),
-                Text.translatable("trim_material." + MiddleEarth.MOD_ID + "." + display.output)));
+                Component.translatable("trim_material." + MiddleEarth.MOD_ID + "." + display.output)));
 
         return widgets;
     }

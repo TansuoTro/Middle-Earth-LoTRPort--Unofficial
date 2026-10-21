@@ -1,18 +1,18 @@
 package net.jukoz.me.block.special.fire_of_orthanc;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.entity.*;
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.nbt.CompoundTag;
 import net.jukoz.me.compat.nbt.ReadView;
 import net.jukoz.me.compat.nbt.WriteView;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.entity.EntitiesME;
 import org.jetbrains.annotations.Nullable;
@@ -27,11 +27,11 @@ public class FireOfOrthancEntity extends Entity implements Ownable {
     @Nullable
     private LivingEntity causingEntity;
 
-    public FireOfOrthancEntity(EntityType<?> type, World world) {
+    public FireOfOrthancEntity(EntityType<?> type, Level world) {
         super(type, world);
     }
 
-    public FireOfOrthancEntity(World world, double x, double y, double z, @Nullable LivingEntity igniter, boolean instant) {
+    public FireOfOrthancEntity(Level world, double x, double y, double z, @Nullable LivingEntity igniter, boolean instant) {
         this(EntitiesME.FIRE_OF_ORTHANC, world);
         this.setPosition(x, y, z);
         double d = world.random.nextDouble() * 6.2831854820251465;
@@ -56,15 +56,15 @@ public class FireOfOrthancEntity extends Entity implements Ownable {
     }
 
     public void explode() {
-        this.getWorld().createExplosion(this, this.getX(), this.getBodyY(0.0625), this.getZ(), EXPLOSION_FORCE, World.ExplosionSourceType.TNT);
+        this.getWorld().createExplosion(this, this.getX(), this.getBodyY(0.0625), this.getZ(), EXPLOSION_FORCE, Level.ExplosionSourceType.TNT);
         tryKillOwner();
     }
 
     private void tryKillOwner() {
         Entity owner = this.getOwner();
-        World world = this.getWorld();
-        if(owner instanceof LivingEntity ownerEntity && world instanceof ServerWorld serverWorld) {
-            if(ownerEntity instanceof PlayerEntity playerEntity){
+        Level world = this.getWorld();
+        if(owner instanceof LivingEntity ownerEntity && world instanceof ServerLevel serverWorld) {
+            if(ownerEntity instanceof Player playerEntity){
                 if(!playerEntity.isCreative()){
                     playerEntity.kill();
                 }
@@ -75,7 +75,7 @@ public class FireOfOrthancEntity extends Entity implements Ownable {
     }
 
     @Override
-    protected void readCustomDataFromNbt(NbtCompound nbt) {
+    protected void readCustomDataFromNbt(CompoundTag nbt) {
         ReadView view = new ReadView(nbt);
         this.setFuse(view.getShort("fuse", (short) 0));
         this.setBlockState((BlockState)view.read("block_state", BlockState.CODEC).orElse(DEFAULT_BLOCK_STATE));
@@ -83,7 +83,7 @@ public class FireOfOrthancEntity extends Entity implements Ownable {
     }
 
     @Override
-    protected void writeCustomDataToNbt(NbtCompound nbt) {
+    protected void writeCustomDataToNbt(CompoundTag nbt) {
         WriteView view = new WriteView(nbt);
         view.putShort("fuse", (short)this.getFuse());
         view.put("block_state", BlockState.CODEC, this.getBlockState());

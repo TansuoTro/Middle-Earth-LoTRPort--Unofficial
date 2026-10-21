@@ -1,6 +1,6 @@
 package net.jukoz.me.client.renderer;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public interface ArmedEntityRenderStateAccess {
     ItemStack getMainHandStack();

@@ -8,12 +8,12 @@ import net.jukoz.me.item.items.CustomSpawnEggItem;
 import net.jukoz.me.item.utils.ModItemGroups;
 import net.jukoz.me.item.utils.ModVerticallyAttachableBlockItem;
 import net.jukoz.me.utils.LoggerUtil;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Direction;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Direction;
 
 public class ModDecorativeItems {
     public static final Item DWARVEN_LANTERN = DecorativeItemsME.DWARVEN_LANTERN;
@@ -26,7 +26,7 @@ public class ModDecorativeItems {
 
     private static Item registerItem(String name, Item item) {
         ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(item.getDefaultStack());
-        return Registry.register(Registries.ITEM, new Identifier(MiddleEarth.MOD_ID, name), item);
+        return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);
     }
 
     public static void registerModItems() {

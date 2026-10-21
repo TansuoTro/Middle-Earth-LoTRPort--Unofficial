@@ -5,24 +5,24 @@ import net.jukoz.me.item.dataComponents.HelmetAttachmentDataComponent;
 import net.jukoz.me.item.items.armor.CustomHelmetItem;
 import net.jukoz.me.item.items.armor.HelmetAttachmentItem;
 import net.jukoz.me.item.utils.armor.helmetAttachments.HelmetAttachmentsStatesME;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.world.World;
+import net.minecraft.core.RegistryWrapper;
+import net.minecraft.world.level.Level;
 
 
 public class HelmetAttachmentRecipe extends SpecialCraftingRecipe {
-    public HelmetAttachmentRecipe(Identifier id, CraftingRecipeCategory category) {
+    public HelmetAttachmentRecipe(ResourceLocation id, CraftingRecipeCategory category) {
         super(id, category);
     }
 
     @Override
-    public boolean matches(RecipeInputInventory input, World world) {
+    public boolean matches(RecipeInputInventory input, Level world) {
         ItemStack itemStackHelmet = ItemStack.EMPTY;
         ItemStack itemStackHood = ItemStack.EMPTY;
 

@@ -4,7 +4,7 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.WoodBlockSets;
 import net.jukoz.me.block.utils.setBuilders.WoodBlockSetBuilder;
 import net.jukoz.me.utils.LoggerUtil;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 
 public class MushroomBlockSets {
     public static final float MUSHROOM_STRENGTH = 2f;

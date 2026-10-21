@@ -4,31 +4,31 @@ import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.jukoz.me.compat.client.render.MEBipedEntityRenderer;
 
 import net.jukoz.me.item.MEComponents;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.entity.BipedEntityRenderer;
-import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
 import net.minecraft.client.render.entity.feature.ElytraFeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.HeadFeatureRenderer;
 import net.minecraft.client.render.entity.model.ArmorEntityModel;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.render.entity.model.EntityModelLayers;
+import net.minecraft.client.model.EntityModelLayers;
 import net.minecraft.client.texture.SpriteAtlasTexture;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.EntityPose;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.entity.EntityPose;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.util.UseAction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.Vec3;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.client.ModTexturedRenderLayers;
 import net.jukoz.me.client.RenderUtil;
@@ -79,7 +79,7 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
         return new NpcEntityRenderState();
     }
 
-    public static float getLOD(Vec3d entityPos) {
+    public static float getLOD(Vec3 entityPos) {
         MinecraftClient client = MinecraftClient.getInstance();
         Camera camera = client.gameRenderer.getCamera();
         return (float)camera.getPos().distanceTo(entityPos);
@@ -90,7 +90,7 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
     }
 
     @Override
-    @Environment(EnvType.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void updateRenderState(NpcEntity npcEntity, NpcEntityRenderState npcEntityRenderState, float tickDelta) {
         if(!npcEntity.getWorld().isClient)
             return;
@@ -103,8 +103,8 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
 
         npcEntityRenderState.pose = npcEntity.getPose();
 
-        npcEntityRenderState.leftArmPose = getArmPose(npcEntity, npcEntity.getStackInHand(Hand.OFF_HAND), Hand.OFF_HAND);
-        npcEntityRenderState.rightArmPose = getArmPose(npcEntity, npcEntity.getStackInHand(Hand.MAIN_HAND), Hand.MAIN_HAND);
+        npcEntityRenderState.leftArmPose = getArmPose(npcEntity, npcEntity.getStackInHand(InteractionHand.OFF_HAND), InteractionHand.OFF_HAND);
+        npcEntityRenderState.rightArmPose = getArmPose(npcEntity, npcEntity.getStackInHand(InteractionHand.MAIN_HAND), InteractionHand.MAIN_HAND);
 
         npcEntityRenderState.widthScale = npcEntity.getWidthScale();
 
@@ -159,7 +159,7 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
     // region [Layered Texture Renderer]
     @Nullable
     protected RenderLayer getRenderLayer(NpcEntityRenderState state, boolean showBody, boolean translucent, boolean showOutline) {
-        Identifier identifier = this.getTexture(state);
+        ResourceLocation identifier = this.getTexture(state);
         if (translucent) {
             return RenderLayer.getEntityTranslucent(identifier);
         } else if (showBody) {
@@ -170,7 +170,7 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
     }
 
     @Override
-    public void render(NpcEntityRenderState state, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+    public void render(NpcEntityRenderState state, PoseStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         boolean simplified = ModClientConfigs.ENABLE_SIMPLIFIED_CHARACTER_RENDERING && state.simplifiedSkinId != null;
 
         if(!simplified && (state.skinId == null || state.headId == null || state.eyesId == null))
@@ -236,7 +236,7 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
         }
     }
 
-    private void renderComplexVersion(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, NpcEntityRenderState state) {
+    private void renderComplexVersion(PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, NpcEntityRenderState state) {
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(ModTexturedRenderLayers.getCharacterTexturesRenderLayer());
 
         // Will always be shown
@@ -280,17 +280,17 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
         }
     }
 
-    private void renderTexture(MatrixStack matrices, VertexConsumer vertexConsumer, Identifier textureId, int light, int overlay, boolean isEmissive){
+    private void renderTexture(PoseStack matrices, VertexConsumer vertexConsumer, ResourceLocation textureId, int light, int overlay, boolean isEmissive){
         RenderUtil.renderAtlasTexture(characterTextureAtlas, model, matrices, vertexConsumer, textureId, light, overlay);
     }
 
     @Override
-    public Identifier getTexture(NpcEntityRenderState state) {
+    public ResourceLocation getTexture(NpcEntityRenderState state) {
         // Made custom in the render method
         return null;
     }
 
-    private BipedEntityModel.ArmPose getArmPose(NpcEntity npc, ItemStack stack, Hand hand) {
+    private BipedEntityModel.ArmPose getArmPose(NpcEntity npc, ItemStack stack, InteractionHand hand) {
         if(npc.isAiming()){
             return BipedEntityModel.ArmPose.BOW_AND_ARROW;
         }

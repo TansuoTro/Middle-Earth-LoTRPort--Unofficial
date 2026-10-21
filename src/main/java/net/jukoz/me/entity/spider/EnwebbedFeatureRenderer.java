@@ -1,20 +1,20 @@
 package net.jukoz.me.entity.spider;
 
 import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.jukoz.me.compat.client.render.equipment.EquipmentRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.client.model.EntityModel;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.EntityModelLayersME;
 import net.jukoz.me.statusEffects.ModStatusEffects;
@@ -23,9 +23,9 @@ import net.jukoz.me.statusEffects.ModStatusEffects;
  * R3: rewritten as a plain 1.20.1 entity-typed feature renderer (the donor version
  * was state-typed and only worked through the deleted 1.21.8 state mixins).
  */
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class EnwebbedFeatureRenderer<T extends LivingEntity, M extends EntityModel<T>> extends FeatureRenderer<T, M> {
-    private static final Identifier TEXTURE = new Identifier(MiddleEarth.MOD_ID, "textures/entities/spiders/enwebbed.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(MiddleEarth.MOD_ID, "textures/entities/spiders/enwebbed.png");
 
     private final EnwebbedModel model;
 
@@ -35,7 +35,7 @@ public class EnwebbedFeatureRenderer<T extends LivingEntity, M extends EntityMod
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, T entity,
+    public void render(PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, T entity,
                        float limbAngle, float limbDistance, float tickDelta, float animationProgress,
                        float headYaw, float headPitch) {
         StatusEffectInstance effect = entity.getStatusEffect(ModStatusEffects.RESTRAINED);

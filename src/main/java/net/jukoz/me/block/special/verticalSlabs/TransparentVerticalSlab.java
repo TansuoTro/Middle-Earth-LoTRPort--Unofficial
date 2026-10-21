@@ -1,14 +1,14 @@
 package net.jukoz.me.block.special.verticalSlabs;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ShapeContext;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.block.TransparentBlock;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.level.BlockGetter;
 
 public class TransparentVerticalSlab extends VerticalSlabBlock{
 
@@ -25,11 +25,11 @@ public class TransparentVerticalSlab extends VerticalSlabBlock{
         return stateFrom.isOf(this) ? true : super.isSideInvisible(state, stateFrom, direction);
     }
 
-    public VoxelShape getCameraCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getCameraCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return VoxelShapes.empty();
     }
 
-    public float getAmbientOcclusionLightLevel(BlockState state, BlockView world, BlockPos pos) {
+    public float getAmbientOcclusionLightLevel(BlockState state, BlockGetter world, BlockPos pos) {
         return 1.0F;
     }
 }

@@ -1,22 +1,22 @@
 package net.jukoz.me.block.special.dirts;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.block.FarmlandBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
@@ -31,24 +31,24 @@ public class CustomFarmlandBlock extends FarmlandBlock {
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
+    public BlockState getPlacementState(BlockPlaceContext ctx) {
         return !this.getDefaultState().canPlaceAt(ctx.getWorld(), ctx.getBlockPos()) ? target.getDefaultState() : super.getPlacementState(ctx);
     }
 
-    public static void setToDirt(@Nullable Entity entity, BlockState state, World world, BlockPos pos, Block target) {
+    public static void setToDirt(@Nullable Entity entity, BlockState state, Level world, BlockPos pos, Block target) {
         BlockState blockState = pushEntitiesUpBeforeBlockChange(state, target.getDefaultState(), world, pos);
         world.setBlockState(pos, blockState);
         world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(entity, blockState));
     }
 
-    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void scheduledTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         if (!state.canPlaceAt(world, pos)) {
             setToDirt((Entity)null, state, world, pos, target);
         }
 
     }
 
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         int i = (Integer)state.get(MOISTURE);
         if (!isWaterNearby(world, pos) && !world.hasRain(pos.up())) {
             if (i > 0) {
@@ -62,16 +62,16 @@ public class CustomFarmlandBlock extends FarmlandBlock {
 
     }
 
-    public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
-        if (world instanceof ServerWorld serverWorld) {
-            if ((double)world.random.nextFloat() < fallDistance - 0.5 && entity instanceof LivingEntity && (entity instanceof PlayerEntity || serverWorld.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING)) && entity.getWidth() * entity.getWidth() * entity.getHeight() > 0.512F) {
+    public void onLandedUpon(Level world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
+        if (world instanceof ServerLevel serverWorld) {
+            if ((double)world.random.nextFloat() < fallDistance - 0.5 && entity instanceof LivingEntity && (entity instanceof Player || serverWorld.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING)) && entity.getWidth() * entity.getWidth() * entity.getHeight() > 0.512F) {
                 setToDirt((Entity)null, state, world, pos, target);
             }
         }
         entity.handleFallDamage(fallDistance, 1.0F, entity.getDamageSources().fall());
     }
 
-    private static boolean hasCrop(BlockView world, BlockPos pos) {
+    private static boolean hasCrop(BlockGetter world, BlockPos pos) {
         return world.getBlockState(pos.up()).isIn(BlockTags.MAINTAINS_FARMLAND);
     }
 

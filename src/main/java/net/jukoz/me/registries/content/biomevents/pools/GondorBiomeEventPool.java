@@ -1,6 +1,6 @@
 package net.jukoz.me.registries.content.biomevents.pools;
 
-import net.minecraft.entity.EntityType;
+import net.minecraft.world.entity.EntityType;
 import net.jukoz.me.registries.content.npctypes.NpcRegistry;
 import net.jukoz.me.resources.datas.biome_events.BiomeEventData;
 import net.jukoz.me.resources.datas.biome_events.data.WildSpawnEventData;

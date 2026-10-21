@@ -1,17 +1,17 @@
 package net.jukoz.me.network.packets.C2S;
 
 import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.artisantable.ArtisanTableScreenHandler;
 import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.ResourceLocation;
 
 public class ArtisanTableTabPacket extends ClientToServerPacket<ArtisanTableTabPacket> {
-    public static final Identifier ID = MiddleEarth.of("artisan_table_tab_packet");
+    public static final ResourceLocation ID = MiddleEarth.of("artisan_table_tab_packet");
     public static final PacketType<ArtisanTableTabPacket> TYPE = PacketType.create(ID, ArtisanTableTabPacket::new);
 
     public String getShapeId() {
@@ -32,7 +32,7 @@ public class ArtisanTableTabPacket extends ClientToServerPacket<ArtisanTableTabP
 
 
 
-    public ArtisanTableTabPacket(PacketByteBuf buf) {
+    public ArtisanTableTabPacket(FriendlyByteBuf buf) {
         this(buf.readString(), buf.readInt());
     }
 
@@ -42,7 +42,7 @@ public class ArtisanTableTabPacket extends ClientToServerPacket<ArtisanTableTabP
     }
 
     @Override
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
         buf.writeString(this.shapeId);
         buf.writeInt(this.syncId);
     }
@@ -51,7 +51,7 @@ public class ArtisanTableTabPacket extends ClientToServerPacket<ArtisanTableTabP
     public void process(ServerPacketContext context) {
         try{
             context.player().getServer().execute(() -> {
-                ServerPlayerEntity player = context.player();
+                ServerPlayer player = context.player();
                 ScreenHandler screenHandler = player.currentScreenHandler;
                 if (screenHandler.syncId == this.syncId && screenHandler instanceof ArtisanTableScreenHandler artisanTableScreenHandler) {
                     artisanTableScreenHandler.changeTab(shapeId);

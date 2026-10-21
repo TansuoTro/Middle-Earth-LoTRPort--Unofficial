@@ -2,9 +2,9 @@ package net.jukoz.me.entity.spider;
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.model.EntityModel;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.util.Mth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -170,13 +170,13 @@ public class MirkwoodSpiderModel extends EntityModel<MirkwoodSpiderEntity> {
 
     @Override
     public void setAngles(MirkwoodSpiderEntity entity, float limbAngle, float limbDistance, float ageInTicks, float headYaw, float headPitch) {
-        float cosVal = (MathHelper.cos(limbAngle * 1.4F) * 0.3F) * limbDistance;
-        float cosTime = MathHelper.cos(ageInTicks * 0.15F) * 0.6F;
+        float cosVal = (Mth.cos(limbAngle * 1.4F) * 0.3F) * limbDistance;
+        float cosTime = Mth.cos(ageInTicks * 0.15F) * 0.6F;
 
         float percentage = (float) entity.getClimbingTicks() / MirkwoodSpiderEntity.CLIMBING_TIME_TRANSITION;
 
         if(percentage > 0) {
-            cosVal = MathHelper.cos(ageInTicks * 0.3F) * 0.6F;
+            cosVal = Mth.cos(ageInTicks * 0.3F) * 0.6F;
 
         }
 
@@ -228,7 +228,7 @@ public class MirkwoodSpiderModel extends EntityModel<MirkwoodSpiderEntity> {
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void render(PoseStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
         this.body.render(matrices, vertices, light, overlay, red, green, blue, alpha);
     }
 }

@@ -10,13 +10,13 @@ import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.datageneration.content.models.HotMetalsModel;
 import net.jukoz.me.datageneration.content.models.SimpleDyeableItemModel;
 import net.jukoz.me.utils.ItemTagsME;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.RegistryWrapper;
+import net.minecraft.tags.TagKey;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -29,33 +29,33 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
     @Override
     protected void configure(RegistryWrapper.WrapperLookup arg) {
         populatePortedTags();
-        var bones = getOrCreateTagBuilder(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "bones")));
-        var feathers = getOrCreateTagBuilder(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "feathers")));
-        var cloaks = getOrCreateTagBuilder(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "cloaks")));
+        var bones = getOrCreateTagBuilder(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "bones")));
+        var feathers = getOrCreateTagBuilder(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "feathers")));
+        var cloaks = getOrCreateTagBuilder(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "cloaks")));
 
-        TagKey<Item> iron_ores = TagKey.of(RegistryKeys.ITEM, new Identifier("minecraft", "iron_ores"));
-        TagKey<Item> gold_ores = TagKey.of(RegistryKeys.ITEM, new Identifier("minecraft", "gold_ores"));
-        TagKey<Item> copper_ores = TagKey.of(RegistryKeys.ITEM, new Identifier("minecraft", "copper_ores"));
-        TagKey<Item> coal_ores = TagKey.of(RegistryKeys.ITEM, new Identifier("minecraft", "coal_ores"));
+        TagKey<Item> iron_ores = TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "iron_ores"));
+        TagKey<Item> gold_ores = TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "gold_ores"));
+        TagKey<Item> copper_ores = TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "copper_ores"));
+        TagKey<Item> coal_ores = TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "coal_ores"));
 
-        TagKey<Item> saplings = TagKey.of(RegistryKeys.ITEM, new Identifier("minecraft", "saplings"));
-        TagKey<Item> wooden_slabs = TagKey.of(RegistryKeys.ITEM, new Identifier("minecraft", "wooden_slabs"));
-        TagKey<Item> logs_that_burn = TagKey.of(RegistryKeys.ITEM, new Identifier("minecraft", "logs_that_burn"));
-        TagKey<Item> stone_crafting_materials = TagKey.of(RegistryKeys.ITEM, new Identifier("minecraft", "stone_crafting_materials"));
-        TagKey<Item> stone_tool_materials = TagKey.of(RegistryKeys.ITEM, new Identifier("minecraft", "stone_tool_materials"));
+        TagKey<Item> saplings = TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "saplings"));
+        TagKey<Item> wooden_slabs = TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "wooden_slabs"));
+        TagKey<Item> logs_that_burn = TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "logs_that_burn"));
+        TagKey<Item> stone_crafting_materials = TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "stone_crafting_materials"));
+        TagKey<Item> stone_tool_materials = TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "stone_tool_materials"));
 
-        TagKey<Item> tin_ores = TagKey.of(RegistryKeys.ITEM, new Identifier("me", "tin_ores"));
-        TagKey<Item> lead_ores = TagKey.of(RegistryKeys.ITEM, new Identifier("me", "lead_ores"));
-        TagKey<Item> silver_ores = TagKey.of(RegistryKeys.ITEM, new Identifier("me", "silver_ores"));
-        TagKey<Item> mithril_ores = TagKey.of(RegistryKeys.ITEM, new Identifier("me", "mithril_ores"));
-        TagKey<Item> shingles = TagKey.of(RegistryKeys.ITEM, new Identifier("me", "shingles"));
+        TagKey<Item> tin_ores = TagKey.of(Registries.ITEM, new ResourceLocation("me", "tin_ores"));
+        TagKey<Item> lead_ores = TagKey.of(Registries.ITEM, new ResourceLocation("me", "lead_ores"));
+        TagKey<Item> silver_ores = TagKey.of(Registries.ITEM, new ResourceLocation("me", "silver_ores"));
+        TagKey<Item> mithril_ores = TagKey.of(Registries.ITEM, new ResourceLocation("me", "mithril_ores"));
+        TagKey<Item> shingles = TagKey.of(Registries.ITEM, new ResourceLocation("me", "shingles"));
 
-        TagKey<Item> mod_stripped_logs = TagKey.of(RegistryKeys.ITEM, new Identifier("me", "mod_stripped_logs"));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.ITEM, new Identifier("me", "mod_planks"))).add(notNullItems(Planks.getItemPlanks()));
+        TagKey<Item> mod_stripped_logs = TagKey.of(Registries.ITEM, new ResourceLocation("me", "mod_stripped_logs"));
+        getOrCreateTagBuilder(TagKey.of(Registries.ITEM, new ResourceLocation("me", "mod_planks"))).add(notNullItems(Planks.getItemPlanks()));
 
 
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.ITEM, new Identifier("minecraft", "planks"))).add(notNullItems(Planks.getItemPlanks()));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.ITEM, new Identifier("minecraft", "logs"))).add(notNullItems(Logs.getItemLogs()));
+        getOrCreateTagBuilder(TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "planks"))).add(notNullItems(Planks.getItemPlanks()));
+        getOrCreateTagBuilder(TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "logs"))).add(notNullItems(Logs.getItemLogs()));
 
 
         bones.add(Items.BONE);
@@ -313,7 +313,7 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
     }
 
     private void addToTag(String id, Item... items) {
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.ITEM, new Identifier(id))).add(items);
+        getOrCreateTagBuilder(TagKey.of(Registries.ITEM, new ResourceLocation(id))).add(items);
     }
 
     private static Item[] notNullItems(java.util.List<Item> values) {

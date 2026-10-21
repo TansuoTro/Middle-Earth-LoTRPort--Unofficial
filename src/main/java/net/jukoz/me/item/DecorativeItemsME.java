@@ -16,14 +16,14 @@ import net.jukoz.me.item.items.WateringCanItem;
 import net.jukoz.me.item.items.weapons.utils.ArtefactUtils;
 import net.jukoz.me.item.utils.ModItemGroups;
 import net.jukoz.me.item.items.VerticallyAttachableBlockItemME;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.item.VerticallyAttachableBlockItem;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Rarity;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.core.Direction;
 import net.jukoz.me.registries.RegistryAliasesME;
 
 import java.util.function.Function;
@@ -245,7 +245,7 @@ public class DecorativeItemsME {
         ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(item.getDefaultStack());
         TranslationEntries.itemEntries.add(item);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ITEM, name));
-        return Registry.register(Registries.ITEM, new Identifier(MiddleEarth.MOD_ID, name), item);
+        return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);
     }
 
     public static void registerModItems() {

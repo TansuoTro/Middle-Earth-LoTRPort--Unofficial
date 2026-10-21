@@ -1,18 +1,18 @@
 package net.jukoz.me.mixin;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.WorldView;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.LevelView;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.entity.EntitiesME;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.FallingBlockEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.explosion.Explosion;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Explosion;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -32,7 +32,7 @@ public abstract class BlockMixin {
 
 
     @Inject(at = @At("HEAD"), method = "onDestroyedByExplosion")
-    private void onDestroyedByExplosion(ServerWorld world, BlockPos pos, Explosion explosion, CallbackInfo ci) {
+    private void onDestroyedByExplosion(ServerLevel world, BlockPos pos, Explosion explosion, CallbackInfo ci) {
         //TODO fix this
         //if(!explosion.shouldDestroy()) return;
         Block block = this.asBlock();
@@ -41,14 +41,14 @@ public abstract class BlockMixin {
             if(block != Blocks.TNT && block != ModDecorativeBlocks.FIRE_OF_ORTHANC) {
                 if(Math.random() < RANDOM_FLYING_BLOCK) {
                     ExplosionAccessMixin access = (ExplosionAccessMixin) (Object) explosion;
-                    net.minecraft.util.math.Vec3d explosionPos = new net.minecraft.util.math.Vec3d(access.me$getX(), access.me$getY(), access.me$getZ());
+                    net.minecraft.world.phys.Vec3 explosionPos = new net.minecraft.world.phys.Vec3(access.me$getX(), access.me$getY(), access.me$getZ());
                     float distance = (float) pos.getSquaredDistance(explosionPos);
                     if(distance < access.me$getPower() / DISCARD_DISTANCE) return;
 
                     FallingBlockEntity fallingBlockEntity = FallingBlockEntity.spawnFromBlock(world, pos, block.getDefaultState());
                     fallingBlockEntity.dropItem = false;
                     fallingBlockEntity.setDestroyedOnLanding();
-                    Vec3d velocity = pos.toCenterPos().subtract(explosionPos).normalize();
+                    Vec3 velocity = pos.toCenterPos().subtract(explosionPos).normalize();
                     float factor = FORCE / distance;
                     velocity.multiply(factor);
                     velocity.add(0, VERTICAL_MULTIPLIER * factor, 0);

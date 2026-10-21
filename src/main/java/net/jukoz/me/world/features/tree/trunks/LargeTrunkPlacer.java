@@ -4,15 +4,15 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.jukoz.me.world.gen.ModTreeGeneration;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.TestableWorld;
-import net.minecraft.world.gen.feature.TreeFeatureConfig;
-import net.minecraft.world.gen.foliage.FoliagePlacer;
-import net.minecraft.world.gen.trunk.TrunkPlacer;
-import net.minecraft.world.gen.trunk.TrunkPlacerType;
+import net.minecraft.world.level.levelgen.feature.TreeFeatureConfig;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +64,7 @@ public class LargeTrunkPlacer extends TrunkPlacer {
     }
 
     @Override
-    public List<FoliagePlacer.TreeNode> generate(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, Random random,
+    public List<FoliagePlacer.TreeNode> generate(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random,
                                                  int height, BlockPos startPos, TreeFeatureConfig config) {
         BlockPos blockPos = startPos.down();
         setToDirt(world, replacer, random, blockPos, config);
@@ -79,20 +79,20 @@ public class LargeTrunkPlacer extends TrunkPlacer {
         return ImmutableList.copyOf(treeNodes);
     }
 
-    private List<FoliagePlacer.TreeNode> createBranches(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, Random random, BlockPos.Mutable mutable,
+    private List<FoliagePlacer.TreeNode> createBranches(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable mutable,
                                                         TreeFeatureConfig config, BlockPos startPos, int height, float radiusA, float radiusB) {
         List<FoliagePlacer.TreeNode> treeNodes = new ArrayList<>();
         float heightProgress = 0;
         List<BlockPos> currentTopBranches = List.of(startPos);
         for (int i = 0; i < iterations; i++) { // iterations (splitting branches)
             int currentHeight = (int) (height * heightProgress);
-            float currentRadiusA = MathHelper.lerp(heightProgress, radiusA, radiusB);
+            float currentRadiusA = Mth.lerp(heightProgress, radiusA, radiusB);
 
             float step = (float)(i + 1) / iterations;
             heightProgress = (float) Math.pow(step, iterationPercentage);
 
             currentHeight = (int) (height * heightProgress) - currentHeight;
-            float currentRadiusB = MathHelper.lerp(1 - heightProgress, radiusB, radiusA);
+            float currentRadiusB = Mth.lerp(1 - heightProgress, radiusB, radiusA);
 
             List<BlockPos> newTopBranches = new ArrayList<>();
             for (BlockPos currentTopBranch : currentTopBranches) {
@@ -121,7 +121,7 @@ public class LargeTrunkPlacer extends TrunkPlacer {
         return treeNodes;
     }
 
-    protected void createRoots(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, Random random, BlockPos.Mutable mutable,
+    protected void createRoots(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable mutable,
                              TreeFeatureConfig config, BlockPos startPos, int height, float radiusA, float radiusB) {
         int rootsNb = 4 + (int)(Math.random() * 3);
         startPos = startPos.add(0, (int) (height * 0.6f), 0);
@@ -133,7 +133,7 @@ public class LargeTrunkPlacer extends TrunkPlacer {
     }
 
 
-    protected BlockPos createBranch(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, Random random, BlockPos.Mutable mutable,
+    protected BlockPos createBranch(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable mutable,
                                   TreeFeatureConfig config, BlockPos startPos, int height, double direction, float radiusA, float radiusB) {
         int multiplier = 1;
         if(height < 0) {
@@ -147,8 +147,8 @@ public class LargeTrunkPlacer extends TrunkPlacer {
 
         for (int i = 0; i < height; ++i) {
             float percentage = (float) (Math.pow((float) i / height, 1.2));
-            offsetX = (MathHelper.lerp(percentage, 0, (float) Math.cos(direction)) * this.velocity);
-            offsetZ = (MathHelper.lerp(percentage, 0, (float) Math.sin(direction)) * this.velocity);
+            offsetX = (Mth.lerp(percentage, 0, (float) Math.cos(direction)) * this.velocity);
+            offsetZ = (Mth.lerp(percentage, 0, (float) Math.sin(direction)) * this.velocity);
             for (int x = -ceilRadius; x <= ceilRadius; x++) {
                 for (int z = -ceilRadius; z <= ceilRadius; z++) {
                     double dx = x;
@@ -163,12 +163,12 @@ public class LargeTrunkPlacer extends TrunkPlacer {
                     }
                 }
             }
-            radius = MathHelper.lerp((float) i / height, radiusA, radiusB );
+            radius = Mth.lerp((float) i / height, radiusA, radiusB );
         }
         return new BlockPos(startPos).add((int) offsetX, multiplier * height, (int) offsetZ);
     }
 
-    protected void setLog(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, Random random, BlockPos.Mutable tmpPos,
+    protected void setLog(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable tmpPos,
                         TreeFeatureConfig config, BlockPos startPos, int dx, int dy, int dz) {
         tmpPos.set(startPos, dx, dy, dz);
         this.trySetState(world, replacer, random, tmpPos, config);

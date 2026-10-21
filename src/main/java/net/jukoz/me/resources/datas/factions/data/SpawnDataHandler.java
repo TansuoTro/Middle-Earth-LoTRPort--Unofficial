@@ -1,10 +1,10 @@
 package net.jukoz.me.resources.datas.factions.data;
 
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 import org.joml.Vector2i;
 
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import java.util.Optional;
 public class SpawnDataHandler {
     Vector2i mapViewCenter;
 
-    HashMap<Identifier, SpawnData> spawns;
+    HashMap<ResourceLocation, SpawnData> spawns;
 
     public SpawnDataHandler(List<SpawnData> spawnDatas){
         spawns = new HashMap<>();
@@ -23,14 +23,14 @@ public class SpawnDataHandler {
         }
     }
 
-    public SpawnDataHandler(Optional<NbtCompound> spawnsNbt) {
+    public SpawnDataHandler(Optional<CompoundTag> spawnsNbt) {
         if(spawnsNbt.isEmpty()){
             return;
         }
         deserializeNbt(spawnsNbt.get());
     }
 
-    private void deserializeNbt(NbtCompound nbtCompound) {
+    private void deserializeNbt(CompoundTag nbtCompound) {
         NbtList compoundList = nbtCompound.getList("data", NbtElement.COMPOUND_TYPE);
         spawns = new HashMap<>();
         for(int i = 0; i < compoundList.size(); i++){
@@ -39,11 +39,11 @@ public class SpawnDataHandler {
         }
     }
 
-    public Optional<NbtCompound> serializeNbt() {
+    public Optional<CompoundTag> serializeNbt() {
         if((spawns == null || spawns.isEmpty()))
             return Optional.empty();
 
-        NbtCompound nbt = new NbtCompound();
+        CompoundTag nbt = new CompoundTag();
         NbtList spawnDataList = new NbtList();
         for(SpawnData spawnData : spawns.values()){
             spawnDataList.add(SpawnData.serialize(spawnData));
@@ -52,11 +52,11 @@ public class SpawnDataHandler {
         return Optional.of(nbt);
     }
 
-    public SpawnData findSpawn(Identifier spawnId) {
+    public SpawnData findSpawn(ResourceLocation spawnId) {
         return spawns.get(spawnId);
     }
 
-    public static String getTranslatableKey(Identifier id){
+    public static String getTranslatableKey(ResourceLocation id){
         if(id == null)
             return null;
         return "spawn.".concat(id.toTranslationKey());
@@ -68,7 +68,7 @@ public class SpawnDataHandler {
         return spawns.values().stream().toList();
     }
 
-    public List<Identifier> getAllSpawnIdentifiers(){
+    public List<ResourceLocation> getAllSpawnIdentifiers(){
         if(spawns == null || spawns.isEmpty())
             return null;
         return spawns.keySet().stream().toList();
@@ -79,13 +79,13 @@ public class SpawnDataHandler {
             return null;
         return spawns.values().stream().findFirst().orElse(null);
     }
-    public Identifier getDefaultSpawn() {
+    public ResourceLocation getDefaultSpawn() {
         if(spawns == null || spawns.isEmpty())
             return null;
         return spawns.keySet().stream().findFirst().orElse(null);
     }
 
-    public BlockPos getSpawnBlockPos(Identifier spawnId) {
+    public BlockPos getSpawnBlockPos(ResourceLocation spawnId) {
         if(spawns == null || spawns.isEmpty())
             return null;
         SpawnData data = spawns.get(spawnId);

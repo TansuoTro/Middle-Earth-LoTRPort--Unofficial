@@ -1,8 +1,8 @@
 package net.jukoz.me.client.model.equipment.chest;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.client.model.geom.PartNames;
+import net.minecraft.world.entity.LivingEntity;
 
 public class HaltChestplateModel extends ChestplateAddonModel {
 
@@ -19,30 +19,30 @@ public class HaltChestplateModel extends ChestplateAddonModel {
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();
 
-        ModelPartData head = modelPartData.addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(),
+        ModelPartData head = modelPartData.addChild(PartNames.HEAD, ModelPartBuilder.create(),
                 ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        head.addChild(EntityModelPartNames.HAT, ModelPartBuilder.create(),
-                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-
-        modelPartData.addChild(EntityModelPartNames.BODY, ModelPartBuilder.create(),
+        head.addChild(PartNames.HAT, ModelPartBuilder.create(),
                 ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData right_arm = modelPartData.addChild(EntityModelPartNames.RIGHT_ARM, ModelPartBuilder.create(),
+        modelPartData.addChild(PartNames.BODY, ModelPartBuilder.create(),
+                ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+
+        ModelPartData right_arm = modelPartData.addChild(PartNames.RIGHT_ARM, ModelPartBuilder.create(),
                 ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         right_arm.addChild("right_halt", ModelPartBuilder.create()
                 .uv(0, 50).cuboid(-1.0F, -6.25F, -3.5F, 0.0F, 7.0F, 7.0F, new Dilation(0.0F)),
                 ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData left_arm = modelPartData.addChild(EntityModelPartNames.LEFT_ARM, ModelPartBuilder.create(),
+        ModelPartData left_arm = modelPartData.addChild(PartNames.LEFT_ARM, ModelPartBuilder.create(),
                 ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         left_arm.addChild("left_halt", ModelPartBuilder.create()
                 .uv(17, 50).cuboid(11.0F, -6.25F, -3.5F, 0.0F, 7.0F, 7.0F, new Dilation(0.0F)),
                 ModelTransform.pivot(-10.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(EntityModelPartNames.RIGHT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(EntityModelPartNames.LEFT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.RIGHT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.LEFT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         return modelData;
     }

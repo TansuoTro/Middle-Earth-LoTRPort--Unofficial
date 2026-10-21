@@ -4,12 +4,12 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.BipedEntityRenderer;
-import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
-import net.minecraft.client.render.entity.model.EntityModelLayers;
+import net.minecraft.client.model.EntityModelLayers;
 import net.minecraft.client.render.entity.model.ZombieEntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.math.RotationAxis;
 
 public class NazgulRenderer extends BipedEntityRenderer<NazgulEntity, NazgulModel<NazgulEntity>> {
@@ -21,12 +21,12 @@ public class NazgulRenderer extends BipedEntityRenderer<NazgulEntity, NazgulMode
     }
 
     @Override
-    public Identifier getTexture(NazgulEntity entity) {
-        return new Identifier(MiddleEarth.MOD_ID, PATH);
+    public ResourceLocation getTexture(NazgulEntity entity) {
+        return new ResourceLocation(MiddleEarth.MOD_ID, PATH);
     }
 
     @Override
-    public void render(NazgulEntity entity, float entityYaw, float partialTick, MatrixStack poseStack,
+    public void render(NazgulEntity entity, float entityYaw, float partialTick, PoseStack poseStack,
                        VertexConsumerProvider bufferSource, int packedLight) {
 
         if(entity.isFading()) {

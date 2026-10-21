@@ -13,24 +13,24 @@ import net.jukoz.me.sound.ModSounds;
 import net.jukoz.me.utils.ParticleManager;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.ai.pathing.PathNodeType;
+import net.minecraft.world.level.pathfinder.PathNodeType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageTypes;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
 public class NazgulEntity extends HostileEntity {
@@ -39,31 +39,31 @@ public class NazgulEntity extends HostileEntity {
     public static float DAMAGE_MULTIPLIER = 0.4f;
     private int ticksSinceDeath = 0;
     private int ticksSinceAlert = ALERT_TIME;
-    public NazgulEntity(EntityType<? extends HostileEntity> entityType, World world) {
+    public NazgulEntity(EntityType<? extends HostileEntity> entityType, Level world) {
         super(entityType, world);
         this.setPathfindingPenalty(PathNodeType.WATER, -1.0f);
     }
 
     @Nullable
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable CompoundTag entityNbt) {
         entityData = super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
-        Random random = world.getRandom();
+        RandomSource random = world.getRandom();
         this.initEquipment(random, difficulty);
         return entityData;
     }
 
     public static DefaultAttributeContainer.Builder setAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3f)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 30.0)
-                .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2.0)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 40.0)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 3.5);
+        return Mob.createMobAttributes()
+                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.3f)
+                .add(Attributes.GENERIC_MAX_HEALTH, 30.0)
+                .add(Attributes.GENERIC_ATTACK_SPEED, 2.0)
+                .add(Attributes.GENERIC_FOLLOW_RANGE, 40.0)
+                .add(Attributes.GENERIC_ATTACK_DAMAGE, 3.5);
     }
 
     @Override
-    protected void initEquipment(Random random, LocalDifficulty localDifficulty) {
+    protected void initEquipment(RandomSource random, LocalDifficulty localDifficulty) {
         super.initEquipment(random, localDifficulty);
         this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModWeaponItems.MORGUL_BLADE));
 
@@ -80,11 +80,11 @@ public class NazgulEntity extends HostileEntity {
         this.goalSelector.add(++i, new PanicFireGoal(this, 1.1f));
         this.goalSelector.add(++i, new MeleeAttackGoal(this, 1.2f, false));
         this.goalSelector.add(++i, new WanderAroundFarGoal(this, 1.0));
-        this.goalSelector.add(++i, new LookAtEntityGoal(this, PlayerEntity.class, 6.0f));
+        this.goalSelector.add(++i, new LookAtEntityGoal(this, Player.class, 6.0f));
         this.goalSelector.add(++i, new LookAroundGoal(this));
         i = 0;
         this.targetSelector.add(++i, new RevengeGoal(this, new Class[0]));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
+        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, Player.class, true));
         this.targetSelector.add(++i, new ActiveTargetGoal<>(this, GaladhrimElfEntity.class, true));
         this.targetSelector.add(++i, new ActiveTargetGoal<>(this, LongbeardDwarfEntity.class, true));
         this.targetSelector.add(++i, new ActiveTargetGoal<>(this, GondorHumanEntity.class, true));
@@ -141,7 +141,7 @@ public class NazgulEntity extends HostileEntity {
     protected void updatePostDeath() {
         ++this.ticksSinceDeath;
         ParticleManager.createParticles(getWorld(), getPos(), ParticleTypes.SMOKE, (int) Math.pow((float)ticksSinceDeath / 9, 1.5f));
-        if (this.ticksSinceDeath >= FADING_TIME && this.getWorld() instanceof ServerWorld) {
+        if (this.ticksSinceDeath >= FADING_TIME && this.getWorld() instanceof ServerLevel) {
             this.remove(Entity.RemovalReason.KILLED);
             this.emitGameEvent(GameEvent.ENTITY_DIE);
         }

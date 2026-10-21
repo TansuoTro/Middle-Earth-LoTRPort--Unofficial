@@ -14,13 +14,13 @@ import net.jukoz.me.item.FoodItemsME;
 import net.jukoz.me.item.ResourceItemsME;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * Ported from the 1.21.8 donor package
@@ -45,7 +45,7 @@ public class AlloyAndAnvilRecipeProvider extends FabricRecipeProvider {
     }
 
     private static TagKey<Item> modTag(String path) {
-        return TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, path));
+        return TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, path));
     }
 
     @Override
@@ -254,7 +254,7 @@ public class AlloyAndAnvilRecipeProvider extends FabricRecipeProvider {
                 .pattern("LLL")
                 .input('I', inputIngot)
                 .input('B', inputBlock)
-                .input('L', TagKey.of(RegistryKeys.ITEM, new Identifier("logs")))
+                .input('L', TagKey.of(Registries.ITEM, new ResourceLocation("logs")))
                 .criterion(hasItem(inputIngot),
                         conditionsFromItem(inputIngot))
                 .offerTo(exporter);

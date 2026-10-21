@@ -5,14 +5,14 @@ import net.jukoz.me.block.special.alloyfurnace.AlloyFurnaceEntity;
 import net.jukoz.me.block.special.wood_pile.WoodPileBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 public class ItemStackSyncS2CPacket {
     public static void receive(MinecraftClient client, ClientPlayNetworkHandler handler,
-                               PacketByteBuf buf, PacketSender responseSender) {
+                               FriendlyByteBuf buf, PacketSender responseSender) {
         int size = buf.readInt();
         DefaultedList<ItemStack> list = DefaultedList.ofSize(size, ItemStack.EMPTY);
         for(int i = 0; i < size; i++) {

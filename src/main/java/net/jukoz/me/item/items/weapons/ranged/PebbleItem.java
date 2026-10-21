@@ -1,16 +1,16 @@
 package net.jukoz.me.item.items.weapons.ranged;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.UseAction;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.entity.projectile.WebbedEntity;
 import net.jukoz.me.entity.projectile.pebble.PebbleEntity;
 
@@ -23,7 +23,7 @@ public class PebbleItem extends Item{
         super(settings);
     }
 
-    public net.minecraft.util.TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+    public net.minecraft.util.TypedActionResult<ItemStack> use(Level world, Player user, InteractionHand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
         user.setCurrentHand(hand);
         return net.minecraft.util.TypedActionResult.success(itemStack);
@@ -40,11 +40,11 @@ public class PebbleItem extends Item{
     }
 
     @Override
-    public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-        if (!(user instanceof PlayerEntity)) {
+    public void onStoppedUsing(ItemStack stack, Level world, LivingEntity user, int remainingUseTicks) {
+        if (!(user instanceof Player)) {
             return;
         }
-        PlayerEntity playerEntity = (PlayerEntity)user;
+        Player playerEntity = (Player)user;
         int i = this.getMaxUseTime(stack) - remainingUseTicks;
         if (i < 7) {
             return;

@@ -3,10 +3,10 @@ package net.jukoz.me.entity.barrow_wights;
 import com.google.common.collect.Maps;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
-import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.Util;
 
 import java.util.Map;
 
@@ -18,8 +18,8 @@ public class BarrowWightEntityRenderer extends MobEntityRenderer<BarrowWightEnti
     }
 
     @Override
-    public Identifier getTexture(BarrowWightEntity entity) {
-        return new Identifier(MiddleEarth.MOD_ID, LOCATION_BY_VARIANT.get(entity.getVariant()));
+    public ResourceLocation getTexture(BarrowWightEntity entity) {
+        return new ResourceLocation(MiddleEarth.MOD_ID, LOCATION_BY_VARIANT.get(entity.getVariant()));
     }
 
     public static final Map<BarrowWightVariant, String> LOCATION_BY_VARIANT =

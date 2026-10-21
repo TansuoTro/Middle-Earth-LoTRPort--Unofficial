@@ -1,8 +1,8 @@
 package net.jukoz.me.block.utils.setBuilders;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.MapColor;
-import net.minecraft.block.enums.Instrument;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.block.NoteBlockInstrument;
 import net.minecraft.sound.BlockSoundGroup;
 import net.jukoz.me.block.utils.BlockRecordTypes;
 import net.jukoz.me.block.utils.WoodBlockTypes;
@@ -36,11 +36,11 @@ public class WoodBlockSetBuilder {
     public float blastResistance;
     public MapColor mapColor;
     public MapColor leavesMapColor;
-    public Instrument instrument;
+    public NoteBlockInstrument instrument;
     public BlockSoundGroup soundGroup;
 
     public WoodBlockSetBuilder(String name, float hardness, float blastResistance,
-                               MapColor mapColor, Instrument instrument, BlockSoundGroup soundGroup, Block sapling){
+                               MapColor mapColor, NoteBlockInstrument instrument, BlockSoundGroup soundGroup, Block sapling){
         this.setName = name;
         this.hardness = hardness;
         this.blastResistance = blastResistance;

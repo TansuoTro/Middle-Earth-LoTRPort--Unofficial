@@ -1,18 +1,18 @@
 package net.jukoz.me.network.packets.S2C;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Identifier;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.map.MapScreenController;
 import net.jukoz.me.network.contexts.ClientPacketContext;
 import net.jukoz.me.network.packets.ServerToClientPacket;
 
 public class PacketOpenMapScreen extends ServerToClientPacket<PacketOpenMapScreen> {
-    public static final Identifier ID = MiddleEarth.of("packet_open_map_screen");
+    public static final ResourceLocation ID = MiddleEarth.of("packet_open_map_screen");
     public static final PacketType<PacketOpenMapScreen> TYPE = PacketType.create(ID, PacketOpenMapScreen::new);
     private final boolean canTeleport;
 
@@ -21,14 +21,14 @@ public class PacketOpenMapScreen extends ServerToClientPacket<PacketOpenMapScree
     }
 
     @Override
-    @Environment(EnvType.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void process(ClientPacketContext context) {
-        PlayerEntity player = context.player();
+        Player player = context.player();
         MapScreenController controller = new MapScreenController(player.getWorld(), player);
         controller.open(canTeleport);
     }
 
-    public PacketOpenMapScreen(PacketByteBuf buf) {
+    public PacketOpenMapScreen(FriendlyByteBuf buf) {
         this(buf.readBoolean());
     }
 
@@ -38,7 +38,7 @@ public class PacketOpenMapScreen extends ServerToClientPacket<PacketOpenMapScree
     }
 
     @Override
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
         buf.writeBoolean(this.canTeleport);
     }
 

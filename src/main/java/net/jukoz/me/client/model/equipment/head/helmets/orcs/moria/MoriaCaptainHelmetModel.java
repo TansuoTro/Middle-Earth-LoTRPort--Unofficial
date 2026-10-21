@@ -1,7 +1,7 @@
 package net.jukoz.me.client.model.equipment.head.helmets.orcs.moria;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
+import net.minecraft.client.model.geom.PartNames;
 import net.jukoz.me.client.model.equipment.head.helmets.HelmetAddonModel;
 
 public class MoriaCaptainHelmetModel extends MoriaScreecherHelmetModel {
@@ -14,8 +14,8 @@ public class MoriaCaptainHelmetModel extends MoriaScreecherHelmetModel {
         ModelData modelData = getModelData();
         ModelPartData modelPartData = modelData.getRoot();
 
-        ModelPartData head = modelPartData.addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        head.addChild(EntityModelPartNames.HAT, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData head = modelPartData.addChild(PartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        head.addChild(PartNames.HAT, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         head.addChild("side_spikes", ModelPartBuilder.create()
                 .uv(48, 13).cuboid(-4.0F, -3.25F, -1.0F, 8.0F, 10.0F, 0.0F, new Dilation(0.0F))

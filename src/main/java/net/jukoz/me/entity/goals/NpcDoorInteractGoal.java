@@ -1,12 +1,12 @@
 package net.jukoz.me.entity.goals;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.entity.ai.goal.LongDoorInteractGoal;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.entity.Mob;
 import net.jukoz.me.block.registration.ModBlocks;
 
 public class NpcDoorInteractGoal extends LongDoorInteractGoal {
-    public NpcDoorInteractGoal(MobEntity mob, boolean delayedClose) {
+    public NpcDoorInteractGoal(Mob mob, boolean delayedClose) {
         super(mob, delayedClose);
     }
 

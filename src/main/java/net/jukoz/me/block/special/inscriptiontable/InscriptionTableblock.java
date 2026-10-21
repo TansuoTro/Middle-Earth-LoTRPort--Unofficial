@@ -1,27 +1,27 @@
 package net.jukoz.me.block.special.inscriptiontable;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.util.Hand;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BlockRenderType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.screen.*;
-import net.minecraft.state.StateManager;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.inscriptiontable.InscriptionTableScreenHandler;
 import org.jetbrains.annotations.Nullable;
 
 public class InscriptionTableblock extends HorizontalFacingBlock {
 
-    private static final Text TITLE = Text.translatable(MiddleEarth.of("inscription_table").toTranslationKey("container"));
+    private static final Component TITLE = Component.translatable(MiddleEarth.of("inscription_table").toTranslationKey("container"));
 
     public InscriptionTableblock(Settings settings) {
         super(settings);
@@ -29,11 +29,11 @@ public class InscriptionTableblock extends HorizontalFacingBlock {
 
 
 
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
+    public BlockState getPlacementState(BlockPlaceContext ctx) {
         return (BlockState)((BlockState)this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite()));
     }
 
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
@@ -41,16 +41,16 @@ public class InscriptionTableblock extends HorizontalFacingBlock {
         return BlockRenderType.MODEL;
     }
 
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!world.isClient) {
             player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
         }
 
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Nullable
-    public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
+    public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, Level world, BlockPos pos) {
         return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> {
             return new InscriptionTableScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos));
         }, TITLE);

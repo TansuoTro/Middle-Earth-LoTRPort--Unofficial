@@ -1,20 +1,20 @@
 package net.jukoz.me.world.features.pillar;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.floatprovider.FloatProvider;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.Heightmap;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.valueproviders.FloatProvider;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.gen.feature.LargeDripstoneFeature;
 import net.minecraft.world.gen.feature.util.CaveSurface;
 import net.minecraft.world.gen.feature.util.DripstoneHelper;
@@ -33,7 +33,7 @@ public class PillarFeature extends Feature<PillarFeatureConfig> {
         StructureWorldAccess structureWorldAccess = context.getWorld();
         BlockPos blockPos = context.getOrigin();
         PillarFeatureConfig largeDripstoneFeatureConfig = context.getConfig();
-        Random random = context.getRandom();
+        RandomSource random = context.getRandom();
         if (!canGenerate(structureWorldAccess, blockPos)) {
             return false;
         }
@@ -46,8 +46,8 @@ public class PillarFeature extends Feature<PillarFeatureConfig> {
             return false;
         }
         int i = (int)((float)bounded.getHeight() * largeDripstoneFeatureConfig.maxColumnRadiusToCaveHeightRatio);
-        int j = MathHelper.clamp(i, largeDripstoneFeatureConfig.columnRadius.getMin(), largeDripstoneFeatureConfig.columnRadius.getMax());
-        int k = MathHelper.nextBetween(random, largeDripstoneFeatureConfig.columnRadius.getMin(), j);
+        int j = Mth.clamp(i, largeDripstoneFeatureConfig.columnRadius.getMin(), largeDripstoneFeatureConfig.columnRadius.getMax());
+        int k = Mth.nextBetween(random, largeDripstoneFeatureConfig.columnRadius.getMin(), j);
         DripstoneGenerator dripstoneGenerator = createGenerator(blockPos.withY(bounded.getCeiling() - 1), false, random, k, largeDripstoneFeatureConfig.stalactiteBluntness, largeDripstoneFeatureConfig.heightScale);
         DripstoneGenerator dripstoneGenerator2 = createGenerator(blockPos.withY(bounded.getFloor() + 1), true, random, k, largeDripstoneFeatureConfig.stalagmiteBluntness, largeDripstoneFeatureConfig.heightScale);
         WindModifier windModifier = dripstoneGenerator.generateWind(largeDripstoneFeatureConfig) && dripstoneGenerator2.generateWind(largeDripstoneFeatureConfig) ? new WindModifier(blockPos.getY(), random, largeDripstoneFeatureConfig.windSpeed) : WindModifier.create();
@@ -62,7 +62,7 @@ public class PillarFeature extends Feature<PillarFeatureConfig> {
         return true;
     }
 
-    private static DripstoneGenerator createGenerator(BlockPos pos, boolean isStalagmite, Random random, int scale, FloatProvider bluntness, FloatProvider heightScale) {
+    private static DripstoneGenerator createGenerator(BlockPos pos, boolean isStalagmite, RandomSource random, int scale, FloatProvider bluntness, FloatProvider heightScale) {
         return new DripstoneGenerator(pos, isStalagmite, scale, bluntness.get(random), heightScale.get(random));
     }
 
@@ -122,14 +122,14 @@ public class PillarFeature extends Feature<PillarFeatureConfig> {
             return (int)scaleHeightFromRadius(height, this.scale, this.heightScale, this.bluntness);
         }
 
-        void generate(StructureWorldAccess world, Random random, WindModifier wind, BlockState blockState) {
+        void generate(StructureWorldAccess world, RandomSource random, WindModifier wind, BlockState blockState) {
             for (int i = -this.scale; i <= this.scale; ++i) {
                 block1: for (int j = -this.scale; j <= this.scale; ++j) {
                     int k;
-                    float f = MathHelper.sqrt(i * i + j * j);
+                    float f = Mth.sqrt(i * i + j * j);
                     if (f > (float)this.scale || (k = this.scale(f)) <= 0) continue;
                     if ((double)random.nextFloat() < 0.2) {
-                        k = (int)((float)k * MathHelper.nextBetween(random, 0.8f, 1.0f));
+                        k = (int)((float)k * Mth.nextBetween(random, 0.8f, 1.0f));
                     }
                     BlockPos.Mutable mutable = this.pos.add(i, 0, j).mutableCopy();
                     boolean bl = false;
@@ -162,8 +162,8 @@ public class PillarFeature extends Feature<PillarFeatureConfig> {
         float g = 6.0f / (float)height;
         for (float h = 0.0f; h < (float)Math.PI * 2; h += g) {
             int j;
-            int i = (int)(MathHelper.cos(h) * (float)height);
-            if (!canGenerateOrLava(world, pos.add(i, 0, j = (int)(MathHelper.sin(h) * (float)height)))) continue;
+            int i = (int)(Mth.cos(h) * (float)height);
+            if (!canGenerateOrLava(world, pos.add(i, 0, j = (int)(Mth.sin(h) * (float)height)))) continue;
             return false;
         }
         return true;
@@ -190,13 +190,13 @@ public class PillarFeature extends Feature<PillarFeatureConfig> {
     static final class WindModifier {
         private final int y;
         @Nullable
-        private final Vec3d wind;
+        private final Vec3 wind;
 
-        WindModifier(int y, Random random, FloatProvider wind) {
+        WindModifier(int y, RandomSource random, FloatProvider wind) {
             this.y = y;
             float f = wind.get(random);
-            float g = MathHelper.nextBetween(random, 0.0f, (float)Math.PI);
-            this.wind = new Vec3d(MathHelper.cos(g) * f, 0.0, MathHelper.sin(g) * f);
+            float g = Mth.nextBetween(random, 0.0f, (float)Math.PI);
+            this.wind = new Vec3(Mth.cos(g) * f, 0.0, Mth.sin(g) * f);
         }
 
         private WindModifier() {
@@ -213,8 +213,8 @@ public class PillarFeature extends Feature<PillarFeatureConfig> {
                 return pos;
             }
             int i = this.y - pos.getY();
-            Vec3d vec3d = this.wind.multiply(i);
-            return pos.add(MathHelper.floor(vec3d.x), 0, MathHelper.floor(vec3d.z));
+            Vec3 vec3d = this.wind.multiply(i);
+            return pos.add(Mth.floor(vec3d.x), 0, Mth.floor(vec3d.z));
         }
     }
 }

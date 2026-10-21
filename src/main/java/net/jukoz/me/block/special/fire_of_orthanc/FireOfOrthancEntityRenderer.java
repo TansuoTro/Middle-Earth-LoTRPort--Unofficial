@@ -1,17 +1,17 @@
 package net.jukoz.me.block.special.fire_of_orthanc;
 import net.jukoz.me.compat.client.render.MEEntityRenderer;
 
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.world.level.block.BlockRenderType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.BlockRenderManager;
-import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.RotationAxis;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 
 public class FireOfOrthancEntityRenderer extends MEEntityRenderer<FireOfOrthancEntity, FireOfOrthancEntityRenderState> {
@@ -29,12 +29,12 @@ public class FireOfOrthancEntityRenderer extends MEEntityRenderer<FireOfOrthancE
     }
 
 
-    public void render(FireOfOrthancEntity fireOfOrthancEntity, float yaw, float tickDelta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int light) {
+    public void render(FireOfOrthancEntity fireOfOrthancEntity, float yaw, float tickDelta, PoseStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int light) {
         BlockState blockState = ModDecorativeBlocks.FIRE_OF_ORTHANC.getDefaultState();
         if (blockState.getRenderType() != BlockRenderType.MODEL) {
             return;
         }
-        World world = fireOfOrthancEntity.getWorld();
+        Level world = fireOfOrthancEntity.getWorld();
         if (blockState == world.getBlockState(fireOfOrthancEntity.getBlockPos()) || blockState.getRenderType() == BlockRenderType.INVISIBLE) {
             return;
         }

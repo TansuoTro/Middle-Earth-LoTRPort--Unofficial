@@ -1,8 +1,8 @@
 package net.jukoz.me.entity.beasts.warg.features;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.PartNames;
 import net.jukoz.me.entity.beasts.warg.WargEntityRenderState;
 import net.jukoz.me.entity.beasts.warg.WargModel;
 
@@ -13,15 +13,15 @@ public class WargArmorModel extends WargModel {
                 super(root);
 
                 this.warg = root.getChild("root");
-                this.head = warg.getChild(EntityModelPartNames.BODY).getChild("upper_body").getChild("body_no_legs").getChild(EntityModelPartNames.HEAD);
+                this.head = warg.getChild(PartNames.BODY).getChild("upper_body").getChild("body_no_legs").getChild(PartNames.HEAD);
         }
 
         public static TexturedModelData getTexturedModelData() {
                 ModelData modelData = getArmorModelData();
-                ModelPartData upper_body = modelData.getRoot().getChild("root").getChild(EntityModelPartNames.BODY).getChild("upper_body");
+                ModelPartData upper_body = modelData.getRoot().getChild("root").getChild(PartNames.BODY).getChild("upper_body");
                 ModelPartData body_no_legs = upper_body.getChild("body_no_legs");
                 ModelPartData body_armor = body_no_legs.getChild("body_fur").getChild("body_armor");
-                ModelPartData head = body_no_legs.getChild(EntityModelPartNames.HEAD);
+                ModelPartData head = body_no_legs.getChild(PartNames.HEAD);
                 ModelPartData front_armor = body_armor.getChild("front_armor");
 
                 front_armor.addChild("front_armor_cube", ModelPartBuilder.create()
@@ -53,9 +53,9 @@ public class WargArmorModel extends WargModel {
 
         public static ModelData getArmorModelData() {
                 ModelData modelData = getEmptyModelData();
-                ModelPartData upper_body = modelData.getRoot().getChild("root").getChild(EntityModelPartNames.BODY).getChild("upper_body");
+                ModelPartData upper_body = modelData.getRoot().getChild("root").getChild(PartNames.BODY).getChild("upper_body");
                 ModelPartData body_no_legs = upper_body.getChild("body_no_legs");
-                ModelPartData head = body_no_legs.getChild(EntityModelPartNames.HEAD);
+                ModelPartData head = body_no_legs.getChild(PartNames.HEAD);
                 ModelPartData body_armor = body_no_legs.getChild("body_fur").addChild("body_armor", ModelPartBuilder.create(), ModelTransform.pivot(-6.5F, -2.75F, 1.5F));
 
                 ModelPartData front_armor = body_armor.addChild("front_armor", ModelPartBuilder.create(), ModelTransform.pivot(7.8F, 1.5F, -1.0F));

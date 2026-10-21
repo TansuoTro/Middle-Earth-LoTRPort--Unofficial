@@ -1,31 +1,31 @@
 package net.jukoz.me.entity.beasts.trolls.petrified;
 
 import net.jukoz.me.item.items.CustomSpawnEggItem;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
-import net.minecraft.item.SpawnEggItem;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
-public class PetrifiedTrollEntity extends MobEntity {
+public class PetrifiedTrollEntity extends Mob {
 
-    public PetrifiedTrollEntity(EntityType<? extends MobEntity> entityType, World world) {
+    public PetrifiedTrollEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
         this.setAiDisabled(true);
     }
 
     public static DefaultAttributeContainer.Builder setAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 30.0);
+        return Mob.createMobAttributes()
+                .add(Attributes.GENERIC_MAX_HEALTH, 30.0);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class PetrifiedTrollEntity extends MobEntity {
     }
 
     @Override
-    public boolean canBeLeashedBy(PlayerEntity player) {
+    public boolean canBeLeashedBy(Player player) {
         return false;
     }
 
@@ -43,7 +43,7 @@ public class PetrifiedTrollEntity extends MobEntity {
     public boolean damage(DamageSource source, float amount) {
         if (this.getWorld().isClient) return false;
         Entity entity = source.getAttacker();
-        if(entity instanceof PlayerEntity playerEntity) {
+        if(entity instanceof Player playerEntity) {
             if(playerEntity.isCreative()) {
                 super.setHealth(0);
                 return true;

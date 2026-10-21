@@ -1,16 +1,16 @@
 package net.jukoz.me.gui.structuremanager.structurenest;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.text.Text;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.utils.CycledSelectionButtonType;
 import net.jukoz.me.gui.utils.widgets.CycledSelectionWidget;
@@ -28,7 +28,7 @@ import java.util.List;
 
 @Environment(value= EnvType.CLIENT)
 public class StructureNestScreen extends HandledScreen<StructureNestScreenHandler> {
-    private static final Identifier TEXTURE = MiddleEarth.ofPath("textures", "gui", "structure_manager.png");
+    private static final ResourceLocation TEXTURE = MiddleEarth.ofPath("textures", "gui", "structure_manager.png");
     private static final int TEXT_COLOR = Color.WHITE.getRGB();
 
 
@@ -41,14 +41,14 @@ public class StructureNestScreen extends HandledScreen<StructureNestScreenHandle
 
     public ArrayList<StructureManagerData> managers;
 
-    public StructureNestScreen(StructureNestScreenHandler handler, PlayerInventory inventory, Text title) {
+    public StructureNestScreen(StructureNestScreenHandler handler, PlayerInventory inventory, Component title) {
         super(handler, inventory, title);
 
-        World world = inventory.player.getWorld();
+        Level world = inventory.player.getWorld();
 
         this.managers = new ArrayList<>();
         var registryManager = world.getRegistryManager().getOptional(DynamicRegistriesME.STRUCTURE_MANAGER_DATA).get();
-        for(RegistryKey<StructureManagerData> data : registryManager.getKeys()){
+        for(ResourceKey<StructureManagerData> data : registryManager.getKeys()){
             this.managers.add(registryManager.get(data.getValue()));
         }
         this.manager = registryManager.get(handler.getManagerKey());
@@ -62,7 +62,7 @@ public class StructureNestScreen extends HandledScreen<StructureNestScreenHandle
 
         List<SearchBarResult> results = new ArrayList<>();
         for(StructureManagerData data : this.managers){
-            results.add(new SearchBarResult(Text.translatable(data.getId().toTranslationKey("structure_manager_data")), data.getId(), SearchBarResultType.NORMAL, button -> selectManager(data)));
+            results.add(new SearchBarResult(Component.translatable(data.getId().toTranslationKey("structure_manager_data")), data.getId(), SearchBarResultType.NORMAL, button -> selectManager(data)));
         }
 
         this.managerSearchBarWidget = new SearchBarWidget(9, results, x -> updateScreenInformation(), 170);
@@ -78,7 +78,7 @@ public class StructureNestScreen extends HandledScreen<StructureNestScreenHandle
         nestCycledSelection.getButtons().forEach(this::addDrawableChild);
         updateNestList(0);
 
-        isEnabledToggleButton = ButtonWidget.builder(Text.of("isEnabledToggleButton"),x -> toggleEnable()).build();
+        isEnabledToggleButton = ButtonWidget.builder(Component.of("isEnabledToggleButton"),x -> toggleEnable()).build();
         net.jukoz.me.compat.client.gui.MEGui.setSize(isEnabledToggleButton, 15, 15);
         addDrawableChild(isEnabledToggleButton);
     }
@@ -120,7 +120,7 @@ public class StructureNestScreen extends HandledScreen<StructureNestScreenHandle
         this.handler.selectNestId(client.player, this.nest.getId());
 
         this.nestCycledSelection.enableArrows(nests.size() > 1);
-        this.nestCycledSelection.setText(Text.of(this.nest.getId().toTranslationKey()).copy());
+        this.nestCycledSelection.setText(Component.of(this.nest.getId().toTranslationKey()).copy());
     }
 
     @Override
@@ -148,18 +148,18 @@ public class StructureNestScreen extends HandledScreen<StructureNestScreenHandle
             this.managerSearchBarWidget.drawSearchResults(context, centerX - 5 - this.managerSearchBarWidget.searchBarToggleButton.getWidth(), managerSearchBarWidgetStartY - 20);
         }
 
-        Text managerIdText = (manager == null)
-                ? Text.translatable("N/A")
-                : Text.translatable(manager.getId().toTranslationKey("structure_manager_data"));
+        Component managerIdText = (manager == null)
+                ? Component.translatable("N/A")
+                : Component.translatable(manager.getId().toTranslationKey("structure_manager_data"));
 
-        context.drawText(this.textRenderer, Text.translatable("ui.middle-earth.structure_manager.label_selected_id", managerIdText).formatted(Formatting.BOLD).formatted(Formatting.WHITE), centerX + 5, startY + 5, TEXT_COLOR, false);
+        context.drawText(this.textRenderer, Component.translatable("ui.middle-earth.structure_manager.label_selected_id", managerIdText).formatted(Formatting.BOLD).formatted(Formatting.WHITE), centerX + 5, startY + 5, TEXT_COLOR, false);
 
         if(manager != null && this.managerSearchBarWidget != null){
             startY += 25;
 
-            Text nestIdText = (nest == null)
-                    ? Text.translatable("N/A")
-                    : Text.translatable(nest.getId().toTranslationKey("structure_nest"));
+            Component nestIdText = (nest == null)
+                    ? Component.translatable("N/A")
+                    : Component.translatable(nest.getId().toTranslationKey("structure_nest"));
 
             this.nestCycledSelection.drawAnchored(context, centerX, startY, true, nestIdText.copy(), textRenderer);
 
@@ -174,7 +174,7 @@ public class StructureNestScreen extends HandledScreen<StructureNestScreenHandle
                 isEnabledToggleButtonUvY = 18;
             context.drawTexture(TEXTURE, isEnabledToggleButton.getX(), isEnabledToggleButton.getY(), 18, isEnabledToggleButtonUvY, isEnabledToggleButton.getWidth(), isEnabledToggleButton.getHeight(), 256, 256);
             if(isEnabledToggleButton.isMouseOver(mouseX, mouseY))
-                context.drawTooltip(this.textRenderer, Text.of("[SET TO TRUE] To ready up the structure manager subscription."), isEnabledToggleButton.getX(), isEnabledToggleButton.getY());
+                context.drawTooltip(this.textRenderer, Component.of("[SET TO TRUE] To ready up the structure manager subscription."), isEnabledToggleButton.getX(), isEnabledToggleButton.getY());
         }
         else
             this.isEnabledToggleButton.active = false;

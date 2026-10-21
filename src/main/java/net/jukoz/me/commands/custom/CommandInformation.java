@@ -8,8 +8,8 @@ import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.commands.ModCommands;
 import net.jukoz.me.resources.StateSaverAndLoader;
@@ -40,52 +40,52 @@ public class CommandInformation {
         if(!context.getSource().isExecutedByPlayer() || context.getSource().getPlayer() == null)
             return 1;
 
-        ServerPlayerEntity source = context.getSource().getPlayer();
+        ServerPlayer source = context.getSource().getPlayer();
 
         PlayerData data = StateSaverAndLoader.getPlayerState(source);
 
         Race race =  PlayerDataService.getPlayerRace(source, source.getWorld());
         if(race != null)
-            source.sendMessage(Text.literal("Race : ").append(Text.translatable(race.getTranslatableKey())));
+            source.sendMessage(Component.literal("Race : ").append(Component.translatable(race.getTranslatableKey())));
 
         Faction faction =  PlayerDataService.getPlayerFaction(source, source.getWorld());
         if(faction != null)
-            source.sendMessage(Text.literal("Faction : ").append(faction.getFullName()));
+            source.sendMessage(Component.literal("Faction : ").append(faction.getFullName()));
 
         SpawnData spawnData =  PlayerDataService.getPlayerSpawnData(source, source.getWorld());
         if(spawnData != null){
-            source.sendMessage(Text.literal("Middle-earth Spawn : ").append(spawnData.getFullName()));
+            source.sendMessage(Component.literal("Middle-earth Spawn : ").append(spawnData.getFullName()));
         }
 
         PlayerDataService.OriginAggregate origin =  PlayerDataService.getOriginAggregate(source, source.getWorld());
         if(origin != null){
-            source.sendMessage(Text.literal("Origin : ").append(Text.translatable(origin.dimensionId().toTranslationKey())).append(" " + origin.origin().toShortString()));
+            source.sendMessage(Component.literal("Origin : ").append(Component.translatable(origin.dimensionId().toTranslationKey())).append(" " + origin.origin().toShortString()));
         }
         return 0;
     }
 
     private static int getTargetInfo(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayerEntity targettedPlayer = EntityArgumentType.getPlayer(context, PLAYER);
+        ServerPlayer targettedPlayer = EntityArgumentType.getPlayer(context, PLAYER);
 
         PlayerData data = StateSaverAndLoader.getPlayerState(targettedPlayer);
 
         Race race =  PlayerDataService.getPlayerRace(targettedPlayer, targettedPlayer.getWorld());
         if(race != null)
-            context.getSource().sendMessage(Text.literal("Race : ").append(Text.translatable(race.getTranslatableKey())));
+            context.getSource().sendMessage(Component.literal("Race : ").append(Component.translatable(race.getTranslatableKey())));
 
 
         Faction faction =  PlayerDataService.getPlayerFaction(targettedPlayer, targettedPlayer.getWorld());
         if(faction != null)
-            context.getSource().sendMessage(Text.literal("Faction : ").append(Text.translatable(faction.getId().toTranslationKey())));
+            context.getSource().sendMessage(Component.literal("Faction : ").append(Component.translatable(faction.getId().toTranslationKey())));
         return 0;
     }
 
     private static int run(CommandContext<ServerCommandSource> context) {
         try{
-            ServerPlayerEntity targettedPlayer = EntityArgumentType.getPlayer(context, PLAYER);
+            ServerPlayer targettedPlayer = EntityArgumentType.getPlayer(context, PLAYER);
 
             PlayerData data = StateSaverAndLoader.getPlayerState(targettedPlayer);
-            targettedPlayer.sendMessage(Text.of(data.toString()));
+            targettedPlayer.sendMessage(Component.of(data.toString()));
 
             return 1;
         } catch (Exception e){

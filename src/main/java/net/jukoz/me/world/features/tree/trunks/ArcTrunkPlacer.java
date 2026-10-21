@@ -4,15 +4,15 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.jukoz.me.world.gen.ModTreeGeneration;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.TestableWorld;
-import net.minecraft.world.gen.feature.TreeFeatureConfig;
-import net.minecraft.world.gen.foliage.FoliagePlacer;
-import net.minecraft.world.gen.trunk.TrunkPlacer;
-import net.minecraft.world.gen.trunk.TrunkPlacerType;
+import net.minecraft.world.level.levelgen.feature.TreeFeatureConfig;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +56,7 @@ public class ArcTrunkPlacer extends TrunkPlacer {
     }
 
     @Override
-    public List<FoliagePlacer.TreeNode> generate(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, Random random,
+    public List<FoliagePlacer.TreeNode> generate(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random,
                                                  int height, BlockPos startPos, TreeFeatureConfig config) {
         BlockPos blockPos = startPos.down();
         BlockPos.Mutable mutable = new BlockPos.Mutable();
@@ -68,18 +68,18 @@ public class ArcTrunkPlacer extends TrunkPlacer {
         return ImmutableList.copyOf(treeNodes);
     }
 
-    protected List<FoliagePlacer.TreeNode> createArcBranch(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, Random random, BlockPos.Mutable mutable,
+    protected List<FoliagePlacer.TreeNode> createArcBranch(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable mutable,
                                           TreeFeatureConfig config, BlockPos startPos, int height, double angle, float acceleration, float velocity) {
         if(height < 0) {
             height *= -1;
         }
-        Vec3d dir = new Vec3d(Math.cos(angle), 1, Math.sin(angle)).normalize();
-        Vec3d currentPos = new Vec3d(startPos.getX(), startPos.getY() - 1, startPos.getZ());
+        Vec3 dir = new Vec3(Math.cos(angle), 1, Math.sin(angle)).normalize();
+        Vec3 currentPos = new Vec3(startPos.getX(), startPos.getY() - 1, startPos.getZ());
         float currentVel = velocity;
 
         int topHeight = (int) (currentPos.y + height);
         while (currentPos.getY() < topHeight) {
-            currentPos = currentPos.add(new Vec3d(dir.x * currentVel, dir.y, dir.z * currentVel));
+            currentPos = currentPos.add(new Vec3(dir.x * currentVel, dir.y, dir.z * currentVel));
             this.setLog(world, replacer, random, mutable, config, new BlockPos((int) currentPos.x, (int) currentPos.y, (int) currentPos.z),
                     0, 0, 0);
             currentVel += acceleration;
@@ -89,7 +89,7 @@ public class ArcTrunkPlacer extends TrunkPlacer {
         return treeNodes;
     }
 
-    protected void setLog(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, Random random, BlockPos.Mutable tmpPos,
+    protected void setLog(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable tmpPos,
                           TreeFeatureConfig config, BlockPos startPos, int dx, int dy, int dz) {
         tmpPos.set(startPos, dx, dy, dz);
         this.trySetState(world, replacer, random, tmpPos, config);

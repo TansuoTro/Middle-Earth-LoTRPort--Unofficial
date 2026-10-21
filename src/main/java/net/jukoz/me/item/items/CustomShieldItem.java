@@ -1,46 +1,46 @@
 package net.jukoz.me.item.items;
 
 import net.jukoz.me.MiddleEarth;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ShieldItem;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class CustomShieldItem extends ShieldItem {
-    private final MutableText faction;
-    private final MutableText subFaction;
+    private final MutableComponent faction;
+    private final MutableComponent subFaction;
 
-    public CustomShieldItem(Settings settings, MutableText faction) {
+    public CustomShieldItem(Settings settings, MutableComponent faction) {
         super(settings);
         this.faction = faction;
         this.subFaction = null;
     }
 
-    public CustomShieldItem(Settings settings, MutableText faction, MutableText subFaction) {
+    public CustomShieldItem(Settings settings, MutableComponent faction, MutableComponent subFaction) {
         super(settings);
         this.faction = faction;
         this.subFaction = subFaction;
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipContext context) {
 
 
-        tooltip.add(Text.of(""));
+        tooltip.add(Component.of(""));
         if (Screen.hasShiftDown()) {
-            tooltip.add(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".faction").append(this.faction));
+            tooltip.add(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".faction").append(this.faction));
             if (this.subFaction != null) {
-                tooltip.add(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".sub_faction").append(this.subFaction));
+                tooltip.add(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".sub_faction").append(this.subFaction));
             }
-            tooltip.add(Text.of(""));
+            tooltip.add(Component.of(""));
         } else {
-            tooltip.add(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".shift"));
+            tooltip.add(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".shift"));
         }
 
         super.appendTooltip(stack, world, tooltip, context);

@@ -2,25 +2,25 @@ package net.jukoz.me.entity.projectile.boulder;
 
 import net.jukoz.me.entity.ModEntities;
 import net.jukoz.me.entity.hobbits.shire.ShireHobbitEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.projectile.thrown.ThrownEntity;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
 
 public class BoulderEntity extends ThrownEntity {
 
-    public BoulderEntity(EntityType<? extends ThrownEntity> type, World world) {
+    public BoulderEntity(EntityType<? extends ThrownEntity> type, Level world) {
         super(type, world);
     }
 
-    public BoulderEntity(EntityType<? extends ThrownEntity> type, LivingEntity owner, World world) {
+    public BoulderEntity(EntityType<? extends ThrownEntity> type, LivingEntity owner, Level world) {
         super(type, owner, world);
     }
-    public BoulderEntity(World world, double x, double y, double z) {
+    public BoulderEntity(Level world, double x, double y, double z) {
         super(ModEntities.BOULDER, x, y, z, world);
     }
 
@@ -48,7 +48,7 @@ public class BoulderEntity extends ThrownEntity {
     protected void onCollision(HitResult hitResult) {
         super.onCollision(hitResult);
         if (!this.getWorld().isClient) {
-            this.getWorld().createExplosion((Entity)this, this.getX(), this.getY(), this.getZ(), 0.5f, false, World.ExplosionSourceType.MOB);
+            this.getWorld().createExplosion((Entity)this, this.getX(), this.getY(), this.getZ(), 0.5f, false, Level.ExplosionSourceType.MOB);
             this.discard();
         }
     }

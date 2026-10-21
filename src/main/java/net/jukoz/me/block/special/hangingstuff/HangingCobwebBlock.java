@@ -1,18 +1,18 @@
 package net.jukoz.me.block.special.hangingstuff;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.block.CobwebBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelView;
 import org.jetbrains.annotations.Nullable;
 
 public class HangingCobwebBlock extends CustomHangingBlock {
@@ -20,11 +20,11 @@ public class HangingCobwebBlock extends CustomHangingBlock {
         super(settings);
     }
 
-    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-        Vec3d vec3d = new Vec3d(0.25, 0.05000000074505806, 0.25);
+    public void onEntityCollision(BlockState state, Level world, BlockPos pos, Entity entity) {
+        Vec3 vec3d = new Vec3(0.25, 0.05000000074505806, 0.25);
         if (entity instanceof LivingEntity livingEntity) {
             if (livingEntity.hasStatusEffect(StatusEffects.SLOWNESS)) {
-                vec3d = new Vec3d(0.5, 0.25, 0.5);
+                vec3d = new Vec3(0.5, 0.25, 0.5);
             }
         }
 
@@ -33,10 +33,10 @@ public class HangingCobwebBlock extends CustomHangingBlock {
 
 
     @Override
-    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos fromPos, boolean notify) {
+    public void neighborUpdate(BlockState state, Level world, BlockPos pos, Block sourceBlock, BlockPos fromPos, boolean notify) {
         if (!world.isClient) {
             for (Direction direction : Direction.values()) {
-                if (world.getFluidState(pos.offset(direction)).isIn(net.minecraft.registry.tag.FluidTags.WATER)) {
+                if (world.getFluidState(pos.offset(direction)).isIn(net.minecraft.tags.FluidTags.WATER)) {
                     world.breakBlock(pos, true);
                     return;
                 }

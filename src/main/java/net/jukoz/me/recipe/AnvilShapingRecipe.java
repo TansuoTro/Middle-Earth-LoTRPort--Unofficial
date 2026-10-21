@@ -4,21 +4,21 @@ import net.jukoz.me.item.MEComponents;
 import com.google.gson.JsonObject;
 import net.minecraft.recipe.*;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.compat.SingleStackRecipeInput;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 public class AnvilShapingRecipe implements Recipe<SingleStackRecipeInput> {
-    public final Identifier id;
+    public final ResourceLocation id;
     protected final Ingredient input;
     protected final ItemStack output;
     protected final int amount;
 
-    public AnvilShapingRecipe(Identifier id, Ingredient input, ItemStack output, int amount) {
+    public AnvilShapingRecipe(ResourceLocation id, Ingredient input, ItemStack output, int amount) {
         this.id = id;
         this.output = output;
         this.input = input;
@@ -30,7 +30,7 @@ public class AnvilShapingRecipe implements Recipe<SingleStackRecipeInput> {
     }
 
     @Override
-    public boolean matches(SingleStackRecipeInput input, World world) {
+    public boolean matches(SingleStackRecipeInput input, Level world) {
         if(input.item().isEmpty()) return false;
         //if(input.item().get(MEComponents.TEMPERATURE_DATA) == null) return false;
         return this.input.test(input.item());
@@ -56,7 +56,7 @@ public class AnvilShapingRecipe implements Recipe<SingleStackRecipeInput> {
     }
 
     @Override
-    public Identifier getId() {
+    public ResourceLocation getId() {
         return id;
     }
 
@@ -94,7 +94,7 @@ public class AnvilShapingRecipe implements Recipe<SingleStackRecipeInput> {
         public static final String ID = "anvil_shaping";
 
         @Override
-        public AnvilShapingRecipe read(Identifier id, JsonObject json) {
+        public AnvilShapingRecipe read(ResourceLocation id, JsonObject json) {
             Ingredient input = Ingredient.fromJson(JsonHelper.getElement(json, "ingredient"), true);
             ItemStack output = ShapedRecipe.outputFromJson(JsonHelper.getObject(json, "output"));
             int amount = JsonHelper.getInt(json, "amount");
@@ -102,7 +102,7 @@ public class AnvilShapingRecipe implements Recipe<SingleStackRecipeInput> {
         }
 
         @Override
-        public AnvilShapingRecipe read(Identifier id, PacketByteBuf buf) {
+        public AnvilShapingRecipe read(ResourceLocation id, FriendlyByteBuf buf) {
             Ingredient input = Ingredient.fromPacket(buf);
             ItemStack output = buf.readItemStack();
             int amount = buf.readInt();
@@ -110,7 +110,7 @@ public class AnvilShapingRecipe implements Recipe<SingleStackRecipeInput> {
         }
 
         @Override
-        public void write(PacketByteBuf buf, AnvilShapingRecipe recipe) {
+        public void write(FriendlyByteBuf buf, AnvilShapingRecipe recipe) {
             recipe.input.write(buf);
             buf.writeItemStack(recipe.output);
             buf.writeInt(recipe.amount);

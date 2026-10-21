@@ -2,9 +2,9 @@ package net.jukoz.me.entity.spider;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
 import net.jukoz.me.registries.DynamicRegistriesME;
@@ -26,12 +26,12 @@ public record SpiderVariant(SpiderAssetInfo assetInfo, net.jukoz.me.compat.spawn
             ).apply(instance, SpiderVariant::new)
     );
 
-    public static final PacketCodec<PacketByteBuf, RegistryEntry<SpiderVariant>> PACKET_CODEC =
+    public static final PacketCodec<FriendlyByteBuf, Holder<SpiderVariant>> PACKET_CODEC =
             PacketCodecs.registryEntry(DynamicRegistriesME.SPIDER_VARIANTS);
 
-    public record AssetInfo(Identifier texturePath) {
+    public record AssetInfo(ResourceLocation texturePath) {
         public static final Codec<AssetInfo> CODEC =
-                Identifier.CODEC.xmap(AssetInfo::new, AssetInfo::texturePath);
+                ResourceLocation.CODEC.xmap(AssetInfo::new, AssetInfo::texturePath);
     }
 
     public record SpiderAssetInfo(AssetInfo larva, AssetInfo scuttler, AssetInfo spawnOfShelob) {

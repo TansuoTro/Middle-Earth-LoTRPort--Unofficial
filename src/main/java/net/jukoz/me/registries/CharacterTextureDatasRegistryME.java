@@ -1,9 +1,9 @@
 package net.jukoz.me.registries;
 
-import net.minecraft.registry.Registerable;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.core.RegistryEntryLookup;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Holder;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.resources.datas.texture_presets.TexturePresetDataPool;
 
@@ -11,23 +11,23 @@ import java.util.*;
 
 public class CharacterTextureDatasRegistryME {
     /* [MORDOR] */
-    public final static RegistryKey<TexturePresetDataPool> MORDOR_ORC = of("mordor_orc");
-    public final static RegistryKey<TexturePresetDataPool> MORDOR_BLACK_URUK = of("mordor_black_uruk");
+    public final static ResourceKey<TexturePresetDataPool> MORDOR_ORC = of("mordor_orc");
+    public final static ResourceKey<TexturePresetDataPool> MORDOR_BLACK_URUK = of("mordor_black_uruk");
 
     /* [HOBGOBLIN TRIBES] */
-    public final static RegistryKey<TexturePresetDataPool> HOBGOBLIN_TRIBES_GOBLIN = of("hobgoblin_tribes_goblin");
-    public final static RegistryKey<TexturePresetDataPool> HOBGOBLIN_TRIBES_HOBGOBLIN = of("hobgoblin_tribes_hobgoblin");
+    public final static ResourceKey<TexturePresetDataPool> HOBGOBLIN_TRIBES_GOBLIN = of("hobgoblin_tribes_goblin");
+    public final static ResourceKey<TexturePresetDataPool> HOBGOBLIN_TRIBES_HOBGOBLIN = of("hobgoblin_tribes_hobgoblin");
 
     /* [ISENGARD] */
-    public final static RegistryKey<TexturePresetDataPool> ISENGARD_ORC = of("isengard_orc");
-    public final static RegistryKey<TexturePresetDataPool> ISENGARD_URUK_HAI = of("isengard_uruk_hai");
+    public final static ResourceKey<TexturePresetDataPool> ISENGARD_ORC = of("isengard_orc");
+    public final static ResourceKey<TexturePresetDataPool> ISENGARD_URUK_HAI = of("isengard_uruk_hai");
 
     /* [WILD GOBLINS] */
-    public final static RegistryKey<TexturePresetDataPool> WILD_GOBLIN_GOBLIN = of("wild_goblin_goblin");
-    public final static RegistryKey<TexturePresetDataPool> WILD_GOBLIN_HOBGOBLIN = of("wild_goblin_hobgoblin");
+    public final static ResourceKey<TexturePresetDataPool> WILD_GOBLIN_GOBLIN = of("wild_goblin_goblin");
+    public final static ResourceKey<TexturePresetDataPool> WILD_GOBLIN_HOBGOBLIN = of("wild_goblin_hobgoblin");
 
 
-    public static void bootstrap(Registerable<TexturePresetDataPool> context) {
+    public static void bootstrap(BootstrapContext<TexturePresetDataPool> context) {
         RegistryEntryLookup<TexturePresetDataPool> npcTextureDataRegistryEntryLookup = context.getRegistryLookup(DynamicRegistriesME.TEXTURE_PRESETS);
         /* [MORDOR] */
         //register(context, npcTextureDataRegistryEntryLookup, MORDOR_ORC, Mordor.GENERIC_ORC);
@@ -43,15 +43,15 @@ public class CharacterTextureDatasRegistryME {
         //register(context, npcTextureDataRegistryEntryLookup, WILD_GOBLIN_HOBGOBLIN, WildGoblin.GENERIC_HOBGOBLIN);
     }
 
-    public static RegistryKey<TexturePresetDataPool> register(Registerable<TexturePresetDataPool> context, RegistryEntryLookup<TexturePresetDataPool> npcTextureDataRegistryEntryLookup, RegistryKey<TexturePresetDataPool> npcTextureDataKey, TexturePresetDataPool texturePresets) {
-        Optional<RegistryEntry.Reference<TexturePresetDataPool>> optionalNpcTextureDataReference = npcTextureDataRegistryEntryLookup.getOptional(npcTextureDataKey);
+    public static ResourceKey<TexturePresetDataPool> register(BootstrapContext<TexturePresetDataPool> context, RegistryEntryLookup<TexturePresetDataPool> npcTextureDataRegistryEntryLookup, ResourceKey<TexturePresetDataPool> npcTextureDataKey, TexturePresetDataPool texturePresets) {
+        Optional<Holder.Reference<TexturePresetDataPool>> optionalNpcTextureDataReference = npcTextureDataRegistryEntryLookup.getOptional(npcTextureDataKey);
         optionalNpcTextureDataReference.ifPresent(biomeReference -> context.register(npcTextureDataKey, texturePresets));
 
         return npcTextureDataKey;
     }
 
-    private static RegistryKey<TexturePresetDataPool> of(String idPath) {
-        return RegistryKey.of(DynamicRegistriesME.TEXTURE_PRESETS, MiddleEarth.of(idPath));
+    private static ResourceKey<TexturePresetDataPool> of(String idPath) {
+        return ResourceKey.of(DynamicRegistriesME.TEXTURE_PRESETS, MiddleEarth.of(idPath));
     }
 
 

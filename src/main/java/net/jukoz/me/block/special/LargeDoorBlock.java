@@ -1,35 +1,35 @@
 package net.jukoz.me.block.special;
 
-import net.minecraft.util.Hand;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ShapeContext;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.block.enums.DoorHinge;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.ai.pathing.NavigationType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.state.property.*;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
-import net.minecraft.world.explosion.Explosion;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.Explosion;
 import net.jukoz.me.MiddleEarth;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,7 +67,7 @@ public class LargeDoorBlock extends Block {
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(getPart(), HORIZONTAL_FACING, OPEN, HINGE);
     }
 
@@ -99,11 +99,11 @@ public class LargeDoorBlock extends Block {
     }
 
     @Nullable
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
+    public BlockState getPlacementState(BlockPlaceContext ctx) {
         Direction direction = ctx.getHorizontalPlayerFacing();
         BlockPos blockPos = ctx.getBlockPos();
         BlockPos blockPos1 = ctx.getBlockPos();
-        World world = ctx.getWorld();
+        Level world = ctx.getWorld();
         boolean canPlace = true;
 
         //Check space for placement
@@ -128,8 +128,8 @@ public class LargeDoorBlock extends Block {
         }
     }
 
-    private DoorHinge getHinge(ItemPlacementContext ctx) {
-        BlockView blockView = ctx.getWorld();
+    private DoorHinge getHinge(BlockPlaceContext ctx) {
+        BlockGetter blockView = ctx.getWorld();
         BlockPos blockPos = ctx.getBlockPos();
         Direction direction = ctx.getHorizontalPlayerFacing();
         BlockPos blockPos2 = blockPos.up();
@@ -146,13 +146,13 @@ public class LargeDoorBlock extends Block {
         int i = (blockState.isFullCube(blockView, blockPos3) ? -1 : 0) + (blockState2.isFullCube(blockView, blockPos4) ? -1 : 0) + (blockState3.isFullCube(blockView, blockPos5) ? 1 : 0) + (blockState4.isFullCube(blockView, blockPos6) ? 1 : 0);
         int j = direction.getOffsetX();
         int k = direction.getOffsetZ();
-        Vec3d vec3d = ctx.getHitPos();
+        Vec3 vec3d = ctx.getHitPos();
         double d = vec3d.x - (double)blockPos.getX();
         double e = vec3d.z - (double)blockPos.getZ();
         return (j >= 0 || !(e < 0.5)) && (j <= 0 || !(e > 0.5)) && (k >= 0 || !(d > 0.5)) && (k <= 0 || !(d < 0.5)) ? DoorHinge.LEFT : DoorHinge.RIGHT;
     }
 
-    public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
+    public void onPlaced(Level world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
         if (!world.isClient){
             BlockPos blockPos = pos;
             //Places all additional blocks after placement is checked
@@ -173,7 +173,7 @@ public class LargeDoorBlock extends Block {
     }
 
     @Override
-    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    public void onBreak(Level world, BlockPos pos, BlockState state, Player player) {
         BlockPos blockPos = getOrigin(pos, state);
         BlockPos blockPos1 = blockPos;
 
@@ -196,7 +196,7 @@ public class LargeDoorBlock extends Block {
     }
 
     @Override
-    public void onDestroyedByExplosion(World world, BlockPos pos, Explosion explosion) {
+    public void onDestroyedByExplosion(Level world, BlockPos pos, Explosion explosion) {
         BlockState state = world.getBlockState(pos);
         BlockPos blockPos = getOrigin(pos, state);
         BlockPos blockPos1 = blockPos;
@@ -220,7 +220,7 @@ public class LargeDoorBlock extends Block {
     }
 
     //Check space for door opening/closing
-    private boolean canToggle(BlockPos origin, BlockState state, World world) {
+    private boolean canToggle(BlockPos origin, BlockState state, Level world) {
         BlockPos blockPos = origin;
         BlockPos blockPos1 = blockPos;
         for (int j = 0; j < doorWidth; j++){
@@ -246,7 +246,7 @@ public class LargeDoorBlock extends Block {
     }
 
     //Door opening
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         BlockPos blockPos = getOrigin(pos, state);
         BlockPos blockPos1 = blockPos;
 
@@ -297,13 +297,13 @@ public class LargeDoorBlock extends Block {
             this.playOpenCloseSound(player, world, pos, (Boolean)state.get(OPEN));
             world.emitGameEvent(player, this.isOpen(state) ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, pos);
         } else {
-            player.sendMessage(Text.translatable("alert.%s.large_door.blocked".formatted(MiddleEarth.MOD_ID)), true);
+            player.sendMessage(Component.translatable("alert.%s.large_door.blocked".formatted(MiddleEarth.MOD_ID)), true);
         }
 
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
-    private void playOpenCloseSound(@Nullable Entity entity, World world, BlockPos pos, boolean open) {
+    private void playOpenCloseSound(@Nullable Entity entity, Level world, BlockPos pos, boolean open) {
         world.playSound(entity, pos, open ? SoundEvents.BLOCK_WOODEN_DOOR_OPEN : SoundEvents.BLOCK_WOODEN_DOOR_CLOSE, SoundCategory.BLOCKS, 1.5F, world.getRandom().nextFloat() * 0.1F + 0.4F);
     }
 
@@ -331,7 +331,7 @@ public class LargeDoorBlock extends Block {
         return PART;
     }
 
-    public boolean canPathfindThrough(BlockState state, net.minecraft.world.BlockView world, BlockPos pos, NavigationType type) {
+    public boolean canPathfindThrough(BlockState state, net.minecraft.world.level.BlockGetter world, BlockPos pos, NavigationType type) {
         return switch (type) {
             case LAND, AIR -> (Boolean) state.get(OPEN);
             case WATER -> false;
@@ -339,7 +339,7 @@ public class LargeDoorBlock extends Block {
         };
     }
 
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         Direction direction = (Direction) state.get(HORIZONTAL_FACING);
         VoxelShape var10000 = null;
         if (state.get(HINGE) == DoorHinge.LEFT) {

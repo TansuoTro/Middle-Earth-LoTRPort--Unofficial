@@ -1,36 +1,36 @@
 package net.jukoz.me.entity.beasts.warg;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.passive.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.beasts.AbstractBeastEntity;
@@ -63,25 +63,25 @@ public class WargEntity extends AbstractBeastEntity {
     public int idleAnimationTimeout = this.random.nextInt(600) + 1700;
     private static final EntityDimensions BABY_BASE_DIMENSIONS = EntitiesME.WARG.getDimensions().scaled(0.5f);
 
-    public WargEntity(EntityType<? extends WargEntity> entityType, World world) {
+    public WargEntity(EntityType<? extends WargEntity> entityType, Level world) {
         super(entityType, world);
     }
 
     public static DefaultAttributeContainer.Builder setAttributes() {
-        return net.minecraft.entity.mob.MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 24.0d)
-                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.2d)
-                .add(EntityAttributes.GENERIC_ATTACK_SPEED, 1.0d)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 38.0d)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 4.0d)
+        return net.minecraft.world.entity.Mob.createMobAttributes()
+                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.4)
+                .add(Attributes.GENERIC_MAX_HEALTH, 24.0d)
+                .add(Attributes.GENERIC_KNOCKBACK_RESISTANCE, 0.2d)
+                .add(Attributes.GENERIC_ATTACK_SPEED, 1.0d)
+                .add(Attributes.GENERIC_FOLLOW_RANGE, 38.0d)
+                .add(Attributes.GENERIC_ATTACK_DAMAGE, 4.0d)
                 .add(EntityAttributesME.SAFE_FALL_DISTANCE.value(), 6.0d);
     }
 
-    protected void initAttributes(Random random) {
-        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(this.getChildHealthBonus(random::nextInt));
-        this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(this.getChildMovementSpeedBonus(random::nextDouble));
-        this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(this.getChildAttackDamageBonus(random::nextDouble));
+    protected void initAttributes(RandomSource random) {
+        this.getAttributeInstance(Attributes.GENERIC_MAX_HEALTH).setBaseValue(this.getChildHealthBonus(random::nextInt));
+        this.getAttributeInstance(Attributes.GENERIC_MOVEMENT_SPEED).setBaseValue(this.getChildMovementSpeedBonus(random::nextDouble));
+        this.getAttributeInstance(Attributes.GENERIC_ATTACK_DAMAGE).setBaseValue(this.getChildAttackDamageBonus(random::nextDouble));
     }
 
     @Override
@@ -90,9 +90,9 @@ public class WargEntity extends AbstractBeastEntity {
         this.goalSelector.add(3, new MeleeAttackGoal(this, 2, false));
         this.goalSelector.add(4, new ChargeAttackGoal(this, this.getDisposition(), maxChargeCooldown()));
         this.goalSelector.add(5, new AnimalMateGoal(this, 1.5));
-        this.goalSelector.add(6, new TemptGoal(this, 0.9, net.minecraft.recipe.Ingredient.fromTag(TagKey.of(RegistryKeys.ITEM, Identifier.of(MiddleEarth.MOD_ID, "warg_food"))), false));
+        this.goalSelector.add(6, new TemptGoal(this, 0.9, net.minecraft.recipe.Ingredient.fromTag(TagKey.of(Registries.ITEM, ResourceLocation.of(MiddleEarth.MOD_ID, "warg_food"))), false));
         this.goalSelector.add(7, new WanderAroundFarGoal(this, 0.5));
-        this.goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 6.0f));
+        this.goalSelector.add(8, new LookAtEntityGoal(this, Player.class, 6.0f));
         this.goalSelector.add(9, new LookAroundGoal(this));
         this.targetSelector.add(3, new BeastRevengeGoal(this, new Class[0]).setGroupRevenge());
         this.targetSelector.add(4, new BeastTargetPlayerGoal(this, this.getDisposition()));
@@ -110,14 +110,14 @@ public class WargEntity extends AbstractBeastEntity {
     }
 
     @Override
-    public void writeCustomDataToNbt(net.minecraft.nbt.NbtCompound nbt) {
+    public void writeCustomDataToNbt(net.minecraft.nbt.CompoundTag nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putInt("Variant", this.getTypeVariant());
         nbt.putInt("EyeVariant", this.getEyeTypeVariant());
     }
 
     @Override
-    public void readCustomDataFromNbt(net.minecraft.nbt.NbtCompound nbt) {
+    public void readCustomDataFromNbt(net.minecraft.nbt.CompoundTag nbt) {
         super.readCustomDataFromNbt(nbt);
         this.dataTracker.set(VARIANT, nbt.getInt("Variant"));
         this.dataTracker.set(EYE_VARIANT, nbt.getInt("EyeVariant"));
@@ -152,14 +152,14 @@ public class WargEntity extends AbstractBeastEntity {
     }
 
     @Override
-    public ActionResult interactMob(PlayerEntity player, Hand hand) {
+    public InteractionResult interactMob(Player player, InteractionHand hand) {
         ItemStack itemStack = player.getStackInHand(hand);
 
         if(!this.getWorld().isClient() && !player.isCreative()) {
             RaceType playerRace = RaceUtil.getRaceType(player);
 
             if(playerRace == RaceType.NONE || (this.getCompatibleRaces() != null && !this.getCompatibleRaces().contains(playerRace))) {
-                return ActionResult.FAIL;
+                return InteractionResult.FAIL;
             }
         }
 
@@ -170,12 +170,12 @@ public class WargEntity extends AbstractBeastEntity {
                     net.minecraft.item.FoodComponent foodComponent = itemStack.getItem().getFoodComponent();
                     float f = foodComponent != null ? (float)foodComponent.getHunger() : 1.0f;
                     this.heal(2.0f * f);
-                    return ActionResult.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
                 else if (!this.getWorld().isClient && this.getBreedingAge() == 0 && this.canEat()) {
                     this.eat(player, hand, itemStack);
                     this.lovePlayer(player);
-                    return ActionResult.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
             }
         }
@@ -185,7 +185,7 @@ public class WargEntity extends AbstractBeastEntity {
 
     @Override
     @Nullable
-    public PassiveEntity createChild(ServerWorld world, PassiveEntity entity) {
+    public PassiveEntity createChild(ServerLevel world, PassiveEntity entity) {
         WargEntity wargEntity = (WargEntity) entity;
         WargEntity wargEntity2 = EntitiesME.WARG.create(world);
         if (wargEntity2 != null) {
@@ -202,9 +202,9 @@ public class WargEntity extends AbstractBeastEntity {
 
     @Override
     protected void setChildAttributes(PassiveEntity other, AbstractHorseEntity child) {
-        this.setChildAttribute(other, child, EntityAttributes.GENERIC_MAX_HEALTH, MIN_HEALTH_BONUS, MAX_HEALTH_BONUS);
-        this.setChildAttribute(other, child, EntityAttributes.GENERIC_ATTACK_DAMAGE, MIN_ATTACK_DAMAGE_BONUS, MAX_ATTACK_DAMAGE_BONUS);
-        this.setChildAttribute(other, child, EntityAttributes.GENERIC_MOVEMENT_SPEED, MIN_MOVEMENT_SPEED_BONUS, MAX_MOVEMENT_SPEED_BONUS);
+        this.setChildAttribute(other, child, Attributes.GENERIC_MAX_HEALTH, MIN_HEALTH_BONUS, MAX_HEALTH_BONUS);
+        this.setChildAttribute(other, child, Attributes.GENERIC_ATTACK_DAMAGE, MIN_ATTACK_DAMAGE_BONUS, MAX_ATTACK_DAMAGE_BONUS);
+        this.setChildAttribute(other, child, Attributes.GENERIC_MOVEMENT_SPEED, MIN_MOVEMENT_SPEED_BONUS, MAX_MOVEMENT_SPEED_BONUS);
     }
 
     @Override
@@ -234,13 +234,13 @@ public class WargEntity extends AbstractBeastEntity {
 
     @Override
     public boolean isBreedingItem(ItemStack stack) {
-        return stack.isIn(TagKey.of(RegistryKeys.ITEM, Identifier.of(MiddleEarth.MOD_ID, "warg_food")));
+        return stack.isIn(TagKey.of(Registries.ITEM, ResourceLocation.of(MiddleEarth.MOD_ID, "warg_food")));
     }
 
     @Override
-    protected float getSaddledSpeed(PlayerEntity controllingPlayer) {
+    protected float getSaddledSpeed(Player controllingPlayer) {
         if(!this.isSitting()) {
-            return controllingPlayer.isSprinting() ? ((float)this.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)) : ((float)this.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED) * 0.25f);
+            return controllingPlayer.isSprinting() ? ((float)this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED)) : ((float)this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED) * 0.25f);
         }
 
         return super.getSaddledSpeed(controllingPlayer);
@@ -249,7 +249,7 @@ public class WargEntity extends AbstractBeastEntity {
     @Override
     protected float getNpcSaddledSpeed(NpcEntity controllingNpc) {
         if(!this.isSitting()) {
-            return controllingNpc.isSprinting() ? ((float)this.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)) : ((float)this.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED) * 0.25f);
+            return controllingNpc.isSprinting() ? ((float)this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED)) : ((float)this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED) * 0.25f);
         }
 
         return super.getNpcSaddledSpeed(controllingNpc);
@@ -308,7 +308,7 @@ public class WargEntity extends AbstractBeastEntity {
     }
     @Override
     public boolean isCommandItem(ItemStack stack) {
-        return stack.isIn(TagKey.of(RegistryKeys.ITEM, Identifier.of(MiddleEarth.MOD_ID, "bones")));
+        return stack.isIn(TagKey.of(Registries.ITEM, ResourceLocation.of(MiddleEarth.MOD_ID, "bones")));
     }
 
     @Override
@@ -331,8 +331,8 @@ public class WargEntity extends AbstractBeastEntity {
         if(!this.hasCharged()) {
             this.setHasCharged(true);
             if(!this.isTame() && !this.getWorld().isClient) {
-                if(targetDir == Vec3d.ZERO && this.getTarget() != null) {
-                    targetDir = new Vec3d( this.getTarget().getBlockPos().getX() - this.getBlockPos().getX(),
+                if(targetDir == Vec3.ZERO && this.getTarget() != null) {
+                    targetDir = new Vec3( this.getTarget().getBlockPos().getX() - this.getBlockPos().getX(),
                             this.getTarget().getBlockPos().getY() - this.getBlockPos().getY(),
                             this.getTarget().getBlockPos().getZ() - this.getBlockPos().getZ());
                 }
@@ -352,10 +352,10 @@ public class WargEntity extends AbstractBeastEntity {
         Entity owner = this.getOwner();
         for(Entity entity : entities) {
             if((owner == null || entity.getUuid() != owner.getUuid()) && entity != this && !this.getPassengerList().contains(entity) && !((entity instanceof WargEntity) && !this.isTame())) {
-                if(getWorld() instanceof ServerWorld serverWorld)
+                if(getWorld() instanceof ServerLevel serverWorld)
                     entity.damage(entity.getDamageSources().mobAttack(this), this.getAttackDamage());
 
-                if(entity instanceof ServerPlayerEntity) {
+                if(entity instanceof ServerPlayer) {
                     entity.stopRiding();
                 }
                 else if(!this.getWorld().isClient) {
@@ -385,7 +385,7 @@ public class WargEntity extends AbstractBeastEntity {
         }
         this.damage(damageSource, i);
         if (this.hasPassengers()) {
-            if(getWorld() instanceof ServerWorld serverWorld){
+            if(getWorld() instanceof ServerLevel serverWorld){
                 for (Entity entity : this.getPassengersDeep()) {
                     entity.damage(damageSource, i);
                 }
@@ -397,7 +397,7 @@ public class WargEntity extends AbstractBeastEntity {
 
     //@Override
     public boolean isHorseArmor(ItemStack stack) {
-        return stack.isIn(TagKey.of(RegistryKeys.ITEM, Identifier.of(MiddleEarth.MOD_ID, "warg_armor")));
+        return stack.isIn(TagKey.of(Registries.ITEM, ResourceLocation.of(MiddleEarth.MOD_ID, "warg_armor")));
     }
 
     public boolean hasCharged() {
@@ -410,7 +410,7 @@ public class WargEntity extends AbstractBeastEntity {
 
     @Override
     public boolean isBondingItem(ItemStack itemStack) {
-        return itemStack.isIn(TagKey.of(RegistryKeys.ITEM, Identifier.of(MiddleEarth.MOD_ID, "warg_food")));
+        return itemStack.isIn(TagKey.of(Registries.ITEM, ResourceLocation.of(MiddleEarth.MOD_ID, "warg_food")));
     }
 
     @Override

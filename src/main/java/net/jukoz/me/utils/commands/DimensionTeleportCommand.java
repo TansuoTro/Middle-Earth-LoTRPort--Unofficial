@@ -8,8 +8,8 @@ import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.*;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3i;
 
 import java.util.Objects;
@@ -30,10 +30,10 @@ public class DimensionTeleportCommand {
     public static int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         try{
             PosArgument posArgument = Vec3ArgumentType.getPosArgument(context, LOCATION);
-            Vec3d coordinatesInDouble = posArgument.toAbsolutePos(context.getSource());
+            Vec3 coordinatesInDouble = posArgument.toAbsolutePos(context.getSource());
 
             Vector3i coordinates = new Vector3i((int) coordinatesInDouble.x, (int) coordinatesInDouble.y, (int) coordinatesInDouble.z);
-            ServerPlayerEntity targettedPlayer = EntityArgumentType.getPlayer(context, PLAYER);
+            ServerPlayer targettedPlayer = EntityArgumentType.getPlayer(context, PLAYER);
 
             ModDimensions.teleportPlayerToMe(targettedPlayer, coordinates);
 

@@ -4,11 +4,11 @@ import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.jukoz.me.compat.client.render.MEMobEntityRenderer;
 
 import com.google.common.collect.Maps;
-import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.Util;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.EntityModelLayersME;
 import net.jukoz.me.entity.beasts.cave_troll.feature.CaveTrollDroolFeatureRenderer;
@@ -29,7 +29,7 @@ public class CaveTrollRenderer extends MEMobEntityRenderer<CaveTrollEntity, Cave
     }
 
     @Override
-    public Identifier getTexture(CaveTrollEntityRenderState state) {
+    public ResourceLocation getTexture(CaveTrollEntityRenderState state) {
         boolean isCalm = (state.tameness > 25 || !state.isTame) && !state.isEnraged;
         if(state.customName != null && state.customName.getString().equals("Angmarzku")) {
             return isCalm ?

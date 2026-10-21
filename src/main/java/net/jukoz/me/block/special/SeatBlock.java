@@ -1,28 +1,28 @@
 package net.jukoz.me.block.special;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.util.Hand;
+import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.InteractionHand;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelView;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.seat.SeatEntity;
@@ -32,8 +32,8 @@ import org.joml.Vector3f;
 
 public class SeatBlock extends Block {
     public static final EnumProperty<Direction> FACING = HorizontalFacingBlock.FACING;
-    public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
-    public static final BooleanProperty OCCUPIED = Properties.OCCUPIED;
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+    public static final BooleanProperty OCCUPIED = BlockStateProperties.OCCUPIED;
 
     public SeatBlock(Settings settings) {
         super(settings);
@@ -41,7 +41,7 @@ public class SeatBlock extends Block {
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         Quaternionf quaternion = state.get(FACING).getOpposite().getRotationQuaternion().normalize();
         Vector3f eulerAngles = new Vector3f(0, 0, 0);
         eulerAngles = quaternion.getEulerAnglesXYZ(eulerAngles);
@@ -56,37 +56,37 @@ public class SeatBlock extends Block {
         seat.setInvulnerable(true);
 
         if(world.isClient) {
-            return ActionResult.CONSUME;
+            return InteractionResult.CONSUME;
         } else if(player.isSneaking() || player.isSpectator() || player.hasVehicle()) {
-            return ActionResult.FAIL;
+            return InteractionResult.FAIL;
         } else if (player.shouldCancelInteraction()) {
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         } else if (world.getBlockState(pos.up()).isOpaque()){
-            player.sendMessage(Text.translatable("alert.%s.seat.space_not_empty".formatted(MiddleEarth.MOD_ID)), true);
-            return ActionResult.SUCCESS;
+            player.sendMessage(Component.translatable("alert.%s.seat.space_not_empty".formatted(MiddleEarth.MOD_ID)), true);
+            return InteractionResult.SUCCESS;
         }else if (state.get(OCCUPIED)){
-        player.sendMessage(Text.translatable("alert.%s.seat.occupied".formatted(MiddleEarth.MOD_ID)), true);
-            return ActionResult.SUCCESS;
+        player.sendMessage(Component.translatable("alert.%s.seat.occupied".formatted(MiddleEarth.MOD_ID)), true);
+            return InteractionResult.SUCCESS;
         } else {
             if(world.spawnEntity(seat)) {
                 player.startRiding(seat, true);
                 player.setYaw(yaw);
                 player.setHeadYaw(yaw);
                 world.setBlockState(pos, state.with(OCCUPIED, true));
-                return ActionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             } else {
-                return ActionResult.CONSUME;
+                return InteractionResult.CONSUME;
             }
         }
     }
 
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(Properties.HORIZONTAL_FACING, WATERLOGGED, OCCUPIED);
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(BlockStateProperties.HORIZONTAL_FACING, WATERLOGGED, OCCUPIED);
     }
 
     @Nullable
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(Properties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
+    public BlockState getPlacementState(BlockPlaceContext ctx) {
+        return this.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
     }
 
     @Override

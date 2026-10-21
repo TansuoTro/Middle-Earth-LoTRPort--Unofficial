@@ -22,7 +22,7 @@ public enum BlockAuthor implements StringIdentifiable {
     private final String authorName;
 
     public static final Codec<BlockAuthor> CODEC = StringIdentifiable.createCodec(BlockAuthor::values);
-    public static final PacketCodec<net.minecraft.network.PacketByteBuf, BlockAuthor> PACKET_CODEC = PacketCodecs.indexed(BY_ID, BlockAuthor::getId);
+    public static final PacketCodec<net.minecraft.network.FriendlyByteBuf, BlockAuthor> PACKET_CODEC = PacketCodecs.indexed(BY_ID, BlockAuthor::getId);
 
     BlockAuthor(int id, String authorName) {
         this.id = id;

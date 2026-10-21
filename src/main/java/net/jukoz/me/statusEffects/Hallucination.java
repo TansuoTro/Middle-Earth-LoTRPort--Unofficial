@@ -2,12 +2,12 @@ package net.jukoz.me.statusEffects;
 
 import net.jukoz.me.utils.HallucinationData;
 import net.jukoz.me.utils.IEntityDataSaver;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.Map;
 
@@ -26,7 +26,7 @@ public class Hallucination extends StatusEffect {
 
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        if(entity instanceof PlayerEntity){
+        if(entity instanceof Player){
             Map<StatusEffect, StatusEffectInstance> map = entity.getActiveStatusEffects();
             int ticksLeft = map.get(this).getDuration();
             if(ticksLeft != -1 && ticksLeft < HallucinationData.STOPPING_TICK)

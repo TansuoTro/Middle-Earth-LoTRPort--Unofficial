@@ -1,27 +1,27 @@
 package net.jukoz.me.block.special.fire_of_orthanc;
 
-import net.minecraft.util.ActionResult;
+import net.minecraft.world.InteractionResult;
 import net.jukoz.me.item.DecorativeItemsME;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
-import net.minecraft.world.explosion.Explosion;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.Explosion;
 import org.jetbrains.annotations.Nullable;
 
 public class FireOfOrthancBlock extends Block {
@@ -31,7 +31,7 @@ public class FireOfOrthancBlock extends Block {
         super(settings);
     }
 
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         ItemStack stack = player.getStackInHand(hand);
         if (!stack.isOf(DecorativeItemsME.TORCH_OF_ORTHANC)) {
             return super.onUse(state, world, pos, player, hand, hit);
@@ -41,17 +41,17 @@ public class FireOfOrthancBlock extends Block {
             Item item = stack.getItem();
             if (!player.isCreative()) {
                 if (stack.isOf(Items.FLINT_AND_STEEL)) {
-                    stack.damage(1, player, (p) -> p.sendEquipmentBreakStatus(hand == Hand.MAIN_HAND ? net.minecraft.entity.EquipmentSlot.MAINHAND : net.minecraft.entity.EquipmentSlot.OFFHAND));
+                    stack.damage(1, player, (p) -> p.sendEquipmentBreakStatus(hand == InteractionHand.MAIN_HAND ? net.minecraft.world.entity.EquipmentSlot.MAINHAND : net.minecraft.world.entity.EquipmentSlot.OFFHAND));
                 } else {
                     stack.decrement(1);
                 }
             }
             player.incrementStat(Stats.USED.getOrCreateStat(item));
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
     }
 
-    public void explode(World world, BlockPos pos, @Nullable LivingEntity igniter) {
+    public void explode(Level world, BlockPos pos, @Nullable LivingEntity igniter) {
         if (!world.isClient) {
             FireOfOrthancEntity fireOfOrthancEntity = new FireOfOrthancEntity(world, (double) pos.getX() + 0.5, pos.getY(), (double) pos.getZ() + 0.5, igniter, true);
             world.spawnEntity(fireOfOrthancEntity);
@@ -61,7 +61,7 @@ public class FireOfOrthancBlock extends Block {
         }
     }
 
-    public void onDestroyedByExplosion(World world, BlockPos pos, Explosion explosion) {
+    public void onDestroyedByExplosion(Level world, BlockPos pos, Explosion explosion) {
         if (!world.isClient) {
             FireOfOrthancEntity fireOfOrthancEntity = new FireOfOrthancEntity(world, (double)pos.getX() + 0.5, pos.getY(), (double)pos.getZ() + 0.5, explosion.getCausingEntity(), false);
             int i = fireOfOrthancEntity.getFuse();
@@ -75,7 +75,7 @@ public class FireOfOrthancBlock extends Block {
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return OUTLINE_SHAPE;
     }
 }

@@ -3,10 +3,10 @@ import net.jukoz.me.compat.NbtCompat;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtElement;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.resources.datas.common.AffinityLevel;
 import net.jukoz.me.resources.datas.factions.Faction;
@@ -18,7 +18,7 @@ public class InitialDiplomacy {
         Codec.STRING.fieldOf("affinity").forGetter(InitialDiplomacy::getAffinityForNbt)
     ).apply(instance, InitialDiplomacy::new));
 
-    Identifier factionId;
+    ResourceLocation factionId;
     AffinityLevel affinity;
 
     public InitialDiplomacy(String factionId, String affinity) {
@@ -26,13 +26,13 @@ public class InitialDiplomacy {
         this.affinity = AffinityLevel.valueOf(affinity);
     }
 
-    public InitialDiplomacy(RegistryKey<Faction> factionRegistryKey, AffinityLevel affinity) {
+    public InitialDiplomacy(ResourceKey<Faction> factionRegistryKey, AffinityLevel affinity) {
         this.factionId = factionRegistryKey.getValue();
         this.affinity = affinity;
     }
 
     public InitialDiplomacy(NbtElement nbtElement) {
-        NbtCompound compound = NbtCompat.compound(nbtElement);
+        CompoundTag compound = NbtCompat.compound(nbtElement);
         compound.get("faction");
     }
 
@@ -45,13 +45,13 @@ public class InitialDiplomacy {
     }
 
     public NbtElement getNbt() {
-        NbtCompound compound = new NbtCompound();
+        CompoundTag compound = new CompoundTag();
         compound.putString("faction", getFactionIdentifierForNbt());
         compound.putString("affinity", getAffinityForNbt());
         return compound;
     }
 
-    public boolean isHostileToward(Identifier faction) {
+    public boolean isHostileToward(ResourceLocation faction) {
         if(faction.equals(factionId)){
             return affinity == AffinityLevel.HOSTILE;
         }

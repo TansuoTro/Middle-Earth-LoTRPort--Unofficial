@@ -1,17 +1,17 @@
 package net.jukoz.me.network.packets.C2S;
 
 import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.structureManager.StructureManagerBlockEntity;
 import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
 
 public class PacketStructureManagerShowAllEntities extends ClientToServerPacket<PacketStructureManagerShowAllEntities> {
-    public static final Identifier ID = new Identifier(MiddleEarth.MOD_ID, "structure_manager_show_all_entities");
+    public static final ResourceLocation ID = new ResourceLocation(MiddleEarth.MOD_ID, "structure_manager_show_all_entities");
     public static final PacketType<PacketStructureManagerShowAllEntities> TYPE = PacketType.create(ID, PacketStructureManagerShowAllEntities::new);
 
     private final BlockPos pos;
@@ -20,7 +20,7 @@ public class PacketStructureManagerShowAllEntities extends ClientToServerPacket<
         this.pos = pos;
     }
 
-    public PacketStructureManagerShowAllEntities(PacketByteBuf buf) {
+    public PacketStructureManagerShowAllEntities(FriendlyByteBuf buf) {
         this(buf.readBlockPos());
     }
 
@@ -30,7 +30,7 @@ public class PacketStructureManagerShowAllEntities extends ClientToServerPacket<
     }
 
     @Override
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
         buf.writeBlockPos(this.pos);
     }
 

@@ -1,13 +1,13 @@
 package net.jukoz.me.entity.ai.brain.task.npc;
 
 import net.minecraft.entity.ai.NoPenaltyTargeting;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
-import net.minecraft.entity.ai.brain.WalkTarget;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.WalkTarget;
 import net.minecraft.entity.ai.brain.task.SingleTickTask;
 import net.minecraft.entity.ai.brain.task.TaskTriggerer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.GlobalPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.world.phys.Vec3;
 import net.jukoz.me.entity.npcs.NpcEntity;
 
 import java.util.Optional;
@@ -19,12 +19,12 @@ public class NpcWalkTowardsTask {
             Optional<Long> optional = context.getOptionalValue(cantReachWalkTargetSince);
             if (globalPos.getDimension() == world.getRegistryKey() && (!optional.isPresent() || world.getTime() - (Long)optional.get() <= (long)maxRunTime)) {
                 if (globalPos.getPos().getManhattanDistance(entity.getBlockPos()) > maxDistance) {
-                    Vec3d vec3d = null;
+                    Vec3 vec3d = null;
                     int l = 0;
                     int m = 1000;
 
                     while(vec3d == null || BlockPos.ofFloored(vec3d).getManhattanDistance(entity.getBlockPos()) > maxDistance) {
-                        vec3d = NoPenaltyTargeting.findTo(entity, 15, 7, Vec3d.ofBottomCenter(globalPos.getPos()), (double)((float)Math.PI / 2F));
+                        vec3d = NoPenaltyTargeting.findTo(entity, 15, 7, Vec3.ofBottomCenter(globalPos.getPos()), (double)((float)Math.PI / 2F));
                         ++l;
                         if (l == 1000) {
                             //entity.releaseTicketFor(destination);

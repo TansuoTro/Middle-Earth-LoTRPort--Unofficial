@@ -2,10 +2,10 @@ package net.jukoz.me.entity.spider.spawn;
 import net.jukoz.me.compat.client.render.MEAnimationStates;
 import net.jukoz.me.compat.client.render.MEMobEntityRenderer;
 
-import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.model.EntityModelLayer;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.entity.EntityModelLayersME;
 
 public class SpawnOfShelobRenderer extends MEMobEntityRenderer<SpawnOfShelobEntity, SpawnOfShelobRenderState, SpawnOfShelobModel> {
@@ -25,7 +25,7 @@ public class SpawnOfShelobRenderer extends MEMobEntityRenderer<SpawnOfShelobEnti
     }
 
     @Override
-    public Identifier getTexture(SpawnOfShelobRenderState state) {
+    public ResourceLocation getTexture(SpawnOfShelobRenderState state) {
         return state.spiderVariant.assetInfo().spawnOfShelob().texturePath();
     }
 

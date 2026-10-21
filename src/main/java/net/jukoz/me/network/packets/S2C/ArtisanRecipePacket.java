@@ -1,12 +1,12 @@
 package net.jukoz.me.network.packets.S2C;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.artisantable.ArtisanTableScreen;
 import net.jukoz.me.gui.artisantable.ArtisanTableScreenHandler;
@@ -14,7 +14,7 @@ import net.jukoz.me.network.contexts.ClientPacketContext;
 import net.jukoz.me.network.packets.ServerToClientPacket;
 
 public class ArtisanRecipePacket extends ServerToClientPacket<ArtisanRecipePacket> {
-    public static final Identifier ID = MiddleEarth.of("artisan_recipe_packet");
+    public static final ResourceLocation ID = MiddleEarth.of("artisan_recipe_packet");
 
     public static final PacketType<ArtisanRecipePacket> TYPE = PacketType.create(ID, ArtisanRecipePacket::new);
 
@@ -27,7 +27,7 @@ public class ArtisanRecipePacket extends ServerToClientPacket<ArtisanRecipePacke
     }
 
     @Override
-    @Environment(EnvType.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void process(ClientPacketContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
         ArtisanTableScreen screen = (ArtisanTableScreen)client.currentScreen;
@@ -39,7 +39,7 @@ public class ArtisanRecipePacket extends ServerToClientPacket<ArtisanRecipePacke
         }
     }
 
-    public ArtisanRecipePacket(PacketByteBuf buf) {
+    public ArtisanRecipePacket(FriendlyByteBuf buf) {
         this(buf.readInt(), buf.readItemStack());
     }
 
@@ -49,7 +49,7 @@ public class ArtisanRecipePacket extends ServerToClientPacket<ArtisanRecipePacke
     }
 
     @Override
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
         buf.writeInt(this.index);
         buf.writeItemStack(this.output);
     }

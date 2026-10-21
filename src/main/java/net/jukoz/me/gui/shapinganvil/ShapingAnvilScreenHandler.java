@@ -2,26 +2,26 @@ package net.jukoz.me.gui.shapinganvil;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
-import net.minecraft.recipe.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.jukoz.me.compat.SingleStackRecipeInput;
 import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.Property;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.block.special.forge.MultipleStackRecipeInput;
 import net.jukoz.me.block.special.shapingAnvil.ShapingAnvilBlockEntity;
 import net.jukoz.me.gui.ModScreenHandlers;
@@ -39,10 +39,10 @@ public class ShapingAnvilScreenHandler extends ScreenHandler {
     private final Inventory inventory;
     private final PropertyDelegate propertyDelegate;
     protected BlockPos pos;
-    private final World world;
+    private final Level world;
     private List<AnvilShapingRecipe> availableRecipes;
     private ItemStack outputStack;
-    private PlayerEntity player;
+    private Player player;
     private Property selectedIndex;
     private Property recipesSize;
 
@@ -89,7 +89,7 @@ public class ShapingAnvilScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMove(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
         if (slot != null && slot.hasStack()) {
@@ -130,7 +130,7 @@ public class ShapingAnvilScreenHandler extends ScreenHandler {
             int index = 0;
             for(AnvilShapingRecipe recipe : availableRecipes) {
                 ShapingAnvilRecipePacket newPacket = new ShapingAnvilRecipePacket(index++, recipe.getOutput());
-                ServerPlayNetworking.send((ServerPlayerEntity) player, newPacket);
+                ServerPlayNetworking.send((ServerPlayer) player, newPacket);
             }
         }
     }
@@ -159,7 +159,7 @@ public class ShapingAnvilScreenHandler extends ScreenHandler {
         ClientPlayNetworking.send(anvilIndexPacket);
     }
 
-    public boolean onButtonClick(PlayerEntity player, int id) {
+    public boolean onButtonClick(Player player, int id) {
         this.player = player;
         return this.isInBounds(id);
     }
@@ -172,7 +172,7 @@ public class ShapingAnvilScreenHandler extends ScreenHandler {
         return outputStack;
     }
 
-    public boolean canUse(PlayerEntity player) {
+    public boolean canUse(Player player) {
         return this.inventory.canPlayerUse(player);
     }
 

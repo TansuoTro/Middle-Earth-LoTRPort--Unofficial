@@ -16,13 +16,13 @@ import net.jukoz.me.entity.spider.MirkwoodSpiderEntity;
 import net.jukoz.me.entity.uruks.misties.MistyHobgoblinEntity;
 import net.jukoz.me.entity.uruks.mordor.MordorBlackUrukEntity;
 import net.jukoz.me.statusEffects.ModStatusEffects;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -30,15 +30,15 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
 
 public class BarrowWightEntity extends HostileEntity {
     private static final int MAX_HEALTH = 40;
@@ -55,18 +55,18 @@ public class BarrowWightEntity extends HostileEntity {
 
     public static final int SCREAM_ACTION_TIME = 35;
 
-    public BarrowWightEntity(EntityType<? extends HostileEntity> entityType, World world) {
+    public BarrowWightEntity(EntityType<? extends HostileEntity> entityType, Level world) {
         super(entityType, world);
     }
     public static DefaultAttributeContainer.Builder setAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, MOVEMENT_SPEED)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, MAX_HEALTH)
-                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, KNOCKBACK_RESISTANCE)
-                .add(EntityAttributes.GENERIC_ATTACK_SPEED, 0.85)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 28.0)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, ATTACK_DAMAGE)
-                .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, ATTACK_KNOCKBACK);
+        return Mob.createMobAttributes()
+                .add(Attributes.GENERIC_MOVEMENT_SPEED, MOVEMENT_SPEED)
+                .add(Attributes.GENERIC_MAX_HEALTH, MAX_HEALTH)
+                .add(Attributes.GENERIC_KNOCKBACK_RESISTANCE, KNOCKBACK_RESISTANCE)
+                .add(Attributes.GENERIC_ATTACK_SPEED, 0.85)
+                .add(Attributes.GENERIC_FOLLOW_RANGE, 28.0)
+                .add(Attributes.GENERIC_ATTACK_DAMAGE, ATTACK_DAMAGE)
+                .add(Attributes.GENERIC_ATTACK_KNOCKBACK, ATTACK_KNOCKBACK);
     }
 
     protected void initGoals() {
@@ -79,7 +79,7 @@ public class BarrowWightEntity extends HostileEntity {
 
         int i = 0;
         this.targetSelector.add(++i, new RevengeGoal(this));
-        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
+        this.targetSelector.add(++i, new ActiveTargetGoal<>(this, Player.class, true));
         this.targetSelector.add(++i, new ActiveTargetGoal<>(this, TrollEntity.class, true));
         this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MordorBlackUrukEntity.class, true));
         this.targetSelector.add(++i, new ActiveTargetGoal<>(this, MistyHobgoblinEntity.class, true));
@@ -135,9 +135,9 @@ public class BarrowWightEntity extends HostileEntity {
 
                 if(this.getScreamingActionTime() <= 0){
                     if(target != null && target.isPlayer()){
-                        int value = Random.create().nextBetweenExclusive(0, 100);
+                        int value = RandomSource.create().nextBetweenExclusive(0, 100);
                         if(value < 5){
-                            target.sendMessage(Text.literal("The barrows says BOO!!!!"));
+                            target.sendMessage(Component.literal("The barrows says BOO!!!!"));
                         }
                         target.addStatusEffect(new StatusEffectInstance(ModStatusEffects.HALLUCINATION, SCREAM_EFFECT_DURATION), this);
                         target.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, SCREAM_EFFECT_DURATION), this);
@@ -161,12 +161,12 @@ public class BarrowWightEntity extends HostileEntity {
         super.tick();
     }
 
-    public void writeCustomDataToNbt(NbtCompound nbt) {
+    public void writeCustomDataToNbt(CompoundTag nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putInt(LAST_SCREAM_TIME_KEY, !this.canScream() ? this.lastScreamTime : -1);
     }
 
-    public void readCustomDataFromNbt(NbtCompound nbt) {
+    public void readCustomDataFromNbt(CompoundTag nbt) {
         super.readCustomDataFromNbt(nbt);
         if (nbt.contains(LAST_SCREAM_TIME_KEY, 99) && nbt.getInt(LAST_SCREAM_TIME_KEY) > -1) {
             this.setScreamedTime(nbt.getInt(LAST_SCREAM_TIME_KEY));

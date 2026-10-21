@@ -1,17 +1,17 @@
 package net.jukoz.me.block.special.crop;
 
 import net.jukoz.me.item.ResourceItemsME;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CropBlock;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.state.StateManager;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.item.ItemConvertible;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.state.property.IntProperty;
-import net.minecraft.state.property.Properties;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class LettuceCropBlock extends CropBlock {
     public static final int MAX_AGE = 3;
-    public static final IntProperty AGE = Properties.AGE_3;
+    public static final IntProperty AGE = BlockStateProperties.AGE_3;
     public LettuceCropBlock(Settings settings) {
         super(settings);
     }
@@ -31,7 +31,7 @@ public class LettuceCropBlock extends CropBlock {
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(AGE);
     }
 }

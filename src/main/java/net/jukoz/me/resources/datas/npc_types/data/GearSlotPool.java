@@ -1,8 +1,8 @@
 package net.jukoz.me.resources.datas.npc_types.data;
 import net.jukoz.me.compat.NbtCompat;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.jukoz.me.api.dtos.WeightedPool;
@@ -43,7 +43,7 @@ public class GearSlotPool {
 
     public static NbtElement createNbt(GearSlotPool slotData){
         if(slotData.isPool()){
-            NbtCompound nbt = new NbtCompound();
+            CompoundTag nbt = new CompoundTag();
             NbtList nbtList = new NbtList();
             for(WeightedItemData gearItemData : slotData.npcGearItemPool.elements){
                 nbtList.add(gearItemData.getNbt());
@@ -64,7 +64,7 @@ public class GearSlotPool {
 
     public static GearSlotPool readNbt(NbtElement nbt){
         if(NbtCompat.isCompound(nbt)){
-            NbtCompound nbtCompound = NbtCompat.compound(nbt);
+            CompoundTag nbtCompound = NbtCompat.compound(nbt);
             if(nbtCompound.get("pool") == null){
                 return GearSlotPool.create(new WeightedItemData(nbtCompound));
             }
@@ -73,7 +73,7 @@ public class GearSlotPool {
             for(int i = 0; i < list.size(); i++){
                 // getString() stringifies compound elements in 1.20.1, so the compound form
                 // has to be tested first.
-                if(list.get(i) instanceof NbtCompound compound){
+                if(list.get(i) instanceof CompoundTag compound){
                     gearSlotPool.add(new WeightedItemData(compound));
                 } else if(!list.getString(i).isEmpty()){
                     gearSlotPool.add(new WeightedItemData(MiddleEarth.fetchId(list.getString(i))));

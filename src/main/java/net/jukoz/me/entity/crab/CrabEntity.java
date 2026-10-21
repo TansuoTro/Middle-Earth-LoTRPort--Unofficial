@@ -1,31 +1,31 @@
 package net.jukoz.me.entity.crab;
 
 import net.jukoz.me.entity.ModEntities;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.entity.ai.control.AquaticMoveControl;
 import net.minecraft.entity.ai.control.MoveControl;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.ai.pathing.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.entity.mob.GuardianEntity;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.entity.mob.WaterCreatureEntity;
 import net.minecraft.entity.passive.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemConvertible;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 public class CrabEntity extends WaterCreatureEntity {
@@ -33,7 +33,7 @@ public class CrabEntity extends WaterCreatureEntity {
     private static final Ingredient BREEDING_INGREDIENT
             = Ingredient.ofItems(Items.SEA_PICKLE, Items.SALMON, Items.COD);
 
-    public CrabEntity(EntityType<? extends WaterCreatureEntity> entityType, World world) {
+    public CrabEntity(EntityType<? extends WaterCreatureEntity> entityType, Level world) {
         super(entityType, world);
         new AquaticMoveControl(this, 85, 10, 0.2F, 0.1F, true);
     }
@@ -45,15 +45,15 @@ public class CrabEntity extends WaterCreatureEntity {
         this.goalSelector.add(2, new TemptGoal(this, 1.3, BREEDING_INGREDIENT, false));
         this.goalSelector.add(3, new SwimAroundGoal(this, 1.0, 10));
         this.goalSelector.add(4, new LookAroundGoal(this));
-        this.goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
+        this.goalSelector.add(5, new LookAtEntityGoal(this, Player.class, 6.0F));
         this.goalSelector.add(6, new MeleeAttackGoal(this, 1.3, true));
         this.goalSelector.add(7, new FleeEntityGoal<>(this, DolphinEntity.class, 8.0F, 1.0, 1.4));
         this.targetSelector.add(1, (new RevengeGoal(this)));
     }
 
     public static DefaultAttributeContainer.Builder createCrabAttributes() {
-        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 10.0).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 5f);
+        return Mob.createMobAttributes().add(Attributes.GENERIC_MAX_HEALTH, 10.0).add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25)
+                .add(Attributes.GENERIC_ATTACK_DAMAGE, 5f);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class CrabEntity extends WaterCreatureEntity {
     }
 
     @Nullable
-    public CrabEntity createChild(ServerWorld serverWorld, PassiveEntity passiveEntity) {
+    public CrabEntity createChild(ServerLevel serverWorld, PassiveEntity passiveEntity) {
         return (CrabEntity) ModEntities.CRAB.create(serverWorld);
     }
 

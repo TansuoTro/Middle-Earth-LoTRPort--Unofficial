@@ -1,28 +1,28 @@
 package net.jukoz.me.api.dtos;
 import net.jukoz.me.compat.NbtCompat;
 
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtElement;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 
-public class WeightedIdentifier extends WeightedItem<Identifier> {
+public class WeightedIdentifier extends WeightedItem<ResourceLocation> {
     public WeightedIdentifier(NbtElement element){
         super(element);
 
         // asString() stringifies any element in 1.20.1, so a compound would asString() to its whole JSON form.
-        if(NbtCompat.isCompound(element)) { this.item = new Identifier(NbtCompat.compound(element).getString("id")); } else { this.item = new Identifier(element.asString()); }
+        if(NbtCompat.isCompound(element)) { this.item = new ResourceLocation(NbtCompat.compound(element).getString("id")); } else { this.item = new ResourceLocation(element.asString()); }
     }
-    public WeightedIdentifier(Identifier value) {
+    public WeightedIdentifier(ResourceLocation value) {
         super(value);
     }
-    public WeightedIdentifier(Identifier value, int i) {
+    public WeightedIdentifier(ResourceLocation value, int i) {
         super(value, i);
     }
-    public static WeightedIdentifier fromIdentifier(Identifier id){
+    public static WeightedIdentifier fromIdentifier(ResourceLocation id){
         return new WeightedIdentifier(id, 1);
     }
-    public static WeightedIdentifier fromKey(RegistryKey key){
+    public static WeightedIdentifier fromKey(ResourceKey key){
         return new WeightedIdentifier(key.getValue(), 1);
     }
 
@@ -39,7 +39,7 @@ public class WeightedIdentifier extends WeightedItem<Identifier> {
         // pool that held both weighted and unweighted entries.
         NbtElement newNbt = super.getNbt();
         if(newNbt == null)
-            newNbt = new NbtCompound();
+            newNbt = new CompoundTag();
 
         NbtCompat.compound(newNbt).putString("id", this.item.toString());
         return newNbt;

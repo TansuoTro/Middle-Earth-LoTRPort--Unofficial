@@ -1,28 +1,28 @@
 package net.jukoz.me.gui.structuremanager;
 
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 
 import java.util.Optional;
 
 public class StructureManagerScreenData{
     private BlockPos pos;
-    private Identifier structureManagerIdentifier;
+    private ResourceLocation structureManagerIdentifier;
     private boolean isActive;
     private boolean toInitialize;
 
-    public static final PacketCodec<? super PacketByteBuf, StructureManagerScreenData> PACKET_CODEC;
+    public static final PacketCodec<? super FriendlyByteBuf, StructureManagerScreenData> PACKET_CODEC;
 
     public BlockPos getPos() {
         return this.pos;
     }
-    public Identifier getStructureManagerIdentifier() {
+    public ResourceLocation getStructureManagerIdentifier() {
         return this.structureManagerIdentifier;
     }
-    private Optional<Identifier> getStructureManagerIdentifierOptional() {
+    private Optional<ResourceLocation> getStructureManagerIdentifierOptional() {
         return Optional.ofNullable(this.structureManagerIdentifier);
     }
 
@@ -33,7 +33,7 @@ public class StructureManagerScreenData{
         return this.toInitialize;
     }
 
-    public void setStructureManagerIdentifier(Identifier structureManagerIdentifier) {
+    public void setStructureManagerIdentifier(ResourceLocation structureManagerIdentifier) {
         this.structureManagerIdentifier = structureManagerIdentifier;
     }
 
@@ -44,7 +44,7 @@ public class StructureManagerScreenData{
         this.toInitialize = toInitialize;
     }
 
-    public StructureManagerScreenData(BlockPos pos, boolean isActive, boolean toInitialize, Optional<Identifier> structureManagerId){
+    public StructureManagerScreenData(BlockPos pos, boolean isActive, boolean toInitialize, Optional<ResourceLocation> structureManagerId){
         this.pos = pos;
         setActive(isActive);
         setToInitialize(toInitialize);

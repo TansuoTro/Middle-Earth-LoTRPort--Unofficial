@@ -1,8 +1,8 @@
 package net.jukoz.me.entity.beasts.warg.features;
 
-import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
+import net.minecraft.client.model.geom.PartNames;
 import net.jukoz.me.entity.beasts.warg.WargEntityRenderState;
 
 public class WargArmorSideAddonsModel extends WargArmorModel {
@@ -16,7 +16,7 @@ public class WargArmorSideAddonsModel extends WargArmorModel {
 
     public static TexturedModelData getTexturedModelDataSideSkulls() {
         ModelData modelData = getArmorModelData();
-        ModelPartData front_armor = modelData.getRoot().getChild("root").getChild(EntityModelPartNames.BODY).getChild("upper_body").getChild("body_no_legs").getChild("body_fur").getChild("body_armor").getChild("front_armor");
+        ModelPartData front_armor = modelData.getRoot().getChild("root").getChild(PartNames.BODY).getChild("upper_body").getChild("body_no_legs").getChild("body_fur").getChild("body_armor").getChild("front_armor");
 
         ModelPartData addons_front_armor = front_armor.addChild("addons_front_armor", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
         ModelPartData skulls = addons_front_armor.addChild("skulls", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 1.0F));

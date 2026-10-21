@@ -2,48 +2,48 @@ package net.jukoz.me.block.special.artisantable;
 
 import com.google.common.collect.ImmutableMap;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import net.jukoz.me.block.special.alloyfurnace.AlloyFurnaceEntity;
 import net.jukoz.me.gui.artisantable.ArtisanTableScreenHandler;
 import net.jukoz.me.resources.datas.common.DispositionType;
 import net.jukoz.me.resources.persistent_datas.PlayerDataService;
 import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.block.enums.BedPart;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.ai.pathing.NavigationType;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.StonecutterScreenHandler;
-import net.minecraft.stat.Stats;
-import net.minecraft.state.StateManager;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.state.property.DirectionProperty;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.state.property.Property;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.*;
 import net.minecraft.util.function.BooleanBiFunction;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccess;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
@@ -51,7 +51,7 @@ import java.util.stream.Stream;
 
 public class ArtisanTable extends HorizontalFacingBlock {
     public static final EnumProperty<ArtisanTablePart> PART = EnumProperty.of("part", ArtisanTablePart.class);
-    private static final Text TITLE = Text.translatable("container.artisan_table");
+    private static final Component TITLE = Component.translatable("container.artisan_table");
 
 
     public ArtisanTable(Settings settings) {
@@ -60,7 +60,7 @@ public class ArtisanTable extends HorizontalFacingBlock {
     }
 
     @Nullable
-    public static Direction getDirection(BlockView world, BlockPos pos) {
+    public static Direction getDirection(BlockGetter world, BlockPos pos) {
         BlockState blockState = world.getBlockState(pos);
         return blockState.getBlock() instanceof ArtisanTable ? (Direction)blockState.get(FACING) : null;
     }
@@ -73,7 +73,7 @@ public class ArtisanTable extends HorizontalFacingBlock {
         }
     }
 
-    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    public void onBreak(Level world, BlockPos pos, BlockState state, Player player) {
         if (!world.isClient && player.isCreative()) {
             ArtisanTablePart tablePart = (ArtisanTablePart)state.get(PART);
             ArtisanTablePart tablePartOpposite = (ArtisanTablePart)state.get(PART).getOpposite(state.get(PART));
@@ -94,11 +94,11 @@ public class ArtisanTable extends HorizontalFacingBlock {
     }
 
     @Nullable
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
+    public BlockState getPlacementState(BlockPlaceContext ctx) {
         Direction direction = ctx.getHorizontalPlayerFacing();
         BlockPos blockPos = ctx.getBlockPos();
         BlockPos blockPos2 = blockPos.offset(direction.rotateYClockwise());
-        World world = ctx.getWorld();
+        Level world = ctx.getWorld();
         return world.getBlockState(blockPos2).canReplace(ctx) && world.getWorldBorder().contains(blockPos2) ? (BlockState)this.getDefaultState().with(FACING, direction).with(PART, ArtisanTablePart.LEFT) : null;
     }
 
@@ -112,7 +112,7 @@ public class ArtisanTable extends HorizontalFacingBlock {
         return tablePart == ArtisanTablePart.RIGHT ? DoubleBlockProperties.Type.FIRST : DoubleBlockProperties.Type.SECOND;
     }
 
-    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
+    public void onPlaced(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
         super.onPlaced(world, pos, state, placer, itemStack);
         if (!world.isClient) {
             BlockPos blockPos = pos.offset((Direction)state.get(FACING).rotateYClockwise());
@@ -124,10 +124,10 @@ public class ArtisanTable extends HorizontalFacingBlock {
 
     public long getRenderingSeed(BlockState state, BlockPos pos) {
         BlockPos blockPos = pos.offset((Direction)state.get(FACING), state.get(PART) == ArtisanTablePart.RIGHT ? 0 : 1);
-        return MathHelper.hashCode(blockPos.getX(), pos.getY(), blockPos.getZ());
+        return Mth.hashCode(blockPos.getX(), pos.getY(), blockPos.getZ());
     }
 
-    public boolean canPathfindThrough(BlockState state, BlockView world, BlockPos pos, NavigationType type) {
+    public boolean canPathfindThrough(BlockState state, BlockGetter world, BlockPos pos, NavigationType type) {
         return false;
     }
 
@@ -136,7 +136,7 @@ public class ArtisanTable extends HorizontalFacingBlock {
         return BlockRenderType.MODEL;
     }
 
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (world.isClient) {
             return ActionResult.SUCCESS;
         } else {
@@ -147,27 +147,27 @@ public class ArtisanTable extends HorizontalFacingBlock {
     }
 
     @Nullable
-    public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
+    public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, Level world, BlockPos pos) {
         return new ExtendedScreenHandlerFactory() {
             @Override
-            public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
+            public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
                 buf.writeString(getDispositionData(player, world));
             }
 
             @Override
-            public Text getDisplayName() {
+            public Component getDisplayName() {
                 return TITLE;
             }
 
             @Override
-            public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+            public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, Player player) {
                 return new ArtisanTableScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, pos), getDispositionData(player, world));
             }
         };
     }
 
     /** Donor opens the artisan table with "{disposition}/{isCreative}", used to filter the recipe list. */
-    private static String getDispositionData(PlayerEntity player, World world) {
+    private static String getDispositionData(Player player, Level world) {
         DispositionType dispositionType = PlayerDataService.getPlayerDisposition(player, world);
         if (dispositionType == null) {
             dispositionType = DispositionType.NEUTRAL;
@@ -175,13 +175,13 @@ public class ArtisanTable extends HorizontalFacingBlock {
         return dispositionType + "/" + player.isCreative();
     }
 
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         super.appendProperties(builder);
         builder.add(FACING, PART);
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
         return switch (state.get(PART)){
             case LEFT ->
                     switch (state.get(FACING)){

@@ -1,7 +1,7 @@
 package net.jukoz.me.compat;import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.item.Item;/**
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;/**
  * The 1.21.2 ToolMaterial record, in 1.20.1 terms.
  *
  * <p>1.21 replaced the numeric mining level with a tag of blocks the tool cannot

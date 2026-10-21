@@ -4,7 +4,7 @@ import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.jukoz.me.entity.npcs.NpcEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 import net.jukoz.me.entity.npcs.renderer.NpcEntityRenderState;
 
 public class EarModel extends SinglePartEntityModel<NpcEntity> {

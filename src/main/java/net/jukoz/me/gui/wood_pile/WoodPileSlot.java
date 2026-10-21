@@ -1,10 +1,10 @@
 package net.jukoz.me.gui.wood_pile;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.inventory.Slot;
 
 public class WoodPileSlot extends Slot {
     public WoodPileSlot(Inventory inventory, int index, int x, int y) {

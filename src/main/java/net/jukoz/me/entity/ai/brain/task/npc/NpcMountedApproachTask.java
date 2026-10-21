@@ -1,11 +1,11 @@
 package net.jukoz.me.entity.ai.brain.task.npc;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.MemoryModuleState;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.MultiTickTask;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
 import net.jukoz.me.entity.ai.brain.MemoryModulesME;
 import net.jukoz.me.entity.beasts.AbstractBeastEntity;
 import net.jukoz.me.entity.npcs.NpcEntity;
@@ -27,17 +27,17 @@ public class NpcMountedApproachTask extends MultiTickTask<NpcEntity> {
     }
 
     @Override
-    protected boolean shouldRun(ServerWorld world, NpcEntity entity) {
+    protected boolean shouldRun(ServerLevel world, NpcEntity entity) {
         return entity.getTarget() != null && entity.hasVehicle() && entity.squaredDistanceTo(entity.getTarget()) < 16;
     }
 
     @Override
-    protected boolean shouldKeepRunning(ServerWorld world, NpcEntity entity, long time) {
+    protected boolean shouldKeepRunning(ServerLevel world, NpcEntity entity, long time) {
         return entity.hasVehicle();
     }
 
     @Override
-    protected void run(ServerWorld world, NpcEntity entity, long time) {
+    protected void run(ServerLevel world, NpcEntity entity, long time) {
         LivingEntity target = entity.getTarget();
         if(target == null || !entity.hasVehicle()){
             entity.getBrain().forget(MemoryModuleType.WALK_TARGET);
@@ -57,7 +57,7 @@ public class NpcMountedApproachTask extends MultiTickTask<NpcEntity> {
     }
 
     @Override
-    protected void finishRunning(ServerWorld world, NpcEntity entity, long time) {
+    protected void finishRunning(ServerLevel world, NpcEntity entity, long time) {
         entity.getBrain().remember(MemoryModulesME.SMASH_COOLDOWN, 200);
         entity.setBlocking(false);
     }

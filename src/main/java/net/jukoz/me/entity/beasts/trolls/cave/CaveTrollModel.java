@@ -1,13 +1,13 @@
 package net.jukoz.me.entity.beasts.trolls.cave;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.jukoz.me.entity.beasts.trolls.TrollAnimations;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.MathHelper;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.util.Mth;
 
 @Environment(value= EnvType.CLIENT)
 public class CaveTrollModel extends SinglePartEntityModel<CaveTrollEntity> {
@@ -82,15 +82,15 @@ public class CaveTrollModel extends SinglePartEntityModel<CaveTrollEntity> {
     }
 
     private void setHeadAngles(float headYaw, float headPitch) {
-        headYaw = MathHelper.clamp(headYaw, -30.0F, 30.0F);
-        headPitch = MathHelper.clamp(headPitch, -25.0F, 40.0F);
+        headYaw = Mth.clamp(headYaw, -30.0F, 30.0F);
+        headPitch = Mth.clamp(headPitch, -25.0F, 40.0F);
 
         this.head.yaw = headYaw * 0.017453292F;
         this.head.pitch = headPitch * 0.017453292F;
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void render(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
         root.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
     }
 

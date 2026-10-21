@@ -4,34 +4,34 @@ import net.jukoz.me.entity.ModEntities;
 import net.jukoz.me.entity.hobbits.shire.ShireHobbitEntity;
 import net.jukoz.me.entity.projectile.AbstractProjectleEntity;
 import net.jukoz.me.item.ModResourceItems;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.world.World;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.Level;
 
 public class LitPineconeEntity extends AbstractProjectleEntity {
     private Item item = ModResourceItems.LIT_PINECONE;
     private float damage;
 
 
-    public LitPineconeEntity(EntityType<? extends LitPineconeEntity> entityType, World world) {
+    public LitPineconeEntity(EntityType<? extends LitPineconeEntity> entityType, Level world) {
         super(entityType, world);
     }
 
-    public LitPineconeEntity(World world, LivingEntity owner, float dmg) {
+    public LitPineconeEntity(Level world, LivingEntity owner, float dmg) {
         super(ModEntities.LIT_PINECONE, owner, world);
         this.damage = dmg;
     }
 
-    public LitPineconeEntity(World world, double x, double y, double z) {
+    public LitPineconeEntity(Level world, double x, double y, double z) {
         super(ModEntities.LIT_PINECONE, x, y, z, world);
     }
     protected void onEntityHit(EntityHitResult entityHitResult) {

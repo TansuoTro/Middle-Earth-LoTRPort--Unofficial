@@ -1,7 +1,7 @@
 package net.jukoz.me.compat;
 
 import net.jukoz.me.compat.NbtCompat;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 
@@ -21,16 +21,16 @@ public final class NbtCompat {
     }
 
     /** The compound behind {@code element}, or null when it is not one. */
-    public static NbtCompound compound(NbtElement element) {
-        return element instanceof NbtCompound compound ? compound : null;
+    public static CompoundTag compound(NbtElement element) {
+        return element instanceof CompoundTag compound ? compound : null;
     }
 
     public static boolean isCompound(NbtElement element) {
-        return element instanceof NbtCompound;
+        return element instanceof CompoundTag;
     }
 
-    public static void ifCompound(NbtElement element, Consumer<NbtCompound> action) {
-        if (element instanceof NbtCompound compound) {
+    public static void ifCompound(NbtElement element, Consumer<CompoundTag> action) {
+        if (element instanceof CompoundTag compound) {
             action.accept(compound);
         }
     }
@@ -51,12 +51,12 @@ public final class NbtCompat {
     }
 
     /** 1.21.5's two-argument getString, which returns the fallback when the key is absent. */
-    public static String getString(NbtCompound nbt, String key, String fallback) {
+    public static String getString(CompoundTag nbt, String key, String fallback) {
         return nbt.contains(key) ? nbt.getString(key) : fallback;
     }
 
     /** Same, defaulting to null rather than to the empty string. */
-    public static String getString(NbtCompound nbt, String key) {
+    public static String getString(CompoundTag nbt, String key) {
         return nbt.contains(key) ? nbt.getString(key) : null;
     }
 }

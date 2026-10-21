@@ -1,24 +1,24 @@
 package net.jukoz.me.block.special.plants;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.world.level.LevelAccess;
 
 import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.jukoz.me.block.special.CustomWaterloggableTallPlantBlock;
 import net.minecraft.block.*;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelView;
 
 public class WaterloggablePlant extends CustomPlantBlock implements Fertilizable, Waterloggable {
-    public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public WaterloggablePlant(Settings settings) {
         super(settings);
@@ -26,7 +26,7 @@ public class WaterloggablePlant extends CustomPlantBlock implements Fertilizable
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(WATERLOGGED);
     }
 
@@ -45,7 +45,7 @@ public class WaterloggablePlant extends CustomPlantBlock implements Fertilizable
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
+    public BlockState getPlacementState(BlockPlaceContext ctx) {
         BlockState blockState = ctx.getWorld().getBlockState(ctx.getBlockPos());
 
         if(blockState.isOf(Blocks.WATER)){
@@ -61,12 +61,12 @@ public class WaterloggablePlant extends CustomPlantBlock implements Fertilizable
     }
 
     @Override
-    public boolean canGrow(World world, Random random, BlockPos pos, BlockState state) {
+    public boolean canGrow(Level world, RandomSource random, BlockPos pos, BlockState state) {
         return true;
     }
 
     @Override
-    public void grow(ServerWorld world, Random random, BlockPos pos, BlockState state) {
+    public void grow(ServerLevel world, RandomSource random, BlockPos pos, BlockState state) {
         CustomWaterloggableTallPlantBlock tallPlantBlock = (CustomWaterloggableTallPlantBlock)(state.isOf(ModNatureBlocks.SHORT_BULRUSH) ? ModNatureBlocks.TALL_BULRUSH : ModNatureBlocks.TALL_CATTAILS);
         if (tallPlantBlock.getDefaultState().canPlaceAt(world, pos) && world.isAir(pos.up())) {
             tallPlantBlock.placeAt(world, pos, state.get(WATERLOGGED), 2);

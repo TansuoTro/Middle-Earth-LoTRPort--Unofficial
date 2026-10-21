@@ -1,24 +1,24 @@
 package net.jukoz.me.entity.deer;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.vehicle.BoatEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -28,7 +28,7 @@ public class DeerEntity extends AnimalEntity {
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = this.random.nextInt(100) + 950;
 
-    public DeerEntity(EntityType<? extends AnimalEntity> entityType, World world) {
+    public DeerEntity(EntityType<? extends AnimalEntity> entityType, Level world) {
         super(entityType, world);
     }
 
@@ -36,18 +36,18 @@ public class DeerEntity extends AnimalEntity {
     protected void initGoals() {
         this.goalSelector.add(0, new SwimGoal(this));
         this.goalSelector.add(1, new EscapeDangerGoal(this, 1.5f));
-        this.goalSelector.add(2, new FleeEntityGoal<PlayerEntity>(this, PlayerEntity.class, 8.0f, 1.5f, 1.7f));
+        this.goalSelector.add(2, new FleeEntityGoal<Player>(this, Player.class, 8.0f, 1.5f, 1.7f));
         this.goalSelector.add(2, new FleeEntityGoal<WolfEntity>(this, WolfEntity.class, 10.0f, 1.5f, 1.7f));
         this.goalSelector.add(2, new FleeEntityGoal<HostileEntity>(this, HostileEntity.class, 4.0f, 1.5f, 1.7f));
         this.goalSelector.add(3, new WanderAroundFarGoal(this, 1.0));
-        this.goalSelector.add(4, new LookAtEntityGoal(this, PlayerEntity.class, 6.0f));
+        this.goalSelector.add(4, new LookAtEntityGoal(this, Player.class, 6.0f));
         this.goalSelector.add(5, new LookAroundGoal(this));
     }
 
     public static DefaultAttributeContainer.Builder createDeerAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 8.0)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3f);
+        return Mob.createMobAttributes()
+                .add(Attributes.GENERIC_MAX_HEALTH, 8.0)
+                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.3f);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class DeerEntity extends AnimalEntity {
 
     @Nullable
     @Override
-    public PassiveEntity createChild(ServerWorld world, PassiveEntity entity) {
+    public PassiveEntity createChild(ServerLevel world, PassiveEntity entity) {
         return null;
     }
 

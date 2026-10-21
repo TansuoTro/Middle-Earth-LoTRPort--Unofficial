@@ -3,14 +3,14 @@ import net.jukoz.me.compat.METext;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.compat.DyedColorComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.compat.TooltipAppender;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.ColorHelper;
 import net.jukoz.me.MiddleEarth;
@@ -28,7 +28,7 @@ public record ArmorTierDataComponent(ArmorMaterialsME.Tiers tier) implements Too
     public static final Codec<ArmorTierDataComponent> CODEC  = ComponentCodecs.alternative(BASE_CODEC, ArmorMaterialsME.Tiers.CODEC, (enabled) -> {
         return new ArmorTierDataComponent(ArmorMaterialsME.Tiers.BASIC);
     });
-    public static final PacketCodec<PacketByteBuf, ArmorTierDataComponent> PACKET_CODEC  = PacketCodec.tuple(ArmorMaterialsME.Tiers.PACKET_CODEC, ArmorTierDataComponent::tier, ArmorTierDataComponent::new);
+    public static final PacketCodec<FriendlyByteBuf, ArmorTierDataComponent> PACKET_CODEC  = PacketCodec.tuple(ArmorMaterialsME.Tiers.PACKET_CODEC, ArmorTierDataComponent::tier, ArmorTierDataComponent::new);
     ;
 
     public ArmorTierDataComponent(ArmorMaterialsME.Tiers tier){
@@ -36,8 +36,8 @@ public record ArmorTierDataComponent(ArmorMaterialsME.Tiers tier) implements Too
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, net.minecraft.client.item.TooltipContext context, List<Text> tooltip) {
-        tooltip.add(METext.withColor( Text.translatable("tooltip.%s.%s".formatted(MiddleEarth.MOD_ID, tier.getName())), tier.getColor()));
+    public void appendTooltip(ItemStack stack, net.minecraft.client.item.TooltipContext context, List<Component> tooltip) {
+        tooltip.add(METext.withColor( Component.translatable("tooltip.%s.%s".formatted(MiddleEarth.MOD_ID, tier.getName())), tier.getColor()));
     }
 
     @Override

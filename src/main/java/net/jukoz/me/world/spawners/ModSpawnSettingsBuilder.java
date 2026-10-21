@@ -1,136 +1,136 @@
 package net.jukoz.me.world.spawners;
 
 import net.jukoz.me.entity.EntitiesME;
-import net.minecraft.entity.EntityType;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
-import net.minecraft.world.biome.SpawnSettings;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 
 public class ModSpawnSettingsBuilder {
-    public static void addRiverAnimals(SpawnSettings.Builder builder) {
-        builder.spawn(SpawnGroup.WATER_AMBIENT, new SpawnSettings.SpawnEntry(EntityType.SALMON, 12, 1, 5));
+    public static void addRiverAnimals(MobSpawnSettings.Builder builder) {
+        builder.spawn(SpawnGroup.WATER_AMBIENT, new MobSpawnSettings.SpawnEntry(EntityType.SALMON, 12, 1, 5));
     }
-    public static void addOceanAnimals(SpawnSettings.Builder builder) {
-        builder.spawn(SpawnGroup.WATER_AMBIENT, new SpawnSettings.SpawnEntry(EntityType.COD, 10, 1, 5));
-        builder.spawn(SpawnGroup.WATER_CREATURE, new SpawnSettings.SpawnEntry(EntityType.SQUID, 6, 1, 4));
-        builder.spawn(SpawnGroup.WATER_CREATURE, new SpawnSettings.SpawnEntry(EntityType.TURTLE, 4, 1, 2));
-        builder.spawn(SpawnGroup.WATER_CREATURE, new SpawnSettings.SpawnEntry(EntityType.DOLPHIN, 3, 1, 2));
-    }
-
-    public static void addColdWaterAnimals(SpawnSettings.Builder builder) {
-        builder.spawn(SpawnGroup.WATER_AMBIENT, new SpawnSettings.SpawnEntry(EntityType.COD, 5, 1, 5));
+    public static void addOceanAnimals(MobSpawnSettings.Builder builder) {
+        builder.spawn(SpawnGroup.WATER_AMBIENT, new MobSpawnSettings.SpawnEntry(EntityType.COD, 10, 1, 5));
+        builder.spawn(SpawnGroup.WATER_CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.SQUID, 6, 1, 4));
+        builder.spawn(SpawnGroup.WATER_CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.TURTLE, 4, 1, 2));
+        builder.spawn(SpawnGroup.WATER_CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.DOLPHIN, 3, 1, 2));
     }
 
-    public static void addFarmAnimals(SpawnSettings.Builder builder) {
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.SHEEP, 12, 4, 4));
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.PIG, 10, 4, 4));
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.CHICKEN, 10, 4, 4));
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.COW, 8, 4, 4));
+    public static void addColdWaterAnimals(MobSpawnSettings.Builder builder) {
+        builder.spawn(SpawnGroup.WATER_AMBIENT, new MobSpawnSettings.SpawnEntry(EntityType.COD, 5, 1, 5));
     }
 
-    public static void addRareWarg(SpawnSettings.Builder builder){
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntitiesME.WARG, 3, 1, 3));
-    }
-    public static void addUncommonWarg(SpawnSettings.Builder builder){
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntitiesME.WARG, 6, 1, 3));
-    }
-
-    public static void addRareStoneTroll(SpawnSettings.Builder builder){
-        builder.spawn(SpawnGroup.MONSTER, new SpawnSettings.SpawnEntry(EntitiesME.STONE_TROLL, 3, 1, 2));
-    }
-    public static void addRareCaveTroll(SpawnSettings.Builder builder){
-        builder.spawn(SpawnGroup.MONSTER, new SpawnSettings.SpawnEntry(EntitiesME.CAVE_TROLL, 3, 1, 1));
-    }
-    public static void addMirkwoodSpider(SpawnSettings.Builder builder){
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntitiesME.SHELOBITE_SCUTTLER, 9, 2, 4));
-    }
-    public static void addRareMirkwoodSpider(SpawnSettings.Builder builder){
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntitiesME.SHELOBITE_SCUTTLER, 5, 1, 2));
+    public static void addFarmAnimals(MobSpawnSettings.Builder builder) {
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.SHEEP, 12, 4, 4));
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.PIG, 10, 4, 4));
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.CHICKEN, 10, 4, 4));
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.COW, 8, 4, 4));
     }
 
-    public static void addUncommonBats(SpawnSettings.Builder builder){
-    builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.BAT, 8, 2, 4));
+    public static void addRareWarg(MobSpawnSettings.Builder builder){
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntitiesME.WARG, 3, 1, 3));
+    }
+    public static void addUncommonWarg(MobSpawnSettings.Builder builder){
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntitiesME.WARG, 6, 1, 3));
     }
 
-    public static void addPlainsMobs(SpawnSettings.Builder builder) {
+    public static void addRareStoneTroll(MobSpawnSettings.Builder builder){
+        builder.spawn(SpawnGroup.MONSTER, new MobSpawnSettings.SpawnEntry(EntitiesME.STONE_TROLL, 3, 1, 2));
+    }
+    public static void addRareCaveTroll(MobSpawnSettings.Builder builder){
+        builder.spawn(SpawnGroup.MONSTER, new MobSpawnSettings.SpawnEntry(EntitiesME.CAVE_TROLL, 3, 1, 1));
+    }
+    public static void addMirkwoodSpider(MobSpawnSettings.Builder builder){
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntitiesME.SHELOBITE_SCUTTLER, 9, 2, 4));
+    }
+    public static void addRareMirkwoodSpider(MobSpawnSettings.Builder builder){
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntitiesME.SHELOBITE_SCUTTLER, 5, 1, 2));
+    }
+
+    public static void addUncommonBats(MobSpawnSettings.Builder builder){
+    builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.BAT, 8, 2, 4));
+    }
+
+    public static void addPlainsMobs(MobSpawnSettings.Builder builder) {
         addFarmAnimals(builder);
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.HORSE, 5, 2, 6));
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.DONKEY, 1, 1, 3));
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.HORSE, 5, 2, 6));
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.DONKEY, 1, 1, 3));
     }
 
-    public static void addRabbits(SpawnSettings.Builder builder) {
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.RABBIT, 3, 1, 5));
+    public static void addRabbits(MobSpawnSettings.Builder builder) {
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.RABBIT, 3, 1, 5));
     }
 
-    public static void addCats(SpawnSettings.Builder builder) {
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.CAT, 5, 1, 3));
+    public static void addCats(MobSpawnSettings.Builder builder) {
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.CAT, 5, 1, 3));
     }
-    public static void addWolves(SpawnSettings.Builder builder) {
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.WOLF, 3, 1, 3));
+    public static void addWolves(MobSpawnSettings.Builder builder) {
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.WOLF, 3, 1, 3));
     }
-    public static void addCommonWolves(SpawnSettings.Builder builder) {
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.WOLF, 8, 1, 3));
+    public static void addCommonWolves(MobSpawnSettings.Builder builder) {
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.WOLF, 8, 1, 3));
     }
-    public static void addRareWolves(SpawnSettings.Builder builder) {
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.WOLF, 1, 1, 2));
-    }
-
-    public static void addMountainsMobs(SpawnSettings.Builder builder) {
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.GOAT, 4, 1, 3));
-    }
-    public static void addBroadhoofGoats(SpawnSettings.Builder builder) {
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntitiesME.BROADHOOF_GOAT, 4, 1, 3));
+    public static void addRareWolves(MobSpawnSettings.Builder builder) {
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.WOLF, 1, 1, 2));
     }
 
-    public static void addNordicMobs(SpawnSettings.Builder builder) {
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.RABBIT, 4, 2, 4));
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.FOX, 2, 1, 3));
+    public static void addMountainsMobs(MobSpawnSettings.Builder builder) {
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.GOAT, 4, 1, 3));
+    }
+    public static void addBroadhoofGoats(MobSpawnSettings.Builder builder) {
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntitiesME.BROADHOOF_GOAT, 4, 1, 3));
     }
 
-    public static void addForochelMobs(SpawnSettings.Builder builder) {
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.FOX, 2, 1, 3));
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.POLAR_BEAR, 1, 1, 2));
+    public static void addNordicMobs(MobSpawnSettings.Builder builder) {
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.RABBIT, 4, 2, 4));
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.FOX, 2, 1, 3));
     }
 
-    public static void addSwampMobs(SpawnSettings.Builder builder) {
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.FROG, 8, 1, 4));
+    public static void addForochelMobs(MobSpawnSettings.Builder builder) {
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.FOX, 2, 1, 3));
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.POLAR_BEAR, 1, 1, 2));
     }
 
-    public static void addRareSnails(SpawnSettings.Builder builder) {
+    public static void addSwampMobs(MobSpawnSettings.Builder builder) {
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.FROG, 8, 1, 4));
     }
 
-    public static void addEriadorMobs(SpawnSettings.Builder builder) {
+    public static void addRareSnails(MobSpawnSettings.Builder builder) {
+    }
+
+    public static void addEriadorMobs(MobSpawnSettings.Builder builder) {
         addPlainsMobs(builder);
         addPheasant(builder);
     }
 
-    public static void addArmadillo(SpawnSettings.Builder builder) {
+    public static void addArmadillo(MobSpawnSettings.Builder builder) {
     }
-    public static void addHaradMobs(SpawnSettings.Builder builder) {
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.RABBIT, 3, 1, 4));
-    }
-
-    public static void addCamel(SpawnSettings.Builder builder) {
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.CAMEL, 1, 1, 2));
+    public static void addHaradMobs(MobSpawnSettings.Builder builder) {
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.RABBIT, 3, 1, 4));
     }
 
-    public static void addLlama(SpawnSettings.Builder builder) {
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.LLAMA, 2, 1, 3));
+    public static void addCamel(MobSpawnSettings.Builder builder) {
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.CAMEL, 1, 1, 2));
     }
 
-    public static void addPheasant(SpawnSettings.Builder builder) {
+    public static void addLlama(MobSpawnSettings.Builder builder) {
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntityType.LLAMA, 2, 1, 3));
     }
 
-    public static void addSwan(SpawnSettings.Builder builder) {
+    public static void addPheasant(MobSpawnSettings.Builder builder) {
     }
 
-    public static void addDeer(SpawnSettings.Builder builder) {
+    public static void addSwan(MobSpawnSettings.Builder builder) {
     }
 
-    public static void addNpcs(SpawnSettings.Builder spawnSettings) {
-        spawnSettings.spawn(SpawnGroup.MONSTER, new SpawnSettings.SpawnEntry(EntitiesME.NPC, 3, 1, 1));
+    public static void addDeer(MobSpawnSettings.Builder builder) {
     }
 
-    public static void addGreatHorn(SpawnSettings.Builder builder) {
-        builder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntitiesME.GREAT_HORN, 5, 1, 2));
+    public static void addNpcs(MobSpawnSettings.Builder spawnSettings) {
+        spawnSettings.spawn(SpawnGroup.MONSTER, new MobSpawnSettings.SpawnEntry(EntitiesME.NPC, 3, 1, 1));
+    }
+
+    public static void addGreatHorn(MobSpawnSettings.Builder builder) {
+        builder.spawn(SpawnGroup.CREATURE, new MobSpawnSettings.SpawnEntry(EntitiesME.GREAT_HORN, 5, 1, 2));
     }
 }

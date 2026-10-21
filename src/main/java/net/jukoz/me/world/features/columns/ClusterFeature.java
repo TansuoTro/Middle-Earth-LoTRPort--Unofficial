@@ -1,24 +1,24 @@
 package net.jukoz.me.world.features.columns;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Block;
-import net.minecraft.block.PointedDripstoneBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.PointedDripstoneBlock;
 import net.minecraft.world.gen.feature.DripstoneClusterFeatureConfig;
 import net.jukoz.me.block.special.pointedBlocks.PointedDolomiteBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.block.enums.Thickness;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 import net.minecraft.util.math.floatprovider.ClampedNormalFloatProvider;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
-import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.gen.feature.util.CaveSurface;
 import net.minecraft.world.gen.feature.util.DripstoneHelper;
 import net.minecraft.world.gen.feature.util.FeatureContext;
@@ -37,7 +37,7 @@ public class ClusterFeature extends Feature<ClusterFeatureConfig> {
         StructureWorldAccess structureWorldAccess = context.getWorld();
         BlockPos blockPos = context.getOrigin();
         ClusterFeatureConfig ClusterFeatureConfig = context.getConfig();
-        Random random = context.getRandom();
+        RandomSource random = context.getRandom();
         if (!canGenerate(structureWorldAccess, blockPos)) {
             return false;
         } else {
@@ -59,7 +59,7 @@ public class ClusterFeature extends Feature<ClusterFeatureConfig> {
         }
     }
 
-    private void generate(StructureWorldAccess world, Random random, BlockPos pos, int localX, int localZ, float wetness, 
+    private void generate(StructureWorldAccess world, RandomSource random, BlockPos pos, int localX, int localZ, float wetness, 
                           double dripstoneChance, int height, float density, ClusterFeatureConfig config) {
         Optional<CaveSurface> optional = CaveSurface.create(world, pos, config.floorToCeilingSearchRange, DripstoneHelper::canGenerate, DripstoneHelper::cannotGenerate);
         if (!optional.isEmpty()) {
@@ -101,7 +101,7 @@ public class ClusterFeature extends Feature<ClusterFeatureConfig> {
                     stalagmiteHeight = config.dripstoneBlockLayerThickness.get(random);
                     this.placeDripstoneBlocks(world, pos.withY(optionalInt3.getAsInt()), stalagmiteHeight, Direction.DOWN, config.blockState);
                     if (optionalInt.isPresent()) {
-                        j = Math.max(0, l + MathHelper.nextBetween(random, -config.maxStalagmiteStalactiteHeightDiff, config.maxStalagmiteStalactiteHeightDiff));
+                        j = Math.max(0, l + Mth.nextBetween(random, -config.maxStalagmiteStalactiteHeightDiff, config.maxStalagmiteStalactiteHeightDiff));
                     } else {
                         j = this.getHeight(random, localX, localZ, density, height, config);
                     }
@@ -115,7 +115,7 @@ public class ClusterFeature extends Feature<ClusterFeatureConfig> {
                     int o = optionalInt.getAsInt();
                     int p = Math.max(o - l, n + 1);
                     int q = Math.min(n + j, o - 1);
-                    int r = MathHelper.nextBetween(random, p, q + 1);
+                    int r = Mth.nextBetween(random, p, q + 1);
                     int s = r - 1;
                     stalagmiteHeight = o - r;
                     stalactiteHeight = s - n;
@@ -199,12 +199,12 @@ public class ClusterFeature extends Feature<ClusterFeatureConfig> {
         return world.getBlockState(pos).isOf(Blocks.LAVA);
     }
 
-    private int getHeight(Random random, int localX, int localZ, float density, int height, ClusterFeatureConfig config) {
+    private int getHeight(RandomSource random, int localX, int localZ, float density, int height, ClusterFeatureConfig config) {
         if (random.nextFloat() > density) {
             return 0;
         } else {
             int i = Math.abs(localX) + Math.abs(localZ);
-            float f = (float)MathHelper.clampedMap((double)i, 0.0, (double)config.maxDistanceFromCenterAffectingHeightBias, height / 2.0, 0.0);
+            float f = (float)Mth.clampedMap((double)i, 0.0, (double)config.maxDistanceFromCenterAffectingHeightBias, height / 2.0, 0.0);
             return (int)clampedGaussian(random, 0.0F, height, f, config.heightDeviation);
         }
     }
@@ -255,10 +255,10 @@ public class ClusterFeature extends Feature<ClusterFeatureConfig> {
         int i = radiusX - Math.abs(localX);
         int j = radiusZ - Math.abs(localZ);
         int k = Math.min(i, j);
-        return (double)MathHelper.clampedMap((float)k, 0.0F, (float)config.maxDistanceFromCenterAffectingChanceOfDripstoneColumn, config.chanceOfDripstoneColumnAtMaxDistanceFromCenter, 1.0F);
+        return (double)Mth.clampedMap((float)k, 0.0F, (float)config.maxDistanceFromCenterAffectingChanceOfDripstoneColumn, config.chanceOfDripstoneColumnAtMaxDistanceFromCenter, 1.0F);
     }
 
-    private static float clampedGaussian(Random random, float min, float max, float mean, float deviation) {
+    private static float clampedGaussian(RandomSource random, float min, float max, float mean, float deviation) {
         return ClampedNormalFloatProvider.get(random, mean, deviation, min, max);
     }
 }

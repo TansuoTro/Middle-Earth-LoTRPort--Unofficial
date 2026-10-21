@@ -1,8 +1,8 @@
 package net.jukoz.me.registries.content.npctypes.pools;
 
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.Items;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Items;
+import net.minecraft.resources.ResourceKey;
 import net.jukoz.me.item.DecorativeItemsME;
 import net.jukoz.me.item.EquipmentItemsME;
 import net.jukoz.me.item.ToolItemsME;
@@ -23,7 +23,7 @@ import net.jukoz.me.resources.datas.npc_types.data.GearSlotPool;
 import java.util.List;
 
 public class IsengardNpcTypePool {
-    private final static RegistryKey<Faction> FACTION = FactionRegistry.ISENGARD;
+    private final static ResourceKey<Faction> FACTION = FactionRegistry.ISENGARD;
 
     private static List<Integer> allColors;
     private static final int DARK = 0x302b28;

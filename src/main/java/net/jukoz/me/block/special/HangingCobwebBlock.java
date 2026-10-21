@@ -1,13 +1,13 @@
 package net.jukoz.me.block.special;
 
 import net.minecraft.block.*;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelView;
 
 public class HangingCobwebBlock extends CobwebBlock {
     public HangingCobwebBlock(Settings settings) {

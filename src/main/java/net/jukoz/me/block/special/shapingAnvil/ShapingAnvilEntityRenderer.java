@@ -1,19 +1,19 @@
 package net.jukoz.me.block.special.shapingAnvil;
 
 import net.minecraft.client.render.LightmapTextureManager;
-import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.block.entity.BlockEntityRenderer;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.BlockItem;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererFactory;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.RotationAxis;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.LightType;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 public class ShapingAnvilEntityRenderer implements BlockEntityRenderer<ShapingAnvilBlockEntity> {
 
@@ -23,14 +23,14 @@ public class ShapingAnvilEntityRenderer implements BlockEntityRenderer<ShapingAn
         this.context = context;
     }
 
-    private int getLightLevel(World world, BlockPos pos) {
+    private int getLightLevel(Level world, BlockPos pos) {
         int bLight = world.getLightLevel(LightType.BLOCK, pos);
         int sLight = world.getLightLevel(LightType.SKY, pos);
         return LightmapTextureManager.pack(bLight, sLight);
     }
 
     @Override
-    public void render(ShapingAnvilBlockEntity entity, float tickProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+    public void render(ShapingAnvilBlockEntity entity, float tickProgress, PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         ItemStack stack = entity.getRenderStack(entity);
 
         if(stack.isEmpty()) return;

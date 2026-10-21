@@ -1,8 +1,8 @@
 package net.jukoz.me.utils;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.server.level.ServerLevel;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntity;
 import net.jukoz.me.entity.beasts.trolls.snow.SnowTrollEntity;
 import net.jukoz.me.entity.beasts.trolls.stone.StoneTrollEntity;
@@ -11,7 +11,7 @@ import net.jukoz.me.entity.spider.scuttler.ShelobiteScuttlerEntity;
 import net.jukoz.me.entity.spider.spawn.SpawnOfShelobEntity;
 
 public class DamageablePlantsUtil {
-    public static void tryDamageEntity(LivingEntity livingEntity, ServerWorld serverWorld, DamageSource damageSource) {
+    public static void tryDamageEntity(LivingEntity livingEntity, ServerLevel serverWorld, DamageSource damageSource) {
         if(isEntityImmune(livingEntity))
             return;
 

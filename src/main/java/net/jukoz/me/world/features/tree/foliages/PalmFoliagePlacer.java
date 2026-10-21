@@ -4,14 +4,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.jukoz.me.block.special.ModLeavesBlock;
 import net.jukoz.me.world.gen.ModTreeGeneration;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.intprovider.IntProvider;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.TestableWorld;
-import net.minecraft.world.gen.feature.TreeFeatureConfig;
-import net.minecraft.world.gen.foliage.FoliagePlacer;
-import net.minecraft.world.gen.foliage.FoliagePlacerType;
+import net.minecraft.world.level.levelgen.feature.TreeFeatureConfig;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
 
 public class PalmFoliagePlacer extends FoliagePlacer {
     protected final int baseHeight;
@@ -48,7 +48,7 @@ public class PalmFoliagePlacer extends FoliagePlacer {
     }
 
     @Override
-    protected void generate(TestableWorld world, BlockPlacer placer, Random random, TreeFeatureConfig config, int trunkHeight, TreeNode treeNode, int foliageHeight, int radius, int offset) {
+    protected void generate(TestableWorld world, BlockPlacer placer, RandomSource random, TreeFeatureConfig config, int trunkHeight, TreeNode treeNode, int foliageHeight, int radius, int offset) {
         BlockPos.Mutable mutable = new BlockPos.Mutable();
 
         int count = 6 + (int) (Math.random() * 2);
@@ -69,19 +69,19 @@ public class PalmFoliagePlacer extends FoliagePlacer {
         }
     }
 
-    protected void createArcBranch(TestableWorld world, BlockPlacer placer, Random random, BlockPos.Mutable mutable,
+    protected void createArcBranch(TestableWorld world, BlockPlacer placer, RandomSource random, BlockPos.Mutable mutable,
                                                            TreeFeatureConfig config, BlockPos startPos, int height, double angle, float acceleration, float velocity) {
         if(height < 0) {
             height *= -1;
         }
-        Vec3d dir = new Vec3d(Math.cos(angle), 0, Math.sin(angle)).normalize();
-        Vec3d currentPos = new Vec3d(startPos.getX(), startPos.getY() - 1, startPos.getZ());
-        Vec3d lastPos;
+        Vec3 dir = new Vec3(Math.cos(angle), 0, Math.sin(angle)).normalize();
+        Vec3 currentPos = new Vec3(startPos.getX(), startPos.getY() - 1, startPos.getZ());
+        Vec3 lastPos;
         float currentVel = velocity;
 
         for(int i = 0; i < height; i++) {
             lastPos = currentPos;
-            currentPos = currentPos.add(new Vec3d(dir.x, Math.max(-1, currentVel), dir.z));
+            currentPos = currentPos.add(new Vec3(dir.x, Math.max(-1, currentVel), dir.z));
             mutable.set(currentPos.x, currentPos.y, currentPos.z);
             placeFoliageBlock(world, placer, random, config, mutable);
             if(lastPos.getY() != currentPos.getY()) {
@@ -93,12 +93,12 @@ public class PalmFoliagePlacer extends FoliagePlacer {
     }
 
     @Override
-    public int getRandomHeight(Random random, int trunkHeight, TreeFeatureConfig config) {
+    public int getRandomHeight(RandomSource random, int trunkHeight, TreeFeatureConfig config) {
         return 4;
     }
 
     @Override
-    protected boolean isInvalidForLeaves(Random random, int dx, int y, int dz, int radius, boolean giantTrunk) {
+    protected boolean isInvalidForLeaves(RandomSource random, int dx, int y, int dz, int radius, boolean giantTrunk) {
         return dx + dz >= ModLeavesBlock.MAX_DISTANCE;
     }
 }

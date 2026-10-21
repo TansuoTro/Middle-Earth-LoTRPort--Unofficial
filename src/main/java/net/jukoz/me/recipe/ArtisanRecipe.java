@@ -3,18 +3,18 @@ package net.jukoz.me.recipe;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.recipe.*;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 public class ArtisanRecipe implements Recipe<Inventory> {
-    public final Identifier id;
+    public final ResourceLocation id;
     public final ItemStack output;
     public final DefaultedList<Ingredient> inputs;
     /** Tab id this recipe is listed under (e.g. "sword"); null matches every tab. */
@@ -23,11 +23,11 @@ public class ArtisanRecipe implements Recipe<Inventory> {
     public final String disposition;
     public final int xp;
 
-    public ArtisanRecipe(Identifier id, ItemStack output, DefaultedList<Ingredient> recipeItems) {
+    public ArtisanRecipe(ResourceLocation id, ItemStack output, DefaultedList<Ingredient> recipeItems) {
         this(id, output, recipeItems, null, null, 0);
     }
 
-    public ArtisanRecipe(Identifier id, ItemStack output, DefaultedList<Ingredient> recipeItems, String category, String disposition, int xp) {
+    public ArtisanRecipe(ResourceLocation id, ItemStack output, DefaultedList<Ingredient> recipeItems, String category, String disposition, int xp) {
         this.id = id;
         this.output = output;
         this.inputs = recipeItems;
@@ -41,7 +41,7 @@ public class ArtisanRecipe implements Recipe<Inventory> {
     }
 
     @Override
-    public boolean matches(Inventory inventory, World world) {
+    public boolean matches(Inventory inventory, Level world) {
         int i = 0;
         for (int j = 0; j < inventory.size(); ++j) {
             ItemStack itemStack = inventory.getStack(j);
@@ -90,7 +90,7 @@ public class ArtisanRecipe implements Recipe<Inventory> {
     }
 
     @Override
-    public Identifier getId() {
+    public ResourceLocation getId() {
         return id;
     }
 
@@ -120,7 +120,7 @@ public class ArtisanRecipe implements Recipe<Inventory> {
         public static final String ID = "artisan_table";
 
         @Override
-        public ArtisanRecipe read(Identifier id, JsonObject json) {
+        public ArtisanRecipe read(ResourceLocation id, JsonObject json) {
             ItemStack output = ShapedRecipe.outputFromJson(JsonHelper.getObject(json, "output"));
             JsonArray ingredients = JsonHelper.getArray(json, "ingredients");
             DefaultedList<Ingredient> inputs = DefaultedList.ofSize(ingredients.size(), Ingredient.EMPTY);
@@ -137,7 +137,7 @@ public class ArtisanRecipe implements Recipe<Inventory> {
         }
 
         @Override
-        public ArtisanRecipe read(Identifier id, PacketByteBuf buf) {
+        public ArtisanRecipe read(ResourceLocation id, FriendlyByteBuf buf) {
             String category = readNullableString(buf);
             ItemStack output = buf.readItemStack();
             DefaultedList<Ingredient> inputs = DefaultedList.ofSize(buf.readInt(), Ingredient.EMPTY);
@@ -150,7 +150,7 @@ public class ArtisanRecipe implements Recipe<Inventory> {
         }
 
         @Override
-        public void write(PacketByteBuf buf, ArtisanRecipe recipe) {
+        public void write(FriendlyByteBuf buf, ArtisanRecipe recipe) {
             writeNullableString(buf, recipe.category);
             buf.writeItemStack(recipe.output);
             buf.writeInt(recipe.getIngredients().size());
@@ -161,12 +161,12 @@ public class ArtisanRecipe implements Recipe<Inventory> {
             buf.writeVarInt(recipe.xp);
         }
 
-        private static String readNullableString(PacketByteBuf buf) {
+        private static String readNullableString(FriendlyByteBuf buf) {
             String value = buf.readString();
             return value.isEmpty() ? null : value;
         }
 
-        private static void writeNullableString(PacketByteBuf buf, String value) {
+        private static void writeNullableString(FriendlyByteBuf buf, String value) {
             buf.writeString(value == null ? "" : value);
         }
     }

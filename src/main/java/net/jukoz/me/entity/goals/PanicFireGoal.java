@@ -1,6 +1,6 @@
 package net.jukoz.me.entity.goals;
 
-import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.entity.ai.goal.EscapeSunlightGoal;
 import net.minecraft.entity.mob.PathAwareEntity;
 

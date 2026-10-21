@@ -1,7 +1,7 @@
 package net.jukoz.me.item;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -14,22 +14,22 @@ import org.jetbrains.annotations.Nullable;
  * @param <T> value type stored on the stack
  */
 public final class MEComponent<T> {
-    private final Identifier id;
+    private final ResourceLocation id;
     private final Codec<T> codec;
     @Nullable
     private final T defaultValue;
 
-    public MEComponent(Identifier id, Codec<T> codec) {
+    public MEComponent(ResourceLocation id, Codec<T> codec) {
         this(id, codec, null);
     }
 
-    public MEComponent(Identifier id, Codec<T> codec, @Nullable T defaultValue) {
+    public MEComponent(ResourceLocation id, Codec<T> codec, @Nullable T defaultValue) {
         this.id = id;
         this.codec = codec;
         this.defaultValue = defaultValue;
     }
 
-    public Identifier id() {
+    public ResourceLocation id() {
         return id;
     }
 

@@ -1,11 +1,11 @@
 package net.jukoz.me.block.special.plants;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.block.TallPlantBlock;
-import net.minecraft.block.enums.DoubleBlockHalf;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldView;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelView;
 
 public class TallMushroomBlock extends TallPlantBlock {
     public TallMushroomBlock(Settings settings) {

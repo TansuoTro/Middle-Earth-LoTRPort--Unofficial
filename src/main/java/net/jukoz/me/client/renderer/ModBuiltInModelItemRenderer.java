@@ -1,7 +1,7 @@
 package net.jukoz.me.client.renderer;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.jukoz.me.MiddleEarthClient;
 import net.jukoz.me.client.MEModelLoader;
@@ -14,26 +14,26 @@ import net.jukoz.me.item.WeaponItemsME;
 import net.jukoz.me.item.items.HeldBannerItem;
 import net.jukoz.me.item.items.shields.CustomBannerShieldItem;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.render.TexturedRenderLayers;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.util.SpriteIdentifier;
-import net.minecraft.client.util.math.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.jukoz.me.compat.MEBannerPatterns;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DyeColor;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Objects;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ModBuiltInModelItemRenderer {
 
-    private static final SpriteIdentifier BANNER_BASE = new SpriteIdentifier(TexturedRenderLayers.BANNER_PATTERNS_ATLAS_TEXTURE, new Identifier("entity/banner_base"));
+    private static final SpriteIdentifier BANNER_BASE = new SpriteIdentifier(TexturedRenderLayers.BANNER_PATTERNS_ATLAS_TEXTURE, new ResourceLocation("entity/banner_base"));
 
     private HeaterShieldEntityModel heaterShieldEntityModel;
     private KiteShieldEntityModel kiteShieldEntityModel;
@@ -44,7 +44,7 @@ public class ModBuiltInModelItemRenderer {
     public ModBuiltInModelItemRenderer() {
     }
 
-    public void render(ItemStack stack, ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+    public void render(ItemStack stack, ModelTransformationMode mode, PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         this.heaterShieldEntityModel = new HeaterShieldEntityModel(MinecraftClient.getInstance().getEntityModelLoader().getModelPart(MiddleEarthClient.HEATER_SHIELD_LAYER));
         this.kiteShieldEntityModel = new KiteShieldEntityModel(MinecraftClient.getInstance().getEntityModelLoader().getModelPart(MiddleEarthClient.KITE_SHIELD_LAYER));
         this.roundShieldEntityModel = new RoundShieldEntityModel(MinecraftClient.getInstance().getEntityModelLoader().getModelPart(MiddleEarthClient.ROUND_SHIELD_LAYER));
@@ -115,7 +115,7 @@ public class ModBuiltInModelItemRenderer {
         }
     }
 
-    public static void renderCanvas(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, ModelPart canvas, SpriteIdentifier baseSprite, boolean isBanner, DyeColor color, MEBannerPatterns patterns, boolean glint, ItemStack stack, boolean solid) {
+    public static void renderCanvas(PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, ModelPart canvas, SpriteIdentifier baseSprite, boolean isBanner, DyeColor color, MEBannerPatterns patterns, boolean glint, ItemStack stack, boolean solid) {
         canvas.render(matrices, baseSprite.getVertexConsumer(vertexConsumers, RenderLayer::getEntitySolid), light, overlay);
         if (stack.isOf(WeaponItemsME.HEATER_SHIELD)){
             renderLayer(matrices, vertexConsumers, light, overlay, canvas, isBanner ? BANNER_BASE : ModTexturedRenderLayers.HEATER_SHIELD_BASE, color);
@@ -144,7 +144,7 @@ public class ModBuiltInModelItemRenderer {
 
 
 
-    private static void renderLayer(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, ModelPart canvas, SpriteIdentifier textureId, DyeColor color) {
+    private static void renderLayer(PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, ModelPart canvas, SpriteIdentifier textureId, DyeColor color) {
         float[] components = color.getColorComponents();
         canvas.render(matrices, textureId.getVertexConsumer(vertexConsumers, RenderLayer::getEntityNoOutline), light, overlay,
                 components[0], components[1], components[2], 1.0F);

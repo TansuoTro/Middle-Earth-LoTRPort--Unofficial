@@ -18,15 +18,15 @@ import net.minecraft.advancement.CriterionMerger;
 import net.minecraft.advancement.criterion.CriterionConditions;
 import net.minecraft.advancement.criterion.RecipeUnlockedCriterion;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemConvertible;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * Datagen builder for {@link ArtisanRecipe}.
@@ -125,8 +125,8 @@ public class ArtisanTableRecipeJsonBuilder {
      * Written directly because the trim material/pattern dynamic registries are not
      * guaranteed to be bootstrapped during datagen.
      */
-    public static NbtCompound trimNbt(Identifier materialId) {
-        NbtCompound trim = new NbtCompound();
+    public static CompoundTag trimNbt(ResourceLocation materialId) {
+        CompoundTag trim = new CompoundTag();
         trim.putString("material", materialId.toString());
         trim.putString("pattern", net.jukoz.me.item.utils.SmithingTrimPatternsME.SMITHING_PART.getValue().toString());
         return trim;
@@ -142,10 +142,10 @@ public class ArtisanTableRecipeJsonBuilder {
     }
 
     public void offerTo(Consumer<RecipeJsonProvider> exporter, String path) {
-        this.offerTo(exporter, new Identifier(net.jukoz.me.MiddleEarth.MOD_ID, path));
+        this.offerTo(exporter, new ResourceLocation(net.jukoz.me.MiddleEarth.MOD_ID, path));
     }
 
-    public void offerTo(Consumer<RecipeJsonProvider> exporter, Identifier recipeId) {
+    public void offerTo(Consumer<RecipeJsonProvider> exporter, ResourceLocation recipeId) {
         this.validate(recipeId);
         Advancement.Builder advancement = Advancement.Builder.createUntelemetered()
                 .criterion("has_the_recipe", RecipeUnlockedCriterion.create(recipeId))
@@ -182,7 +182,7 @@ public class ArtisanTableRecipeJsonBuilder {
         return json;
     }
 
-    private void validate(Identifier recipeId) {
+    private void validate(ResourceLocation recipeId) {
         if (this.criteria.isEmpty()) {
             throw new IllegalStateException("No way of obtaining recipe " + recipeId);
         }

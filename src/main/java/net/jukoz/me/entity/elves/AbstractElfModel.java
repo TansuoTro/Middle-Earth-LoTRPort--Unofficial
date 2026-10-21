@@ -1,6 +1,6 @@
 package net.jukoz.me.entity.elves;
 
-import net.minecraft.client.model.ModelPart;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.entity.passive.PassiveEntity;
 

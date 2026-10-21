@@ -1,6 +1,6 @@
 package net.jukoz.me.mixin;
 
-import net.minecraft.world.explosion.Explosion;
+import net.minecraft.world.level.Explosion;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 

@@ -5,41 +5,41 @@ import net.jukoz.me.entity.ModEntities;
 import net.jukoz.me.entity.duck.DuckEntity;
 import net.jukoz.me.entity.goals.PheasantStartledGoal;
 import net.jukoz.me.item.ModEquipmentItems;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.NoPenaltyTargeting;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.ai.pathing.Path;
-import net.minecraft.entity.ai.pathing.PathNodeType;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.level.pathfinder.PathNodeType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
@@ -48,7 +48,7 @@ import java.util.List;
 public class PheasantEntity extends AnimalEntity {
     private static final TrackedData<Integer> VARIANT = DataTracker.registerData(PheasantEntity.class, TrackedDataHandlerRegistry.INTEGER);
 
-    public PheasantEntity(EntityType<? extends AnimalEntity> entityType, World world) {
+    public PheasantEntity(EntityType<? extends AnimalEntity> entityType, Level world) {
         super(entityType, world);
         this.setPathfindingPenalty(PathNodeType.WATER, 0.0f);
     }
@@ -61,7 +61,7 @@ public class PheasantEntity extends AnimalEntity {
         this.goalSelector.add(3, new FollowParentGoal(this, 1.1));
         this.goalSelector.add(4, new AnimalMateGoal(this, 1.0));
         this.goalSelector.add(5, new TemptGoal(this, 0.9, DuckEntity.SEEDS_BREEDING_INGREDIENT, true));
-        this.goalSelector.add(6, new LookAtEntityGoal(this, PlayerEntity.class, 6.0f));
+        this.goalSelector.add(6, new LookAtEntityGoal(this, Player.class, 6.0f));
         this.goalSelector.add(6, new WanderAroundFarGoal(this, 1.0));
         this.goalSelector.add(7, new LookAroundGoal(this));
     }
@@ -73,19 +73,19 @@ public class PheasantEntity extends AnimalEntity {
     }
 
     public static DefaultAttributeContainer.Builder createPheasantAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 5.0)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4);
+        return Mob.createMobAttributes()
+                .add(Attributes.GENERIC_MAX_HEALTH, 5.0)
+                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.4);
     }
 
     @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
+    public void writeCustomDataToNbt(CompoundTag nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putInt("Variant", this.getTypeVariant());
     }
 
     @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
+    public void readCustomDataFromNbt(CompoundTag nbt) {
         super.readCustomDataFromNbt(nbt);
         this.dataTracker.set(VARIANT, nbt.getInt("Variant"));
     }
@@ -97,7 +97,7 @@ public class PheasantEntity extends AnimalEntity {
 
     @Nullable
     @Override
-    public PheasantEntity createChild(ServerWorld world, PassiveEntity entity) {
+    public PheasantEntity createChild(ServerLevel world, PassiveEntity entity) {
         return ModEntities.PHEASANT.create(world);
     }
 
@@ -109,7 +109,7 @@ public class PheasantEntity extends AnimalEntity {
     public void tickMovement() {
         super.tickMovement();
 
-        Vec3d vec3d = this.getVelocity();
+        Vec3 vec3d = this.getVelocity();
         if (!this.isOnGround() && vec3d.y < 0.0) {
             this.setVelocity(vec3d.multiply(1.0, 0.6, 1.0));
         }
@@ -142,7 +142,7 @@ public class PheasantEntity extends AnimalEntity {
 
     /* VARIANTS */
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason,
-                                 @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
+                                 @Nullable EntityData entityData, @Nullable CompoundTag entityNbt) {
         PheasantVariant variant = Util.getRandom(PheasantVariant.values(), this.random);
         setVariant(variant);
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);

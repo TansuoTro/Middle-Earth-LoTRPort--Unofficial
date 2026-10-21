@@ -2,12 +2,12 @@ package net.jukoz.me.item.items;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ToolMaterial;
 
@@ -51,7 +51,7 @@ public class CustomPickaxeItem extends PickaxeItem {
         ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
         for (Map.Entry<EntityAttribute, EntityAttributeModifier> entry : super.getAttributeModifiers(slot).entries()) {
             EntityAttributeModifier modifier = entry.getValue();
-            if (entry.getKey() == EntityAttributes.GENERIC_ATTACK_DAMAGE) {
+            if (entry.getKey() == Attributes.GENERIC_ATTACK_DAMAGE) {
                 builder.put(entry.getKey(), new EntityAttributeModifier(modifier.getId(), modifier.getName(),
                         modifier.getValue() + this.extraAttackDamage, modifier.getOperation()));
             } else {

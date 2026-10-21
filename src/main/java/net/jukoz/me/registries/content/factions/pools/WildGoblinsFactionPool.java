@@ -1,7 +1,7 @@
 package net.jukoz.me.registries.content.factions.pools;
 
-import net.minecraft.block.entity.BannerPatterns;
-import net.minecraft.util.DyeColor;
+import net.minecraft.world.level.block.entity.BannerPatterns;
+import net.minecraft.world.item.DyeColor;
 import net.jukoz.me.registries.content.factions.FactionRegistry;
 import net.jukoz.me.registries.content.npctypes.pools.WildGoblinNpcTypePool;
 import net.jukoz.me.resources.datas.common.AffinityLevel;

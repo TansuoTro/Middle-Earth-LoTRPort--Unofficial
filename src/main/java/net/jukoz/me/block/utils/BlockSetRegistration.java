@@ -3,12 +3,12 @@ package net.jukoz.me.block.utils;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.minecraft.block.*;
-import net.minecraft.block.enums.Instrument;
+import net.minecraft.world.level.block.NoteBlockInstrument;
 import net.minecraft.block.piston.PistonBehavior;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.block.special.*;
 import net.jukoz.me.block.special.verticalSlabs.TransparentVerticalSlab;
@@ -21,7 +21,7 @@ import java.util.function.Function;
 
 public class BlockSetRegistration {
 
-    public static BlockRecordTypes.RegularSet createRegularSet(String name, float hardness, float blastResistance, MapColor mapColor, Instrument instrument, BlockSoundGroup soundGroup, boolean pillar, List<ItemStack> group, boolean requiresTool) {
+    public static BlockRecordTypes.RegularSet createRegularSet(String name, float hardness, float blastResistance, MapColor mapColor, NoteBlockInstrument instrument, BlockSoundGroup soundGroup, boolean pillar, List<ItemStack> group, boolean requiresTool) {
         Block base;
 
         AbstractBlock.Settings baseSettings;
@@ -60,7 +60,7 @@ public class BlockSetRegistration {
         return new BlockRecordTypes.RegularSet(base, slab, verticalSlab, stairs, wall);
     }
 
-    public static BlockRecordTypes.SimpleBlocks createSimpleSet(String name, float hardness, float blastResistance, MapColor mapColor, Instrument instrument, BlockSoundGroup soundGroup, boolean pillar, List<ItemStack> group, boolean requiresTool) {
+    public static BlockRecordTypes.SimpleBlocks createSimpleSet(String name, float hardness, float blastResistance, MapColor mapColor, NoteBlockInstrument instrument, BlockSoundGroup soundGroup, boolean pillar, List<ItemStack> group, boolean requiresTool) {
         Block base;
 
         AbstractBlock.Settings baseSettings;
@@ -86,7 +86,7 @@ public class BlockSetRegistration {
         return new BlockRecordTypes.SimpleBlocks(base, slab, verticalSlab, stairs);
     }
 
-    public static BlockRecordTypes.RegularSet createOxidizableSet(String name, float hardness, float blastResistance, MapColor mapColor, Instrument instrument, BlockSoundGroup soundGroup, boolean pillar, List<ItemStack> group, boolean requiresTool, Oxidizable.OxidationLevel level) {
+    public static BlockRecordTypes.RegularSet createOxidizableSet(String name, float hardness, float blastResistance, MapColor mapColor, NoteBlockInstrument instrument, BlockSoundGroup soundGroup, boolean pillar, List<ItemStack> group, boolean requiresTool, Oxidizable.OxidationLevel level) {
         Block base;
 
         AbstractBlock.Settings baseSettings;
@@ -124,7 +124,7 @@ public class BlockSetRegistration {
         return new BlockRecordTypes.RegularSet(base, slab, verticalSlab, stairs, wall);
     }
 
-    public static BlockRecordTypes.WoodSet createWoodSet(String name, float hardness, float blastResistance, MapColor mapColor, Instrument instrument, BlockSoundGroup soundGroup, List<ItemStack> group) {
+    public static BlockRecordTypes.WoodSet createWoodSet(String name, float hardness, float blastResistance, MapColor mapColor, NoteBlockInstrument instrument, BlockSoundGroup soundGroup, List<ItemStack> group) {
 
         Block log = getVanillaOrCreateNew(name + "_log", PillarBlock::new,
                 AbstractBlock.Settings.create()
@@ -166,7 +166,7 @@ public class BlockSetRegistration {
         return new BlockRecordTypes.WoodSet(log, wood, slab, verticalSlab, stairs, wall, fence);
     }
 
-    public static BlockRecordTypes.WoodSet createStemSet(String name, float hardness, float blastResistance, MapColor mapColor, Instrument instrument, BlockSoundGroup soundGroup, List<ItemStack> group) {
+    public static BlockRecordTypes.WoodSet createStemSet(String name, float hardness, float blastResistance, MapColor mapColor, NoteBlockInstrument instrument, BlockSoundGroup soundGroup, List<ItemStack> group) {
 
         Block log = getVanillaOrCreateNew(name + "_stem", PillarBlock::new,
                 AbstractBlock.Settings.create()
@@ -194,7 +194,7 @@ public class BlockSetRegistration {
         return new BlockRecordTypes.WoodSet(log, wood, slab, verticalSlab, stairs, wall, fence);
     }
 
-    public static BlockRecordTypes.MushroomStemSet createMushroomStemSet(String name, float hardness, float blastResistance, MapColor mapColor, Instrument instrument, BlockSoundGroup soundGroup, List<ItemStack> group) {
+    public static BlockRecordTypes.MushroomStemSet createMushroomStemSet(String name, float hardness, float blastResistance, MapColor mapColor, NoteBlockInstrument instrument, BlockSoundGroup soundGroup, List<ItemStack> group) {
 
         Block stem = getVanillaOrCreateNew(name + "_stem", MushroomBlock::new,
                 AbstractBlock.Settings.create()
@@ -218,7 +218,7 @@ public class BlockSetRegistration {
         return new BlockRecordTypes.MushroomStemSet(stem, slab, verticalSlab, stairs, wall, fence);
     }
 
-    public static BlockRecordTypes.PlanksSet createPlanksSet(String name, float hardness, float blastResistance, MapColor mapColor, Instrument instrument, BlockSoundGroup soundGroup, List<ItemStack> group) {
+    public static BlockRecordTypes.PlanksSet createPlanksSet(String name, float hardness, float blastResistance, MapColor mapColor, NoteBlockInstrument instrument, BlockSoundGroup soundGroup, List<ItemStack> group) {
 
         Block base = getVanillaOrCreateNew(name, Block::new,
                     AbstractBlock.Settings.create()
@@ -304,7 +304,7 @@ public class BlockSetRegistration {
         return new BlockRecordTypes.WoodFurnitureBlocks(table, chair, stool, bench, ladder);
     }
 
-    public static BlockRecordTypes.BaseStoneSet createMainStoneSet(String name, float hardness, float blastResistance, MapColor mapColor, Instrument instrument, BlockSoundGroup soundGroup, List<ItemStack> group) {
+    public static BlockRecordTypes.BaseStoneSet createMainStoneSet(String name, float hardness, float blastResistance, MapColor mapColor, NoteBlockInstrument instrument, BlockSoundGroup soundGroup, List<ItemStack> group) {
         if (Objects.equals(name, "dripstone"))
         {
             name = "dripstone_block";
@@ -353,7 +353,7 @@ public class BlockSetRegistration {
         return new BlockRecordTypes.BaseStoneSet(base, slab, verticalSlab, stairs, wall, pressurePlate, button, trapdoor, stool, table, chair, rocks);
     }
 
-    public static BlockRecordTypes.PillarSet createStonePillarSet(String name, float hardness, float blastResistance, MapColor mapColor, Instrument instrument, BlockSoundGroup soundGroup, List<ItemStack> group) {
+    public static BlockRecordTypes.PillarSet createStonePillarSet(String name, float hardness, float blastResistance, MapColor mapColor, NoteBlockInstrument instrument, BlockSoundGroup soundGroup, List<ItemStack> group) {
 
         Block base = getVanillaOrCreateNew(name, PillarBlock::new,
                     AbstractBlock.Settings.create()
@@ -368,7 +368,7 @@ public class BlockSetRegistration {
         return new BlockRecordTypes.PillarSet(base, verticalSlab, wall);
     }
 
-    public static BlockRecordTypes.PillarSet createStoneChiseledSet(String name, float hardness, float blastResistance, MapColor mapColor, Instrument instrument, BlockSoundGroup soundGroup, List<ItemStack> group) {
+    public static BlockRecordTypes.PillarSet createStoneChiseledSet(String name, float hardness, float blastResistance, MapColor mapColor, NoteBlockInstrument instrument, BlockSoundGroup soundGroup, List<ItemStack> group) {
 
         Block block = getVanillaOrCreateNew("chiseled_" + name, PillarBlock::new,
                 AbstractBlock.Settings.create()
@@ -383,7 +383,7 @@ public class BlockSetRegistration {
         return new BlockRecordTypes.PillarSet(block, verticalSlab, wall);
     }
 
-    public static BlockRecordTypes.CarvedWindow createCarvedWindowSet(String name, float hardness, float blastResistance, MapColor mapColor, Instrument instrument, BlockSoundGroup soundGroup, List<ItemStack> group) {
+    public static BlockRecordTypes.CarvedWindow createCarvedWindowSet(String name, float hardness, float blastResistance, MapColor mapColor, NoteBlockInstrument instrument, BlockSoundGroup soundGroup, List<ItemStack> group) {
         Block block = getVanillaOrCreateNew(name, TransparentBlock::new,
                 AbstractBlock.Settings.create()
                         .mapColor(mapColor).instrument(instrument).sounds(soundGroup).strength(hardness, blastResistance).requiresTool()
@@ -397,10 +397,10 @@ public class BlockSetRegistration {
     }
 
     public static Block getVanillaOrCreateNew(String path, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings, List<ItemStack> group){
-        if (Registries.BLOCK.get(new Identifier("minecraft", path)) == Blocks.AIR){
+        if (Registries.BLOCK.get(new ResourceLocation("minecraft", path)) == Blocks.AIR){
             return ModBlocks.registerBlock(path, factory, settings, false, group);
         } else {
-            return Registries.BLOCK.get(new Identifier("minecraft", path));
+            return Registries.BLOCK.get(new ResourceLocation("minecraft", path));
         }
     }
 }

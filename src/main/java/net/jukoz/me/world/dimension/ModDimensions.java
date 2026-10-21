@@ -12,17 +12,17 @@ import net.jukoz.me.world.chunkgen.MiddleEarthChunkGenerator;
 import net.jukoz.me.world.chunkgen.map.MiddleEarthHeightMap;
 import net.jukoz.me.world.map.MiddleEarthMapConfigs;
 import net.jukoz.me.world.map.MiddleEarthMapUtils;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.dimension.DimensionOptions;
 import org.joml.Vector2i;
 import org.joml.Vector3i;
@@ -32,24 +32,24 @@ public class ModDimensions {
     public static final Vector3i ME_SPAWN_LOCATION = new Vector3i(939, 90, 915);
     public static final String PATH = "middle-earth";
 
-    public static final Identifier ME_DIMENSION_ID = new Identifier(MiddleEarth.MOD_ID, PATH);
-    public static final Identifier OW_DIMENSION_ID = new Identifier("overworld");
+    public static final ResourceLocation ME_DIMENSION_ID = new ResourceLocation(MiddleEarth.MOD_ID, PATH);
+    public static final ResourceLocation OW_DIMENSION_ID = new ResourceLocation("overworld");
 
-    public static final RegistryKey<DimensionOptions> ME_DIMENSION_KEY =
-            RegistryKey.of(RegistryKeys.DIMENSION, ME_DIMENSION_ID);
+    public static final ResourceKey<DimensionOptions> ME_DIMENSION_KEY =
+            ResourceKey.of(Registries.DIMENSION, ME_DIMENSION_ID);
 
-    public static RegistryKey<World> ME_WORLD_KEY =
-            RegistryKey.of(RegistryKeys.WORLD, ME_DIMENSION_KEY.getValue());
+    public static ResourceKey<Level> ME_WORLD_KEY =
+            ResourceKey.of(Registries.WORLD, ME_DIMENSION_KEY.getValue());
 
-    public static final RegistryKey<DimensionOptions> OW_DIMENSION_KEY =
-            RegistryKey.of(RegistryKeys.DIMENSION, OW_DIMENSION_ID);
+    public static final ResourceKey<DimensionOptions> OW_DIMENSION_KEY =
+            ResourceKey.of(Registries.DIMENSION, OW_DIMENSION_ID);
 
-    public static RegistryKey<World> OW_WORLD_KEY =
-            RegistryKey.of(RegistryKeys.WORLD, OW_DIMENSION_KEY.getValue());
+    public static ResourceKey<Level> OW_WORLD_KEY =
+            ResourceKey.of(Registries.WORLD, OW_DIMENSION_KEY.getValue());
 
     public static void register() {
         Registry.register(Registries.CHUNK_GENERATOR, ME_DIMENSION_ID, MiddleEarthChunkGenerator.CODEC);
-        ME_WORLD_KEY = RegistryKey.of(RegistryKeys.WORLD, ME_DIMENSION_ID);
+        ME_WORLD_KEY = ResourceKey.of(Registries.WORLD, ME_DIMENSION_ID);
 
         LoggerUtil.getInstance().logDebugMsg("Registering ModDimensions for " + MiddleEarth.MOD_ID);
     }
@@ -59,19 +59,19 @@ public class ModDimensions {
         return new Vector3i(x, height, z);
     }
 
-    public static void teleportPlayerToME(PlayerEntity player) {
+    public static void teleportPlayerToME(Player player) {
         Vector2i coordinates = MiddleEarthMapUtils.getInstance().getWorldCoordinateFromInitialMap(ME_SPAWN_LOCATION.x, ME_SPAWN_LOCATION.z);
-        teleportPlayerToMe(player, new Vec3d(coordinates.x, getDimensionHeight(coordinates.x, coordinates.y).y, coordinates.y), true, false);
+        teleportPlayerToMe(player, new Vec3(coordinates.x, getDimensionHeight(coordinates.x, coordinates.y).y, coordinates.y), true, false);
     }
 
-    public static void teleportPlayerToMe(PlayerEntity player, Vector3i coordinates) {
-        teleportPlayerToMe(player, new Vec3d(coordinates.x, coordinates.y, coordinates.z), false, false);
+    public static void teleportPlayerToMe(Player player, Vector3i coordinates) {
+        teleportPlayerToMe(player, new Vec3(coordinates.x, coordinates.y, coordinates.z), false, false);
     }
 
-    public static void teleportPlayerToMe(PlayerEntity player, Vec3d coordinates, boolean setSpawnPoint, boolean welcomeNeeded) {
-        if (player.getWorld().isClient() || !(player instanceof ServerPlayerEntity serverPlayer)) return;
+    public static void teleportPlayerToMe(Player player, Vec3 coordinates, boolean setSpawnPoint, boolean welcomeNeeded) {
+        if (player.getWorld().isClient() || !(player instanceof ServerPlayer serverPlayer)) return;
 
-        ServerWorld serverWorld = serverPlayer.getServer().getWorld(ME_WORLD_KEY);
+        ServerLevel serverWorld = serverPlayer.getServer().getWorld(ME_WORLD_KEY);
         if (serverWorld == null) return;
 
         serverPlayer.wakeUp();
@@ -91,10 +91,10 @@ public class ModDimensions {
         }
     }
 
-    public static boolean teleportPlayerToOverworld(PlayerEntity player) {
-        if (player.getWorld().isClient() || !(player instanceof ServerPlayerEntity serverPlayer)) return false;
+    public static boolean teleportPlayerToOverworld(Player player) {
+        if (player.getWorld().isClient() || !(player instanceof ServerPlayer serverPlayer)) return false;
 
-        ServerWorld overworld = serverPlayer.getServer().getOverworld();
+        ServerLevel overworld = serverPlayer.getServer().getOverworld();
         if (overworld == null) return false;
 
         PlayerDataService.OriginAggregate origin = PlayerDataService.getOriginAggregate(player, player.getWorld());
@@ -126,11 +126,11 @@ public class ModDimensions {
         return new Vector3i(x, ME_SPAWN_LOCATION.y, z);
     }
 
-    public static boolean isInMiddleEarth(World world){
+    public static boolean isInMiddleEarth(Level world){
         return world.getRegistryKey().getValue().equals(ME_DIMENSION_ID);
     }
 
-    public static boolean isInOverworld(World world){
+    public static boolean isInOverworld(Level world){
         return world.getRegistryKey().getValue().equals(OW_DIMENSION_ID);
     }
 }

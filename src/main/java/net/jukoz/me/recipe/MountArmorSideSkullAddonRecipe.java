@@ -2,25 +2,25 @@ package net.jukoz.me.recipe;
 
 import net.jukoz.me.item.MEComponents;
 import net.jukoz.me.item.dataComponents.MountArmorAddonComponent;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.world.World;
+import net.minecraft.core.RegistryWrapper;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.utils.ItemTagsME;
 
 public class MountArmorSideSkullAddonRecipe extends SpecialCraftingRecipe {
-    public MountArmorSideSkullAddonRecipe(Identifier id, CraftingRecipeCategory category) {
+    public MountArmorSideSkullAddonRecipe(ResourceLocation id, CraftingRecipeCategory category) {
         super(id, category);
     }
 
     @Override
-    public boolean matches(RecipeInputInventory input, World world) {
+    public boolean matches(RecipeInputInventory input, Level world) {
         ItemStack itemStackArmor = ItemStack.EMPTY;
         ItemStack itemStackString = ItemStack.EMPTY;
         ItemStack itemStackSkull= ItemStack.EMPTY;

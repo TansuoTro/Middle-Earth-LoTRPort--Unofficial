@@ -4,10 +4,10 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.SpawnGroup;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.*;
 import net.jukoz.me.entity.EntitiesME;
 

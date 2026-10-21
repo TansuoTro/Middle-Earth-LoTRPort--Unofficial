@@ -1,43 +1,43 @@
 package net.jukoz.me.block.special.forge;
 
 import net.jukoz.me.item.MEComponents;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import net.jukoz.me.item.dataComponents.TemperatureDataComponent;
 import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleTypes;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
     public static final EnumProperty<ForgePart> PART = EnumProperty.of("part", ForgePart.class);
-    public static final EnumProperty<Direction> FACING = Properties.HORIZONTAL_FACING;
-    public static final BooleanProperty LIT = Properties.LIT;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
     public ForgeBlock(Settings settings) {
         super(settings);
@@ -52,7 +52,7 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
     }
 
     @Override
-    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+    public void onStateReplaced(BlockState state, Level world, BlockPos pos, BlockState newState, boolean moved) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if(blockEntity instanceof ForgeBlockEntity forgeBlockEntity) {
             if (state.get(PART) == ForgePart.BOTTOM){
@@ -74,15 +74,15 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
     }
 
     @Nullable
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
+    public BlockState getPlacementState(BlockPlaceContext ctx) {
         BlockPos pos = ctx.getBlockPos().add(0,1,0);
-        World world = ctx.getWorld();
+        Level world = ctx.getWorld();
         Direction direction = ctx.getHorizontalPlayerFacing().getOpposite();
 
         return world.getBlockState(pos).canReplace(ctx) && world.getWorldBorder().contains(pos) ? (BlockState)this.getDefaultState().with(FACING, direction).with(PART, ForgePart.BOTTOM) : null;
     }
 
-    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
+    public void onPlaced(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
         super.onPlaced(world, pos, state, placer, itemStack);
         if (!world.isClient) {
             BlockPos blockPos = pos.add(0,1,0);
@@ -93,7 +93,7 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
     }
 
     @Override
-    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    public void onBreak(Level world, BlockPos pos, BlockState state, Player player) {
         if (!world.isClient) {
             ForgePart forgePart = (ForgePart)state.get(PART);
             ForgePart forgePartOpposite = (ForgePart)state.get(PART).getOpposite(state.get(PART));
@@ -123,16 +123,16 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
         builder.add(LIT);
         builder.add(PART);
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (world.isClient) {
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         } else {
             if(state.get(PART) == ForgePart.BOTTOM){
                 NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
@@ -140,7 +140,7 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
                     player.openHandledScreen(screenHandlerFactory);
                 }
             }
-            return ActionResult.CONSUME;
+            return InteractionResult.CONSUME;
         }
     }
 
@@ -152,14 +152,14 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
         return validateTicker(world, type, ModBlockEntities.FORGE);
     }
 
     @Nullable
-    protected static <T extends BlockEntity> BlockEntityTicker<T> validateTicker(World world, BlockEntityType<T> givenType, BlockEntityType<ForgeBlockEntity> expectedType) {
+    protected static <T extends BlockEntity> BlockEntityTicker<T> validateTicker(Level world, BlockEntityType<T> givenType, BlockEntityType<ForgeBlockEntity> expectedType) {
         BlockEntityTicker ticker;
-        if (world instanceof ServerWorld serverWorld) {
+        if (world instanceof ServerLevel serverWorld) {
             ticker = checkType(givenType, expectedType, (worldx, pos, state, blockEntity) -> {
                 ForgeBlockEntity.tick(serverWorld, pos, state, blockEntity);
             });
@@ -171,7 +171,7 @@ public class ForgeBlock extends BlockWithEntity implements BlockEntityProvider {
     }
 
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+    public void randomDisplayTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
         if (!state.get(LIT).booleanValue()) {
             return;
         }

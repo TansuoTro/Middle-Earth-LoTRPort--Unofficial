@@ -2,10 +2,10 @@ package net.jukoz.me.resources.datas.texture_presets;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.api.dtos.WeightedPool;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.resources.datas.common.CharacterMaterialTypes;
@@ -17,12 +17,12 @@ import java.util.Random;
 
 public class TexturePresetDataPool {
     public static final Codec<TexturePresetDataPool> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        NbtCompound.CODEC.fieldOf("categories").forGetter(TexturePresetDataPool::getNbt)
+        CompoundTag.CODEC.fieldOf("categories").forGetter(TexturePresetDataPool::getNbt)
     ).apply(instance, TexturePresetDataPool::new));
 
     HashMap<EntityCategories, WeightedPool<WeightedTexturePresetHolder>> presetsByCategory;
 
-    public TexturePresetDataPool(NbtCompound categories) {
+    public TexturePresetDataPool(CompoundTag categories) {
         if(categories == null) return;
         presetsByCategory = new HashMap<>();
 
@@ -43,13 +43,13 @@ public class TexturePresetDataPool {
         presetsByCategory = sourceDatas;
     }
 
-    public static Identifier buildId(Identifier pattern, Identifier material) {
+    public static ResourceLocation buildId(ResourceLocation pattern, ResourceLocation material) {
         if(pattern == null || material == null)
             return null;
         return MiddleEarth.of(pattern.getPath() + "_" + material.getPath());
     }
 
-    public static Identifier buildAddonId(Identifier pattern, Identifier material) {
+    public static ResourceLocation buildAddonId(ResourceLocation pattern, ResourceLocation material) {
         return MiddleEarth.of(pattern.getPath() + "_addon_" + material.getPath());
     }
 
@@ -58,8 +58,8 @@ public class TexturePresetDataPool {
     }
 
 
-    public NbtCompound getNbt() {
-        NbtCompound newNbt = new NbtCompound();
+    public CompoundTag getNbt() {
+        CompoundTag newNbt = new CompoundTag();
         for(EntityCategories category : presetsByCategory.keySet()){
             WeightedPool<WeightedTexturePresetHolder> presets = presetsByCategory.get(category);
             if(presets != null && !presets.isEmpty()){
@@ -73,14 +73,14 @@ public class TexturePresetDataPool {
         return newNbt;
     }
 
-    public static Identifier getRawMaterial(Identity identity, CharacterMaterialTypes materialType) {
+    public static ResourceLocation getRawMaterial(Identity identity, CharacterMaterialTypes materialType) {
         var weightedItem = identity.preset.getMaterials(materialType).getRandom();
         if(weightedItem == null)
             return null;
         return weightedItem.getItem();
     }
 
-    public static Identifier getRawPattern(Identity identity, CharacterPatternTypes patternType) {
+    public static ResourceLocation getRawPattern(Identity identity, CharacterPatternTypes patternType) {
         var weightedItem = identity.preset.getPatterns(patternType).getRandom();
         if(weightedItem == null)
             return null;

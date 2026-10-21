@@ -1,17 +1,17 @@
 package net.jukoz.me.compat.structure;
 
 import net.jukoz.me.block.registration.ModBlockEntities;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.entity.*;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.loot.context.*;
 import net.minecraft.nbt.*;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.math.*;
 import net.minecraft.world.*;
 import java.util.*;
@@ -64,16 +64,16 @@ public class TrialSpawnerBlockEntity extends BlockEntity {
     }
 
     public static void tick(World world, BlockPos pos, BlockState state, TrialSpawnerBlockEntity trial) {
-        if (!(world instanceof ServerWorld server) || world.getDifficulty() == Difficulty.PEACEFUL) return;
+        if (!(world instanceof ServerLevel server) || world.getDifficulty() == Difficulty.PEACEFUL) return;
         trial.serverTick(server);
     }
-    private void serverTick(ServerWorld server) {
+    private void serverTick(ServerLevel server) {
         long time = server.getTime();
         if (time < cooldownUntil) { phase(TrialSpawnerBlock.Phase.COOLDOWN); return; }
         int range = configuration.contains("required_player_range") ? MathHelper.clamp(configuration.getInt("required_player_range"), 1, 64) : 14;
         var nearby = server.getPlayers(player -> !player.isSpectator() && !player.isCreative() && player.squaredDistanceTo(Vec3d.ofCenter(pos)) <= range*range);
         if (participants.isEmpty() && nearby.isEmpty()) { phase(TrialSpawnerBlock.Phase.WAITING_FOR_PLAYERS); return; }
-        for (ServerPlayerEntity player : nearby) if (participants.add(player.getUuid())) markDirty();
+        for (ServerPlayer player : nearby) if (participants.add(player.getUuid())) markDirty();
         // Missing entities in unloaded chunks remain in the encounter ledger. A short
         // grace period also prevents entity-load ordering from completing a trial.
         for (var iterator = alive.entrySet().iterator(); iterator.hasNext();) {
@@ -97,7 +97,7 @@ public class TrialSpawnerBlockEntity extends BlockEntity {
             Entity entity = EntityType.loadEntityWithPassengers(entityData.copy(), server, e -> { e.refreshPositionAndAngles(x,y,z,server.random.nextFloat()*360,0); return e; });
             if (entity == null) break;
             if (!server.isSpaceEmpty(entity)) continue;
-            if (entity instanceof MobEntity mob) {
+            if (entity instanceof Mob mob) {
                 // InitializationData is consumed by NPC readNbt. Unconfigured mobs need vanilla initialization.
                 if (entityData.getSize() == 1) mob.initialize(server, server.getLocalDifficulty(mob.getBlockPos()), SpawnReason.TRIGGERED, null, null);
                 mob.setPersistent();
@@ -109,7 +109,7 @@ public class TrialSpawnerBlockEntity extends BlockEntity {
         }
     }
 
-    private NbtCompound chooseEntity(ServerWorld server) {
+    private NbtCompound chooseEntity(ServerLevel server) {
         NbtList potentials = config().getList("spawn_potentials", NbtElement.COMPOUND_TYPE);
         int sum = 0; for (NbtElement element : potentials) sum += Math.max(1, ((NbtCompound)element).getInt("weight"));
         if (sum > 0) {
@@ -122,7 +122,7 @@ public class TrialSpawnerBlockEntity extends BlockEntity {
         return configuration.getCompound("spawn_data").getCompound("entity");
     }
 
-    private void reward(ServerWorld server) {
+    private void reward(ServerLevel server) {
         NbtList tables = config().getList("loot_tables_to_eject", NbtElement.COMPOUND_TYPE);
         int totalWeight = 0; for (NbtElement e : tables) totalWeight += Math.max(1,((NbtCompound)e).getInt("weight"));
         for (UUID playerId : participants) {
@@ -131,10 +131,10 @@ public class TrialSpawnerBlockEntity extends BlockEntity {
                 int roll = server.random.nextInt(totalWeight);
                 for (NbtElement e : tables) { NbtCompound entry=(NbtCompound)e; roll-=Math.max(1,entry.getInt("weight")); if(roll<0){tableName=entry.getString("data");break;} }
             }
-            Identifier table = Identifier.tryParse(tableName);
+            ResourceLocation table = ResourceLocation.tryParse(tableName);
             if (table != null) {
                 var builder = new LootContextParameterSet.Builder(server).add(LootContextParameters.ORIGIN, Vec3d.ofCenter(pos));
-                ServerPlayerEntity player = server.getServer().getPlayerManager().getPlayer(playerId);
+                ServerPlayer player = server.getServer().getPlayerManager().getPlayer(playerId);
                 if (player != null) builder.add(LootContextParameters.THIS_ENTITY, player).luck(player.getLuck());
                 for (var stack : server.getServer().getLootManager().getLootTable(table).generateLoot(builder.build(LootContextTypes.CHEST))) Block.dropStack(server,pos.up(),stack);
             }

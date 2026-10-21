@@ -1,9 +1,9 @@
 package net.jukoz.me.network.packets.C2S;
 
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.forge.ForgeBlockEntity;
 import net.jukoz.me.gui.inscriptiontable.InscriptionTableScreenHandler;
@@ -11,7 +11,7 @@ import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
 
 public class InscriptionWordUpdatePacket extends ClientToServerPacket<InscriptionWordUpdatePacket> {
-    public static final Identifier ID = MiddleEarth.of("inscription_word_update_packet");
+    public static final ResourceLocation ID = MiddleEarth.of("inscription_word_update_packet");
     public static final PacketType<InscriptionWordUpdatePacket> TYPE = PacketType.create(ID, InscriptionWordUpdatePacket::new);
 
     private final boolean add;
@@ -24,7 +24,7 @@ public class InscriptionWordUpdatePacket extends ClientToServerPacket<Inscriptio
 
 
 
-    public InscriptionWordUpdatePacket(PacketByteBuf buf) {
+    public InscriptionWordUpdatePacket(FriendlyByteBuf buf) {
         this(buf.readBoolean(), buf.readString());
     }
 
@@ -34,7 +34,7 @@ public class InscriptionWordUpdatePacket extends ClientToServerPacket<Inscriptio
     }
 
     @Override
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
         buf.writeBoolean(this.add);
         buf.writeString(this.word);
     }

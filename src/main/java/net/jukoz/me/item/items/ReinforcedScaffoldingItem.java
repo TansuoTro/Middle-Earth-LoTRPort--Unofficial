@@ -1,15 +1,15 @@
 package net.jukoz.me.item.items;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.item.ScaffoldingItem;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.block.special.ReinforcedScaffoldingBlock;
 
 public class ReinforcedScaffoldingItem extends ScaffoldingItem {
@@ -18,9 +18,9 @@ public class ReinforcedScaffoldingItem extends ScaffoldingItem {
     }
 
     @Override
-    public ItemPlacementContext getPlacementContext(ItemPlacementContext context) {
+    public BlockPlaceContext getPlacementContext(BlockPlaceContext context) {
         BlockPos blockPos = context.getBlockPos();
-        World world = context.getWorld();
+        Level world = context.getWorld();
         BlockState blockState = world.getBlockState(blockPos);
         Block block = this.getBlock();
         if (blockState.isOf(block)) {
@@ -36,9 +36,9 @@ public class ReinforcedScaffoldingItem extends ScaffoldingItem {
 
             while (horizontalDistance < ReinforcedScaffoldingBlock.MAX_SUPPORT_DISTANCE) {
                 if (!world.isClient && !world.isInBuildLimit(mutable)) {
-                    if (context.getPlayer() instanceof ServerPlayerEntity serverPlayer && mutable.getY() > world.getTopY()) {
+                    if (context.getPlayer() instanceof ServerPlayer serverPlayer && mutable.getY() > world.getTopY()) {
                         serverPlayer.sendMessageToClient(
-                                Text.translatable("build.tooHigh", world.getTopY()).formatted(Formatting.RED),
+                                Component.translatable("build.tooHigh", world.getTopY()).formatted(Formatting.RED),
                                 true
                         );
                     }
@@ -47,7 +47,7 @@ public class ReinforcedScaffoldingItem extends ScaffoldingItem {
 
                 blockState = world.getBlockState(mutable);
                 if (!blockState.isOf(block)) {
-                    return blockState.canReplace(context) ? ItemPlacementContext.offset(context, mutable, direction) : null;
+                    return blockState.canReplace(context) ? BlockPlaceContext.offset(context, mutable, direction) : null;
                 }
 
                 mutable.move(direction);

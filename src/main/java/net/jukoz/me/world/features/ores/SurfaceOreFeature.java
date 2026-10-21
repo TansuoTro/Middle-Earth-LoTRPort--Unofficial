@@ -1,35 +1,35 @@
 package net.jukoz.me.world.features.ores;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.structure.rule.BlockMatchRuleTest;
 import net.minecraft.util.math.*;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.ChunkSectionCache;
-import net.minecraft.world.Heightmap;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.chunk.ChunkSection;
-import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.gen.feature.OreFeature;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 
 import java.util.BitSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class SurfaceOreFeature extends Feature<OreFeatureConfig> {
-    public SurfaceOreFeature(Codec<OreFeatureConfig> configCodec) {
+public class SurfaceOreFeature extends Feature<OreConfiguration> {
+    public SurfaceOreFeature(Codec<OreConfiguration> configCodec) {
         super(configCodec);
     }
 
     @Override
-    public boolean generate(FeatureContext<OreFeatureConfig> context) {
-        Random random = context.getRandom();
+    public boolean generate(FeatureContext<OreConfiguration> context) {
+        RandomSource random = context.getRandom();
         BlockPos blockPos = context.getOrigin();
         StructureWorldAccess structureWorldAccess = context.getWorld();
-        OreFeatureConfig oreFeatureConfig = context.getConfig();
+        OreConfiguration oreFeatureConfig = context.getConfig();
         float f = random.nextFloat() * (float)Math.PI;
         float g = (float)oreFeatureConfig.size / 8.0f;
         int i = MathHelper.ceil(((float)oreFeatureConfig.size / 16.0f * 2.0f + 1.0f) / 2.0f);
@@ -54,7 +54,7 @@ public class SurfaceOreFeature extends Feature<OreFeatureConfig> {
         return false;
     }
 
-    protected boolean generateVeinPart(StructureWorldAccess world, Random random, OreFeatureConfig config, double startX, double endX, double startZ, double endZ, double startY, double endY, int x, int y, int z, int horizontalSize, int verticalSize) {
+    protected boolean generateVeinPart(StructureWorldAccess world, RandomSource random, OreConfiguration config, double startX, double endX, double startZ, double endZ, double startY, double endY, int x, int y, int z, int horizontalSize, int verticalSize) {
         double h;
         double g;
         double e;
@@ -119,7 +119,7 @@ public class SurfaceOreFeature extends Feature<OreFeatureConfig> {
                             int ae = ChunkSectionPos.getLocalCoord(v);
                             int af = ChunkSectionPos.getLocalCoord(aa);
                             BlockState blockState = chunkSection.getBlockState(ad, ae, af);
-                            for (OreFeatureConfig.Target target : config.targets) {
+                            for (OreConfiguration.Target target : config.targets) {
                                 if (!shouldPlace(blockState, chunkSectionCache::getBlockState, random, config, target, mutable)) continue;
                                 chunkSection.setBlockState(ad, ae, af, target.state, false);
                                 ++i;
@@ -133,9 +133,9 @@ public class SurfaceOreFeature extends Feature<OreFeatureConfig> {
         return i > 0;
     }
 
-    public static boolean shouldPlace(BlockState state, Function<BlockPos, BlockState> posToState, Random random, OreFeatureConfig config, OreFeatureConfig.Target target, BlockPos.Mutable pos) {
+    public static boolean shouldPlace(BlockState state, Function<BlockPos, BlockState> posToState, RandomSource random, OreConfiguration config, OreConfiguration.Target target, BlockPos.Mutable pos) {
         BlockPos.Mutable mutable = new BlockPos.Mutable();
-        Predicate<BlockState> predicate = AbstractBlock.AbstractBlockState::isAir;
+        Predicate<BlockState> predicate = BlockBehaviour.AbstractBlockState::isAir;
         mutable.set(pos, Direction.UP);
         if (!predicate.test(posToState.apply(mutable))) return false;
 
@@ -146,7 +146,7 @@ public class SurfaceOreFeature extends Feature<OreFeatureConfig> {
         return shouldNotDiscard(random, config.discardOnAirChance);
     }
 
-    protected static boolean shouldNotDiscard(Random random, float chance) {
+    protected static boolean shouldNotDiscard(RandomSource random, float chance) {
         if (chance <= 0.0f) {
             return true;
         }

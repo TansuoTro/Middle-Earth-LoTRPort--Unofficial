@@ -1,19 +1,19 @@
 package net.jukoz.me.entity.goals;
 
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Difficulty;
 import net.jukoz.me.entity.beasts.AbstractBeastEntity;
 import net.jukoz.me.resources.datas.common.DispositionType;
 import net.jukoz.me.resources.persistent_datas.PlayerDataService;
 
-public class BeastTargetPlayerGoal extends ActiveTargetGoal<PlayerEntity> {
+public class BeastTargetPlayerGoal extends ActiveTargetGoal<Player> {
     AbstractBeastEntity mob;
     DispositionType beastDispositionType;
 
     public BeastTargetPlayerGoal(AbstractBeastEntity mob, DispositionType beastDispositionType) {
-        super(mob, PlayerEntity.class, true);
+        super(mob, Player.class, true);
         this.mob = mob;
         this.beastDispositionType = beastDispositionType;
     }
@@ -29,8 +29,8 @@ public class BeastTargetPlayerGoal extends ActiveTargetGoal<PlayerEntity> {
     }
 
     private boolean canTargetMob(){
-        if(this.mob.getWorld() instanceof ServerWorld serverWorld) {
-            PlayerEntity player = serverWorld.getClosestPlayer(this.targetPredicate, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());;
+        if(this.mob.getWorld() instanceof ServerLevel serverWorld) {
+            Player player = serverWorld.getClosestPlayer(this.targetPredicate, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());;
             if(player == null || mob.getWorld().getDifficulty() == Difficulty.PEACEFUL || mob.isTame() || player == mob.getOwner()){
                 return false;
             }

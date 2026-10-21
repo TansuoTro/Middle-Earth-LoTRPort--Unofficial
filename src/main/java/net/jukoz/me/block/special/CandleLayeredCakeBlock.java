@@ -3,26 +3,26 @@ package net.jukoz.me.block.special;
 import com.google.common.collect.Maps;
 import net.minecraft.block.*;
 import net.minecraft.entity.ai.pathing.NavigationType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Property;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelView;
 import net.jukoz.me.block.registration.ModBlocks;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
     public static final BooleanProperty LIT;
     private static final VoxelShape SHAPE;
     private static final Map<CandleBlock, CandleLayeredCakeBlock> CANDLES_TO_CANDLE_CAKES;
-    private static final Iterable<Vec3d> PARTICLE_OFFSETS;
+    private static final Iterable<Vec3> PARTICLE_OFFSETS;
     private final CandleBlock candle;
 
 
@@ -49,28 +49,28 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
         }
     }
 
-    protected Iterable<Vec3d> getParticleOffsets(BlockState state) {
+    protected Iterable<Vec3> getParticleOffsets(BlockState state) {
         return PARTICLE_OFFSETS;
     }
 
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
         return SHAPE;
     }
 
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         ItemStack stack = player.getStackInHand(hand);
         if (stack.isOf(Items.FLINT_AND_STEEL) || stack.isOf(Items.FIRE_CHARGE)) {
             if(canBeLit(state)) {
                 setLit(world, state, pos, true);
-                return ActionResult.CONSUME;
+                return InteractionResult.CONSUME;
             }
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         } else {
             if (isHittingCandle(hit) && stack.isEmpty() && (Boolean)state.get(LIT)) {
                 extinguish(player, state, world, pos);
-                return ActionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             } else {
-                ActionResult actionResult = LayeredCakeBlock.tryEat(world, pos, ModBlocks.LAYERED_CAKE.getDefaultState(), player);
+                InteractionResult actionResult = LayeredCakeBlock.tryEat(world, pos, ModBlocks.LAYERED_CAKE.getDefaultState(), player);
                 if (actionResult.isAccepted()) {
                     dropStacks(state, world, pos);
                 }
@@ -87,7 +87,7 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
         return hitResult.getPos().y - (double)hitResult.getBlockPos().getY() > 0.5;
     }
 
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(new Property[]{LIT});
     }
 
@@ -103,7 +103,7 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
         return world.getBlockState(pos.down()).isSolid();
     }
 
-    public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
+    public int getComparatorOutput(BlockState state, Level world, BlockPos pos) {
         return CakeBlock.DEFAULT_COMPARATOR_OUTPUT;
     }
 
@@ -111,7 +111,7 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
         return true;
     }
 
-    public boolean canPathfindThrough(BlockState state, net.minecraft.world.BlockView world, BlockPos pos, NavigationType type) {
+    public boolean canPathfindThrough(BlockState state, net.minecraft.world.level.BlockGetter world, BlockPos pos, NavigationType type) {
         return false;
     }
 
@@ -128,10 +128,10 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
         SHAPE = VoxelShapes.union(Block.createCuboidShape(0, 0.0, 0, 16.0, 8.0, 16.0),
                 Block.createCuboidShape(2, 8, 2, 14, 16, 14));
         CANDLES_TO_CANDLE_CAKES = Maps.newHashMap();
-        PARTICLE_OFFSETS = List.of((new Vec3d(5.0, 23, 5.0)).multiply(0.0625),
-                (new Vec3d(5.0, 23, 11.0)).multiply(0.0625),
-                (new Vec3d(11.0, 23, 5.0)).multiply(0.0625),
-                (new Vec3d(11.0, 23, 11.0)).multiply(0.0625)
+        PARTICLE_OFFSETS = List.of((new Vec3(5.0, 23, 5.0)).multiply(0.0625),
+                (new Vec3(5.0, 23, 11.0)).multiply(0.0625),
+                (new Vec3(11.0, 23, 5.0)).multiply(0.0625),
+                (new Vec3(11.0, 23, 11.0)).multiply(0.0625)
         );
     }
 }

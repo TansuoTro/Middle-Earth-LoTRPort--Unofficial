@@ -2,9 +2,9 @@ package net.jukoz.me.entity.ai.brain.task;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.entity.ai.brain.MemoryModuleState;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.MultiTickTask;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
 import net.jukoz.me.entity.beasts.AbstractBeastEntity;
 
 public class BeastChargeTask extends MultiTickTask<AbstractBeastEntity> {
@@ -22,7 +22,7 @@ public class BeastChargeTask extends MultiTickTask<AbstractBeastEntity> {
     }
 
     @Override
-    protected boolean shouldRun(ServerWorld world, AbstractBeastEntity entity) {
+    protected boolean shouldRun(ServerLevel world, AbstractBeastEntity entity) {
         return entity.getTarget() != null &&
                 entity.getChargeTimeout() == 0  &&
                 entity.canSee(entity.getTarget()) &&
@@ -31,18 +31,18 @@ public class BeastChargeTask extends MultiTickTask<AbstractBeastEntity> {
     }
 
     @Override
-    protected boolean shouldKeepRunning(ServerWorld world, AbstractBeastEntity entity, long time) {
+    protected boolean shouldKeepRunning(ServerLevel world, AbstractBeastEntity entity, long time) {
         return entity.isCharging();
     }
 
     @Override
-    protected void run(ServerWorld world, AbstractBeastEntity entity, long time) {
+    protected void run(ServerLevel world, AbstractBeastEntity entity, long time) {
         entity.setCharging(true);
         entity.setChargeTimeout(MAX_COOLDOWN);
     }
 
     @Override
-    protected void finishRunning(ServerWorld world, AbstractBeastEntity entity, long time) {
+    protected void finishRunning(ServerLevel world, AbstractBeastEntity entity, long time) {
         entity.setCharging(false);
     }
 }

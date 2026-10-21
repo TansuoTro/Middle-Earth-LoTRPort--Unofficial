@@ -2,15 +2,15 @@ package net.jukoz.me.compat;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * 1.21 stores enchantments in an {@code ItemEnchantmentsComponent}; 1.20.1 still exposes the raw
@@ -26,8 +26,8 @@ public final class MEEnchants {
         List<Enchantment> result = new ArrayList<>();
         NbtList enchantments = stack.getEnchantments();
         for (int i = 0; i < enchantments.size(); i++) {
-            NbtCompound entry = enchantments.getCompound(i);
-            Enchantment enchantment = Registries.ENCHANTMENT.get(Identifier.tryParse(entry.getString("id")));
+            CompoundTag entry = enchantments.getCompound(i);
+            Enchantment enchantment = Registries.ENCHANTMENT.get(ResourceLocation.tryParse(entry.getString("id")));
             if (enchantment != null) {
                 result.add(enchantment);
             }
@@ -35,7 +35,7 @@ public final class MEEnchants {
         return result;
     }
 
-    public static boolean has(ItemStack stack, RegistryEntry<Enchantment> enchantment) {
+    public static boolean has(ItemStack stack, Holder<Enchantment> enchantment) {
         if (!enchantment.hasKeyAndValue()) {
             return false;
         }
@@ -43,7 +43,7 @@ public final class MEEnchants {
         for (int i = 0; i < enchantments.size(); i++) {
             NbtElement element = enchantments.get(i);
             if (element.getType() == NbtElement.COMPOUND_TYPE) {
-                NbtCompound entry = (NbtCompound) element;
+                CompoundTag entry = (CompoundTag) element;
                 if (enchantment.getKey().orElseThrow().getValue().toString().equals(entry.getString("id"))) {
                     return true;
                 }

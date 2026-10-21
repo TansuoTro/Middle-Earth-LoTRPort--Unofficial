@@ -1,38 +1,38 @@
 package net.jukoz.me.block.special.crockpot;
 
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.particle.ParticleTypes;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.particles.ParticleTypes;
 
-import net.minecraft.recipe.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.nbt.CompoundTag;
 import net.jukoz.me.compat.nbt.ReadView;
 import net.jukoz.me.compat.nbt.WriteView;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.forge.MultipleStackRecipeInput;
 import net.jukoz.me.recipe.CrockpotRecipe;
@@ -51,7 +51,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
     protected final PropertyDelegate propertyDelegate;
     private final RecipeManager.MatchGetter<MultipleStackRecipeInput, ? extends CrockpotRecipe> matchGetter;
     private int progress = 0;
-    private Random random;
+    private RandomSource random;
     private float liquidTopLevel;
 
     public CrockpotBlockEntity(BlockPos pos, BlockState state) {
@@ -83,10 +83,10 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
         };
         this.matchGetter = RecipeManager.createCachedMatchGetter(RecipesME.CROCKPOT);
         this.liquidTopLevel = liquidTopLevel;
-        random = Random.create();
+        random = RandomSource.create();
     }
 
-    public static void serverTick(World world, BlockPos pos, BlockState state, CrockpotBlockEntity blockEntity) {
+    public static void serverTick(Level world, BlockPos pos, BlockState state, CrockpotBlockEntity blockEntity) {
         ArrayList<ItemStack> ingredients = new ArrayList<>();
         for(int i = 0; i < blockEntity.inventory.size(); i++) {
             ItemStack ingredient = blockEntity.inventory.get(i);
@@ -97,7 +97,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
         boolean markDirty = false;
         if (blockEntity.isBoiling() && !world.isClient) {
             blockEntity.randomBubbles();
-            ServerWorld serverWorld = (ServerWorld) world;
+            ServerLevel serverWorld = (ServerLevel) world;
             MultipleStackRecipeInput recipeInput = new MultipleStackRecipeInput(ingredients);
             CrockpotRecipe recipeEntry;
             if (ingredients.size() >= 2) {
@@ -121,7 +121,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
 
     }
 
-    public static void clientTick(World world, BlockPos pos, BlockState state, CrockpotBlockEntity blockEntity) {
+    public static void clientTick(Level world, BlockPos pos, BlockState state, CrockpotBlockEntity blockEntity) {
         if(blockEntity.isCooking())
         {
             double x = (double)pos.getX() + 0.5;
@@ -176,7 +176,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, Player player) {
         return new CrockpotScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
@@ -304,7 +304,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
+    public boolean canPlayerUse(Player player) {
         return Inventory.canPlayerUse(this, player);
     }
 
@@ -314,12 +314,12 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("screen." + MiddleEarth.MOD_ID + "." + ID);
+    public Component getDisplayName() {
+        return Component.translatable("screen." + MiddleEarth.MOD_ID + "." + ID);
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt) {
+    protected void writeNbt(CompoundTag nbt) {
         super.writeNbt(nbt);
         WriteView view = new WriteView(nbt);
         Inventories.writeNbt(view.nbt(), this.inventory, false);
@@ -327,7 +327,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
     }
 
     @Override
-    public void readNbt(NbtCompound nbt) {
+    public void readNbt(CompoundTag nbt) {
         super.readNbt(nbt);
         ReadView view = new ReadView(nbt);
         this.inventory.clear();
@@ -336,7 +336,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
     }
 
     @Override
-    public void writeScreenOpeningData(net.minecraft.server.network.ServerPlayerEntity player, net.minecraft.network.PacketByteBuf buf) {
+    public void writeScreenOpeningData(net.minecraft.server.level.ServerPlayer player, net.minecraft.network.FriendlyByteBuf buf) {
         buf.writeBlockPos(this.pos);
     }
 }

@@ -1,12 +1,12 @@
 package net.jukoz.me.block.special.plants;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
 
 /**
  * 1.20.1 backport of the 1.21.x vanilla TintedParticleLeavesBlock:
@@ -17,13 +17,13 @@ import net.minecraft.world.World;
 public class TintedParticleLeavesBlock extends LeavesBlock {
     private final float particleChance;
 
-    public TintedParticleLeavesBlock(float particleChance, net.minecraft.block.AbstractBlock.Settings settings) {
+    public TintedParticleLeavesBlock(float particleChance, net.minecraft.world.level.block.state.BlockBehaviour.Settings settings) {
         super(settings);
         this.particleChance = particleChance;
     }
 
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+    public void randomDisplayTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
         super.randomDisplayTick(state, world, pos, random);
         if (random.nextFloat() >= this.particleChance) {
             return;

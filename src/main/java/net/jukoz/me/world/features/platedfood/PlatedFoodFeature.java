@@ -1,21 +1,21 @@
 package net.jukoz.me.world.features.platedfood;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.loot.LootTable;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.plate.PlateBlockEntity;
@@ -31,9 +31,9 @@ public class PlatedFoodFeature extends Feature<PlatedFoodFeatureConfig> {
     public boolean generate(FeatureContext<PlatedFoodFeatureConfig> context) {
         BlockPos blockPos = context.getOrigin();
         StructureWorldAccess structureWorldAccess = context.getWorld();
-        Random random = context.getRandom();
+        RandomSource random = context.getRandom();
         PlatedFoodFeatureConfig config = context.getConfig();
-        Identifier lootTableIdentifier = config.lootTable;
+        ResourceLocation lootTableIdentifier = config.lootTable;
 
         this.setBlockState(structureWorldAccess, blockPos, config.plate);
 
@@ -42,7 +42,7 @@ public class PlatedFoodFeature extends Feature<PlatedFoodFeatureConfig> {
             PlateBlockEntity plateBlockEntity = (PlateBlockEntity) blockEntity;
             plateBlockEntity.setLootTable(lootTableIdentifier, random.nextLong());
             plateBlockEntity.setBlockPlaced();
-            plateBlockEntity.generateItem((ServerWorld) structureWorldAccess);
+            plateBlockEntity.generateItem((ServerLevel) structureWorldAccess);
         }
         return true;
     }

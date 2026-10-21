@@ -2,12 +2,12 @@ package net.jukoz.me.recipe;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.jukoz.me.MiddleEarth;
-import net.minecraft.recipe.RecipeType;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.jukoz.me.recipe.inscription.InscriptionRecipe;
 
 import java.util.function.Supplier;

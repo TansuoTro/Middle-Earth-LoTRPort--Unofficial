@@ -9,12 +9,12 @@ import net.jukoz.me.item.dataComponents.FactionDataComponent;
 import net.jukoz.me.item.dataComponents.RaceDataComponent;
 import net.jukoz.me.item.dataComponents.SneakAttackDataComponent;
 import net.jukoz.me.item.dataComponents.TemperatureDataComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.IdentityHashMap;
@@ -77,15 +77,15 @@ public final class MEComponents {
 
     /**
      * 1.21's ITEM_MODEL override. Only the mod's own renderers read it (PlateEntityRenderer,
-     * WoodlandRealmCrownItem), so an NBT-backed Identifier is enough; 1.20.1 has no
+     * WoodlandRealmCrownItem), so an NBT-backed ResourceLocation is enough; 1.20.1 has no
      * per-stack model component for the vanilla item renderer to consult.
      */
-    public static final MEComponent<Identifier> ITEM_MODEL =
-            register("item_model", Identifier.CODEC);
+    public static final MEComponent<ResourceLocation> ITEM_MODEL =
+            register("item_model", ResourceLocation.CODEC);
 
     /** 1.21's EQUIPPABLE asset id; only the mod's own renderers read it. */
-    public static final MEComponent<Identifier> EQUIPPABLE_ASSET =
-            register("equippable_asset", Identifier.CODEC);
+    public static final MEComponent<ResourceLocation> EQUIPPABLE_ASSET =
+            register("equippable_asset", ResourceLocation.CODEC);
     public static final MEComponent<MountEquippableComponent> MOUNT_EQUIPPABLE =
             register("mount_equippable", MountEquippableComponent.CODEC);
 
@@ -124,7 +124,7 @@ public final class MEComponents {
     }
 
     private static <T> MEComponent<T> register(String path, Codec<T> codec) {
-        MEComponent<T> component = new MEComponent<>(new Identifier(MiddleEarth.MOD_ID, path), codec);
+        MEComponent<T> component = new MEComponent<>(new ResourceLocation(MiddleEarth.MOD_ID, path), codec);
         ALL.add(component);
         return component;
     }
@@ -135,12 +135,12 @@ public final class MEComponents {
      * component registry.
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static void appendTooltips(ItemStack stack, net.minecraft.client.item.TooltipContext context, java.util.List<net.minecraft.text.Text> tooltip) {
+    public static void appendTooltips(ItemStack stack, net.minecraft.client.item.TooltipContext context, java.util.List<net.minecraft.network.chat.Component> tooltip) {
         appendTooltips(stack, context, tooltip, null);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static void appendTooltips(ItemStack stack, net.minecraft.client.item.TooltipContext context, java.util.List<net.minecraft.text.Text> tooltip, net.minecraft.world.World world) {
+    public static void appendTooltips(ItemStack stack, net.minecraft.client.item.TooltipContext context, java.util.List<net.minecraft.network.chat.Component> tooltip, net.minecraft.world.level.Level world) {
         tooltip.addAll(net.jukoz.me.item.ItemExtras.lore(stack.getItem()));
         for (MEComponent<?> key : ALL) {
             Object value = get(stack, (MEComponent) key);
@@ -157,9 +157,9 @@ public final class MEComponents {
     @Nullable
     @SuppressWarnings("unchecked")
     public static <T> T get(ItemStack stack, MEComponent<T> key) {
-        NbtCompound tag = stack.getNbt();
+        CompoundTag tag = stack.getNbt();
         if (tag != null && tag.contains(ROOT, NbtElement.COMPOUND_TYPE)) {
-            NbtCompound root = tag.getCompound(ROOT);
+            CompoundTag root = tag.getCompound(ROOT);
             String path = key.id().getPath();
             if (root.contains(path)) {
                 T value = decode(key, root.get(path));
@@ -219,11 +219,11 @@ public final class MEComponents {
     }
 
     public static <T> void remove(ItemStack stack, MEComponent<T> key) {
-        NbtCompound tag = stack.getNbt();
+        CompoundTag tag = stack.getNbt();
         if (tag == null || !tag.contains(ROOT, NbtElement.COMPOUND_TYPE)) {
             return;
         }
-        NbtCompound root = tag.getCompound(ROOT);
+        CompoundTag root = tag.getCompound(ROOT);
         root.remove(key.id().getPath());
         syncCustomModelData(stack, key, null);
         if (root.isEmpty()) {

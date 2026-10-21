@@ -13,14 +13,14 @@ public record TemperatureDataComponent(int temperature) implements net.jukoz.me.
             ComponentCodecs.alternative(BASE_CODEC, Codec.INT, TemperatureDataComponent::new);
 
     @Override
-    public void appendTooltip(net.minecraft.item.ItemStack stack, net.minecraft.client.item.TooltipContext context,
-                              java.util.List<net.minecraft.text.Text> tooltip) {
+    public void appendTooltip(net.minecraft.world.item.ItemStack stack, net.minecraft.client.item.TooltipContext context,
+                              java.util.List<net.minecraft.network.chat.Component> tooltip) {
         if (temperature < 0) return;
         int tier = Math.min(4, temperature / 20);
         net.jukoz.me.utils.ModColors[] colors = {net.jukoz.me.utils.ModColors.TEMP_1,
                 net.jukoz.me.utils.ModColors.TEMP_2, net.jukoz.me.utils.ModColors.TEMP_3,
                 net.jukoz.me.utils.ModColors.TEMP_4, net.jukoz.me.utils.ModColors.TEMP_5};
-        tooltip.add(net.minecraft.text.Text.translatable("tooltip.me.temp_" + (tier + 1))
+        tooltip.add(net.minecraft.network.chat.Component.translatable("tooltip.me.temp_" + (tier + 1))
                 .styled(style -> style.withColor(colors[tier].color)));
     }
 }

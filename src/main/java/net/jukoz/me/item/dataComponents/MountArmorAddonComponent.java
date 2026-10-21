@@ -2,7 +2,7 @@ package net.jukoz.me.item.dataComponents;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
 
@@ -17,7 +17,7 @@ public record MountArmorAddonComponent(boolean topArmorAddon, boolean sideArmorA
     public static final Codec<MountArmorAddonComponent> CODEC = ComponentCodecs.alternative(BASE_CODEC, Codec.BOOL, (enabled) -> {
         return new MountArmorAddonComponent(false, false);
     });
-    public static final PacketCodec<PacketByteBuf, MountArmorAddonComponent> PACKET_CODEC  = PacketCodec.tuple(PacketCodecs.BOOLEAN, MountArmorAddonComponent::topArmorAddon, PacketCodecs.BOOLEAN, MountArmorAddonComponent::sideArmorAddon, MountArmorAddonComponent::new);
+    public static final PacketCodec<FriendlyByteBuf, MountArmorAddonComponent> PACKET_CODEC  = PacketCodec.tuple(PacketCodecs.BOOLEAN, MountArmorAddonComponent::topArmorAddon, PacketCodecs.BOOLEAN, MountArmorAddonComponent::sideArmorAddon, MountArmorAddonComponent::new);
     ;
 
     public MountArmorAddonComponent(boolean topArmorAddon, boolean sideArmorAddon) {

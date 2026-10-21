@@ -1,10 +1,10 @@
 package net.jukoz.me.compat;
 
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.VoxelShapes;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -52,10 +52,10 @@ public final class MEBlockShapes {
     }
 
     public static Map<Direction, VoxelShape> createHorizontalFacingShapeMap(VoxelShape shape) {
-        return createHorizontalFacingShapeMap(shape, new Vec3d(0.5, 0.5, 0.5));
+        return createHorizontalFacingShapeMap(shape, new Vec3(0.5, 0.5, 0.5));
     }
 
-    public static Map<Direction, VoxelShape> createHorizontalFacingShapeMap(VoxelShape shape, Vec3d anchor) {
+    public static Map<Direction, VoxelShape> createHorizontalFacingShapeMap(VoxelShape shape, Vec3 anchor) {
         Map<Direction, VoxelShape> map = new EnumMap<>(Direction.class);
         int i = 0;
         for (Direction direction : new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST}) {
@@ -66,10 +66,10 @@ public final class MEBlockShapes {
     }
 
     public static Map<Direction, VoxelShape> createFacingShapeMap(VoxelShape shape) {
-        return createFacingShapeMap(shape, new Vec3d(0.5, 0.5, 0.5));
+        return createFacingShapeMap(shape, new Vec3(0.5, 0.5, 0.5));
     }
 
-    public static Map<Direction, VoxelShape> createFacingShapeMap(VoxelShape shape, Vec3d anchor) {
+    public static Map<Direction, VoxelShape> createFacingShapeMap(VoxelShape shape, Vec3 anchor) {
         Map<Direction, VoxelShape> map = new EnumMap<>(Direction.class);
         for (Direction direction : Direction.values()) {
             map.put(direction, shape);
@@ -77,7 +77,7 @@ public final class MEBlockShapes {
         return map;
     }
 
-    private static VoxelShape rotateAroundY(VoxelShape shape, Vec3d anchor, int quarterTurns) {
+    private static VoxelShape rotateAroundY(VoxelShape shape, Vec3 anchor, int quarterTurns) {
         int turns = ((quarterTurns % 4) + 4) % 4;
         if (turns == 0) {
             return shape;

@@ -1,19 +1,19 @@
 package net.jukoz.me.block.special.shapingAnvil.stoneanvil;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.BlockWithEntity;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.util.function.BooleanBiFunction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import net.jukoz.me.block.special.shapingAnvil.AbstractShapingAnvilBlock;
 import net.jukoz.me.block.special.shapingAnvil.ShapingAnvilBlockEntity;
@@ -30,7 +30,7 @@ public class StoneAnvilBlock extends AbstractShapingAnvilBlock {
 
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         switch (state.get(FACING)){
             case NORTH -> {
                 return Stream.of(
@@ -75,12 +75,12 @@ public class StoneAnvilBlock extends AbstractShapingAnvilBlock {
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
         return StoneAnvilBlock.validateTicker(world, type, ModBlockEntities.STONE_ANVIL);
     }
 
     @Nullable
-    protected static <T extends BlockEntity> BlockEntityTicker<T> validateTicker(World world, BlockEntityType<T> givenType, BlockEntityType<StoneAnvilBlockEntity> expectedType) {
+    protected static <T extends BlockEntity> BlockEntityTicker<T> validateTicker(Level world, BlockEntityType<T> givenType, BlockEntityType<StoneAnvilBlockEntity> expectedType) {
         return world.isClient ? null : StoneAnvilBlock.checkType(givenType, expectedType, StoneAnvilBlockEntity::tick);
     }
 }

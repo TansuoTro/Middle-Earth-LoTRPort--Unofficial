@@ -2,22 +2,22 @@ package net.jukoz.me.entity;
 
 import net.jukoz.me.entity.goals.CustomBowAttackGoal;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.RangedAttackMob;
+import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.entity.projectile.ProjectileUtil;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.item.RangedWeaponItem;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -29,7 +29,7 @@ public class NpcEntity extends PathAwareEntity implements RangedAttackMob {
     private final MeleeAttackGoal meleeAttackGoal = new MeleeAttackGoal(this, 1.5, false);
     public RANK rank;
 
-    protected NpcEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
+    protected NpcEntity(EntityType<? extends PathAwareEntity> entityType, Level world) {
         super(entityType, world);
         this.updateAttackType();
         for (int i = 0; i < 4; i++) {
@@ -39,7 +39,7 @@ public class NpcEntity extends PathAwareEntity implements RangedAttackMob {
 
     @Nullable
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable CompoundTag entityNbt) {
         entityData = super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
         this.updateAttackType();
         return entityData;
@@ -49,7 +49,7 @@ public class NpcEntity extends PathAwareEntity implements RangedAttackMob {
     protected void initGoals() {
         this.goalSelector.add(1, new SwimGoal(this));
         this.goalSelector.add(2, new WanderAroundFarGoal(this, 1.0));
-        this.goalSelector.add(3, new LookAtEntityGoal(this, PlayerEntity.class, 6.0f));
+        this.goalSelector.add(3, new LookAtEntityGoal(this, Player.class, 6.0f));
         this.goalSelector.add(4, new LookAroundGoal(this));
         this.targetSelector.add(1, new RevengeGoal(this, this.getClass()).setGroupRevenge());
     }
@@ -98,7 +98,7 @@ public class NpcEntity extends PathAwareEntity implements RangedAttackMob {
     }
 
     @Override
-    protected void initEquipment(Random random, LocalDifficulty localDifficulty) {
+    protected void initEquipment(RandomSource random, LocalDifficulty localDifficulty) {
     }
 
     @Override
@@ -134,7 +134,7 @@ public class NpcEntity extends PathAwareEntity implements RangedAttackMob {
         return ProjectileUtil.createArrowProjectile(this, arrow, damageModifier);
     }
 
-    public void readCustomDataFromNbt(NbtCompound nbt) {
+    public void readCustomDataFromNbt(CompoundTag nbt) {
         super.readCustomDataFromNbt(nbt);
         this.updateAttackType();
     }

@@ -3,21 +3,21 @@ package net.jukoz.me.entity.balrog;
 import net.jukoz.me.entity.dwarves.longbeards.LongbeardDwarfEntity;
 import net.jukoz.me.entity.elves.galadhrim.GaladhrimElfEntity;
 import net.jukoz.me.entity.hobbits.shire.ShireHobbitEntity;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.Random;
 
@@ -33,7 +33,7 @@ public class BalrogEntity extends HostileEntity {
 
     private Random randomRegen = new Random();
 
-    public BalrogEntity(EntityType<? extends HostileEntity> entityType, World world) {
+    public BalrogEntity(EntityType<? extends HostileEntity> entityType, Level world) {
         super(entityType, world);
     }
 
@@ -42,10 +42,10 @@ public class BalrogEntity extends HostileEntity {
         this.goalSelector.add(2, new RevengeGoal(this));
         this.goalSelector.add(3, new MeleeAttackGoal(this, 1.0f, true));
         this.goalSelector.add(4, new WanderAroundGoal(this, 1.0F));
-        this.goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
+        this.goalSelector.add(5, new LookAtEntityGoal(this, Player.class, 6.0F));
         this.goalSelector.add(6, new LookAroundGoal(this));
 
-        this.targetSelector.add(1, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
+        this.targetSelector.add(1, new ActiveTargetGoal<>(this, Player.class, true));
         this.targetSelector.add(2, new ActiveTargetGoal<>(this, GaladhrimElfEntity.class, true));
         this.targetSelector.add(3, new ActiveTargetGoal<>(this, LongbeardDwarfEntity.class, true));
         this.targetSelector.add(4, new ActiveTargetGoal<>(this, ShireHobbitEntity.class, true));
@@ -53,14 +53,14 @@ public class BalrogEntity extends HostileEntity {
     }
 
     public static DefaultAttributeContainer.Builder createBalrogAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 300.0)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4)
-                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 1.0)
-                .add(EntityAttributes.GENERIC_ATTACK_SPEED, 1.0)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 40.0)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 25.0)
-                .add(EntityAttributes.GENERIC_ARMOR, 10.0);
+        return Mob.createMobAttributes()
+                .add(Attributes.GENERIC_MAX_HEALTH, 300.0)
+                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.4)
+                .add(Attributes.GENERIC_KNOCKBACK_RESISTANCE, 1.0)
+                .add(Attributes.GENERIC_ATTACK_SPEED, 1.0)
+                .add(Attributes.GENERIC_FOLLOW_RANGE, 40.0)
+                .add(Attributes.GENERIC_ATTACK_DAMAGE, 25.0)
+                .add(Attributes.GENERIC_ARMOR, 10.0);
     }
 
     public int getAttackTicksLeft() {
@@ -86,7 +86,7 @@ public class BalrogEntity extends HostileEntity {
             double d;
             if (target instanceof LivingEntity) {
                 LivingEntity livingEntity = (LivingEntity)target;
-                d = livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE);
+                d = livingEntity.getAttributeValue(Attributes.GENERIC_KNOCKBACK_RESISTANCE);
             } else {
                 d = 0.0;
             }
@@ -99,7 +99,7 @@ public class BalrogEntity extends HostileEntity {
     }
 
     private float getAttackDamage() {
-        return (float)this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        return (float)this.getAttributeValue(Attributes.GENERIC_ATTACK_DAMAGE);
     }
 
     @Override

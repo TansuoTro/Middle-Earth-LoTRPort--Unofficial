@@ -3,12 +3,12 @@ import net.jukoz.me.entity.npcs.NpcEntity;
 import net.jukoz.me.compat.client.render.MEBipedEntityModel;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.util.math.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.util.Arm;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.Util;
+import net.minecraft.util.RandomSource;
 
 import java.util.List;
 
@@ -67,7 +67,7 @@ public class NpcEntityModel extends MEBipedEntityModel<NpcEntity, NpcEntityRende
         this.jacket.visible = visible;
     }
 
-    public void setArmAngle(Arm arm, MatrixStack matrices) {
+    public void setArmAngle(Arm arm, PoseStack matrices) {
         super.setArmAngle(arm, matrices);
     }
 }

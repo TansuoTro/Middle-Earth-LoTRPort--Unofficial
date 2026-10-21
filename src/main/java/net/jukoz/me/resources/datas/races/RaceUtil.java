@@ -1,14 +1,14 @@
 package net.jukoz.me.resources.datas.races;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 import net.jukoz.me.resources.datas.common.RaceType;
 import net.jukoz.me.resources.datas.attributes.AttributePool;
 import net.jukoz.me.resources.persistent_datas.PlayerDataService;
 
 public class RaceUtil {
 
-    public static void updateRace(PlayerEntity player, Race race, boolean shouldHeal){
+    public static void updateRace(Player player, Race race, boolean shouldHeal){
         Race previousRace = PlayerDataService.getPlayerRace(player, player.getWorld());
         boolean havePreviousRace =  previousRace != null;
         boolean raceExists = race != null;
@@ -31,7 +31,7 @@ public class RaceUtil {
     }
 
 
-    public static RaceType getRaceType(PlayerEntity player){
+    public static RaceType getRaceType(Player player){
         Race race = PlayerDataService.getPlayerRace(player, player.getWorld());
         if(race != null)
             return race.getRaceType();
@@ -39,12 +39,12 @@ public class RaceUtil {
             return null;
     }
 
-    public static void initializeRace(ServerPlayerEntity player) {
+    public static void initializeRace(ServerPlayer player) {
         Race race = PlayerDataService.getPlayerRace(player, player.getWorld());
         updateRace(player, race, false);
     }
 
-    public static void reset(PlayerEntity player) {
+    public static void reset(Player player) {
         AttributePool.reverse(player);
     }
 }

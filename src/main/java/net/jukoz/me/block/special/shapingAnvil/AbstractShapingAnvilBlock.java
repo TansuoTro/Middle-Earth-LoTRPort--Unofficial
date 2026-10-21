@@ -1,32 +1,32 @@
 package net.jukoz.me.block.special.shapingAnvil;
 
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Hand;
-import net.minecraft.state.property.EnumProperty;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.jukoz.me.item.items.SmithingHammerItem;
 import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.stat.Stats;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractShapingAnvilBlock extends BlockWithEntity implements BlockEntityProvider {
-    public static final EnumProperty<Direction> FACING = Properties.HORIZONTAL_FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public AbstractShapingAnvilBlock(Settings settings) {
         super(settings);
@@ -39,7 +39,7 @@ public abstract class AbstractShapingAnvilBlock extends BlockWithEntity implemen
     }
 
     @Override
-    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+    public void onStateReplaced(BlockState state, Level world, BlockPos pos, BlockState newState, boolean moved) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof Inventory inventory) {
             ItemScatterer.spawn(world, pos, inventory);
@@ -58,23 +58,23 @@ public abstract class AbstractShapingAnvilBlock extends BlockWithEntity implemen
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
     @Nullable
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
+    public BlockState getPlacementState(BlockPlaceContext ctx) {
         return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Override
-    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    public void onBreak(Level world, BlockPos pos, BlockState state, Player player) {
 
         super.onBreak(world, pos, state, player);
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         Inventory blockEntity = (Inventory) world.getBlockEntity(pos);
 
         if (!world.isClient) {
@@ -89,11 +89,11 @@ public abstract class AbstractShapingAnvilBlock extends BlockWithEntity implemen
             }
         }
 
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public void onBlockBreakStart(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+    public void onBlockBreakStart(BlockState state, Level world, BlockPos pos, Player player) {
         ItemStack stack = player.getEquippedStack(EquipmentSlot.MAINHAND);
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (!world.isClient) {
@@ -102,7 +102,7 @@ public abstract class AbstractShapingAnvilBlock extends BlockWithEntity implemen
                 stack.use(world, player, player.getActiveHand());
                 player.getStackInHand(player.getActiveHand()).damage(1, player, (p) -> p.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
                 if (blockEntity instanceof ShapingAnvilBlockEntity shapingAnvilBlockEntity) {
-                    ServerWorld serverWorld = (ServerWorld) world;
+                    ServerLevel serverWorld = (ServerLevel) world;
                     shapingAnvilBlockEntity.bonk(shapingAnvilBlockEntity, serverWorld, stack);
                 }
             }

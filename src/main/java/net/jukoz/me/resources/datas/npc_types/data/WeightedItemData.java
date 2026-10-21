@@ -2,11 +2,11 @@ package net.jukoz.me.resources.datas.npc_types.data;
 import net.jukoz.me.compat.METext;
 import net.jukoz.me.compat.NbtCompat;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtElement;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.api.dtos.WeightedItem;
 import net.jukoz.me.item.utils.armor.backAttachments.BackAttachmentsME;
 import net.jukoz.me.item.utils.armor.helmetAttachments.HelmetAttachmentsME;
@@ -22,7 +22,7 @@ public class WeightedItemData extends WeightedItem<GearItemData> {
         this.item = new GearItemData(item);
     }
 
-    public WeightedItemData(Identifier itemIdentifier) {
+    public WeightedItemData(ResourceLocation itemIdentifier) {
         this.item = new GearItemData(itemIdentifier);
     }
 
@@ -34,7 +34,7 @@ public class WeightedItemData extends WeightedItem<GearItemData> {
         if(NbtCompat.isCompound(element))
             this.item = new GearItemData(NbtCompat.compound(element));
         else if(!element.asString().isEmpty())
-            this.item = new GearItemData(new Identifier(element.asString()));
+            this.item = new GearItemData(new ResourceLocation(element.asString()));
     }
 
     public static WeightedItemData create() {
@@ -43,7 +43,7 @@ public class WeightedItemData extends WeightedItem<GearItemData> {
     public static WeightedItemData create(Item item) {
         return new WeightedItemData(item);
     }
-    public static WeightedItemData create(Identifier itemIdentifier) {
+    public static WeightedItemData create(ResourceLocation itemIdentifier) {
         return new WeightedItemData(itemIdentifier);
     }
     public WeightedItemData withWeight(int weight) {
@@ -105,7 +105,7 @@ public class WeightedItemData extends WeightedItem<GearItemData> {
     public NbtElement getNbt() {
         NbtElement nbt = super.getNbt();
         if(nbt == null)
-            nbt = new NbtCompound();
+            nbt = new CompoundTag();
         nbt = this.item.getNbt(NbtCompat.compound(nbt));
         return nbt;
     }

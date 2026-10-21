@@ -1,12 +1,12 @@
 package net.jukoz.me.block.special.dirts;
 
 import net.minecraft.block.*;
-import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.WorldView;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.LevelView;
 import net.minecraft.world.chunk.light.ChunkLightProvider;
 
 public class CustomGrassBlock extends GrassBlock {
@@ -19,7 +19,7 @@ public class CustomGrassBlock extends GrassBlock {
     }
 
     @Override
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         if (!canSurvive(state, world, pos)) {
             world.setBlockState(pos, this.target.getDefaultState());
         } else {

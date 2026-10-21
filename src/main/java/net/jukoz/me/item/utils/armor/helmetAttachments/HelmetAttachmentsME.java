@@ -36,7 +36,7 @@ public enum HelmetAttachmentsME implements StringIdentifiable {
     private final HelmetAttachmentsStatesME constantState;
 
     public static final Codec<HelmetAttachmentsME> CODEC = StringIdentifiable.createCodec(HelmetAttachmentsME::values);
-    public static final PacketCodec<net.minecraft.network.PacketByteBuf, HelmetAttachmentsME> PACKET_CODEC = PacketCodecs.indexed(BY_ID, HelmetAttachmentsME::getId);;
+    public static final PacketCodec<net.minecraft.network.FriendlyByteBuf, HelmetAttachmentsME> PACKET_CODEC = PacketCodecs.indexed(BY_ID, HelmetAttachmentsME::getId);;
 
     HelmetAttachmentsME(int id, String name){
         this.id = id;

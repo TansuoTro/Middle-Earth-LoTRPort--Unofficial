@@ -1,6 +1,6 @@
 package net.jukoz.me.gui.utils.widgets.map;
 
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.utils.widgets.ModWidget;
 import net.jukoz.me.gui.utils.widgets.UiDirections;
@@ -9,7 +9,7 @@ import net.jukoz.me.world.biomes.surface.MapBasedCustomBiome;
 import net.jukoz.me.world.chunkgen.map.ImageUtils;
 import net.jukoz.me.world.map.MiddleEarthMapConfigs;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import org.joml.Vector2d;
 import org.joml.Vector2i;
 
@@ -75,11 +75,11 @@ public class MapWidget extends ModWidget {
     private float getMinZoom(){
         return 1f;
     }
-    protected Identifier getMapTexture(){
-        return new Identifier(MiddleEarth.MOD_ID,"textures/map.png");
+    protected ResourceLocation getMapTexture(){
+        return new ResourceLocation(MiddleEarth.MOD_ID,"textures/map.png");
     }
-    protected Identifier getOverlayMapTexture(){
-        return new Identifier(MiddleEarth.MOD_ID,"textures/map_overlay.png");
+    protected ResourceLocation getOverlayMapTexture(){
+        return new ResourceLocation(MiddleEarth.MOD_ID,"textures/map_overlay.png");
     }
     public void setOverlayState(boolean state){
         isOverlayEnabled = state;

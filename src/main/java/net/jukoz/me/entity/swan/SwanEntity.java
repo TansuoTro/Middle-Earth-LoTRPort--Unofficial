@@ -2,35 +2,35 @@ package net.jukoz.me.entity.swan;
 
 import net.jukoz.me.entity.ModEntities;
 import net.jukoz.me.entity.duck.DuckEntity;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.ItemEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.ai.pathing.BirdNavigation;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.particle.ItemStackParticleEffect;
-import net.minecraft.particle.ParticleTypes;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
@@ -46,7 +46,7 @@ public class SwanEntity extends AnimalEntity {
     private float field_28640 = 1.0F;
 
 
-    public SwanEntity(EntityType<? extends AnimalEntity> entityType, World world) {
+    public SwanEntity(EntityType<? extends AnimalEntity> entityType, Level world) {
         super(entityType, world);
         this.setCanPickUpLoot(true);
     }
@@ -63,7 +63,7 @@ public class SwanEntity extends AnimalEntity {
 
         this.goalSelector.add(6, new FollowParentGoal(this, 1.05));
 
-        this.goalSelector.add(7, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
+        this.goalSelector.add(7, new LookAtEntityGoal(this, Player.class, 6.0F));
         this.goalSelector.add(8, new LookAroundGoal(this));
         this.goalSelector.add(9, new WanderAroundGoal(this, 1.0F));
 
@@ -74,15 +74,15 @@ public class SwanEntity extends AnimalEntity {
 
 
     public static DefaultAttributeContainer.Builder createSwanAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 10.0)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.35)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1.0)
-                .add(EntityAttributes.GENERIC_ATTACK_SPEED, 1.0)
-                .add(EntityAttributes.GENERIC_FLYING_SPEED, 0.4000000059604645);
+        return Mob.createMobAttributes()
+                .add(Attributes.GENERIC_MAX_HEALTH, 10.0)
+                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.35)
+                .add(Attributes.GENERIC_ATTACK_DAMAGE, 1.0)
+                .add(Attributes.GENERIC_ATTACK_SPEED, 1.0)
+                .add(Attributes.GENERIC_FLYING_SPEED, 0.4000000059604645);
     }
 
-    protected EntityNavigation createNavigation(World world) {
+    protected EntityNavigation createNavigation(Level world) {
         BirdNavigation birdNavigation = new BirdNavigation(this, world);
         birdNavigation.setCanPathThroughDoors(true);
         birdNavigation.setCanSwim(true);
@@ -100,13 +100,13 @@ public class SwanEntity extends AnimalEntity {
         this.prevFlapProgress = this.flapProgress;
         this.prevMaxWingDeviation = this.maxWingDeviation;
         this.maxWingDeviation += (float)(!this.isOnGround() && !this.hasVehicle() ? 4 : -1) * 0.3F;
-        this.maxWingDeviation = MathHelper.clamp(this.maxWingDeviation, 0.0F, 1.0F);
+        this.maxWingDeviation = Mth.clamp(this.maxWingDeviation, 0.0F, 1.0F);
         if (!this.isOnGround() && this.flapSpeed < 1.0F) {
             this.flapSpeed = 1.0F;
         }
 
         this.flapSpeed *= 0.9F;
-        Vec3d vec3d = this.getVelocity();
+        Vec3 vec3d = this.getVelocity();
         if (!this.isOnGround() && vec3d.y < 0.0) {
             this.setVelocity(vec3d.multiply(1.0, 0.6, 1.0));
         }
@@ -143,7 +143,7 @@ public class SwanEntity extends AnimalEntity {
     }
 
     @Nullable
-    public SwanEntity createChild(ServerWorld serverWorld, PassiveEntity passiveEntity) {
+    public SwanEntity createChild(ServerLevel serverWorld, PassiveEntity passiveEntity) {
         return (SwanEntity) ModEntities.SWAN.create(serverWorld);
     }
 

@@ -1,32 +1,32 @@
 package net.jukoz.me.item.items;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CropBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.block.FarmlandBlock;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUsageContext;
 import net.minecraft.util.UseAction;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.util.Arm;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.RaycastContext;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.jukoz.me.utils.BlockTagsME;
 import net.jukoz.me.utils.item.DamageableItemUtils;
 
@@ -40,22 +40,22 @@ public class WateringCanItem extends BlockItem {
     private static final double WATERING_CONE_MIN_DOT = 0.2D;
     private static final int FULL_BAR_STEPS = 13;
 
-    public WateringCanItem(net.minecraft.block.Block block, Settings settings) {
+    public WateringCanItem(net.minecraft.world.level.block.Block block, Settings settings) {
         super(block, settings.maxCount(1).maxDamage(MAX_WATER_LEVEL));
     }
 
     @Override
-    public ActionResult useOnBlock(ItemUsageContext context) {
-        PlayerEntity player = context.getPlayer();
+    public InteractionResult useOnBlock(ItemUsageContext context) {
+        Player player = context.getPlayer();
         if (player == null) {
             return super.useOnBlock(context);
         }
 
         ItemStack stack = context.getStack();
-        World world = context.getWorld();
+        Level world = context.getWorld();
 
         if (tryRefilling(world, player, stack, context.getBlockPos())) {
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
 
         if (player.isSneaking()) {
@@ -63,18 +63,18 @@ public class WateringCanItem extends BlockItem {
         }
 
         if (!canWater(stack)) {
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         }
 
         return use(world, player, context.getHand()).getResult();
     }
 
-        public boolean allowComponentsUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack) {
+        public boolean allowComponentsUpdateAnimation(Player player, InteractionHand hand, ItemStack oldStack, ItemStack newStack) {
         return false;
     }
 
     @Override
-    public net.minecraft.util.TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+    public net.minecraft.util.TypedActionResult<ItemStack> use(Level world, Player user, InteractionHand hand) {
         ItemStack stack = user.getStackInHand(hand);
 
         BlockHitResult blockHitResult = raycast(world, user, RaycastContext.FluidHandling.SOURCE_ONLY);
@@ -92,8 +92,8 @@ public class WateringCanItem extends BlockItem {
     }
 
     @Override
-    public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
-        if (!(world instanceof ServerWorld serverWorld)) {
+    public void usageTick(Level world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
+        if (!(world instanceof ServerLevel serverWorld)) {
             return;
         }
 
@@ -109,7 +109,7 @@ public class WateringCanItem extends BlockItem {
             waterPlants(serverWorld, user);
         }
 
-        if (elapsedTicks % WATER_DRAIN_INTERVAL_TICKS == 0 && user instanceof PlayerEntity player && !player.isCreative()) {
+        if (elapsedTicks % WATER_DRAIN_INTERVAL_TICKS == 0 && user instanceof Player player && !player.isCreative()) {
             stack.setDamage(Math.min(stack.getMaxDamage(), stack.getDamage() + 1));
             if (DamageableItemUtils.isFullyDamaged(stack)) {
                 user.stopUsingItem();
@@ -142,13 +142,13 @@ public class WateringCanItem extends BlockItem {
         return 0x3F76E4;
     }
 
-    private void startWatering(World world, PlayerEntity user, Hand hand) {
+    private void startWatering(Level world, Player user, InteractionHand hand) {
         user.setCurrentHand(hand);
         user.incrementStat(Stats.USED.getOrCreateStat(this));
         world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 0.35F, 1.35F);
     }
 
-    private boolean tryRefilling(World world, PlayerEntity user, ItemStack stack, BlockPos pos) {
+    private boolean tryRefilling(Level world, Player user, ItemStack stack, BlockPos pos) {
         if (!world.canPlayerModifyAt(user, pos) || !world.getFluidState(pos).isIn(FluidTags.WATER) || !world.getFluidState(pos).isStill()) {
             return false;
         }
@@ -163,36 +163,36 @@ public class WateringCanItem extends BlockItem {
         return true;
     }
 
-    private void spawnWaterParticles(ServerWorld world, LivingEntity user) {
-        Vec3d look = user.getRotationVec(1.0F).normalize();
-        Vec3d side = look.crossProduct(new Vec3d(0.0D, 1.0D, 0.0D));
+    private void spawnWaterParticles(ServerLevel world, LivingEntity user) {
+        Vec3 look = user.getRotationVec(1.0F).normalize();
+        Vec3 side = look.crossProduct(new Vec3(0.0D, 1.0D, 0.0D));
         if (side.lengthSquared() < 1.0E-4D) {
-            side = new Vec3d(1.0D, 0.0D, 0.0D);
+            side = new Vec3(1.0D, 0.0D, 0.0D);
         } else {
             side = side.normalize();
         }
 
         double handOffset = user.getMainArm() == Arm.RIGHT ? 0.2D : -0.2D;
         if(user.getOffHandStack().getItem() == this && user.getMainHandStack().getItem() != this) handOffset *= -1;
-        Vec3d origin = user.getEyePos()
+        Vec3 origin = user.getEyePos()
                 .add(look.multiply(0.35D))
                 .add(side.multiply(handOffset))
                 .add(0.0D, -0.3D, 0.0D);
-        Vec3d streamCenter = origin.add(look.multiply(0.75D)).add(0.0D, -0.2D, 0.0D);
+        Vec3 streamCenter = origin.add(look.multiply(0.75D)).add(0.0D, -0.2D, 0.0D);
 
         world.spawnParticles(ParticleTypes.SPLASH, streamCenter.x, streamCenter.y, streamCenter.z, 1, 0.08D, 0.05D, 0.08D, 0.01D);
         world.spawnParticles(ParticleTypes.FALLING_WATER, streamCenter.x, streamCenter.y, streamCenter.z, 1, 0.08D, 0.08D, 0.08D, 0.02D);
     }
 
-    private void waterPlants(ServerWorld world, LivingEntity user) {
-        Vec3d eyePos = user.getEyePos();
-        Vec3d look = user.getRotationVec(1.0F).normalize();
+    private void waterPlants(ServerLevel world, LivingEntity user) {
+        Vec3 eyePos = user.getEyePos();
+        Vec3 look = user.getRotationVec(1.0F).normalize();
         BlockPos min = BlockPos.ofFloored(eyePos.x - WATERING_RANGE, user.getY() - 1.0D, eyePos.z - WATERING_RANGE);
         BlockPos max = BlockPos.ofFloored(eyePos.x + WATERING_RANGE, user.getY() + 2.5D, eyePos.z + WATERING_RANGE);
 
         for (BlockPos pos : BlockPos.iterate(min, max)) {
-            Vec3d center = Vec3d.ofCenter(pos);
-            Vec3d toBlock = center.subtract(eyePos);
+            Vec3 center = Vec3.ofCenter(pos);
+            Vec3 toBlock = center.subtract(eyePos);
             double distanceSquared = toBlock.lengthSquared();
 
             if (distanceSquared > WATERING_RANGE * WATERING_RANGE || distanceSquared < 0.01D) {
@@ -214,9 +214,9 @@ public class WateringCanItem extends BlockItem {
         }
     }
 
-    private void hydrateFarmland(ServerWorld world, BlockPos pos, BlockState state) {
-        if (state.contains(Properties.MOISTURE) && state.isIn(BlockTagsME.FARMLANDS) && state.get(Properties.MOISTURE) < FarmlandBlock.MAX_MOISTURE) {
-            world.setBlockState(pos, state.with(Properties.MOISTURE, FarmlandBlock.MAX_MOISTURE), 2);
+    private void hydrateFarmland(ServerLevel world, BlockPos pos, BlockState state) {
+        if (state.contains(BlockStateProperties.MOISTURE) && state.isIn(BlockTagsME.FARMLANDS) && state.get(BlockStateProperties.MOISTURE) < FarmlandBlock.MAX_MOISTURE) {
+            world.setBlockState(pos, state.with(BlockStateProperties.MOISTURE, FarmlandBlock.MAX_MOISTURE), 2);
         }
     }
 
@@ -224,7 +224,7 @@ public class WateringCanItem extends BlockItem {
         return state.getBlock() instanceof CropBlock;
     }
 
-    private void accelerateGrowth(ServerWorld world, BlockPos pos, BlockState state) {
+    private void accelerateGrowth(ServerLevel world, BlockPos pos, BlockState state) {
         for (double d = 0; d < ACCELERATED_RANDOM_TICKS; d++) {
             BlockState currentState = d == 0 ? state : world.getBlockState(pos);
             if (!(currentState.getBlock() instanceof CropBlock) || !currentState.hasRandomTicks()) {

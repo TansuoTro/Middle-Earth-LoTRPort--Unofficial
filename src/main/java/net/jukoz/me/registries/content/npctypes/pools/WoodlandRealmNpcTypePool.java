@@ -1,12 +1,12 @@
 package net.jukoz.me.registries.content.npctypes.pools;
 import net.jukoz.me.compat.METext;
 
-import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.item.Items;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.Items;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.item.DecorativeItemsME;
@@ -35,9 +35,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class WoodlandRealmNpcTypePool {
-    private final static RegistryKey<Faction> FACTION = FactionRegistry.WOODLAND_REALM;
+    private final static ResourceKey<Faction> FACTION = FactionRegistry.WOODLAND_REALM;
 
-    public static final Identifier TOTAL_DAMAGE_MODIFIER = MiddleEarth.of("total_damage");
+    public static final ResourceLocation TOTAL_DAMAGE_MODIFIER = MiddleEarth.of("total_damage");
 
     public final static NpcType ARTISAN; // Citizen / Artisans
     public final static NpcType HUNTER; // Very lightly armored, focusing entities (spiders and deer (cooldown) rather than orcs)
@@ -406,10 +406,10 @@ public class WoodlandRealmNpcTypePool {
                         )
         ), new HashMap<>(){{
             put(EntityCategories.SHARED, new AttributePool().addElements(List.of(
-                    AttributePoolElement.create(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25, 0.30),
-                    AttributePoolElement.create(EntityAttributes.GENERIC_MAX_HEALTH, 28),
-                    AttributePoolElement.create(EntityAttributes.GENERIC_ARMOR, 10, 20),
-                    AttributePoolElement.create(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1, 2)
+                    AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.25, 0.30),
+                    AttributePoolElement.create(Attributes.GENERIC_MAX_HEALTH, 28),
+                    AttributePoolElement.create(Attributes.GENERIC_ARMOR, 10, 20),
+                    AttributePoolElement.create(Attributes.GENERIC_ATTACK_DAMAGE, 1, 2)
                             .withModifier(TOTAL_DAMAGE_MODIFIER, 1.5, EntityAttributeModifier.Operation.MULTIPLY_TOTAL) // Does 1.5x damage, with 1 -> 2 base damage (strong)
             )));
         }}, CombatArchetypePool.DEFAULT, NpcLoot.FROM_15_TO_25);

@@ -1,7 +1,7 @@
 package net.jukoz.me.datageneration;
 
 import com.google.gson.JsonElement;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -39,14 +39,14 @@ public final class DedupingModelCollector {
             if (!(original instanceof BiConsumer)) {
                 return;
             }
-        Set<Identifier> seen = new HashSet<>();
-        BiConsumer<Identifier, Supplier<JsonElement>> wrapper = (id, supplier) -> {
+        Set<ResourceLocation> seen = new HashSet<>();
+        BiConsumer<ResourceLocation, Supplier<JsonElement>> wrapper = (id, supplier) -> {
             // Remember what got uploaded so ModelProvider's item fallback can tell a real block
             // model from one that only exists as sub-models.
             net.jukoz.me.datageneration.ModelProvider.UPLOADED_BLOCK_MODELS.add(id);
             if (seen.add(id)) {
                     //noinspection unchecked
-                    ((BiConsumer<Identifier, Supplier<JsonElement>>) original).accept(id, supplier);
+                    ((BiConsumer<ResourceLocation, Supplier<JsonElement>>) original).accept(id, supplier);
                 }
             };
             setFinalField(generator, field, wrapper);
@@ -62,7 +62,7 @@ public final class DedupingModelCollector {
             if (!(original instanceof java.util.function.Consumer)) {
                 return;
             }
-            Set<net.minecraft.block.Block> seen = new HashSet<>();
+            Set<net.minecraft.world.level.block.Block> seen = new HashSet<>();
             java.util.function.Consumer<net.minecraft.data.client.BlockStateSupplier> wrapper = supplier -> {
                 if (seen.add(supplier.getBlock())) {
                     //noinspection unchecked

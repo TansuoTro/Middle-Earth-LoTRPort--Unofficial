@@ -1,9 +1,9 @@
 package net.jukoz.me.entity.ai.brain.sensor;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
-import net.minecraft.entity.ai.brain.sensor.NearestVisibleLivingEntitySensor;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.sensing.NearestVisibleLivingEntitySensor;
+import net.minecraft.server.level.ServerLevel;
 import net.jukoz.me.entity.npcs.NpcEntity;
 
 public class NpcAttackablesSensor extends NearestVisibleLivingEntitySensor {

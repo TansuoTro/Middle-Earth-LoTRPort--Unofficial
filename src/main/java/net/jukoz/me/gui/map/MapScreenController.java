@@ -2,8 +2,8 @@ package net.jukoz.me.gui.map;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.event.KeyInputHandler;
 import net.jukoz.me.gui.utils.widgets.ModWidget;
 import net.jukoz.me.network.packets.C2S.PacketTeleportToDynamicWorldCoordinate;
@@ -14,14 +14,14 @@ import org.joml.Vector2d;
 import java.awt.event.KeyEvent;
 
 public class MapScreenController {
-    private World world;
-    private PlayerEntity player;
+    private Level world;
+    private Player player;
     private MapScreen screen;
     private boolean isInDimension;
     private boolean isFullscreen;
     private boolean hasTeleportPermission;
 
-    public MapScreenController(World world, PlayerEntity player) {
+    public MapScreenController(Level world, Player player) {
         this.world = world;
         this.player = player;
     }

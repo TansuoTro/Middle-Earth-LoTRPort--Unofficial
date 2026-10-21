@@ -1,14 +1,14 @@
 package net.jukoz.me.entity.goals;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.Mob;
 
 public class BirdFlightGoal extends Goal {
-    private final MobEntity mob;
+    private final Mob mob;
     private LivingEntity target;
 
-    public BirdFlightGoal(MobEntity mob) {
+    public BirdFlightGoal(Mob mob) {
         this.mob = mob;
     }
 

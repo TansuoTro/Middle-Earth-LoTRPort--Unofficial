@@ -1,17 +1,17 @@
 package net.jukoz.me.entity.goals;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.util.Mth;
 import net.jukoz.me.entity.goals.interfaces.CooldownRangedAttackMob;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
 public class SmartProjectileAttackGoal extends Goal {
-	private final MobEntity mob;
+	private final Mob mob;
 	private final CooldownRangedAttackMob owner;
 	@Nullable
 	private LivingEntity target;
@@ -29,7 +29,7 @@ public class SmartProjectileAttackGoal extends Goal {
 			throw new IllegalArgumentException("ProjectileAttackGoal requires Mob implements RangedAttackMob");
 		} else {
 			this.owner = mob;
-			this.mob = (MobEntity)mob;
+			this.mob = (Mob)mob;
 			this.mobSpeed = mobSpeed;
 			this.minIntervalTicks = minIntervalTicks;
 			this.maxIntervalTicks = maxIntervalTicks;
@@ -60,7 +60,7 @@ public class SmartProjectileAttackGoal extends Goal {
 	public boolean shouldContinue() {
 		boolean shouldContinue = this.target.isAlive();
 		shouldContinue &= isInbound();
-		if(this.target instanceof PlayerEntity playerEntity) {
+		if(this.target instanceof Player playerEntity) {
 			shouldContinue &= !(playerEntity.isSpectator() || playerEntity.isCreative());
 		}
 		return shouldContinue;
@@ -108,12 +108,12 @@ public class SmartProjectileAttackGoal extends Goal {
 			}
 
 			float f = (float)Math.sqrt(d) / this.maxShootRange;
-			float g = MathHelper.clamp(f, 0.1F, 1.0F);
+			float g = Mth.clamp(f, 0.1F, 1.0F);
 			this.owner.attack(this.target, g);
-			this.updateCountdownTicks = MathHelper.floor(f * (this.maxIntervalTicks - this.minIntervalTicks) + this.minIntervalTicks);
+			this.updateCountdownTicks = Mth.floor(f * (this.maxIntervalTicks - this.minIntervalTicks) + this.minIntervalTicks);
 		} else if (this.updateCountdownTicks < 0) {
-			this.updateCountdownTicks = MathHelper.floor(
-				MathHelper.lerp(Math.sqrt(d) / this.maxShootRange, (double)this.minIntervalTicks, (double)this.maxIntervalTicks)
+			this.updateCountdownTicks = Mth.floor(
+				Mth.lerp(Math.sqrt(d) / this.maxShootRange, (double)this.minIntervalTicks, (double)this.maxIntervalTicks)
 			);
 		}
 	}

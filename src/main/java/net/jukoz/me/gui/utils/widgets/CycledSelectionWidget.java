@@ -3,10 +3,10 @@ package net.jukoz.me.gui.utils.widgets;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Colors;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.utils.CycledSelectionButtonType;
 
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CycledSelectionWidget extends ModWidget{
-    private static final Identifier TEXTURE = new Identifier(MiddleEarth.MOD_ID,"textures/gui/widget/cycled_selection_widget.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(MiddleEarth.MOD_ID,"textures/gui/widget/cycled_selection_widget.png");
     boolean leftCanBeActive = true;
     boolean rightCanBeActive = true;
     boolean centerCanBeActive = true;
@@ -29,17 +29,17 @@ public class CycledSelectionWidget extends ModWidget{
     static final int PANEL_SIZE_Y = CycledSelectionButtonType.HEIGHT;
     public static final int TOTAL_WIDTH = ((MARGIN + ARROW_SIZE_X) * 2) + PANEL_SIZE_X;
     public static final int TOTAL_HEIGHT = Math.max(PANEL_SIZE_Y, ARROW_SIZE_Y);
-    public MutableText text;
+    public MutableComponent text;
 
     public CycledSelectionWidget(ButtonWidget.PressAction leftAction, ButtonWidget.PressAction rightAction, ButtonWidget.PressAction selectionAction, CycledSelectionButtonType buttonType){
         this.buttonType = buttonType;
-        buttonLeft = ButtonWidget.builder(Text.of("Cycled Selection Left"), leftAction).build();
+        buttonLeft = ButtonWidget.builder(Component.of("Cycled Selection Left"), leftAction).build();
         net.jukoz.me.compat.client.gui.MEGui.setSize(buttonLeft, ARROW_SIZE_X, ARROW_SIZE_Y);
 
-        buttonRight = ButtonWidget.builder(Text.of("Cycled Selection Right"), rightAction).build();
+        buttonRight = ButtonWidget.builder(Component.of("Cycled Selection Right"), rightAction).build();
         net.jukoz.me.compat.client.gui.MEGui.setSize(buttonRight, ARROW_SIZE_X, ARROW_SIZE_Y);
 
-        selectionButton = ButtonWidget.builder(Text.of("Cycled Selection"), selectionAction).build();
+        selectionButton = ButtonWidget.builder(Component.of("Cycled Selection"), selectionAction).build();
         net.jukoz.me.compat.client.gui.MEGui.setSize(selectionButton, PANEL_SIZE_X, PANEL_SIZE_Y);
 
         if(selectionAction == null){
@@ -77,7 +77,7 @@ public class CycledSelectionWidget extends ModWidget{
         this.selectionButton.active = activate && centerCanBeActive;
     }
 
-    public void setText(MutableText text){
+    public void setText(MutableComponent text){
         this.text = text;
     }
 
@@ -87,19 +87,19 @@ public class CycledSelectionWidget extends ModWidget{
             startX -= TOTAL_WIDTH;
         return draw(context, startX, startY, this.text, textRenderer);
     }
-    public int drawAnchored(DrawContext context, int anchorX, int startY, boolean isLeftAnchor, MutableText text, TextRenderer textRenderer){
+    public int drawAnchored(DrawContext context, int anchorX, int startY, boolean isLeftAnchor, MutableComponent text, TextRenderer textRenderer){
         int startX = anchorX;
         if(!isLeftAnchor)
             startX -= TOTAL_WIDTH;
         return draw(context, startX, startY, text, textRenderer);
     }
 
-    public int drawCentered(DrawContext context, int centerX, int startY, MutableText text, TextRenderer textRenderer){
+    public int drawCentered(DrawContext context, int centerX, int startY, MutableComponent text, TextRenderer textRenderer){
         int startX = centerX - (TOTAL_WIDTH / 2);
         return draw(context, startX, startY, text, textRenderer);
     }
 
-    protected int draw(DrawContext context, int startX, int startY, MutableText text, TextRenderer textRenderer){
+    protected int draw(DrawContext context, int startX, int startY, MutableComponent text, TextRenderer textRenderer){
         if(!shouldDisplay){
             return 0;
         }
@@ -132,7 +132,7 @@ public class CycledSelectionWidget extends ModWidget{
             context.drawTexture(TEXTURE, x, y + buttonStartOffsetY, CycledSelectionButtonType.FOCUS_UV_X, CycledSelectionButtonType.FOCUS_UV_Y, PANEL_SIZE_X, PANEL_SIZE_Y, 256, 256);
 
         if(text == null)
-            text = Text.translatable("me.ui.selection.none");
+            text = Component.translatable("me.ui.selection.none");
         context.drawText(textRenderer, text,
                 x + (int)((PANEL_SIZE_X - textRenderer.getWidth(text)) / 2f),
                 startY + (int) ((PANEL_SIZE_Y / 2f) - (textRenderer.fontHeight / 2f)) + 1,

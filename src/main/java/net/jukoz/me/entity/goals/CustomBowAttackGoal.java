@@ -1,13 +1,13 @@
 package net.jukoz.me.entity.goals;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.RangedAttackMob;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionHand;
 
 import java.util.EnumSet;
 
@@ -37,32 +37,32 @@ public class CustomBowAttackGoal<T extends LivingEntity> extends Goal {
 
         @Override
         public boolean canStart() {
-            if (((MobEntity)this.actor).getTarget() == null) {
+            if (((Mob)this.actor).getTarget() == null) {
                 return false;
             }
             return this.isHoldingBow();
         }
 
         protected boolean isHoldingBow() {
-            ItemStack stack = actor.getStackInHand(Hand.MAIN_HAND);
+            ItemStack stack = actor.getStackInHand(InteractionHand.MAIN_HAND);
             return stack.getItem() instanceof BowItem;
         }
 
         @Override
         public boolean shouldContinue() {
-            return (this.canStart() || !((MobEntity)this.actor).getNavigation().isIdle()) && this.isHoldingBow();
+            return (this.canStart() || !((Mob)this.actor).getNavigation().isIdle()) && this.isHoldingBow();
         }
 
         @Override
         public void start() {
             super.start();
-            ((MobEntity)this.actor).setAttacking(true);
+            ((Mob)this.actor).setAttacking(true);
         }
 
         @Override
         public void stop() {
             super.stop();
-            ((MobEntity)this.actor).setAttacking(false);
+            ((Mob)this.actor).setAttacking(false);
             this.targetSeeingTicker = 0;
             this.cooldown = -1;
             ((LivingEntity)this.actor).clearActiveItem();
@@ -76,26 +76,26 @@ public class CustomBowAttackGoal<T extends LivingEntity> extends Goal {
         @Override
         public void tick() {
             boolean bl2;
-            LivingEntity livingEntity = ((MobEntity)this.actor).getTarget();
+            LivingEntity livingEntity = ((Mob)this.actor).getTarget();
             if (livingEntity == null) {
                 return;
             }
             double d = ((Entity)this.actor).squaredDistanceTo(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ());
-            boolean bl = ((MobEntity)this.actor).getVisibilityCache().canSee(livingEntity);
+            boolean bl = ((Mob)this.actor).getVisibilityCache().canSee(livingEntity);
             boolean bl3 = bl2 = this.targetSeeingTicker > 0;
             if (bl != bl2) {
                 this.targetSeeingTicker = 0;
             }
             this.targetSeeingTicker = bl ? ++this.targetSeeingTicker : --this.targetSeeingTicker;
             if (d > (double)this.squaredRange || this.targetSeeingTicker < 20) {
-                ((MobEntity)this.actor).getNavigation().startMovingTo(livingEntity, this.speed);
+                ((Mob)this.actor).getNavigation().startMovingTo(livingEntity, this.speed);
                 this.combatTicks = -1;
             } else {
-                ((MobEntity)this.actor).getNavigation().stop();
+                ((Mob)this.actor).getNavigation().stop();
                 ++this.combatTicks;
             }
             if(!livingEntity.isAlive()) {
-                ((MobEntity)this.actor).getNavigation().stop();
+                ((Mob)this.actor).getNavigation().stop();
                 return;
             }
 
@@ -114,10 +114,10 @@ public class CustomBowAttackGoal<T extends LivingEntity> extends Goal {
                 } else if (d < (double)(this.squaredRange * 0.25f)) {
                     this.backward = true;
                 }
-                ((MobEntity)this.actor).getMoveControl().strafeTo(this.backward ? -0.5f : 0.5f, this.movingToLeft ? 0.5f : -0.5f);
-                ((MobEntity)this.actor).lookAtEntity(livingEntity, 30.0f, 30.0f);
+                ((Mob)this.actor).getMoveControl().strafeTo(this.backward ? -0.5f : 0.5f, this.movingToLeft ? 0.5f : -0.5f);
+                ((Mob)this.actor).lookAtEntity(livingEntity, 30.0f, 30.0f);
             } else {
-                ((MobEntity)this.actor).getLookControl().lookAt(livingEntity, 30.0f, 30.0f);
+                ((Mob)this.actor).getLookControl().lookAt(livingEntity, 30.0f, 30.0f);
             }
             if (((LivingEntity)this.actor).isUsingItem()) {
                 int i;
@@ -129,7 +129,7 @@ public class CustomBowAttackGoal<T extends LivingEntity> extends Goal {
                     this.cooldown = this.attackInterval;
                 }
             } else if (--this.cooldown <= 0 && this.targetSeeingTicker >= -60) {
-                ((LivingEntity)this.actor).setCurrentHand(Hand.MAIN_HAND);
+                ((LivingEntity)this.actor).setCurrentHand(InteractionHand.MAIN_HAND);
             }
         }
 }

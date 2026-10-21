@@ -1,18 +1,18 @@
 package net.jukoz.me.entity.elves.galadhrim;
 
 import com.google.common.collect.Maps;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.BipedEntityRenderer;
-import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
-import net.minecraft.client.render.entity.model.EntityModelLayers;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
+import net.minecraft.client.model.EntityModelLayers;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.Util;
 
 import java.util.Map;
 
@@ -38,12 +38,12 @@ public class GaladhrimElfRenderer extends BipedEntityRenderer<GaladhrimElfEntity
             });
 
     @Override
-    public Identifier getTexture(GaladhrimElfEntity entity) {
-        return new Identifier(MiddleEarth.MOD_ID, LOCATION_BY_VARIANT.get(entity.getVariant()));
+    public ResourceLocation getTexture(GaladhrimElfEntity entity) {
+        return new ResourceLocation(MiddleEarth.MOD_ID, LOCATION_BY_VARIANT.get(entity.getVariant()));
     }
 
     @Override
-    public void render(GaladhrimElfEntity entity, float entityYaw, float partialTick, MatrixStack poseStack,
+    public void render(GaladhrimElfEntity entity, float entityYaw, float partialTick, PoseStack poseStack,
                        VertexConsumerProvider bufferSource, int packedLight) {
 
         poseStack.scale(0.95f, 1.0f, 0.95f);

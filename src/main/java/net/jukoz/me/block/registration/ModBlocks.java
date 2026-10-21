@@ -1,9 +1,9 @@
 package net.jukoz.me.block.registration;
 import net.jukoz.me.item.MESettings;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.*;
 import net.jukoz.me.block.special.dirts.CustomFarmlandBlock;
@@ -19,15 +19,15 @@ import net.jukoz.me.datageneration.content.TranslationEntries;
 import net.jukoz.me.datageneration.content.loot_tables.BlockDrops;
 import net.jukoz.me.item.utils.ModItemGroups;
 import net.minecraft.block.*;
-import net.minecraft.world.BlockView;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.core.BlockPos;
 import net.minecraft.block.piston.PistonBehavior;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.registries.RegistryAliasesME;
 
 import java.util.List;
@@ -788,7 +788,7 @@ public class ModBlocks {
         // Port shim: the port-only set classes (RoofBlockSets, MushroomBlockSets, ...) re-declare
         // blocks that WoodBlockSets / GenericBlockSets already registered.  Reuse the existing
         // entry instead of aborting the whole registry with a duplicate-id error.
-        Block existing = Registries.BLOCK.get(new Identifier(MiddleEarth.MOD_ID, name));
+        Block existing = Registries.BLOCK.get(new ResourceLocation(MiddleEarth.MOD_ID, name));
         if (existing != Blocks.AIR) {
             return existing;
         }
@@ -844,18 +844,18 @@ public class ModBlocks {
     }
 
     static void registerBlockItem(String name, Block block) {
-        var item = Registry.register(Registries.ITEM, new Identifier(MiddleEarth.MOD_ID, name),
+        var item = Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name),
                 new BlockItem(block, new MESettings()));
         Item.BLOCK_ITEMS.put(block, item);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ITEM, name));
     }
 
-    public static Identifier keyOfBlock(String id) {
-        return new Identifier(MiddleEarth.MOD_ID, id);
+    public static ResourceLocation keyOfBlock(String id) {
+        return new ResourceLocation(MiddleEarth.MOD_ID, id);
     }
 
-    public static Identifier keyOfItem(String id) {
-        return new Identifier(MiddleEarth.MOD_ID, id);
+    public static ResourceLocation keyOfItem(String id) {
+        return new ResourceLocation(MiddleEarth.MOD_ID, id);
     }
 
     public static void registerModBlocks() {
@@ -872,7 +872,7 @@ public class ModBlocks {
         }
 
         @Override
-        public int getColor(BlockState state, BlockView world, BlockPos pos) {
+        public int getColor(BlockState state, BlockGetter world, BlockPos pos) {
             return dustColor;
         }
     }

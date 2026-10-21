@@ -1,13 +1,13 @@
 package net.jukoz.me.entity.ai.brain.task.npc;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.EntityLookTarget;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.SingleTickTask;
 import net.minecraft.entity.ai.brain.task.TaskTriggerer;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.Item;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.item.RangedWeaponItem;
 import net.jukoz.me.entity.npcs.NpcEntity;
 
@@ -64,7 +64,7 @@ public class NpcRangedAttackTask {
         }));
     }
 
-    private static boolean isHoldingUsableRangedWeapon(MobEntity mob) {
+    private static boolean isHoldingUsableRangedWeapon(Mob mob) {
         return mob.isHolding((stack) -> {
             Item item = stack.getItem();
             return item instanceof RangedWeaponItem && mob.canUseRangedWeapon((RangedWeaponItem)item);

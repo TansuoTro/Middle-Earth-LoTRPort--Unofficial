@@ -4,16 +4,16 @@ import net.fabricmc.fabric.api.client.model.ExtraModelProvider;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.datageneration.content.models.SimpleBigItemModel;
 import net.minecraft.client.util.ModelIdentifier;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.Consumer;
 
 public class VariantsModelProvider implements ExtraModelProvider {
 
     @Override
-    public void provideExtraModels(ResourceManager manager, Consumer<Identifier> out) {
+    public void provideExtraModels(ResourceManager manager, Consumer<ResourceLocation> out) {
         for(Item item : SimpleBigItemModel.items) {
             out.accept(getInventoryModelIdentifierVariant(item));
         }

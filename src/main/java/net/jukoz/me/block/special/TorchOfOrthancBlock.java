@@ -1,29 +1,29 @@
 package net.jukoz.me.block.special;
 
 import net.minecraft.block.*;
-import net.minecraft.util.Hand;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Items;
-import net.minecraft.particle.ParticleTypes;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.state.property.Property;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 
 public class TorchOfOrthancBlock extends TorchBlock {
     protected static final VoxelShape SHAPE = Block.createCuboidShape(5.0, 0.0, 5.0, 11.0, 18.0, 11.0);
-    public static final BooleanProperty LIT = Properties.LIT;
+    public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
     public TorchOfOrthancBlock(AbstractBlock.Settings settings, DefaultParticleType particleEffect) {
         super(settings, particleEffect);
@@ -31,9 +31,9 @@ public class TorchOfOrthancBlock extends TorchBlock {
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if(world.isClient){
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         } else {
             if(player.getStackInHand(player.getActiveHand()).isOf(Items.FLINT_AND_STEEL) && !state.get(LIT)){
                 world.playSound(null, pos, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, 1.5F);
@@ -47,7 +47,7 @@ public class TorchOfOrthancBlock extends TorchBlock {
         return super.onUse(state, world, pos, player, hand, hit);
     }
 
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(new Property[]{LIT});
     }
 
@@ -56,7 +56,7 @@ public class TorchOfOrthancBlock extends TorchBlock {
     }
 
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+    public void randomDisplayTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
         if(state.get(LIT)){
             double d = (double)pos.getX() + 0.5;
             double e = (double)pos.getY() + 1.4;
@@ -65,7 +65,7 @@ public class TorchOfOrthancBlock extends TorchBlock {
         }
     }
 
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
         return SHAPE;
     }
 }

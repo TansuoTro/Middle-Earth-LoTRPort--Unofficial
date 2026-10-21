@@ -1,24 +1,24 @@
 package net.jukoz.me.entity.npcs.initializer;
 
-import net.minecraft.block.BedBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.passive.HorseEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.structure.StructureStart;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.structure.Structure;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Holder;
+import net.minecraft.tags.TagKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.levelgen.structure.StructureStart;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.beasts.AbstractBeastEntity;
 import net.jukoz.me.entity.npcs.NpcEntity;
@@ -31,12 +31,12 @@ import java.util.List;
 import java.util.Optional;
 
 public class NpcEntityInitializer {
-    public static void initializeNpcEntity(ServerWorld serverWorld, NpcEntity npcEntity){
+    public static void initializeNpcEntity(ServerLevel serverWorld, NpcEntity npcEntity){
         initializeForServer(serverWorld, npcEntity);
     }
 
-    private static void initializeForServer(ServerWorld serverWorld, NpcEntity npcEntity){
-        Identifier npcTypeId = npcEntity.getNpcTypeIdentifier();
+    private static void initializeForServer(ServerLevel serverWorld, NpcEntity npcEntity){
+        ResourceLocation npcTypeId = npcEntity.getNpcTypeIdentifier();
         if(!NpcEntityInitializerUtil.characterIdentifierExist(serverWorld, npcTypeId))
         {
             BiomeEventData.ContextualizedBiomeData contextualizedBiomeData = null;
@@ -62,15 +62,15 @@ public class NpcEntityInitializer {
         npcEntity.updateTargetGoals();
     }
 
-    private static BiomeEventData.ContextualizedBiomeData findContextualizedNpcData(ServerWorld world, NpcEntity npcEntity)  {
+    private static BiomeEventData.ContextualizedBiomeData findContextualizedNpcData(ServerLevel world, NpcEntity npcEntity)  {
         BlockPos blockPos = npcEntity.getBlockPos();
-        RegistryEntry<Biome> biome = world.getBiome(blockPos);
-        Registry<Structure> structureRegistry = world.getRegistryManager().get(RegistryKeys.STRUCTURE);
+        Holder<Biome> biome = world.getBiome(blockPos);
+        Registry<Structure> structureRegistry = world.getRegistryManager().get(Registries.STRUCTURE);
         List<StructureStart> structureStarts = world.getStructureAccessor().getStructureStarts(world.getChunk(blockPos).getPos(), s -> true);
 
         for (StructureStart structureStart : structureStarts) {
             Structure structure = structureStart.getStructure();
-            Identifier structureId = structureRegistry.getId(structure);
+            ResourceLocation structureId = structureRegistry.getId(structure);
             BiomeEventData.ContextualizedBiomeData contextualizedBiomeData = BiomeEventDataLookup.findNpcDataForStructure(world, structureId, npcEntity);
             if(contextualizedBiomeData != null){
                 return contextualizedBiomeData;
@@ -80,13 +80,13 @@ public class NpcEntityInitializer {
         return BiomeEventDataLookup.findNpcDataForBiome(world, biome, npcEntity);
     }
 
-    public static boolean shouldInitialize(ServerWorld serverWorld, NpcEntity npcEntity){
-        Identifier currentNpcDataId = npcEntity.getNpcTypeIdentifier();
+    public static boolean shouldInitialize(ServerLevel serverWorld, NpcEntity npcEntity){
+        ResourceLocation currentNpcDataId = npcEntity.getNpcTypeIdentifier();
         if(currentNpcDataId == null)
             return true;
 
         DynamicRegistryManager registryManager = serverWorld.getRegistryManager();
-        Optional<RegistryEntry.Reference<NpcType>> optionalEntry = registryManager.getOptional(DynamicRegistriesME.NPC_TYPE).get().getEntry(net.minecraft.registry.RegistryKey.of(DynamicRegistriesME.NPC_TYPE, currentNpcDataId));
+        Optional<Holder.Reference<NpcType>> optionalEntry = registryManager.getOptional(DynamicRegistriesME.NPC_TYPE).get().getEntry(net.minecraft.resources.ResourceKey.of(DynamicRegistriesME.NPC_TYPE, currentNpcDataId));
 
 
         if(!npcEntity.hasTextureData())

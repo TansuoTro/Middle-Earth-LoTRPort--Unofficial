@@ -3,11 +3,11 @@ package net.jukoz.me.compat.client.render;
 import java.util.function.Function;
 
 import net.jukoz.me.compat.client.render.state.BipedEntityRenderStateCompat;
-import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * R2 bridge for donor-style 1.21.8 models written as
@@ -24,7 +24,7 @@ public abstract class MEBipedEntityModel<T extends LivingEntity, S extends Biped
         super(root);
     }
 
-    public MEBipedEntityModel(ModelPart root, Function<Identifier, RenderLayer> layerFactory) {
+    public MEBipedEntityModel(ModelPart root, Function<ResourceLocation, RenderLayer> layerFactory) {
         super(root, layerFactory);
     }
 

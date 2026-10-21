@@ -12,14 +12,14 @@ import net.jukoz.me.world.features.tree.trunks.LargeTrunkPlacer;
 import net.jukoz.me.world.features.tree.ModTreePlacedFeatures;
 import net.jukoz.me.world.features.tree.foliages.OvalFoliagePlacer;
 import net.jukoz.me.world.features.tree.trunks.SpruceTrunkPlacer;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.world.gen.GenerationStep;
-import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.gen.feature.OreFeature;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.foliage.FoliagePlacerType;
-import net.minecraft.world.gen.trunk.TrunkPlacerType;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 
 public class ModTreeGeneration {
     public static final Registry<TrunkPlacerType<?>> trunkRegistry = Registries.TRUNK_PLACER_TYPE;

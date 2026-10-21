@@ -6,8 +6,8 @@ import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry;
 import me.shedaniel.rei.api.common.util.EntryStacks;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.compat.artisanTable.ArtisanTableCategory;
 import net.jukoz.me.compat.artisanTable.ArtisanTableDisplay;
@@ -18,7 +18,7 @@ import net.jukoz.me.gui.forge.ForgeAlloyingScreen;
 import net.jukoz.me.recipe.AlloyingRecipe;
 import net.jukoz.me.recipe.ArtisanRecipe;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class REIClientPluginME implements REIClientPlugin {
 
     @Override

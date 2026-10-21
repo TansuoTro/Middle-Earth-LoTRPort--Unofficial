@@ -1,13 +1,13 @@
 package net.jukoz.me.gui.sack;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.inventory.Slot;
 
 public class SackScreenHandler extends ScreenHandler {
 	private static final int CONTAINER_SIZE = 9;
@@ -54,11 +54,11 @@ public class SackScreenHandler extends ScreenHandler {
 		}
 	}
 
-	public boolean canUse(PlayerEntity player) {
+	public boolean canUse(Player player) {
 		return this.inventory.canPlayerUse(player);
 	}
 
-	public ItemStack quickMove(PlayerEntity player, int slot) {
+	public ItemStack quickMove(Player player, int slot) {
 		ItemStack itemStack = ItemStack.EMPTY;
 		Slot slot2 = (Slot)this.slots.get(slot);
 		if (slot2 != null && slot2.hasStack()) {
@@ -88,7 +88,7 @@ public class SackScreenHandler extends ScreenHandler {
 		return itemStack;
 	}
 
-	public void onClosed(PlayerEntity player) {
+	public void onClosed(Player player) {
 		super.onClosed(player);
 		this.inventory.onClose(player);
 	}

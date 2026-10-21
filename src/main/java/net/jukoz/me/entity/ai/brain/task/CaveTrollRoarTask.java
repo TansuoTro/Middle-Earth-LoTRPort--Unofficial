@@ -1,16 +1,16 @@
 package net.jukoz.me.entity.ai.brain.task;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.MemoryModuleState;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.MultiTickTask;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.jukoz.me.entity.ai.brain.MemoryModulesME;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntity;
 
@@ -31,12 +31,12 @@ public class CaveTrollRoarTask extends MultiTickTask<CaveTrollEntity> {
     }
 
     @Override
-    protected boolean shouldKeepRunning(ServerWorld world, CaveTrollEntity entity, long time) {
+    protected boolean shouldKeepRunning(ServerLevel world, CaveTrollEntity entity, long time) {
         return true;
     }
 
     @Override
-    protected void run(ServerWorld world, CaveTrollEntity troll, long time) {
+    protected void run(ServerLevel world, CaveTrollEntity troll, long time) {
         this.startTime = time;
         troll.setRoaring(true);
         troll.getBrain().forget(MemoryModuleType.WALK_TARGET);
@@ -52,7 +52,7 @@ public class CaveTrollRoarTask extends MultiTickTask<CaveTrollEntity> {
 
 
     @Override
-    protected void keepRunning(ServerWorld world, CaveTrollEntity entity, long time) {
+    protected void keepRunning(ServerLevel world, CaveTrollEntity entity, long time) {
         if(time - startTime == 10) {
             entity.playRoarSound();
         }
@@ -64,7 +64,7 @@ public class CaveTrollRoarTask extends MultiTickTask<CaveTrollEntity> {
     }
 
     @Override
-    protected void finishRunning(ServerWorld world, CaveTrollEntity entity, long time) {
+    protected void finishRunning(ServerLevel world, CaveTrollEntity entity, long time) {
         entity.setRoaring(false);
         entity.getBrain().remember(MemoryModulesME.ROAR_COOLDOWN, 600);
     }

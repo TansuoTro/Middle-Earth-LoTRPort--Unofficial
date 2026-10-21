@@ -1,9 +1,9 @@
 package net.jukoz.me.resources.datas.texture_presets;
 import net.jukoz.me.compat.NbtCompat;
 
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtElement;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.api.dtos.WeightedItem;
 import net.jukoz.me.api.dtos.WeightedPool;
 import net.jukoz.me.resources.datas.common.CharacterMaterialTypes;
@@ -18,7 +18,7 @@ public class WeightedTexturePresetHolder extends WeightedItem<TexturePreset> {
         this.item = new TexturePreset();
     }
 
-    public WeightedTexturePresetHolder(NbtCompound compound) {
+    public WeightedTexturePresetHolder(CompoundTag compound) {
         super(compound);
 
         this.item = new TexturePreset(compound);
@@ -35,7 +35,7 @@ public class WeightedTexturePresetHolder extends WeightedItem<TexturePreset> {
     public NbtElement getNbt(){
         NbtElement nbt = super.getNbt();
         if(nbt == null){
-            nbt = new NbtCompound();
+            nbt = new CompoundTag();
         }
         return item.getNbt(NbtCompat.compound(nbt));
     }
@@ -170,9 +170,9 @@ public class WeightedTexturePresetHolder extends WeightedItem<TexturePreset> {
         }
         WeightedClothingPresetHolder clothePreset = item.characterClothePresets.getRandom();
 
-        Identifier baseId = clothePreset.getRandomBase();
-        Identifier overId = clothePreset.getRandomOver();
-        Identifier extraId = clothePreset.getRandomExtra();
+        ResourceLocation baseId = clothePreset.getRandomBase();
+        ResourceLocation overId = clothePreset.getRandomOver();
+        ResourceLocation extraId = clothePreset.getRandomExtra();
 
         return new ClothingSelection(baseId, overId, extraId);
     }

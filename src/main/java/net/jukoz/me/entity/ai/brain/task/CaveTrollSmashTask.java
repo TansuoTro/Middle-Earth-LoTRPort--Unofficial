@@ -2,9 +2,9 @@ package net.jukoz.me.entity.ai.brain.task;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.entity.ai.brain.MemoryModuleState;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.MultiTickTask;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
 import net.jukoz.me.entity.ai.brain.MemoryModulesME;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntity;
 
@@ -21,23 +21,23 @@ public class CaveTrollSmashTask extends MultiTickTask<CaveTrollEntity> {
     }
 
     @Override
-    protected boolean shouldRun(ServerWorld world, CaveTrollEntity entity) {
+    protected boolean shouldRun(ServerLevel world, CaveTrollEntity entity) {
         return entity.getTarget() != null && entity.squaredDistanceTo(entity.getTarget()) < 16;
     }
 
     @Override
-    protected boolean shouldKeepRunning(ServerWorld world, CaveTrollEntity entity, long time) {
+    protected boolean shouldKeepRunning(ServerLevel world, CaveTrollEntity entity, long time) {
         return true;
     }
 
     @Override
-    protected void run(ServerWorld world, CaveTrollEntity entity, long time) {
+    protected void run(ServerLevel world, CaveTrollEntity entity, long time) {
         entity.setSmashing(true);
         entity.getBrain().forget(MemoryModuleType.WALK_TARGET);
     }
 
     @Override
-    protected void finishRunning(ServerWorld world, CaveTrollEntity entity, long time) {
+    protected void finishRunning(ServerLevel world, CaveTrollEntity entity, long time) {
         entity.smashAttack(entity.getRandom().nextBetween(75, 125));
         entity.getBrain().remember(MemoryModulesME.SMASH_COOLDOWN, 200);
     }

@@ -8,10 +8,10 @@ import net.jukoz.me.item.utils.ModArmorMaterials;
 import net.jukoz.me.item.utils.ModItemGroups;
 import net.jukoz.me.utils.LoggerUtil;
 import net.minecraft.item.*;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 
@@ -171,7 +171,7 @@ public class ModEquipmentItems {
             new CustomBootsItem(ModArmorMaterials.EREBOR_COMMANDER_ARMOR, ArmorItem.Type.BOOTS, new FabricItemSettings()));
 
     public static final Item LONGBEARD_SHIELD = registerItem("longbeard_shield",
-            new CustomShieldItem(new FabricItemSettings().maxCount(1).maxDamage(450), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".longbeards")));
+            new CustomShieldItem(new FabricItemSettings().maxCount(1).maxDamage(450), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".longbeards")));
 
     public static final Item LORIEN_HORSE_ARMOR = EquipmentItemsME.LORIEN_HORSE_ARMOR;
 
@@ -246,7 +246,7 @@ public class ModEquipmentItems {
             new CustomHelmetItem(ModArmorMaterials.MORDOR_BLACK_URUK_PLATE_ARMOR, ArmorItem.Type.HELMET, new FabricItemSettings(), List.of(CustomHelmetItem.Customizations.SKULL)));
 
     public static final Item MORDOR_SHIELD = registerItem("mordor_shield",
-            new CustomShieldItem(new FabricItemSettings().maxCount(1).maxDamage(450), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".mordor")));
+            new CustomShieldItem(new FabricItemSettings().maxCount(1).maxDamage(450), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".mordor")));
 
     public static final Item NAZGUL_CLOAK_HOOD = registerGeneratedItem("nazgul_cloak_hood",
             new CustomHelmetItem(ModArmorMaterials.NAZGUL_CLOAK, ArmorItem.Type.HELMET, new FabricItemSettings(),List.of(CustomHelmetItem.Customizations.HOOD)));
@@ -291,20 +291,20 @@ public class ModEquipmentItems {
             new CustomChestplateItem(ModArmorMaterials.MISTY_HOBGOBLIN_PLATE_ARMOR, ArmorItem.Type.CHESTPLATE, new FabricItemSettings(), List.of(CustomChestplateItem.Customizations.IMPALED_SKULLS)));
 
     public static final Item MISTY_MOUNTAINS_SHIELD = registerItem("misty_mountains_shield",
-            new CustomShieldItem(new FabricItemSettings().maxCount(1).maxDamage(450), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".misty_orcs")));
+            new CustomShieldItem(new FabricItemSettings().maxCount(1).maxDamage(450), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".misty_orcs")));
 
     /*public static final Item STEEL_TROLL_ARMOR = registerGeneratedItem("steel_troll_armor",
             new TrollArmorItem(10, "steel", new FabricItemSettings().maxCount(1)));*/
 
     private static Item registerItem(String name, Item item) {
         ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultStack());
-        return Registry.register(Registries.ITEM, new Identifier(MiddleEarth.MOD_ID, name), item);
+        return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);
     }
 
     private static Item registerGeneratedItem(String name, Item item) {
         ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultStack());
         SimpleItemModel.items.add(item);
-        return Registry.register(Registries.ITEM, new Identifier(MiddleEarth.MOD_ID, name), item);
+        return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);
     }
 
     public static void registerModItems() {

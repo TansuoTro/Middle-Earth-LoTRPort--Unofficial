@@ -3,20 +3,20 @@ package net.jukoz.me.item.utils;
 import net.minecraft.client.MinecraftClient;
 
 import net.jukoz.me.item.MEComponents;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.trim.ArmorTrim;
-import net.minecraft.item.trim.ArmorTrimMaterial;
-import net.minecraft.item.trim.ArmorTrimMaterials;
-import net.minecraft.item.trim.ArmorTrimPattern;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemGroup;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.armortrim.ArmorTrim;
+import net.minecraft.world.item.armortrim.ArmorTrimMaterial;
+import net.minecraft.world.item.armortrim.ArmorTrimMaterials;
+import net.minecraft.world.item.armortrim.ArmorTrimPattern;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.*;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Holder;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.compat.MEArmorTrim;
 import net.jukoz.me.entity.npcs.NpcEntity;
@@ -35,14 +35,14 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class ItemGroupsUtil {
-    private static final Comparator<RegistryEntry<NpcType>> NPC_DATA_COMPARATOR = Comparator.comparing(RegistryEntry::value, Comparator.comparing(NpcType::getId));
+    private static final Comparator<Holder<NpcType>> NPC_DATA_COMPARATOR = Comparator.comparing(Holder::value, Comparator.comparing(NpcType::getId));
 
-    public static void addNpcEggs(ItemGroup.Entries entries, RegistryWrapper.Impl<NpcType> registryWrapper, Predicate<RegistryEntry<NpcType>> filter, RegistryWrapper.WrapperLookup lookup, ItemGroup.StackVisibility stackVisibility) {
-        Identifier randomSpawnEggId = MiddleEarth.of("npc_random_spawn_egg");
+    public static void addNpcEggs(ItemGroup.Entries entries, RegistryWrapper.Impl<NpcType> registryWrapper, Predicate<Holder<NpcType>> filter, RegistryWrapper.WrapperLookup lookup, ItemGroup.StackVisibility stackVisibility) {
+        ResourceLocation randomSpawnEggId = MiddleEarth.of("npc_random_spawn_egg");
 
         ItemStack randomNpcSpawnEgg = new ItemStack(EggItemsME.NPC_SPAWN_EGG);
 
-        NbtCompound compoundData = new NbtCompound();
+        CompoundTag compoundData = new CompoundTag();
         compoundData.putString("id", MiddleEarth.of("npc").toString());
 
         NpcInitializationData npcInitializationData = new NpcInitializationData(null, true);
@@ -54,11 +54,11 @@ public class ItemGroupsUtil {
 
         NbtElement element = NpcInitializationData.CODEC
                 .encodeStart(ops, npcInitializationData)
-                .result().orElse(new NbtCompound());
+                .result().orElse(new CompoundTag());
         compoundData.put(NpcEntity.KeyStrings.INITIALIZATION_DATA, element);
 
-        randomNpcSpawnEgg.setCustomName(Text.translatable(randomSpawnEggId.toTranslationKey("item")));
-        MEComponents.set(randomNpcSpawnEgg, MEComponents.ITEM_MODEL, new Identifier(MiddleEarth.MOD_ID, randomSpawnEggId.getPath().replaceAll("\\.", "_")));
+        randomNpcSpawnEgg.setCustomName(Component.translatable(randomSpawnEggId.toTranslationKey("item")));
+        MEComponents.set(randomNpcSpawnEgg, MEComponents.ITEM_MODEL, new ResourceLocation(MiddleEarth.MOD_ID, randomSpawnEggId.getPath().replaceAll("\\.", "_")));
 
         entries.add(randomNpcSpawnEgg);
 
@@ -70,8 +70,8 @@ public class ItemGroupsUtil {
 
     private static ItemStack addTrim(Item partItem, RegistryWrapper.WrapperLookup wrapper, RegistryKey<ArmorTrimMaterial> reference) {
         ItemStack item = partItem.getDefaultStack();
-        RegistryEntry.Reference<ArmorTrimMaterial> material = wrapper.getOptionalWrapper(RegistryKeys.TRIM_MATERIAL).orElseThrow().getOrThrow(reference);
-        RegistryEntry.Reference<ArmorTrimPattern> pattern = wrapper.getOptionalWrapper(RegistryKeys.TRIM_PATTERN).orElseThrow().getOptional(RegistryKey.of(RegistryKeys.TRIM_PATTERN, MiddleEarth.of( "smithing_part"))).orElse(null);
+        Holder.Reference<ArmorTrimMaterial> material = wrapper.getOptionalWrapper(RegistryKeys.TRIM_MATERIAL).orElseThrow().getOrThrow(reference);
+        Holder.Reference<ArmorTrimPattern> pattern = wrapper.getOptionalWrapper(RegistryKeys.TRIM_PATTERN).orElseThrow().getOptional(RegistryKey.of(RegistryKeys.TRIM_PATTERN, MiddleEarth.of( "smithing_part"))).orElse(null);
         MEArmorTrim.set(item, new ArmorTrim(material , pattern));
         return item;
     }
@@ -131,8 +131,8 @@ public class ItemGroupsUtil {
 
     public static Collection<ItemStack> addFactionBanners(RegistryWrapper.WrapperLookup lookup) {
         List<ItemStack> bannerList = new ArrayList<>();
-        List<RegistryEntry.Reference<Faction>> factions = lookup.getWrapperOrThrow(DynamicRegistriesME.FACTION).streamEntries().toList();
-        for(RegistryEntry.Reference<Faction> factionReference : factions){
+        List<Holder.Reference<Faction>> factions = lookup.getWrapperOrThrow(DynamicRegistriesME.FACTION).streamEntries().toList();
+        for(Holder.Reference<Faction> factionReference : factions){
             ItemStack bannerItem = factionReference.value().getBannerItem(lookup);
             if(!bannerItem.isEmpty())
                 bannerList.add(bannerItem);

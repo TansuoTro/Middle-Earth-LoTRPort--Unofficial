@@ -1,32 +1,32 @@
 package net.jukoz.me.client.screens;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.world.map.MiddleEarthMapConfigs;
 import net.jukoz.me.world.dimension.ModDimensions;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.text.*;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.Vec2f;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import org.joml.Vector2i;
 
 import java.util.Optional;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class MiddleEarthMapScreen extends Screen {
-    private static final Identifier WINDOW_TEXTURE = new Identifier(MiddleEarth.MOD_ID,"textures/gui/map_background.png");
-    private static final Identifier MAP_UI_TEXTURE = new Identifier(MiddleEarth.MOD_ID,"textures/gui/map_ui.png");
-    private static final Identifier MAP_TEXTURE = new Identifier(MiddleEarth.MOD_ID,"textures/map.png");
+    private static final ResourceLocation WINDOW_TEXTURE = new ResourceLocation(MiddleEarth.MOD_ID,"textures/gui/map_background.png");
+    private static final ResourceLocation MAP_UI_TEXTURE = new ResourceLocation(MiddleEarth.MOD_ID,"textures/gui/map_ui.png");
+    private static final ResourceLocation MAP_TEXTURE = new ResourceLocation(MiddleEarth.MOD_ID,"textures/map.png");
     private static final Text MAP_TITLE_TEXT = Text.of("Middle-earth Map");
     public static final int MARGIN = 5;
 
@@ -161,8 +161,8 @@ public class MiddleEarthMapScreen extends Screen {
 
             // Debug panel
             if(debug){
-                World world = this.player.getWorld();
-                Optional<RegistryKey<Biome>> biomeRegistry = world.getBiome(this.player.getBlockPos()).getKey();
+                Level world = this.player.getWorld();
+                Optional<ResourceKey<Biome>> biomeRegistry = world.getBiome(this.player.getBlockPos()).getKey();
                 MutableText text = MutableText.of(new LiteralTextContent("N/A"));
                 if(biomeRegistry.isPresent()) {
                     String currentBiomeId = biomeRegistry.get().getValue().toString().replace(':', '.');

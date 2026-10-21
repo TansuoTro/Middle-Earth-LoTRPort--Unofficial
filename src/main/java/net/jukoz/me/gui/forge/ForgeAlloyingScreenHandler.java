@@ -2,22 +2,22 @@ package net.jukoz.me.gui.forge;
 
 import net.jukoz.me.block.special.forge.ForgeBlockEntity;
 import net.jukoz.me.gui.ModScreenHandlers;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class ForgeAlloyingScreenHandler extends ScreenHandler {
     protected final Inventory inventory;
     protected final PropertyDelegate propertyDelegate;
-    protected final World world;
+    protected final Level world;
     protected BlockPos pos;
 
     public ForgeAlloyingScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos blockPos) {
@@ -52,7 +52,7 @@ public class ForgeAlloyingScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int slot) {
+    public ItemStack quickMove(Player player, int slot) {
         ItemStack stack = ItemStack.EMPTY;
         Slot invSlot = this.slots.get(slot);
 
@@ -75,7 +75,7 @@ public class ForgeAlloyingScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
+    public boolean canUse(Player player) {
         return this.inventory.canPlayerUse(player);
     }
 

@@ -2,12 +2,12 @@ package net.jukoz.me.resources.datas.texture_presets;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.registry.entry.RegistryElementCodec;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.resources.datas.common.CharacterPatternTypes;
 
@@ -16,40 +16,40 @@ import java.util.Optional;
 public class CharacterTexturePattern {
 
     public static final Codec<CharacterTexturePattern> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
-            Identifier.CODEC.fieldOf("asset_id").forGetter(CharacterTexturePattern::getIdentifier),
+            ResourceLocation.CODEC.fieldOf("asset_id").forGetter(CharacterTexturePattern::getIdentifier),
             Codec.STRING.fieldOf("category").forGetter(CharacterTexturePattern::getCategoryString),
             Codec.BOOL.optionalFieldOf("has_addon").forGetter(CharacterTexturePattern::hasAddonOptional))
             .apply(instance, CharacterTexturePattern::new));
 
-    public static final PacketCodec<PacketByteBuf, CharacterTexturePattern> PACKET_CODEC;
-    public static final Codec<RegistryEntry<CharacterTexturePattern>> ENTRY_CODEC;
-    public static final PacketCodec<PacketByteBuf, RegistryEntry<CharacterTexturePattern>> ENTRY_PACKET_CODEC;
+    public static final PacketCodec<FriendlyByteBuf, CharacterTexturePattern> PACKET_CODEC;
+    public static final Codec<Holder<CharacterTexturePattern>> ENTRY_CODEC;
+    public static final PacketCodec<FriendlyByteBuf, Holder<CharacterTexturePattern>> ENTRY_PACKET_CODEC;
 
-    private final Identifier assetId;
+    private final ResourceLocation assetId;
     private final CharacterPatternTypes patternType;
 
     private Boolean hasAddon;
-    public CharacterTexturePattern(Identifier assetId, String type, Optional<Boolean> hasAddon){
+    public CharacterTexturePattern(ResourceLocation assetId, String type, Optional<Boolean> hasAddon){
         this.assetId = assetId;
         this.patternType = CharacterPatternTypes.valueOf(type);
         this.hasAddon = hasAddon.orElse(false);
     }
 
-    public CharacterTexturePattern(Identifier assetId, String type, Boolean hasAddon){
+    public CharacterTexturePattern(ResourceLocation assetId, String type, Boolean hasAddon){
         this.assetId = assetId;
         this.patternType = CharacterPatternTypes.valueOf(type.toUpperCase());
         this.hasAddon = hasAddon;
     }
 
-    public CharacterTexturePattern(Identifier id, CharacterPatternTypes type, Boolean hasAddon){
+    public CharacterTexturePattern(ResourceLocation id, CharacterPatternTypes type, Boolean hasAddon){
         this(id, type);
         this.hasAddon = hasAddon;
     }
-    public CharacterTexturePattern(Identifier id, CharacterPatternTypes type){
+    public CharacterTexturePattern(ResourceLocation id, CharacterPatternTypes type){
         this.assetId = id;
         this.patternType = type;
     }
-    public Identifier getIdentifier() {
+    public ResourceLocation getIdentifier() {
         return assetId;
     }
 

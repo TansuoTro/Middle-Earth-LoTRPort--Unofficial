@@ -1,21 +1,21 @@
 package net.jukoz.me.mixin;
 
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.ShieldItem;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ShieldItem;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderList;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.util.Mth;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Mixin(PlayerEntity.class)
+@Mixin(Player.class)
 public class PlayerEntityMixin {
     @Shadow
     @Final
@@ -36,18 +36,18 @@ public class PlayerEntityMixin {
 
     @Inject(at = @At(value = "HEAD"), method = "damageShield(F)V", locals = LocalCapture.CAPTURE_FAILHARD)
     private void damageShield(float amount, CallbackInfo callBackInfo) {
-        PlayerEntity player = (PlayerEntity) (Object) this;
+        Player player = (Player) (Object) this;
         ItemStack activeItem = player.getActiveItem();
 
         if (activeItem.getItem() instanceof ShieldItem) {
             if (amount >= 3.0F) {
-                int i = 1 + MathHelper.floor(amount);
-                Hand hand = player.getActiveHand();
+                int i = 1 + Mth.floor(amount);
+                InteractionHand hand = player.getActiveHand();
 
                 activeItem.damage(i, (LivingEntity) player, ((playerEntity) -> player.sendToolBreakStatus(hand)));
 
                 if (activeItem.isEmpty()) {
-                    if (hand == Hand.MAIN_HAND) {
+                    if (hand == InteractionHand.MAIN_HAND) {
                         player.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
                     } else {
                         player.equipStack(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
@@ -65,7 +65,7 @@ public class PlayerEntityMixin {
      */
     @Inject(at = @At(value = "HEAD"), method = "disableShield(Z)V", locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
     private void disableShieldHead(boolean sprinting, CallbackInfo callbackInfo) {
-        PlayerEntity player = (PlayerEntity) (Object) this;
+        Player player = (Player) (Object) this;
         ItemStack activeItemStack = player.getActiveItem();
         Item activeItem = activeItemStack.getItem();
 
@@ -83,11 +83,11 @@ public class PlayerEntityMixin {
         }
     }
 
-    private void getEntryList(PlayerEntity player) {
+    private void getEntryList(Player player) {
         Optional<RegistryEntryList.Named<Item>> opt = Registries.ITEM.getEntryList(ConventionalItemTags.SHIELDS);
         List<Item> list = new ArrayList<>();
         if (opt.isPresent()) {
-            list = opt.get().stream().map(RegistryEntry::value).toList();
+            list = opt.get().stream().map(Holder::value).toList();
         }
 
         for (int amountOfShields = list.size(); amountOfShields > 0; amountOfShields--) {

@@ -3,16 +3,16 @@ package net.jukoz.me.item.items.armor;
 import net.jukoz.me.item.MEComponents;
 
 import net.jukoz.me.compat.DyedColorComponent;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.biome.Biome;
 import net.jukoz.me.item.dataComponents.BackAttachmentDataComponent;
 import net.jukoz.me.item.utils.armor.ExtendedArmorMaterial;
 import org.jetbrains.annotations.Nullable;
@@ -27,19 +27,19 @@ public class MantleOfYavannaItem extends BackAttachmentItem {
         super(settings.maxCount(1), material);
     }
 
-        public boolean allowComponentsUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack) {
+        public boolean allowComponentsUpdateAnimation(Player player, InteractionHand hand, ItemStack oldStack, ItemStack newStack) {
         return false;
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, net.minecraft.world.World world, Entity entity, int slot, boolean selected) {
+    public void inventoryTick(ItemStack stack, net.minecraft.world.level.Level world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, world, entity, slot, selected);
         DyedColorComponent dyedColorComponent = MEComponents.get(stack, MEComponents.DYED_COLOR);
         if(dyedColorComponent == null) return;
 
         int targetColor = 4624722;
         int currentColor = dyedColorComponent.rgb();
-        RegistryEntry<Biome> biomeEntry = world.getBiome(entity.getBlockPos());
+        Holder<Biome> biomeEntry = world.getBiome(entity.getBlockPos());
 
         if(biomeEntry.getKey().isPresent()) {
             int color = biomeEntry.value().getFoliageColor();
@@ -49,18 +49,18 @@ public class MantleOfYavannaItem extends BackAttachmentItem {
         if(currentColor != targetColor) {
             Color colorA = new Color(MEComponents.get(stack, MEComponents.DYED_COLOR).rgb());
             Color colorB = new Color(targetColor);
-            Color lerpColor = new Color(MathHelper.lerp(COLOR_LERP, colorA.getRed(), colorB.getRed()),
-                    MathHelper.lerp(COLOR_LERP, colorA.getGreen(), colorB.getGreen()),
-                    MathHelper.lerp(COLOR_LERP, colorA.getBlue(), colorB.getBlue()));
+            Color lerpColor = new Color(Mth.lerp(COLOR_LERP, colorA.getRed(), colorB.getRed()),
+                    Mth.lerp(COLOR_LERP, colorA.getGreen(), colorB.getGreen()),
+                    Mth.lerp(COLOR_LERP, colorA.getBlue(), colorB.getBlue()));
             currentColor = lerpColor.getRGB();
             MEComponents.set(stack, MEComponents.DYED_COLOR, new DyedColorComponent(currentColor));
         }
     }
 
-    public static ItemStack applyBackAttachmentColor(ItemStack stack, ServerWorld world, Entity entity, BackAttachmentDataComponent backAttachmentDataComponent) {
+    public static ItemStack applyBackAttachmentColor(ItemStack stack, ServerLevel world, Entity entity, BackAttachmentDataComponent backAttachmentDataComponent) {
         int targetColor;
         int currentColor = backAttachmentDataComponent.backAttachmentColor();
-        RegistryEntry<Biome> biomeEntry = world.getBiome(entity.getBlockPos());
+        Holder<Biome> biomeEntry = world.getBiome(entity.getBlockPos());
 
         if(biomeEntry.getKey().isPresent()) {
             int color = biomeEntry.value().getFoliageColor();
@@ -70,9 +70,9 @@ public class MantleOfYavannaItem extends BackAttachmentItem {
             if(currentColor != targetColor) {
                 Color colorA = new Color(currentColor);
                 Color colorB = new Color(targetColor);
-                Color lerpColor = new Color(MathHelper.lerp(COLOR_LERP, colorA.getRed(), colorB.getRed()),
-                        MathHelper.lerp(COLOR_LERP, colorA.getGreen(), colorB.getGreen()),
-                        MathHelper.lerp(COLOR_LERP, colorA.getBlue(), colorB.getBlue()));
+                Color lerpColor = new Color(Mth.lerp(COLOR_LERP, colorA.getRed(), colorB.getRed()),
+                        Mth.lerp(COLOR_LERP, colorA.getGreen(), colorB.getGreen()),
+                        Mth.lerp(COLOR_LERP, colorA.getBlue(), colorB.getBlue()));
                 currentColor = lerpColor.getRGB();
 
                 MEComponents.set(stack, MEComponents.BACK_ATTACHMENT_DATA, new BackAttachmentDataComponent(backAttachmentDataComponent.backAttachment(), currentColor));

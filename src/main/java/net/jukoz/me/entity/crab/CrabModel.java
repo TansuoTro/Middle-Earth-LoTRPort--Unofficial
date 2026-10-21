@@ -2,10 +2,10 @@ package net.jukoz.me.entity.crab;
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.PartNames;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.util.Mth;
 
 public class CrabModel extends EntityModel<CrabEntity> {
     private static final String ARM_RIGHT = "bone_arm_right";
@@ -149,9 +149,9 @@ public class CrabModel extends EntityModel<CrabEntity> {
     @Override
     public void setAngles(CrabEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
-        float legAngle = 65F * MathHelper.RADIANS_PER_DEGREE;
-        float armAngle = 30F * MathHelper.RADIANS_PER_DEGREE;
-        float cosVal = (MathHelper.cos(limbSwing * 2.0F) * 0.6F) * limbSwingAmount;
+        float legAngle = 65F * Mth.RADIANS_PER_DEGREE;
+        float armAngle = 30F * Mth.RADIANS_PER_DEGREE;
+        float cosVal = (Mth.cos(limbSwing * 2.0F) * 0.6F) * limbSwingAmount;
 
         legRightFirst.roll = legAngle;
         legRightSecond.roll = legAngle;
@@ -173,7 +173,7 @@ public class CrabModel extends EntityModel<CrabEntity> {
         armRight.roll = armAngle ;
         armLeft.roll = -armAngle;
 
-        float clawPitchMovement = MathHelper.abs(MathHelper.cos(limbSwing * 1.3333F) * 0.5F) * limbSwingAmount;
+        float clawPitchMovement = Mth.abs(Mth.cos(limbSwing * 1.3333F) * 0.5F) * limbSwingAmount;
         clawTopRight.roll = -clawPitchMovement;
         clawBotRight.roll = clawPitchMovement;
 
@@ -188,7 +188,7 @@ public class CrabModel extends EntityModel<CrabEntity> {
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void render(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
         armRight.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
         armLeft.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
         legSwimmerLeft.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);

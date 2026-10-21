@@ -3,15 +3,15 @@ package net.jukoz.me.entity.npcs.data;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.resources.datas.common.EntityCategories;
 import net.jukoz.me.resources.datas.npc_types.NpcType;
@@ -20,9 +20,9 @@ import java.util.Optional;
 
 public class NpcData {
     public static final Codec<NpcData> CODEC;
-    public static final PacketCodec<PacketByteBuf, NpcData> PACKET_CODEC;
+    public static final PacketCodec<FriendlyByteBuf, NpcData> PACKET_CODEC;
 
-    private RegistryEntry<NpcType> type;
+    private Holder<NpcType> type;
     private EntityCategories category;
     private final SpawnReason spawnReason;
     private final Optional<BlockPos> structureManagerPos;
@@ -43,14 +43,14 @@ public class NpcData {
                 NpcData::new);
     }
 
-    public NpcData(Optional<RegistryEntry<NpcType>> type, Optional<String> category, Optional<String> spawnReason, Optional<BlockPos> structureManagerPos) {
+    public NpcData(Optional<Holder<NpcType>> type, Optional<String> category, Optional<String> spawnReason, Optional<BlockPos> structureManagerPos) {
         this.type = type.orElse(null);
         this.category = category.map(value -> parseEnum(EntityCategories.class, value)).orElse(null);
         this.spawnReason = spawnReason.map(value -> parseEnum(SpawnReason.class, value)).orElse(null);
         this.structureManagerPos = structureManagerPos == null ||  structureManagerPos.isEmpty() ? Optional.empty() : structureManagerPos;
     }
 
-    public NpcData(RegistryEntry<NpcType> type, EntityCategories category, SpawnReason spawnReason, Optional<BlockPos> structureManagerPos) {
+    public NpcData(Holder<NpcType> type, EntityCategories category, SpawnReason spawnReason, Optional<BlockPos> structureManagerPos) {
         this.type = type;
         this.category = category;
         this.spawnReason = spawnReason;
@@ -65,7 +65,7 @@ public class NpcData {
     }
 
     // [BUILDERS]
-    public NpcData withType(RegistryEntry<NpcType> type) {
+    public NpcData withType(Holder<NpcType> type) {
         return new NpcData(type, category, spawnReason, structureManagerPos);
     }
 
@@ -80,7 +80,7 @@ public class NpcData {
     public NpcData withStructureManagerPos(BlockPos structureManagerPos) {
         return new NpcData(this.type, this.category, this.spawnReason, Optional.of(structureManagerPos));
     }
-    public NpcData withType(World world, Identifier npcDataIdentifier) {
+    public NpcData withType(Level world, ResourceLocation npcDataIdentifier) {
         if(npcDataIdentifier == null || world == null)
             return this;
 
@@ -91,16 +91,16 @@ public class NpcData {
         return this.withType(registry.getEntry(npcType));
     }
 
-    public Identifier getNpcTypeId() {
+    public ResourceLocation getNpcTypeId() {
         if(type == null){
             return null;
         }
         return type.getKey()
-                .map(RegistryKey::getValue)
+                .map(ResourceKey::getValue)
                 .orElse(null);
     }
 
-    public Identifier getFaction() {
+    public ResourceLocation getFaction() {
         if(type == null)
             return null;
         return type.value().getFactionIdentifier();
@@ -121,7 +121,7 @@ public class NpcData {
         return type.value();
     }
 
-    private Optional<RegistryEntry<NpcType>> getOptionalType() {
+    private Optional<Holder<NpcType>> getOptionalType() {
         return type != null ? Optional.of(type) : Optional.empty();
     }
 

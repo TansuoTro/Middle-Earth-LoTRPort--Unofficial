@@ -3,15 +3,15 @@ package net.jukoz.me.entity.spider.scuttler;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.*;
-import net.minecraft.entity.ai.brain.sensor.Sensor;
+import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.entity.ai.brain.task.*;
 import net.minecraft.entity.mob.*;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.GlobalPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.tasks.SpiderPounceTask;
@@ -210,7 +210,7 @@ public class ShelobiteScuttlerBrain {
 		}
 	}*/
 
-	private static boolean isTarget(ServerWorld world, ShelobiteScuttlerEntity shelobiteScuttler, LivingEntity target) {
+	private static boolean isTarget(ServerLevel world, ShelobiteScuttlerEntity shelobiteScuttler, LivingEntity target) {
 		return getTarget(shelobiteScuttler).filter(targetx -> targetx == target).isPresent();
 	}
 
@@ -224,7 +224,7 @@ public class ShelobiteScuttlerBrain {
 		}
 	}
 
-	protected static void tryRevenge(ServerWorld world, ShelobiteScuttlerEntity shelobiteScuttler, LivingEntity target) {
+	protected static void tryRevenge(ServerLevel world, ShelobiteScuttlerEntity shelobiteScuttler, LivingEntity target) {
 		if (!(target instanceof AbstractPiglinEntity)) {
 			tryRevenge(world, shelobiteScuttler, target);
 		}

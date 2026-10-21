@@ -1,17 +1,17 @@
 package net.jukoz.me.gui.onboarding;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Colors;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.onboarding.onboarding_faction.OnboardingFactionScreenController;
 import net.jukoz.me.network.packets.C2S.PacketTeleportToCurrentSpawn;
@@ -21,10 +21,10 @@ import net.jukoz.me.resources.datas.attributes.AttributePoolElement;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class OnboardingSelectionScreen extends Screen {
-private static final Text ONBOARDING_SELECTION_TITLE = Text.translatable("ui.%s.onboarding_selection.title".formatted(MiddleEarth.MOD_ID));
-    private static final Identifier BUTTON_WIDGET = new Identifier(MiddleEarth.MOD_ID,"textures/gui/widget/button_widget.png");
+private static final Component ONBOARDING_SELECTION_TITLE = Component.translatable("ui.%s.onboarding_selection.title".formatted(MiddleEarth.MOD_ID));
+    private static final ResourceLocation BUTTON_WIDGET = new ResourceLocation(MiddleEarth.MOD_ID,"textures/gui/widget/button_widget.png");
     private boolean focusEnabled;
     public ButtonWidget continueAsCharacterButton;
     public ButtonWidget resetCharacterButton;
@@ -50,7 +50,7 @@ private static final Text ONBOARDING_SELECTION_TITLE = Text.translatable("ui.%s.
         ButtonWidget.PressAction continueAsFaction = button -> {
             teleportPlayerToMiddleEarth();
         };
-        continueAsCharacterButton = ButtonWidget.builder(Text.of("continue_character"), continueAsFaction).build();
+        continueAsCharacterButton = ButtonWidget.builder(Component.of("continue_character"), continueAsFaction).build();
         addDrawableChild(continueAsCharacterButton);
         if(currentDelay > 0)
             continueAsCharacterButton.active = false;
@@ -60,7 +60,7 @@ private static final Text ONBOARDING_SELECTION_TITLE = Text.translatable("ui.%s.
                 var controller = new OnboardingFactionScreenController(this.player.getWorld(), currentDelay, playerAttributes);
                 controller.open();
             };
-            resetCharacterButton = ButtonWidget.builder(Text.of("reset_character"), resetCharacterAction).build();
+            resetCharacterButton = ButtonWidget.builder(Component.of("reset_character"), resetCharacterAction).build();
             addDrawableChild(resetCharacterButton);
         }
     }
@@ -106,7 +106,7 @@ private static final Text ONBOARDING_SELECTION_TITLE = Text.translatable("ui.%s.
         if(continueAsCharacterButton.active){
             context.drawTexture(BUTTON_WIDGET, startX, startY, 0, continueAsCharacterButton.isFocused() || isMouseOver(startX, panelSizeX, startY, panelSizeY) ? 19 : 0, panelSizeX, panelSizeY, 256, 256);
 
-            Text continueText = Text.translatable("ui.%s.continue_character".formatted(MiddleEarth.MOD_ID));
+            Component continueText = Component.translatable("ui.%s.continue_character".formatted(MiddleEarth.MOD_ID));
             context.drawText(textRenderer, continueText,
                     startX + (int)((panelSizeX - textRenderer.getWidth(continueText)) / 2f),
                     startY + (int) ((panelSizeY / 2f) - (textRenderer.fontHeight / 2f)) + 1,
@@ -118,7 +118,7 @@ private static final Text ONBOARDING_SELECTION_TITLE = Text.translatable("ui.%s.
             }
         } else {
             context.drawTexture(BUTTON_WIDGET, startX, startY, 0, 38, panelSizeX, panelSizeY, 256, 256);
-            Text delayText = Text.literal(String.valueOf((Math.round(this.currentDelay * 10f) /10f)));
+            Component delayText = Component.literal(String.valueOf((Math.round(this.currentDelay * 10f) /10f)));
             context.drawText(textRenderer, delayText,
                     startX + (panelSizeX / 2) - (textRenderer.getWidth(delayText) / 2),
                     startY + 5, Colors.RED, true);
@@ -130,7 +130,7 @@ private static final Text ONBOARDING_SELECTION_TITLE = Text.translatable("ui.%s.
 
             context.drawTexture(BUTTON_WIDGET, startX, startY, 0, resetCharacterButton.isFocused() || isMouseOver(startX, panelSizeX, startY, panelSizeY) ? 19 : 0, panelSizeX, panelSizeY, 256, 256);
 
-            Text resetText = Text.translatable("ui.%s.reset_character".formatted(MiddleEarth.MOD_ID));
+            Component resetText = Component.translatable("ui.%s.reset_character".formatted(MiddleEarth.MOD_ID));
             context.drawText(textRenderer, resetText,
                     startX + (int) ((panelSizeX - textRenderer.getWidth(resetText)) / 2f),
                     startY + (int) ((panelSizeY / 2f) - (textRenderer.fontHeight / 2f)) + 1,

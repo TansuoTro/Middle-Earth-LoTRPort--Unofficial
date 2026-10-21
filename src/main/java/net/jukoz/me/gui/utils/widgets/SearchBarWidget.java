@@ -3,12 +3,12 @@ package net.jukoz.me.gui.utils.widgets;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Colors;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringHelper;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.utils.widgets.searchbar.SearchBarResult;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchBarWidget extends ModWidget {
-    private static final Identifier SEARCH_WIDGET = new Identifier(MiddleEarth.MOD_ID, "textures/gui/widget/search_widget.png");
+    private static final ResourceLocation SEARCH_WIDGET = new ResourceLocation(MiddleEarth.MOD_ID, "textures/gui/widget/search_widget.png");
     private static final List<Integer> KEYS_TO_IGNORE = List.of(260, 262, 264, 263, 265, 266, 267, 268, 269);
     private static final int MINIMAL_MARGIN = 4;
     public int desiredWidth;
@@ -53,18 +53,18 @@ public class SearchBarWidget extends ModWidget {
             if (!searchBarToggle)
                 searchBarToggle = true;
         };
-        searchBarToggleButton = ButtonWidget.builder(Text.translatable("ui.%s.search.toggle_button".formatted(MiddleEarth.MOD_ID)), searchBarInputToggle).build();
+        searchBarToggleButton = ButtonWidget.builder(Component.translatable("ui.%s.search.toggle_button".formatted(MiddleEarth.MOD_ID)), searchBarInputToggle).build();
         net.jukoz.me.compat.client.gui.MEGui.setSize(searchBarToggleButton, desiredWidth, searchBarToggleButton.getHeight());
 
         // Screen click
-        screenClick = ButtonWidget.builder(Text.translatable("ui.%s.search.screen_click_button".formatted(MiddleEarth.MOD_ID)), button -> clickOnScreen(button, additionalScreenClickAction)).build();
+        screenClick = ButtonWidget.builder(Component.translatable("ui.%s.search.screen_click_button".formatted(MiddleEarth.MOD_ID)), button -> clickOnScreen(button, additionalScreenClickAction)).build();
         screenClick.setAlpha(0);
-        screenClick.setMessage(Text.of(""));
+        screenClick.setMessage(Component.of(""));
 
         resultButtons = new ArrayList<>();
         for(int i = 0; i < maxAmountOnScreen; i++){
             final int index = i;
-            resultButtons.add(ButtonWidget.builder(Text.of("N/A"), x -> buttonPress(x, index)).build());
+            resultButtons.add(ButtonWidget.builder(Component.of("N/A"), x -> buttonPress(x, index)).build());
             resultButtons.get(resultButtons.size()-1).active = false;
         }
         textRenderer = MinecraftClient.getInstance().textRenderer;
@@ -113,7 +113,7 @@ public class SearchBarWidget extends ModWidget {
         net.jukoz.me.compat.client.gui.MEGui.setBounds(searchBarToggleButton, desiredWidth, panelSizeY, startX, startY);
         drawSearchBarBackground(context, SEARCH_WIDGET, startX, startY);
 
-        MutableText text = Text.translatable((!searchBarToggle && searchBarInput.isEmpty()) ? "ui.%s.search.label".formatted(MiddleEarth.MOD_ID) : searchBarInput);
+        MutableComponent text = Component.translatable((!searchBarToggle && searchBarInput.isEmpty()) ? "ui.%s.search.label".formatted(MiddleEarth.MOD_ID) : searchBarInput);
         context.drawText(textRenderer, text,
                 startX + magnifyingGlassSizeX + MINIMAL_MARGIN - 1,
                 startY + (int) ((panelSizeY / 2f) - (textRenderer.fontHeight / 2f)) + 1,
@@ -224,7 +224,7 @@ public class SearchBarWidget extends ModWidget {
         }
         return 1;
     }
-    private int drawSearchBarBackground(DrawContext context, Identifier searchWidget, int startX, int startY) {
+    private int drawSearchBarBackground(DrawContext context, ResourceLocation searchWidget, int startX, int startY) {
         int uvY = (getFocusEnabled() && searchBarToggleButton.isFocused()) ? 19 : 0;
 
         context.drawTexture(searchWidget, startX, startY, 0, uvY, 10, 18, 256, 256);
@@ -235,7 +235,7 @@ public class SearchBarWidget extends ModWidget {
         return startY + 4;
     }
 
-    private int drawTop(DrawContext context, Identifier searchWidget, int startX, int startY) {
+    private int drawTop(DrawContext context, ResourceLocation searchWidget, int startX, int startY) {
         context.drawTexture(searchWidget, startX, startY, 0, 38, 10, 4, 256, 256);
 
         context.drawTexture(searchWidget, startX + 10, startY, 11, 38, desiredWidth - 10 - 13, 4, 5, 4, 256, 256);
@@ -244,7 +244,7 @@ public class SearchBarWidget extends ModWidget {
         return startY + 4;
     }
 
-    private int drawFooter(DrawContext context, Identifier searchWidget, int startX, int startY) {
+    private int drawFooter(DrawContext context, ResourceLocation searchWidget, int startX, int startY) {
         context.drawTexture(searchWidget, startX, startY, 0, 58, 10, 10, 256, 256);
 
         context.drawTexture(searchWidget, startX + 10, startY, 11, 58, desiredWidth - 10 - 13, 10, 5, 10, 256, 256);
@@ -253,7 +253,7 @@ public class SearchBarWidget extends ModWidget {
         return startY + 10;
     }
 
-    private int drawBottom(DrawContext context, Identifier searchWidget, int startX, int startY) {
+    private int drawBottom(DrawContext context, ResourceLocation searchWidget, int startX, int startY) {
         context.drawTexture(searchWidget, startX, startY, 0, 69, 10, 4, 256, 256);
 
         context.drawTexture(searchWidget, startX + 10, startY, 11, 69, desiredWidth - 10 - 13, 4, 5, 4, 256, 256);
@@ -262,7 +262,7 @@ public class SearchBarWidget extends ModWidget {
         return startY + 4;
     }
 
-    private int drawCenter(DrawContext context, Identifier searchWidget, int startX, int startY, int currentAmount) {
+    private int drawCenter(DrawContext context, ResourceLocation searchWidget, int startX, int startY, int currentAmount) {
         context.drawTexture(searchWidget, startX, startY, 0, 43, 10, 14 * currentAmount, 10, 14, 256, 256);
 
         context.drawTexture(searchWidget, startX + 10, startY, 11, 43, desiredWidth - 10 - 13, 14 * currentAmount, 5, 14, 256, 256);
@@ -271,7 +271,7 @@ public class SearchBarWidget extends ModWidget {
         return startY + (14 * currentAmount);
     }
 
-    private int drawResultButtonBackground(DrawContext context, Identifier searchWidget, int startX, int startY, int uvX, int uvY, int size) {
+    private int drawResultButtonBackground(DrawContext context, ResourceLocation searchWidget, int startX, int startY, int uvX, int uvY, int size) {
         context.drawTexture(searchWidget, startX, startY, uvX, uvY, 9, 14, 256, 256);
         startX += 9;
 

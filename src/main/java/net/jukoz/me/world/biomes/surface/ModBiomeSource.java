@@ -9,23 +9,23 @@ import net.jukoz.me.world.biomes.MEBiomeKeys;
 import net.jukoz.me.world.biomes.caves.CaveType;
 import net.jukoz.me.world.biomes.caves.ModCaveBiomes;
 import net.jukoz.me.world.features.underground.CavesPlacedFeatures;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Holder;
 import net.minecraft.util.math.Vec2f;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.biome.source.BiomeCoords;
-import net.minecraft.world.biome.source.BiomeSource;
+import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.biome.source.util.MultiNoiseUtil;
 
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
 public class ModBiomeSource extends BiomeSource {
-    private final ArrayList<RegistryEntry<Biome>> biomes;
+    private final ArrayList<Holder<Biome>> biomes;
     private final int CAVE_NOISE = 96;
     private final int CAVE_OFFSET = 7220;
     private MiddleEarthMapRuntime middleEarthMapRuntime;
-    public ModBiomeSource(ArrayList<RegistryEntry<Biome>> biomes) {
+    public ModBiomeSource(ArrayList<Holder<Biome>> biomes) {
         this.biomes = biomes;
         middleEarthMapRuntime = MiddleEarthMapRuntime.getInstance();
     }
@@ -36,18 +36,18 @@ public class ModBiomeSource extends BiomeSource {
     }
 
     @Override
-    protected Stream<RegistryEntry<Biome>> biomeStream() {
+    protected Stream<Holder<Biome>> biomeStream() {
         return biomes.stream();
     }
 
-    private RegistryKey<Biome> getCaveBiome(int x, int z, MEBiome surfaceBiome) {
+    private ResourceKey<Biome> getCaveBiome(int x, int z, MEBiome surfaceBiome) {
         float temperature = (float) SimplexNoise.noise((double) x / CAVE_NOISE,  (double) z / CAVE_NOISE);
         float humidity = (float) SimplexNoise.noise((double) (x + CAVE_OFFSET) / CAVE_NOISE, (double)(z + CAVE_OFFSET) / CAVE_NOISE);
         return ModCaveBiomes.getBiome(new Vec2f(temperature, humidity), surfaceBiome);
     }
 
     @Override
-    public RegistryEntry<Biome> getBiome(int x, int y, int z, MultiNoiseUtil.MultiNoiseSampler noise) {
+    public Holder<Biome> getBiome(int x, int y, int z, MultiNoiseUtil.MultiNoiseSampler noise) {
         int i = BiomeCoords.toBlock(x);
         int j = BiomeCoords.toBlock(y);
         int k = BiomeCoords.toBlock(z);
@@ -58,8 +58,8 @@ public class ModBiomeSource extends BiomeSource {
             return biomes.get(0);
         }
 
-        RegistryKey<Biome> biome = meBiome.biome;
-        RegistryKey<Biome> processedBiome;
+        ResourceKey<Biome> biome = meBiome.biome;
+        ResourceKey<Biome> processedBiome;
 
         if(!MEBiomesData.waterBiomes.contains(biome)) {
             float height = MiddleEarthChunkGenerator.DIRT_HEIGHT + MiddleEarthHeightMap.getHeight(i, k);

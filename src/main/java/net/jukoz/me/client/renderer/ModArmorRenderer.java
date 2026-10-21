@@ -11,30 +11,30 @@ import net.jukoz.me.client.model.equipment.InnerArmorModel;
 import net.jukoz.me.utils.IntToRGB;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.Model;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.model.ArmorEntityModel;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.render.entity.model.EntityModelLayers;
-import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.model.EntityModelLayers;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.item.DyeableItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
 import java.awt.*;
 
 public class ModArmorRenderer implements ArmorRenderer {
-    private  Identifier ARMOR_LAYER_0;
-    private  Identifier ARMOR_LAYER_1;
-    private  Identifier ARMOR_LAYER_2;
-    private  Identifier ARMOR_LAYER_CAPE;
-    private  Identifier ARMOR_LAYER_HOOD;
+    private  ResourceLocation ARMOR_LAYER_0;
+    private  ResourceLocation ARMOR_LAYER_1;
+    private  ResourceLocation ARMOR_LAYER_2;
+    private  ResourceLocation ARMOR_LAYER_CAPE;
+    private  ResourceLocation ARMOR_LAYER_HOOD;
 
     private  CustomHelmetModel<LivingEntity> helmetModel;
     private  CustomChestplateModel<LivingEntity> chestplateModel;
@@ -54,11 +54,11 @@ public class ModArmorRenderer implements ArmorRenderer {
                             boolean hasInnerLayer, boolean hasVanillaArmorModel, boolean hasCape, boolean hasHood, boolean dyeable) {
         helmetModel = customHelmetModel;
         chestplateModel = customChestplateModel;
-        ARMOR_LAYER_0 = new Identifier(MiddleEarth.MOD_ID, "textures/models/armor/" + armorName + "_layer_0.png");
-        ARMOR_LAYER_1 = new Identifier(MiddleEarth.MOD_ID, "textures/models/armor/" + armorName + "_layer_1.png");
-        ARMOR_LAYER_2 = new Identifier(MiddleEarth.MOD_ID, "textures/models/armor/" + armorName + "_layer_2.png");
-        ARMOR_LAYER_CAPE = new Identifier(MiddleEarth.MOD_ID, "textures/models/armor/" + armorName + "_cape.png");
-        ARMOR_LAYER_HOOD = new Identifier(MiddleEarth.MOD_ID, "textures/models/armor/" + armorName + "_hood.png");
+        ARMOR_LAYER_0 = new ResourceLocation(MiddleEarth.MOD_ID, "textures/models/armor/" + armorName + "_layer_0.png");
+        ARMOR_LAYER_1 = new ResourceLocation(MiddleEarth.MOD_ID, "textures/models/armor/" + armorName + "_layer_1.png");
+        ARMOR_LAYER_2 = new ResourceLocation(MiddleEarth.MOD_ID, "textures/models/armor/" + armorName + "_layer_2.png");
+        ARMOR_LAYER_CAPE = new ResourceLocation(MiddleEarth.MOD_ID, "textures/models/armor/" + armorName + "_cape.png");
+        ARMOR_LAYER_HOOD = new ResourceLocation(MiddleEarth.MOD_ID, "textures/models/armor/" + armorName + "_hood.png");
 
         this.hasInnerLayer = hasInnerLayer;
         this.hasVanillaArmorModel = hasVanillaArmorModel;
@@ -68,7 +68,7 @@ public class ModArmorRenderer implements ArmorRenderer {
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, ItemStack stack, LivingEntity entity, EquipmentSlot slot, int light, BipedEntityModel<LivingEntity> contextModel) {
+    public void render(PoseStack matrices, VertexConsumerProvider vertexConsumers, ItemStack stack, LivingEntity entity, EquipmentSlot slot, int light, BipedEntityModel<LivingEntity> contextModel) {
         if (innerArmorModel == null) {
             innerArmorModel = new InnerArmorModel<>(MinecraftClient.getInstance().getEntityModelLoader().getModelPart(MiddleEarthClient.INNER_ARMOR_MODEL_LAYER));
             armorModel = new ArmorEntityModel<>(MinecraftClient.getInstance().getEntityModelLoader().getModelPart(EntityModelLayers.PLAYER_OUTER_ARMOR));
@@ -159,11 +159,11 @@ public class ModArmorRenderer implements ArmorRenderer {
     }
 
 
-    static void renderArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ItemStack stack, Model model, Identifier texture, boolean dyeable){
+    static void renderArmor(PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, ItemStack stack, Model model, ResourceLocation texture, boolean dyeable){
         if(dyeable){
             renderDyeable(matrices, vertexConsumers, light, stack, model, texture);
             if(!(model == capeModel)){
-                renderDyeable(matrices, vertexConsumers, light, stack, model, new Identifier(MiddleEarth.MOD_ID,
+                renderDyeable(matrices, vertexConsumers, light, stack, model, new ResourceLocation(MiddleEarth.MOD_ID,
                         texture.getPath().replaceAll(".png", "_overlay.png")));
             }
         } else {
@@ -171,7 +171,7 @@ public class ModArmorRenderer implements ArmorRenderer {
         }
     }
 
-    static void renderDyeable(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ItemStack stack, Model model, Identifier texture) {
+    static void renderDyeable(PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, ItemStack stack, Model model, ResourceLocation texture) {
         VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(texture), false, stack.hasGlint());
         Color rgb = IntToRGB.ex(((DyeableItem)stack.getItem()).getColor(stack));
         model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, rgb.getRed()/255f, rgb.getGreen()/255f, rgb.getBlue()/255f, 1.0F);

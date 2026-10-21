@@ -2,16 +2,16 @@ package net.jukoz.me.resources.datas.biome_events.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.entity.EntityType;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.util.RandomSource;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.registries.content.npctypes.NpcRegistry;
 import net.jukoz.me.resources.datas.npc_types.NpcType;
@@ -66,8 +66,8 @@ public class WildSpawnEventData {
     }
 
     public static final Codec<WildSpawnEventData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Identifier.CODEC.fieldOf(Fields.ENTITY_TYPE).forGetter(WildSpawnEventData::getEntityType),
-            Identifier.CODEC.optionalFieldOf(Fields.NPC_TYPE).forGetter(WildSpawnEventData::getOptionalNpcType),
+            ResourceLocation.CODEC.fieldOf(Fields.ENTITY_TYPE).forGetter(WildSpawnEventData::getEntityType),
+            ResourceLocation.CODEC.optionalFieldOf(Fields.NPC_TYPE).forGetter(WildSpawnEventData::getOptionalNpcType),
             Codec.INT.optionalFieldOf(Fields.WEIGHT).forGetter(WildSpawnEventData::getOptionalWeight),
 
             EntityLimitationData.CODEC.optionalFieldOf(Fields.SAME_ENTITY_LIMITATION).forGetter(WildSpawnEventData::getSameEntityLimitation),
@@ -91,8 +91,8 @@ public class WildSpawnEventData {
             BroadcastData.CODEC.optionalFieldOf(Fields.BROADCAST).forGetter(WildSpawnEventData::getBroadcast)
     ).apply(instance, WildSpawnEventData::new));
 
-    private final Identifier entityType;
-    private Identifier npcType = null;
+    private final ResourceLocation entityType;
+    private ResourceLocation npcType = null;
     private Integer weight = null;
     private EntityLimitationData sameEntityLimitation = null;
     private EntityLimitationData sameNpcTypeLimitation = null;
@@ -110,8 +110,8 @@ public class WildSpawnEventData {
 
 
     private WildSpawnEventData(
-            Identifier entityType, 
-            Optional<Identifier> npcType,
+            ResourceLocation entityType, 
+            Optional<ResourceLocation> npcType,
             Optional<Integer> weight,
             Optional<EntityLimitationData> sameEntityLimitation,
             Optional<EntityLimitationData> sameNpcTypeLimitation,
@@ -148,7 +148,7 @@ public class WildSpawnEventData {
         this.entityType = Registries.ENTITY_TYPE.getId(entityType);
     }
 
-    public WildSpawnEventData(RegistryKey<NpcType> npcType){
+    public WildSpawnEventData(ResourceKey<NpcType> npcType){
         this.entityType = Registries.ENTITY_TYPE.getId(EntitiesME.NPC);
         this.npcType = npcType.getValue();
         this.sameEntityLimitation = new EntityLimitationData();
@@ -156,15 +156,15 @@ public class WildSpawnEventData {
         this.requireSky = true;
     }
 
-    public Identifier getEntityType() {
+    public ResourceLocation getEntityType() {
         return entityType;
     }
 
-    public Identifier getNpcType(Identifier defaultNpcType) {
+    public ResourceLocation getNpcType(ResourceLocation defaultNpcType) {
         return npcType == null ? defaultNpcType : npcType;
     }
 
-    private Optional<Identifier> getOptionalNpcType() {
+    private Optional<ResourceLocation> getOptionalNpcType() {
         return npcType == null ? Optional.empty() : Optional.of(npcType);
 
     }
@@ -414,7 +414,7 @@ public class WildSpawnEventData {
         return Optional.ofNullable(discardChance);
     }
 
-    public boolean isDiscarded(Random random) {
+    public boolean isDiscarded(RandomSource random) {
         if(discardChance == null)
             return false;
         double obtained = random.nextDouble();
@@ -430,7 +430,7 @@ public class WildSpawnEventData {
         return this;
     }
 
-    public void broadcastMessage(ServerWorld world, BlockPos pos){
+    public void broadcastMessage(ServerLevel world, BlockPos pos){
         if(broadcastData == null)
             return;
         broadcastData.broadcastMessage(world, pos);

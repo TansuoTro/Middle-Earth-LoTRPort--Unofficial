@@ -2,20 +2,20 @@ package net.jukoz.me.network.packets.C2S;
 
 import net.minecraft.screen.AnvilScreenHandler;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.shapingAnvil.ShapingAnvilBlockEntity;
 import net.jukoz.me.gui.artisantable.ArtisanTableScreenHandler;
 import net.jukoz.me.gui.shapinganvil.ShapingAnvilScreenHandler;
 import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
 
 public class AnvilIndexPacket extends ClientToServerPacket<AnvilIndexPacket> {
-    public static final Identifier ID = MiddleEarth.of("anvil_index_packet");
+    public static final ResourceLocation ID = MiddleEarth.of("anvil_index_packet");
     public static final PacketType<AnvilIndexPacket> TYPE = PacketType.create(ID, AnvilIndexPacket::new);
 
     public int getIndex() {
@@ -48,7 +48,7 @@ public class AnvilIndexPacket extends ClientToServerPacket<AnvilIndexPacket> {
 
 
 
-    public AnvilIndexPacket(PacketByteBuf buf) {
+    public AnvilIndexPacket(FriendlyByteBuf buf) {
         this(buf.readInt(), buf.readDouble(), buf.readDouble(), buf.readDouble());
     }
 
@@ -58,7 +58,7 @@ public class AnvilIndexPacket extends ClientToServerPacket<AnvilIndexPacket> {
     }
 
     @Override
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
         buf.writeInt(this.index);
         buf.writeDouble(this.x);
         buf.writeDouble(this.y);
@@ -70,11 +70,11 @@ public class AnvilIndexPacket extends ClientToServerPacket<AnvilIndexPacket> {
         try{
             if(index >= 0) {
                 context.player().getServer().execute(() -> {
-                    Vec3d coordinates = new Vec3d(x, y, z);
+                    Vec3 coordinates = new Vec3(x, y, z);
                     ShapingAnvilBlockEntity.updateIndex(index, coordinates, context.player());
                 });
             } else {
-                ServerPlayerEntity player = context.player();
+                ServerPlayer player = context.player();
                 ScreenHandler screenHandler = player.currentScreenHandler;
                 if (screenHandler instanceof ShapingAnvilScreenHandler anvilScreenHandler) {
                     anvilScreenHandler.updateScreen();

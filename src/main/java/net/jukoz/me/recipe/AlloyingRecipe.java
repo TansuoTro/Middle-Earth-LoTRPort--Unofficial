@@ -6,19 +6,19 @@ import com.google.gson.JsonObject;
 import net.minecraft.recipe.*;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.jukoz.me.block.special.forge.MultipleStackRecipeInput;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 import java.util.Locale;
 
 public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
-    public final Identifier id;
+    public final ResourceLocation id;
     public final String output;
     public final int amount;
     public final List<Ingredient> inputs;
@@ -26,7 +26,7 @@ public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
     private final String group;
     private final int xp;
 
-    public AlloyingRecipe(Identifier id, String group, CraftingRecipeCategory category, String output, List<Ingredient> recipeItems, int amount, int xp) {
+    public AlloyingRecipe(ResourceLocation id, String group, CraftingRecipeCategory category, String output, List<Ingredient> recipeItems, int amount, int xp) {
         this.id = id;
         this.output = output;
         this.group = group;
@@ -56,7 +56,7 @@ public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
     }
 
     @Override
-    public boolean matches(MultipleStackRecipeInput input, World world) {
+    public boolean matches(MultipleStackRecipeInput input, Level world) {
         if(world.isClient()) return false;
         int i = 0;
         for (int j = 0; j < input.size(); j++) {
@@ -88,7 +88,7 @@ public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
     }
 
     @Override
-    public Identifier getId() {
+    public ResourceLocation getId() {
         return id;
     }
 
@@ -129,7 +129,7 @@ public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
         public static final String ID = "alloying";
 
         @Override
-        public AlloyingRecipe read(Identifier id, JsonObject json) {
+        public AlloyingRecipe read(ResourceLocation id, JsonObject json) {
             String group = JsonHelper.getString(json, "group", "");
             CraftingRecipeCategory category = CraftingRecipeCategory.MISC;
             if (JsonHelper.hasString(json, "category")) {
@@ -152,7 +152,7 @@ public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
         }
 
         @Override
-        public AlloyingRecipe read(Identifier id, PacketByteBuf buf) {
+        public AlloyingRecipe read(ResourceLocation id, FriendlyByteBuf buf) {
             String group = buf.readString();
             CraftingRecipeCategory category = buf.readEnumConstant(CraftingRecipeCategory.class);
             String output = buf.readString();
@@ -167,7 +167,7 @@ public class AlloyingRecipe implements Recipe<MultipleStackRecipeInput> {
         }
 
         @Override
-        public void write(PacketByteBuf buf, AlloyingRecipe recipe) {
+        public void write(FriendlyByteBuf buf, AlloyingRecipe recipe) {
             buf.writeString(recipe.group);
             buf.writeEnumConstant(recipe.category);
             buf.writeString(recipe.output);

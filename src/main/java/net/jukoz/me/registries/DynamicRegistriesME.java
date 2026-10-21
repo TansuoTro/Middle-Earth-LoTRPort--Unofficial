@@ -3,11 +3,11 @@ package net.jukoz.me.registries;
 import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryBuilder;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryBuilder;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.RegistryFixedCodec;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.beasts.great_horn.GreatHornVariant;
 import net.jukoz.me.entity.spider.SpiderVariant;
@@ -29,26 +29,26 @@ import net.jukoz.me.resources.datas.texture_presets.CharacterTexturePattern;
 import net.jukoz.me.resources.datas.structure_manager_datas.StructureManagerData;
 
 public class DynamicRegistriesME extends net.jukoz.me.api.registries.DynamicRegistries {
-    public static final RegistryKey<Registry<Race>> RACE = RegistryKey.ofRegistry(MiddleEarth.of("race"));
-    public static final RegistryKey<Registry<Faction>> FACTION = RegistryKey.ofRegistry(MiddleEarth.of("faction"));
-    public static final RegistryKey<Registry<NpcType>> NPC_TYPE = RegistryKey.ofRegistry(MiddleEarth.of("npc_type"));
-    public static final Codec<RegistryEntry<NpcType>> NPC_TYPE_CODEC = RegistryFixedCodec.of(DynamicRegistriesME.NPC_TYPE);
-    public static final RegistryKey<Registry<StructureManagerData>> STRUCTURE_MANAGER_DATA  = RegistryKey.ofRegistry(MiddleEarth.of("structure_manager_data"));
-    public static final RegistryKey<Registry<BiomeEventData>> BIOME_EVENT = RegistryKey.ofRegistry(MiddleEarth.of("biome_event"));
-    public static final RegistryKey<Registry<BiomeEventData>> STRUCTURE_EVENT = RegistryKey.ofRegistry(MiddleEarth.of("structure_event"));
+    public static final ResourceKey<Registry<Race>> RACE = ResourceKey.ofRegistry(MiddleEarth.of("race"));
+    public static final ResourceKey<Registry<Faction>> FACTION = ResourceKey.ofRegistry(MiddleEarth.of("faction"));
+    public static final ResourceKey<Registry<NpcType>> NPC_TYPE = ResourceKey.ofRegistry(MiddleEarth.of("npc_type"));
+    public static final Codec<Holder<NpcType>> NPC_TYPE_CODEC = RegistryFixedCodec.of(DynamicRegistriesME.NPC_TYPE);
+    public static final ResourceKey<Registry<StructureManagerData>> STRUCTURE_MANAGER_DATA  = ResourceKey.ofRegistry(MiddleEarth.of("structure_manager_data"));
+    public static final ResourceKey<Registry<BiomeEventData>> BIOME_EVENT = ResourceKey.ofRegistry(MiddleEarth.of("biome_event"));
+    public static final ResourceKey<Registry<BiomeEventData>> STRUCTURE_EVENT = ResourceKey.ofRegistry(MiddleEarth.of("structure_event"));
 
-    public static final RegistryKey<Registry<TexturePresetDataPool>> TEXTURE_PRESETS = RegistryKey.ofRegistry(MiddleEarth.of( "texture_presets"));
+    public static final ResourceKey<Registry<TexturePresetDataPool>> TEXTURE_PRESETS = ResourceKey.ofRegistry(MiddleEarth.of( "texture_presets"));
 
-    public static final RegistryKey<Registry<CharacterTextureMaterial>> SKIN_MATERIAL = RegistryKey.ofRegistry(MiddleEarth.of("skin_material"));
-    public static final RegistryKey<Registry<CharacterTextureMaterial>> EYE_MATERIAL = RegistryKey.ofRegistry(MiddleEarth.of("eye_material"));
-    public static final RegistryKey<Registry<CharacterTextureMaterial>> HAIR_MATERIAL = RegistryKey.ofRegistry(MiddleEarth.of("hair_material"));
+    public static final ResourceKey<Registry<CharacterTextureMaterial>> SKIN_MATERIAL = ResourceKey.ofRegistry(MiddleEarth.of("skin_material"));
+    public static final ResourceKey<Registry<CharacterTextureMaterial>> EYE_MATERIAL = ResourceKey.ofRegistry(MiddleEarth.of("eye_material"));
+    public static final ResourceKey<Registry<CharacterTextureMaterial>> HAIR_MATERIAL = ResourceKey.ofRegistry(MiddleEarth.of("hair_material"));
 
-    public static final RegistryKey<Registry<CharacterTexturePattern>> SKIN_PATTERN = RegistryKey.ofRegistry(MiddleEarth.of("skin_pattern"));
-    public static final RegistryKey<Registry<CharacterTexturePattern>> EYE_PATTERN = RegistryKey.ofRegistry(MiddleEarth.of("eye_pattern"));
-    public static final RegistryKey<Registry<CharacterTexturePattern>> HAIR_PATTERN = RegistryKey.ofRegistry(MiddleEarth.of("hair_pattern"));
+    public static final ResourceKey<Registry<CharacterTexturePattern>> SKIN_PATTERN = ResourceKey.ofRegistry(MiddleEarth.of("skin_pattern"));
+    public static final ResourceKey<Registry<CharacterTexturePattern>> EYE_PATTERN = ResourceKey.ofRegistry(MiddleEarth.of("eye_pattern"));
+    public static final ResourceKey<Registry<CharacterTexturePattern>> HAIR_PATTERN = ResourceKey.ofRegistry(MiddleEarth.of("hair_pattern"));
 
-    public static final RegistryKey<Registry<SpiderVariant>> SPIDER_VARIANTS = RegistryKey.ofRegistry(MiddleEarth.of("spider_variants"));
-    public static final RegistryKey<Registry<GreatHornVariant>> GREAT_HORN_VARIANTS = RegistryKey.ofRegistry(MiddleEarth.of("great_horn_variants"));
+    public static final ResourceKey<Registry<SpiderVariant>> SPIDER_VARIANTS = ResourceKey.ofRegistry(MiddleEarth.of("spider_variants"));
+    public static final ResourceKey<Registry<GreatHornVariant>> GREAT_HORN_VARIANTS = ResourceKey.ofRegistry(MiddleEarth.of("great_horn_variants"));
 
     public static void register() {
         net.jukoz.me.entity.EntityAttributesME.register();

@@ -1,6 +1,6 @@
 package net.jukoz.me.gui.utils.widgets.backgrounds;
 
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.jukoz.me.gui.utils.widgets.ModWidget;
 import net.jukoz.me.gui.utils.widgets.UiDirections;
 import net.jukoz.me.gui.utils.widgets.backgrounds.types.BackgroundContainerTypes;

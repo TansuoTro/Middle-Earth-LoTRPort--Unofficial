@@ -2,10 +2,10 @@ package net.jukoz.me.resources.datas.npc_types;
 
 import net.jukoz.me.item.items.weapons.ReachWeaponItem;
 import net.jukoz.me.resources.datas.npc_types.data.WeightedGearData;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 public class NpcUtil {
     public static void equipAll(LivingEntity entity, WeightedGearData data) {

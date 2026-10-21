@@ -2,23 +2,23 @@ package net.jukoz.me.block.special;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 public class WebbingBlock extends MultifaceGrowthBlock {
-    public static final BooleanProperty PERSISTENT = Properties.PERSISTENT;
+    public static final BooleanProperty PERSISTENT = BlockStateProperties.PERSISTENT;
     private final LichenGrower grower = new LichenGrower(this);
 
     public WebbingBlock(Settings settings) {
@@ -34,16 +34,16 @@ public class WebbingBlock extends MultifaceGrowthBlock {
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(PERSISTENT);
         super.appendProperties(builder);
     }
 
-    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-        Vec3d vec3d = new Vec3d(0.75, 0.50, 0.75);
+    public void onEntityCollision(BlockState state, Level world, BlockPos pos, Entity entity) {
+        Vec3 vec3d = new Vec3(0.75, 0.50, 0.75);
         if (entity instanceof LivingEntity livingEntity) {
             if (livingEntity.hasStatusEffect(StatusEffects.SLOWNESS)) {
-                vec3d = new Vec3d(0.90, 0.75, 0.90);
+                vec3d = new Vec3(0.90, 0.75, 0.90);
             }
         }
 
@@ -51,10 +51,10 @@ public class WebbingBlock extends MultifaceGrowthBlock {
     }
 
     @Override
-    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos fromPos, boolean notify) {
+    public void neighborUpdate(BlockState state, Level world, BlockPos pos, Block sourceBlock, BlockPos fromPos, boolean notify) {
         if (!world.isClient) {
             for (Direction direction : Direction.values()) {
-                if (world.getFluidState(pos.offset(direction)).isIn(net.minecraft.registry.tag.FluidTags.WATER)) {
+                if (world.getFluidState(pos.offset(direction)).isIn(net.minecraft.tags.FluidTags.WATER)) {
                     world.breakBlock(pos, true);
                     return;
                 }
@@ -67,7 +67,7 @@ public class WebbingBlock extends MultifaceGrowthBlock {
         return !(Boolean)state.get(PERSISTENT);
     }
 
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         if (this.shouldDecay(state)) {
             world.removeBlock(pos, false);
         }

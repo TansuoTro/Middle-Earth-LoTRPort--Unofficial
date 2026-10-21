@@ -2,20 +2,20 @@ package net.jukoz.me.entity.npcs.renderer.features.hair;
 import net.jukoz.me.entity.npcs.NpcEntity;
 import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.render.OverlayTexture;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.client.model.EntityModel;
 import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.jukoz.me.compat.client.render.state.LivingEntityRenderState;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.client.ModTexturedRenderLayers;
 import net.jukoz.me.config.ModClientConfigs;
@@ -25,7 +25,7 @@ import net.jukoz.me.entity.npcs.renderer.NpcEntityRenderState;
 import net.jukoz.me.registries.AtlasesME;
 
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class HairFeatureRenderer extends MEFeatureRenderer<NpcEntity, NpcEntityRenderState, NpcEntityModel> {
     private final HairModel hairModel;
     private final SpriteAtlasTexture characterTexturesAtlas;
@@ -37,17 +37,17 @@ public class HairFeatureRenderer extends MEFeatureRenderer<NpcEntity, NpcEntityR
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, NpcEntityRenderState state, float limbAngle, float limbDistance) {
+    public void render(PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, NpcEntityRenderState state, float limbAngle, float limbDistance) {
         HairModel entityModel = hairModel;
 
         boolean isSimplified = ModClientConfigs.ENABLE_SIMPLIFIED_CHARACTER_RENDERING && state.simplifiedSkinId != null;
-        Identifier hairAddonTextureId = (isSimplified) ? state.simplifiedHairAddonId : MiddleEarth.ofPrefix(state.hairAddonId, AtlasesME.HAIR_PREFIX);
-        Identifier beardAddonTextureId =  (isSimplified) ? null : MiddleEarth.ofPrefix(state.beardAddonId, AtlasesME.HAIR_PREFIX);
+        ResourceLocation hairAddonTextureId = (isSimplified) ? state.simplifiedHairAddonId : MiddleEarth.ofPrefix(state.hairAddonId, AtlasesME.HAIR_PREFIX);
+        ResourceLocation beardAddonTextureId =  (isSimplified) ? null : MiddleEarth.ofPrefix(state.beardAddonId, AtlasesME.HAIR_PREFIX);
 
 
         // TODO : Disable the beard based on the helmet
         /*
-        if (entity.getEquippedStack(EquipmentSlot.HEAD).isIn(TagK°.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "helmet_hides_dwarf_beard")))){
+        if (entity.getEquippedStack(EquipmentSlot.HEAD).isIn(TagK°.of(RegistryKeys.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "helmet_hides_dwarf_beard")))){
          */
 
         if(hairAddonTextureId == null && beardAddonTextureId == null){
@@ -71,7 +71,7 @@ public class HairFeatureRenderer extends MEFeatureRenderer<NpcEntity, NpcEntityR
         }
     }
 
-    private void renderModel(Sprite sprite, MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay){
+    private void renderModel(Sprite sprite, PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay){
         if(sprite != null){
             VertexConsumer newLayerVertexConsumer = sprite.getTextureSpecificVertexConsumer(vertexConsumer);
             hairModel.render(matrices, newLayerVertexConsumer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);

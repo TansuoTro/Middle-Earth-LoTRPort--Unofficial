@@ -1,23 +1,23 @@
 package net.jukoz.me.block.special.plate;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
-import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.block.entity.BlockEntityRenderer;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
-import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererFactory;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.math.*;
 import net.minecraft.world.LightType;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.item.MEComponents;
 import net.jukoz.me.block.special.forge.ForgeBlock;
 
@@ -31,13 +31,13 @@ public class PlateEntityRenderer implements BlockEntityRenderer<PlateBlockEntity
     }
 
     @Override
-    public void render(PlateBlockEntity entity, float tickProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+    public void render(PlateBlockEntity entity, float tickProgress, PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         ItemStack stack = entity.getStack();
 
         if(stack.isEmpty()) return;
 
-        Identifier oldId = MEComponents.get(stack, MEComponents.ITEM_MODEL);
-        Identifier modelId = PlateFoodModels.getPlateIdentifier(oldId);
+        ResourceLocation oldId = MEComponents.get(stack, MEComponents.ITEM_MODEL);
+        ResourceLocation modelId = PlateFoodModels.getPlateIdentifier(oldId);
         ItemStack copyStack = stack.copy();
         MEComponents.set(copyStack, MEComponents.ITEM_MODEL, modelId);
 
@@ -82,7 +82,7 @@ public class PlateEntityRenderer implements BlockEntityRenderer<PlateBlockEntity
         matrices.pop();
     }
 
-    private int getLightLevel(World world, BlockPos pos, Direction direction) {
+    private int getLightLevel(Level world, BlockPos pos, Direction direction) {
         int bLight = world.getLightLevel(LightType.BLOCK, pos.offset(direction).up());
         int sLight = world.getLightLevel(LightType.SKY, pos.offset(direction).up());
         return LightmapTextureManager.pack(bLight, sLight);

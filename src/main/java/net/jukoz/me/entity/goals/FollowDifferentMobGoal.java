@@ -1,14 +1,14 @@
 package net.jukoz.me.entity.goals;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.control.LookControl;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.control.LookControl;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.pathing.BirdNavigation;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.ai.pathing.MobNavigation;
-import net.minecraft.entity.ai.pathing.PathNodeType;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.level.pathfinder.PathNodeType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.predicate.entity.EntityPredicates;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,11 +16,11 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class FollowDifferentMobGoal<T extends MobEntity> extends Goal {
-    private final MobEntity mob;
-    private final Predicate<MobEntity> targetPredicate;
+public class FollowDifferentMobGoal<T extends Mob> extends Goal {
+    private final Mob mob;
+    private final Predicate<Mob> targetPredicate;
     @Nullable
-    private MobEntity target;
+    private Mob target;
     private final double speed;
     private final EntityNavigation navigation;
     private int updateCountdownTicks;
@@ -29,7 +29,7 @@ public class FollowDifferentMobGoal<T extends MobEntity> extends Goal {
     private final float maxDistance;
     private final Class<T> followedClass;
 
-    public FollowDifferentMobGoal(MobEntity follower, Class<T> followed, double speed, float minDistance, float maxDistance) {
+    public FollowDifferentMobGoal(Mob follower, Class<T> followed, double speed, float minDistance, float maxDistance) {
         this.mob = follower;
         this.followedClass = followed;
         this.targetPredicate = target -> target != null && followed != target.getClass();
@@ -47,7 +47,7 @@ public class FollowDifferentMobGoal<T extends MobEntity> extends Goal {
     public boolean canStart() {
         List<T> list = this.mob.getWorld().getEntitiesByClass(this.followedClass, this.mob.getBoundingBox().expand(this.maxDistance), EntityPredicates.VALID_ENTITY);
         if (!list.isEmpty()) {
-            for (MobEntity mobEntity : list) {
+            for (Mob mobEntity : list) {
                 if (!mobEntity.isInvisible()) {
                     this.target = mobEntity;
                     return true;

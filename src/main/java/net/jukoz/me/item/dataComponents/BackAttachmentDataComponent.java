@@ -3,16 +3,16 @@ package net.jukoz.me.item.dataComponents;
 import net.jukoz.me.item.MEComponents;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.compat.DyedColorComponent;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.jukoz.me.compat.TooltipAppender;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Formatting;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.item.utils.armor.DyeablePiecesME;
 import net.jukoz.me.item.utils.armor.backAttachments.BackAttachmentsME;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
 import net.minecraft.util.math.ColorHelper;
@@ -29,7 +29,7 @@ public record BackAttachmentDataComponent(BackAttachmentsME backAttachment, int 
     public static final Codec<BackAttachmentDataComponent> CODEC  = ComponentCodecs.alternative(BASE_CODEC, Codec.BOOL, (enabled) -> {
         return new BackAttachmentDataComponent(BackAttachmentsME.CAPE, DyedColorComponent.DEFAULT_COLOR);
     });
-    public static final PacketCodec<PacketByteBuf, BackAttachmentDataComponent> PACKET_CODEC  = PacketCodec.tuple(BackAttachmentsME.PACKET_CODEC, BackAttachmentDataComponent::getBackAttachment, PacketCodecs.INTEGER, BackAttachmentDataComponent::backAttachmentColor, BackAttachmentDataComponent::new);
+    public static final PacketCodec<FriendlyByteBuf, BackAttachmentDataComponent> PACKET_CODEC  = PacketCodec.tuple(BackAttachmentsME.PACKET_CODEC, BackAttachmentDataComponent::getBackAttachment, PacketCodecs.INTEGER, BackAttachmentDataComponent::backAttachmentColor, BackAttachmentDataComponent::new);
     ;
 
     public BackAttachmentDataComponent(BackAttachmentsME backAttachment, int backAttachmentColor){
@@ -74,7 +74,7 @@ public record BackAttachmentDataComponent(BackAttachmentsME backAttachment, int 
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, net.minecraft.client.item.TooltipContext context, List<Text> tooltip) {
-        tooltip.add(Text.translatable("tooltip.%s.%s".formatted(MiddleEarth.MOD_ID, this.backAttachment().getName())).formatted(Formatting.GRAY));
+    public void appendTooltip(ItemStack stack, net.minecraft.client.item.TooltipContext context, List<Component> tooltip) {
+        tooltip.add(Component.translatable("tooltip.%s.%s".formatted(MiddleEarth.MOD_ID, this.backAttachment().getName())).formatted(Formatting.GRAY));
     }
 }

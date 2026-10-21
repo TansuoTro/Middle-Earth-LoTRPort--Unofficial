@@ -1,9 +1,9 @@
 package net.jukoz.me.item;
 
 import net.minecraft.item.FoodComponent;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.minecraft.resource.featuretoggle.FeatureFlag;
-import net.minecraft.util.Rarity;
+import net.minecraft.world.item.Rarity;
 
 import java.util.Collections;
 import java.util.IdentityHashMap;
@@ -69,21 +69,21 @@ public class MESettings extends Item.Settings {
         return this.unbreakable;
     }
 
-    private java.util.List<net.minecraft.text.Text> lore;
+    private java.util.List<net.minecraft.network.chat.Component> lore;
     private String bannerPatternTag;
 
     /** 1.21's LORE component: lines every stack of the item shows in its tooltip. */
-    public MESettings lore(java.util.List<net.minecraft.text.Text> lines) {
+    public MESettings lore(java.util.List<net.minecraft.network.chat.Component> lines) {
         this.lore = lines;
         return this;
     }
 
-    public java.util.List<net.minecraft.text.Text> lore() {
+    public java.util.List<net.minecraft.network.chat.Component> lore() {
         return this.lore;
     }
 
     /** 1.21's PROVIDES_BANNER_PATTERNS component; the tag id is kept for the loom integration. */
-    public MESettings providesBannerPatterns(net.minecraft.registry.tag.TagKey<?> tag) {
+    public MESettings providesBannerPatterns(net.minecraft.tags.TagKey<?> tag) {
         this.bannerPatternTag = tag.id().toString();
         return this;
     }
@@ -101,7 +101,7 @@ public class MESettings extends Item.Settings {
     }
 
     /** 1.21's {@code horseArmor(ArmorMaterial)}: 1.20.1 sets horse armour on the item class. */
-    public MESettings horseArmor(net.minecraft.item.ArmorMaterial material) {
+    public MESettings horseArmor(net.minecraft.world.item.ArmorMaterial material) {
         return this;
     }
 

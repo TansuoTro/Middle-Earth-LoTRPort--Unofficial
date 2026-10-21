@@ -1,7 +1,7 @@
 package net.jukoz.me.compat;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 
 /**
  * The donor's "blunted" state for artefact weapons.
@@ -20,7 +20,7 @@ public final class BluntWeapon {
     }
 
     public static boolean isBlunted(ItemStack stack) {
-        NbtCompound nbt = stack.getNbt();
+        CompoundTag nbt = stack.getNbt();
         return nbt != null && nbt.getBoolean(KEY);
     }
 

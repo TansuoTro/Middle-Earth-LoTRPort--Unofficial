@@ -3,15 +3,15 @@ import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatEntity;
 import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
 import com.google.common.collect.Maps;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatBeads;
 import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatEntityRenderState;
@@ -22,9 +22,9 @@ import java.util.Map;
 
 public class BroadhoofGoatBeadsFeatureRenderer extends MEFeatureRenderer<BroadhoofGoatEntity, BroadhoofGoatEntityRenderState, BroadhoofGoatModel> {
     private static final String PATH = "textures/entities/broadhoof_goat/beads/";
-    private static final Identifier INVISIBLE_ID = new Identifier("minecraft", "invisible");
+    private static final ResourceLocation INVISIBLE_ID = new ResourceLocation("minecraft", "invisible");
 
-    private static final Map<BroadhoofGoatBeads, Identifier> TEXTURES = Maps.newEnumMap(
+    private static final Map<BroadhoofGoatBeads, ResourceLocation> TEXTURES = Maps.newEnumMap(
             Map.of(
                     BroadhoofGoatBeads.NONE,
                     INVISIBLE_ID,
@@ -46,9 +46,9 @@ public class BroadhoofGoatBeadsFeatureRenderer extends MEFeatureRenderer<Broadho
     }
 
     public void render(
-            MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, BroadhoofGoatEntityRenderState state, float f, float g
+            PoseStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, BroadhoofGoatEntityRenderState state, float f, float g
     ) {
-        Identifier identifier = (Identifier)TEXTURES.get(state.beads);
+        ResourceLocation identifier = (ResourceLocation)TEXTURES.get(state.beads);
         if (identifier != INVISIBLE_ID && !state.invisible) {
             VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEntityTranslucent(identifier));
             this.getContextModel().render(matrixStack, vertexConsumer, i, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);

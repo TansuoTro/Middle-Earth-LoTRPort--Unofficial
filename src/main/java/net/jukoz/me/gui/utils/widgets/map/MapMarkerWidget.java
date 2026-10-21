@@ -1,7 +1,7 @@
 package net.jukoz.me.gui.utils.widgets.map;
 import net.jukoz.me.compat.METext;
 
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.utils.widgets.ModWidget;
 import net.jukoz.me.gui.utils.widgets.UiDirections;
@@ -10,9 +10,9 @@ import net.jukoz.me.gui.utils.widgets.map.types.MapMarkerType;
 import net.jukoz.me.utils.ModColors;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import org.joml.Vector2d;
 import org.joml.Vector2i;
 
@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class MapMarkerWidget extends ModWidget {
-    private static final Identifier MAP_MARKERS = new Identifier(MiddleEarth.MOD_ID,"textures/gui/widget/map_markers.png");
-    private static final Identifier MAP_ARROWS = new Identifier(MiddleEarth.MOD_ID,"textures/gui/widget/map_arrows.png");
+    private static final ResourceLocation MAP_MARKERS = new ResourceLocation(MiddleEarth.MOD_ID,"textures/gui/widget/map_markers.png");
+    private static final ResourceLocation MAP_ARROWS = new ResourceLocation(MiddleEarth.MOD_ID,"textures/gui/widget/map_arrows.png");
 
     private ButtonWidget markerButton;
     private MapMarkerType type;
@@ -32,13 +32,13 @@ public class MapMarkerWidget extends ModWidget {
     private Vector2i runtimeStartCoordinates = null;
     private boolean isArrow;
     private boolean isSelected;
-    private static Text TITLE;
-    private List<Text> content;
+    private static Component TITLE;
+    private List<Component> content;
     private List<MapMarkerWidget> childs = new ArrayList<>();
     private Rectangle2D borders;
     public MapMarkerWidget(String name, ButtonWidget.PressAction onPress, Rectangle2D borders) {
         super();
-        markerButton = ButtonWidget.builder(Text.of(name), onPress).build();
+        markerButton = ButtonWidget.builder(Component.of(name), onPress).build();
         type = MapMarkerType.NONE;
         arrowType = MapArrowType.NORMAL;
         isArrow = false;
@@ -160,7 +160,7 @@ public class MapMarkerWidget extends ModWidget {
         }
         if(mouseIsOver){
             int maxChildDisplay = 2;
-            List<Text> texts = new ArrayList<>();
+            List<Component> texts = new ArrayList<>();
             boolean haveChilds = childs != null && !childs.isEmpty();
             if(haveChilds)
                 texts.add(TITLE);
@@ -170,7 +170,7 @@ public class MapMarkerWidget extends ModWidget {
                     texts.addAll(childs.get(i).getContent());
                 }
                 if(childs.size() > maxChildDisplay){
-                    texts.add(Text.translatable("widget.%s.marker.more".formatted(MiddleEarth.MOD_ID)).formatted(Formatting.BLUE));
+                    texts.add(Component.translatable("widget.%s.marker.more".formatted(MiddleEarth.MOD_ID)).formatted(Formatting.BLUE));
                 }
             }
             context.drawTooltip(client.textRenderer, texts, Optional.empty(), drawStart.x + (drawSize.x / 2), drawStart.y + (drawSize.y / 2));
@@ -187,13 +187,13 @@ public class MapMarkerWidget extends ModWidget {
         }
     }
 
-    private List<Text> getContent() {
+    private List<Component> getContent() {
         if(isSelected){
-            List<Text> modifiedList = new ArrayList<>();
+            List<Component> modifiedList = new ArrayList<>();
             modifiedList.add(
-                    Text.translatable("widget.%s.marker.selected_title_container.before".formatted(MiddleEarth.MOD_ID))
+                    Component.translatable("widget.%s.marker.selected_title_container.before".formatted(MiddleEarth.MOD_ID))
                             .append(METext.withColor( content.get(0).copy(), ModColors.SUCCESS.color))
-                            .append(Text.translatable("widget.%s.marker.selected_title_container.after".formatted(MiddleEarth.MOD_ID))));
+                            .append(Component.translatable("widget.%s.marker.selected_title_container.after".formatted(MiddleEarth.MOD_ID))));
             for(int i = 1; i < content.size(); i++){
                 modifiedList.add(content.get(i));
             }
@@ -202,10 +202,10 @@ public class MapMarkerWidget extends ModWidget {
         return this.content;
     }
 
-    public static void setTitle(Text title){
+    public static void setTitle(Component title){
         TITLE = title;
     }
-    public void setContent(List<Text> content){
+    public void setContent(List<Component> content){
         this.content = content;
     }
 

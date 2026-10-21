@@ -1,88 +1,88 @@
 package net.jukoz.me.item.utils;
 
 import net.jukoz.me.MiddleEarth;
-import net.minecraft.block.entity.BannerPattern;
-import net.minecraft.registry.Registerable;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.datageneration.content.TranslationEntries;
 
 public class BannerPatternsME {
-    private static final java.util.List<RegistryKey<BannerPattern>> ALL = new java.util.ArrayList<>();
-    public static final RegistryKey<BannerPattern> TREE = key("tree");
-    public static final RegistryKey<BannerPattern> HORSE = key("horse");
-    public static final RegistryKey<BannerPattern> HORSE_HEAD = key("horse_head");
-    public static final RegistryKey<BannerPattern> GOLDENWOOD = key("goldenwood");
-    public static final RegistryKey<BannerPattern> STAR_AND_LEAF = key("star_and_leaf");
-    public static final RegistryKey<BannerPattern> MALLORN = key("mallorn");
-    public static final RegistryKey<BannerPattern> EYE_OF_SAURON = key("eye_of_sauron");
-    public static final RegistryKey<BannerPattern> GREAT_EYE = key("great_eye");
-    public static final RegistryKey<BannerPattern> PAINTED_EYE = key("painted_eye");
-    public static final RegistryKey<BannerPattern> EVIL_EYE = key("evil_eye");
-    public static final RegistryKey<BannerPattern> EVIL_PEAKS = key("evil_peaks");
-    public static final RegistryKey<BannerPattern> HAND = key("hand");
-    public static final RegistryKey<BannerPattern> SCREECHING_SKULL = key("screeching_skull");
-    public static final RegistryKey<BannerPattern> GOBLIN_SKULL = key("goblin_skull");
-    public static final RegistryKey<BannerPattern> ANTLERS = key("antlers");
-    public static final RegistryKey<BannerPattern> ANTLERS_TOP = key("antlers_top");
-    public static final RegistryKey<BannerPattern> ELK = key("elk");
-    public static final RegistryKey<BannerPattern> ELK_ANTLERS = key("elk_antlers");
-    public static final RegistryKey<BannerPattern> ELK_SHED = key("elk_shed");
-    public static final RegistryKey<BannerPattern> STAG = key("stag");
-    public static final RegistryKey<BannerPattern> STAG_ANTLERS = key("stag_antlers");
-    public static final RegistryKey<BannerPattern> STAG_SHED = key("stag_shed");
-    public static final RegistryKey<BannerPattern> OAK_LEAF = key("oak_leaf");
+    private static final java.util.List<ResourceKey<BannerPattern>> ALL = new java.util.ArrayList<>();
+    public static final ResourceKey<BannerPattern> TREE = key("tree");
+    public static final ResourceKey<BannerPattern> HORSE = key("horse");
+    public static final ResourceKey<BannerPattern> HORSE_HEAD = key("horse_head");
+    public static final ResourceKey<BannerPattern> GOLDENWOOD = key("goldenwood");
+    public static final ResourceKey<BannerPattern> STAR_AND_LEAF = key("star_and_leaf");
+    public static final ResourceKey<BannerPattern> MALLORN = key("mallorn");
+    public static final ResourceKey<BannerPattern> EYE_OF_SAURON = key("eye_of_sauron");
+    public static final ResourceKey<BannerPattern> GREAT_EYE = key("great_eye");
+    public static final ResourceKey<BannerPattern> PAINTED_EYE = key("painted_eye");
+    public static final ResourceKey<BannerPattern> EVIL_EYE = key("evil_eye");
+    public static final ResourceKey<BannerPattern> EVIL_PEAKS = key("evil_peaks");
+    public static final ResourceKey<BannerPattern> HAND = key("hand");
+    public static final ResourceKey<BannerPattern> SCREECHING_SKULL = key("screeching_skull");
+    public static final ResourceKey<BannerPattern> GOBLIN_SKULL = key("goblin_skull");
+    public static final ResourceKey<BannerPattern> ANTLERS = key("antlers");
+    public static final ResourceKey<BannerPattern> ANTLERS_TOP = key("antlers_top");
+    public static final ResourceKey<BannerPattern> ELK = key("elk");
+    public static final ResourceKey<BannerPattern> ELK_ANTLERS = key("elk_antlers");
+    public static final ResourceKey<BannerPattern> ELK_SHED = key("elk_shed");
+    public static final ResourceKey<BannerPattern> STAG = key("stag");
+    public static final ResourceKey<BannerPattern> STAG_ANTLERS = key("stag_antlers");
+    public static final ResourceKey<BannerPattern> STAG_SHED = key("stag_shed");
+    public static final ResourceKey<BannerPattern> OAK_LEAF = key("oak_leaf");
 
-    public static final RegistryKey<BannerPattern> DRAGON = key("dragon");
-    public static final RegistryKey<BannerPattern> SNAIL = key("snail");
+    public static final ResourceKey<BannerPattern> DRAGON = key("dragon");
+    public static final ResourceKey<BannerPattern> SNAIL = key("snail");
 
-    public static final RegistryKey<BannerPattern> CLOTH = key("cloth");
-    public static final RegistryKey<BannerPattern> CLOTH_GRADIENT = key("cloth_gradient");
-    public static final RegistryKey<BannerPattern> CLOTH_GRADIENT_UP = key("cloth_gradient_up");
-    public static final RegistryKey<BannerPattern> VEIL = key("veil");
+    public static final ResourceKey<BannerPattern> CLOTH = key("cloth");
+    public static final ResourceKey<BannerPattern> CLOTH_GRADIENT = key("cloth_gradient");
+    public static final ResourceKey<BannerPattern> CLOTH_GRADIENT_UP = key("cloth_gradient_up");
+    public static final ResourceKey<BannerPattern> VEIL = key("veil");
 
-    public static final RegistryKey<BannerPattern> ANVIL = key("anvil");
-    public static final RegistryKey<BannerPattern> ANVIL_BOTTOM = key("anvil_bottom");
-    public static final RegistryKey<BannerPattern> ANVIL_HAMMER = key("anvil_hammer");
-    public static final RegistryKey<BannerPattern> ANVIL_HAMMER_BOTTOM = key("anvil_hammer_bottom");
-    public static final RegistryKey<BannerPattern> ANVIL_HAMMER_TOP = key("anvil_hammer_top");
-    public static final RegistryKey<BannerPattern> ANVIL_TOP = key("anvil_top");
+    public static final ResourceKey<BannerPattern> ANVIL = key("anvil");
+    public static final ResourceKey<BannerPattern> ANVIL_BOTTOM = key("anvil_bottom");
+    public static final ResourceKey<BannerPattern> ANVIL_HAMMER = key("anvil_hammer");
+    public static final ResourceKey<BannerPattern> ANVIL_HAMMER_BOTTOM = key("anvil_hammer_bottom");
+    public static final ResourceKey<BannerPattern> ANVIL_HAMMER_TOP = key("anvil_hammer_top");
+    public static final ResourceKey<BannerPattern> ANVIL_TOP = key("anvil_top");
 
-    public static final RegistryKey<BannerPattern> BELL = key("bell");
-    public static final RegistryKey<BannerPattern> BELL_BOTTOM = key("bell_bottom");
-    public static final RegistryKey<BannerPattern> BELL_TOP = key("bell_top");
+    public static final ResourceKey<BannerPattern> BELL = key("bell");
+    public static final ResourceKey<BannerPattern> BELL_BOTTOM = key("bell_bottom");
+    public static final ResourceKey<BannerPattern> BELL_TOP = key("bell_top");
 
-    public static final RegistryKey<BannerPattern> BOW = key("bow");
-    public static final RegistryKey<BannerPattern> BOW_DOWN = key("bow_down");
-    public static final RegistryKey<BannerPattern> BOW_FLAT_BOTTOM = key("bow_flat_bottom");
-    public static final RegistryKey<BannerPattern> BOW_FLAT_CENTER = key("bow_flat_center");
-    public static final RegistryKey<BannerPattern> BOW_FLAT_TOP = key("bow_flat_top");
-    public static final RegistryKey<BannerPattern> BOW_LONG = key("bow_long");
-    public static final RegistryKey<BannerPattern> BOW_UP = key("bow_up");
+    public static final ResourceKey<BannerPattern> BOW = key("bow");
+    public static final ResourceKey<BannerPattern> BOW_DOWN = key("bow_down");
+    public static final ResourceKey<BannerPattern> BOW_FLAT_BOTTOM = key("bow_flat_bottom");
+    public static final ResourceKey<BannerPattern> BOW_FLAT_CENTER = key("bow_flat_center");
+    public static final ResourceKey<BannerPattern> BOW_FLAT_TOP = key("bow_flat_top");
+    public static final ResourceKey<BannerPattern> BOW_LONG = key("bow_long");
+    public static final ResourceKey<BannerPattern> BOW_UP = key("bow_up");
 
-    public static final RegistryKey<BannerPattern> DWARF_CROWN = key("dwarf_crown");
-    public static final RegistryKey<BannerPattern> DWARF_CROWN_BOTTOM = key("dwarf_crown_bottom");
-    public static final RegistryKey<BannerPattern> DWARF_CROWN_TOP = key("dwarf_crown_top");
+    public static final ResourceKey<BannerPattern> DWARF_CROWN = key("dwarf_crown");
+    public static final ResourceKey<BannerPattern> DWARF_CROWN_BOTTOM = key("dwarf_crown_bottom");
+    public static final ResourceKey<BannerPattern> DWARF_CROWN_TOP = key("dwarf_crown_top");
 
-    public static final RegistryKey<BannerPattern> SMALL_CIRCLE = key("small_circle");
-    public static final RegistryKey<BannerPattern> PIPE = key("pipe");
-    public static final RegistryKey<BannerPattern> SPIDER = key("spider");
+    public static final ResourceKey<BannerPattern> SMALL_CIRCLE = key("small_circle");
+    public static final ResourceKey<BannerPattern> PIPE = key("pipe");
+    public static final ResourceKey<BannerPattern> SPIDER = key("spider");
 
-    private static RegistryKey<BannerPattern> key(String id) {
+    private static ResourceKey<BannerPattern> key(String id) {
         TranslationEntries.bannerPatternEntries.add(id);
-        RegistryKey<BannerPattern> key = RegistryKey.of(RegistryKeys.BANNER_PATTERN, new Identifier(MiddleEarth.MOD_ID, id));
+        ResourceKey<BannerPattern> key = ResourceKey.of(Registries.BANNER_PATTERN, new ResourceLocation(MiddleEarth.MOD_ID, id));
         ALL.add(key);
         return key;
     }
 
-    public static void registerRuntime(net.minecraft.registry.Registry<BannerPattern> registry) {
-        for (RegistryKey<BannerPattern> key : ALL) {
-            net.minecraft.registry.Registry.register(registry, key, new BannerPattern(key.getValue().toString()));
+    public static void registerRuntime(net.minecraft.core.Registry<BannerPattern> registry) {
+        for (ResourceKey<BannerPattern> key : ALL) {
+            net.minecraft.core.Registry.register(registry, key, new BannerPattern(key.getValue().toString()));
         }
     }
 
-    public static void register(Registerable<BannerPattern> registry) {
+    public static void register(BootstrapContext<BannerPattern> registry) {
         register(registry, TREE);
         register(registry, HORSE);
         register(registry, HORSE_HEAD);
@@ -143,7 +143,7 @@ public class BannerPatternsME {
         register(registry, SPIDER);
     }
 
-    public static void register(Registerable<BannerPattern> registry, RegistryKey<BannerPattern> key) {
+    public static void register(BootstrapContext<BannerPattern> registry, ResourceKey<BannerPattern> key) {
         registry.register(key, new BannerPattern(key.getValue().toString()));
     }
 }

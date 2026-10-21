@@ -5,14 +5,14 @@ import net.jukoz.me.item.MEComponents;
 
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.entity.ExperienceOrbEntity;
-import net.minecraft.item.trim.ArmorTrim;
-import net.minecraft.item.trim.ArmorTrimMaterial;
-import net.minecraft.item.trim.ArmorTrimPattern;
-import net.minecraft.recipe.RecipeManager;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.item.armortrim.ArmorTrim;
+import net.minecraft.world.item.armortrim.ArmorTrimMaterial;
+import net.minecraft.world.item.armortrim.ArmorTrimPattern;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.server.level.ServerLevel;
 import net.jukoz.me.compat.nbt.ReadView;
 import net.jukoz.me.compat.nbt.WriteView;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
@@ -22,42 +22,42 @@ import net.jukoz.me.gui.forge.ForgeAlloyingScreenHandler;
 import net.jukoz.me.item.ResourceItemsME;
 import net.jukoz.me.item.dataComponents.TemperatureDataComponent;
 import net.jukoz.me.recipe.AlloyingRecipe;
-import net.minecraft.block.AbstractFurnaceBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.world.level.block.AbstractFurnaceBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.RegistryWrapper;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.recipe.RecipesME;
 import org.jetbrains.annotations.Nullable;
 
@@ -133,8 +133,8 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("screen." + MiddleEarth.MOD_ID + "." + ID);
+    public Component getDisplayName() {
+        return Component.translatable("screen." + MiddleEarth.MOD_ID + "." + ID);
     }
 
     public int getStorage() {
@@ -147,12 +147,12 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, Player player) {
         return new ForgeAlloyingScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
-    public int hasBellows(World world, BlockPos pos, BlockState state){
-        Direction direction = state.get(Properties.HORIZONTAL_FACING);
+    public int hasBellows(Level world, BlockPos pos, BlockState state){
+        Direction direction = state.get(BlockStateProperties.HORIZONTAL_FACING);
         BlockPos pos1 = pos.offset(direction.rotateYClockwise());
         BlockPos pos2 = pos.offset(direction.rotateYClockwise().getOpposite());
 
@@ -195,7 +195,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt) {
+    protected void writeNbt(CompoundTag nbt) {
         super.writeNbt(nbt);
         WriteView view = new WriteView(nbt);
         Inventories.writeNbt(view.nbt(), this.inventory, true);
@@ -209,7 +209,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
     }
 
     @Override
-    public void readNbt(NbtCompound nbt) {
+    public void readNbt(CompoundTag nbt) {
         super.readNbt(nbt);
         ReadView view = new ReadView(nbt);
         this.inventory.clear();
@@ -229,7 +229,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt() {
+    public CompoundTag toInitialChunkDataNbt() {
         return createNbt();
     }
 
@@ -313,7 +313,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
+    public boolean canPlayerUse(Player player) {
         return Inventory.canPlayerUse(this, player);
     }
 
@@ -327,7 +327,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
         update();
     }
 
-    public static void switchMode(Vec3d coords, ServerPlayerEntity player){
+    public static void switchMode(Vec3 coords, ServerPlayer player){
         BlockPos pos = new BlockPos((int) coords.getX(), (int) coords.getY(), (int) coords.getZ());
         Optional<ForgeBlockEntity> forgeBlockEntity = player.getWorld().getBlockEntity(pos, ModBlockEntities.FORGE);
 
@@ -341,7 +341,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
         }
     }
 
-    public static void outputItemStack(int amount, Vec3d coords, ServerPlayerEntity player, int mode){
+    public static void outputItemStack(int amount, Vec3 coords, ServerPlayer player, int mode){
         BlockPos pos = new BlockPos((int) coords.getX(), (int) coords.getY(), (int) coords.getZ());
 
         Optional<ForgeBlockEntity> forgeBlockEntity = player.getWorld().getBlockEntity(pos, ModBlockEntities.FORGE);
@@ -352,8 +352,8 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
 
             if (entity.getStack(OUTPUT_SLOT).getMaxCount() <= entity.getStack(OUTPUT_SLOT).getCount()) return;
 
-            RegistryWrapper.Impl<ArmorTrimMaterial>  armorTrimMaterialRegistry = entity.getWorld().getRegistryManager().getWrapperOrThrow(RegistryKeys.TRIM_MATERIAL);
-            RegistryWrapper.Impl<ArmorTrimPattern>  armorTrimPatternRegistry = entity.getWorld().getRegistryManager().getWrapperOrThrow(RegistryKeys.TRIM_PATTERN);
+            RegistryWrapper.Impl<ArmorTrimMaterial>  armorTrimMaterialRegistry = entity.getWorld().getRegistryManager().getWrapperOrThrow(Registries.TRIM_MATERIAL);
+            RegistryWrapper.Impl<ArmorTrimPattern>  armorTrimPatternRegistry = entity.getWorld().getRegistryManager().getWrapperOrThrow(Registries.TRIM_PATTERN);
 
             switch (amount){
                 case 16 -> {
@@ -383,12 +383,12 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
                     }
                     else if(entity.currentMetal.isVanilla()) {
                         MEArmorTrim.set(itemstack, new ArmorTrim(
-                                armorTrimMaterialRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_MATERIAL, new Identifier(entity.currentMetal.getName()))),
-                                armorTrimPatternRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_PATTERN, new Identifier(MiddleEarth.MOD_ID, "smithing_part")))));
+                                armorTrimMaterialRegistry.getOrThrow(ResourceKey.of(Registries.TRIM_MATERIAL, new ResourceLocation(entity.currentMetal.getName()))),
+                                armorTrimPatternRegistry.getOrThrow(ResourceKey.of(Registries.TRIM_PATTERN, new ResourceLocation(MiddleEarth.MOD_ID, "smithing_part")))));
                     } else {
                         MEArmorTrim.set(itemstack, new ArmorTrim(
-                                armorTrimMaterialRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_MATERIAL, new Identifier(MiddleEarth.MOD_ID, entity.currentMetal.getName()))),
-                                armorTrimPatternRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_PATTERN, new Identifier(MiddleEarth.MOD_ID, "smithing_part")))));
+                                armorTrimMaterialRegistry.getOrThrow(ResourceKey.of(Registries.TRIM_MATERIAL, new ResourceLocation(MiddleEarth.MOD_ID, entity.currentMetal.getName()))),
+                                armorTrimPatternRegistry.getOrThrow(ResourceKey.of(Registries.TRIM_PATTERN, new ResourceLocation(MiddleEarth.MOD_ID, "smithing_part")))));
 
                     }MEComponents.set(itemstack, MEComponents.TEMPERATURE_DATA, new TemperatureDataComponent(100));
                 }
@@ -398,13 +398,13 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
                         itemstack = new ItemStack(ResourceItemsME.SAUROPOD_NUGGET);
                     } else if (entity.currentMetal.isVanilla()){
                         MEArmorTrim.set(itemstack, new ArmorTrim(
-                                armorTrimMaterialRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_MATERIAL, new Identifier(entity.currentMetal.getName()))),
-                                armorTrimPatternRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_PATTERN, new Identifier(MiddleEarth.MOD_ID, "smithing_part")))));
+                                armorTrimMaterialRegistry.getOrThrow(ResourceKey.of(Registries.TRIM_MATERIAL, new ResourceLocation(entity.currentMetal.getName()))),
+                                armorTrimPatternRegistry.getOrThrow(ResourceKey.of(Registries.TRIM_PATTERN, new ResourceLocation(MiddleEarth.MOD_ID, "smithing_part")))));
 
                     } else {
                         MEArmorTrim.set(itemstack, new ArmorTrim(
-                                armorTrimMaterialRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_MATERIAL, new Identifier(MiddleEarth.MOD_ID, entity.currentMetal.getName()))),
-                                armorTrimPatternRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_PATTERN, new Identifier(MiddleEarth.MOD_ID, "smithing_part")))));
+                                armorTrimMaterialRegistry.getOrThrow(ResourceKey.of(Registries.TRIM_MATERIAL, new ResourceLocation(MiddleEarth.MOD_ID, entity.currentMetal.getName()))),
+                                armorTrimPatternRegistry.getOrThrow(ResourceKey.of(Registries.TRIM_PATTERN, new ResourceLocation(MiddleEarth.MOD_ID, "smithing_part")))));
 
                     }
                     MEComponents.set(itemstack, MEComponents.TEMPERATURE_DATA, new TemperatureDataComponent(100));
@@ -447,15 +447,15 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
         }
     }
 
-    private static void playExtractSound(World world, BlockPos pos){
+    private static void playExtractSound(Level world, BlockPos pos){
         world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1.0f, 1.0f);
     }
 
-    private static void playFailedExtractSound(World world, BlockPos pos){
+    private static void playFailedExtractSound(Level world, BlockPos pos){
         world.playSound(null, pos, SoundEvents.BLOCK_DECORATED_POT_PLACE, SoundCategory.BLOCKS, 1.0f, 1.0f);
     }
 
-    public static void tick(ServerWorld world, BlockPos blockPos, BlockState blockState, ForgeBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos blockPos, BlockState blockState, ForgeBlockEntity entity) {
         if (blockState.get(ForgeBlock.PART) == ForgePart.TOP) return;
 
         entity.fuelTime = Math.max(0, entity.fuelTime - 1);
@@ -516,7 +516,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
         world.setBlockState(blockPos.up(), blockStateUp, Block.NOTIFY_ALL);
     }
 
-    private static void craftItem(ForgeBlockEntity entity, ServerWorld world) {
+    private static void craftItem(ForgeBlockEntity entity, ServerLevel world) {
         SimpleInventory inventory1 = new SimpleInventory(entity.size());
         List<ItemStack> inputs = new ArrayList<>();
         for (int i = 0; i < entity.size(); i++) {
@@ -541,7 +541,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
         }
     }
 
-    private static boolean hasAlloyingRecipe(ForgeBlockEntity entity, ServerWorld world) {
+    private static boolean hasAlloyingRecipe(ForgeBlockEntity entity, ServerLevel world) {
         SimpleInventory inventory1 = new SimpleInventory(entity.size());
         List<ItemStack> inputs = new ArrayList<>();
         for (int i = 0; i < entity.size(); i++) {
@@ -655,7 +655,7 @@ public class ForgeBlockEntity extends BlockEntity implements ExtendedScreenHandl
     }
 
     @Override
-    public void writeScreenOpeningData(net.minecraft.server.network.ServerPlayerEntity player, net.minecraft.network.PacketByteBuf buf) {
+    public void writeScreenOpeningData(net.minecraft.server.level.ServerPlayer player, net.minecraft.network.FriendlyByteBuf buf) {
         buf.writeBlockPos(this.pos);
     }
 }

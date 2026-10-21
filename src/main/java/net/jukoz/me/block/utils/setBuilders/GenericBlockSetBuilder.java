@@ -1,8 +1,8 @@
 package net.jukoz.me.block.utils.setBuilders;
 
-import net.minecraft.block.MapColor;
-import net.minecraft.block.enums.Instrument;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.block.NoteBlockInstrument;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.sound.BlockSoundGroup;
 import net.jukoz.me.block.utils.BlockRecordTypes;
 import net.jukoz.me.block.utils.StoneBlockTypes;
@@ -18,13 +18,13 @@ public class GenericBlockSetBuilder {
     public float hardness;
     public float blastResistance;
     public MapColor mapColor;
-    public Instrument instrument;
+    public NoteBlockInstrument instrument;
     public BlockSoundGroup soundGroup;
     public boolean requiresTool;
     public List<ItemStack> group;
 
     public GenericBlockSetBuilder(String name, float hardness, float blastResistance,
-                                  MapColor mapColor, Instrument instrument, BlockSoundGroup soundGroup, boolean requiresTool,
+                                  MapColor mapColor, NoteBlockInstrument instrument, BlockSoundGroup soundGroup, boolean requiresTool,
                                   List<ItemStack> group){
         this.setName = name;
         this.hardness = hardness;
@@ -37,7 +37,7 @@ public class GenericBlockSetBuilder {
     }
 
     // Legacy datagen call sites used a flat base() accessor.
-    public net.minecraft.block.Block base() {
+    public net.minecraft.world.level.block.Block base() {
         return this.blockSet == null ? null : this.blockSet.base();
     }
 }

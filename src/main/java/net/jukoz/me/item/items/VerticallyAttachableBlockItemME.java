@@ -1,14 +1,14 @@
 package net.jukoz.me.item.items;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.WorldView;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.LevelView;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -28,7 +28,7 @@ public class VerticallyAttachableBlockItemME extends BlockItem {
     }
 
     @Nullable
-    protected BlockState getPlacementState(ItemPlacementContext context) {
+    protected BlockState getPlacementState(BlockPlaceContext context) {
         BlockState blockState = this.wallBlock.getPlacementState(context);
         BlockState blockState2 = null;
         WorldView worldView = context.getWorld();
@@ -43,7 +43,7 @@ public class VerticallyAttachableBlockItemME extends BlockItem {
                     BlockState blockState3 = direction == verticalAttachmentDirection ? this.getBlock().getPlacementState(context) : blockState;
                     if (blockState3 != null && this.canPlaceAt(worldView, blockState3, blockPos)) {
                         blockState2 = blockState3;
-                        return worldView.canPlace(blockState2, blockPos, ShapeContext.absent()) ? blockState2 : null;
+                        return worldView.canPlace(blockState2, blockPos, CollisionContext.absent()) ? blockState2 : null;
                     }
                 }
             }

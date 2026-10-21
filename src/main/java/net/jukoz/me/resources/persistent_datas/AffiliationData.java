@@ -7,17 +7,17 @@ import net.jukoz.me.resources.datas.factions.Faction;
 import net.jukoz.me.resources.datas.factions.FactionLookup;
 import net.jukoz.me.resources.datas.factions.data.SpawnData;
 import net.jukoz.me.world.dimension.ModDimensions;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 public class AffiliationData {
     public DispositionType dispositionType;
-    public Identifier faction;
-    public Identifier spawnId;
+    public ResourceLocation faction;
+    public ResourceLocation spawnId;
 
-    public AffiliationData(String disposition, Identifier factionId, Identifier spawnId) {
+    public AffiliationData(String disposition, ResourceLocation factionId, ResourceLocation spawnId) {
         this.dispositionType = DispositionType.valueOf(disposition);
         this.faction = factionId;
         this.spawnId = spawnId;
@@ -28,7 +28,7 @@ public class AffiliationData {
         return dispositionType;
     }
 
-    public Vec3d getSpawnMiddleEarthCoordinate(World world){
+    public Vec3 getSpawnMiddleEarthCoordinate(Level world){
         try{
             Faction foundFaction = FactionLookup.getFactionById(world,faction);
             SpawnData spawnData = foundFaction.getSpawnData().findSpawn(spawnId);

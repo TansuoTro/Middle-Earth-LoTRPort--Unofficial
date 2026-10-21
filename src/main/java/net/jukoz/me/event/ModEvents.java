@@ -4,25 +4,25 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Holder;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.config.ModServerConfigs;
 import net.jukoz.me.enchantments.EnchantmentsME;
@@ -42,7 +42,7 @@ public class ModEvents {
 
     public static void register(){
         ServerPlayConnectionEvents.JOIN.register((serverPlayNetworkHandler, packetSender, minecraftServer) -> {
-            ServerPlayerEntity player = serverPlayNetworkHandler.getPlayer();
+            ServerPlayer player = serverPlayNetworkHandler.getPlayer();
 
             PlayerData data = StateSaverAndLoader.getPlayerState(player);
             if(data == null)
@@ -65,15 +65,15 @@ public class ModEvents {
         });
 
         ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register((world, entity, killedEntity) -> {
-            if(entity instanceof PlayerEntity playerEntity) {
+            if(entity instanceof Player playerEntity) {
                 ItemStack stack = Objects.requireNonNull(playerEntity.getStackInHand(playerEntity.getActiveHand()));
-                RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager()
-                        .get(RegistryKeys.ENCHANTMENT).getEntry(EnchantmentsME.BEHEADING).orElseThrow();
+                Holder<Enchantment> enchantmentRegistryEntry = world.getRegistryManager()
+                        .get(Registries.ENCHANTMENT).getEntry(EnchantmentsME.BEHEADING).orElseThrow();
                 boolean hasEnchant = MEEnchants.has(stack, enchantmentRegistryEntry);
 
                 if (hasEnchant) {
                     ItemStack drop = ItemStack.EMPTY;
-                    if(killedEntity instanceof PlayerEntity killedPlayer) {
+                    if(killedEntity instanceof Player killedPlayer) {
                         drop = new ItemStack(Items.PLAYER_HEAD);
                         net.minecraft.nbt.NbtHelper.writeGameProfile(drop.getOrCreateSubNbt("SkullOwner"), killedPlayer.getGameProfile());
                     }
@@ -87,7 +87,7 @@ public class ModEvents {
         PlayerBlockBreakEvents.AFTER.register((world, playerEntity, blockPos, blockState, blockEntity) -> {
             ItemStack stack = Objects.requireNonNull(playerEntity.getStackInHand(playerEntity.getActiveHand()));
             
-            RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(EnchantmentsME.HEWING).orElseThrow();
+            Holder<Enchantment> enchantmentRegistryEntry = world.getRegistryManager().get(Registries.ENCHANTMENT).getEntry(EnchantmentsME.HEWING).orElseThrow();
             boolean hasEnchant = MEEnchants.has(stack, enchantmentRegistryEntry);
             int level = EnchantmentHelper.getLevel(enchantmentRegistryEntry.value(), stack);
             float hardness = blockState.getBlock().getHardness();
@@ -121,8 +121,8 @@ public class ModEvents {
         PlayerBlockBreakEvents.AFTER.register((world, playerEntity, blockPos, blockState, blockEntity) -> {
             ItemStack stack = Objects.requireNonNull(playerEntity.getStackInHand(playerEntity.getActiveHand()));
             
-            RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager()
-                    .get(RegistryKeys.ENCHANTMENT).getEntry(EnchantmentsME.TREE_FELLER).orElseThrow();
+            Holder<Enchantment> enchantmentRegistryEntry = world.getRegistryManager()
+                    .get(Registries.ENCHANTMENT).getEntry(EnchantmentsME.TREE_FELLER).orElseThrow();
             boolean hasEnchant = MEEnchants.has(stack, enchantmentRegistryEntry);
             int level = EnchantmentHelper.getLevel(enchantmentRegistryEntry.value(), stack);
             float hardness = blockState.getBlock().getHardness();
@@ -141,7 +141,7 @@ public class ModEvents {
         });
     }
 
-    private static void breakTopLogs(World world, PlayerEntity player, BlockPos blockPos, ItemStack stack, float hardness, int[] attempts) {
+    private static void breakTopLogs(Level world, Player player, BlockPos blockPos, ItemStack stack, float hardness, int[] attempts) {
         BlockPos offsetY = blockPos.offset(Direction.Axis.Y, 1);
         for(int z = -2; z < 2; z++) {
             BlockPos offsetZ = offsetY.offset(Direction.Axis.Z, z);
@@ -156,7 +156,7 @@ public class ModEvents {
         breakAndDamage(world, player, blockPos, stack, hardness);
     }
 
-    private static void level1BreakVertical(World world, PlayerEntity player, BlockPos blockPos, ItemStack stack, float hardness){
+    private static void level1BreakVertical(Level world, Player player, BlockPos blockPos, ItemStack stack, float hardness){
         float yaw = player.getYaw();
         if((yaw >= -45 && yaw <= 45) || yaw <= -135 || yaw >= 135){
             breakAndDamage(world, player, blockPos.offset(Direction.NORTH), stack, hardness);
@@ -167,14 +167,14 @@ public class ModEvents {
         }
     }
 
-    private static void level2BreakVertical(World world, PlayerEntity player, BlockPos blockPos, ItemStack stack, float hardness){
+    private static void level2BreakVertical(Level world, Player player, BlockPos blockPos, ItemStack stack, float hardness){
         breakAndDamage(world, player, blockPos.offset(Direction.NORTH), stack, hardness);
         breakAndDamage(world, player, blockPos.offset(Direction.EAST), stack, hardness);
         breakAndDamage(world, player, blockPos.offset(Direction.SOUTH), stack, hardness);
         breakAndDamage(world, player, blockPos.offset(Direction.WEST), stack, hardness);
     }
 
-    private static void level3BreakVertical(World world, PlayerEntity player, BlockPos blockPos, ItemStack stack, float hardness){
+    private static void level3BreakVertical(Level world, Player player, BlockPos blockPos, ItemStack stack, float hardness){
         BlockPos blockPosNorth = blockPos.offset(Direction.NORTH);
         BlockPos blockPosSouth = blockPos.offset(Direction.SOUTH);
 
@@ -191,7 +191,7 @@ public class ModEvents {
         breakAndDamage(world, player, blockPos.offset(Direction.WEST), stack, hardness);
     }
 
-    private static void level1Break(World world, PlayerEntity player, BlockPos blockPos, ItemStack stack, float hardness){
+    private static void level1Break(Level world, Player player, BlockPos blockPos, ItemStack stack, float hardness){
         BlockPos blockPosUp = blockPos.up();
         BlockPos blockPosDown = blockPos.down();
 
@@ -199,7 +199,7 @@ public class ModEvents {
         breakAndDamage(world, player, blockPosDown, stack, hardness);
     }
 
-    private static void level2Break(World world, PlayerEntity player, BlockPos blockPos, ItemStack stack, float hardness){
+    private static void level2Break(Level world, Player player, BlockPos blockPos, ItemStack stack, float hardness){
         BlockPos blockPosUp = blockPos.up();
         BlockPos blockPosDown = blockPos.down();
 
@@ -211,7 +211,7 @@ public class ModEvents {
         breakAndDamage(world, player, blockPosDown, stack, hardness);
     }
 
-    private static void level3Break(World world, PlayerEntity player, BlockPos blockPos, ItemStack stack, float hardness){
+    private static void level3Break(Level world, Player player, BlockPos blockPos, ItemStack stack, float hardness){
         BlockPos blockPosUp = blockPos.up();
         BlockPos blockPosDown = blockPos.down();
 
@@ -227,7 +227,7 @@ public class ModEvents {
         breakAndDamage(world, player, blockPosDown.offset(MEDirection.facing(player).rotateYCounterclockwise()), stack, hardness);
     }
 
-    private static void breakAndDamage(World world, PlayerEntity player, BlockPos blockpos, ItemStack stack, float hardness){
+    private static void breakAndDamage(Level world, Player player, BlockPos blockpos, ItemStack stack, float hardness){
         
         BlockState blockState = world.getBlockState(blockpos);
 

@@ -2,11 +2,11 @@ package net.jukoz.me.item;
 
 
 import net.jukoz.me.compat.DyedColorComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Rarity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.world.item.Rarity;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.datageneration.content.TranslationEntries;

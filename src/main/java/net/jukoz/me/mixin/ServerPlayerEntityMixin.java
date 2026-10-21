@@ -3,17 +3,17 @@ package net.jukoz.me.mixin;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.TeleportTarget;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.entity.EntityAttributesME;
 import net.jukoz.me.resources.StateSaverAndLoader;
 import net.jukoz.me.resources.datas.factions.data.SpawnData;
@@ -32,17 +32,17 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ServerPlayerEntity.class)
-public class ServerPlayerEntityMixin extends PlayerEntity {
+@Mixin(ServerPlayer.class)
+public class ServerPlayerEntityMixin extends Player {
     @Shadow public MinecraftServer server;
     @Shadow public ServerPlayerInteractionManager interactionManager;
 
-    public ServerPlayerEntityMixin(MinecraftServer server, ServerWorld world, GameProfile profile) {
+    public ServerPlayerEntityMixin(MinecraftServer server, ServerLevel world, GameProfile profile) {
         super(world, world.getSpawnPos(), 0.0F, profile);
     }
 
     @Inject(method = "getTeleportTarget", at = @At("RETURN"), cancellable = true)
-    private void me$getTeleportTarget(ServerWorld targetWorld, CallbackInfoReturnable<TeleportTarget> cir) {
+    private void me$getTeleportTarget(ServerLevel targetWorld, CallbackInfoReturnable<TeleportTarget> cir) {
         if (!ModDimensions.isInMiddleEarth(this.getWorld())) {
             return;
         }
@@ -57,12 +57,12 @@ public class ServerPlayerEntityMixin extends PlayerEntity {
         if (this.getServer() == null) return;
 
         PlayerManager manager = this.getServer().getPlayerManager();
-        ServerPlayerEntity foundPlayer = manager.getPlayer(this.getUuid());
+        ServerPlayer foundPlayer = manager.getPlayer(this.getUuid());
         if (foundPlayer == null) return;
-        foundPlayer.setSpawnPoint(World.OVERWORLD, foundPlayer.getServer().getOverworld().getSpawnPos(),
+        foundPlayer.setSpawnPoint(Level.OVERWORLD, foundPlayer.getServer().getOverworld().getSpawnPos(),
                 foundPlayer.getServer().getOverworld().getSpawnAngle(), true, false);
 
-        cir.setReturnValue(new TeleportTarget(this.server.getOverworld().getSpawnPos().toCenterPos(), Vec3d.ZERO, 0, 0));
+        cir.setReturnValue(new TeleportTarget(this.server.getOverworld().getSpawnPos().toCenterPos(), Vec3.ZERO, 0, 0));
     }
 
     @Unique
@@ -71,29 +71,29 @@ public class ServerPlayerEntityMixin extends PlayerEntity {
 
         if (server == null) return false;
         PlayerManager manager = server.getPlayerManager();
-        ServerPlayerEntity foundPlayer = manager.getPlayer(this.getUuid());
+        ServerPlayer foundPlayer = manager.getPlayer(this.getUuid());
 
         if (foundPlayer == null) return false;
         SpawnData data = PlayerDataService.getPlayerSpawnData(foundPlayer, getWorld());
         if (ModDimensions.isInMiddleEarth(this.getWorld()) && data != null && data.getIdentifier() != null) {
             BlockPos spawnCoordinates = data.getWorldCoordinateBlockPos();
             if (spawnCoordinates != null) {
-                ServerWorld MEWorld = this.server.getWorld(ModDimensions.ME_WORLD_KEY);
+                ServerLevel MEWorld = this.server.getWorld(ModDimensions.ME_WORLD_KEY);
                 if (MEWorld != null) {
-                    Vec3d coordinates = new Vec3d(spawnCoordinates.getX(), spawnCoordinates.getY() + 1, spawnCoordinates.getZ());
+                    Vec3 coordinates = new Vec3(spawnCoordinates.getX(), spawnCoordinates.getY() + 1, spawnCoordinates.getZ());
 
                     foundPlayer.setSpawnPoint(ModDimensions.ME_WORLD_KEY,
                             new BlockPos((int) coordinates.x, (int) coordinates.y, (int) coordinates.z), 0, true, false);
 
-                    cir.setReturnValue(new TeleportTarget(coordinates, Vec3d.ZERO, 0, 0));
+                    cir.setReturnValue(new TeleportTarget(coordinates, Vec3.ZERO, 0, 0));
                     return true;
                 }
             }
         }
-        foundPlayer.setSpawnPoint(World.OVERWORLD, server.getOverworld().getSpawnPos(),
+        foundPlayer.setSpawnPoint(Level.OVERWORLD, server.getOverworld().getSpawnPos(),
                 server.getOverworld().getSpawnAngle(), true, false);
 
-        cir.setReturnValue(new TeleportTarget(server.getOverworld().getSpawnPos().toCenterPos(), Vec3d.ZERO, 0, 0));
+        cir.setReturnValue(new TeleportTarget(server.getOverworld().getSpawnPos().toCenterPos(), Vec3.ZERO, 0, 0));
         return false;
     }
 

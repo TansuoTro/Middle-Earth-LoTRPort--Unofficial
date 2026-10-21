@@ -11,19 +11,19 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.CraftingResultInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerListener;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 
@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ArtisanTableScreen extends HandledScreen<ArtisanTableScreenHandler> implements ScreenHandlerListener {
-    private static final Identifier TEXTURE = new Identifier(MiddleEarth.MOD_ID, "textures/gui/artisan_table.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(MiddleEarth.MOD_ID, "textures/gui/artisan_table.png");
     public static final int SLOT_SCALE = 18;
     public static final int SLOT_OFFSET_X = 12;
     public static final int SLOT_OFFSET_Y = 15;
@@ -52,7 +52,7 @@ public class ArtisanTableScreen extends HandledScreen<ArtisanTableScreenHandler>
     private ArtisanTableTab selectedCategory;
     private ArtisanTableTab selectedTab;
 
-    public ArtisanTableScreen(ArtisanTableScreenHandler handler, PlayerInventory inventory, Text title) {
+    public ArtisanTableScreen(ArtisanTableScreenHandler handler, PlayerInventory inventory, Component title) {
         super(handler, inventory, title);
         this.backgroundWidth = 232;
         this.backgroundHeight = 166;
@@ -320,7 +320,7 @@ public class ArtisanTableScreen extends HandledScreen<ArtisanTableScreenHandler>
             int i = this.y + 14;
             int j = i + 54;
             this.scrollAmount = ((float) mouseY - (float) i - 7.5F) / ((float) (j - i) - 15.0F);
-            this.scrollAmount = MathHelper.clamp(this.scrollAmount, 0.0F, 1.0F);
+            this.scrollAmount = Mth.clamp(this.scrollAmount, 0.0F, 1.0F);
             this.scrollOffset = (int) ((double) (this.scrollAmount * (float) this.getMaxScroll()) + 0.5) * 4;
             return true;
         } else {
@@ -332,7 +332,7 @@ public class ArtisanTableScreen extends HandledScreen<ArtisanTableScreenHandler>
         if (this.shouldScroll()) {
             int i = this.getMaxScroll();
             float f = (float) amount / (float) i;
-            this.scrollAmount = MathHelper.clamp(this.scrollAmount - f, 0.0F, 1.0F);
+            this.scrollAmount = Mth.clamp(this.scrollAmount - f, 0.0F, 1.0F);
             this.scrollOffset = (int) ((double) (this.scrollAmount * (float) i) + 0.5) * 4;
         }
 
@@ -359,7 +359,7 @@ public class ArtisanTableScreen extends HandledScreen<ArtisanTableScreenHandler>
         ClientPlayNetworking.send(new ArtisanTableTabPacket(selectedTab.getInputShape().getId(), handler.syncId));
     }
 
-    private static Text getTabTranslation(String tab) {
-        return Text.translatable("screen." + MiddleEarth.MOD_ID + ".artisan_table." + tab);
+    private static Component getTabTranslation(String tab) {
+        return Component.translatable("screen." + MiddleEarth.MOD_ID + ".artisan_table." + tab);
     }
 }

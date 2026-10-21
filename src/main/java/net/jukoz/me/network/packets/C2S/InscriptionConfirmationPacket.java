@@ -1,15 +1,15 @@
 package net.jukoz.me.network.packets.C2S;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.inscriptiontable.InscriptionTableScreenHandler;
 import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
 
 public class InscriptionConfirmationPacket extends ClientToServerPacket<InscriptionConfirmationPacket> {
-    public static final Identifier ID = MiddleEarth.of("inscription_confirmation_packet");
+    public static final ResourceLocation ID = MiddleEarth.of("inscription_confirmation_packet");
     public static final InscriptionConfirmationPacket INSTANCE = new InscriptionConfirmationPacket();
     public static final PacketType<InscriptionConfirmationPacket> TYPE = PacketType.create(ID, InscriptionConfirmationPacket::new);
 
@@ -18,7 +18,7 @@ public class InscriptionConfirmationPacket extends ClientToServerPacket<Inscript
 
 
 
-    public InscriptionConfirmationPacket(PacketByteBuf buf) {
+    public InscriptionConfirmationPacket(FriendlyByteBuf buf) {
         this();
     }
 
@@ -28,7 +28,7 @@ public class InscriptionConfirmationPacket extends ClientToServerPacket<Inscript
     }
 
     @Override
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
     }
 
     @Override

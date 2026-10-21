@@ -1,35 +1,35 @@
 package net.jukoz.me.block.special.sack;
 
-import net.minecraft.block.BarrelBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ShulkerBoxBlock;
-import net.minecraft.block.entity.BarrelBlockEntity;
-import net.minecraft.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.BarrelBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
+import net.minecraft.world.level.block.entity.BarrelBlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.block.entity.ViewerCountManager;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.ShulkerBoxScreenHandler;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.nbt.CompoundTag;
 import net.jukoz.me.compat.nbt.ReadView;
 import net.jukoz.me.compat.nbt.WriteView;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import net.jukoz.me.gui.sack.SackScreenHandler;
@@ -47,18 +47,18 @@ public class SackBlockEntity extends LootableContainerBlockEntity implements Sid
         this.inventory = DefaultedList.ofSize(size(), ItemStack.EMPTY);
         this.setInvStackList(DefaultedList.ofSize(this.size(), ItemStack.EMPTY));
         this.stateManager = new ViewerCountManager() {
-            protected void onContainerOpen(World world, BlockPos pos, BlockState state) {
+            protected void onContainerOpen(Level world, BlockPos pos, BlockState state) {
                 SackBlockEntity.this.setOpen(state, true);
             }
 
-            protected void onContainerClose(World world, BlockPos pos, BlockState state) {
+            protected void onContainerClose(Level world, BlockPos pos, BlockState state) {
                 SackBlockEntity.this.setOpen(state, false);
             }
 
-            protected void onViewerCountUpdate(World world, BlockPos pos, BlockState state, int oldViewerCount, int newViewerCount) {
+            protected void onViewerCountUpdate(Level world, BlockPos pos, BlockState state, int oldViewerCount, int newViewerCount) {
             }
 
-            protected boolean isPlayerViewing(PlayerEntity player) {
+            protected boolean isPlayerViewing(Player player) {
                 if (player.currentScreenHandler instanceof GenericContainerScreenHandler) {
                     Inventory inventory = ((GenericContainerScreenHandler)player.currentScreenHandler).getInventory();
                     return inventory == SackBlockEntity.this;
@@ -80,22 +80,22 @@ public class SackBlockEntity extends LootableContainerBlockEntity implements Sid
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable(MiddleEarth.of("sack").toTranslationKey("screen"));
+    public Component getDisplayName() {
+        return Component.translatable(MiddleEarth.of("sack").toTranslationKey("screen"));
     }
 
     @Override
-    protected Text getContainerName() {
-        return Text.translatable(MiddleEarth.of("sack").toTranslationKey("screen"));
+    protected Component getContainerName() {
+        return Component.translatable(MiddleEarth.of("sack").toTranslationKey("screen"));
     }
 
-    public void readNbt(NbtCompound nbt) {
+    public void readNbt(CompoundTag nbt) {
         super.readNbt(nbt);
         ReadView view = new ReadView(nbt);
         this.readInventoryNbt(view);
     }
 
-    protected void writeNbt(NbtCompound nbt) {
+    protected void writeNbt(CompoundTag nbt) {
         super.writeNbt(nbt);
         WriteView view = new WriteView(nbt);
         if (!this.serializeLootTable(view.nbt())) {
@@ -115,13 +115,13 @@ public class SackBlockEntity extends LootableContainerBlockEntity implements Sid
         // Keep empty
     }
 
-    public void onOpen(PlayerEntity player) {
+    public void onOpen(Player player) {
         if (!this.removed && !player.isSpectator()) {
             this.stateManager.openContainer(player, this.getWorld(), this.getPos(), this.getCachedState());
         }
     }
 
-    public void onClose(PlayerEntity player) {
+    public void onClose(Player player) {
         if (!this.removed && !player.isSpectator()) {
             this.stateManager.closeContainer(player, this.getWorld(), this.getPos(), this.getCachedState());
         }
@@ -181,7 +181,7 @@ public class SackBlockEntity extends LootableContainerBlockEntity implements Sid
         this.inventory = list;
     }
 
-    public void generateLoot(PlayerEntity player) {
+    public void generateLoot(Player player) {
         this.checkLootInteraction(player);
     }
 }

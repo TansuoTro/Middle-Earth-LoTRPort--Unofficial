@@ -1,46 +1,46 @@
 package net.jukoz.me.entity.beasts.broadhoof;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraft.item.FoodComponent;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.entity.passive.*;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.item.GoatHornItem;
-import net.minecraft.item.Instrument;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.Instrument;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.InstrumentTags;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.InstrumentTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.nbt.CompoundTag;
 import net.jukoz.me.compat.nbt.ReadView;
 import net.jukoz.me.compat.nbt.WriteView;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.config.ModServerConfigs;
 import net.jukoz.me.entity.EntitiesME;
@@ -77,28 +77,28 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
     private static final EntityDimensions BABY_BASE_DIMENSIONS = EntitiesME.BROADHOOF_GOAT.getDimensions().scaled(0.5f);
 
 
-    public BroadhoofGoatEntity(EntityType<? extends AbstractBeastEntity> entityType, World world) {
+    public BroadhoofGoatEntity(EntityType<? extends AbstractBeastEntity> entityType, Level world) {
         super(entityType, world);
     }
 
     public static DefaultAttributeContainer.Builder setAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 50.0d)
-                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.4d)
-                .add(EntityAttributes.GENERIC_ATTACK_SPEED, 1.0d)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 38.0d)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 4.0d)
+        return Mob.createMobAttributes()
+                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.2)
+                .add(Attributes.GENERIC_MAX_HEALTH, 50.0d)
+                .add(Attributes.GENERIC_KNOCKBACK_RESISTANCE, 0.4d)
+                .add(Attributes.GENERIC_ATTACK_SPEED, 1.0d)
+                .add(Attributes.GENERIC_FOLLOW_RANGE, 38.0d)
+                .add(Attributes.GENERIC_ATTACK_DAMAGE, 4.0d)
                 .add(EntityAttributesME.SAFE_FALL_DISTANCE.value(), 10.0d)
                 .add(EntityAttributesME.POWDERED_SNOW_IMMUNITY.value(), 1.0f)
-                .add(EntityAttributes.HORSE_JUMP_STRENGTH, 1);
+                .add(Attributes.HORSE_JUMP_STRENGTH, 1);
     }
 
     @Override
-    protected void initAttributes(Random random) {
-        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(this.getChildHealthBonus(random::nextInt));
-        this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(this.getChildMovementSpeedBonus(random::nextDouble));
-        this.getAttributeInstance(EntityAttributes.HORSE_JUMP_STRENGTH).setBaseValue(this.getChildJumpStrengthBonus(random::nextDouble));
+    protected void initAttributes(RandomSource random) {
+        this.getAttributeInstance(Attributes.GENERIC_MAX_HEALTH).setBaseValue(this.getChildHealthBonus(random::nextInt));
+        this.getAttributeInstance(Attributes.GENERIC_MOVEMENT_SPEED).setBaseValue(this.getChildMovementSpeedBonus(random::nextDouble));
+        this.getAttributeInstance(Attributes.HORSE_JUMP_STRENGTH).setBaseValue(this.getChildJumpStrengthBonus(random::nextDouble));
     }
 
     @Override
@@ -109,7 +109,7 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
         this.goalSelector.add(4, new ChargeAttackGoal(this, maxChargeCooldown()));
         this.goalSelector.add(5, new AnimalMateGoal(this, 1.5));
         this.goalSelector.add(6, new TemptGoal(this, 1.0, Ingredient.fromTag(ItemTagsME.COW_FOOD), false));
-        this.goalSelector.add(7, new LookAtEntityGoal(this, PlayerEntity.class, 6.0f));
+        this.goalSelector.add(7, new LookAtEntityGoal(this, Player.class, 6.0f));
         this.goalSelector.add(8, new LookAroundGoal(this));
         this.targetSelector.add(1, new BeastRevengeGoal(this, new Class[0]).setGroupRevenge());
     }
@@ -127,7 +127,7 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
     }
 
     @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
+    public void writeCustomDataToNbt(CompoundTag nbt) {
         super.writeCustomDataToNbt(nbt);
         WriteView view = new WriteView(nbt);
         view.putInt("Variant", this.getGoatVariant());
@@ -139,7 +139,7 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
     }
 
     @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
+    public void readCustomDataFromNbt(CompoundTag nbt) {
         super.readCustomDataFromNbt(nbt);
         ReadView view = new ReadView(nbt);
         this.dataTracker.set(VARIANT, view.getInt("Variant", 0));
@@ -174,7 +174,7 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
     }
 
     @Override
-    public ActionResult interactMob(PlayerEntity player, Hand hand) {
+    public InteractionResult interactMob(Player player, InteractionHand hand) {
 
         ItemStack itemStack = player.getStackInHand(hand);
 
@@ -193,24 +193,24 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
                                 FoodComponent foodComponent = itemStack.getItem().getFoodComponent();
                                 float f = foodComponent != null ? (float)foodComponent.getHunger() : 1.0f;
                                 this.heal(2.0f * f);
-                                return ActionResult.SUCCESS;
+                                return InteractionResult.SUCCESS;
                             }
                             else if (this.getBreedingAge() == 0 && this.canEat()) { // Food provides baby
                                 this.eat(player, hand, itemStack);
                                 this.lovePlayer(player);
-                                return ActionResult.SUCCESS;
+                                return InteractionResult.SUCCESS;
                             }
                         }
                         else if(itemStack.isOf(Items.BRUSH)) { // Brush beard
                             this.setBrushedBeard(true);
-                            return ActionResult.SUCCESS;
+                            return InteractionResult.SUCCESS;
                         }
                         else if(hasBrushedBeard()) {
                             if(BroadhoofGoatBeads.isValidMaterial(itemStack)) {
                                 this.setGoatBeads(BroadhoofGoatBeads.getBeads(itemStack));
                                 if (!player.getAbilities().creativeMode) itemStack.decrement(1);
 
-                                return ActionResult.SUCCESS;
+                                return InteractionResult.SUCCESS;
                             }
                             else if(itemStack.isOf(Items.SHEARS)) { // Un-Brush beard
                                 if(getGoatBeads().equals(BroadhoofGoatBeads.NONE)) {
@@ -224,7 +224,7 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
                                     itemStack.damage(1, player, (p) -> {});
                                 }
 
-                                return ActionResult.SUCCESS;
+                                return InteractionResult.SUCCESS;
                             }
                         }
                     }
@@ -233,14 +233,14 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
                 }
             }
         }
-        return ActionResult.PASS;
+        return InteractionResult.PASS;
     }
 
     @Override
     protected void updatePassengerPosition(Entity passenger, Entity.PositionUpdater positionUpdater) {
         super.updatePassengerPosition(passenger, positionUpdater);
         float animationSpeed = this.limbAnimator.getSpeed();
-        float animationProgress = this.limbAnimator.getPos() * (MathHelper.PI / 180) * 18;
+        float animationProgress = this.limbAnimator.getPos() * (Mth.PI / 180) * 18;
 
         boolean sprinting = passenger.isSprinting();
 
@@ -248,8 +248,8 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
         float frequency = sprinting ? (1.2f/0.74f) : 4;
 
         double y = sprinting ?
-                MathHelper.sin(animationProgress * frequency + MathHelper.PI / 4) * 0.11 * animationSpeed - 0.05 :
-                MathHelper.cos(animationProgress * frequency) * 0.06 * animationSpeed - 0.05;
+                Mth.sin(animationProgress * frequency + Mth.PI / 4) * 0.11 * animationSpeed - 0.05 :
+                Mth.cos(animationProgress * frequency) * 0.06 * animationSpeed - 0.05;
 
         if(this.isSitting()) {
             y = -0.5;
@@ -260,7 +260,7 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
 
     @Override
     @Nullable
-    public PassiveEntity createChild(ServerWorld world, PassiveEntity entity) {
+    public PassiveEntity createChild(ServerLevel world, PassiveEntity entity) {
         BroadhoofGoatEntity broadhoofEntity = (BroadhoofGoatEntity)entity;
         BroadhoofGoatEntity broadhoofEntity2 = EntitiesME.BROADHOOF_GOAT.create(world);
         if (broadhoofEntity2 != null) {
@@ -279,9 +279,9 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
 
     @Override
     protected void setChildAttributes(PassiveEntity other, AbstractHorseEntity child) {
-        this.setChildAttribute(other, child, EntityAttributes.GENERIC_MAX_HEALTH, MIN_HEALTH_BONUS, MAX_HEALTH_BONUS);
-        this.setChildAttribute(other, child, EntityAttributes.HORSE_JUMP_STRENGTH, MIN_JUMP_STRENGTH_BONUS, MAX_JUMP_STRENGTH_BONUS);
-        this.setChildAttribute(other, child, EntityAttributes.GENERIC_MOVEMENT_SPEED, MIN_MOVEMENT_SPEED_BONUS, MAX_MOVEMENT_SPEED_BONUS);
+        this.setChildAttribute(other, child, Attributes.GENERIC_MAX_HEALTH, MIN_HEALTH_BONUS, MAX_HEALTH_BONUS);
+        this.setChildAttribute(other, child, Attributes.HORSE_JUMP_STRENGTH, MIN_JUMP_STRENGTH_BONUS, MAX_JUMP_STRENGTH_BONUS);
+        this.setChildAttribute(other, child, Attributes.GENERIC_MOVEMENT_SPEED, MIN_MOVEMENT_SPEED_BONUS, MAX_MOVEMENT_SPEED_BONUS);
     }
 
 
@@ -296,7 +296,7 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
     }
 
     @Override
-    protected boolean isTamable(PlayerEntity player) {
+    protected boolean isTamable(Player player) {
         return this.isMountable();
     }
 
@@ -325,26 +325,26 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
         List<Entity> entities = this.getWorld().getOtherEntities(this, this.getBoundingBox().expand(0.2,0,0.2));
 
         if(!this.isTame() && !this.getWorld().isClient) {
-            if(targetDir == Vec3d.ZERO && this.getTarget() != null) {
-                targetDir = new Vec3d( this.getTarget().getBlockPos().getX() - this.getBlockPos().getX(),
+            if(targetDir == Vec3.ZERO && this.getTarget() != null) {
+                targetDir = new Vec3( this.getTarget().getBlockPos().getX() - this.getBlockPos().getX(),
                         this.getTarget().getBlockPos().getY() - this.getBlockPos().getY(),
                         this.getTarget().getBlockPos().getZ() - this.getBlockPos().getZ());
             }
             this.setYaw((float) Math.toDegrees(Math.atan2(-targetDir.x, targetDir.z)));
-            this.setVelocity(targetDir.multiply(1,0,1).normalize().multiply(1.0d - ((double)MathHelper.abs(this.chargeTimeout - (maxChargeCooldown() - chargeDuration()) - (chargeDuration() * 0.2f)) / chargeDuration())).add(0, this.getVelocity().y, 0));
+            this.setVelocity(targetDir.multiply(1,0,1).normalize().multiply(1.0d - ((double)Mth.abs(this.chargeTimeout - (maxChargeCooldown() - chargeDuration()) - (chargeDuration() * 0.2f)) / chargeDuration())).add(0, this.getVelocity().y, 0));
         }
         else if (this.getWorld().isClient) {
-            this.setVelocity(this.getRotationVector().multiply(1,0,1).normalize().multiply(1.0d - ((double)MathHelper.abs(this.chargeTimeout - (maxChargeCooldown() - chargeDuration()) - (chargeDuration() * 0.2f)) / chargeDuration())).add(0, this.getVelocity().y, 0));
+            this.setVelocity(this.getRotationVector().multiply(1,0,1).normalize().multiply(1.0d - ((double)Mth.abs(this.chargeTimeout - (maxChargeCooldown() - chargeDuration()) - (chargeDuration() * 0.2f)) / chargeDuration())).add(0, this.getVelocity().y, 0));
         }
 
         for(Entity entity : entities) {
             if(entity != this.getOwner() && entity != this && !this.getPassengerList().contains(entity) && !this.getWorld().isClient()) {
                 entity.damage(entity.getDamageSources().mobAttack(this), getAttackDamage());
 
-                Vec3d velocity = this.getVelocity();
+                Vec3 velocity = this.getVelocity();
                 velocity = velocity.multiply(1.0, 0.0, 1.0);
                 velocity = velocity.normalize();
-                Vec3d vec3d = velocity.multiply(2);
+                Vec3 vec3d = velocity.multiply(2);
                 if (vec3d.lengthSquared() > 0.0) {
                     entity.addVelocity(vec3d.x, 0.15, vec3d.z);
                 }
@@ -361,20 +361,20 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
     }
 
     @Override
-    protected void jump(float strength, Vec3d movementInput) {
+    protected void jump(float strength, Vec3 movementInput) {
         if(this.hasControllingPassenger() && this.getControllingPassenger().isSprinting()) {
             super.jump(strength, movementInput);
         }
         else {
             this.setChargeTimeout(30);
             double d = this.getJumpVelocity();
-            Vec3d vec3d = this.getVelocity().multiply(4);
+            Vec3 vec3d = this.getVelocity().multiply(4);
             this.setVelocity(vec3d.x, d, vec3d.z);
             this.setOnGround(false);
             this.velocityDirty = true;
             if (movementInput.z > 0.0) {
-                float f = MathHelper.sin(this.getYaw() * ((float)Math.PI / 180));
-                float g = MathHelper.cos(this.getYaw() * ((float)Math.PI / 180));
+                float f = Mth.sin(this.getYaw() * ((float)Math.PI / 180));
+                float g = Mth.cos(this.getYaw() * ((float)Math.PI / 180));
                 this.setVelocity(this.getVelocity().add(-0.4f * f * strength, 0.0, 0.4f * g * strength));
             }
         }
@@ -423,20 +423,20 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
         }
         TrackedData<Boolean> trackedData = !bl ? RIGHT_HORN : (!bl2 ? LEFT_HORN : (this.random.nextBoolean() ? LEFT_HORN : RIGHT_HORN));
         this.dataTracker.set(trackedData, false);
-        Vec3d vec3d = this.getPos();
+        Vec3 vec3d = this.getPos();
         ItemStack itemStack = this.getGoatHornStack();
-        double d = MathHelper.nextBetween(this.random, -0.2f, 0.2f);
-        double e = MathHelper.nextBetween(this.random, 0.3f, 0.7f);
-        double f = MathHelper.nextBetween(this.random, -0.2f, 0.2f);
+        double d = Mth.nextBetween(this.random, -0.2f, 0.2f);
+        double e = Mth.nextBetween(this.random, 0.3f, 0.7f);
+        double f = Mth.nextBetween(this.random, -0.2f, 0.2f);
         ItemEntity itemEntity = new ItemEntity(this.getWorld(), vec3d.getX(), vec3d.getY(), vec3d.getZ(), itemStack, d, e, f);
         this.getWorld().spawnEntity(itemEntity);
         return true;
     }
 
     public ItemStack getGoatHornStack() {
-        Random random = Random.create((long)this.getUuid().hashCode());
+        RandomSource random = RandomSource.create((long)this.getUuid().hashCode());
         TagKey<Instrument> tagKey = this.random.nextBoolean() ? InstrumentTags.SCREAMING_GOAT_HORNS : InstrumentTags.REGULAR_GOAT_HORNS;
-        return this.getWorld().getRegistryManager().get(RegistryKeys.INSTRUMENT).getEntryList(tagKey)
+        return this.getWorld().getRegistryManager().get(Registries.INSTRUMENT).getEntryList(tagKey)
                 .flatMap(list -> list.getRandom(random))
                 .map(registryEntry -> GoatHornItem.getStackForInstrument(Items.GOAT_HORN, registryEntry))
                 .orElseGet(() -> new ItemStack(Items.GOAT_HORN));
@@ -475,9 +475,9 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
     }
 
     @Override
-    protected float getSaddledSpeed(PlayerEntity controllingPlayer) {
+    protected float getSaddledSpeed(Player controllingPlayer) {
         if(!this.isSitting()) {
-            return controllingPlayer.isSprinting() ? ((float)this.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)) : ((float)this.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED) * 0.5f);
+            return controllingPlayer.isSprinting() ? ((float)this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED)) : ((float)this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED) * 0.5f);
         }
 
         return super.getSaddledSpeed(controllingPlayer);
@@ -486,7 +486,7 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
     @Override
     protected float getNpcSaddledSpeed(NpcEntity controllingNpc) {
         if(!this.isSitting()) {
-            return controllingNpc.isSprinting() ? ((float)this.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED) * 2f) : ((float)this.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED) * 0.75f);
+            return controllingNpc.isSprinting() ? ((float)this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED) * 2f) : ((float)this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED) * 0.75f);
         }
 
         return super.getNpcSaddledSpeed(controllingNpc);
@@ -503,7 +503,7 @@ public class BroadhoofGoatEntity extends AbstractBeastEntity {
     }
 
     /* VARIANTS */
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound nbt) {
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable CompoundTag nbt) {
         BroadhoofGoatColor color = Util.getRandom(BroadhoofGoatColor.values(), this.random);
         BroadhoofGoatPattern pattern = BroadhoofGoatPattern.PATTERN_COMBINATIONS.get(color).getRandom().getItem();
         BroadhoofGoatHorns horns = Util.getRandom(BroadhoofGoatHorns.values(), this.random);

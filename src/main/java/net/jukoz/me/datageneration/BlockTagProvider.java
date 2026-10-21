@@ -6,13 +6,13 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.*;
 import net.jukoz.me.datageneration.content.models.*;
 import net.jukoz.me.datageneration.content.tags.*;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.RegistryWrapper;
+import net.minecraft.tags.TagKey;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -24,25 +24,25 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup arg) {
-        var mineablePickaxe = getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "mineable/pickaxe")));
-        var mineableAxe = getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "mineable/axe")));
-        var mineableShovel = getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "mineable/shovel")));
-        var mineableHoe = getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "mineable/hoe")));
-        var swordEfficient = getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "sword_efficient")));
+        var mineablePickaxe = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "mineable/pickaxe")));
+        var mineableAxe = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "mineable/axe")));
+        var mineableShovel = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "mineable/shovel")));
+        var mineableHoe = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "mineable/hoe")));
+        var swordEfficient = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "sword_efficient")));
 
-        var needsStoneTools = getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "needs_stone_tool")));
-        var needsIronTools = getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "needs_iron_tool")));
-        var needsDiamondTools = getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "needs_diamond_tool")));
-        var needsNetheriteTools = getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("fabric", "needs_tool_level_4")));
+        var needsStoneTools = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "needs_stone_tool")));
+        var needsIronTools = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "needs_iron_tool")));
+        var needsDiamondTools = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "needs_diamond_tool")));
+        var needsNetheriteTools = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("fabric", "needs_tool_level_4")));
 
-        var baseStoneOverworld = getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "base_stone_overworld")));
+        var baseStoneOverworld = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "base_stone_overworld")));
 
-        var seat = getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier(MiddleEarth.MOD_ID, "seat")));
-        var table = getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier(MiddleEarth.MOD_ID, "table")));
+        var seat = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "seat")));
+        var table = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "table")));
 
-        var leaves = getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "leaves")));
+        var leaves = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "leaves")));
 
-        var cobwebs = getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("me", "cobwebs")));
+        var cobwebs = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("me", "cobwebs")));
 
         mineableAxe.add(notNullBlocks(MineableAxe.blocks));
         mineablePickaxe.add(notNullBlocks(MineablePickaxe.blocks));
@@ -52,29 +52,29 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         swordEfficient.add(notNullBlocks(LeavesSets.blocks));
 
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "saplings"))).add(notNullBlocks(Saplings.saplings));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "doors"))).add(notNullBlocks(Doors.doors));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "trapdoors"))).add(notNullBlocks(Trapdoors.trapdoors));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "buttons"))).add(notNullBlocks(Buttons.buttons));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "fences"))).add(notNullBlocks(Fences.fences));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "wooden_fences"))).add(notNullBlocks(Fences.fences));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "fence_gates"))).add(notNullBlocks(FenceGates.fenceGates));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "logs"))).add(notNullBlocks(Logs.logs));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "pressure_plates"))).add(notNullBlocks(PressurePlates.pressurePlates));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "walls"))).add(notNullBlocks(Walls.walls));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "planks"))).add(notNullBlocks(Planks.planks));
-        getOrCreateTagBuilder(TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "crops"))).add(notNullBlocks(Crops.crops));
+        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "saplings"))).add(notNullBlocks(Saplings.saplings));
+        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "doors"))).add(notNullBlocks(Doors.doors));
+        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "trapdoors"))).add(notNullBlocks(Trapdoors.trapdoors));
+        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "buttons"))).add(notNullBlocks(Buttons.buttons));
+        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "fences"))).add(notNullBlocks(Fences.fences));
+        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "wooden_fences"))).add(notNullBlocks(Fences.fences));
+        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "fence_gates"))).add(notNullBlocks(FenceGates.fenceGates));
+        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "logs"))).add(notNullBlocks(Logs.logs));
+        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "pressure_plates"))).add(notNullBlocks(PressurePlates.pressurePlates));
+        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "walls"))).add(notNullBlocks(Walls.walls));
+        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "planks"))).add(notNullBlocks(Planks.planks));
+        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "crops"))).add(notNullBlocks(Crops.crops));
 
         //Ores
-        TagKey<Block> iron_ores = TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "iron_ores"));
-        TagKey<Block> gold_ores = TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "gold_ores"));
-        TagKey<Block> copper_ores = TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "copper_ores"));
-        TagKey<Block> coal_ores = TagKey.of(RegistryKeys.BLOCK, new Identifier("minecraft", "coal_ores"));
+        TagKey<Block> iron_ores = TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "iron_ores"));
+        TagKey<Block> gold_ores = TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "gold_ores"));
+        TagKey<Block> copper_ores = TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "copper_ores"));
+        TagKey<Block> coal_ores = TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "coal_ores"));
 
-        TagKey<Block> tin_ores = TagKey.of(RegistryKeys.BLOCK, new Identifier("me", "tin_ores"));
-        TagKey<Block> lead_ores = TagKey.of(RegistryKeys.BLOCK, new Identifier("me", "lead_ores"));
-        TagKey<Block> silver_ores = TagKey.of(RegistryKeys.BLOCK, new Identifier("me", "silver_ores"));
-        TagKey<Block> mithril_ores = TagKey.of(RegistryKeys.BLOCK, new Identifier("me", "mithril_ores"));
+        TagKey<Block> tin_ores = TagKey.of(Registries.BLOCK, new ResourceLocation("me", "tin_ores"));
+        TagKey<Block> lead_ores = TagKey.of(Registries.BLOCK, new ResourceLocation("me", "lead_ores"));
+        TagKey<Block> silver_ores = TagKey.of(Registries.BLOCK, new ResourceLocation("me", "silver_ores"));
+        TagKey<Block> mithril_ores = TagKey.of(Registries.BLOCK, new ResourceLocation("me", "mithril_ores"));
 
 
 

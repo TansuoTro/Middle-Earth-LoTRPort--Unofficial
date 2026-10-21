@@ -3,11 +3,11 @@ package net.jukoz.me.entity.ai.brain;
 import com.google.common.annotations.VisibleForTesting;
 import com.mojang.serialization.Codec;
 import net.minecraft.entity.ai.brain.Memory;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.jukoz.me.MiddleEarth;
 
 import java.util.Optional;
@@ -34,11 +34,11 @@ public class MemoryModulesME<U> {
     }
 
     private static <U> MemoryModuleType<U> register(String id, Codec<U> codec) {
-        return Registry.register(Registries.MEMORY_MODULE_TYPE, new Identifier(MiddleEarth.MOD_ID, id), new MemoryModuleType<>(Optional.of(codec)));
+        return Registry.register(Registries.MEMORY_MODULE_TYPE, new ResourceLocation(MiddleEarth.MOD_ID, id), new MemoryModuleType<>(Optional.of(codec)));
     }
 
     private static <U> MemoryModuleType<U> register(String id) {
-        return Registry.register(Registries.MEMORY_MODULE_TYPE, new Identifier(MiddleEarth.MOD_ID, id), new MemoryModuleType<>(Optional.empty()));
+        return Registry.register(Registries.MEMORY_MODULE_TYPE, new ResourceLocation(MiddleEarth.MOD_ID, id), new MemoryModuleType<>(Optional.empty()));
     }
 
     public static void registerModMemoryModules() {

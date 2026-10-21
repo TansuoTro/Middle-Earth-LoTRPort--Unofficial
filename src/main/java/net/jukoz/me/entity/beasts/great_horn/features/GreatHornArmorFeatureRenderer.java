@@ -3,23 +3,23 @@ import net.jukoz.me.entity.beasts.great_horn.GreatHornEntity;
 import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.jukoz.me.compat.client.render.equipment.EquipmentRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
-import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.jukoz.me.compat.DyedColorComponent;
 import net.jukoz.me.item.MEComponents;
-import net.minecraft.util.Identifier;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.EntityModelLayersME;
 import net.jukoz.me.entity.beasts.great_horn.GreatHornEntityRenderState;
@@ -37,9 +37,9 @@ public class GreatHornArmorFeatureRenderer extends MEFeatureRenderer<GreatHornEn
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, GreatHornEntityRenderState state, float limbAngle, float limbDistance) {
+    public void render(PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, GreatHornEntityRenderState state, float limbAngle, float limbDistance) {
         ItemStack itemStack = state.armor;
-        Identifier equippableComponent = MEComponents.get(itemStack, MEComponents.EQUIPPABLE_ASSET);
+        ResourceLocation equippableComponent = MEComponents.get(itemStack, MEComponents.EQUIPPABLE_ASSET);
         if (equippableComponent != null && !equippableComponent.getPath().isEmpty()) {
             model.setAngles(state);
             String path = "textures/entities/great_horn/feature/" + equippableComponent.getPath() + ".png";
@@ -47,7 +47,7 @@ public class GreatHornArmorFeatureRenderer extends MEFeatureRenderer<GreatHornEn
             if (itemStack.getItem() instanceof net.minecraft.item.DyeableItem) {
                 dyeable = true;
             }
-            VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(new Identifier(MiddleEarth.MOD_ID, path)), true, itemStack.hasGlint());
+            VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(new ResourceLocation(MiddleEarth.MOD_ID, path)), true, itemStack.hasGlint());
 
             if(dyeable){
                 int color = itemStack.getItem() instanceof net.minecraft.item.DyeableItem dyeableItem
@@ -58,7 +58,7 @@ public class GreatHornArmorFeatureRenderer extends MEFeatureRenderer<GreatHornEn
                 model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, red, green, blue, 1.0F);
                 if(DyeablePiecesME.dyeablePieces.get(itemStack.getItem())) {
                     ArmorRenderer.renderPart(matrices, vertexConsumers, light, itemStack, model,
-                            new Identifier(MiddleEarth.MOD_ID, path.replaceAll(".png", "_overlay.png")));
+                            new ResourceLocation(MiddleEarth.MOD_ID, path.replaceAll(".png", "_overlay.png")));
                 }
             } else {
                 model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);

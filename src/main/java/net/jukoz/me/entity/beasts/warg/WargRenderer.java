@@ -7,15 +7,15 @@ import com.google.common.collect.Maps;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.jukoz.me.compat.client.render.equipment.EquipmentModel;
 import net.jukoz.me.compat.client.render.equipment.SaddleFeatureRenderer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.EquipmentSlot;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.beasts.warg.features.*;
 import net.jukoz.me.entity.EntityModelLayersME;
-import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.Util;
 
 import java.util.Map;
 
@@ -44,7 +44,7 @@ public class WargRenderer extends MEMobEntityRenderer<WargEntity, WargEntityRend
     }
 
     @Override
-    public void render(WargEntityRenderState state, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
+    public void render(WargEntityRenderState state, PoseStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
         if(state.baby) {
             matrixStack.scale(SIZE/2, SIZE/2, SIZE/2);
         }
@@ -60,26 +60,26 @@ public class WargRenderer extends MEMobEntityRenderer<WargEntity, WargEntityRend
         return new WargEntityRenderState();
     }
 
-    public static final Map<WargVariant, Identifier> LOCATION_BY_VARIANT =
+    public static final Map<WargVariant, ResourceLocation> LOCATION_BY_VARIANT =
             Util.make(Maps.newEnumMap(WargVariant.class), (map) -> {
                 map.put(WargVariant.BROWN,
-                        new Identifier(MiddleEarth.MOD_ID, PATH + "warg_brown.png"));
+                        new ResourceLocation(MiddleEarth.MOD_ID, PATH + "warg_brown.png"));
                 map.put(WargVariant.BLACK,
-                        new Identifier(MiddleEarth.MOD_ID, PATH + "warg_black.png"));
+                        new ResourceLocation(MiddleEarth.MOD_ID, PATH + "warg_black.png"));
                 map.put(WargVariant.GRAY,
-                        new Identifier(MiddleEarth.MOD_ID, PATH + "warg_gray.png"));
+                        new ResourceLocation(MiddleEarth.MOD_ID, PATH + "warg_gray.png"));
                 map.put(WargVariant.LIGHT_GRAY,
-                        new Identifier(MiddleEarth.MOD_ID, PATH + "warg_light_gray.png"));
+                        new ResourceLocation(MiddleEarth.MOD_ID, PATH + "warg_light_gray.png"));
                 map.put(WargVariant.SNOW,
-                        new Identifier(MiddleEarth.MOD_ID, PATH + "warg_snow.png"));
+                        new ResourceLocation(MiddleEarth.MOD_ID, PATH + "warg_snow.png"));
                 map.put(WargVariant.MOTTLED,
-                        new Identifier(MiddleEarth.MOD_ID, PATH + "warg_mottled.png"));
+                        new ResourceLocation(MiddleEarth.MOD_ID, PATH + "warg_mottled.png"));
                 map.put(WargVariant.TAN,
-                        new Identifier(MiddleEarth.MOD_ID, PATH + "warg_tan.png"));
+                        new ResourceLocation(MiddleEarth.MOD_ID, PATH + "warg_tan.png"));
             });
 
     @Override
-    public Identifier getTexture(WargEntityRenderState state) {
+    public ResourceLocation getTexture(WargEntityRenderState state) {
         return LOCATION_BY_VARIANT.get(state.variant);
     }
 

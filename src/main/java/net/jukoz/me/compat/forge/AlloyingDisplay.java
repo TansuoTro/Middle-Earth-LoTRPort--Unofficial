@@ -4,7 +4,7 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.block.special.forge.MetalTypes;
 import net.jukoz.me.compat.REICommonPluginME;
 import net.jukoz.me.recipe.AlloyingRecipe;

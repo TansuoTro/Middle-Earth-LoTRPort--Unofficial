@@ -1,27 +1,27 @@
 package net.jukoz.me.block.special.curtains;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.block.LichenGrower;
 import net.minecraft.block.MultifaceGrowthBlock;
-import net.minecraft.block.ShapeContext;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.block.Waterloggable;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.state.property.Property;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelView;
 import net.jukoz.me.utils.BlockTagsME;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,7 +38,7 @@ import java.util.function.Function;
  */
 public class CurtainsBlock extends MultifaceGrowthBlock implements Waterloggable {
     public static final BooleanProperty TIP = BooleanProperty.of("tip");
-    public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private static final Map<Direction, VoxelShape> FACING_SHAPES = Map.of(
             Direction.NORTH, Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 3.0, 3.0),
@@ -49,7 +49,7 @@ public class CurtainsBlock extends MultifaceGrowthBlock implements Waterloggable
     private final Function<BlockState, VoxelShape> shapeFunction;
     private final LichenGrower grower = new LichenGrower(this);
 
-    public CurtainsBlock(AbstractBlock.Settings settings) {
+    public CurtainsBlock(BlockBehaviour.Settings settings) {
         super(settings);
         shapeFunction = createShapeFunction();
     }
@@ -61,8 +61,8 @@ public class CurtainsBlock extends MultifaceGrowthBlock implements Waterloggable
 
     @Override
     @Nullable
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        World world = ctx.getWorld();
+    public BlockState getPlacementState(BlockPlaceContext ctx) {
+        Level world = ctx.getWorld();
         BlockPos blockPos = ctx.getBlockPos();
         BlockState blockState = world.getBlockState(blockPos);
         BlockState returnState = (BlockState) Arrays.stream(ctx.getPlacementDirections()).map((direction) -> {
@@ -79,7 +79,7 @@ public class CurtainsBlock extends MultifaceGrowthBlock implements Waterloggable
     }
 
     @Override
-    public boolean canGrowWithDirection(BlockView world, BlockState state, BlockPos pos, Direction direction) {
+    public boolean canGrowWithDirection(BlockGetter world, BlockState state, BlockPos pos, Direction direction) {
         return canHaveDirection(direction);
     }
 
@@ -89,7 +89,7 @@ public class CurtainsBlock extends MultifaceGrowthBlock implements Waterloggable
     }
 
     @Override
-    public boolean canReplace(BlockState state, ItemPlacementContext context) {
+    public boolean canReplace(BlockState state, BlockPlaceContext context) {
         boolean sneaking = false;
         if (context.getPlayer() != null) sneaking = context.getPlayer().isSneaking();
         boolean placeVertically = false;
@@ -141,7 +141,7 @@ public class CurtainsBlock extends MultifaceGrowthBlock implements Waterloggable
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return (VoxelShape) this.shapeFunction.apply(state);
     }
 
@@ -163,7 +163,7 @@ public class CurtainsBlock extends MultifaceGrowthBlock implements Waterloggable
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(new Property[]{TIP, WATERLOGGED});
         super.appendProperties(builder);
     }

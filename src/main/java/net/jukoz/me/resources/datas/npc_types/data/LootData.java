@@ -2,7 +2,7 @@ package net.jukoz.me.resources.datas.npc_types.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
 
 import java.util.Optional;
 
@@ -40,7 +40,7 @@ public class LootData {
         return Optional.ofNullable(randomAddition);
     }
 
-    public int getExperience(ServerWorld world) {
+    public int getExperience(ServerLevel world) {
         int random = getRandomAddition().orElse(0);
         if(random == 0) {
             return baseExperience;

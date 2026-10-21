@@ -1,14 +1,14 @@
 package net.jukoz.me.block.special;
 
 import net.minecraft.block.*;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelView;
 import net.minecraft.world.chunk.light.ChunkLightProvider;
 
 public class StoneMyceliumBlock extends Block {
@@ -17,7 +17,7 @@ public class StoneMyceliumBlock extends Block {
         super(settings);
     }
 
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         if (!canSurvive(state, world, pos)) {
             world.setBlockState(pos, Blocks.STONE.getDefaultState());
         } else {
@@ -35,7 +35,7 @@ public class StoneMyceliumBlock extends Block {
         }
     }
 
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+    public void randomDisplayTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
         super.randomDisplayTick(state, world, pos, random);
         if (random.nextInt(10) == 0) {
             world.addParticle(ParticleTypes.MYCELIUM, (double)pos.getX() + random.nextDouble(), (double)pos.getY() + 1.1, (double)pos.getZ() + random.nextDouble(), 0.0, 0.0, 0.0);

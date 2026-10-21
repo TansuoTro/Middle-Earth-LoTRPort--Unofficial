@@ -1,11 +1,11 @@
 package net.jukoz.me.network.packets.S2C;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.inscriptiontable.InscriptionTableScreen;
 import net.jukoz.me.gui.inscriptiontable.InscriptionTableScreenHandler;
@@ -18,7 +18,7 @@ import net.jukoz.me.world.dimension.ModDimensions;
 import java.util.List;
 
 public class InscriptionEnchantInfoPacket extends ServerToClientPacket<InscriptionEnchantInfoPacket> {
-    public static final Identifier ID = MiddleEarth.of("inscription_enchant_info_packet");
+    public static final ResourceLocation ID = MiddleEarth.of("inscription_enchant_info_packet");
     public static final PacketType<InscriptionEnchantInfoPacket> TYPE = PacketType.create(ID, InscriptionEnchantInfoPacket::new);
 
     private final String enchant;
@@ -34,7 +34,7 @@ public class InscriptionEnchantInfoPacket extends ServerToClientPacket<Inscripti
     }
 
     @Override
-    @Environment(EnvType.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void process(ClientPacketContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
         InscriptionTableScreen screen = (InscriptionTableScreen)client.currentScreen;
@@ -48,7 +48,7 @@ public class InscriptionEnchantInfoPacket extends ServerToClientPacket<Inscripti
         }
     }
 
-    public InscriptionEnchantInfoPacket(PacketByteBuf buf) {
+    public InscriptionEnchantInfoPacket(FriendlyByteBuf buf) {
         this(buf.readString(), buf.readInt(), buf.readInt(), buf.readByteArray());
     }
 
@@ -58,7 +58,7 @@ public class InscriptionEnchantInfoPacket extends ServerToClientPacket<Inscripti
     }
 
     @Override
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
         buf.writeString(this.enchant);
         buf.writeInt(this.level);
         buf.writeInt(this.maxLevel);

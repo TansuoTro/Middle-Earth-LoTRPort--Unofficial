@@ -9,9 +9,9 @@ import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.commands.CommandUtils;
 import net.jukoz.me.commands.ModCommands;
@@ -50,7 +50,7 @@ public class CommandOnboarding {
 
     private static int open(CommandContext<ServerCommandSource> context) {
         if(context.getSource().isExecutedByPlayer()) {
-            ServerPlayerEntity source = context.getSource().getPlayer();
+            ServerPlayer source = context.getSource().getPlayer();
             if(source != null){
                 ServerPlayNetworking.send(source, new PacketForceOnboardingScreen(ModServerConfigs.DELAY_ON_TELEPORT_CONFIRMATION, source));
             }
@@ -59,7 +59,7 @@ public class CommandOnboarding {
     }
 
     private static int openForTarget(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayerEntity targetPlayer = EntityArgumentType.getPlayer(context, PLAYER);
+        ServerPlayer targetPlayer = EntityArgumentType.getPlayer(context, PLAYER);
         if(targetPlayer != null){
             ServerPlayNetworking.send(targetPlayer, new PacketForceOnboardingScreen(ModServerConfigs.DELAY_ON_TELEPORT_CONFIRMATION, targetPlayer));
         }
@@ -69,13 +69,13 @@ public class CommandOnboarding {
 
     private static int tryOpen(CommandContext<ServerCommandSource> context) {
         if(context.getSource().isExecutedByPlayer()) {
-            ServerPlayerEntity playerSource = context.getSource().getPlayer();
+            ServerPlayer playerSource = context.getSource().getPlayer();
             if(playerSource != null){
                 boolean playerPassedOnboarding = PlayerDataService.playerPassedOnboarding(playerSource);
                 if(playerPassedOnboarding){
                     ServerPlayNetworking.send(playerSource, new PacketForceOnboardingScreen(ModServerConfigs.DELAY_ON_TELEPORT_CONFIRMATION, playerSource));
                 } else {
-                    MutableText sourceText = Text.translatable("command.%s.open.onboarding.error".formatted(MiddleEarth.MOD_ID));
+                    MutableComponent sourceText = Component.translatable("command.%s.open.onboarding.error".formatted(MiddleEarth.MOD_ID));
                     playerSource.sendMessage(METext.withColor(sourceText, ModColors.WARNING.color));
                 }
             }
@@ -84,15 +84,15 @@ public class CommandOnboarding {
     }
 
     private static int tryOpenForTarget(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayerEntity playerTarget = EntityArgumentType.getPlayer(context, PLAYER);
+        ServerPlayer playerTarget = EntityArgumentType.getPlayer(context, PLAYER);
         if(playerTarget != null){
             boolean playerPassedOnboarding = PlayerDataService.playerPassedOnboarding(playerTarget);
             if(playerPassedOnboarding){
                 ServerPlayNetworking.send(playerTarget, new PacketForceOnboardingScreen(ModServerConfigs.DELAY_ON_TELEPORT_CONFIRMATION, playerTarget));
-                MutableText sourceText = Text.translatable("command.%s.open_target.onboarding.success".formatted(MiddleEarth.MOD_ID), playerTarget.getName());
+                MutableComponent sourceText = Component.translatable("command.%s.open_target.onboarding.success".formatted(MiddleEarth.MOD_ID), playerTarget.getName());
                 context.getSource().sendMessage(METext.withColor(sourceText, ModColors.SUCCESS.color));
             } else {
-                MutableText sourceText = Text.translatable("command.%s.open_target.onboarding.error".formatted(MiddleEarth.MOD_ID), playerTarget.getName());
+                MutableComponent sourceText = Component.translatable("command.%s.open_target.onboarding.error".formatted(MiddleEarth.MOD_ID), playerTarget.getName());
                 context.getSource().sendMessage(METext.withColor(sourceText, ModColors.WARNING.color));
             }
         }

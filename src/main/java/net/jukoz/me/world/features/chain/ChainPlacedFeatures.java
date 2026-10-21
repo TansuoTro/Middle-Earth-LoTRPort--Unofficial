@@ -1,14 +1,14 @@
 package net.jukoz.me.world.features.chain;
 
 import net.jukoz.me.MiddleEarth;
-import net.minecraft.registry.Registerable;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.PlacedFeature;
-import net.minecraft.world.gen.feature.PlacedFeatures;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.core.RegistryEntryLookup;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 /**
  * The donor's {@code rope_ladder_down} template-pool feature element points at a
@@ -16,15 +16,15 @@ import net.minecraft.world.gen.feature.PlacedFeatures;
  * features resolve instead of leaving an unbound registry entry.
  */
 public class ChainPlacedFeatures {
-    public static final RegistryKey<PlacedFeature> ROPE_LADDER_DOWN = registerKey("rope_ladder_down");
+    public static final ResourceKey<PlacedFeature> ROPE_LADDER_DOWN = registerKey("rope_ladder_down");
 
-    public static RegistryKey<PlacedFeature> registerKey(String name) {
-        return RegistryKey.of(RegistryKeys.PLACED_FEATURE, MiddleEarth.of(name));
+    public static ResourceKey<PlacedFeature> registerKey(String name) {
+        return ResourceKey.of(Registries.PLACED_FEATURE, MiddleEarth.of(name));
     }
 
-    public static void bootstrap(Registerable<PlacedFeature> featureRegisterable) {
-        RegistryEntryLookup<ConfiguredFeature<?, ?>> configured = featureRegisterable.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE);
-        PlacedFeatures.register(featureRegisterable, ROPE_LADDER_DOWN,
+    public static void bootstrap(BootstrapContext<PlacedFeature> featureRegisterable) {
+        RegistryEntryLookup<ConfiguredFeature<?, ?>> configured = featureRegisterable.getRegistryLookup(Registries.CONFIGURED_FEATURE);
+        PlacedFeature.register(featureRegisterable, ROPE_LADDER_DOWN,
                 configured.getOrThrow(ChainConfiguredFeatures.ROPE_LADDER_DOWN));
     }
 }

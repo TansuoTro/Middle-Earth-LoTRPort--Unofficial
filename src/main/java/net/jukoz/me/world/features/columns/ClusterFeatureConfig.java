@@ -2,12 +2,12 @@ package net.jukoz.me.world.features.columns;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.floatprovider.FloatProvider;
-import net.minecraft.util.math.intprovider.IntProvider;
-import net.minecraft.world.gen.feature.FeatureConfig;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.util.valueproviders.FloatProvider;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 
-public class ClusterFeatureConfig implements FeatureConfig {
+public class ClusterFeatureConfig implements FeatureConfiguration {
 
     public static final Codec<ClusterFeatureConfig> CODEC = RecordCodecBuilder.create((instance) -> {
         return instance.group(Codec.intRange(1, 512).fieldOf("floor_to_ceiling_search_range").forGetter((config) -> {

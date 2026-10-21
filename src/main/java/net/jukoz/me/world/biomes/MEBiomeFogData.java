@@ -1,13 +1,13 @@
 package net.jukoz.me.world.biomes;
 
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.biome.Biome;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class MEBiomeFogData {
-    public static Map<RegistryKey<Biome>, MEBiomeFogData> DATA;
+    public static Map<ResourceKey<Biome>, MEBiomeFogData> DATA;
     static {
         DATA = new HashMap<>();
         DATA.put(MEBiomeKeys.ERIADOR, new MEBiomeFogData(0.15f, 0.95f));

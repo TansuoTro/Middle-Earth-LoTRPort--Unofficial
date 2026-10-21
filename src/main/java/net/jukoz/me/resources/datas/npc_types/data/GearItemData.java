@@ -4,17 +4,17 @@ import net.jukoz.me.item.MEComponents;
 
 
 import net.jukoz.me.compat.DyedColorComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtString;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.item.dataComponents.BackAttachmentDataComponent;
 import net.jukoz.me.item.dataComponents.HelmetAttachmentDataComponent;
@@ -48,7 +48,7 @@ public class GearItemData {
     public GearItemData(Item item) {
         this.item = item;
     }
-    public GearItemData(Identifier itemIdentifier) {
+    public GearItemData(ResourceLocation itemIdentifier) {
         this.item = getItemFromId(itemIdentifier);
     }
 
@@ -58,7 +58,7 @@ public class GearItemData {
     public static GearItemData create(Item item) {
         return new GearItemData(item);
     }
-    public static GearItemData create(Identifier itemIdentifier) {
+    public static GearItemData create(ResourceLocation itemIdentifier) {
         return new GearItemData(itemIdentifier);
     }
 
@@ -128,18 +128,18 @@ public class GearItemData {
         return this;
     }
 
-    private static Item getItemFromId(Identifier itemId){
+    private static Item getItemFromId(ResourceLocation itemId){
         return Registries.ITEM.get(itemId);
     }
 
-    private static Identifier getIdentifierFromItem(Item item){
+    private static ResourceLocation getIdentifierFromItem(Item item){
         return Registries.ITEM.getId(item);
     }
 
     private int getRandomColor(List<Integer> listToFetch) {
         if(listToFetch != null){
             int max = listToFetch.size() - 1;
-            return listToFetch.get(Random.create().nextBetween(0, max));
+            return listToFetch.get(RandomSource.create().nextBetween(0, max));
         }
         return Color.PINK.getRGB();
     }
@@ -147,7 +147,7 @@ public class GearItemData {
     public Integer getColor(){
         return this.color;
     }
-    public Identifier getItemIdentifier() {
+    public ResourceLocation getItemIdentifier() {
         return getIdentifierFromItem(this.item);
     }
 
@@ -201,8 +201,8 @@ public class GearItemData {
         return itemStack;
     }
 
-    public GearItemData(NbtCompound nbt){
-        this(new Identifier(nbt.getString("id")));
+    public GearItemData(CompoundTag nbt){
+        this(new ResourceLocation(nbt.getString("id")));
 
         if(nbt.get("color") != null){
             color = nbt.getInt("color");
@@ -256,7 +256,7 @@ public class GearItemData {
         }
     }
 
-    public NbtElement getNbt(NbtCompound nbt) {
+    public NbtElement getNbt(CompoundTag nbt) {
         nbt.putString("id", getItemIdentifier().toString());
 
         if(color != null)

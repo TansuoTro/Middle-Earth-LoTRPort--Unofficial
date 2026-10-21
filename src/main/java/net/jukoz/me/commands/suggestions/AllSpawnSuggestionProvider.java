@@ -9,7 +9,7 @@ import net.jukoz.me.resources.datas.factions.Faction;
 import net.jukoz.me.resources.datas.factions.FactionLookup;
 import net.jukoz.me.resources.datas.factions.data.SpawnDataHandler;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class AllSpawnSuggestionProvider implements SuggestionProvider<ServerComm
     @Override
     public CompletableFuture<Suggestions> getSuggestions(CommandContext<ServerCommandSource> context, SuggestionsBuilder builder) {
         try {
-            List<Identifier> candidates = null;
+            List<ResourceLocation> candidates = null;
             candidates = getAllSpawns(context);
             return SuggestionUtil.getCorrespondingIdentifiers(candidates, builder);
         } catch (FactionIdentifierException e) {
@@ -27,23 +27,23 @@ public class AllSpawnSuggestionProvider implements SuggestionProvider<ServerComm
         }
     }
 
-    private static List<Identifier> getAllSpawns(CommandContext<ServerCommandSource> context) throws FactionIdentifierException {
+    private static List<ResourceLocation> getAllSpawns(CommandContext<ServerCommandSource> context) throws FactionIdentifierException {
         List<Faction> factions = FactionLookup.getAllFactions(context.getSource().getWorld());
-        List<Identifier> candidates = new ArrayList<>();
+        List<ResourceLocation> candidates = new ArrayList<>();
 
         for(Faction faction: factions){
             SpawnDataHandler spawnDataHandler = faction.getSpawnData();
             if(spawnDataHandler != null){
-                List<Identifier> spawnIds = spawnDataHandler.getAllSpawnIdentifiers();
+                List<ResourceLocation> spawnIds = spawnDataHandler.getAllSpawnIdentifiers();
                 if(spawnIds != null)
                     candidates.addAll(spawnIds);
             }
             if(faction.getSubFactions() != null){
-                for(Identifier subfactionId : faction.getSubFactions()){
+                for(ResourceLocation subfactionId : faction.getSubFactions()){
                     Faction subFaction = FactionLookup.getFactionById(context.getSource().getWorld(), subfactionId);
                     SpawnDataHandler subFacspawnDataHandler = subFaction.getSpawnData();
 
-                    List<Identifier> spawnIds = subFacspawnDataHandler.getAllSpawnIdentifiers();
+                    List<ResourceLocation> spawnIds = subFacspawnDataHandler.getAllSpawnIdentifiers();
                     if(spawnIds != null)
                         candidates.addAll(spawnIds);
                 }

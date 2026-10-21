@@ -3,15 +3,15 @@ package net.jukoz.me.block.special.structureManager.features;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.block.BedBlock;
+import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.block.DoubleBlockProperties;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Uuids;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.structureManager.StructureManagerBlockEntity;
 import net.jukoz.me.entity.npcs.NpcEntity;
@@ -24,7 +24,7 @@ import net.jukoz.me.entity.ai.brain.MemoryModulesME;
 
 public class SpawnNestManager {
     public static final Codec<SpawnNestManager> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Identifier.CODEC.fieldOf("id").forGetter(SpawnNestManager::getId),
+            ResourceLocation.CODEC.fieldOf("id").forGetter(SpawnNestManager::getId),
             Codec.list(Uuids.CODEC).fieldOf("entity_uuid").forGetter(SpawnNestManager::getEntityUuids),
             Codec.LONG.fieldOf("respawn_event_trigger_tick").forGetter(SpawnNestManager::getRespawnEventTriggerTick),
             Codec.INT.fieldOf("respawn_tick_delay").forGetter(SpawnNestManager::getRespawnTickDelay),
@@ -36,7 +36,7 @@ public class SpawnNestManager {
 
     private static final String ID = "spawn_nest_data";
 
-    private Identifier id;
+    private ResourceLocation id;
     private ArrayList<UUID> entities;
     private long respawnEventTriggerTick;
     private int respawnTickDelay;
@@ -45,11 +45,11 @@ public class SpawnNestManager {
 
     private final Map<String, BlockPos> bedAssignments;
 
-    public SpawnNestManager(Identifier dataId, List<UUID> dataEntities, long dataRespawnEventTriggerTick, int dataRespawnTickDelay, BlockPos position, int spawnRadius) {
+    public SpawnNestManager(ResourceLocation dataId, List<UUID> dataEntities, long dataRespawnEventTriggerTick, int dataRespawnTickDelay, BlockPos position, int spawnRadius) {
         this(dataId, dataEntities, dataRespawnEventTriggerTick, dataRespawnTickDelay, position, spawnRadius, Map.of());
     }
 
-    public SpawnNestManager(Identifier dataId, List<UUID> dataEntities, long dataRespawnEventTriggerTick, int dataRespawnTickDelay, BlockPos position, int spawnRadius, Map<String, BlockPos> beds) {
+    public SpawnNestManager(ResourceLocation dataId, List<UUID> dataEntities, long dataRespawnEventTriggerTick, int dataRespawnTickDelay, BlockPos position, int spawnRadius, Map<String, BlockPos> beds) {
         this.id = dataId;
         this.entities =  Lists.newArrayList();
         this.entities.addAll(dataEntities);
@@ -70,7 +70,7 @@ public class SpawnNestManager {
         this.bedAssignments = new LinkedHashMap<>();
     }
 
-    public Identifier getId() {
+    public ResourceLocation getId() {
         return this.id;
     }
 
@@ -112,7 +112,7 @@ public class SpawnNestManager {
         }
         return true;
     }
-    public void removeEntity(World world, UUID uuid){
+    public void removeEntity(Level world, UUID uuid){
         if(world.isClient || !this.entities.contains(uuid))
             return;
         this.entities.remove(uuid);
@@ -121,7 +121,7 @@ public class SpawnNestManager {
         }
     }
 
-    private void beginRespawnSequence(World world) {
+    private void beginRespawnSequence(Level world) {
         this.respawnEventTriggerTick = world.getTime();
     }
 
@@ -129,17 +129,17 @@ public class SpawnNestManager {
         return (entities.isEmpty() && time > respawnEventTriggerTick + respawnTickDelay);
     }
 
-    public void tick(StructureManagerData structureManagerData, long currentTick, ServerWorld world, BlockPos sourcePos) {
+    public void tick(StructureManagerData structureManagerData, long currentTick, ServerLevel world, BlockPos sourcePos) {
         if(canRespawn(currentTick)){
             respawnAll(structureManagerData, world, sourcePos);
         }
     }
 
-    public void doWellnessCheck(StructureManagerData structureManagerData, World world, BlockPos sourcePos) {
+    public void doWellnessCheck(StructureManagerData structureManagerData, Level world, BlockPos sourcePos) {
         if(entities != null && !entities.isEmpty()){
             List<UUID> toRemove = new ArrayList<>();
             for (UUID uuid : entities){ // Wellness check
-                var entity = world instanceof net.minecraft.server.world.ServerWorld sw ? sw.getEntity(uuid) : null;
+                var entity = world instanceof net.minecraft.server.level.ServerLevel sw ? sw.getEntity(uuid) : null;
                 // An unloaded entity is not dead. Removing it here duplicates residents on respawn.
                 if(entity != null && !entity.isAlive())
                     toRemove.add(uuid);
@@ -150,7 +150,7 @@ public class SpawnNestManager {
     }
 
 
-    private void respawnAll(StructureManagerData structureManagerData, ServerWorld world, BlockPos structureManagerPos) {
+    private void respawnAll(StructureManagerData structureManagerData, ServerLevel world, BlockPos structureManagerPos) {
         if(structureManagerData == null)
             return;
         SpawnNestNodeData data = structureManagerData.getNpcSpawnNest(id);
@@ -178,7 +178,7 @@ public class SpawnNestManager {
         return false;
     }
 
-    public void forceRespawn(StructureManagerData structureManagerData, ServerWorld world, BlockPos structureManagerPos) {
+    public void forceRespawn(StructureManagerData structureManagerData, ServerLevel world, BlockPos structureManagerPos) {
         for(var uuid : getEntityUuids()){
             if(world.getEntity(uuid) instanceof LivingEntity livingEntity){
                 livingEntity.setRemoved(Entity.RemovalReason.DISCARDED);
@@ -198,7 +198,7 @@ public class SpawnNestManager {
     }
 
     /** Reserve existing valid assignments before any nest allocates another resident's bed. */
-    public void retainBeds(List<BlockPos> candidates, Set<BlockPos> claimed, ServerWorld world) {
+    public void retainBeds(List<BlockPos> candidates, Set<BlockPos> claimed, ServerLevel world) {
         Set<String> residents = new HashSet<>();
         for (UUID uuid : entities) residents.add(uuid.toString());
         bedAssignments.entrySet().removeIf(entry -> !residents.contains(entry.getKey())
@@ -206,7 +206,7 @@ public class SpawnNestManager {
                 || !claimed.add(entry.getValue()));
     }
 
-    public void assignBeds(List<BlockPos> candidates, Set<BlockPos> claimed, ServerWorld world) {
+    public void assignBeds(List<BlockPos> candidates, Set<BlockPos> claimed, ServerLevel world) {
         for (UUID uuid : entities) {
             if (!(world.getEntity(uuid) instanceof NpcEntity npc)) continue;
             String key = uuid.toString();

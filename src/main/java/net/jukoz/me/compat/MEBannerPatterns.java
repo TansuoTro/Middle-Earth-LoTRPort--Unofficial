@@ -1,14 +1,14 @@
 package net.jukoz.me.compat;
 
 import net.minecraft.block.entity.BannerBlockEntity;
-import net.minecraft.block.entity.BannerPattern;
-import net.minecraft.item.BannerItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.item.BannerItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.DyeColor;
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.DyeColor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ import java.util.List;
  * short id ({@code Pattern}) and a dye index ({@code Color}). Call sites keep the donor shape
  * through {@link #get}/{@link #set} and the nested {@link Builder}.
  *
- * <p>R3: layers hold a {@link RegistryEntry} (1.20.1's {@code BannerPattern.byId} and
+ * <p>R3: layers hold a {@link Holder} (1.20.1's {@code BannerPattern.byId} and
  * {@code TexturedRenderLayers.getBannerPatternTextureId} work on registry entries/keys).
  */
 public record MEBannerPatterns(List<Layer> layers) {
@@ -29,7 +29,7 @@ public record MEBannerPatterns(List<Layer> layers) {
     public static final MEBannerPatterns DEFAULT = new MEBannerPatterns(List.of());
 
     /** One applied banner layer: the pattern and the dye it was applied with. */
-    public record Layer(RegistryEntry<BannerPattern> pattern, DyeColor color) {
+    public record Layer(Holder<BannerPattern> pattern, DyeColor color) {
     }
 
     /** Donor-style builder mirroring {@code MEBannerPatterns.Builder}. */
@@ -37,14 +37,14 @@ public record MEBannerPatterns(List<Layer> layers) {
         private final List<Layer> layers = new ArrayList<>();
 
         public Builder add(BannerPattern pattern, DyeColor color) {
-            RegistryEntry<BannerPattern> entry = BannerPattern.byId(pattern.getId());
+            Holder<BannerPattern> entry = BannerPattern.byId(pattern.getId());
             if (entry != null) {
                 layers.add(new Layer(entry, color));
             }
             return this;
         }
 
-        public Builder add(RegistryEntry<BannerPattern> pattern, DyeColor color) {
+        public Builder add(Holder<BannerPattern> pattern, DyeColor color) {
             layers.add(new Layer(pattern, color));
             return this;
         }
@@ -62,12 +62,12 @@ public record MEBannerPatterns(List<Layer> layers) {
     /** The layers currently applied to {@code stack}, never null. */
     public static MEBannerPatterns get(ItemStack stack) {
         List<Layer> layers = new ArrayList<>();
-        NbtCompound blockEntityTag = stack.getSubNbt("BlockEntityTag");
+        CompoundTag blockEntityTag = stack.getSubNbt("BlockEntityTag");
         if (blockEntityTag != null) {
             NbtList patterns = blockEntityTag.getList(BannerBlockEntity.PATTERNS_KEY, NbtElement.COMPOUND_TYPE);
             for (int i = 0; i < patterns.size(); i++) {
-                NbtCompound entry = patterns.getCompound(i);
-                RegistryEntry<BannerPattern> pattern = BannerPattern.byId(entry.getString(BannerBlockEntity.PATTERN_KEY));
+                CompoundTag entry = patterns.getCompound(i);
+                Holder<BannerPattern> pattern = BannerPattern.byId(entry.getString(BannerBlockEntity.PATTERN_KEY));
                 if (pattern == null) {
                     continue;
                 }
@@ -79,13 +79,13 @@ public record MEBannerPatterns(List<Layer> layers) {
 
     /** Replaces the applied layers; an empty list removes the {@code Patterns} key. */
     public static void set(ItemStack stack, MEBannerPatterns patterns) {
-        NbtCompound blockEntityTag = stack.getOrCreateSubNbt("BlockEntityTag");
+        CompoundTag blockEntityTag = stack.getOrCreateSubNbt("BlockEntityTag");
         if (patterns.layers().isEmpty()) {
             blockEntityTag.remove(BannerBlockEntity.PATTERNS_KEY);
         } else {
             NbtList list = new NbtList();
             for (Layer layer : patterns.layers()) {
-                NbtCompound entry = new NbtCompound();
+                CompoundTag entry = new CompoundTag();
                 entry.putString(BannerBlockEntity.PATTERN_KEY, layer.pattern().value().getId());
                 entry.putInt(BannerBlockEntity.COLOR_KEY, layer.color().getId());
                 list.add(entry);

@@ -1,9 +1,9 @@
 package net.jukoz.me.mixin.client;
 
 import net.minecraft.client.color.block.BlockColors;
-import net.minecraft.client.render.model.BakedModelManager;
+import net.minecraft.client.resources.model.BakedModelManager;
 import net.minecraft.client.texture.TextureManager;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.client.ModTexturedRenderLayers;
 import net.jukoz.me.registries.AtlasesME;
@@ -24,14 +24,14 @@ public class BakedModelManagerMixin{
 
     @Mutable
     @Shadow @Final
-    private static Map<Identifier, Identifier> LAYERS_TO_LOADERS;
+    private static Map<ResourceLocation, ResourceLocation> LAYERS_TO_LOADERS;
 
     // HEAD of a constructor lands before the super() call, and Mixin requires those handlers to
     // be static - which is what we want anyway, since LAYERS_TO_LOADERS is a static field.
     @Inject(method = "<init>", at=@At("HEAD"))
     private static void addNewAtlas(TextureManager textureManager, BlockColors colorMap, int mipmap, CallbackInfo ci)
     {
-        HashMap<Identifier, Identifier> map = new HashMap<>(LAYERS_TO_LOADERS);
+        HashMap<ResourceLocation, ResourceLocation> map = new HashMap<>(LAYERS_TO_LOADERS);
         map.put(ModTexturedRenderLayers.CHARACTER_ATLAS_TEXTURES, AtlasesME.CHARACTER_TEXTURES);
 
         /*

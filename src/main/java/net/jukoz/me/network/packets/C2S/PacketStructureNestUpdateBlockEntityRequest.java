@@ -1,10 +1,10 @@
 package net.jukoz.me.network.packets.C2S;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.structureManager.nest.StructureNestBlockEntity;
 import net.jukoz.me.network.contexts.ServerPacketContext;
@@ -14,25 +14,25 @@ import java.util.Optional;
 
 public class PacketStructureNestUpdateBlockEntityRequest extends ClientToServerPacket<PacketStructureNestUpdateBlockEntityRequest>
 {
-    public static final Identifier ID = new Identifier(MiddleEarth.MOD_ID, "structure_nest_update_block_entity_request");
+    public static final ResourceLocation ID = new ResourceLocation(MiddleEarth.MOD_ID, "structure_nest_update_block_entity_request");
 
     public static final PacketType<PacketStructureNestUpdateBlockEntityRequest> TYPE = PacketType.create(ID, PacketStructureNestUpdateBlockEntityRequest::new);
 
-    private Optional<Identifier> getStructureManagerId() {
+    private Optional<ResourceLocation> getStructureManagerId() {
         return Optional.ofNullable(structureManagerId);
     }
 
-    private Optional<Identifier> getStructureNestId() {
+    private Optional<ResourceLocation> getStructureNestId() {
         return Optional.ofNullable(structureNestId);
     }
 
     private final BlockPos pos;
-    private final Identifier structureManagerId;
-    private final Identifier structureNestId;
+    private final ResourceLocation structureManagerId;
+    private final ResourceLocation structureNestId;
     private final int spawnRadius;
     private final boolean isEnabled;
 
-    public PacketStructureNestUpdateBlockEntityRequest(BlockPos pos, Optional<Identifier> structureManagerId, Optional<Identifier> structureNestId, int spawnRadius, boolean isEnabled) {
+    public PacketStructureNestUpdateBlockEntityRequest(BlockPos pos, Optional<ResourceLocation> structureManagerId, Optional<ResourceLocation> structureNestId, int spawnRadius, boolean isEnabled) {
         this.pos = pos;
         this.spawnRadius = spawnRadius;
         this.isEnabled = isEnabled;
@@ -50,10 +50,10 @@ public class PacketStructureNestUpdateBlockEntityRequest extends ClientToServerP
 
 
 
-    public PacketStructureNestUpdateBlockEntityRequest(PacketByteBuf buf) {
+    public PacketStructureNestUpdateBlockEntityRequest(FriendlyByteBuf buf) {
         this(buf.readBlockPos(),
-                Optional.ofNullable(buf.readNullable(PacketByteBuf::readIdentifier)),
-                Optional.ofNullable(buf.readNullable(PacketByteBuf::readIdentifier)),
+                Optional.ofNullable(buf.readNullable(FriendlyByteBuf::readIdentifier)),
+                Optional.ofNullable(buf.readNullable(FriendlyByteBuf::readIdentifier)),
                 buf.readInt(), buf.readBoolean());
     }
 
@@ -63,10 +63,10 @@ public class PacketStructureNestUpdateBlockEntityRequest extends ClientToServerP
     }
 
     @Override
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
         buf.writeBlockPos(this.pos);
-        buf.writeNullable(this.structureManagerId, PacketByteBuf::writeIdentifier);
-        buf.writeNullable(this.structureNestId, PacketByteBuf::writeIdentifier);
+        buf.writeNullable(this.structureManagerId, FriendlyByteBuf::writeIdentifier);
+        buf.writeNullable(this.structureNestId, FriendlyByteBuf::writeIdentifier);
         buf.writeInt(this.spawnRadius);
         buf.writeBoolean(this.isEnabled);
     }

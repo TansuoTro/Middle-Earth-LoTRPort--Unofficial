@@ -1,12 +1,12 @@
 package net.jukoz.me.block.special.beds;
 
 import net.jukoz.me.block.registration.ModBlockEntities;
-import net.minecraft.block.BedBlock;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.util.DyeColor;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.BlockRenderType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.core.BlockPos;
 
 public class CustomBedBlock extends BedBlock {
 

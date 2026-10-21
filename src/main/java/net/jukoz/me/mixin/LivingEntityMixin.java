@@ -3,24 +3,24 @@ package net.jukoz.me.mixin;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.passive.HorseEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.enchantments.EnchantmentsME;
 import net.jukoz.me.entity.npcs.NpcEntity;
@@ -46,7 +46,7 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
 
-    @Shadow public abstract ItemStack getStackInHand(Hand hand);
+    @Shadow public abstract ItemStack getStackInHand(InteractionHand hand);
 
     @Shadow public abstract boolean hasStatusEffect(StatusEffect effect);
 
@@ -55,7 +55,7 @@ public abstract class LivingEntityMixin extends Entity {
     @Shadow
     protected abstract float getMovementSpeed(float slipperiness);
 
-    public LivingEntityMixin(EntityType<?> type, World world) {
+    public LivingEntityMixin(EntityType<?> type, Level world) {
         super(type, world);
     }
 
@@ -64,8 +64,8 @@ public abstract class LivingEntityMixin extends Entity {
         if (entity != null) {
             ItemStack chestplate = this.getEquippedStack(EquipmentSlot.CHEST);
             if(!chestplate.isEmpty()) {
-                RegistryEntry<Enchantment> enchantmentRegistryEntry = entity.getWorld().getRegistryManager()
-                        .get(RegistryKeys.ENCHANTMENT).getEntry(EnchantmentsME.STEALTHY_TRAIL).orElseThrow();
+                Holder<Enchantment> enchantmentRegistryEntry = entity.getWorld().getRegistryManager()
+                        .get(Registries.ENCHANTMENT).getEntry(EnchantmentsME.STEALTHY_TRAIL).orElseThrow();
                 boolean hasEnchant = MEEnchants.has(chestplate, enchantmentRegistryEntry);
                 int level = EnchantmentHelper.getLevel(enchantmentRegistryEntry.value(), chestplate);
                 if(hasEnchant) {
@@ -82,8 +82,8 @@ public abstract class LivingEntityMixin extends Entity {
         if(stackTraceLock) return;
         stackTraceLock = true;
         boolean twoHanded = false;
-        ItemStack stackMainHand = this.getStackInHand(Hand.MAIN_HAND);
-        ItemStack stackOffHand = this.getStackInHand(Hand.OFF_HAND);
+        ItemStack stackMainHand = this.getStackInHand(InteractionHand.MAIN_HAND);
+        ItemStack stackOffHand = this.getStackInHand(InteractionHand.OFF_HAND);
 
         if(stackMainHand != null){
             if ((stackMainHand.getItem() instanceof ReachWeaponItem && (((ReachWeaponItem) stackMainHand.getItem()).type.twoHanded))
@@ -114,7 +114,7 @@ public abstract class LivingEntityMixin extends Entity {
     public final StatusEffectInstance addStatusEffect(StatusEffectInstance effect) {
         if(effect.getEffectType().getCategory().equals(StatusEffectCategory.HARMFUL)) {
             float ailmentLevel = 0;
-            World world = this.getWorld();
+            Level world = this.getWorld();
             ailmentLevel += getAilmentProtectionLevel(this.getEquippedStack(EquipmentSlot.HEAD), world);
             ailmentLevel += getAilmentProtectionLevel(this.getEquippedStack(EquipmentSlot.CHEST), world);
             ailmentLevel += getAilmentProtectionLevel(this.getEquippedStack(EquipmentSlot.LEGS), world);
@@ -133,15 +133,15 @@ public abstract class LivingEntityMixin extends Entity {
     @Inject(method = "addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z", at = @At("TAIL"))
     public final void addStatusEffect(StatusEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {
         if(!this.getWorld().isClient) {
-            for (ServerPlayerEntity player : ((ServerWorld) this.getWorld()).getPlayers()) {
+            for (ServerPlayer player : ((ServerLevel) this.getWorld()).getPlayers()) {
                 ServerPlayNetworking.send(player, new PacketLivingEntityData(this.getId(), effect));
             }
         }
     }
 
-    private static int getAilmentProtectionLevel(ItemStack itemStack, World world) {
+    private static int getAilmentProtectionLevel(ItemStack itemStack, Level world) {
         int level = 0;
-        RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT)
+        Holder<Enchantment> enchantmentRegistryEntry = world.getRegistryManager().get(Registries.ENCHANTMENT)
                 .getEntry(EnchantmentsME.AILMENT_PROTECTION).orElseThrow();
         boolean hasEnchant = MEEnchants.has(itemStack, enchantmentRegistryEntry);
         if(hasEnchant) {
@@ -151,7 +151,7 @@ public abstract class LivingEntityMixin extends Entity {
     }
 
     @Inject(at = @At("HEAD"), method = "drop")
-    protected void drop(ServerWorld world, DamageSource damageSource, CallbackInfo callbackInfo) {
+    protected void drop(ServerLevel world, DamageSource damageSource, CallbackInfo callbackInfo) {
         if(getControllingPassenger() != null && getControllingPassenger() instanceof NpcEntity){
             for (EquipmentSlot equipmentSlot : EquipmentSlot.values()) {
                 this.equipStack(equipmentSlot, ItemStack.EMPTY);

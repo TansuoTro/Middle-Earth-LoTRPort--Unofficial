@@ -1,8 +1,8 @@
 package net.jukoz.me.block.registration;
 
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.minecraft.block.Block;
-import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.beds.CustomBedBlockEntity;
 import net.jukoz.me.block.special.bellows.BellowsBlockEntity;
@@ -19,10 +19,10 @@ import net.jukoz.me.block.special.skull.OldSkullBlockEntity;
 import net.jukoz.me.block.special.structureManager.StructureManagerBlockEntity;
 import net.jukoz.me.block.special.structureManager.nest.StructureNestBlockEntity;
 import net.jukoz.me.block.special.wood_pile.WoodPileBlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.registries.RegistryAliasesME;
 
 public class ModBlockEntities {
@@ -99,7 +99,7 @@ public class ModBlockEntities {
 private static <T extends BlockEntity> BlockEntityType<T> register(String name,
                                                                        FabricBlockEntityTypeBuilder.Factory<? extends T> entityFactory,
                                                                        Block... blocks) {
-        Identifier id = new Identifier(MiddleEarth.MOD_ID, name);
+        ResourceLocation id = new ResourceLocation(MiddleEarth.MOD_ID, name);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.BLOCK_ENTITY_TYPE, name));
 
         return Registry.register(Registries.BLOCK_ENTITY_TYPE, id, FabricBlockEntityTypeBuilder.<T>create(entityFactory, blocks).build());

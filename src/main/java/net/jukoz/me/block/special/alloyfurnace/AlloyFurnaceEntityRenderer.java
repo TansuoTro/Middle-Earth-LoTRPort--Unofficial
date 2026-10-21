@@ -2,24 +2,24 @@ package net.jukoz.me.block.special.alloyfurnace;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
-import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.block.entity.BlockEntityRenderer;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
-import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererFactory;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.ItemStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.math.*;
 import net.minecraft.world.LightType;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 public class AlloyFurnaceEntityRenderer implements BlockEntityRenderer<AlloyFurnaceEntity> {
     public AlloyFurnaceEntityRenderer(BlockEntityRendererFactory.Context context) {
     }
 
     @Override
-    public void render(AlloyFurnaceEntity entity, float tickDelta, MatrixStack matrices,
+    public void render(AlloyFurnaceEntity entity, float tickDelta, PoseStack matrices,
                        VertexConsumerProvider vertexConsumers, int light, int overlay) {
         ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
         //BlockModelRenderer blockRenderer = MinecraftClient.getInstance().getBlockRenderManager().getModelRenderer();
@@ -53,7 +53,7 @@ public class AlloyFurnaceEntityRenderer implements BlockEntityRenderer<AlloyFurn
         matrices.pop();
     }
 
-    private int getLightLevel(World world, BlockPos pos) {
+    private int getLightLevel(Level world, BlockPos pos) {
         int bLight = world.getLightLevel(LightType.BLOCK, pos);
         int sLight = world.getLightLevel(LightType.SKY, pos);
         return LightmapTextureManager.pack(bLight, sLight);

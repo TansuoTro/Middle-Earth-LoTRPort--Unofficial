@@ -1,9 +1,9 @@
 package net.jukoz.me.compat;
 
-import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Helpers for reading the 1.21 attribute-component data back out of a 1.20.1 stack.
@@ -20,7 +20,7 @@ public final class MEAttributes {
     public static double weaponAttackDamage(ItemStack stack) {
         double damage = 0.0;
         for (EntityAttributeModifier modifier : stack.getAttributeModifiers(EquipmentSlot.MAINHAND)
-                .get(EntityAttributes.GENERIC_ATTACK_DAMAGE)) {
+                .get(Attributes.GENERIC_ATTACK_DAMAGE)) {
             damage += modifier.getValue();
         }
         return damage;

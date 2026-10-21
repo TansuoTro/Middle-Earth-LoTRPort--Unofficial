@@ -1,13 +1,13 @@
 package net.jukoz.me.particles.custom;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.Heightmap;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 public class BiomeFogParticle extends SpriteBillboardParticle {
 
@@ -57,7 +57,7 @@ public class BiomeFogParticle extends SpriteBillboardParticle {
     }
 
     private float getLifetimeProgress(float age) {
-        return MathHelper.clamp(age / this.maxAge, 0.0F, 1.0F);
+        return Mth.clamp(age / this.maxAge, 0.0F, 1.0F);
     }
 
     private static float getFadeAmount(float lifetimeProgress, float fadeIn, float fadeOut) {
@@ -68,7 +68,7 @@ public class BiomeFogParticle extends SpriteBillboardParticle {
         }
     }
 
-    @Environment(EnvType.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static class Factory implements ParticleFactory<DefaultParticleType> {
         private final SpriteProvider spriteProvider;
 

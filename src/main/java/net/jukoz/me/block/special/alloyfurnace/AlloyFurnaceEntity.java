@@ -8,32 +8,32 @@ import net.jukoz.me.block.registration.ModBlockEntities;
 import net.jukoz.me.gui.alloyfurnace.AlloyFurnaceScreenHandler;
 import net.jukoz.me.network.ModNetworks;
 import net.jukoz.me.recipe.AlloyRecipe;
-import net.minecraft.block.AbstractFurnaceBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.AbstractFurnaceBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -84,18 +84,18 @@ public class AlloyFurnaceEntity extends BlockEntity implements NamedScreenHandle
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("screen." + MiddleEarth.MOD_ID + "." + ID);
+    public Component getDisplayName() {
+        return Component.translatable("screen." + MiddleEarth.MOD_ID + "." + ID);
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, Player player) {
         return new AlloyFurnaceScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt) {
+    protected void writeNbt(CompoundTag nbt) {
         super.writeNbt(nbt);
         Inventories.writeNbt(nbt, inventory);
         nbt.putInt(ID + ".progress", progress);
@@ -104,7 +104,7 @@ public class AlloyFurnaceEntity extends BlockEntity implements NamedScreenHandle
     }
 
     @Override
-    public void readNbt(NbtCompound nbt) {
+    public void readNbt(CompoundTag nbt) {
         Inventories.readNbt(nbt, inventory);
         super.readNbt(nbt);
         progress = nbt.getInt(ID + ".progress");
@@ -124,14 +124,14 @@ public class AlloyFurnaceEntity extends BlockEntity implements NamedScreenHandle
     @Override
     public void markDirty() {
         if(world != null && !world.isClient()) {
-            PacketByteBuf data = PacketByteBufs.create();
+            FriendlyByteBuf data = PacketByteBufs.create();
             data.writeInt(inventory.size());
             for(int i = 0; i < inventory.size(); i++) {
                 data.writeItemStack(inventory.get(i));
             }
             data.writeBlockPos(getPos());
 
-            for (ServerPlayerEntity player : PlayerLookup.tracking((ServerWorld) world, getPos())) {
+            for (ServerPlayer player : PlayerLookup.tracking((ServerLevel) world, getPos())) {
                 ServerPlayNetworking.send(player, ModNetworks.ITEM_SYNC, data);
             }
         }
@@ -207,7 +207,7 @@ public class AlloyFurnaceEntity extends BlockEntity implements NamedScreenHandle
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
+    public boolean canPlayerUse(Player player) {
         return Inventory.canPlayerUse(this, player);
     }
 
@@ -216,7 +216,7 @@ public class AlloyFurnaceEntity extends BlockEntity implements NamedScreenHandle
         inventory.clear();
     }
 
-    public static void tick(World world, BlockPos blockPos, BlockState blockState, AlloyFurnaceEntity entity) {
+    public static void tick(Level world, BlockPos blockPos, BlockState blockState, AlloyFurnaceEntity entity) {
         if(world.isClient()) return;
         entity.fuelTime = Math.max(0, entity.fuelTime - 1);
         boolean progress = false;

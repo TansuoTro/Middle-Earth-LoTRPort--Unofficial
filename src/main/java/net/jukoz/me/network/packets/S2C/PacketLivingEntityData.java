@@ -1,18 +1,18 @@
 package net.jukoz.me.network.packets.S2C;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.network.contexts.ClientPacketContext;
 import net.jukoz.me.network.packets.ServerToClientPacket;
 
 public class PacketLivingEntityData extends ServerToClientPacket<PacketLivingEntityData> {
-    public static final Identifier ID = new Identifier(MiddleEarth.MOD_ID, "packet_living_entity_data");
+    public static final ResourceLocation ID = new ResourceLocation(MiddleEarth.MOD_ID, "packet_living_entity_data");
     public static final PacketType<PacketLivingEntityData> TYPE = PacketType.create(ID, PacketLivingEntityData::new);
 
     private final int entityId;
@@ -25,7 +25,7 @@ public class PacketLivingEntityData extends ServerToClientPacket<PacketLivingEnt
 
 
 
-    public PacketLivingEntityData(PacketByteBuf buf) {
+    public PacketLivingEntityData(FriendlyByteBuf buf) {
         this(buf.readInt(), StatusEffectInstance.fromNbt(buf.readNbt()));
     }
 
@@ -35,9 +35,9 @@ public class PacketLivingEntityData extends ServerToClientPacket<PacketLivingEnt
     }
 
     @Override
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
         buf.writeInt(this.entityId);
-        buf.writeNbt(this.statusEffectInstance.writeNbt(new NbtCompound()));
+        buf.writeNbt(this.statusEffectInstance.writeNbt(new CompoundTag()));
     }
 
     @Override

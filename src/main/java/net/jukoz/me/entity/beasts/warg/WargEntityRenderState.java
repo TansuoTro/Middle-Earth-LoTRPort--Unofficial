@@ -1,12 +1,12 @@
 package net.jukoz.me.entity.beasts.warg;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.entity.AnimationState;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.entity.beasts.BeastEntityRenderState;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class WargEntityRenderState extends BeastEntityRenderState {
     WargVariant variant = WargVariant.BROWN;
     public WargEyeVariant eyeVariant = WargEyeVariant.BLUE;

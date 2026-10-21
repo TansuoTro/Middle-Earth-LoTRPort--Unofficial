@@ -19,22 +19,22 @@ import net.jukoz.me.item.ToolItemsME;
 import net.jukoz.me.item.WeaponItemsME;
 import net.jukoz.me.resources.datas.common.DispositionType;
 import net.jukoz.me.utils.ItemTagsME;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Holder;
+import net.minecraft.tags.TagKey;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * Ported from the 1.21.8 donor package
@@ -48,7 +48,7 @@ public class ArtisanTableArmorRecipeProvider extends FabricRecipeProvider {
     private static final int XP_STEEL_ITEM = 3;
     private static final int XP_NOBLE_ITEM = 5;
 
-    private static NbtCompound trimNbt(Identifier materialId) {
+    private static CompoundTag trimNbt(ResourceLocation materialId) {
         return ArtisanTableRecipeJsonBuilder.trimNbt(materialId);
     }
 
@@ -65,58 +65,58 @@ public class ArtisanTableArmorRecipeProvider extends FabricRecipeProvider {
     public void generate(Consumer<RecipeJsonProvider> exporter) {
 
         ItemStack goldArmorPlate = new ItemStack(ResourceItemsME.ARMOR_PLATE);
-        goldArmorPlate.setSubNbt("Trim", trimNbt(new Identifier(MetalTypes.GOLD.getName())));
+        goldArmorPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MetalTypes.GOLD.getName())));
 
         ItemStack silverArmorPlate = new ItemStack(ResourceItemsME.ARMOR_PLATE);
-        silverArmorPlate.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.SILVER.getName())));
+        silverArmorPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.SILVER.getName())));
 
         ItemStack steelArmorPlate = new ItemStack(ResourceItemsME.ARMOR_PLATE);
-        steelArmorPlate.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.STEEL.getName())));
+        steelArmorPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.STEEL.getName())));
         ItemStack steelHelmetPlate = new ItemStack(ResourceItemsME.HELMET_PLATE);
-        steelHelmetPlate.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.STEEL.getName())));
+        steelHelmetPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.STEEL.getName())));
         ItemStack steelChainmail = new ItemStack(ResourceItemsME.MAIL);
-        steelChainmail.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.STEEL.getName())));
+        steelChainmail.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.STEEL.getName())));
         ItemStack steelScaleMail = new ItemStack(ResourceItemsME.SCALE_MAIL);
-        steelScaleMail.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.STEEL.getName())));
+        steelScaleMail.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.STEEL.getName())));
 
         ItemStack edhelSteelArmorPlate = new ItemStack(ResourceItemsME.ARMOR_PLATE);
-        edhelSteelArmorPlate.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.EDHEL_STEEL.getName())));
+        edhelSteelArmorPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.EDHEL_STEEL.getName())));
         ItemStack edhelSteelHelmetPlate = new ItemStack(ResourceItemsME.HELMET_PLATE);
-        edhelSteelHelmetPlate.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.EDHEL_STEEL.getName())));
+        edhelSteelHelmetPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.EDHEL_STEEL.getName())));
         ItemStack edhelSteelChainmail = new ItemStack(ResourceItemsME.MAIL);
-        edhelSteelChainmail.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.EDHEL_STEEL.getName())));
+        edhelSteelChainmail.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.EDHEL_STEEL.getName())));
         ItemStack edhelSteelScaleMail = new ItemStack(ResourceItemsME.SCALE_MAIL);
-        edhelSteelScaleMail.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.EDHEL_STEEL.getName())));
+        edhelSteelScaleMail.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.EDHEL_STEEL.getName())));
 
         ItemStack khazadSteelArmorPlate = new ItemStack(ResourceItemsME.ARMOR_PLATE);
-        khazadSteelArmorPlate.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.KHAZAD_STEEL.getName())));
+        khazadSteelArmorPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.KHAZAD_STEEL.getName())));
         ItemStack khazadSteelHelmetPlate = new ItemStack(ResourceItemsME.HELMET_PLATE);
-        khazadSteelHelmetPlate.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.KHAZAD_STEEL.getName())));
+        khazadSteelHelmetPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.KHAZAD_STEEL.getName())));
         ItemStack khazadSteelChainmail = new ItemStack(ResourceItemsME.MAIL);
-        khazadSteelChainmail.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.KHAZAD_STEEL.getName())));
+        khazadSteelChainmail.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.KHAZAD_STEEL.getName())));
         ItemStack khazadSteelScaleMail = new ItemStack(ResourceItemsME.SCALE_MAIL);
-        khazadSteelScaleMail.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.KHAZAD_STEEL.getName())));
+        khazadSteelScaleMail.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.KHAZAD_STEEL.getName())));
 
         ItemStack burzumSteelArmorPlate = new ItemStack(ResourceItemsME.ARMOR_PLATE);
-        burzumSteelArmorPlate.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.BURZUM_STEEL.getName())));
+        burzumSteelArmorPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.BURZUM_STEEL.getName())));
         ItemStack burzumSteelHelmetPlate = new ItemStack(ResourceItemsME.HELMET_PLATE);
-        burzumSteelHelmetPlate.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.BURZUM_STEEL.getName())));
+        burzumSteelHelmetPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.BURZUM_STEEL.getName())));
         ItemStack burzumSteelChainmail = new ItemStack(ResourceItemsME.MAIL);
-        burzumSteelChainmail.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.BURZUM_STEEL.getName())));
+        burzumSteelChainmail.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.BURZUM_STEEL.getName())));
         ItemStack burzumSteelScaleMail = new ItemStack(ResourceItemsME.SCALE_MAIL);
-        burzumSteelScaleMail.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.BURZUM_STEEL.getName())));
+        burzumSteelScaleMail.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.BURZUM_STEEL.getName())));
 
         ItemStack ironArmorPlate = new ItemStack(ResourceItemsME.ARMOR_PLATE);
-        ironArmorPlate.setSubNbt("Trim", trimNbt(new Identifier(MetalTypes.IRON.getName())));
+        ironArmorPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MetalTypes.IRON.getName())));
         ItemStack ironHelmetPlate = new ItemStack(ResourceItemsME.HELMET_PLATE);
-        ironHelmetPlate.setSubNbt("Trim", trimNbt(new Identifier(MetalTypes.IRON.getName())));
+        ironHelmetPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MetalTypes.IRON.getName())));
         ItemStack ironChainmail = new ItemStack(ResourceItemsME.MAIL);
-        ironChainmail.setSubNbt("Trim", trimNbt(new Identifier(MetalTypes.IRON.getName())));
+        ironChainmail.setSubNbt("Trim", trimNbt(new ResourceLocation(MetalTypes.IRON.getName())));
 
         ItemStack bronzeArmorPlate = new ItemStack(ResourceItemsME.ARMOR_PLATE);
-        bronzeArmorPlate.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.BRONZE.getName())));
+        bronzeArmorPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.BRONZE.getName())));
         ItemStack crudeArmorPlate = new ItemStack(ResourceItemsME.ARMOR_PLATE);
-        crudeArmorPlate.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.CRUDE.getName())));
+        crudeArmorPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.CRUDE.getName())));
 
         
 
@@ -3188,8 +3188,8 @@ public class ArtisanTableArmorRecipeProvider extends FabricRecipeProvider {
                 //region MISTIES
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, EquipmentItemsME.GUNDABAD_BONE_PAULDRON.getDefaultStack(), "chestplate", DispositionType.EVIL)
                         .input(Items.LEATHER)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "bones")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "bones")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "bones")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "bones")))
                         .input(Items.LEATHER)
                         .input(Items.LEATHER)
                         .criterion(hasItem(Items.LEATHER),
@@ -3208,7 +3208,7 @@ public class ArtisanTableArmorRecipeProvider extends FabricRecipeProvider {
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, EquipmentItemsME.GUNDABAD_LEATHER_SCALE_COAT.getDefaultStack(), "chestplate", DispositionType.EVIL, XP_T2)
                         .input(Items.LEATHER)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "bones")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "bones")))
                         .input(Items.LEATHER)
                         .input(Items.LEATHER)
                         .input(Items.LEATHER)
@@ -3307,7 +3307,7 @@ public class ArtisanTableArmorRecipeProvider extends FabricRecipeProvider {
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, EquipmentItemsME.GUNDABAD_REINFORCED_LEATHER_SCALE_COAT.getDefaultStack(), "chestplate", DispositionType.EVIL, XP_T4)
                         .input(Items.LEATHER)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "bones")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "bones")))
                         .componentInput(burzumSteelArmorPlate)
                         .input(EquipmentItemsME.GUNDABAD_LEATHER_SCALE_COAT)
                         .componentInput(burzumSteelArmorPlate)

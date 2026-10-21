@@ -1,9 +1,9 @@
 package net.jukoz.me.utils.item;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Predicate;
 
@@ -15,7 +15,7 @@ public class ItemSearchUtils {
      * @param targetItem The item to search for.
      * @return The first matching {@link ItemStack}, or {@link ItemStack#EMPTY} if none found.
      */
-    public static ItemStack findFirstInInventory(PlayerEntity player, Item targetItem) {
+    public static ItemStack findFirstInInventory(Player player, Item targetItem) {
         return findFirstMatching(player, stack -> stack.getItem() == targetItem);
     }
 
@@ -26,7 +26,7 @@ public class ItemSearchUtils {
      * @param filter A predicate used to match {@link ItemStack} entries.
      * @return The first matching {@link ItemStack}, or {@link ItemStack#EMPTY} if none found.
      */
-    public static ItemStack findFirstMatching(PlayerEntity player, Predicate<ItemStack> filter) {
+    public static ItemStack findFirstMatching(Player player, Predicate<ItemStack> filter) {
         return player.getInventory().main.stream()
                 .filter(filter)
                 .findFirst()

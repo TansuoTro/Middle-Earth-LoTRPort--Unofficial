@@ -1,10 +1,10 @@
 package net.jukoz.me.compat;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.trim.ArmorTrim;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.armortrim.ArmorTrim;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -37,7 +37,7 @@ public final class MEArmorTrim {
     /**
      * Donor-compatible signature with no registry manager.
      *
-     * <p>1.20.1 has no way to resolve a {@link RegistryEntry} for a trim without a
+     * <p>1.20.1 has no way to resolve a {@link Holder} for a trim without a
      * {@link DynamicRegistryManager} (unlike 1.21, where the component already holds the
      * resolved entries), so this returns null. Prefer
      * {@link #get(ItemStack, DynamicRegistryManager)}.
@@ -49,13 +49,13 @@ public final class MEArmorTrim {
 
     /** Writes {@code trim} to the stack's {@code Trim} sub-NBT, replacing any existing trim. */
     public static void set(ItemStack stack, ArmorTrim trim) {
-        NbtCompound tag = new NbtCompound();
+        CompoundTag tag = new CompoundTag();
         putEntryId(tag, MATERIAL_KEY, trim.getMaterial());
         putEntryId(tag, PATTERN_KEY, trim.getPattern());
         stack.setSubNbt(ArmorTrim.NBT_KEY, tag);
     }
 
-    private static void putEntryId(NbtCompound tag, String key, RegistryEntry<?> entry) {
+    private static void putEntryId(CompoundTag tag, String key, Holder<?> entry) {
         entry.getKey().ifPresent(registryKey -> tag.putString(key, registryKey.getValue().toString()));
     }
 }

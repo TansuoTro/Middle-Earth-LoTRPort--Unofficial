@@ -1,7 +1,7 @@
 package net.jukoz.me.item.items;
 
 import net.minecraft.item.HoeItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
 
 /**

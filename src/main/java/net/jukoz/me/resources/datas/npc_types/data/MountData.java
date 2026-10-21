@@ -5,16 +5,16 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.jukoz.me.compat.DyedColorComponent;
 import net.minecraft.entity.*;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.entity.passive.AbstractHorseEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.item.MEComponents;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.beasts.AbstractBeastEntity;
 import net.jukoz.me.entity.npcs.NpcEntity;
@@ -34,21 +34,21 @@ public class MountData {
     }
 
     public static final Codec<MountData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Identifier.CODEC.fieldOf(Fields.ENTITY_TYPE).forGetter(MountData::getEntityType),
-            Identifier.CODEC.optionalFieldOf(Fields.NPC_TYPE).forGetter(MountData::getOptionalNpcType),
+            ResourceLocation.CODEC.fieldOf(Fields.ENTITY_TYPE).forGetter(MountData::getEntityType),
+            ResourceLocation.CODEC.optionalFieldOf(Fields.NPC_TYPE).forGetter(MountData::getOptionalNpcType),
             ItemStack.CODEC.optionalFieldOf(Fields.ARMOR).forGetter(MountData::getOptionalArmor),
             MountPassengerSlotData.CODEC.listOf().fieldOf(Fields.PASSENGER_SLOTS).forGetter(MountData::getPassengerSlots)
     ).apply(instance, MountData::new));
 
 
-    private Identifier entityType;
-    private Identifier npcType;
+    private ResourceLocation entityType;
+    private ResourceLocation npcType;
     private ItemStack armor;
     private List<MountPassengerSlotData> passengerSlots;
 
     private MountData(
-            Identifier entityType,
-            Optional<Identifier> npcType,
+            ResourceLocation entityType,
+            Optional<ResourceLocation> npcType,
             Optional<ItemStack> armor,
             List<MountPassengerSlotData> passengerSlots
     ) {
@@ -63,7 +63,7 @@ public class MountData {
         this.armor = null;
     }
 
-    public MountData(RegistryKey<NpcType> npcType){
+    public MountData(ResourceKey<NpcType> npcType){
         this.entityType = Registries.ENTITY_TYPE.getId(EntitiesME.NPC);
         this.npcType = npcType.getValue();
     }
@@ -85,10 +85,10 @@ public class MountData {
         return this;
     }
 
-    private Identifier getEntityType() {
+    private ResourceLocation getEntityType() {
         return entityType;
     }
-    private Optional<Identifier> getOptionalNpcType() {
+    private Optional<ResourceLocation> getOptionalNpcType() {
         return Optional.ofNullable(npcType);
     }
     private Optional<ItemStack> getOptionalArmor() {
@@ -107,7 +107,7 @@ public class MountData {
         return this;
     }
 
-    public void createEntity(ServerWorld world, LivingEntity owner) {
+    public void createEntity(ServerLevel world, LivingEntity owner) {
         if(this.entityType == null || owner.hasVehicle() || owner.hasPassengers())
             return;
         EntityType<?> type = Registries.ENTITY_TYPE.get(this.entityType);
@@ -120,7 +120,7 @@ public class MountData {
             if(armor != null)
                 entity.equipStack(EquipmentSlot.CHEST, this.armor);
 
-            if (entity instanceof MobEntity mob) {
+            if (entity instanceof Mob mob) {
                 mob.initialize(
                         world,
                         world.getLocalDifficulty(owner.getBlockPos()),

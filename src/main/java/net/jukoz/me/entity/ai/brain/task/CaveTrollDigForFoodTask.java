@@ -2,20 +2,20 @@ package net.jukoz.me.entity.ai.brain.task;
 
 import com.google.common.collect.ImmutableMap;
 import net.fabricmc.fabric.mixin.loot.LootTableAccessor;
-import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.entity.ai.brain.MemoryModuleState;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.MultiTickTask;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.LootTables;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.LootTables;
 import net.minecraft.loot.entry.LootPoolEntry;
 import net.minecraft.loot.entry.LootTableEntry;
 import net.minecraft.loot.provider.number.LootNumberProvider;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.collection.Pool;
 import net.jukoz.me.entity.ai.brain.MemoryModulesME;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntity;
@@ -39,13 +39,13 @@ public class CaveTrollDigForFoodTask extends MultiTickTask<CaveTrollEntity> {
     }
 
     @Override
-    protected void run(ServerWorld world, CaveTrollEntity entity, long time) {
+    protected void run(ServerLevel world, CaveTrollEntity entity, long time) {
         entity.setScavenging(true);
         entity.getBrain().forget(MemoryModuleType.WALK_TARGET);
     }
 
     @Override
-    protected void finishRunning(ServerWorld world, CaveTrollEntity entity, long time) {
+    protected void finishRunning(ServerLevel world, CaveTrollEntity entity, long time) {
         entity.setScavenging(false);
         entity.getBrain().remember(MemoryModulesME.DIG_FOR_FOOD_COOLDOWN, 2400 + entity.getRandom().nextInt(1200));
         entity.getBrain().remember(MemoryModulesME.ACTION_TIMEOUT, 200);
@@ -60,7 +60,7 @@ public class CaveTrollDigForFoodTask extends MultiTickTask<CaveTrollEntity> {
     }
 
     @Override
-    protected boolean shouldKeepRunning(ServerWorld world, CaveTrollEntity entity, long time) {
+    protected boolean shouldKeepRunning(ServerLevel world, CaveTrollEntity entity, long time) {
         return hasRequiredMemoryState(entity);
     }
 }

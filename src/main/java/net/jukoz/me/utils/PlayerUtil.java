@@ -1,14 +1,14 @@
 package net.jukoz.me.utils;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.World;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.exceptions.FactionIdentifierException;
 import net.jukoz.me.resources.StateSaverAndLoader;
@@ -24,19 +24,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class PlayerUtil {
-    public static boolean isAgainstWall(PlayerEntity entity) {
+    public static boolean isAgainstWall(Player entity) {
         Box boundingBox = entity.getBoundingBox();
-        World world = entity.getWorld();
+        Level world = entity.getWorld();
         double testMovementAmount = 0.0001;
 
-        Vec3d testMovement = new Vec3d(testMovementAmount, 0.0, testMovementAmount);
+        Vec3 testMovement = new Vec3(testMovementAmount, 0.0, testMovementAmount);
         List<VoxelShape> collisions = world.getEntityCollisions(entity, boundingBox.stretch(testMovement));
-        Vec3d result = Entity.adjustMovementForCollisions(entity, testMovement, boundingBox, world, collisions);
+        Vec3 result = Entity.adjustMovementForCollisions(entity, testMovement, boundingBox, world, collisions);
         if (!result.equals(testMovement)) {
             return checkIfBlockIsAllowed(world, entity);
         }
 
-        testMovement = new Vec3d(-testMovementAmount, 0.0, -testMovementAmount);
+        testMovement = new Vec3(-testMovementAmount, 0.0, -testMovementAmount);
         collisions = world.getEntityCollisions(entity, boundingBox.stretch(testMovement));
         result = Entity.adjustMovementForCollisions(entity, testMovement, boundingBox, world, collisions);
         if (!result.equals(testMovement)) {
@@ -46,14 +46,14 @@ public class PlayerUtil {
         return false;
     }
 
-    private static boolean checkIfBlockIsAllowed(World world, PlayerEntity player) {
+    private static boolean checkIfBlockIsAllowed(Level world, Player player) {
         BlockState blockstate = world.getBlockState(player.getBlockPos().offset(player.getHorizontalFacing()));
         boolean isSolid = blockstate.isSolidBlock(world, player.getBlockPos());
-        boolean isAllowed = !blockstate.isIn(TagKey.of(RegistryKeys.BLOCK, MiddleEarth.of("climbing_attribute_unallowed_blocks")));
+        boolean isAllowed = !blockstate.isIn(TagKey.of(Registries.BLOCK, MiddleEarth.of("climbing_attribute_unallowed_blocks")));
         return isSolid && isAllowed;
     }
 
-    public static boolean isOfRace(@NotNull PlayerEntity entity, @NotNull RaceType type){
+    public static boolean isOfRace(@NotNull Player entity, @NotNull RaceType type){
         PlayerData data = StateSaverAndLoader.getPlayerState(entity);
         if(data != null && data.getRace() != null){
             Race race = RaceLookup.getRace(entity.getWorld(), data.getRace());
@@ -65,7 +65,7 @@ public class PlayerUtil {
         return false;
     }
 
-    public static boolean isOfRace(@NotNull PlayerEntity entity, @NotNull List<RaceType> types){
+    public static boolean isOfRace(@NotNull Player entity, @NotNull List<RaceType> types){
         PlayerData data = StateSaverAndLoader.getPlayerState(entity);
         if(data != null && data.getRace() != null){
             Race race = RaceLookup.getRace(entity.getWorld(), data.getRace());
@@ -77,7 +77,7 @@ public class PlayerUtil {
         return false;
     }
 
-    public static Faction fetchFaction(@NotNull PlayerEntity entity){
+    public static Faction fetchFaction(@NotNull Player entity){
         PlayerData data = StateSaverAndLoader.getPlayerState(entity);
         if(data != null && data.getFaction() != null){
             try {
@@ -88,7 +88,7 @@ public class PlayerUtil {
         }
         return null;
     }
-    public static SpawnData fetchSpawn(@NotNull PlayerEntity entity){
+    public static SpawnData fetchSpawn(@NotNull Player entity){
         PlayerData data = StateSaverAndLoader.getPlayerState(entity);
         if(data != null && data.getFaction() != null && data.getSpawn() != null){
             try {

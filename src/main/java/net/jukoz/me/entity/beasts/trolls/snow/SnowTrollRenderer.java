@@ -3,10 +3,10 @@ package net.jukoz.me.entity.beasts.trolls.snow;
 import com.google.common.collect.Maps;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
-import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.Util;
 
 import java.util.Map;
 
@@ -18,8 +18,8 @@ public class SnowTrollRenderer extends MobEntityRenderer<SnowTrollEntity, SnowTr
     }
 
     @Override
-    public Identifier getTexture(SnowTrollEntity entity) {
-        return new Identifier(MiddleEarth.MOD_ID, PATH + "snow_troll1.png");
+    public ResourceLocation getTexture(SnowTrollEntity entity) {
+        return new ResourceLocation(MiddleEarth.MOD_ID, PATH + "snow_troll1.png");
     }
 
     public static final Map<SnowTrollVariant, String> LOCATION_BY_VARIANT =

@@ -4,12 +4,12 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.jukoz.me.compat.client.render.state.EntityRenderState;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.npcs.NpcEntity;
 import net.jukoz.me.entity.npcs.initializer.NpcEntityInitializerClient;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlayableNpcPreviewWidget extends ModWidget{
-    private static final Identifier NPC_PREVIEW = new Identifier(MiddleEarth.MOD_ID,"textures/gui/widget/npc_preview_widget.png");
+    private static final ResourceLocation NPC_PREVIEW = new ResourceLocation(MiddleEarth.MOD_ID,"textures/gui/widget/npc_preview_widget.png");
 
     private static final int TICK_DELAY = 10;
     private static final int MINIMAL_MARGIN = 4;
@@ -62,13 +62,13 @@ public class PlayableNpcPreviewWidget extends ModWidget{
             setCurrentButton(false);
         };
 
-        leftButton = ButtonWidget.builder(Text.of("left_button"), leftButtonAction).build();
+        leftButton = ButtonWidget.builder(Component.of("left_button"), leftButtonAction).build();
         net.jukoz.me.compat.client.gui.MEGui.setSize(leftButton, 14, 9);
 
-        resetButton = ButtonWidget.builder(Text.of("reset_button"), resetButtonAction).build();
+        resetButton = ButtonWidget.builder(Component.of("reset_button"), resetButtonAction).build();
         net.jukoz.me.compat.client.gui.MEGui.setSize(resetButton, 6, 6);
 
-        rightButton = ButtonWidget.builder(Text.of("right_button"), rightButtonAction).build();
+        rightButton = ButtonWidget.builder(Component.of("right_button"), rightButtonAction).build();
         net.jukoz.me.compat.client.gui.MEGui.setSize(rightButton, 14, 9);
     }
 
@@ -115,7 +115,7 @@ public class PlayableNpcPreviewWidget extends ModWidget{
         }
     }
 
-    public void updateEntity(Identifier npcDataIdentifier, Race race, ClientWorld world, boolean deactivatedAI) {
+    public void updateEntity(ResourceLocation npcDataIdentifier, Race race, ClientWorld world, boolean deactivatedAI) {
         if(world != null)
             haveBeenInitialized = true;
 

@@ -2,7 +2,7 @@ package net.jukoz.me.registries.content.spidervariants;
 
 import net.jukoz.me.compat.spawn.SpawnConditionSelectors;
 import net.minecraft.registry.*;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.tags.TagKey;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.spider.SpiderVariant;
 import net.jukoz.me.registries.DynamicRegistriesME;

@@ -3,10 +3,10 @@ package net.jukoz.me.entity.beasts.trolls.stone;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.resources.ResourceLocation;
 
 public class StoneTrollRenderer extends MobEntityRenderer<StoneTrollEntity, StoneTrollModel> {
     private static final String PATH = "textures/entities/trolls/stone/";
@@ -16,11 +16,11 @@ public class StoneTrollRenderer extends MobEntityRenderer<StoneTrollEntity, Ston
     }
 
     @Override
-    public Identifier getTexture(StoneTrollEntity entity) {
-        return new Identifier(MiddleEarth.MOD_ID, PATH + "stone_troll1.png");
+    public ResourceLocation getTexture(StoneTrollEntity entity) {
+        return new ResourceLocation(MiddleEarth.MOD_ID, PATH + "stone_troll1.png");
     }
 
-    public void render(StoneTrollEntity entity, float entityYaw, float partialTick, MatrixStack poseStack,
+    public void render(StoneTrollEntity entity, float entityYaw, float partialTick, PoseStack poseStack,
                        VertexConsumerProvider bufferSource, int packedLight) {
 
         poseStack.scale(1, 1, 1);

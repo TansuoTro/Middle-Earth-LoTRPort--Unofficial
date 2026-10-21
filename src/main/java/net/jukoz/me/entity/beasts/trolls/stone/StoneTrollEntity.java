@@ -5,33 +5,33 @@ import net.jukoz.me.entity.beasts.trolls.TrollEntity;
 import net.jukoz.me.world.biomes.MEBiomeKeys;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.passive.AbstractDonkeyEntity;
-import net.minecraft.item.Item;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.item.Item;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import java.util.List;
 
 public class StoneTrollEntity extends TrollEntity {
     public static final TrackedData<Integer> PETRIFYING = DataTracker.registerData(StoneTrollEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    public static final List<RegistryKey<Biome>> darkBiomes = List.of(
+    public static final List<ResourceKey<Biome>> darkBiomes = List.of(
             MEBiomeKeys.MORDOR,
             MEBiomeKeys.MORDOR_MOUNTAINS,
             MEBiomeKeys.MORDOR_WASTES
     );
     private final int PETRIFYING_DURATION = 600;
 
-    public StoneTrollEntity(EntityType<? extends AbstractDonkeyEntity> entityType, World world) {
+    public StoneTrollEntity(EntityType<? extends AbstractDonkeyEntity> entityType, Level world) {
         super(entityType, world);
     }
 
@@ -53,7 +53,7 @@ public class StoneTrollEntity extends TrollEntity {
         float f = Math.min(0.25F, this.limbAnimator.getSpeed());
         float g = this.limbAnimator.getPos();
         float h = this.isSitting() ? -0.75f : 0;
-        return (double)this.getHeight() - 1.0d + (double)(0.12F * MathHelper.cos(g * 1.5F) * 2.0F * f) + h;
+        return (double)this.getHeight() - 1.0d + (double)(0.12F * Mth.cos(g * 1.5F) * 2.0F * f) + h;
     }
 
     @Override
@@ -65,7 +65,7 @@ public class StoneTrollEntity extends TrollEntity {
 
         float f = -0.5f; // Z-Offset
 
-        Vec3d vec3d = new Vec3d(0.0, 0.0, f).rotateY(-this.bodyYaw * ((float)Math.PI / 180));
+        Vec3 vec3d = new Vec3(0.0, 0.0, f).rotateY(-this.bodyYaw * ((float)Math.PI / 180));
         positionUpdater.accept(passenger, this.getX() + vec3d.x, this.getY() + this.getMountedHeightOffset(), this.getZ() + vec3d.z);
     }
 
@@ -110,7 +110,7 @@ public class StoneTrollEntity extends TrollEntity {
     @Override
     public void tickMovement() {
         if (this.isAlive() && !this.getWorld().isClient() && this.getPetrifying() != -1 && this.getWorld().getBiome(this.getBlockPos()).getKey().isPresent()) {
-            RegistryKey<Biome> biomeKey = this.getWorld().getBiome(this.getBlockPos()).getKey().get();
+            ResourceKey<Biome> biomeKey = this.getWorld().getBiome(this.getBlockPos()).getKey().get();
 
             boolean inDaylight = this.isAffectedByDaylight() && this.getEquippedStack(EquipmentSlot.CHEST).isEmpty() && !darkBiomes.contains(biomeKey);
 
@@ -140,13 +140,13 @@ public class StoneTrollEntity extends TrollEntity {
     }
 
     @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
+    public void writeCustomDataToNbt(CompoundTag nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putInt("Petrifying", this.getPetrifying());
     }
 
     @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
+    public void readCustomDataFromNbt(CompoundTag nbt) {
         super.readCustomDataFromNbt(nbt);
         this.dataTracker.set(PETRIFYING, nbt.getInt("Petrifying"));
     }

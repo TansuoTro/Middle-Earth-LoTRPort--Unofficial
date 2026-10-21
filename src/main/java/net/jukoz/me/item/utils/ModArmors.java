@@ -3,8 +3,8 @@ package net.jukoz.me.item.utils;
 import net.jukoz.me.client.model.equipment.chest.*;
 import net.jukoz.me.client.model.equipment.head.*;
 import net.jukoz.me.item.ModEquipmentItems;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemConvertible;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemConvertible;
 
 public enum ModArmors {
 

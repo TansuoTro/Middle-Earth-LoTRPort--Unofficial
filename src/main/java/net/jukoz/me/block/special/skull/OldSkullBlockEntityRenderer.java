@@ -1,30 +1,30 @@
 package net.jukoz.me.block.special.skull;
 import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.block.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.block.SkullBlock;
 import net.minecraft.block.WallSkullBlock;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.*;
-import net.minecraft.client.render.block.entity.BlockEntityRenderer;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererFactory;
 import net.minecraft.client.render.block.entity.SkullBlockEntityModel;
 import net.minecraft.client.render.entity.model.*;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.SpriteIdentifier;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Direction;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Direction;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.RotationPropertyHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.phys.Vec3;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.EntityModelLayersME;
 import org.jetbrains.annotations.Nullable;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class OldSkullBlockEntityRenderer implements BlockEntityRenderer<OldSkullBlockEntity> {
     private final ModelPart skull;
 
@@ -46,7 +46,7 @@ public class OldSkullBlockEntityRenderer implements BlockEntityRenderer<OldSkull
         return TexturedModelData.of(modelData, 64, 64);
     }
 
-    public void render(OldSkullBlockEntity skullBlockEntity, float f, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, int j) {
+    public void render(OldSkullBlockEntity skullBlockEntity, float f, PoseStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, int j) {
         BlockState blockState = skullBlockEntity.getCachedState();
         boolean bl = blockState.getBlock() instanceof WallSkullBlock;
         Direction direction = bl ? blockState.get(WallSkullBlock.FACING) : null;
@@ -59,7 +59,7 @@ public class OldSkullBlockEntityRenderer implements BlockEntityRenderer<OldSkull
         renderSkull(direction, h, 0, matrixStack, vertexConsumer, i, skull, renderLayer);
     }
 
-    public static void renderSkull(@Nullable Direction direction, float yaw, float animationProgress, MatrixStack matrices,
+    public static void renderSkull(@Nullable Direction direction, float yaw, float animationProgress, PoseStack matrices,
                                    VertexConsumer vertexConsumers, int light, ModelPart model, RenderLayer renderLayer) {
         matrices.push();
         if (direction == null) {
@@ -77,11 +77,11 @@ public class OldSkullBlockEntityRenderer implements BlockEntityRenderer<OldSkull
     }
 
     public static RenderLayer getRenderLayer() {
-        return RenderLayer.getEntityCutoutNoCullZOffset(new Identifier(MiddleEarth.MOD_ID, "model/old_skull"));
+        return RenderLayer.getEntityCutoutNoCullZOffset(new ResourceLocation(MiddleEarth.MOD_ID, "model/old_skull"));
     }
 
     private SpriteIdentifier getSpriteIdentifier(){
         return new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE,
-                new Identifier(MiddleEarth.MOD_ID, "model/old_skull"));
+                new ResourceLocation(MiddleEarth.MOD_ID, "model/old_skull"));
     }
 }

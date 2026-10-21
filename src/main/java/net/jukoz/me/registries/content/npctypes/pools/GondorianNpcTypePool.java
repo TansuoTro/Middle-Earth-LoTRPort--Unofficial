@@ -1,9 +1,9 @@
 package net.jukoz.me.registries.content.npctypes.pools;
 import net.jukoz.me.compat.METext;
 
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.Items;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Items;
+import net.minecraft.resources.ResourceKey;
 import net.jukoz.me.item.EquipmentItemsME;
 import net.jukoz.me.item.ToolItemsME;
 import net.jukoz.me.item.WeaponItemsME;
@@ -23,7 +23,7 @@ import net.jukoz.me.resources.datas.npc_types.data.GearSlotPool;
 import java.util.List;
 
 public class GondorianNpcTypePool {
-    private final static RegistryKey<Faction> FACTION = FactionRegistry.GONDOR;
+    private final static ResourceKey<Faction> FACTION = FactionRegistry.GONDOR;
 
     private final static int LIGHT_BLUE = 0x2b3965;
     private final static int DARK_BLUE = 0x182038;

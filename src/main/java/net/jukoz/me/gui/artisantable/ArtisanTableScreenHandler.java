@@ -14,20 +14,20 @@ import net.jukoz.me.network.packets.S2C.ArtisanRecipePacket;
 import net.jukoz.me.recipe.ArtisanRecipe;
 import net.jukoz.me.recipe.ModRecipes;
 import net.jukoz.me.resources.datas.common.DispositionType;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.CraftingResultInventory;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.screen.*;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
     private final ScreenHandlerContext context;
     private final Property selectedRecipe;
     private final Property recipesSize;
-    private final World world;
+    private final Level world;
     private List<ArtisanRecipe> availableRecipes;
     private List<ItemStack> outputs;
     private ItemStack inputStack;
@@ -46,7 +46,7 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
     Runnable contentsChangedListener;
     public final Inventory input;
     final CraftingResultInventory output;
-    private PlayerEntity playerEntity;
+    private Player playerEntity;
     private ArtisanTableInputsShape inputsShape = ArtisanTableInputsShape.ANY;
     private int xp = 0;
 
@@ -110,7 +110,7 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
             }
 
             @Override
-            public void onTakeItem(PlayerEntity player, ItemStack itemStack) {
+            public void onTakeItem(Player player, ItemStack itemStack) {
                 ArtisanTableScreenHandler.this.playerEntity = player;
                 itemStack.onCraft(player.getWorld(), player, itemStack.getCount());
                 ArtisanTableScreenHandler.this.output.unlockLastRecipe(player, this.getInputStacks());
@@ -200,12 +200,12 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
         return !this.availableRecipes.isEmpty();
     }
 
-    public boolean canUse(PlayerEntity player) {
+    public boolean canUse(Player player) {
         this.playerEntity = player;
         return canUse(this.context, player, ModDecorativeBlocks.ARTISAN_TABLE);
     }
 
-    public boolean onButtonClick(PlayerEntity player, int id) {
+    public boolean onButtonClick(Player player, int id) {
         this.playerEntity = player;
         if (this.isInBounds(id)) {
             this.selectedRecipe.set(id);
@@ -293,7 +293,7 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
 
         int index = 0;
         for (ArtisanRecipe recipe : availableRecipes) {
-            if (this.playerEntity instanceof ServerPlayerEntity serverPlayer) {
+            if (this.playerEntity instanceof ServerPlayer serverPlayer) {
                 ArtisanRecipePacket artisanRecipePacket = new ArtisanRecipePacket(index, recipe.getOutput(this.world.getRegistryManager()));
                 ServerPlayNetworking.send(serverPlayer, artisanRecipePacket);
             }
@@ -311,7 +311,7 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
         }
     }
 
-    void populateResult(PlayerEntity player) {
+    void populateResult(Player player) {
         this.playerEntity = player;
         if (!this.availableRecipes.isEmpty() && this.isInBounds(this.selectedRecipe.get())) {
             ArtisanRecipe artisanRecipe = this.availableRecipes.get(this.selectedRecipe.get());
@@ -351,7 +351,7 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
         return slot.inventory != this.output && super.canInsertIntoSlot(stack, slot);
     }
 
-    public ItemStack quickMove(PlayerEntity player, int slot) {
+    public ItemStack quickMove(Player player, int slot) {
         this.playerEntity = player;
         ItemStack stack = ItemStack.EMPTY;
         Slot invSlot = this.slots.get(slot);
@@ -385,7 +385,7 @@ public class ArtisanTableScreenHandler extends ScreenHandler {
         return stack;
     }
 
-    public void onClosed(PlayerEntity player) {
+    public void onClosed(Player player) {
         super.onClosed(player);
         this.output.removeStack(0);
         this.context.run((world, pos) -> {

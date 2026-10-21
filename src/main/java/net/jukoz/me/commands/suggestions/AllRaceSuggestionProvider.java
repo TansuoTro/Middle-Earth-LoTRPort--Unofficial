@@ -8,7 +8,7 @@ import net.jukoz.me.exceptions.FactionIdentifierException;
 import net.jukoz.me.resources.datas.races.Race;
 import net.jukoz.me.resources.datas.races.RaceLookup;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class AllRaceSuggestionProvider implements SuggestionProvider<ServerComma
     @Override
     public CompletableFuture<Suggestions> getSuggestions(CommandContext<ServerCommandSource> context, SuggestionsBuilder builder) {
         try {
-            List<Identifier> candidates = null;
+            List<ResourceLocation> candidates = null;
             candidates = getAllRaces(context);
             return SuggestionUtil.getCorrespondingIdentifiers(candidates, builder);
         } catch (FactionIdentifierException e) {
@@ -26,9 +26,9 @@ public class AllRaceSuggestionProvider implements SuggestionProvider<ServerComma
         }
     }
 
-    private static List<Identifier> getAllRaces(CommandContext<ServerCommandSource> context) throws FactionIdentifierException {
+    private static List<ResourceLocation> getAllRaces(CommandContext<ServerCommandSource> context) throws FactionIdentifierException {
         List<Race> races = RaceLookup.getAllRaces(context.getSource().getWorld());
-        List<Identifier> candidates = new ArrayList<>();
+        List<ResourceLocation> candidates = new ArrayList<>();
 
         for(Race race: races){
             candidates.add(race.getId());

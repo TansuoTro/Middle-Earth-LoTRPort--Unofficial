@@ -1,10 +1,10 @@
 package net.jukoz.me.registries.content.npctypes.pools;
 import net.jukoz.me.compat.METext;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.Items;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Items;
+import net.minecraft.resources.ResourceKey;
 import net.jukoz.me.item.EquipmentItemsME;
 import net.jukoz.me.item.ToolItemsME;
 import net.jukoz.me.item.WeaponItemsME;
@@ -25,7 +25,7 @@ import net.jukoz.me.resources.datas.npc_types.data.WeightedItemData;
 import java.util.List;
 
 public class ShireNpcTypePool {
-    private final static RegistryKey<Faction> FACTION = FactionRegistry.SHIRE;
+    private final static ResourceKey<Faction> FACTION = FactionRegistry.SHIRE;
 
     private final static int DARK_BEIGE = 0xa89371;
     private final static int DARK_GREEN = 0x336339;

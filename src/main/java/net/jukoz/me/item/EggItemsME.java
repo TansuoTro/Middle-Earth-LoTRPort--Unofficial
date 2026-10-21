@@ -1,12 +1,12 @@
 package net.jukoz.me.item;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.SpawnEggItem;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.datageneration.content.TranslationEntries;
@@ -54,7 +54,7 @@ public class EggItemsME {
             (settings) -> egg(EntitiesME.NPC, settings), new MESettings());
 
     /** 1.20.1 spawn eggs still take two colour ints; keep one shared Middle-earth palette. */
-    private static SpawnEggItem egg(EntityType<? extends MobEntity> type, Item.Settings settings) {
+    private static SpawnEggItem egg(EntityType<? extends Mob> type, Item.Settings settings) {
         return new SpawnEggItem(type, 0x5B4A32, 0xD9C7A3, settings);
     }
 
@@ -64,14 +64,14 @@ public class EggItemsME {
         SimpleItemModel.items.add(item);
         TranslationEntries.itemEntries.add(item);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ITEM, name));
-        return Registry.register(Registries.ITEM, new Identifier(MiddleEarth.MOD_ID, name), item);
+        return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);
     }
     private static Item registerSpecialEgg(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
         Item item = (Item)factory.apply(settings);
         ModItemGroups.SPAWN_EGGS_CONTENTS.add(item.getDefaultStack());
         TranslationEntries.itemEntries.add(item);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ITEM, name));
-        return Registry.register(Registries.ITEM, new Identifier(MiddleEarth.MOD_ID, name), item);
+        return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);
     }
 
     public static void registerModItems() {

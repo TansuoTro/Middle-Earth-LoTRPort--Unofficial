@@ -1,6 +1,6 @@
 package net.jukoz.me.entity.beasts.broadhoof;
 
-import net.minecraft.util.Util;
+import net.minecraft.Util;
 import net.jukoz.me.api.dtos.WeightedItem;
 
 import java.util.*;

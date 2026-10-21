@@ -1,38 +1,38 @@
 package net.jukoz.me.block.special.candles;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.block.*;
 import net.minecraft.entity.ai.pathing.NavigationType;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.EnumProperty;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.state.property.IntProperty;
-import net.minecraft.state.property.Properties;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.util.*;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -54,19 +54,19 @@ public class SkullCandleBlock extends Block {
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(LIT, CANDLES, HORIZONTAL_FACING);
     }
 
     @Nullable
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
+    public BlockState getPlacementState(BlockPlaceContext ctx) {
         Direction[] var3 = ctx.getPlacementDirections();
         int var4 = var3.length;
 
         for(int var5 = 0; var5 < var4; ++var5) {
             Direction direction = var3[var5];
             if (direction.getAxis() == Direction.Axis.Y) {
-                BlockState blockState = this.getDefaultState().with(Properties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+                BlockState blockState = this.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite());
                 if (blockState.canPlaceAt(ctx.getWorld(), ctx.getBlockPos())) {
                     return blockState;
                 }
@@ -82,12 +82,12 @@ public class SkullCandleBlock extends Block {
     }
 
     @Override
-    public boolean canPathfindThrough(BlockState state, net.minecraft.world.BlockView world, BlockPos pos, NavigationType type) {
+    public boolean canPathfindThrough(BlockState state, net.minecraft.world.level.BlockGetter world, BlockPos pos, NavigationType type) {
         return false;
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         ItemStack stack = player.getStackInHand(hand);
         if(stack.isIn(ItemTags.CANDLES) && state.get(CANDLES) < 3) {
             if (!player.isCreative()) stack.decrement(1);
@@ -108,17 +108,17 @@ public class SkullCandleBlock extends Block {
         return ActionResult.SUCCESS;
     }
 
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+    public void randomDisplayTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
         if (state.get(LIT)) {
             this.getParticleOffsets(state).forEach((offset) -> {
                 int quarter = state.get(HORIZONTAL_FACING).getHorizontal();
-                Vec3d rotatedOffset = offset.add(-0.5, -0.5, -0.5).rotateY(quarter * -90 * ((float)Math.PI / 180)).add(0.5, 0.5, 0.5);
+                Vec3 rotatedOffset = offset.add(-0.5, -0.5, -0.5).rotateY(quarter * -90 * ((float)Math.PI / 180)).add(0.5, 0.5, 0.5);
                 spawnCandleParticles(world, rotatedOffset.add(pos.getX(), pos.getY(), pos.getZ()), random);
             });
         }
     }
 
-    private static void spawnCandleParticles(World world, Vec3d vec3d, Random random) {
+    private static void spawnCandleParticles(Level world, Vec3 vec3d, RandomSource random) {
         float f = random.nextFloat();
         if (f < 0.3F) {
             world.addParticle(ParticleTypes.SMOKE, vec3d.x, vec3d.y, vec3d.z, 0.0, 0.0, 0.0);
@@ -137,7 +137,7 @@ public class SkullCandleBlock extends Block {
         }
     }
 
-    protected static void extinguish(@Nullable PlayerEntity player, BlockState state, WorldAccess world, BlockPos pos) {
+    protected static void extinguish(@Nullable Player player, BlockState state, WorldAccess world, BlockPos pos) {
         setLit(world, state, pos, false);
 
         world.playSound(null, pos, SoundEvents.BLOCK_CANDLE_EXTINGUISH, SoundCategory.BLOCKS, 1.5F, 1.0F);
@@ -149,18 +149,18 @@ public class SkullCandleBlock extends Block {
         return Fluids.EMPTY.getDefaultState();
     }
 
-    public void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
+    public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
         if (!world.isClient && projectile.isOnFire() && !state.get(LIT)) {
             world.setBlockState(hit.getBlockPos(), state.with(LIT, true), STATE_TO_LUMINANCE.applyAsInt(state));
         }
     }
 
-    protected Iterable<Vec3d> getParticleOffsets(BlockState state) {
+    protected Iterable<Vec3> getParticleOffsets(BlockState state) {
         return (Iterable)CANDLES_TO_PARTICLE_OFFSETS.get(state.get(CANDLES));
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
         return SHAPE;
     }
 
@@ -186,13 +186,13 @@ public class SkullCandleBlock extends Block {
     }
 
     static {
-        LIT = Properties.LIT;
+        LIT = BlockStateProperties.LIT;
         STATE_TO_LUMINANCE = (state) -> state.get(LIT) ? (int)(state.get(CANDLES) * 3.5f) : 0;
         CANDLES_TO_PARTICLE_OFFSETS = Util.make(new Int2ObjectOpenHashMap(4), (int2ObjectOpenHashMap) -> {
-            int2ObjectOpenHashMap.put(1, List.of((new Vec3d(8.0, 16.0, 8.0)).multiply(0.0625)));
-            int2ObjectOpenHashMap.put(2, List.of((new Vec3d(7.0, 16.0, 8.0)).multiply(0.0625), (new Vec3d(10, 14.0, 9)).multiply(0.0625)));
-            int2ObjectOpenHashMap.put(3, List.of((new Vec3d(7.0, 16.0, 9.0)).multiply(0.0625), (new Vec3d(8.0, 15.0, 6.0)).multiply(0.0625),
-                    (new Vec3d(10, 14.0, 10.0)).multiply(0.0625), (new Vec3d(2.0, 8.0, 4.0)).multiply(0.0625), (new Vec3d(13.0, 6.0, 13.0)).multiply(0.0625)));
+            int2ObjectOpenHashMap.put(1, List.of((new Vec3(8.0, 16.0, 8.0)).multiply(0.0625)));
+            int2ObjectOpenHashMap.put(2, List.of((new Vec3(7.0, 16.0, 8.0)).multiply(0.0625), (new Vec3(10, 14.0, 9)).multiply(0.0625)));
+            int2ObjectOpenHashMap.put(3, List.of((new Vec3(7.0, 16.0, 9.0)).multiply(0.0625), (new Vec3(8.0, 15.0, 6.0)).multiply(0.0625),
+                    (new Vec3(10, 14.0, 10.0)).multiply(0.0625), (new Vec3(2.0, 8.0, 4.0)).multiply(0.0625), (new Vec3(13.0, 6.0, 13.0)).multiply(0.0625)));
         });
         SHAPE = Block.createCuboidShape(4, 0, 4, 12, 8, 12);
     }

@@ -2,16 +2,16 @@ package net.jukoz.me.item.utils.armor;
 
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.item.Item;
-import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.function.ValueLists;
 import net.jukoz.me.MiddleEarth;
@@ -195,7 +195,7 @@ public interface ArmorMaterialsME {
         private final int color;
 
         public static final Codec<Tiers> CODEC = StringIdentifiable.createCodec(Tiers::values);
-        public static final net.jukoz.me.compat.net.PacketCodec<net.minecraft.network.PacketByteBuf, Tiers> PACKET_CODEC =
+        public static final net.jukoz.me.compat.net.PacketCodec<net.minecraft.network.FriendlyByteBuf, Tiers> PACKET_CODEC =
                 net.jukoz.me.compat.net.PacketCodecs.indexed(Tiers::byId, Tiers::getId);
 
         public static Tiers byId(int id) {

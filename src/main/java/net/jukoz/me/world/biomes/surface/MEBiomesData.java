@@ -2,11 +2,11 @@ package net.jukoz.me.world.biomes.surface;
 
 import net.jukoz.me.world.biomes.MEBiomeKeys;
 import net.jukoz.me.world.biomes.caves.CaveType;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Holder;
+import net.minecraft.world.level.biome.Biome;
 
 import java.awt.Color;
 import java.util.*;
@@ -14,13 +14,13 @@ import java.util.*;
 /** Adapts the complete donor biome palette to the 1.20.1 terrain interfaces. */
 public class MEBiomesData {
     private static final Map<Integer, MEBiome> byColor = new HashMap<>();
-    private static final Map<RegistryKey<Biome>, MEBiome> byKey = new HashMap<>();
+    private static final Map<ResourceKey<Biome>, MEBiome> byKey = new HashMap<>();
     private static final List<MEBiome> biomes = new ArrayList<>();
-    public static List<RegistryKey<Biome>> waterBiomes = MapBasedBiomePool.waterBiomes;
-    public static List<RegistryKey<Biome>> frozenBiomes = MapBasedBiomePool.frozenBiomes;
-    public static List<RegistryKey<Biome>> wastePondBiomes = MapBasedBiomePool.wastePondBiomes;
-    public static List<RegistryKey<Biome>> mirkwoodSwampBiomes = MapBasedBiomePool.mirkwoodSwampBiomes;
-    public static List<RegistryKey<Biome>> oasisBiomes = MapBasedBiomePool.oasisBiomes;
+    public static List<ResourceKey<Biome>> waterBiomes = MapBasedBiomePool.waterBiomes;
+    public static List<ResourceKey<Biome>> frozenBiomes = MapBasedBiomePool.frozenBiomes;
+    public static List<ResourceKey<Biome>> wastePondBiomes = MapBasedBiomePool.wastePondBiomes;
+    public static List<ResourceKey<Biome>> mirkwoodSwampBiomes = MapBasedBiomePool.mirkwoodSwampBiomes;
+    public static List<ResourceKey<Biome>> oasisBiomes = MapBasedBiomePool.oasisBiomes;
     public static MEBiome defaultBiome, frozenPond, oasis, pond, wastePond, mirkwoodSwamp;
 
     /** Colours found in a map tile but absent from the palette (tile/palette version drift). */
@@ -110,11 +110,11 @@ public class MEBiomesData {
         return biome;
     }
 
-    public static MEBiome getBiomeByKey(RegistryEntry<Biome> biome) {
+    public static MEBiome getBiomeByKey(Holder<Biome> biome) {
         return getBiomeByKey(biome.getKey().orElseThrow());
     }
 
-    public static MEBiome getBiomeByKey(RegistryKey<Biome> key) {
+    public static MEBiome getBiomeByKey(ResourceKey<Biome> key) {
         MEBiome biome = byKey.get(key);
         if (biome == null) throw new IllegalArgumentException("No terrain metadata for " + key.getValue());
         return biome;

@@ -1,8 +1,8 @@
 package net.jukoz.me.recipe.inscription;
 
 import com.google.common.collect.ArrayListMultimap;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.jukoz.me.datageneration.content.TranslationEntries;
 import net.jukoz.me.item.ResourceItemsME;
 

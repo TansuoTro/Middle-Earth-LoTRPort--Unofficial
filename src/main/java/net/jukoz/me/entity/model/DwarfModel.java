@@ -1,8 +1,8 @@
 package net.jukoz.me.entity.model;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.model.geom.PartNames;
+import net.minecraft.world.entity.Entity;
 
 public class DwarfModel {
     public static final String NOSE = "nose";
@@ -19,7 +19,7 @@ public class DwarfModel {
     public static TexturedModelData getTexturedModelData(Dilation dilation) {
         ModelData modelData = new ModelData();
             ModelPartData modelPartData = modelData.getRoot();
-            ModelPartData head = modelPartData.addChild(EntityModelPartNames.HEAD, ModelPartBuilder
+            ModelPartData head = modelPartData.addChild(PartNames.HEAD, ModelPartBuilder
                     .create().uv(0, 0)
                     .cuboid(-4.0f, -8.0f, -4.0f, 8.0f, 8.0f, 8.0f, dilation), ModelTransform.pivot(0.0f, 0.0f, 0.0f));
 
@@ -40,19 +40,19 @@ public class DwarfModel {
             head.addChild(NORI_BEARD_RIGHT, ModelPartBuilder.create().uv(64, 0).cuboid(-3f, 0.7f, -4f, 2.0f, 5.0f, 2.0f, dilation),
                     ModelTransform.of(0f, 0f, 0f, BEARD_PITCH_ANGLE, 0, 0.55f));
 
-            modelPartData.addChild(EntityModelPartNames.HAT, ModelPartBuilder.create().uv(32, 0).cuboid(-4.0f, -8.0f, -4.0f, 8.0f, 8.0f, 8.0f, dilation.add(0.5f)), ModelTransform.pivot(0.0f, 0.0f, 0.0f));
-            modelPartData.addChild(EntityModelPartNames.BODY, ModelPartBuilder.create().uv(16, 16).cuboid(-4.0f, 0.0f, -2.0f, 8.0f, 12.0f, 4.0f, dilation), ModelTransform.pivot(0.0f, 0.0f, 0.0f));
+            modelPartData.addChild(PartNames.HAT, ModelPartBuilder.create().uv(32, 0).cuboid(-4.0f, -8.0f, -4.0f, 8.0f, 8.0f, 8.0f, dilation.add(0.5f)), ModelTransform.pivot(0.0f, 0.0f, 0.0f));
+            modelPartData.addChild(PartNames.BODY, ModelPartBuilder.create().uv(16, 16).cuboid(-4.0f, 0.0f, -2.0f, 8.0f, 12.0f, 4.0f, dilation), ModelTransform.pivot(0.0f, 0.0f, 0.0f));
 
-            ModelPartData rightArm = modelPartData.addChild(EntityModelPartNames.RIGHT_ARM, ModelPartBuilder.create()
+            ModelPartData rightArm = modelPartData.addChild(PartNames.RIGHT_ARM, ModelPartBuilder.create()
                     .uv(40, 16).cuboid(-3.0f, -2.5f, -2.0f, 4.0f, 12.0f, 4.0f, dilation), ModelTransform.pivot(-5.0f, 2.0f, 0.0f));
             rightArm.addChild(RIGHT_SLEEVE, ModelPartBuilder.create().uv(40, 32).cuboid(0f, 0f, 0f, 4.0f, 12.0f, 4.0f, dilation.add(0.25f)), ModelTransform.pivot(-3f, -2f, -2f));
 
-            ModelPartData leftArm = modelPartData.addChild(EntityModelPartNames.LEFT_ARM, ModelPartBuilder.create()
+            ModelPartData leftArm = modelPartData.addChild(PartNames.LEFT_ARM, ModelPartBuilder.create()
                     .uv(40, 16).mirrored().cuboid(-1.0f, -2.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation), ModelTransform.pivot(5.0f, 2.0f, 0.0f));
             leftArm.addChild(LEFT_SLEEVE, ModelPartBuilder.create().uv(48, 48).cuboid(0f, 0f, 0f, 4.0f, 12.0f, 4.0f, dilation.add(0.25f)), ModelTransform.pivot(-1f, -2f, -2f));
 
-            modelPartData.addChild(EntityModelPartNames.RIGHT_LEG, ModelPartBuilder.create().uv(0, 16).cuboid(-2.0f, 0.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation), ModelTransform.pivot(-1.9f, 12.0f, 0.0f));
-            modelPartData.addChild(EntityModelPartNames.LEFT_LEG, ModelPartBuilder.create().uv(0, 16).mirrored().cuboid(-2.0f, 0.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation), ModelTransform.pivot(1.9f, 12.0f, 0.0f));
+            modelPartData.addChild(PartNames.RIGHT_LEG, ModelPartBuilder.create().uv(0, 16).cuboid(-2.0f, 0.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation), ModelTransform.pivot(-1.9f, 12.0f, 0.0f));
+            modelPartData.addChild(PartNames.LEFT_LEG, ModelPartBuilder.create().uv(0, 16).mirrored().cuboid(-2.0f, 0.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation), ModelTransform.pivot(1.9f, 12.0f, 0.0f));
 
             return TexturedModelData.of(modelData, 82, 64);
     }

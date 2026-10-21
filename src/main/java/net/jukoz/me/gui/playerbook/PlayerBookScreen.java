@@ -1,22 +1,22 @@
 package net.jukoz.me.gui.playerbook;
 
 import com.google.common.collect.Lists;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.block.Blocks;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.widget.PageTurnWidget;
 import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.item.Item;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.world.item.Item;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Colors;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.spider.scuttler.ShelobiteScuttlerEntity;
@@ -29,9 +29,9 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class PlayerBookScreen extends Screen {
-    private static final Identifier TEXTURE = new Identifier(MiddleEarth.MOD_ID, "textures/gui/player_book.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(MiddleEarth.MOD_ID, "textures/gui/player_book.png");
     private static final String PATH = "textures/gui/playerbook/";
     private static final int WIDTH = 320;
     private static final int HEIGHT = 220;
@@ -42,7 +42,7 @@ public class PlayerBookScreen extends Screen {
     private PlayerBookChapters currentChapter = PlayerBookChapters.GETTING_STARTED;
     private int currentPage = 0;
 
-    public PlayerBookScreen(Text title) {
+    public PlayerBookScreen(Component title) {
         super(title);
         chapters = List.of(new Chapter("playerbook.chapter_getting_started", PlayerBookChapters.GETTING_STARTED, ResourceItemsME.STARLIGHT_PHIAL),
                 new Chapter("playerbook.chapter_mining", PlayerBookChapters.MINING, ToolItemsME.STEEL_PICKAXE),
@@ -71,22 +71,22 @@ public class PlayerBookScreen extends Screen {
         context.drawTexture(TEXTURE, startX, startY, 0, 0, WIDTH, HEIGHT, 384, 384);
 
         if(currentPage == 0) {
-            drawScaledText(textRenderer, context, Text.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.title").formatted(Formatting.UNDERLINE).formatted(Formatting.BOLD),
+            drawScaledText(textRenderer, context, Component.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.title").formatted(Formatting.UNDERLINE).formatted(Formatting.BOLD),
                     startX + (int)(WIDTH * 0.325), startY + (int)(HEIGHT * 0.11f), 1.5f, Colors.BLACK, true);
 
-            context.drawTextWrapped(textRenderer, Text.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.description"), startX + 38, startY + (int)(HEIGHT * 0.22f), 116, Colors.BLACK);
+            context.drawTextWrapped(textRenderer, Component.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.description"), startX + 38, startY + (int)(HEIGHT * 0.22f), 116, Colors.BLACK);
 
-            drawScaledText(textRenderer, context, Text.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.chapters").formatted(Formatting.UNDERLINE).formatted(Formatting.BOLD),
+            drawScaledText(textRenderer, context, Component.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.chapters").formatted(Formatting.UNDERLINE).formatted(Formatting.BOLD),
                     startX + (int)(WIDTH * 0.75), startY + (int)(HEIGHT * 0.11f), 1.5f, Colors.BLACK, true);
             int index = 0;
             for(Chapter chapter : chapters) {
-                MutableText text = Text.translatable("screen." + MiddleEarth.MOD_ID + "." + chapter.name);
+                MutableComponent text = Component.translatable("screen." + MiddleEarth.MOD_ID + "." + chapter.name);
                 int startTooltipX = centerX + 30;
                 int startTooltipY = (context.getScaledWindowHeight() / 2) - (int)(HEIGHT * 0.295f) + (index * 18);
                 if (mouseX >= startTooltipX && mouseX <= startTooltipX + (chapter.name.length() * 4.75) + 5 && mouseY >= startTooltipY && mouseY <= startTooltipY + 9) {
                     context.drawOrderedTooltip(this.client.textRenderer, Lists.transform(
-                            List.of(Text.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.navigate_to")
-                            ), Text::asOrderedText), mouseX, mouseY);
+                            List.of(Component.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.navigate_to")
+                            ), Component::asOrderedText), mouseX, mouseY);
                     text.formatted(Formatting.UNDERLINE);
                 }
 
@@ -97,16 +97,16 @@ public class PlayerBookScreen extends Screen {
         } else {
             PlayerBookPageData pageData = chaptersPages.get(currentChapter).get(currentPage - 1);
             if(pageData != null) {
-                drawScaledText(textRenderer, context, Text.translatable("screen." + MiddleEarth.MOD_ID + "." + pageData.leftPageTitle).formatted(Formatting.UNDERLINE),
+                drawScaledText(textRenderer, context, Component.translatable("screen." + MiddleEarth.MOD_ID + "." + pageData.leftPageTitle).formatted(Formatting.UNDERLINE),
                         startX + (int)(WIDTH * 0.3), startY + (int)(HEIGHT * 0.11f), 1.25f, Colors.BLACK, true);
 
                 if(pageData.image != null) {
                     context.drawTexture(pageData.image, startX, startY, 0, 0, WIDTH, HEIGHT, 320, 320);
                 }
 
-                context.drawTextWrapped(textRenderer, Text.translatable("screen." + MiddleEarth.MOD_ID + "." + pageData.leftPageDescription),
+                context.drawTextWrapped(textRenderer, Component.translatable("screen." + MiddleEarth.MOD_ID + "." + pageData.leftPageDescription),
                         startX + 38, startY + (int)(HEIGHT * 0.2f), 116, Colors.BLACK);
-                context.drawTextWrapped(textRenderer, Text.translatable("screen." + MiddleEarth.MOD_ID + "." + pageData.rightPageDescription),
+                context.drawTextWrapped(textRenderer, Component.translatable("screen." + MiddleEarth.MOD_ID + "." + pageData.rightPageDescription),
                         startX + (int)(WIDTH * 0.5f) + 16, startY + (int)(HEIGHT * 0.16f), 114, Colors.BLACK);
             }
         }
@@ -147,8 +147,8 @@ public class PlayerBookScreen extends Screen {
         int centerX = context.getScaledWindowWidth() / 2;
     }
 
-    public static void drawScaledText(TextRenderer textRenderer, DrawContext context, Text text, int x, int y, float scale, int color, boolean centered) {
-        net.minecraft.client.util.math.MatrixStack matrices = context.getMatrices();
+    public static void drawScaledText(TextRenderer textRenderer, DrawContext context, Component text, int x, int y, float scale, int color, boolean centered) {
+        com.mojang.blaze3d.vertex.PoseStack matrices = context.getMatrices();
         matrices.push();
         matrices.scale(scale, scale, 1.0f);
 
@@ -200,55 +200,55 @@ public class PlayerBookScreen extends Screen {
     static {
         chaptersPages = new HashMap<>();
         chaptersPages.put(PlayerBookChapters.GETTING_STARTED, List.of(
-                new PlayerBookPageData().withTitle("playerbook.chapter_getting_started").withImage(new Identifier(MiddleEarth.MOD_ID, PATH + "getting_started1.png"))
+                new PlayerBookPageData().withTitle("playerbook.chapter_getting_started").withImage(new ResourceLocation(MiddleEarth.MOD_ID, PATH + "getting_started1.png"))
                     .withLeftPageDesc("playerbook.getting_started_desc")
                     .withRightPageDesc("playerbook.getting_started_desc_right")
         ));
 
         chaptersPages.put(PlayerBookChapters.MINING, List.of(
-                new PlayerBookPageData().withTitle("playerbook.chapter_mining").withImage(new Identifier(MiddleEarth.MOD_ID, PATH + "mining1.png"))
+                new PlayerBookPageData().withTitle("playerbook.chapter_mining").withImage(new ResourceLocation(MiddleEarth.MOD_ID, PATH + "mining1.png"))
                     .withLeftPageDesc("playerbook.mining_desc")
                     .withRightPageDesc("playerbook.mining_desc_right"),
                 new PlayerBookPageData().withTitle("playerbook.tools")
                     .withLeftPageDesc("playerbook.mining_tools_desc")
                     .withRightPageDesc("playerbook.mining_tools_desc_right"),
-                new PlayerBookPageData().withTitle("playerbook.cave_monsters").withImage(new Identifier(MiddleEarth.MOD_ID, PATH + "mining3.png"))
+                new PlayerBookPageData().withTitle("playerbook.cave_monsters").withImage(new ResourceLocation(MiddleEarth.MOD_ID, PATH + "mining3.png"))
                     .withLeftPageDesc("playerbook.mining_cave_monster_desc")
                     .withRightPageDesc("playerbook.mining_cave_monster_desc_right")
         ));
 
         chaptersPages.put(PlayerBookChapters.SMITHING, List.of(
-                new PlayerBookPageData().withTitle("playerbook.chapter_smithing").withImage(new Identifier(MiddleEarth.MOD_ID, PATH + "smithing1.png"))
+                new PlayerBookPageData().withTitle("playerbook.chapter_smithing").withImage(new ResourceLocation(MiddleEarth.MOD_ID, PATH + "smithing1.png"))
                         .withLeftPageDesc("playerbook.smithing_desc")
                         .withRightPageDesc("playerbook.smithing_desc_right"),
-                new PlayerBookPageData().withTitle("playerbook.copper_alloys").withImage(new Identifier(MiddleEarth.MOD_ID, PATH + "smithing2.png"))
+                new PlayerBookPageData().withTitle("playerbook.copper_alloys").withImage(new ResourceLocation(MiddleEarth.MOD_ID, PATH + "smithing2.png"))
                         .withLeftPageDesc("playerbook.smithing_copper_alloys_smithing_desc")
                         .withRightPageDesc("playerbook.smithing_copper_alloys_smithing_desc_right"),
-                new PlayerBookPageData().withTitle("playerbook.casting").withImage(new Identifier(MiddleEarth.MOD_ID, PATH + "smithing3.png"))
+                new PlayerBookPageData().withTitle("playerbook.casting").withImage(new ResourceLocation(MiddleEarth.MOD_ID, PATH + "smithing3.png"))
                         .withLeftPageDesc("playerbook.smithing_casting_desc")
                         .withRightPageDesc("playerbook.smithing_casting_desc_right"),
-                new PlayerBookPageData().withTitle("playerbook.shaping_anvil").withImage(new Identifier(MiddleEarth.MOD_ID, PATH + "smithing4.png"))
+                new PlayerBookPageData().withTitle("playerbook.shaping_anvil").withImage(new ResourceLocation(MiddleEarth.MOD_ID, PATH + "smithing4.png"))
                         .withLeftPageDesc("playerbook.smithing_shaping_anvil_desc")
                         .withRightPageDesc("playerbook.smithing_shaping_anvil_desc_right"),
                 new PlayerBookPageData().withTitle("playerbook.shaping_anvil")
                         .withLeftPageDesc("playerbook.smithing_shaping_anvil_1_desc")
                         .withRightPageDesc("playerbook.smithing_shaping_anvil_1_desc_right"),
-                new PlayerBookPageData().withTitle("playerbook.quenching").withImage(new Identifier(MiddleEarth.MOD_ID, PATH + "smithing5.png"))
+                new PlayerBookPageData().withTitle("playerbook.quenching").withImage(new ResourceLocation(MiddleEarth.MOD_ID, PATH + "smithing5.png"))
                         .withLeftPageDesc("playerbook.smithing_quenching_desc")
                         .withRightPageDesc("playerbook.smithing_quenching_desc_right"),
-                new PlayerBookPageData().withTitle("playerbook.artisan_table").withImage(new Identifier(MiddleEarth.MOD_ID, PATH + "smithing6.png"))
+                new PlayerBookPageData().withTitle("playerbook.artisan_table").withImage(new ResourceLocation(MiddleEarth.MOD_ID, PATH + "smithing6.png"))
                         .withLeftPageDesc("playerbook.smithing_artisan_table_desc")
                         .withRightPageDesc("playerbook.smithing_artisan_table_desc_right"),
-                new PlayerBookPageData().withTitle("playerbook.artisan_table").withImage(new Identifier(MiddleEarth.MOD_ID, PATH + "smithing7.png"))
+                new PlayerBookPageData().withTitle("playerbook.artisan_table").withImage(new ResourceLocation(MiddleEarth.MOD_ID, PATH + "smithing7.png"))
                         .withLeftPageDesc("playerbook.smithing_artisan_table_1_desc")
                         .withRightPageDesc("playerbook.smithing_artisan_table_1_desc_right")
         ));
 
         chaptersPages.put(PlayerBookChapters.ENCHANTING, List.of(
-                new PlayerBookPageData().withTitle("playerbook.chapter_enchanting").withImage(new Identifier(MiddleEarth.MOD_ID, PATH + "enchanting1.png"))
+                new PlayerBookPageData().withTitle("playerbook.chapter_enchanting").withImage(new ResourceLocation(MiddleEarth.MOD_ID, PATH + "enchanting1.png"))
                         .withLeftPageDesc("playerbook.enchanting_desc")
                         .withRightPageDesc("playerbook.enchanting_desc_right"),
-                new PlayerBookPageData().withTitle("playerbook.inscription_table").withImage(new Identifier(MiddleEarth.MOD_ID, PATH + "enchanting2.png"))
+                new PlayerBookPageData().withTitle("playerbook.inscription_table").withImage(new ResourceLocation(MiddleEarth.MOD_ID, PATH + "enchanting2.png"))
                         .withLeftPageDesc("playerbook.inscription_table_desc")
                         .withRightPageDesc("playerbook.inscription_table_desc_right")
         ));
@@ -257,16 +257,16 @@ public class PlayerBookScreen extends Screen {
                 new PlayerBookPageData().withTitle("playerbook.chapter_mounts")
                         .withLeftPageDesc("playerbook.mounts_desc")
                         .withRightPageDesc("playerbook.mounts_desc_right"),
-                new PlayerBookPageData().withTitle("playerbook.broadhoof_goat").withImage(new Identifier(MiddleEarth.MOD_ID, PATH + "mount_broadhoof_goat.png"))
+                new PlayerBookPageData().withTitle("playerbook.broadhoof_goat").withImage(new ResourceLocation(MiddleEarth.MOD_ID, PATH + "mount_broadhoof_goat.png"))
                         .withLeftPageDesc("playerbook.mount_broadhoof_goat_desc")
                         .withRightPageDesc("playerbook.mount_broadhoof_goat_desc_right"),
-                new PlayerBookPageData().withTitle("playerbook.great_horn").withImage(new Identifier(MiddleEarth.MOD_ID, PATH + "mount_great_horn.png"))
+                new PlayerBookPageData().withTitle("playerbook.great_horn").withImage(new ResourceLocation(MiddleEarth.MOD_ID, PATH + "mount_great_horn.png"))
                         .withLeftPageDesc("playerbook.mount_great_horn_desc")
                         .withRightPageDesc("playerbook.mount_great_horn_desc_right"),
-                new PlayerBookPageData().withTitle("playerbook.warg").withImage(new Identifier(MiddleEarth.MOD_ID, PATH + "mount_warg.png"))
+                new PlayerBookPageData().withTitle("playerbook.warg").withImage(new ResourceLocation(MiddleEarth.MOD_ID, PATH + "mount_warg.png"))
                         .withLeftPageDesc("playerbook.mount_warg_desc")
                         .withRightPageDesc("playerbook.mount_warg_desc_right"),
-                new PlayerBookPageData().withTitle("playerbook.cave_troll").withImage(new Identifier(MiddleEarth.MOD_ID, PATH + "mount_cave_troll.png"))
+                new PlayerBookPageData().withTitle("playerbook.cave_troll").withImage(new ResourceLocation(MiddleEarth.MOD_ID, PATH + "mount_cave_troll.png"))
                         .withLeftPageDesc("playerbook.mount_cave_troll_desc")
                         .withRightPageDesc("playerbook.mount_cave_troll_desc_right")
         ));
@@ -275,10 +275,10 @@ public class PlayerBookScreen extends Screen {
                 new PlayerBookPageData().withTitle("playerbook.chapter_dungeons")
                         .withLeftPageDesc("playerbook.dungeons_desc")
                         .withRightPageDesc("playerbook.dungeons_desc_right"),
-                new PlayerBookPageData().withTitle("playerbook.brigands").withImage(new Identifier(MiddleEarth.MOD_ID, PATH + "dungeon_brigands.png"))
+                new PlayerBookPageData().withTitle("playerbook.brigands").withImage(new ResourceLocation(MiddleEarth.MOD_ID, PATH + "dungeon_brigands.png"))
                         .withLeftPageDesc("playerbook.dungeon_brigands_desc")
                         .withRightPageDesc("playerbook.dungeon_brigands_desc_right"),
-                new PlayerBookPageData().withTitle("playerbook.spider_burrows").withImage(new Identifier(MiddleEarth.MOD_ID, PATH + "dungeon_spider_burrows.png"))
+                new PlayerBookPageData().withTitle("playerbook.spider_burrows").withImage(new ResourceLocation(MiddleEarth.MOD_ID, PATH + "dungeon_spider_burrows.png"))
                         .withLeftPageDesc("playerbook.dungeon_spider_burrows_desc")
                         .withRightPageDesc("playerbook.dungeon_spider_burrows_desc_right")
         ));

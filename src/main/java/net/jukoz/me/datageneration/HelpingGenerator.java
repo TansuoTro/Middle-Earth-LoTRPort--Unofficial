@@ -14,7 +14,7 @@ import net.jukoz.me.datageneration.content.loot_tables.BlockDrops;
 import net.jukoz.me.datageneration.content.models.*;
 import net.jukoz.me.datageneration.content.tags.*;
 import net.minecraft.block.*;
-import net.minecraft.registry.Registries;
+import net.minecraft.core.registries.Registries;
 
 import java.util.Objects;
 

@@ -1,26 +1,26 @@
 package net.jukoz.me.block.special;
 
-import net.minecraft.block.Block;
-import net.minecraft.util.Hand;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 public class GroundBookBlock extends Block {
@@ -33,20 +33,20 @@ public class GroundBookBlock extends Block {
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if(!world.isClient && player.getAbilities().allowModifyWorld){
             world.setBlockState(pos, state.cycle(OPEN), 2 | 3);
         }
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(HORIZONTAL_FACING, OPEN);
     }
 
     @Nullable
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(Properties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(OPEN, false);
+    public BlockState getPlacementState(BlockPlaceContext ctx) {
+        return this.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(OPEN, false);
     }
 
     @Override
@@ -71,15 +71,15 @@ public class GroundBookBlock extends Block {
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         if(state.get(OPEN)){
-            return switch(state.get(Properties.HORIZONTAL_FACING)) {
+            return switch(state.get(BlockStateProperties.HORIZONTAL_FACING)) {
                 case WEST, EAST -> Block.createCuboidShape(2, 0, 0, 14, 5, 16);
                 case SOUTH, NORTH -> Block.createCuboidShape(0, 0, 2, 16, 5, 14);
                 default -> VoxelShapes.cuboid(1,1,1,1,1,1);
             };
         } else {
-            return switch(state.get(Properties.HORIZONTAL_FACING)) {
+            return switch(state.get(BlockStateProperties.HORIZONTAL_FACING)) {
                 case WEST, EAST -> Block.createCuboidShape(3, 0, 4, 13, 3, 12);
                 case SOUTH, NORTH -> Block.createCuboidShape(4, 0, 3, 12, 3, 13);
                 default -> VoxelShapes.cuboid(1,1,1,1,1,1);

@@ -93,7 +93,7 @@ public enum BackAttachmentsME implements StringIdentifiable {
     private final int id;
 
     public static final Codec<BackAttachmentsME> CODEC = StringIdentifiable.createCodec(BackAttachmentsME::values);
-    public static final PacketCodec<net.minecraft.network.PacketByteBuf, BackAttachmentsME> PACKET_CODEC = PacketCodecs.indexed(BY_ID, BackAttachmentsME::getId);
+    public static final PacketCodec<net.minecraft.network.FriendlyByteBuf, BackAttachmentsME> PACKET_CODEC = PacketCodecs.indexed(BY_ID, BackAttachmentsME::getId);
 
     BackAttachmentsME(int id, String name){
         this.name = name;

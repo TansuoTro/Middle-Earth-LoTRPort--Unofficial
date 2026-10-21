@@ -3,8 +3,8 @@ package net.jukoz.me.datageneration;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
 import net.jukoz.me.MiddleEarth;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -15,9 +15,9 @@ public class DataWorldGenerator extends FabricDynamicRegistryProvider {
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup registries, Entries entries) {
-        entries.addAll(registries.getWrapperOrThrow(RegistryKeys.BIOME));
-        entries.addAll(registries.getWrapperOrThrow(RegistryKeys.CONFIGURED_FEATURE));
-        entries.addAll(registries.getWrapperOrThrow(RegistryKeys.PLACED_FEATURE));
+        entries.addAll(registries.getWrapperOrThrow(Registries.BIOME));
+        entries.addAll(registries.getWrapperOrThrow(Registries.CONFIGURED_FEATURE));
+        entries.addAll(registries.getWrapperOrThrow(Registries.PLACED_FEATURE));
 
         entries.addAll(registries.getWrapperOrThrow(net.jukoz.me.registries.DynamicRegistriesME.RACE));
         entries.addAll(registries.getWrapperOrThrow(net.jukoz.me.registries.DynamicRegistriesME.NPC_TYPE));

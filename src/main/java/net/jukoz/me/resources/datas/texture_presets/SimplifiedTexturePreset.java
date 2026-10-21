@@ -1,22 +1,22 @@
 package net.jukoz.me.resources.datas.texture_presets;
 import net.jukoz.me.compat.NbtCompat;
 
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtElement;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 
 public class SimplifiedTexturePreset {
-    public Identifier base;
-    public Identifier hair;
-    public Identifier feet;
-    public Identifier nose;
-    public Identifier ear;
+    public ResourceLocation base;
+    public ResourceLocation hair;
+    public ResourceLocation feet;
+    public ResourceLocation nose;
+    public ResourceLocation ear;
 
     public SimplifiedTexturePreset() {
     }
 
-    public SimplifiedTexturePreset(NbtCompound source) {
+    public SimplifiedTexturePreset(CompoundTag source) {
         if (source.contains("base")) this.base = MiddleEarth.fetchId(source.getString("base"));
         if (source.contains("hair")) this.hair = MiddleEarth.fetchId(source.getString("hair"));
         if (source.contains("feet")) this.feet = MiddleEarth.fetchId(source.getString("feet"));
@@ -25,28 +25,28 @@ public class SimplifiedTexturePreset {
     }
 
 
-    public static SimplifiedTexturePreset create(Identifier base) {
+    public static SimplifiedTexturePreset create(ResourceLocation base) {
         SimplifiedTexturePreset texturePreset = new SimplifiedTexturePreset();
         texturePreset.base = base;
         return texturePreset;
     }
 
-    public SimplifiedTexturePreset withHair(Identifier hair){
+    public SimplifiedTexturePreset withHair(ResourceLocation hair){
         this.hair = hair;
         return this;
     }
 
-    public SimplifiedTexturePreset withFeet(Identifier feet){
+    public SimplifiedTexturePreset withFeet(ResourceLocation feet){
         this.feet = feet;
         return this;
     }
 
-    public SimplifiedTexturePreset withNose(Identifier nose){
+    public SimplifiedTexturePreset withNose(ResourceLocation nose){
         this.nose = nose;
         return this;
     }
 
-    public SimplifiedTexturePreset withEar(Identifier ear){
+    public SimplifiedTexturePreset withEar(ResourceLocation ear){
         this.ear = ear;
         return this;
     }

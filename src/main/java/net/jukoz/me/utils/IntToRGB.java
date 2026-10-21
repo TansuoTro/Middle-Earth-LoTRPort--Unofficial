@@ -1,6 +1,6 @@
 package net.jukoz.me.utils;
 
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.phys.Vec3;
 
 import java.awt.*;
 

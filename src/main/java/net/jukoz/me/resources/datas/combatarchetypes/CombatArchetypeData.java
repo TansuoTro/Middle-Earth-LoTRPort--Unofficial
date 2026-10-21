@@ -1,8 +1,8 @@
 package net.jukoz.me.resources.datas.combatarchetypes;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
 import net.jukoz.me.resources.datas.combatarchetypes.data.CombatArchetype;
 
 public abstract class CombatArchetypeData {
@@ -21,7 +21,7 @@ public abstract class CombatArchetypeData {
         this.optimalBlockRangeMaximum = optimalBlockRangeMaximum;
     }
 
-    public CombatArchetypeData(NbtCompound data) {
+    public CombatArchetypeData(CompoundTag data) {
         setArchetype(getCombatArchetype());
 
         this.fleeMovementSpeedModifier = data.getFloat("flee_movement_speed_modifier");
@@ -30,23 +30,23 @@ public abstract class CombatArchetypeData {
         this.optimalBlockRangeMaximum = data.getInt("optimal_block_range_maximum");
     }
 
-    public NbtCompound getNbt(){
-        NbtCompound nbt = new NbtCompound();
+    public CompoundTag getNbt(){
+        CompoundTag nbt = new CompoundTag();
         if(this.combatArchetype == null)
             this.combatArchetype = CombatArchetype.MELEE;
 
         nbt.putString("type", combatArchetype.name());
 
 
-        NbtCompound dataNbt =  getDataNbt();
+        CompoundTag dataNbt =  getDataNbt();
 
         nbt.put("data", dataNbt);
 
         return nbt;
     }
 
-    protected NbtCompound getDataNbt() {
-        NbtCompound nbtCompound = new NbtCompound();
+    protected CompoundTag getDataNbt() {
+        CompoundTag nbtCompound = new CompoundTag();
 
         nbtCompound.putFloat("flee_movement_speed_modifier", fleeMovementSpeedModifier);
         nbtCompound.putFloat("seek_target_movement_speed_modifier", seekTargetMovementSpeedModifier);

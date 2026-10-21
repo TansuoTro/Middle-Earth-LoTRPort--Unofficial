@@ -2,9 +2,9 @@ package net.jukoz.me.entity.beasts.great_horn;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
 import net.jukoz.me.registries.DynamicRegistriesME;
@@ -25,12 +25,12 @@ public record GreatHornVariant(GreatHornAssetInfo assetInfo, net.jukoz.me.compat
             ).apply(instance, GreatHornVariant::new)
     );
 
-    public static final PacketCodec<PacketByteBuf, RegistryEntry<GreatHornVariant>> PACKET_CODEC =
+    public static final PacketCodec<FriendlyByteBuf, Holder<GreatHornVariant>> PACKET_CODEC =
             PacketCodecs.registryEntry(DynamicRegistriesME.GREAT_HORN_VARIANTS);
 
-    public record AssetInfo(Identifier texturePath) {
+    public record AssetInfo(ResourceLocation texturePath) {
         public static final Codec<AssetInfo> CODEC =
-                Identifier.CODEC.xmap(AssetInfo::new, AssetInfo::texturePath);
+                ResourceLocation.CODEC.xmap(AssetInfo::new, AssetInfo::texturePath);
     }
 
     public record GreatHornAssetInfo(AssetInfo id) {

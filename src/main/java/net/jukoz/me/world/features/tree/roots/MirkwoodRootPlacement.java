@@ -3,17 +3,17 @@ package net.jukoz.me.world.features.tree.roots;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.block.Block;
-import net.minecraft.registry.RegistryCodecs;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.world.gen.stateprovider.BlockStateProvider;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.core.RegistryCodecs;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.HolderList;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
 public record MirkwoodRootPlacement(RegistryEntryList<Block> canGrowThrough, RegistryEntryList<Block> muddyRootsIn, BlockStateProvider muddyRootsProvider, int maxRootWidth, int maxRootLength, float randomSkewChance) {
     public static final Codec<MirkwoodRootPlacement> CODEC = RecordCodecBuilder.create((instance) -> {
-        return instance.group(RegistryCodecs.entryList(RegistryKeys.BLOCK).fieldOf("can_grow_through").forGetter((rootPlacement) -> {
+        return instance.group(RegistryCodecs.entryList(Registries.BLOCK).fieldOf("can_grow_through").forGetter((rootPlacement) -> {
             return rootPlacement.canGrowThrough;
-        }), RegistryCodecs.entryList(RegistryKeys.BLOCK).fieldOf("muddy_roots_in").forGetter((rootPlacement) -> {
+        }), RegistryCodecs.entryList(Registries.BLOCK).fieldOf("muddy_roots_in").forGetter((rootPlacement) -> {
             return rootPlacement.muddyRootsIn;
         }), BlockStateProvider.TYPE_CODEC.fieldOf("muddy_roots_provider").forGetter((rootPlacement) -> {
             return rootPlacement.muddyRootsProvider;

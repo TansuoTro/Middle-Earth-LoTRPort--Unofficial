@@ -3,10 +3,10 @@ package net.jukoz.me.entity.pheasant;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.entity.passive.ChickenEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 
 public class PheasantModel extends SinglePartEntityModel<PheasantEntity> {
     private final ModelPart pheasant;
@@ -72,7 +72,7 @@ public class PheasantModel extends SinglePartEntityModel<PheasantEntity> {
 
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void render(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
         pheasant.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
     }
 
@@ -83,14 +83,14 @@ public class PheasantModel extends SinglePartEntityModel<PheasantEntity> {
 
     @Override
     public void setAngles(PheasantEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
-        this.rightleg.pitch = MathHelper.cos(limbAngle * 0.6662f) * 1.4f * limbDistance;
-        this.leftleg.pitch = MathHelper.cos(limbAngle * 0.6662f + (float)Math.PI) * 1.4f * limbDistance;
+        this.rightleg.pitch = Mth.cos(limbAngle * 0.6662f) * 1.4f * limbDistance;
+        this.leftleg.pitch = Mth.cos(limbAngle * 0.6662f + (float)Math.PI) * 1.4f * limbDistance;
 
         this.rightwing.roll = 0;
         this.leftwing.roll = 0;
 
         if(!entity.isOnGround()) {
-            float angle = MathHelper.cos(MathHelper.cos(animationProgress * 0.5f));
+            float angle = Mth.cos(Mth.cos(animationProgress * 0.5f));
             this.rightwing.roll = 4 + (4 * angle);
             this.leftwing.roll = -4 - (4 * angle);
         }

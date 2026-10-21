@@ -1,7 +1,7 @@
 package net.jukoz.me.entity.beasts.broadhoof.features;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
+import net.minecraft.client.model.geom.PartNames;
 import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatEntity;
 import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatModel;
 
@@ -10,12 +10,12 @@ public class BroadhoofGoatSaddleModel extends BroadhoofGoatModel {
     public BroadhoofGoatSaddleModel(ModelPart root) {
         super(root);
 
-        this.reins = root.getChild("broadhoof_goat").getChild(EntityModelPartNames.BODY).getChild(EntityModelPartNames.HEAD).getChild("saddle_things").getChild("reins");
+        this.reins = root.getChild("broadhoof_goat").getChild(PartNames.BODY).getChild(PartNames.HEAD).getChild("saddle_things").getChild("reins");
     }
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = getModelData();
-        ModelPartData root = modelData.getRoot().getChild("broadhoof_goat").getChild(EntityModelPartNames.BODY);
-        ModelPartData head = root.getChild(EntityModelPartNames.HEAD);
+        ModelPartData root = modelData.getRoot().getChild("broadhoof_goat").getChild(PartNames.BODY);
+        ModelPartData head = root.getChild(PartNames.HEAD);
 
 
         ModelPartData saddle = root.addChild("saddle", ModelPartBuilder.create().uv(74, 19).cuboid(-7.0F, -23.0F, 13.0F, 14.0F, 14.0F, 13.0F, new Dilation(0.3F))

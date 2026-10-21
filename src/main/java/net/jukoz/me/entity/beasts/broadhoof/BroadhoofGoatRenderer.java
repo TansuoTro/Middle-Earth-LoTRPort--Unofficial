@@ -5,16 +5,16 @@ import net.jukoz.me.compat.client.render.MEMobEntityRenderer;
 
 import com.google.common.collect.Maps;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.jukoz.me.compat.client.render.equipment.EquipmentModel;
 import net.minecraft.client.render.entity.feature.HorseMarkingFeatureRenderer;
 import net.jukoz.me.compat.client.render.equipment.SaddleFeatureRenderer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.EquipmentSlot;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.entity.passive.HorseColor;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.Util;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.EntityModelLayersME;
 import net.jukoz.me.entity.beasts.broadhoof.features.BroadhoofGoatBeadsFeatureRenderer;
@@ -45,7 +45,7 @@ public class BroadhoofGoatRenderer extends MEMobEntityRenderer<BroadhoofGoatEnti
     }
 
     @Override
-    public void render(BroadhoofGoatEntityRenderState state, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
+    public void render(BroadhoofGoatEntityRenderState state, PoseStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
         if(state.baby) {
             matrixStack.scale(SIZE/2, SIZE/2, SIZE/2);
         }
@@ -61,7 +61,7 @@ public class BroadhoofGoatRenderer extends MEMobEntityRenderer<BroadhoofGoatEnti
         return new BroadhoofGoatEntityRenderState();
     }
 
-    private static final Map<BroadhoofGoatColor, Identifier> TEXTURES = Maps.newEnumMap(
+    private static final Map<BroadhoofGoatColor, ResourceLocation> TEXTURES = Maps.newEnumMap(
             Map.of(
                     BroadhoofGoatColor.WHITE,
                     MiddleEarth.of(PATH + "broadhoof_goat_white.png"),
@@ -113,7 +113,7 @@ public class BroadhoofGoatRenderer extends MEMobEntityRenderer<BroadhoofGoatEnti
     }
 
     @Override
-    public Identifier getTexture(BroadhoofGoatEntityRenderState state) {
+    public ResourceLocation getTexture(BroadhoofGoatEntityRenderState state) {
         return TEXTURES.get(state.color);
     }
 }

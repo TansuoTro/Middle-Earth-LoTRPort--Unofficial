@@ -4,13 +4,13 @@ import net.jukoz.me.item.MEComponents;
 
 import net.jukoz.me.resources.datas.common.RaceType;
 import net.jukoz.me.resources.datas.races.RaceUtil;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public class HotChickenFoodItem extends Item {
     public HotChickenFoodItem(Settings settings) {
@@ -18,10 +18,10 @@ public class HotChickenFoodItem extends Item {
     }
 
     @Override
-    public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
+    public ItemStack finishUsing(ItemStack stack, Level world, LivingEntity user) {
         if(world.isClient) return super.finishUsing(stack, world, user);
 
-        if(user instanceof PlayerEntity playerEntity) {
+        if(user instanceof Player playerEntity) {
             if (!stack.isEmpty() && MEComponents.get(stack, MEComponents.TEMPERATURE_DATA) != null) {
                 int temperature = MEComponents.get(stack, MEComponents.TEMPERATURE_DATA).temperature();
                 float percentage = 1;

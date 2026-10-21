@@ -1,7 +1,7 @@
 package net.jukoz.me.network.packets.C2S;
 
 import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
@@ -9,11 +9,11 @@ import net.jukoz.me.resources.datas.races.RaceLookup;
 import net.jukoz.me.resources.datas.races.RaceUtil;
 import net.jukoz.me.api.utils.IdentifierUtil;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class PacketSetRace extends ClientToServerPacket<PacketSetRace>
 {
-    public static final Identifier ID = new Identifier(MiddleEarth.MOD_ID, "packet_set_race");
+    public static final ResourceLocation ID = new ResourceLocation(MiddleEarth.MOD_ID, "packet_set_race");
 
     public static final PacketType<PacketSetRace> TYPE = PacketType.create(ID, PacketSetRace::new);
 
@@ -26,7 +26,7 @@ public class PacketSetRace extends ClientToServerPacket<PacketSetRace>
 
 
 
-    public PacketSetRace(PacketByteBuf buf) {
+    public PacketSetRace(FriendlyByteBuf buf) {
         this(buf.readString());
     }
 
@@ -36,7 +36,7 @@ public class PacketSetRace extends ClientToServerPacket<PacketSetRace>
     }
 
     @Override
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
         buf.writeString(this.race);
     }
 

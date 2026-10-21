@@ -3,11 +3,11 @@ package net.jukoz.me.mixin.client;
 import net.jukoz.me.entity.EntityAttributesME;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileUtil;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,7 +19,7 @@ public abstract class GameRendererMixin {
     private void me$attributeReach(float tickDelta, CallbackInfo ci) {
         MinecraftClient client = MinecraftClient.getInstance();
         Entity camera = client.getCameraEntity();
-        if (!(camera instanceof PlayerEntity player) || client.world == null || client.interactionManager == null) return;
+        if (!(camera instanceof Player player) || client.world == null || client.interactionManager == null) return;
         double blockReach = EntityAttributesME.blockReach(player);
         double entityReach = EntityAttributesME.entityReach(player);
         var eye = camera.getCameraPosVec(tickDelta);

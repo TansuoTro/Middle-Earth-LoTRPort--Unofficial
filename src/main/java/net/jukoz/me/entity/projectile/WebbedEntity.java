@@ -1,24 +1,24 @@
 package net.jukoz.me.entity.projectile;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.particle.BlockStateParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.EntityTypeTagsME;
@@ -31,18 +31,18 @@ public class WebbedEntity extends AbstractProjectileEntity {
     private static ConfiguredFeature feature;
     private float damage;
 
-    public WebbedEntity(EntityType<? extends WebbedEntity> entityType, World world) {
+    public WebbedEntity(EntityType<? extends WebbedEntity> entityType, Level world) {
         super(entityType, world);
     }
 
-    public WebbedEntity(World world, LivingEntity owner, float dmg) {
+    public WebbedEntity(Level world, LivingEntity owner, float dmg) {
         super(EntitiesME.WEB, owner, world, new ItemStack(Items.COBWEB));
         this.damage = dmg;
         if(feature == null) {
             if(!this.getWorld().isClient) {
-                if(this.getWorld() instanceof ServerWorld serverWorld) {
-                    Optional<? extends RegistryEntry<ConfiguredFeature<?, ?>>> optional = serverWorld.getRegistryManager()
-                            .get(RegistryKeys.CONFIGURED_FEATURE)
+                if(this.getWorld() instanceof ServerLevel serverWorld) {
+                    Optional<? extends Holder<ConfiguredFeature<?, ?>>> optional = serverWorld.getRegistryManager()
+                            .get(Registries.CONFIGURED_FEATURE)
                             .getEntry(ModVegetationConfiguredFeatures.PATCH_WEBBING);
                     optional.ifPresent(configuredFeatureRegistryEntry -> feature = configuredFeatureRegistryEntry.value());
                 }
@@ -66,7 +66,7 @@ public class WebbedEntity extends AbstractProjectileEntity {
     public void onEntityHit(EntityHitResult entityHitResult) {
         super.onEntityHit(entityHitResult);
         Entity entity = entityHitResult.getEntity();
-        if(this.getWorld() instanceof ServerWorld serverWorld) {
+        if(this.getWorld() instanceof ServerLevel serverWorld) {
             entity.damage(this.getDamageSources().thrown(this, this.getOwner()), this.damage);
             if(entity instanceof LivingEntity livingEntity) {
                 livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 200));
@@ -118,7 +118,7 @@ public class WebbedEntity extends AbstractProjectileEntity {
     }
 
     private void spawnWebbing() {
-        if(this.getWorld() instanceof ServerWorld serverWorld && feature != null) {
+        if(this.getWorld() instanceof ServerLevel serverWorld && feature != null) {
             feature.generate(serverWorld, serverWorld.getChunkManager().getChunkGenerator(), random, this.getBlockPos());
         }
     }

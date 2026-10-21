@@ -1,6 +1,6 @@
 package net.jukoz.me.utils.item;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class DamageableItemUtils {
 

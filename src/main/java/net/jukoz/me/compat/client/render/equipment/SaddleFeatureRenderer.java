@@ -6,11 +6,11 @@ import net.jukoz.me.compat.client.render.state.EntityRenderStateCompat;
 import net.jukoz.me.item.MEComponents;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.model.EntityModel;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.Function;
 
@@ -37,13 +37,13 @@ public class SaddleFeatureRenderer<T extends LivingEntity, S extends EntityRende
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light,
+    public void render(PoseStack matrices, VertexConsumerProvider vertexConsumers, int light,
                        S state, float limbAngle, float limbDistance) {
         ItemStack stack = this.stackGetter.apply(state);
         if (stack == null || stack.isEmpty()) {
             return;
         }
-        Identifier assetId = MEComponents.get(stack, MEComponents.EQUIPPABLE_ASSET);
+        ResourceLocation assetId = MEComponents.get(stack, MEComponents.EQUIPPABLE_ASSET);
         if (assetId == null) {
             return;
         }

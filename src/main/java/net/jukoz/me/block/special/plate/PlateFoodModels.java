@@ -1,14 +1,14 @@
 package net.jukoz.me.block.special.plate;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 
 import java.util.HashMap;
 
 public class PlateFoodModels {
-    public static HashMap<Identifier, Identifier> plateModels;
+    public static HashMap<ResourceLocation, ResourceLocation> plateModels;
 
-    public static Identifier getPlateIdentifier(Identifier itemIdentifier) {
+    public static ResourceLocation getPlateIdentifier(ResourceLocation itemIdentifier) {
         if(plateModels.containsKey(itemIdentifier)) {
             return plateModels.get(itemIdentifier);
         }
@@ -16,7 +16,7 @@ public class PlateFoodModels {
     }
 
     public static void addVanillaModel(String name) {
-        plateModels.put(new Identifier("minecraft", name), new Identifier(MiddleEarth.MOD_ID, "plate_" + name));
+        plateModels.put(new ResourceLocation("minecraft", name), new ResourceLocation(MiddleEarth.MOD_ID, "plate_" + name));
     }
     public static void addModel(String name) {
         plateModels.put(MiddleEarth.of(name), MiddleEarth.of('_', "plate", name));

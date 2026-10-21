@@ -1,29 +1,29 @@
 package net.jukoz.me.world.features.tree.saplings;
 
 import net.minecraft.block.sapling.LargeTreeSaplingGenerator;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import org.jetbrains.annotations.Nullable;
 
 public class ModLargeSaplingGenerator extends LargeTreeSaplingGenerator {
-    private final RegistryKey<ConfiguredFeature<?, ?>> treeKey;
-    private final RegistryKey<ConfiguredFeature<?, ?>> largeTreeKey;
+    private final ResourceKey<ConfiguredFeature<?, ?>> treeKey;
+    private final ResourceKey<ConfiguredFeature<?, ?>> largeTreeKey;
 
-    public ModLargeSaplingGenerator(RegistryKey<ConfiguredFeature<?, ?>> treeKey, RegistryKey<ConfiguredFeature<?, ?>> largeTreeKey) {
+    public ModLargeSaplingGenerator(ResourceKey<ConfiguredFeature<?, ?>> treeKey, ResourceKey<ConfiguredFeature<?, ?>> largeTreeKey) {
         this.treeKey = treeKey;
         this.largeTreeKey = largeTreeKey;
     }
 
     @Nullable
     @Override
-    protected RegistryKey<ConfiguredFeature<?, ?>> getTreeFeature(Random random, boolean bees) {
+    protected ResourceKey<ConfiguredFeature<?, ?>> getTreeFeature(RandomSource random, boolean bees) {
         return treeKey;
     }
 
     @Nullable
     @Override
-    protected RegistryKey<ConfiguredFeature<?, ?>> getLargeTreeFeature(Random random) {
+    protected ResourceKey<ConfiguredFeature<?, ?>> getLargeTreeFeature(RandomSource random) {
         return largeTreeKey;
     }
 }

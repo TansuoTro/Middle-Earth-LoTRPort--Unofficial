@@ -1,16 +1,16 @@
 package net.jukoz.me.block.special;
 
-import net.minecraft.block.Block;
-import net.minecraft.util.Hand;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.jukoz.me.sound.SoundsME;
 
 public class OrcishDrumBlock extends Block {
@@ -20,13 +20,13 @@ public class OrcishDrumBlock extends Block {
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (world.getBlockState(pos.up()).isAir()) {
-            Random random = world.getRandom();
+            RandomSource random = world.getRandom();
             world.addSyncedBlockEvent(pos, this, 0, 0);
             world.playSound(player, pos, SoundsME.ORC_DRUM, SoundCategory.BLOCKS, 1.0F + random.nextFloat(), (float)(0.75F + (random.nextFloat() * 0.4)));
             world.emitGameEvent(player, GameEvent.BLOCK_ACTIVATE, pos);
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
 
         return super.onUse(state, world, pos, player, hand, hit);

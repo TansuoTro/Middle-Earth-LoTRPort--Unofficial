@@ -5,10 +5,10 @@ import net.jukoz.me.compat.client.render.MEAnimationStates;
 import net.jukoz.me.compat.client.render.MEMAgeableMobEntityRenderer;
 
 import com.google.common.collect.Maps;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.Util;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.EntityModelLayersME;
 import net.jukoz.me.entity.beasts.great_horn.features.GreatHornArmorFeatureRenderer;
@@ -39,24 +39,24 @@ public class GreatHornRenderer extends MEMAgeableMobEntityRenderer<GreatHornEnti
         return new GreatHornEntityRenderState();
     }
 
-    public static final Map<GreatHornVariantDep, Identifier> LOCATION_BY_VARIANT =
+    public static final Map<GreatHornVariantDep, ResourceLocation> LOCATION_BY_VARIANT =
             Util.make(Maps.newEnumMap(GreatHornVariantDep.class), (map) -> {
                 map.put(GreatHornVariantDep.BROWN,
-                        new Identifier(MiddleEarth.MOD_ID, PATH + "brown_great_horn.png"));
+                        new ResourceLocation(MiddleEarth.MOD_ID, PATH + "brown_great_horn.png"));
                 map.put(GreatHornVariantDep.TEMPERATE,
-                        new Identifier(MiddleEarth.MOD_ID, PATH + "temperate_great_horn.png"));
+                        new ResourceLocation(MiddleEarth.MOD_ID, PATH + "temperate_great_horn.png"));
                 map.put(GreatHornVariantDep.COLD,
-                        new Identifier(MiddleEarth.MOD_ID, PATH + "cold_great_horn.png"));
+                        new ResourceLocation(MiddleEarth.MOD_ID, PATH + "cold_great_horn.png"));
                 map.put(GreatHornVariantDep.WARM,
-                        new Identifier(MiddleEarth.MOD_ID, PATH + "warm_great_horn.png"));
+                        new ResourceLocation(MiddleEarth.MOD_ID, PATH + "warm_great_horn.png"));
                 map.put(GreatHornVariantDep.WHITE,
-                        new Identifier(MiddleEarth.MOD_ID, PATH + "white_great_horn.png"));
+                        new ResourceLocation(MiddleEarth.MOD_ID, PATH + "white_great_horn.png"));
 
             });
 
 
     @Override
-    public Identifier getTexture(GreatHornEntityRenderState state) {
+    public ResourceLocation getTexture(GreatHornEntityRenderState state) {
         return state.greatHornVariant.assetInfo().id().texturePath();
     }
 

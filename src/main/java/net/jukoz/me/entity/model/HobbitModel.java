@@ -2,7 +2,7 @@ package net.jukoz.me.entity.model;
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
+import net.minecraft.client.model.geom.PartNames;
 
 public class HobbitModel {
     private static final String LEFT_SLEEVE = "left_sleeve";
@@ -14,19 +14,19 @@ public class HobbitModel {
         ModelData modelData = new ModelData();
         ModelPartData root = modelData.getRoot();
 
-        root.addChild(EntityModelPartNames.BODY, ModelPartBuilder.create().uv(8, 8)
+        root.addChild(PartNames.BODY, ModelPartBuilder.create().uv(8, 8)
                 .cuboid(-1.0f, 0f, -1.0f, 2.0f, 2.0f, 2.0f, dilation),
                 ModelTransform.pivot(0.0f, 0.0f, 0.0f));
 
 
-        root.addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create().uv(0, 0)
+        root.addChild(PartNames.HEAD, ModelPartBuilder.create().uv(0, 0)
                 .cuboid(-4.0f, -8.0f, -4.0f, 8.0f, 8.0f, 8.0f, dilation),
                 ModelTransform.pivot(0.0f, 0.0f, 0.0f));
 
-        ModelPartData leftArm = root.addChild(EntityModelPartNames.LEFT_ARM, ModelPartBuilder.create().uv(32, 48)
+        ModelPartData leftArm = root.addChild(PartNames.LEFT_ARM, ModelPartBuilder.create().uv(32, 48)
                         .cuboid(-1.0f, -2.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation),
                 ModelTransform.pivot(17.0f, 2.5f, 0.0f));
-        ModelPartData rightArm = root.addChild(EntityModelPartNames.RIGHT_ARM, ModelPartBuilder.create().uv(40, 16)
+        ModelPartData rightArm = root.addChild(PartNames.RIGHT_ARM, ModelPartBuilder.create().uv(40, 16)
                         .cuboid(-2.5f, -2.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation),
                 ModelTransform.pivot(-7.0f, 2.5f, 0.0f));
 
@@ -35,29 +35,29 @@ public class HobbitModel {
         leftArm.addChild(LEFT_SLEEVE, ModelPartBuilder.create().uv(48, 48).cuboid(0f, 0f, 0f, 3.0f, 12.0f, 4.0f, dilation.add(0.25f)),
                 ModelTransform.pivot(-1f, -2f, -2f));
 
-        root.addChild(EntityModelPartNames.BODY, ModelPartBuilder.create().uv(16, 16)
+        root.addChild(PartNames.BODY, ModelPartBuilder.create().uv(16, 16)
                 .cuboid(-4.0f, 0.0f, -2f, 8.0f, 12.0f, 4.0f, dilation),
                 ModelTransform.pivot(0.0f, 0f, 0.0f));
 
-        root.getChild(EntityModelPartNames.BODY).addChild(EntityModelPartNames.JACKET, ModelPartBuilder.create().uv(16, 32)
+        root.getChild(PartNames.BODY).addChild(PartNames.JACKET, ModelPartBuilder.create().uv(16, 32)
                 .cuboid(-4.0f, 0.0f, -2f, 8.0f, 12.0f, 4.0f, dilation.add(0.25f)), ModelTransform.NONE);
 
-        root.addChild(EntityModelPartNames.RIGHT_LEG, ModelPartBuilder.create().uv(0, 16)
+        root.addChild(PartNames.RIGHT_LEG, ModelPartBuilder.create().uv(0, 16)
                 .cuboid(-2.0f, 0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation),
                 ModelTransform.pivot(-1.9f, 0.0f, 0.0f));
-        root.addChild(EntityModelPartNames.LEFT_LEG, ModelPartBuilder.create().uv(0, 16).mirrored()
+        root.addChild(PartNames.LEFT_LEG, ModelPartBuilder.create().uv(0, 16).mirrored()
                 .cuboid(-2.0f, 0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation),
                 ModelTransform.pivot(1.9f, 0.0f, 0.0f));
 
 
-        root.getChild(EntityModelPartNames.LEFT_LEG).addChild(LEFT_PANTS, ModelPartBuilder.create().uv(0, 48)
+        root.getChild(PartNames.LEFT_LEG).addChild(LEFT_PANTS, ModelPartBuilder.create().uv(0, 48)
                         .cuboid(-2.0f, 0.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation.add(0.25f)),
                 ModelTransform.pivot(0, 0.0f, 0.0f));
-        root.getChild(EntityModelPartNames.RIGHT_LEG).addChild(RIGHT_PANTS, ModelPartBuilder.create().uv(0, 32)
+        root.getChild(PartNames.RIGHT_LEG).addChild(RIGHT_PANTS, ModelPartBuilder.create().uv(0, 32)
                         .cuboid(-2.0f, 0.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation.add(0.25f)),
                 ModelTransform.pivot(0, 0.0f, 0.0f));
 
-        root.addChild(EntityModelPartNames.HAT, ModelPartBuilder.create().uv(32, 0).cuboid(-4.0f, -8.0f, -4.0f, 8.0f, 8.0f, 8.0f, dilation.add(0.5f)),
+        root.addChild(PartNames.HAT, ModelPartBuilder.create().uv(32, 0).cuboid(-4.0f, -8.0f, -4.0f, 8.0f, 8.0f, 8.0f, dilation.add(0.5f)),
                 ModelTransform.pivot(0.0f, 0.0f, 0.0f));                // 54
 
         return TexturedModelData.of(modelData, 64, 64);

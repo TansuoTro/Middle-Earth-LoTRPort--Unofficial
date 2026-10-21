@@ -4,24 +4,24 @@ import net.jukoz.me.item.MEComponents;
 import net.jukoz.me.compat.DyedColorComponent;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.item.items.armor.CustomHelmetItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.ShearsItem;
-import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ShearsItem;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.RegistryWrapper;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 
 public class HelmetAttachmentRemovalRecipe extends SpecialCraftingRecipe {
 
-    public HelmetAttachmentRemovalRecipe(Identifier id, CraftingRecipeCategory category) {
+    public HelmetAttachmentRemovalRecipe(ResourceLocation id, CraftingRecipeCategory category) {
         super(id, category);
     }
 
@@ -36,7 +36,7 @@ public class HelmetAttachmentRemovalRecipe extends SpecialCraftingRecipe {
             } else if (itemStack.getItem() instanceof ShearsItem) {
                 defaultedList.set(i, itemStack.copyWithCount(1));
             }else if (MEComponents.get(itemStack, MEComponents.HELMET_ATTACHMENT_DATA) != null){
-                ItemStack helmetAttachment = new ItemStack(Registries.ITEM.get(new Identifier(MiddleEarth.MOD_ID, MEComponents.get(itemStack, MEComponents.HELMET_ATTACHMENT_DATA).helmetAttachment().getName())));
+                ItemStack helmetAttachment = new ItemStack(Registries.ITEM.get(new ResourceLocation(MiddleEarth.MOD_ID, MEComponents.get(itemStack, MEComponents.HELMET_ATTACHMENT_DATA).helmetAttachment().getName())));
                 MEComponents.set(helmetAttachment, MEComponents.HELMET_ATTACHMENT_DATA, MEComponents.get(itemStack, MEComponents.HELMET_ATTACHMENT_DATA));
                 MEComponents.set(helmetAttachment, MEComponents.DYED_COLOR, new DyedColorComponent(MEComponents.get(itemStack, MEComponents.HELMET_ATTACHMENT_DATA).helmetAttachmentColor()));
                 defaultedList.set(i, helmetAttachment);
@@ -48,7 +48,7 @@ public class HelmetAttachmentRemovalRecipe extends SpecialCraftingRecipe {
 
 
     @Override
-    public boolean matches(RecipeInputInventory input, World world) {
+    public boolean matches(RecipeInputInventory input, Level world) {
         ItemStack itemStackHelmet = ItemStack.EMPTY;
         ItemStack itemStackHood = ItemStack.EMPTY;
 

@@ -9,8 +9,8 @@ import net.minecraft.command.argument.PosArgument;
 import net.minecraft.command.argument.Vec3ArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.core.BlockPos;
 import net.jukoz.me.commands.ModCommands;
 import net.jukoz.me.world.dimension.ModDimensions;
 
@@ -32,7 +32,7 @@ public class CommandDimensionTeleport {
             PosArgument posArgument = Vec3ArgumentType.getPosArgument(context, LOCATION);
             BlockPos coordinates = posArgument.toAbsoluteBlockPos(context.getSource());
 
-            ServerPlayerEntity targettedPlayer = EntityArgumentType.getPlayer(context, PLAYER);
+            ServerPlayer targettedPlayer = EntityArgumentType.getPlayer(context, PLAYER);
 
             ModDimensions.teleportPlayerToMe(targettedPlayer, coordinates.toCenterPos(), true, true);
             return 1;

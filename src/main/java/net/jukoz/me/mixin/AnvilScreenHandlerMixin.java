@@ -1,9 +1,9 @@
 package net.jukoz.me.mixin;
 
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.inventory.CraftingResultInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.screen.AnvilScreenHandler;
 import net.jukoz.me.config.ModServerConfigs;
 import org.spongepowered.asm.mixin.Mixin;

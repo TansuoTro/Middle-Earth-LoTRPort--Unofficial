@@ -1,9 +1,9 @@
 package net.jukoz.me.registries.content.biomevents;
 
 import net.minecraft.registry.*;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.structure.Structure;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.registries.content.biomevents.pools.*;

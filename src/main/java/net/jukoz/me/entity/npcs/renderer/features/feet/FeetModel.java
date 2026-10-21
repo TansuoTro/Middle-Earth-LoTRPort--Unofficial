@@ -1,15 +1,15 @@
 package net.jukoz.me.entity.npcs.renderer.features.feet;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.jukoz.me.entity.npcs.NpcEntity;
 
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 import net.jukoz.me.entity.npcs.renderer.NpcEntityRenderState;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class FeetModel extends SinglePartEntityModel<NpcEntity> {
     private final ModelPart root;
     public final ModelPart toeCubeLeft;
@@ -51,8 +51,8 @@ public class FeetModel extends SinglePartEntityModel<NpcEntity> {
         float g = state.limbSwingAnimationProgress;
         float h = state.limbSwingAmplitude;
 
-        this.rightLeg.pitch = MathHelper.cos(g * 0.6662F) * 1.4F * h / state.limbAmplitudeInverse;
-        this.leftLeg.pitch = MathHelper.cos(g * 0.6662F + (float)Math.PI) * 1.4F * h / state.limbAmplitudeInverse;
+        this.rightLeg.pitch = Mth.cos(g * 0.6662F) * 1.4F * h / state.limbAmplitudeInverse;
+        this.leftLeg.pitch = Mth.cos(g * 0.6662F + (float)Math.PI) * 1.4F * h / state.limbAmplitudeInverse;
         this.rightLeg.yaw = 0.005F;
         this.leftLeg.yaw = -0.005F;
         this.rightLeg.roll = 0.005F;

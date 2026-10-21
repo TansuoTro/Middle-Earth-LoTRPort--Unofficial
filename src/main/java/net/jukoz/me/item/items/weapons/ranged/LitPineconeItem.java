@@ -1,13 +1,13 @@
 package net.jukoz.me.item.items.weapons.ranged;
 
 import net.jukoz.me.entity.projectile.pinecone.LitPineconeEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.level.Level;
 
 public class LitPineconeItem extends PineconeItem {
     public static final float DAMAGE = 2f;
@@ -20,11 +20,11 @@ public class LitPineconeItem extends PineconeItem {
 
 
     @Override
-    public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-        if (!(user instanceof PlayerEntity)) {
+    public void onStoppedUsing(ItemStack stack, Level world, LivingEntity user, int remainingUseTicks) {
+        if (!(user instanceof Player)) {
             return;
         }
-        PlayerEntity playerEntity = (PlayerEntity)user;
+        Player playerEntity = (Player)user;
         int i = this.getMaxUseTime(stack) - remainingUseTicks;
         if (i < 7) {
             return;

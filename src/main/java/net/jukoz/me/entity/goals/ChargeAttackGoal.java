@@ -1,10 +1,10 @@
 package net.jukoz.me.entity.goals;
 
 import net.jukoz.me.entity.beasts.AbstractBeastEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.pathing.Path;
-import net.minecraft.entity.ai.pathing.PathNode;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.level.pathfinder.PathNode;
 
 public class ChargeAttackGoal extends Goal {
     private AbstractBeastEntity mob;

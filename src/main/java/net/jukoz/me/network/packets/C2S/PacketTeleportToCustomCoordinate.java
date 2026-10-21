@@ -1,16 +1,16 @@
 package net.jukoz.me.network.packets.C2S;
 
 import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
 import net.jukoz.me.world.dimension.ModDimensions;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
 
 public class PacketTeleportToCustomCoordinate extends ClientToServerPacket<PacketTeleportToCustomCoordinate> {
-    public static final Identifier ID = new Identifier(MiddleEarth.MOD_ID, "packet_teleport_custom_spawn");
+    public static final ResourceLocation ID = new ResourceLocation(MiddleEarth.MOD_ID, "packet_teleport_custom_spawn");
     public static final PacketType<PacketTeleportToCustomCoordinate> TYPE = PacketType.create(ID, PacketTeleportToCustomCoordinate::new);
     private final double xCoordinate;
     private final double yCoordinate;
@@ -26,7 +26,7 @@ public class PacketTeleportToCustomCoordinate extends ClientToServerPacket<Packe
 
 
 
-    public PacketTeleportToCustomCoordinate(PacketByteBuf buf) {
+    public PacketTeleportToCustomCoordinate(FriendlyByteBuf buf) {
         this(buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readBoolean());
     }
 
@@ -36,7 +36,7 @@ public class PacketTeleportToCustomCoordinate extends ClientToServerPacket<Packe
     }
 
     @Override
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
         buf.writeDouble(this.xCoordinate);
         buf.writeDouble(this.yCoordinate);
         buf.writeDouble(this.zCoordinate);
@@ -46,7 +46,7 @@ public class PacketTeleportToCustomCoordinate extends ClientToServerPacket<Packe
     @Override
     public void process(ServerPacketContext context) {
         context.player().getServer().execute(() -> {
-            Vec3d coordinates = new Vec3d(xCoordinate, yCoordinate, zCoordinate);
+            Vec3 coordinates = new Vec3(xCoordinate, yCoordinate, zCoordinate);
             ModDimensions.teleportPlayerToMe(context.player(), coordinates, true, welcomeNeeded);
         });
     }

@@ -1,10 +1,10 @@
 package net.jukoz.me.sound;
 
 import net.jukoz.me.MiddleEarth;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.resources.ResourceLocation;
 
 public class SoundsME {
     public static SoundEvent BELLOWS_PUSH = registerSoundEvent("bellows_push");
@@ -36,7 +36,7 @@ public class SoundsME {
     public static SoundEvent CAVE_TROLL_STEP = registerSoundEvent("cave_troll_step");
 
     private static SoundEvent registerSoundEvent(String name) {
-        Identifier id = new Identifier(MiddleEarth.MOD_ID, name);
+        ResourceLocation id = new ResourceLocation(MiddleEarth.MOD_ID, name);
         SoundEvent existing = Registries.SOUND_EVENT.get(id);
         if (existing != null) {
             return existing;

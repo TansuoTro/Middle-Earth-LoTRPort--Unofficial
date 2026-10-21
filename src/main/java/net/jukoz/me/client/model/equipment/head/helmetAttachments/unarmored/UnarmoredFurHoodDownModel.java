@@ -2,7 +2,7 @@ package net.jukoz.me.client.model.equipment.head.helmetAttachments.unarmored;
 
 import net.jukoz.me.client.model.equipment.head.helmetAttachments.CloakHoodModel;
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
+import net.minecraft.client.model.geom.PartNames;
 
 public class UnarmoredFurHoodDownModel extends CloakHoodModel {
 
@@ -14,8 +14,8 @@ public class UnarmoredFurHoodDownModel extends CloakHoodModel {
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();
 
-        ModelPartData head = modelPartData.addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        ModelPartData hat = head.addChild(EntityModelPartNames.HAT, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData head = modelPartData.addChild(PartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData hat = head.addChild(PartNames.HAT, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         ModelPartData hood = hat.addChild("helmetAttachment", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, -1.0F, 0.016F));
 
@@ -34,13 +34,13 @@ public class UnarmoredFurHoodDownModel extends CloakHoodModel {
                 .uv(94, 20).cuboid(3.6F, -11.2857F, -5.3F, 1.0F, 8.0F, 2.0F, new Dilation(0.6F)), ModelTransform.pivot(0.25F, 0.0F, 0.0F));
         hoodDown.addChild("right", ModelPartBuilder.create().uv(100, 20).mirrored().cuboid(-4.35F, -11.2857F, -5.3F, 1.0F, 8.0F, 2.0F, new Dilation(0.5F)).mirrored(false)
                 .uv(106, 20).cuboid(-4.35F, -11.2857F, -5.3F, 1.0F, 8.0F, 2.0F, new Dilation(0.6F)), ModelTransform.pivot(-0.25F, 0.0F, 0.0F));
-        modelPartData.addChild(EntityModelPartNames.BODY, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.BODY, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(EntityModelPartNames.RIGHT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(EntityModelPartNames.LEFT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.RIGHT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.LEFT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(EntityModelPartNames.RIGHT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(EntityModelPartNames.LEFT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.RIGHT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.LEFT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         return TexturedModelData.of(modelData, 128, 128);
     }

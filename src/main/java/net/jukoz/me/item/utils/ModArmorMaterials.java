@@ -2,14 +2,14 @@ package net.jukoz.me.item.utils;
 
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.item.ModResourceItems;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Items;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Lazy;
 
 import java.util.EnumMap;
@@ -18,109 +18,109 @@ import java.util.function.Supplier;
 public enum ModArmorMaterials implements ArmorMaterial {
 
     HOBBIT_SHIRRIFF_HAT("hobbit_shirriff_hat", 1, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(Items.LEATHER), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".shire"), null),
+            () -> Ingredient.ofItems(Items.LEATHER), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".shire"), null),
 
     GAMBESON("gambeson", 2, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(Items.LEATHER), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), null),
+            () -> Ingredient.ofItems(Items.LEATHER), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), null),
 
     CLOAK("cloak", 1, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER,
-            () -> Ingredient.ofItems(Items.LEATHER), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), null),
+            () -> Ingredient.ofItems(Items.LEATHER), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), null),
 
     TUNIC_CLOAK("tunic_cloak", 1, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER,
-            () -> Ingredient.ofItems(Items.LEATHER), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), null),
+            () -> Ingredient.ofItems(Items.LEATHER), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), null),
 
     FUR_CLOAK("fur_cloak", 1, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER,
-            () -> Ingredient.ofItems(Items.IRON_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), null),
+            () -> Ingredient.ofItems(Items.IRON_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), null),
 
     CHAINMAIL_FUR_CLOAK("chainmail_fur_cloak", 3, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN,
-            () -> Ingredient.ofItems(Items.IRON_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), null),
+            () -> Ingredient.ofItems(Items.IRON_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), null),
 
     RUSTY_KETTLE_HAT("rusty_kettle_hat", 2, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(Items.IRON_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), null),
+            () -> Ingredient.ofItems(Items.IRON_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), null),
 
     KETTLE_HAT("kettle_hat", 2, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(Items.IRON_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), null),
+            () -> Ingredient.ofItems(Items.IRON_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), null),
 
     NAZGUL_CLOAK("nazgul_cloak", 3, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.MORGUL_STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".mordor"), null),
+            () -> Ingredient.ofItems(ModResourceItems.MORGUL_STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".mordor"), null),
 
     GONDORIAN_MAIL_ARMOR("gondorian_mail", 3, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(Items.IRON_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".gondor"), null),
+            () -> Ingredient.ofItems(Items.IRON_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".gondor"), null),
 
     GONDORIAN_REINFORCED_MAIL_ARMOR("gondorian_reinforced_mail", 4, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".gondor"), null),
+            () -> Ingredient.ofItems(ModResourceItems.STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".gondor"), null),
 
     GONDORIAN_PLATE_ARMOR("gondorian_plate", 5, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".gondor"), null),
+            () -> Ingredient.ofItems(ModResourceItems.STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".gondor"), null),
 
     GONDORIAN_CITADEL_GUARD_ARMOR("gondorian_citadel_guard", 5, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".gondor"), null),
+            () -> Ingredient.ofItems(ModResourceItems.STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".gondor"), null),
 
     GONDORIAN_FOUNTAIN_GUARD_ARMOR("gondorian_fountain_guard", 5, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".gondor"), null),
+            () -> Ingredient.ofItems(ModResourceItems.STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".gondor"), null),
 
     ROHIRRIC_MAIL_ARMOR("rohirric_mail", 3, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(Items.IRON_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".rohan"), null),
+            () -> Ingredient.ofItems(Items.IRON_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".rohan"), null),
 
     ROHIRRIC_SCALE_ARMOR("rohirric_scale", 4, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".rohan"), null),
+            () -> Ingredient.ofItems(ModResourceItems.STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".rohan"), null),
 
     ROHIRRIC_ROYAL_GUARD_ARMOR("rohirric_royal_guard", 5, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".rohan"), null),
+            () -> Ingredient.ofItems(ModResourceItems.STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".rohan"), null),
 
     EORLING_MARSHALL_ARMOR("eorling_marshall", 5, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".rohan"), null),
+            () -> Ingredient.ofItems(ModResourceItems.STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".rohan"), null),
 
     HORSE_LORD_ARMOR("horse_lord", 5, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".rohan"), null),
+            () -> Ingredient.ofItems(ModResourceItems.STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".rohan"), null),
 
     DWARVEN_PARTISAN("dwarven_partisan", 2, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER,
-            () -> Ingredient.ofItems(Items.LEATHER), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".dwarven")),
+            () -> Ingredient.ofItems(Items.LEATHER), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".generic"), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".dwarven")),
 
     EREBOR_MAIL_ARMOR("erebor_mail", 3, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(Items.IRON_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".longbeards"), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".erebor")),
+            () -> Ingredient.ofItems(Items.IRON_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".longbeards"), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".erebor")),
 
     EREBOR_SCALE_ARMOR("erebor_scale", 4, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.DWARVEN_STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".longbeards"), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".erebor")),
+            () -> Ingredient.ofItems(ModResourceItems.DWARVEN_STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".longbeards"), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".erebor")),
 
     EREBOR_PLATE_ARMOR("erebor_plate", 5, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.DWARVEN_STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".longbeards"), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".erebor")),
+            () -> Ingredient.ofItems(ModResourceItems.DWARVEN_STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".longbeards"), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".erebor")),
 
     EREBOR_COMMANDER_ARMOR("erebor_commander", 5, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.DWARVEN_STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".longbeards"), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".erebor")),
+            () -> Ingredient.ofItems(ModResourceItems.DWARVEN_STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".longbeards"), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".erebor")),
 
     LORIEN_MAIL_ARMOR("lorien_mail", 3, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(Items.IRON_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".lothlorien"), null),
+            () -> Ingredient.ofItems(Items.IRON_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".lothlorien"), null),
 
     LORIEN_SCALE_ARMOR("lorien_scale", 4, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.ELVEN_STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".lothlorien"), null),
+            () -> Ingredient.ofItems(ModResourceItems.ELVEN_STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".lothlorien"), null),
 
     LORIEN_PLATE_ARMOR("lorien_plate", 5, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.ELVEN_STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".lothlorien"), null),
+            () -> Ingredient.ofItems(ModResourceItems.ELVEN_STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".lothlorien"), null),
 
     LORIEN_COMMANDER_ARMOR("lorien_commander", 5, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.ELVEN_STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".lothlorien"), null),
+            () -> Ingredient.ofItems(ModResourceItems.ELVEN_STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".lothlorien"), null),
 
     MORDOR_ORC_MAIL_ARMOR("mordor_orc_mail", 3, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.ORC_STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".mordor"), null),
+            () -> Ingredient.ofItems(ModResourceItems.ORC_STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".mordor"), null),
 
     MORDOR_BLACK_URUK_SCALE_ARMOR("mordor_black_uruk_scale",  4, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.URUK_STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".mordor"), null),
+            () -> Ingredient.ofItems(ModResourceItems.URUK_STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".mordor"), null),
 
     MORDOR_BLACK_URUK_PLATE_ARMOR("mordor_black_uruk_plate", 5, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.URUK_STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".mordor"), null),
+            () -> Ingredient.ofItems(ModResourceItems.URUK_STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".mordor"), null),
 
     MORDOR_BLACK_URUK_COMMANDER_ARMOR("mordor_black_uruk_commander", 5, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.URUK_STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".mordor"), null),
+            () -> Ingredient.ofItems(ModResourceItems.URUK_STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".mordor"), null),
 
     MISTY_GOBLIN_MAIL_ARMOR("misty_goblin_mail", 3, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.ORC_STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".misty_orcs"), null),
+            () -> Ingredient.ofItems(ModResourceItems.ORC_STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".misty_orcs"), null),
 
     MISTY_HOBGOBLIN_SCALE_ARMOR("misty_hobgoblin_scale", 4, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.URUK_STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".misty_orcs"), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".gundabad")),
+            () -> Ingredient.ofItems(ModResourceItems.URUK_STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".misty_orcs"), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".gundabad")),
 
     MISTY_HOBGOBLIN_PLATE_ARMOR("misty_hobgoblin_plate", 5, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
-            () -> Ingredient.ofItems(ModResourceItems.URUK_STEEL_INGOT), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".misty_orcs"), Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".gundabad")),
+            () -> Ingredient.ofItems(ModResourceItems.URUK_STEEL_INGOT), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".misty_orcs"), Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".gundabad")),
     ;
 
     private final String name;
@@ -134,12 +134,12 @@ public enum ModArmorMaterials implements ArmorMaterial {
 
     private final int tier;
 
-    private final MutableText faction;
-    private final MutableText subFaction;
+    private final MutableComponent faction;
+    private final MutableComponent subFaction;
 
     private static final int[] BASE_DURABILITY = { 11, 16, 15, 13 };
 
-    ModArmorMaterials(String name, int tier, SoundEvent equipSound, Supplier<Ingredient> repairIngredient, MutableText faction, MutableText subFaction) {
+    ModArmorMaterials(String name, int tier, SoundEvent equipSound, Supplier<Ingredient> repairIngredient, MutableComponent faction, MutableComponent subFaction) {
         this.name = name;
         this.equipSound = equipSound;
         this.repairIngredient = repairIngredient;
@@ -238,11 +238,11 @@ public enum ModArmorMaterials implements ArmorMaterial {
         return this.knockbackResistance;
     }
 
-    public MutableText getFaction() {
+    public MutableComponent getFaction() {
         return this.faction;
     }
 
-    public MutableText getSubFaction() {
+    public MutableComponent getSubFaction() {
         return this.subFaction;
     }
 

@@ -2,14 +2,14 @@ package net.jukoz.me.world.spawners;
 
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.world.biomes.MEBiomeKeys;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.biome.Biome;
 
 import java.util.HashMap;
 import java.util.List;
 
 public class ModEntitySpawning {
-    private static HashMap<RegistryKey<Biome>, List<EntitySpawningSettings>> spawns = new HashMap<>();
+    private static HashMap<ResourceKey<Biome>, List<EntitySpawningSettings>> spawns = new HashMap<>();
 
     public static void addSpawns() {
         /*List<EntitySpawningSettings> banditSpawnSettings = List.of(
@@ -242,7 +242,7 @@ public class ModEntitySpawning {
         spawns.put(MEBiomeKeys.EPHEL_DUATH_PEAKS, wildMordorSpawnSettings);*/
     }
 
-    public static List<EntitySpawningSettings> getSpawnsAt(RegistryKey<Biome> biomeRegistryKey) {
+    public static List<EntitySpawningSettings> getSpawnsAt(ResourceKey<Biome> biomeRegistryKey) {
         if(spawns.containsKey(biomeRegistryKey)) return spawns.get(biomeRegistryKey);
         return null;
     }

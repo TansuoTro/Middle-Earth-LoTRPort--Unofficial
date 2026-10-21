@@ -2,17 +2,17 @@ package net.jukoz.me.entity.beasts.great_horn.features;
 import net.jukoz.me.entity.beasts.great_horn.GreatHornEntity;
 import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.EntityModelLayersME;
 import net.jukoz.me.entity.beasts.great_horn.GreatHornEntityRenderState;
@@ -21,10 +21,10 @@ import net.jukoz.me.entity.beasts.great_horn.GreatHornModel;
 import java.time.LocalDate;
 import java.time.Month;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GreatHornNoseFeatureRenderer extends MEFeatureRenderer<GreatHornEntity, GreatHornEntityRenderState, GreatHornModel> {
 	private final GreatHornModel model;
-	private final static Identifier TEXTURE = new Identifier(MiddleEarth.MOD_ID, "textures/entities/great_horn/feature/great_horn_red_nose.png");
+	private final static ResourceLocation TEXTURE = new ResourceLocation(MiddleEarth.MOD_ID, "textures/entities/great_horn/feature/great_horn_red_nose.png");
 
 	public GreatHornNoseFeatureRenderer(FeatureRendererContext<GreatHornEntity, GreatHornModel> context, LoadedEntityModelsCompat loader) {
 		super(context);
@@ -37,7 +37,7 @@ public class GreatHornNoseFeatureRenderer extends MEFeatureRenderer<GreatHornEnt
 	}
 
 	@Override
-	public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, GreatHornEntityRenderState state, float limbAngle, float limbDistance) {
+	public void render(PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, GreatHornEntityRenderState state, float limbAngle, float limbDistance) {
 		if(state.hasRedNose() || isChristmas()) {
 			VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(TEXTURE));
 			this.getContextModel().render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);

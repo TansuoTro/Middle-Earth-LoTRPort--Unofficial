@@ -1,11 +1,11 @@
 package net.jukoz.me.utils;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.Direction;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -128,7 +128,7 @@ public interface ImplementedInventory extends Inventory {
      * @return true if the player can use the inventory, false otherwise.
      */
     @Override
-    default boolean canPlayerUse(PlayerEntity player) {
+    default boolean canPlayerUse(Player player) {
         return true;
     }
 }

@@ -1,35 +1,35 @@
 package net.jukoz.me.client;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.resources.ResourceLocation;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public final class RenderUtil {
     private RenderUtil() {
     }
 
-    public static void renderCutoutTexture(EntityModel<?> model, MatrixStack matrices,
-                                           VertexConsumerProvider vertexConsumers, Identifier texture,
+    public static void renderCutoutTexture(EntityModel<?> model, PoseStack matrices,
+                                           VertexConsumerProvider vertexConsumers, ResourceLocation texture,
                                            int light, int overlay) {
         renderModel(model, matrices, vertexConsumers.getBuffer(RenderLayer.getEntityCutoutNoCull(texture)), light, overlay);
     }
 
-    public static void renderEmissiveTexture(EntityModel<?> model, MatrixStack matrices,
-                                             VertexConsumerProvider vertexConsumers, Identifier texture,
+    public static void renderEmissiveTexture(EntityModel<?> model, PoseStack matrices,
+                                             VertexConsumerProvider vertexConsumers, ResourceLocation texture,
                                              int light, int overlay) {
         renderModel(model, matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentEmissive(texture)), light, overlay);
     }
 
-    public static void renderAtlasTexture(SpriteAtlasTexture atlas, EntityModel<?> model, MatrixStack matrices,
-                                          VertexConsumer vertexConsumer, Identifier textureId, int light, int overlay) {
+    public static void renderAtlasTexture(SpriteAtlasTexture atlas, EntityModel<?> model, PoseStack matrices,
+                                          VertexConsumer vertexConsumer, ResourceLocation textureId, int light, int overlay) {
         Sprite sprite = atlas.getSprite(textureId);
         if(sprite != null) {
             VertexConsumer textureSpecificVertexConsumer = sprite.getTextureSpecificVertexConsumer(vertexConsumer);
@@ -37,7 +37,7 @@ public final class RenderUtil {
         }
     }
 
-    public static void renderModel(EntityModel<?> model, MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay) {
+    public static void renderModel(EntityModel<?> model, PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay) {
         model.render(matrices, vertexConsumer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

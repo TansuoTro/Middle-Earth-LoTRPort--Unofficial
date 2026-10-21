@@ -1,14 +1,14 @@
 package net.jukoz.me.enchantments;
 
 import net.jukoz.me.MiddleEarth;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentTarget;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
@@ -28,21 +28,21 @@ import java.util.UUID;
  * plain enchantments and the bonus has to be applied by hand in code.
  */
 public class EnchantmentsME {
-    public static final RegistryKey<Enchantment> AILMENT_PROTECTION = of("ailment_protection");
-    public static final RegistryKey<Enchantment> AULE_BLESSING = of("aule_blessing");
-    public static final RegistryKey<Enchantment> BANE_OF_GIANTS = of("bane_of_giants");
-    public static final RegistryKey<Enchantment> BEHEADING = of("beheading");
-    public static final RegistryKey<Enchantment> CELERITY = of("celerity");
-    public static final RegistryKey<Enchantment> FIRST_STRIKE = of("first_strike");
-    public static final RegistryKey<Enchantment> GROUNDED = of("grounded");
-    public static final RegistryKey<Enchantment> HEWING = of("hewing");
-    public static final RegistryKey<Enchantment> HIGH_STEP = of("high_step");
-    public static final RegistryKey<Enchantment> MINER_REACH = of("miner_reach");
-    public static final RegistryKey<Enchantment> STEALTHY_TRAIL = of("stealthy_trail");
-    public static final RegistryKey<Enchantment> STALWART = of("stalwart");
-    public static final RegistryKey<Enchantment> STRIDE = of("stride");
-    public static final RegistryKey<Enchantment> TREE_FELLER = of("tree_feller");
-    public static final RegistryKey<Enchantment> VANTAGE = of("vantage");
+    public static final ResourceKey<Enchantment> AILMENT_PROTECTION = of("ailment_protection");
+    public static final ResourceKey<Enchantment> AULE_BLESSING = of("aule_blessing");
+    public static final ResourceKey<Enchantment> BANE_OF_GIANTS = of("bane_of_giants");
+    public static final ResourceKey<Enchantment> BEHEADING = of("beheading");
+    public static final ResourceKey<Enchantment> CELERITY = of("celerity");
+    public static final ResourceKey<Enchantment> FIRST_STRIKE = of("first_strike");
+    public static final ResourceKey<Enchantment> GROUNDED = of("grounded");
+    public static final ResourceKey<Enchantment> HEWING = of("hewing");
+    public static final ResourceKey<Enchantment> HIGH_STEP = of("high_step");
+    public static final ResourceKey<Enchantment> MINER_REACH = of("miner_reach");
+    public static final ResourceKey<Enchantment> STEALTHY_TRAIL = of("stealthy_trail");
+    public static final ResourceKey<Enchantment> STALWART = of("stalwart");
+    public static final ResourceKey<Enchantment> STRIDE = of("stride");
+    public static final ResourceKey<Enchantment> TREE_FELLER = of("tree_feller");
+    public static final ResourceKey<Enchantment> VANTAGE = of("vantage");
 
     /**
      * Ids of the by-hand attribute modifiers {@code PlayerMixin} applies for the four
@@ -61,9 +61,9 @@ public class EnchantmentsME {
     private static final EquipmentSlot[] LEGS_SLOT = {EquipmentSlot.LEGS};
     private static final EquipmentSlot[] FEET_SLOT = {EquipmentSlot.FEET};
 
-    private static RegistryKey<Enchantment> of(String path) {
-        Identifier id = MiddleEarth.of(path);
-        return RegistryKey.of(RegistryKeys.ENCHANTMENT, id);
+    private static ResourceKey<Enchantment> of(String path) {
+        ResourceLocation id = MiddleEarth.of(path);
+        return ResourceKey.of(Registries.ENCHANTMENT, id);
     }
 
     private static UUID modifierId(String path) {
@@ -72,7 +72,7 @@ public class EnchantmentsME {
 
     /** The registered enchantment behind a key; {@code null} only when it is not registered yet. */
     @org.jetbrains.annotations.Nullable
-    public static Enchantment get(RegistryKey<Enchantment> key) {
+    public static Enchantment get(ResourceKey<Enchantment> key) {
         return Registries.ENCHANTMENT.get(key.getValue());
     }
 
@@ -109,7 +109,7 @@ public class EnchantmentsME {
                 HAND_SLOT, 1, 10, 20, 40, 20);
     }
 
-    private static void register(RegistryKey<Enchantment> key, Enchantment.Rarity rarity,
+    private static void register(ResourceKey<Enchantment> key, Enchantment.Rarity rarity,
                                  EnchantmentTarget target, EquipmentSlot[] slots, int maxLevel,
                                  int minBase, int minPerLevel, int maxBase, int maxPerLevel) {
         Registry.register(Registries.ENCHANTMENT, key, new MESimpleEnchantment(

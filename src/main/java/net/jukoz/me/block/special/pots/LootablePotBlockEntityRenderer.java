@@ -1,22 +1,22 @@
 package net.jukoz.me.block.special.pots;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.DecoratedPotBlockEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.block.BlockModelRenderer;
-import net.minecraft.client.render.block.entity.BlockEntityRenderer;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererFactory;
 import net.minecraft.client.render.block.entity.DecoratedPotBlockEntityRenderer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.render.RenderLayers;
-import net.minecraft.util.math.MathHelper;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.entity.layers.RenderLayers;
+import net.minecraft.util.Mth;
 import net.minecraft.util.math.RotationAxis;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.phys.Vec3;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class LootablePotBlockEntityRenderer implements BlockEntityRenderer<DecoratedPotBlockEntity> {
     private static final float POSITIVE_WOBBLE_SCALE = 0.015625F;
     private final DecoratedPotBlockEntityRenderer vanillaRenderer;
@@ -28,7 +28,7 @@ public class LootablePotBlockEntityRenderer implements BlockEntityRenderer<Decor
     }
 
     @Override
-    public void render(DecoratedPotBlockEntity entity, float tickProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+    public void render(DecoratedPotBlockEntity entity, float tickProgress, PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         BlockState state = entity.getCachedState();
         if (!(state.getBlock() instanceof LootablePotBlock)) {
             vanillaRenderer.render(entity, tickProgress, matrices, vertexConsumers, light, overlay);

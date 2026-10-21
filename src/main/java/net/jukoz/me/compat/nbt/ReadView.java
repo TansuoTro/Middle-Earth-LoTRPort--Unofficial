@@ -2,40 +2,40 @@ package net.jukoz.me.compat.nbt;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DynamicOps;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.RegistryOps;
+import net.minecraft.resources.RegistryOps;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Stand-in for 1.21.5's {@code net.minecraft.storage.ReadView}, backed by an {@link NbtCompound}.
+ * Stand-in for 1.21.5's {@code net.minecraft.storage.ReadView}, backed by an {@link CompoundTag}.
  *
  * <p>1.20.1 has no view abstraction: every persistent object reads straight out of the
- * {@code NbtCompound} it was handed. The donor's serialisation bodies were written against
+ * {@code CompoundTag} it was handed. The donor's serialisation bodies were written against
  * {@code ReadView}, so this class reproduces the handful of methods they use and lets those
  * bodies stay as they are; the {@code readNbt} / {@code readCustomDataFromNbt} override at the
  * top of each class wraps the compound in one of these.
  */
 public final class ReadView {
-    private final NbtCompound nbt;
+    private final CompoundTag nbt;
     private final DynamicOps<NbtElement> ops;
 
-    public ReadView(NbtCompound nbt) {
+    public ReadView(CompoundTag nbt) {
         this(nbt, null);
     }
 
-    public ReadView(NbtCompound nbt, DynamicRegistryManager registries) {
+    public ReadView(CompoundTag nbt, DynamicRegistryManager registries) {
         this.nbt = nbt;
         this.ops = registries == null ? NbtOps.INSTANCE : RegistryOps.of(NbtOps.INSTANCE, registries);
     }
 
-    public NbtCompound nbt() {
+    public CompoundTag nbt() {
         return this.nbt;
     }
 
@@ -60,7 +60,7 @@ public final class ReadView {
         return out;
     }
 
-    public NbtCompound getCompound(String key) {
+    public CompoundTag getCompound(String key) {
         return this.nbt.getCompound(key);
     }
 

@@ -2,34 +2,34 @@ package net.jukoz.me.block.special.candles;
 
 import net.minecraft.block.*;
 import net.minecraft.entity.ai.pathing.NavigationType;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.state.property.IntProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.ToIntFunction;
@@ -48,12 +48,12 @@ public class SmallChandelierBlock extends Block {
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(LIT).add(VARIANT);
     }
 
     @Nullable
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
+    public BlockState getPlacementState(BlockPlaceContext ctx) {
         BlockState blockState = this.getDefaultState().with(VARIANT, 1);
         if (blockState.canPlaceAt(ctx.getWorld(), ctx.getBlockPos())) {
             return blockState;
@@ -68,17 +68,17 @@ public class SmallChandelierBlock extends Block {
     }
 
     @Override
-    public boolean canPathfindThrough(BlockState state, net.minecraft.world.BlockView world, BlockPos pos, NavigationType type) {
+    public boolean canPathfindThrough(BlockState state, net.minecraft.world.level.BlockGetter world, BlockPos pos, NavigationType type) {
         return false;
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!world.isClient && player.getAbilities().allowModifyWorld) {
             ItemStack itemStack = player.getStackInHand(hand);
             if(player.isCreative() && itemStack == ItemStack.EMPTY){
                 world.setBlockState(pos, state.cycle(VARIANT));
-                return ActionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
 
             if (state.get(LIT) && itemStack.isIn(ItemTags.SHOVELS)) {
@@ -87,10 +87,10 @@ public class SmallChandelierBlock extends Block {
                 setLit(world, state, pos, true);
             }
         }
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+    public void randomDisplayTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
         if (state.get(LIT)) {
             if(state.get(VARIANT) == 1) {
                 spawnCandleParticles(world, pos.toCenterPos().add(0.0625, 12.5 * 0.0625, 0.0625), random);
@@ -106,7 +106,7 @@ public class SmallChandelierBlock extends Block {
         }
     }
 
-    protected static void spawnCandleParticles(World world, Vec3d vec3d, Random random) {
+    protected static void spawnCandleParticles(Level world, Vec3 vec3d, RandomSource random) {
         float f = random.nextFloat();
         if (f < 0.3F) {
             world.addParticle(ParticleTypes.SMOKE, vec3d.x - 0.5f, vec3d.y - 0.5f, vec3d.z - 0.5f, 0.0, 0.0, 0.0);
@@ -124,7 +124,7 @@ public class SmallChandelierBlock extends Block {
         }
     }
 
-    protected static void extinguish(@Nullable PlayerEntity player, BlockState state, WorldAccess world, BlockPos pos) {
+    protected static void extinguish(@Nullable Player player, BlockState state, WorldAccess world, BlockPos pos) {
         setLit(world, state, pos, false);
 
         world.playSound(null, pos, SoundEvents.BLOCK_CANDLE_EXTINGUISH, SoundCategory.BLOCKS, 1.5F, 1.0F);
@@ -141,19 +141,19 @@ public class SmallChandelierBlock extends Block {
         return Fluids.EMPTY.getDefaultState();
     }
 
-    public void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
+    public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
         if (!world.isClient && projectile.isOnFire() && !state.get(LIT)) {
             world.setBlockState(hit.getBlockPos(), state.with(LIT, true), STATE_TO_LUMINANCE.applyAsInt(state));
         }
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
         return SHAPE;
     }
 
     static {
-        LIT = Properties.LIT;
+        LIT = BlockStateProperties.LIT;
         STATE_TO_LUMINANCE = (state) -> state.get(LIT) ? 15 : 0;
         SHAPE = Block.createCuboidShape(0, 2, 0, 16, 16.0, 16);
     }

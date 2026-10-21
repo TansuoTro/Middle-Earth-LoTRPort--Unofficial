@@ -2,8 +2,8 @@ package net.jukoz.me.entity.spider;
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 
 public class EnwebbedModel extends SinglePartEntityModel<LivingEntity> {
     private final ModelPart bigBody;

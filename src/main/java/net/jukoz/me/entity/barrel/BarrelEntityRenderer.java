@@ -2,23 +2,23 @@ package net.jukoz.me.entity.barrel;
 import net.jukoz.me.compat.client.render.MEEntityRenderer;
 
 import net.minecraft.client.model.Model;
-import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import net.jukoz.me.compat.client.render.state.BoatEntityRenderState;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.util.math.RotationAxis;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.EntityModelLayersME;
 import org.joml.Quaternionf;
 
 public class BarrelEntityRenderer extends MEEntityRenderer<BarrelEntity, BoatEntityRenderState> {
-    private static final Identifier TEXTURE = new Identifier(MiddleEarth.MOD_ID, "textures/entities/reinforced_barrel/reinforced_barrel.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(MiddleEarth.MOD_ID, "textures/entities/reinforced_barrel/reinforced_barrel.png");
     private ModelPart modelPart;
 
     public BarrelEntityRenderer(EntityRendererFactory.Context context) {
@@ -33,7 +33,7 @@ public class BarrelEntityRenderer extends MEEntityRenderer<BarrelEntity, BoatEnt
     }
 
     @Override
-    public void render(BoatEntityRenderState state, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+    public void render(BoatEntityRenderState state, PoseStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         matrices.push();
         matrices.scale(1.35f, 1.35f, 1.35f);
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180.0F - state.yaw));
@@ -41,10 +41,10 @@ public class BarrelEntityRenderer extends MEEntityRenderer<BarrelEntity, BoatEnt
 
         float f = state.damageWobbleTicks;
         if (f > 0.0F) {
-            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(MathHelper.sin(f) * f * state.damageWobbleStrength / 10.0F * (float)state.damageWobbleSide));
+            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(Mth.sin(f) * f * state.damageWobbleStrength / 10.0F * (float)state.damageWobbleSide));
         }
 
-        if (!state.submergedInWater && !MathHelper.approximatelyEquals(state.bubbleWobble, 0.0F)) {
+        if (!state.submergedInWater && !Mth.approximatelyEquals(state.bubbleWobble, 0.0F)) {
             matrices.multiply((new Quaternionf()).setAngleAxis(state.bubbleWobble * 0.017453292F, 1.0F, 0.0F, 1.0F));
         }
 
@@ -56,7 +56,7 @@ public class BarrelEntityRenderer extends MEEntityRenderer<BarrelEntity, BoatEnt
 
     public void updateRenderState(BarrelEntity barrelEntity, BoatEntityRenderState boatEntityRenderState, float f) {
         super.updateRenderState(barrelEntity, boatEntityRenderState, f);
-        boatEntityRenderState.yaw = MathHelper.lerpAngleDegrees(f, barrelEntity.prevYaw, barrelEntity.getYaw());
+        boatEntityRenderState.yaw = Mth.lerpAngleDegrees(f, barrelEntity.prevYaw, barrelEntity.getYaw());
         boatEntityRenderState.damageWobbleTicks = (float)barrelEntity.getDamageWobbleTicks() - f;
         boatEntityRenderState.damageWobbleSide = barrelEntity.getDamageWobbleSide();
         boatEntityRenderState.damageWobbleStrength = Math.max(barrelEntity.getDamageWobbleStrength() - f, 0.0F);
@@ -66,7 +66,7 @@ public class BarrelEntityRenderer extends MEEntityRenderer<BarrelEntity, BoatEnt
         boatEntityRenderState.rightPaddleAngle = barrelEntity.interpolatePaddlePhase(1, f);
     }
 
-    protected void renderWaterMask(BoatEntityRenderState state, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+    protected void renderWaterMask(BoatEntityRenderState state, PoseStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         if (!state.submergedInWater) {
             this.modelPart.render(matrices, vertexConsumers.getBuffer(RenderLayer.getWaterMask()), light, OverlayTexture.DEFAULT_UV);
         }

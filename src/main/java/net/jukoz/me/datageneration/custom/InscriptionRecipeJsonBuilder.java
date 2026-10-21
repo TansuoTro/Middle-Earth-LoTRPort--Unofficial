@@ -16,13 +16,13 @@ import net.minecraft.advancement.CriterionMerger;
 import net.minecraft.advancement.criterion.CriterionConditions;
 import net.minecraft.advancement.criterion.RecipeUnlockedCriterion;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.Item;
 import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Holder;
+import net.minecraft.tags.TagKey;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * Datagen builder for {@link InscriptionRecipe}.
@@ -32,21 +32,21 @@ import net.minecraft.util.Identifier;
  */
 public class InscriptionRecipeJsonBuilder {
     private final RecipeCategory category;
-    public RegistryEntry<Enchantment> enchant;
+    public Holder<Enchantment> enchant;
     public int level;
     private final List<String> inputWords = new ArrayList<>();
     private net.minecraft.recipe.Ingredient chiselInput;
     private int levelCost;
     private final Map<String, CriterionConditions> criteria = new LinkedHashMap<>();
 
-    private InscriptionRecipeJsonBuilder(RecipeCategory category, RegistryEntry<Enchantment> enchant, int level, int levelCost) {
+    private InscriptionRecipeJsonBuilder(RecipeCategory category, Holder<Enchantment> enchant, int level, int levelCost) {
         this.category = category;
         this.enchant = enchant;
         this.level = level;
         this.levelCost = levelCost;
     }
 
-    public static InscriptionRecipeJsonBuilder createInscriptionRecipe(RecipeCategory category, RegistryEntry<Enchantment> enchant, int level, int levelCost) {
+    public static InscriptionRecipeJsonBuilder createInscriptionRecipe(RecipeCategory category, Holder<Enchantment> enchant, int level, int levelCost) {
         return new InscriptionRecipeJsonBuilder(category, enchant, level, levelCost);
     }
 
@@ -79,10 +79,10 @@ public class InscriptionRecipeJsonBuilder {
     }
 
     public void offerTo(Consumer<RecipeJsonProvider> exporter, String path) {
-        this.offerTo(exporter, new Identifier(MiddleEarth.MOD_ID, path));
+        this.offerTo(exporter, new ResourceLocation(MiddleEarth.MOD_ID, path));
     }
 
-    public void offerTo(Consumer<RecipeJsonProvider> exporter, Identifier recipeId) {
+    public void offerTo(Consumer<RecipeJsonProvider> exporter, ResourceLocation recipeId) {
         this.validate(recipeId);
         Advancement.Builder advancement = Advancement.Builder.createUntelemetered()
                 .criterion("has_the_recipe", RecipeUnlockedCriterion.create(recipeId))
@@ -105,7 +105,7 @@ public class InscriptionRecipeJsonBuilder {
         json.addProperty("level_cost", this.levelCost);
     }
 
-    private void validate(Identifier recipeId) {
+    private void validate(ResourceLocation recipeId) {
         if (this.criteria.isEmpty()) {
             throw new IllegalStateException("No way of obtaining recipe " + recipeId);
         }

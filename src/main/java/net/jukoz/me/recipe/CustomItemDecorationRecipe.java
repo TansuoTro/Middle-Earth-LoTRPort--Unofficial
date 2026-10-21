@@ -3,26 +3,26 @@ package net.jukoz.me.recipe;
 import net.jukoz.me.item.items.HeldBannerItem;
 import net.jukoz.me.item.items.shields.CustomBannerShieldItem;
 import net.jukoz.me.compat.MEBannerPatterns;
-import net.minecraft.item.BannerItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.world.item.BannerItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.world.World;
+import net.minecraft.core.RegistryWrapper;
+import net.minecraft.world.level.Level;
 
 public class CustomItemDecorationRecipe extends SpecialCraftingRecipe {
 
     //TODO NO WORKY
 
-    public CustomItemDecorationRecipe(Identifier id, CraftingRecipeCategory category) {
+    public CustomItemDecorationRecipe(ResourceLocation id, CraftingRecipeCategory category) {
         super(id, category);
     }
 
-    public boolean matches(RecipeInputInventory craftingRecipeInput, World world) {
+    public boolean matches(RecipeInputInventory craftingRecipeInput, Level world) {
         ItemStack itemStack = ItemStack.EMPTY;
         ItemStack itemStack2 = ItemStack.EMPTY;
 

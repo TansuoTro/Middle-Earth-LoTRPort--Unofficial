@@ -2,7 +2,7 @@ package net.jukoz.me.entity.beasts.cave_troll;
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
-import net.minecraft.client.util.math.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 public class CaveTrollEntityModel extends SinglePartEntityModel<CaveTrollEntity> {
     private final ModelPart rightArm;
@@ -129,7 +129,7 @@ public class CaveTrollEntityModel extends SinglePartEntityModel<CaveTrollEntity>
         this.updateAnimation(entity.smashingAnimationState, CaveTrollAnimations.OVERHAND_SMASH, ageInTicks);
     }
 
-    public void setArmAngle(MatrixStack matrices) {
+    public void setArmAngle(PoseStack matrices) {
         this.getPart().rotate(matrices);
         this.upperBody.rotate(matrices);
         this.rightArm.rotate(matrices);

@@ -1,6 +1,6 @@
 package net.jukoz.me.datageneration.content.tags;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.jukoz.me.block.special.forge.MetalTypes;
 import net.jukoz.me.item.EquipmentItemsME;
 import net.jukoz.me.resources.datas.common.DispositionType;

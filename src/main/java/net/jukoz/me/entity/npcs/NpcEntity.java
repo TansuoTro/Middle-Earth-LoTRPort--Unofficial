@@ -2,50 +2,50 @@ package net.jukoz.me.entity.npcs;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Dynamic;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 
-import net.minecraft.entity.EntityGroup;
-import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.EntityGroup;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.brain.Brain;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageTypes;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.entity.projectile.ProjectileUtil;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.item.RangedWeaponItem;
-import net.minecraft.loot.LootTable;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.context.LootContextTypes;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.nbt.CompoundTag;
 import net.jukoz.me.compat.nbt.ReadView;
 import net.jukoz.me.compat.nbt.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.*;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlocks;
@@ -130,7 +130,7 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
     }
 
     @Nullable
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound nbt) {
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable CompoundTag nbt) {
         this.saveSpawnReason(spawnReason);
         return super.initialize(world, difficulty, spawnReason, entityData, nbt);
     }
@@ -180,7 +180,7 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
         this.dataTracker.set(NPC_INITIALIZATION_DATA, new NpcInitializationData());
     }
     // [NpcTypeIdentifier]
-    public void prepareNpcIdentifier(Identifier npcTypeIdentifier){
+    public void prepareNpcIdentifier(ResourceLocation npcTypeIdentifier){
         NpcInitializationData newNpcInitializationData = this.retrieveNpcInitializationData().withType(npcTypeIdentifier);
         this.saveNpcInitializationData(newNpcInitializationData);
     }
@@ -195,7 +195,7 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
     public NpcType getNpcType(){
         return retrieveNpcData().getNpcType();
     }
-    public void saveNpcType(RegistryEntry<NpcType> npcType){
+    public void saveNpcType(Holder<NpcType> npcType){
         NpcData newNpcData = this.retrieveNpcData().withType(npcType);
         this.saveNpcData(newNpcData);
     }
@@ -229,16 +229,16 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
     }
 
     public static DefaultAttributeContainer.Builder setAttributes() {
-        return EntityAttributesME.addDefaults(MobEntity.createMobAttributes())
-                .add(EntityAttributes.GENERIC_ATTACK_SPEED, 4.0)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1.0);
+        return EntityAttributesME.addDefaults(Mob.createMobAttributes())
+                .add(Attributes.GENERIC_ATTACK_SPEED, 4.0)
+                .add(Attributes.GENERIC_FOLLOW_RANGE, 32.0)
+                .add(Attributes.GENERIC_ATTACK_DAMAGE, 1.0);
     }
 
     protected void initGoals() {
         this.goalSelector.add(1, new SwimGoal(this));
         this.goalSelector.add(5, new WanderAroundFarGoal(this, 0.8));
-        this.goalSelector.add(6, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.add(6, new LookAtEntityGoal(this, Player.class, 8.0F));
         this.goalSelector.add(6, new LookAroundGoal(this));
         this.targetSelector.add(1, new RevengeGoal(this));
         this.targetSelector.add(3, new TargetPlayerDiplomacyGoal(this));
@@ -263,7 +263,7 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
     }
 
     @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
+    public void writeCustomDataToNbt(CompoundTag nbt) {
         super.writeCustomDataToNbt(nbt);
         WriteView view = new WriteView(nbt, this.getWorld().getRegistryManager());
         view.put(KeyStrings.DATA, NpcData.CODEC, this.retrieveNpcData());
@@ -275,7 +275,7 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
 
 
     @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
+    public void readCustomDataFromNbt(CompoundTag nbt) {
         super.readCustomDataFromNbt(nbt);
         ReadView view = new ReadView(nbt, this.getWorld().getRegistryManager());
         NpcData foundNpcData = view.read(KeyStrings.DATA, NpcData.CODEC).orElse(new NpcData());
@@ -347,10 +347,10 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
 
     //region [DATA TRANSFER]
     // GETTERS
-    public Identifier getNpcTypeIdentifier(){
+    public ResourceLocation getNpcTypeIdentifier(){
         return retrieveNpcData().getNpcTypeId();
     }
-    public Identifier getFactionIdentifier(){
+    public ResourceLocation getFactionIdentifier(){
         Faction faction = getFaction();
         if(faction == null) return null;
         return faction.getId();
@@ -370,7 +370,7 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
         if(world.isClient)
             return;
 
-        if(world instanceof ServerWorld serverWorld){
+        if(world instanceof ServerLevel serverWorld){
             if(NpcEntityInitializer.shouldInitialize(serverWorld, this)){
                 NpcEntityInitializer.initializeNpcEntity(serverWorld, this);
             }
@@ -411,17 +411,17 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
     protected void updatePassengerPosition(Entity passenger, Entity.PositionUpdater positionUpdater) {
         super.updatePassengerPosition(passenger, positionUpdater);
 
-        Vec3d offset = new Vec3d(
+        Vec3 offset = new Vec3(
                 0.0,
                 -0.3,
                 -0.25
         );
 
-        Vec3d rotated = rotatePoint(offset, this.getYaw());
+        Vec3 rotated = rotatePoint(offset, this.getYaw());
         passenger.setPos(passenger.getX() + rotated.x, passenger.getY() + rotated.y, passenger.getZ() + rotated.z);
     }
 
-    private static Vec3d rotatePoint(Vec3d point, float yaw) {
+    private static Vec3 rotatePoint(Vec3 point, float yaw) {
         return point.rotateY(-yaw * ((float)Math.PI / 180F));
     }
 
@@ -457,7 +457,7 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
     }
 
     public float getFightingMovementSpeed(){
-        double currentSpeed = this.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);
+        double currentSpeed = this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED);
         return (float) (currentSpeed);
     }
 
@@ -503,7 +503,7 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
     }
 
     @Override
-    protected void initEquipment(Random random, LocalDifficulty localDifficulty) {
+    protected void initEquipment(RandomSource random, LocalDifficulty localDifficulty) {
         // Overrides vanilla init equipment (gold sets???)
     }
 
@@ -535,7 +535,7 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
         if(damageSource == null)
             return canDropLoot;
 
-        if(damageSource.getAttacker() instanceof PlayerEntity player){
+        if(damageSource.getAttacker() instanceof Player player){
             PlayerData data = StateSaverAndLoader.getPlayerState(player);
             if(data == null)
                 canDropLoot = true;
@@ -565,12 +565,12 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
         LootData lootData = retrieveLootData();
         if(lootData == null)
             return 1;
-        return lootData.getExperience((ServerWorld) this.getWorld());
+        return lootData.getExperience((ServerLevel) this.getWorld());
     }
 
     @Override
     protected void dropLoot(DamageSource damageSource, boolean causedByPlayer) {
-        if (!(this.getWorld() instanceof ServerWorld serverWorld) || getNpcType() == null)
+        if (!(this.getWorld() instanceof ServerLevel serverWorld) || getNpcType() == null)
             return;
 
         LootTable lootTable = serverWorld.getServer().getLootManager().getLootTable(getNpcType().getId().withPrefixedPath("entities/"));
@@ -581,7 +581,7 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
                     .add(LootContextParameters.DAMAGE_SOURCE, damageSource)
                     .addOptional(LootContextParameters.KILLER_ENTITY, damageSource.getAttacker())
                     .addOptional(LootContextParameters.DIRECT_KILLER_ENTITY, damageSource.getSource());
-            if (damageSource.getAttacker() instanceof PlayerEntity playerEntity) {
+            if (damageSource.getAttacker() instanceof Player playerEntity) {
                 builder = builder.add(LootContextParameters.LAST_DAMAGE_PLAYER, playerEntity).luck(playerEntity.getLuck());
             }
 
@@ -601,7 +601,7 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
     }
 
     @Override
-    public void setCustomName(@Nullable Text name) {
+    public void setCustomName(@Nullable Component name) {
         super.setCustomName(name);
     }
 
@@ -609,7 +609,7 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
         NpcData data = retrieveNpcData();
         if(data == null)
             return null;
-        Identifier factionId = data.getFaction();
+        ResourceLocation factionId = data.getFaction();
         if(factionId == null)
             return null;
         try {
@@ -640,7 +640,7 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
         boolean targetDamaged;
         float damage = 1.0f;
         try{
-            damage = (float) this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+            damage = (float) this.getAttributeValue(Attributes.GENERIC_ATTACK_DAMAGE);
         } catch (Exception ignored){}
         ItemStack itemStack = this.getMainHandStack();
         DamageSource damageSource = this.getDamageSources().mobAttack(this);
@@ -659,7 +659,7 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
             int g = EnchantmentHelper.getKnockback(this);
             if (g > 0 && target instanceof LivingEntity) {
                 livingEntity = (LivingEntity)target;
-                livingEntity.takeKnockback(g * 0.5f, MathHelper.sin(this.getYaw() * ((float)Math.PI / 180)), -MathHelper.cos(this.getYaw() * ((float)Math.PI / 180)));
+                livingEntity.takeKnockback(g * 0.5f, Mth.sin(this.getYaw() * ((float)Math.PI / 180)), -Mth.cos(this.getYaw() * ((float)Math.PI / 180)));
                 this.setVelocity(this.getVelocity().multiply(0.6, 1.0, 0.6));
             }
             if (target instanceof LivingEntity) {
@@ -683,11 +683,11 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
     }
 
     @Override
-    protected Text getDefaultName() {
+    protected Component getDefaultName() {
         if(this.getNpcTypeIdentifier() == null) {
-            return Text.translatable("npc_type."+ MiddleEarth.MOD_ID +".npc");
+            return Component.translatable("npc_type."+ MiddleEarth.MOD_ID +".npc");
         }
-        return Text.translatable(this.getNpcTypeIdentifier().toTranslationKey("npc_type"));
+        return Component.translatable(this.getNpcTypeIdentifier().toTranslationKey("npc_type"));
     }
 
     @Override
@@ -706,13 +706,13 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
     }
 
     public int getTickAttackSpeedCooldown(){
-        if(!this.getAttributes().hasAttribute(EntityAttributes.GENERIC_ATTACK_SPEED))
+        if(!this.getAttributes().hasAttribute(Attributes.GENERIC_ATTACK_SPEED))
             return 1;
-        return (int)this.getAttributes().getValue(EntityAttributes.GENERIC_ATTACK_SPEED);
+        return (int)this.getAttributes().getValue(Attributes.GENERIC_ATTACK_SPEED);
     }
 
     @Override
-    public boolean canBeLeashedBy(PlayerEntity player) {
+    public boolean canBeLeashedBy(Player player) {
         return false;
     }
 
@@ -755,7 +755,7 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
         var currentItem = getActiveItem();
         if(currentItem.isEmpty()){
             clearActiveItem();
-            setCurrentHand(Hand.MAIN_HAND);
+            setCurrentHand(InteractionHand.MAIN_HAND);
         }
     }
 
@@ -799,7 +799,7 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
         // Reduce the vanilla arc compensation for larger entities and faster arrows.
         double arcCompensation = horizontalDistance * (0.2F / (scale * powerModifier));
 
-        if (this.getWorld() instanceof ServerWorld serverWorld) {
+        if (this.getWorld() instanceof ServerLevel serverWorld) {
             projectile.setVelocity(
                     distanceX,
                     distanceY + arcCompensation,
@@ -863,13 +863,13 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
         if(other instanceof NpcEntity npc){
             return !isHostileToward(npc);
         }
-        else if(other instanceof PlayerEntity player){
+        else if(other instanceof Player player){
             return !isHostileTowardPlayer(player);
         }
         return !isHostileToward(other);
     }
 
-    private boolean isHostileTowardPlayer(PlayerEntity player) {
+    private boolean isHostileTowardPlayer(Player player) {
         if(player.getWorld().isClient || !player.canTakeDamage())
             return false;
         PlayerData playerData = StateSaverAndLoader.getPlayerState(player);
@@ -900,7 +900,7 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
         Faction ownFaction = getFaction();
         if(ownFaction == null)
             return true;
-        Identifier otherNpcFaction = npc.getFactionIdentifier();
+        ResourceLocation otherNpcFaction = npc.getFactionIdentifier();
         if(otherNpcFaction == null)
             return true;
         if(ownFaction.isHostileToward(otherNpcFaction))
@@ -908,7 +908,7 @@ public class NpcEntity extends PathAwareEntity implements CrossbowUser {
         return false;
     }
 
-    public static boolean canSpawn(EntityType<NpcEntity> type, ServerWorldAccess serverWorldAccess, SpawnReason spawnReason, BlockPos blockPos, Random random) {
+    public static boolean canSpawn(EntityType<NpcEntity> type, ServerWorldAccess serverWorldAccess, SpawnReason spawnReason, BlockPos blockPos, RandomSource random) {
         return SpawnUtil.canSpawn(blockPos, serverWorldAccess, spawnReason);
     }
 

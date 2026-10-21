@@ -3,7 +3,7 @@ package net.jukoz.me.mixin;
 import net.jukoz.me.compat.DyedColorComponent;
 import net.jukoz.me.item.MEComponents;
 import net.minecraft.item.DyeableItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

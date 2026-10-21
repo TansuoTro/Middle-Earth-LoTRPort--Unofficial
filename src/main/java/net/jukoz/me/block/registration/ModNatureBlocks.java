@@ -28,15 +28,15 @@ import net.minecraft.block.*;
 import net.minecraft.block.sapling.SaplingGenerator;
 import net.jukoz.me.compat.MESaplingGenerator;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.util.DyeColor;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -614,7 +614,7 @@ public class ModNatureBlocks {
         return resultBlock;
     }
 
-    public static Block registerSimpleSapling(String name, RegistryKey<ConfiguredFeature<?, ?>> treeFeature) {
+    public static Block registerSimpleSapling(String name, ResourceKey<ConfiguredFeature<?, ?>> treeFeature) {
         SaplingBlock saplingBlock = new SaplingBlock(new MESaplingGenerator(name, Optional.empty(), Optional.ofNullable(treeFeature), Optional.empty()),
                 AbstractBlock.Settings.copy(Blocks.OAK_SAPLING));
         Block resultBlock = Registry.register(Registries.BLOCK, ModBlocks.keyOfBlock(name), saplingBlock);
@@ -628,9 +628,9 @@ public class ModNatureBlocks {
         return resultBlock;
     }
 
-    public static Block registerVariantSapling(String name, List<RegistryKey<ConfiguredFeature<?, ?>>> treeFeatures) {
+    public static Block registerVariantSapling(String name, List<ResourceKey<ConfiguredFeature<?, ?>>> treeFeatures) {
         List<SaplingGenerator> saplingGenerators = new ArrayList<>();
-        for(RegistryKey<ConfiguredFeature<?,?>> treeFeature : treeFeatures) {
+        for(ResourceKey<ConfiguredFeature<?,?>> treeFeature : treeFeatures) {
             saplingGenerators.add(new MESaplingGenerator(name, Optional.empty(), Optional.ofNullable(treeFeature),
                             Optional.empty()));
         }
@@ -675,7 +675,7 @@ public class ModNatureBlocks {
     }
 
     static void registerBlockItem(String name, Block block) {
-        var item =  Registry.register(Registries.ITEM, new Identifier(MiddleEarth.MOD_ID, name),
+        var item =  Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name),
                new BlockItem(block, new MESettings()));
         Item.BLOCK_ITEMS.put(block, item);
 

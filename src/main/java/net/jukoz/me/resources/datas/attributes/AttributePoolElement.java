@@ -4,21 +4,21 @@ import net.jukoz.me.compat.NbtCompat;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 
 import java.util.*;
 
 public class AttributePoolElement {
-    private Identifier identifier;
+    private ResourceLocation identifier;
     private Double value;
     private Double valueMax;
     private List<AttributeModifierElement> modifiers;
@@ -29,7 +29,7 @@ public class AttributePoolElement {
                 .withDefineValue(defineValue);
     }
 
-    public static AttributePoolElement create(RegistryEntry<EntityAttribute> attributeEntry, double defineValue){
+    public static AttributePoolElement create(Holder<EntityAttribute> attributeEntry, double defineValue){
         return create(attributeEntry.value(), defineValue);
     }
     public static AttributePoolElement create(EntityAttribute attribute, double min, double max){
@@ -38,13 +38,13 @@ public class AttributePoolElement {
                 .withMinMaxValue(min, max);
     }
 
-    public static AttributePoolElement create(RegistryEntry<EntityAttribute> attributeEntry, double min, double max){
+    public static AttributePoolElement create(Holder<EntityAttribute> attributeEntry, double min, double max){
         return create(attributeEntry.value(), min, max);
     }
 
-    public static AttributePoolElement createFromNbt(NbtCompound nbtCompound){
+    public static AttributePoolElement createFromNbt(CompoundTag nbtCompound){
         var newElement = new AttributePoolElement();
-        newElement.withIdentifier(new Identifier(nbtCompound.getString("id")));
+        newElement.withIdentifier(new ResourceLocation(nbtCompound.getString("id")));
 
         if(nbtCompound.contains("value"))
             newElement.withDefineValue(nbtCompound.getDouble("value"));
@@ -65,8 +65,8 @@ public class AttributePoolElement {
         });
     }
 
-    public NbtCompound createNbt(){
-        var nbtCompound = new NbtCompound();
+    public CompoundTag createNbt(){
+        var nbtCompound = new CompoundTag();
 
         nbtCompound.putString("id", this.identifier.toString());
         if(this.valueMax == null)
@@ -86,7 +86,7 @@ public class AttributePoolElement {
         return nbtCompound;
     }
 
-    public AttributePoolElement withIdentifier(Identifier newIdentifier) {
+    public AttributePoolElement withIdentifier(ResourceLocation newIdentifier) {
         this.identifier = newIdentifier;
         return this;
     }
@@ -102,12 +102,12 @@ public class AttributePoolElement {
         return this;
     }
 
-    public AttributePoolElement withModifier(Identifier identifier, double value) {
+    public AttributePoolElement withModifier(ResourceLocation identifier, double value) {
         withModifier(identifier, value, EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
         return this;
     }
 
-    public AttributePoolElement withModifier(Identifier identifier, double value, EntityAttributeModifier.Operation operation) {
+    public AttributePoolElement withModifier(ResourceLocation identifier, double value, EntityAttributeModifier.Operation operation) {
         if(modifiers == null)
             modifiers = new ArrayList<>();
 
@@ -115,7 +115,7 @@ public class AttributePoolElement {
         return this;
     }
 
-    public Identifier getIdentifier(){
+    public ResourceLocation getIdentifier(){
         return this.identifier;
     }
 
@@ -137,9 +137,9 @@ public class AttributePoolElement {
         return modifiers;
     }
 
-    public static NbtCompound createAttributeNbtListFromPlayer(PlayerEntity player) {
+    public static CompoundTag createAttributeNbtListFromPlayer(Player player) {
         NbtList attributeList = new NbtList();
-        var registry = player.getWorld().getRegistryManager().getOptional(RegistryKeys.ATTRIBUTE).get();
+        var registry = player.getWorld().getRegistryManager().getOptional(Registries.ATTRIBUTE).get();
         Collection<EntityAttributeInstance> attributes = new ArrayList<>();
         var entries = registry.streamEntries().toList();
         for(var entry : entries){
@@ -150,18 +150,18 @@ public class AttributePoolElement {
         }
         attributes.forEach(attribute -> {
             AttributePoolElement attributePoolElement = new AttributePoolElement();
-            attributePoolElement.withIdentifier(MiddleEarth.fetchId(net.minecraft.registry.Registries.ATTRIBUTE.getId(attribute.getAttribute()).toString()));
+            attributePoolElement.withIdentifier(MiddleEarth.fetchId(net.minecraft.core.registries.Registries.ATTRIBUTE.getId(attribute.getAttribute()).toString()));
             attributePoolElement.withDefineValue(attribute.getBaseValue());
             for(var modifier : attribute.getModifiers())
                 attributePoolElement.withModifier(MiddleEarth.fetchId(modifier.getName()), modifier.getValue(), modifier.getOperation());
             attributeList.add(attributePoolElement.createNbt());
         });
-        NbtCompound compound = new NbtCompound();
+        CompoundTag compound = new CompoundTag();
         compound.put("attributes", attributeList);
         return compound;
     }
 
-    public static List<AttributePoolElement> obtainAttributeList(NbtCompound nbtCompound) {
+    public static List<AttributePoolElement> obtainAttributeList(CompoundTag nbtCompound) {
         List<AttributePoolElement> attributePoolElementList = new ArrayList<>();
 
         NbtList nbtList = nbtCompound.getList("attributes", NbtElement.COMPOUND_TYPE);

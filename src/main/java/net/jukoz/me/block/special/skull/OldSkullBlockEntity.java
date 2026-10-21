@@ -1,8 +1,8 @@
 package net.jukoz.me.block.special.skull;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
 import net.jukoz.me.block.registration.ModBlockEntities;
 
 public class OldSkullBlockEntity extends BlockEntity {

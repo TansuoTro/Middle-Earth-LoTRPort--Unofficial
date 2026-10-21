@@ -1,7 +1,7 @@
 package net.jukoz.me.network.handlers;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.config.ModServerConfigs;
 import net.jukoz.me.gui.onboarding.OnboardingSelectionScreen;
@@ -18,7 +18,7 @@ import java.util.List;
 public class OnboardingScreenHandler {
     public static void handle(ClientPacketContext context, boolean havePlayerData, float delay, List<AttributePoolElement> playerAttributes){
         try{
-            World world = context.player().getWorld();
+            Level world = context.player().getWorld();
             if(ModDimensions.isInOverworld(world)){
                 MinecraftClient client = MinecraftClient.getInstance();
                 if(!havePlayerData){

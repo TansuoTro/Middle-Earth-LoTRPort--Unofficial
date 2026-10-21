@@ -3,13 +3,13 @@ import net.jukoz.me.entity.beasts.warg.WargEntity;
 import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 
 import com.google.common.collect.Maps;
-import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.Util;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.client.RenderUtil;
 import net.jukoz.me.entity.beasts.warg.WargEyeVariant;
@@ -19,13 +19,13 @@ import java.util.Map;
 
 public class WargEyesFeatureRenderer extends MEFeatureRenderer<WargEntity, WargEntityRenderState, WargModel> {
     private static final String PATH = "textures/entities/warg/eyes/";
-    private static final Identifier EMISSIVE_TEXTURE = new Identifier(MiddleEarth.MOD_ID, PATH + "warg_eyes_emissive.png");
-    private static final Map<WargEyeVariant, Identifier> LOCATION_BY_VARIANT =
+    private static final ResourceLocation EMISSIVE_TEXTURE = new ResourceLocation(MiddleEarth.MOD_ID, PATH + "warg_eyes_emissive.png");
+    private static final Map<WargEyeVariant, ResourceLocation> LOCATION_BY_VARIANT =
             Util.make(Maps.newEnumMap(WargEyeVariant.class), (map) -> {
                 map.put(WargEyeVariant.BLUE,
-                        new Identifier(MiddleEarth.MOD_ID, PATH + "warg_eyes_blue.png"));
+                        new ResourceLocation(MiddleEarth.MOD_ID, PATH + "warg_eyes_blue.png"));
                 map.put(WargEyeVariant.ORANGE,
-                        new Identifier(MiddleEarth.MOD_ID, PATH + "warg_eyes_orange.png"));
+                        new ResourceLocation(MiddleEarth.MOD_ID, PATH + "warg_eyes_orange.png"));
             });
 
     public WargEyesFeatureRenderer(FeatureRendererContext<WargEntity, WargModel> featureRendererContext) {
@@ -33,7 +33,7 @@ public class WargEyesFeatureRenderer extends MEFeatureRenderer<WargEntity, WargE
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, WargEntityRenderState state, float limbAngle, float limbDistance) {
+    public void render(PoseStack matrices, VertexConsumerProvider vertexConsumers, int light, WargEntityRenderState state, float limbAngle, float limbDistance) {
         RenderUtil.renderCutoutTexture(this.getContextModel(), matrices, vertexConsumers,
                 LOCATION_BY_VARIANT.get(state.eyeVariant), light, OverlayTexture.DEFAULT_UV);
 

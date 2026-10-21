@@ -1,7 +1,7 @@
 package net.jukoz.me.network.packets.C2S;
 
 import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.config.ModServerConfigs;
 import net.jukoz.me.item.items.StarlightPhialItem;
@@ -9,12 +9,12 @@ import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
 import net.jukoz.me.resources.datas.races.RaceUtil;
 import net.jukoz.me.world.dimension.ModDimensions;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceLocation;
 
 
 public class PacketTeleportToCurrentOverworldSpawn extends ClientToServerPacket<PacketTeleportToCurrentOverworldSpawn> {
-    public static final Identifier ID = new Identifier(MiddleEarth.MOD_ID, "packet_teleport_to_current_overworld_spawn");
+    public static final ResourceLocation ID = new ResourceLocation(MiddleEarth.MOD_ID, "packet_teleport_to_current_overworld_spawn");
     public static final PacketTeleportToCurrentOverworldSpawn INSTANCE = new PacketTeleportToCurrentOverworldSpawn();
     public static final PacketType<PacketTeleportToCurrentOverworldSpawn> TYPE = PacketType.create(ID, PacketTeleportToCurrentOverworldSpawn::new);
 
@@ -25,7 +25,7 @@ public class PacketTeleportToCurrentOverworldSpawn extends ClientToServerPacket<
     private PacketTeleportToCurrentOverworldSpawn() {
     }
 
-    public PacketTeleportToCurrentOverworldSpawn(PacketByteBuf buf) {
+    public PacketTeleportToCurrentOverworldSpawn(FriendlyByteBuf buf) {
         this();
     }
 
@@ -35,7 +35,7 @@ public class PacketTeleportToCurrentOverworldSpawn extends ClientToServerPacket<
     }
 
     @Override
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
     }
 
     @Override
@@ -54,7 +54,7 @@ public class PacketTeleportToCurrentOverworldSpawn extends ClientToServerPacket<
                     }
 
                     if(!context.player().isCreative() && context.player().getMainHandStack().getItem() instanceof StarlightPhialItem)
-                        context.player().getStackInHand(Hand.MAIN_HAND).decrement(1);
+                        context.player().getStackInHand(InteractionHand.MAIN_HAND).decrement(1);
                 }
             });
         } catch (Exception e){

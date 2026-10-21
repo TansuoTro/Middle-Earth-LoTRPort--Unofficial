@@ -1,14 +1,14 @@
 package net.jukoz.me.block.special.structureManager.features;
 
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.block.special.structureManager.StructureManagerBlockEntity;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.npcs.initializer.NpcEntityBuilder;
@@ -22,16 +22,16 @@ import java.util.Map;
 import java.util.Set;
 
 public class StructureManagerService {
-    private static final Map<RegistryKey<World>, Set<BlockPos>> STRUCTURE_MANAGERS = new HashMap<>();
+    private static final Map<ResourceKey<Level>, Set<BlockPos>> STRUCTURE_MANAGERS = new HashMap<>();
 
-    public static StructureManagerData getStructureManagerData(World world, Identifier structureManagerDataId){
+    public static StructureManagerData getStructureManagerData(Level world, ResourceLocation structureManagerDataId){
         if(world == null)
             return null;
         var data =  StructureManagerDataLookup.getStructureManagerData(world, structureManagerDataId);
         return data.orElse(null);
     }
 
-    public static LivingEntity spawnEntity(ServerWorld world, StructureSpawnNestPool pool, BlockPos pos, int spawnRadius){
+    public static LivingEntity spawnEntity(ServerLevel world, StructureSpawnNestPool pool, BlockPos pos, int spawnRadius){
         var random = world.getRandom();
         int chances = 5;
         BlockPos chosenBlockPos = null;
@@ -53,7 +53,7 @@ public class StructureManagerService {
                     .build();
         } else {
             entity = (LivingEntity) pool.getEntityType().create(world);
-            if(entity instanceof MobEntity mob)
+            if(entity instanceof Mob mob)
                 mob.initialize(world, world.getLocalDifficulty(pos), SpawnReason.STRUCTURE, null, null);
             entity.setPosition(chosenBlockPos.toCenterPos());
         }
@@ -66,7 +66,7 @@ public class StructureManagerService {
     }
 
     public static void register(StructureManagerBlockEntity manager) {
-        World world = manager.getWorld();
+        Level world = manager.getWorld();
         if (world == null || world.isClient())
             return;
         STRUCTURE_MANAGERS.computeIfAbsent(world.getRegistryKey(), key -> new HashSet<>())
@@ -74,7 +74,7 @@ public class StructureManagerService {
     }
 
     public static void unregister(StructureManagerBlockEntity manager) {
-        World world = manager.getWorld();
+        Level world = manager.getWorld();
         if (world == null || world.isClient())
             return;
         Set<BlockPos> managers = STRUCTURE_MANAGERS.get(world.getRegistryKey());
@@ -86,7 +86,7 @@ public class StructureManagerService {
             STRUCTURE_MANAGERS.remove(world.getRegistryKey());
     }
 
-    public static boolean isClose(World world, BlockPos pos, int radius) {
+    public static boolean isClose(Level world, BlockPos pos, int radius) {
         Set<BlockPos> managers = STRUCTURE_MANAGERS.get(world.getRegistryKey());
 
         if (managers == null) {
@@ -104,7 +104,7 @@ public class StructureManagerService {
         return false;
     }
 
-    public static StructureManagerBlockEntity getClosest(World world, BlockPos pos, int radius) {
+    public static StructureManagerBlockEntity getClosest(Level world, BlockPos pos, int radius) {
         Set<BlockPos> managers = STRUCTURE_MANAGERS.get(world.getRegistryKey());
 
         if (managers == null) {

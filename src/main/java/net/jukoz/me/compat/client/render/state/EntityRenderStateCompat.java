@@ -1,7 +1,7 @@
 package net.jukoz.me.compat.client.render.state;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.text.Text;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.network.chat.Component;
 
 /**
  * 1.20.1 stand-in for the 1.21.8 client render-state system.
@@ -15,7 +15,7 @@ import net.minecraft.text.Text;
 public class EntityRenderStateCompat {
     public float tickDelta;
     public Entity entity;
-    public Text customName;
+    public Component customName;
     public boolean invisible;
     public boolean baby;
     public float age;

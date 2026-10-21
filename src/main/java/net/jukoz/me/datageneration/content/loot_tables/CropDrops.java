@@ -4,9 +4,9 @@ import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.jukoz.me.block.special.crop.*;
 import net.jukoz.me.item.FoodItemsME;
 import net.jukoz.me.item.ResourceItemsME;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.loot.condition.BlockStatePropertyLootCondition;
 import net.minecraft.predicate.StatePredicate;
 

@@ -15,9 +15,9 @@ import net.jukoz.me.world.features.ores.ModOreFeatureConfig;
 import net.jukoz.me.world.features.ores.SurfaceOreFeature;
 import net.jukoz.me.world.features.pillar.PillarFeature;
 import net.jukoz.me.world.features.pillar.PillarFeatureConfig;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.gen.feature.*;
 import net.jukoz.me.world.features.platedfood.PlatedFoodFeature;
 import net.jukoz.me.world.features.platedfood.PlatedFoodFeatureConfig;
@@ -44,6 +44,6 @@ public class ModFeatures {
     }
 
     private static <C extends FeatureConfig, F extends Feature<C>> F register(String name, F feature) {
-        return (F) Registry.register(Registries.FEATURE, new Identifier(MiddleEarth.MOD_ID, name), feature);
+        return (F) Registry.register(Registries.FEATURE, new ResourceLocation(MiddleEarth.MOD_ID, name), feature);
     }
 }

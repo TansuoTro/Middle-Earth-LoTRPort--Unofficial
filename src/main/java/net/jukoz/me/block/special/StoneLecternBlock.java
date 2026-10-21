@@ -1,12 +1,12 @@
 package net.jukoz.me.block.special;
 
 import net.minecraft.block.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.VoxelShapes;
 import net.jukoz.me.compat.MEBlockShapes;
-import net.minecraft.world.BlockView;
+import net.minecraft.world.level.BlockGetter;
 
 import java.util.Map;
 
@@ -19,17 +19,17 @@ public class StoneLecternBlock extends LecternBlock {
     }
 
     @Override
-    public VoxelShape getCullingShape(BlockState state, BlockView world, BlockPos pos) {
+    public VoxelShape getCullingShape(BlockState state, BlockGetter world, BlockPos pos) {
         return BASE_SHAPE;
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
         return BASE_SHAPE;
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
         return (VoxelShape)OUTLINE_SHAPES_BY_DIRECTION.get(state.get(FACING));
     }
 

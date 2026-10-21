@@ -1,14 +1,14 @@
 package net.jukoz.me.resources.datas.attributes;
 
 import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.Identifier;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 
 public class AttributeModifierElement {
     private EntityAttributeModifier modifier;
 
-    public AttributeModifierElement(NbtCompound modifierNbt) {
+    public AttributeModifierElement(CompoundTag modifierNbt) {
         this.modifier = new EntityAttributeModifier(
                 modifierNbt.getString("id"),
                 modifierNbt.getDouble("value"),
@@ -16,20 +16,20 @@ public class AttributeModifierElement {
         );
     }
 
-    public AttributeModifierElement(Identifier identifier, double value, EntityAttributeModifier.Operation operation) {
+    public AttributeModifierElement(ResourceLocation identifier, double value, EntityAttributeModifier.Operation operation) {
         this.modifier = new EntityAttributeModifier(identifier.toString(), value, operation);
     }
 
 
-    public NbtCompound toNbt() {
-        NbtCompound nbt = new NbtCompound();
+    public CompoundTag toNbt() {
+        CompoundTag nbt = new CompoundTag();
         nbt.putString("id", modifier.getName());
         nbt.putDouble("value", modifier.getValue());
         nbt.putString("operation", modifier.getOperation().name());
         return nbt;
     }
 
-    public Identifier getIdentifier() {
+    public ResourceLocation getIdentifier() {
         return MiddleEarth.fetchId(modifier.getName());
     }
     public double getValue() {

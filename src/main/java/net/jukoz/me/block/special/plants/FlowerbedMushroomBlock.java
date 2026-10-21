@@ -1,11 +1,11 @@
 package net.jukoz.me.block.special.plants;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.block.FlowerbedBlock;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.WorldView;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelView;
 
 public class FlowerbedMushroomBlock extends FlowerbedBlock {
     public FlowerbedMushroomBlock(Settings settings) {
@@ -23,7 +23,7 @@ public class FlowerbedMushroomBlock extends FlowerbedBlock {
     }
 
     @Override
-    protected boolean canPlantOnTop(BlockState floor, BlockView world, BlockPos pos) {
+    protected boolean canPlantOnTop(BlockState floor, BlockGetter world, BlockPos pos) {
         return floor.isOpaqueFullCube(world, pos);
     }
 }

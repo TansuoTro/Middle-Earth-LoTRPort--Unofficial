@@ -2,15 +2,15 @@ package net.jukoz.me.item.items.weapons;
 
 import net.jukoz.me.item.MEComponents;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.compat.BluntWeapon;
 import net.jukoz.me.item.dataComponents.SneakAttackDataComponent;
@@ -20,7 +20,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 public class CustomDaggerWeaponItem extends ReachWeaponItem {
-    public static final Identifier ENTITY_INTERACTION_RANGE_MODIFIER_ID = new Identifier(MiddleEarth.MOD_ID, "entity_interaction_range");
+    public static final ResourceLocation ENTITY_INTERACTION_RANGE_MODIFIER_ID = new ResourceLocation(MiddleEarth.MOD_ID, "entity_interaction_range");
     private static final int SNEAK_ATTACK_TIME = 40;
 
     public CustomDaggerWeaponItem(ToolMaterial toolMaterial, Item.Settings settings) {
@@ -29,9 +29,9 @@ public class CustomDaggerWeaponItem extends ReachWeaponItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, net.minecraft.world.World world, Entity entity, int slot, boolean selected) {
+    public void inventoryTick(ItemStack stack, net.minecraft.world.level.Level world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, world, entity, slot, selected);
-        if(entity instanceof PlayerEntity playerEntity) {
+        if(entity instanceof Player playerEntity) {
             int timer = 0;
             SneakAttackDataComponent sneakAttackDataComponent = MEComponents.get(stack, MEComponents.SNEAK_ATTACK_DATA);
             if(sneakAttackDataComponent != null) timer = sneakAttackDataComponent.timer();

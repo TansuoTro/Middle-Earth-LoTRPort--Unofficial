@@ -3,29 +3,29 @@ package net.jukoz.me.entity.projectile.spear;
 import net.jukoz.me.entity.ModEntities;
 import net.jukoz.me.entity.hobbits.shire.ShireHobbitEntity;
 import net.jukoz.me.item.ModWeaponItems;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.world.World;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.Level;
 
 public class SpearEntity extends ThrownItemEntity {
     private Item item;
     private float damage;
 
-    public SpearEntity(EntityType<? extends SpearEntity> entityType, World world) {
+    public SpearEntity(EntityType<? extends SpearEntity> entityType, Level world) {
         super(entityType, world);
         this.item = ModWeaponItems.GONDOR_SPEAR;
     }
 
-    public SpearEntity(World world, Item item, LivingEntity owner, float dmg) {
+    public SpearEntity(Level world, Item item, LivingEntity owner, float dmg) {
         super(ModEntities.SPEAR, owner, world);
         this.item = item;
         this.damage = dmg;

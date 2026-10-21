@@ -1,8 +1,8 @@
 package net.jukoz.me.block.special.forge;
 
 import net.jukoz.me.item.ResourceItemsME;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.util.StringIdentifiable;
 
 public enum MetalTypes implements StringIdentifiable {

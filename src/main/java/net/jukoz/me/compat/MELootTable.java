@@ -1,9 +1,9 @@
 package net.jukoz.me.compat;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtElement;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -21,17 +21,17 @@ public final class MELootTable {
     }
 
     /** A loot table id and its generation seed. */
-    public record Loot(Identifier table, long seed) {
+    public record Loot(ResourceLocation table, long seed) {
     }
 
     /** The container's loot table, or null when the stack carries none. */
     @Nullable
     public static Loot get(ItemStack stack) {
-        NbtCompound blockEntityTag = stack.getSubNbt("BlockEntityTag");
+        CompoundTag blockEntityTag = stack.getSubNbt("BlockEntityTag");
         if (blockEntityTag == null || !blockEntityTag.contains(LOOT_TABLE_KEY, NbtElement.STRING_TYPE)) {
             return null;
         }
-        Identifier table = Identifier.tryParse(blockEntityTag.getString(LOOT_TABLE_KEY));
+        ResourceLocation table = ResourceLocation.tryParse(blockEntityTag.getString(LOOT_TABLE_KEY));
         if (table == null) {
             return null;
         }

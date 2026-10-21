@@ -2,17 +2,17 @@ package net.jukoz.me.block.special.shapingAnvil.stoneanvil;
 
 import net.jukoz.me.compat.MEArmorTrim;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.trim.ArmorTrim;
-import net.minecraft.item.trim.ArmorTrimMaterial;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.armortrim.ArmorTrim;
+import net.minecraft.world.item.armortrim.ArmorTrimMaterial;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import net.jukoz.me.block.special.shapingAnvil.ShapingAnvilBlockEntity;
@@ -30,14 +30,14 @@ public class StoneAnvilBlockEntity extends ShapingAnvilBlockEntity {
     }
 
     @Override
-    public void bonk(ShapingAnvilBlockEntity entity, ServerWorld world, ItemStack tool) {
+    public void bonk(ShapingAnvilBlockEntity entity, ServerLevel world, ItemStack tool) {
         ItemStack input = entity.getStack(0);
 
         ArmorTrim trim = MEArmorTrim.get(input);
         if (trim != null){
-            Optional<RegistryKey<ArmorTrimMaterial>> armorTrimMaterialRegistryKey = trim.getMaterial().getKey();
+            Optional<ResourceKey<ArmorTrimMaterial>> armorTrimMaterialRegistryKey = trim.getMaterial().getKey();
             if(armorTrimMaterialRegistryKey.isPresent()) {
-                RegistryKey<ArmorTrimMaterial> armorTrimMaterial = armorTrimMaterialRegistryKey.get();
+                ResourceKey<ArmorTrimMaterial> armorTrimMaterial = armorTrimMaterialRegistryKey.get();
                 if (!armorTrimMaterial.getValue().equals(MiddleEarth.of("bronze")) &&
                         !armorTrimMaterial.getValue().equals(MiddleEarth.of("crude")) &&
                         !armorTrimMaterial.getValue().equals(MiddleEarth.of("iron"))) {

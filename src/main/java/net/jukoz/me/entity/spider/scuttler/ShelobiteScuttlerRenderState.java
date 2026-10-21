@@ -1,12 +1,12 @@
 package net.jukoz.me.entity.spider.scuttler;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.jukoz.me.compat.client.render.state.LivingEntityRenderState;
 import net.minecraft.entity.AnimationState;
 import net.jukoz.me.entity.spider.SpiderVariant;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ShelobiteScuttlerRenderState extends LivingEntityRenderState {
 
     public final AnimationState idleAnimationState = new AnimationState();

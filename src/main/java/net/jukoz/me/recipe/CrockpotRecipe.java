@@ -2,25 +2,25 @@ package net.jukoz.me.recipe;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.recipe.*;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.block.special.forge.MultipleStackRecipeInput;
 
 import java.util.List;
 
 public class CrockpotRecipe implements Recipe<MultipleStackRecipeInput> {
-    public final Identifier id;
+    public final ResourceLocation id;
     public final int ingredientsAmount;
     public final List<Ingredient> inputs;
     public final ItemStack output;
 
-    public CrockpotRecipe(Identifier id, int ingredientsAmount, List<Ingredient> inputs, ItemStack output) {
+    public CrockpotRecipe(ResourceLocation id, int ingredientsAmount, List<Ingredient> inputs, ItemStack output) {
         this.id = id;
         this.ingredientsAmount = ingredientsAmount;
         this.inputs = inputs;
@@ -39,7 +39,7 @@ public class CrockpotRecipe implements Recipe<MultipleStackRecipeInput> {
     }
 
     @Override
-    public boolean matches(MultipleStackRecipeInput input, World world) {
+    public boolean matches(MultipleStackRecipeInput input, Level world) {
         if(world.isClient()) return false;
         int i = 0;
         for (int j = 0; j < input.size(); j++) {
@@ -71,7 +71,7 @@ public class CrockpotRecipe implements Recipe<MultipleStackRecipeInput> {
     }
 
     @Override
-    public Identifier getId() {
+    public ResourceLocation getId() {
         return id;
     }
 
@@ -96,7 +96,7 @@ public class CrockpotRecipe implements Recipe<MultipleStackRecipeInput> {
         public static final String ID = "crockpot";
 
         @Override
-        public CrockpotRecipe read(Identifier id, JsonObject json) {
+        public CrockpotRecipe read(ResourceLocation id, JsonObject json) {
             int ingredientsAmount = JsonHelper.getInt(json, "ingredients_amount");
             JsonArray ingredients = JsonHelper.getArray(json, "ingredients");
             DefaultedList<Ingredient> inputs = DefaultedList.ofSize(ingredients.size(), Ingredient.EMPTY);
@@ -111,7 +111,7 @@ public class CrockpotRecipe implements Recipe<MultipleStackRecipeInput> {
         }
 
         @Override
-        public CrockpotRecipe read(Identifier id, PacketByteBuf buf) {
+        public CrockpotRecipe read(ResourceLocation id, FriendlyByteBuf buf) {
             int ingredientsAmount = buf.readInt();
             DefaultedList<Ingredient> inputs = DefaultedList.ofSize(buf.readInt(), Ingredient.EMPTY);
             for (int i = 0; i < inputs.size(); i++) {
@@ -123,7 +123,7 @@ public class CrockpotRecipe implements Recipe<MultipleStackRecipeInput> {
         }
 
         @Override
-        public void write(PacketByteBuf buf, CrockpotRecipe recipe) {
+        public void write(FriendlyByteBuf buf, CrockpotRecipe recipe) {
             buf.writeInt(recipe.ingredientsAmount);
             buf.writeInt(recipe.inputs.size());
             for (Ingredient ingredient : recipe.inputs) {

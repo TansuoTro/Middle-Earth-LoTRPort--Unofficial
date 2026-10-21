@@ -9,18 +9,18 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import net.jukoz.me.world.features.tree.ModRootPlacerType;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Direction.Type;
-import net.minecraft.util.math.intprovider.IntProvider;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Plane;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.TestableWorld;
-import net.minecraft.world.gen.feature.TreeFeatureConfig;
-import net.minecraft.world.gen.root.AboveRootPlacement;
-import net.minecraft.world.gen.root.RootPlacer;
-import net.minecraft.world.gen.root.RootPlacerType;
-import net.minecraft.world.gen.stateprovider.BlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.TreeFeatureConfig;
+import net.minecraft.world.level.levelgen.feature.rootplacers.AboveRootPlacement;
+import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacer;
+import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacerType;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
 public class MirkwoodRootPlacer extends RootPlacer {
     public static final int field_38769 = 8;
@@ -37,7 +37,7 @@ public class MirkwoodRootPlacer extends RootPlacer {
         this.mirkwoodRootPlacement = mirkwoodRootPlacement;
     }
 
-    public boolean generate(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, Random random, BlockPos pos, BlockPos trunkPos, TreeFeatureConfig config) {
+    public boolean generate(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos pos, BlockPos trunkPos, TreeFeatureConfig config) {
         List<BlockPos> list = Lists.newArrayList();
         BlockPos.Mutable mutable = pos.mutableCopy();
 
@@ -74,7 +74,7 @@ public class MirkwoodRootPlacer extends RootPlacer {
         return true;
     }
 
-    private boolean canGrow(TestableWorld world, Random random, BlockPos pos, Direction direction, BlockPos origin, List<BlockPos> offshootPositions, int rootLength) {
+    private boolean canGrow(TestableWorld world, RandomSource random, BlockPos pos, Direction direction, BlockPos origin, List<BlockPos> offshootPositions, int rootLength) {
         int i = this.mirkwoodRootPlacement.maxRootLength();
         if (rootLength != i && offshootPositions.size() <= i) {
             List<BlockPos> list = this.getOffshootPositions(pos, direction, random, origin);
@@ -96,7 +96,7 @@ public class MirkwoodRootPlacer extends RootPlacer {
         }
     }
 
-    protected List<BlockPos> getOffshootPositions(BlockPos pos, Direction direction, Random random, BlockPos origin) {
+    protected List<BlockPos> getOffshootPositions(BlockPos pos, Direction direction, RandomSource random, BlockPos origin) {
         BlockPos blockPos = pos.down();
         BlockPos blockPos2 = pos.offset(direction);
         int i = pos.getManhattanDistance(origin);
@@ -119,7 +119,7 @@ public class MirkwoodRootPlacer extends RootPlacer {
         });
     }
 
-    protected void placeRoots(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, Random random, BlockPos pos, TreeFeatureConfig config) {
+    protected void placeRoots(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos pos, TreeFeatureConfig config) {
         if (world.testBlockState(pos, (state) -> {
             return state.isIn(this.mirkwoodRootPlacement.muddyRootsIn());
         })) {

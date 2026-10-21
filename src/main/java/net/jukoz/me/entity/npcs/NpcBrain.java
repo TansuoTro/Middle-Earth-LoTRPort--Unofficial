@@ -6,16 +6,16 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Range;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Dynamic;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.Activity;
-import net.minecraft.entity.ai.brain.Brain;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.schedule.Activity;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.entity.ai.brain.MemoryModuleState;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
-import net.minecraft.entity.ai.brain.sensor.Sensor;
-import net.minecraft.entity.ai.brain.sensor.SensorType;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.sensing.Sensor;
+import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.entity.ai.brain.task.*;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.GlobalPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.core.GlobalPos;
 import net.jukoz.me.api.entity.ai.brain.MemoryModulesAPI;
 import net.jukoz.me.entity.ai.brain.MemoryModulesME;
 import net.jukoz.me.entity.ai.brain.SensorsME;
@@ -131,7 +131,7 @@ public class NpcBrain {
         return npc.getBrain().getOptionalRegisteredMemory(MemoryModuleType.NEAREST_ATTACKABLE);
     }
 
-    private static boolean shouldForgetTarget(ServerWorld world, LivingEntity target, NpcEntity npc) {
+    private static boolean shouldForgetTarget(ServerLevel world, LivingEntity target, NpcEntity npc) {
         Optional<Boolean> defendingHome = npc.getBrain().getOptionalMemory(MemoryModulesAPI.DEFENDING_HOME);
         Optional<GlobalPos> home = npc.getBrain().getOptionalMemory(MemoryModuleType.HOME);
 

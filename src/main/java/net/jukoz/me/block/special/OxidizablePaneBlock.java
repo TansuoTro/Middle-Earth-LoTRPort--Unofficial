@@ -1,11 +1,11 @@
 package net.jukoz.me.block.special;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.block.Oxidizable;
 import net.minecraft.block.PaneBlock;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 
 public class OxidizablePaneBlock extends PaneBlock implements Oxidizable {
     private final OxidationLevel oxidationLevel;
@@ -15,7 +15,7 @@ public class OxidizablePaneBlock extends PaneBlock implements Oxidizable {
         this.oxidationLevel = oxidationLevel;
     }
 
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         this.tickDegradation(state, world, pos, random);
     }
 

@@ -1,7 +1,7 @@
 package net.jukoz.me.client.model.equipment.head.helmets.humans.gondor;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
+import net.minecraft.client.model.geom.PartNames;
 import net.jukoz.me.client.model.equipment.head.helmets.EggHelmetModel;
 
 public class CitadelGuardHelmetModel extends EggHelmetModel {
@@ -13,7 +13,7 @@ public class CitadelGuardHelmetModel extends EggHelmetModel {
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = getModelData();
         //+0.75
-        ModelPartData head = modelData.getRoot().addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData head = modelData.getRoot().addChild(PartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         head.addChild("side_left", ModelPartBuilder.create()
                 .uv(40, 32).cuboid(-0.5F, -9.75F, 0.284F, 6.0F, 15.0F, 0.0F, new Dilation(0.0F)),

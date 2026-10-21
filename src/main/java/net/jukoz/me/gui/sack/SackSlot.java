@@ -1,10 +1,10 @@
 package net.jukoz.me.gui.sack;
 
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.block.ShulkerBoxBlock;
-import net.minecraft.item.BlockItem;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.inventory.Slot;
 import net.jukoz.me.item.DecorativeItemsME;
 
 public class SackSlot extends Slot {

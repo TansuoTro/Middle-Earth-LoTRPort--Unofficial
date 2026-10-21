@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.jukoz.me.utils.resources.FileUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import org.joml.Vector2i;
 
 import java.awt.image.BufferedImage;
@@ -37,7 +37,7 @@ public class MiddleEarthMapUtils {
         maxImageCoordinateZ = (int) (initial.getHeight() * ratioZ);
     }
 
-    public List<ServerPlayerEntity> getPlayers() {
+    public List<ServerPlayer> getPlayers() {
         return server.getPlayerManager().getPlayerList();
     }
     public int getTick() {

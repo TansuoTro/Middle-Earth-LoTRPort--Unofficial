@@ -1,9 +1,9 @@
 package net.jukoz.me.client.model.hand.shields;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.util.math.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 public class KiteShieldEntityModel extends Model {
     private final ModelPart root;
@@ -46,7 +46,7 @@ public class KiteShieldEntityModel extends Model {
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay,
+    public void render(PoseStack matrices, VertexConsumer vertices, int light, int overlay,
                        float red, float green, float blue, float alpha) {
         this.root.render(matrices, vertices, light, overlay);
     }

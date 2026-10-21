@@ -1,7 +1,7 @@
 package net.jukoz.me.entity.beasts.broadhoof.features;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
+import net.minecraft.client.model.geom.PartNames;
 import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatEntity;
 import net.jukoz.me.entity.beasts.broadhoof.BroadhoofGoatModel;
 
@@ -14,13 +14,13 @@ public class BroadhoofGoatArmorModel extends BroadhoofGoatModel {
         super(root);
 
         this.broadhoofGoat = root.getChild("broadhoof_goat");
-        this.head = broadhoofGoat.getChild(EntityModelPartNames.BODY).getChild(EntityModelPartNames.HEAD);
+        this.head = broadhoofGoat.getChild(PartNames.BODY).getChild(PartNames.HEAD);
     }
 
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = getModelData();
-        ModelPartData root = modelData.getRoot().getChild("broadhoof_goat").getChild(EntityModelPartNames.BODY);
-        ModelPartData head = root.getChild(EntityModelPartNames.HEAD);
+        ModelPartData root = modelData.getRoot().getChild("broadhoof_goat").getChild(PartNames.BODY);
+        ModelPartData head = root.getChild(PartNames.HEAD);
 
         ModelPartData head_armor = head.addChild("head_armor", ModelPartBuilder.create().uv(0, 1).cuboid(0.9F, -11.0F, 2.0F, 3.0F, 2.0F, 1.0F, new Dilation(0.1F))
                 .uv(0, 1).mirrored().cuboid(-7.9F, -11.0F, 2.0F, 3.0F, 2.0F, 1.0F, new Dilation(0.1F)).mirrored(false), ModelTransform.pivot(2.0F, 0.0F, -8.0F));

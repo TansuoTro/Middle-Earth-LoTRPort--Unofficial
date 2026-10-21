@@ -1,12 +1,12 @@
 package net.jukoz.me.item.items;
 
 import net.jukoz.me.world.dimension.ModDimensions;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 public class StarlightPhialItem extends Item {
     public StarlightPhialItem(Settings settings) {
@@ -19,7 +19,7 @@ public class StarlightPhialItem extends Item {
      * vanilla interact packet ({@code use} runs there too) and without spending the item.
      */
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+    public TypedActionResult<ItemStack> use(Level world, Player user, InteractionHand hand) {
         if (!ModDimensions.isInMiddleEarth(world) && !world.isClient) {
             ModDimensions.teleportPlayerToME(user);
         }

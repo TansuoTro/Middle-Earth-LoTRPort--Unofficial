@@ -1,14 +1,14 @@
 package net.jukoz.me.compat.structure;
 
 import net.jukoz.me.block.registration.ModBlockEntities;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.loot.context.*;
 import net.minecraft.nbt.*;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sound.*;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
@@ -37,8 +37,8 @@ public class VaultBlockEntity extends BlockEntity {
         nbt.put("MERewardedPlayers", players);
     }
 
-    public boolean unlock(PlayerEntity player, Hand hand) {
-        if (!(world instanceof ServerWorld server) || player.isSpectator() || rewarded.contains(player.getUuid())) return false;
+    public boolean unlock(Player player, Hand hand) {
+        if (!(world instanceof ServerLevel server) || player.isSpectator() || rewarded.contains(player.getUuid())) return false;
         ItemStack key = ItemStack.fromNbt(config.getCompound("key_item"));
         ItemStack held = player.getStackInHand(hand);
         if (key.isEmpty() || !held.isOf(key.getItem()) || held.getCount() < key.getCount()) return false;

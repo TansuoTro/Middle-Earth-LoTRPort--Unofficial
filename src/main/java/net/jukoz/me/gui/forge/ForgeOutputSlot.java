@@ -1,17 +1,17 @@
 package net.jukoz.me.gui.forge;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.inventory.Slot;
 
 public class ForgeOutputSlot extends Slot {
-    private final PlayerEntity player;
+    private final Player player;
     private int amount;
 
     private final boolean isEnabled;
 
-    public ForgeOutputSlot(PlayerEntity player, Inventory inventory, int index, int x, int y, boolean isEnabled) {
+    public ForgeOutputSlot(Player player, Inventory inventory, int index, int x, int y, boolean isEnabled) {
         super(inventory, index, x, y);
         this.player = player;
         this.isEnabled = isEnabled;
@@ -31,7 +31,7 @@ public class ForgeOutputSlot extends Slot {
     }
 
     @Override
-    public void onTakeItem(PlayerEntity player, ItemStack stack) {
+    public void onTakeItem(Player player, ItemStack stack) {
         this.onCrafted(stack);
         super.onTakeItem(player, stack);
     }
@@ -48,7 +48,7 @@ public class ForgeOutputSlot extends Slot {
     }
 
     @Override
-    public boolean canTakeItems(PlayerEntity playerEntity) {
+    public boolean canTakeItems(Player playerEntity) {
         return isEnabled;
     }
 }

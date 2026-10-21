@@ -3,7 +3,7 @@ package net.jukoz.me.datageneration.content;
 import net.minecraft.data.client.Model;
 import net.minecraft.data.client.TextureKey;
 import net.jukoz.me.MiddleEarth;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Optional;
 
@@ -54,11 +54,11 @@ public class MEModels {
     public static final Model PATH_BLOCK;
 
     private static Model block(String parent, TextureKey... requiredTextureKeys) {
-        return new Model(Optional.of(new Identifier(MiddleEarth.MOD_ID, "block/" + parent)), Optional.empty(), requiredTextureKeys);
+        return new Model(Optional.of(new ResourceLocation(MiddleEarth.MOD_ID, "block/" + parent)), Optional.empty(), requiredTextureKeys);
     }
 
     private static Model block(String parent, String variant, TextureKey... requiredTextureKeys) {
-        return new Model(Optional.of(new Identifier(MiddleEarth.MOD_ID, "block/" + parent)), Optional.of(variant), requiredTextureKeys);
+        return new Model(Optional.of(new ResourceLocation(MiddleEarth.MOD_ID, "block/" + parent)), Optional.of(variant), requiredTextureKeys);
     }
 
     static {

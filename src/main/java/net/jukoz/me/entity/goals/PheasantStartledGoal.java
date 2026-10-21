@@ -2,25 +2,25 @@ package net.jukoz.me.entity.goals;
 
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.pheasant.PheasantEntity;
-import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.entity.ai.NoPenaltyTargeting;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.ai.pathing.Path;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
 public class PheasantStartledGoal extends Goal {
     PheasantEntity pheasant;
-    PlayerEntity player;
-    Vec3d vec3d = Vec3d.ZERO;
-    Vec3d fleeDir;
+    Player player;
+    Vec3 vec3d = Vec3.ZERO;
+    Vec3 fleeDir;
     @Nullable
     Path fleePath;
     final EntityNavigation fleeingEntityNavigation;
@@ -52,8 +52,8 @@ public class PheasantStartledGoal extends Goal {
             return false;
         }
 
-        boolean wearingCloak =  player.getEquippedStack(EquipmentSlot.CHEST).isIn(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "cloaks")))
-                && player.getEquippedStack(EquipmentSlot.HEAD).isIn(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "cloaks")));
+        boolean wearingCloak =  player.getEquippedStack(EquipmentSlot.CHEST).isIn(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "cloaks")))
+                && player.getEquippedStack(EquipmentSlot.HEAD).isIn(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "cloaks")));
 
         return !(player == null || wearingCloak || player.isSneaking() || !pheasant.isOnGround());
     }

@@ -1,26 +1,26 @@
 package net.jukoz.me.world.spawners;
 
 import net.jukoz.me.entity.NpcEntity;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.EntityData;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.Heightmap;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.core.Vec3i;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.spawner.Spawner;
 
 import java.util.ArrayList;
@@ -36,8 +36,8 @@ public class SpawnerNPCs implements Spawner {
     private int cooldown = BASE_COOLDOWN + COOLDOWN_RANGE;
 
     @Override
-    public int spawn(ServerWorld world, boolean spawnMonsters, boolean spawnAnimals) {
-        Random random = world.random;
+    public int spawn(ServerLevel world, boolean spawnMonsters, boolean spawnAnimals) {
+        RandomSource random = world.random;
         --this.cooldown;
         if (this.cooldown > 0) {
             return 0;
@@ -45,16 +45,16 @@ public class SpawnerNPCs implements Spawner {
         this.cooldown += (BASE_COOLDOWN + random.nextInt(COOLDOWN_RANGE)) * 20;
 
         int i = 0;
-        for (PlayerEntity playerEntity : world.getPlayers()) {
+        for (Player playerEntity : world.getPlayers()) {
             BlockState blockState;
             if (playerEntity.isSpectator()) continue;
             BlockPos blockPos = playerEntity.getBlockPos();
             BlockPos targetBlockPos = new BlockPos(blockPos);
             LocalDifficulty localDifficulty = world.getLocalDifficulty(blockPos);
 
-            Vec3d offset = new Vec3d(MAX_SPAWN_RAD, 0, MAX_SPAWN_RAD);
-            Vec3d pos1 = blockPos.toCenterPos().add(offset).add(0, 321 - playerEntity.getPos().y, 0);
-            Vec3d pos2 = blockPos.toCenterPos().subtract(offset).add(0, -63 - playerEntity.getPos().y, 0);
+            Vec3 offset = new Vec3(MAX_SPAWN_RAD, 0, MAX_SPAWN_RAD);
+            Vec3 pos1 = blockPos.toCenterPos().add(offset).add(0, 321 - playerEntity.getPos().y, 0);
+            Vec3 pos2 = blockPos.toCenterPos().subtract(offset).add(0, -63 - playerEntity.getPos().y, 0);
             int size = world.getEntitiesByClass(NpcEntity.class, new Box(pos1, pos2), (entity) -> true).size();
             if(size <= SPAWN_COUNT_CAP) {
                 float randomAngle = random.nextInt(360);
@@ -65,7 +65,7 @@ public class SpawnerNPCs implements Spawner {
                 targetBlockPos = new BlockPos(x, 1 + getHighestYAtXZ(world, x, z), z);
 
                 if(world.getBiome(targetBlockPos).getKey().isEmpty()) continue;
-                RegistryKey<Biome> biomeRegistryKey = world.getBiome(targetBlockPos).getKey().get();
+                ResourceKey<Biome> biomeRegistryKey = world.getBiome(targetBlockPos).getKey().get();
 
                 EntityData entityData = null;
                 List<EntitySpawningSettings> biomeSpawnSettings = ModEntitySpawning.getSpawnsAt(biomeRegistryKey);
@@ -109,11 +109,11 @@ public class SpawnerNPCs implements Spawner {
         return i;
     }
 
-    public static int getHighestYAtXZ(World world, int x, int z) {
+    public static int getHighestYAtXZ(Level world, int x, int z) {
         return world.getChunk(new BlockPos(x, 0, z)).sampleHeightmap(Heightmap.Type.MOTION_BLOCKING, x, z);
     }
 
-    private static boolean canSpawnAt(BlockView world, BlockPos pos, EntityType type, BlockState blockState) {
+    private static boolean canSpawnAt(BlockGetter world, BlockPos pos, EntityType type, BlockState blockState) {
         if(!blockState.allowsSpawning(world, pos, type)) return false;
         return (!blockState.isOf(Blocks.WATER) && !blockState.isOf(Blocks.LAVA) && !blockState.isIn(BlockTags.LOGS));
     }

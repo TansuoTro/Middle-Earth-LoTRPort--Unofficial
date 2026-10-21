@@ -4,14 +4,14 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.block.registration.StoneBlockSets;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 
 
@@ -27,7 +27,7 @@ public class BigBoulderFeature extends Feature<BigBoulderFeatureConfig> {
     public boolean generate(FeatureContext<BigBoulderFeatureConfig> context) {
         BlockPos blockPos = context.getOrigin();
         StructureWorldAccess structureWorldAccess = context.getWorld();
-        Random random = context.getRandom();
+        RandomSource random = context.getRandom();
 
         BlockState underBlock = structureWorldAccess.getBlockState(blockPos.down());
         if(underBlock.isIn(BlockTags.LEAVES) || CANNOT_PLACE_ON_BLOCKS.contains(underBlock.getBlock())) {
@@ -61,7 +61,7 @@ public class BigBoulderFeature extends Feature<BigBoulderFeatureConfig> {
         return true;
     }
 
-    private boolean isPointInside(int x, int y, int z, float length, float width, float baseHeight, float angle, float randomNoise, Random random) {
+    private boolean isPointInside(int x, int y, int z, float length, float width, float baseHeight, float angle, float randomNoise, RandomSource random) {
         float randomness = -randomNoise + (random.nextFloat() * randomNoise * 2);
 
         float squareLength = (length + randomness) * (length + randomness);

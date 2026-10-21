@@ -4,11 +4,11 @@ import net.jukoz.me.compat.client.render.MEMobEntityRenderer;
 
 
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.model.EntityModelLayer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.entity.EntityModelLayersME;
 import net.jukoz.me.entity.spider.scuttler.ShelobiteScuttlerRenderState;
 
@@ -30,7 +30,7 @@ public class ShelobiteLarvaRenderer extends MEMobEntityRenderer<ShelobiteLarvaEn
 
 
     @Override
-    public Identifier getTexture(ShelobiteScuttlerRenderState state) {
+    public ResourceLocation getTexture(ShelobiteScuttlerRenderState state) {
         return state.spiderVariant.assetInfo().larva().texturePath();
     }
 
@@ -42,7 +42,7 @@ public class ShelobiteLarvaRenderer extends MEMobEntityRenderer<ShelobiteLarvaEn
     }
 
     @Override
-    public void render(ShelobiteScuttlerRenderState livingEntityRenderState, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
+    public void render(ShelobiteScuttlerRenderState livingEntityRenderState, PoseStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
         super.render(livingEntityRenderState, matrixStack, vertexConsumerProvider, i);
     }
 }

@@ -3,7 +3,7 @@ package net.jukoz.me.block.special.structureManager.features;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
 import net.jukoz.me.api.utils.ModLogger;
@@ -15,7 +15,7 @@ import java.util.List;
 public class StructureNestList {
     ModLogger logger = MiddleEarth.LOGGER;
     public static final Codec<StructureNestList> CODEC;
-    public static final PacketCodec<net.minecraft.network.PacketByteBuf, StructureNestList> PACKET_CODEC;
+    public static final PacketCodec<net.minecraft.network.FriendlyByteBuf, StructureNestList> PACKET_CODEC;
     private static final String ID = "spawn_nest_list";
 
     private List<SpawnNestManager> managers;

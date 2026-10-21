@@ -1,8 +1,8 @@
 package net.jukoz.me.registries.content.npctypes.pools;
 
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.Items;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Items;
+import net.minecraft.resources.ResourceKey;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.item.EquipmentItemsME;
@@ -24,7 +24,7 @@ import net.jukoz.me.resources.datas.npc_types.data.WeightedItemData;
 import java.util.List;
 
 public class MoriaNpcTypePool {
-    private final static RegistryKey<Faction> FACTION = FactionRegistry.MORIA;
+    private final static ResourceKey<Faction> FACTION = FactionRegistry.MORIA;
 
     private static List<Integer> allColors;
     private static final int DARK_RED = 0x2e2624;

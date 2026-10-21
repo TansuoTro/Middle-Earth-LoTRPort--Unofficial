@@ -2,28 +2,28 @@ package net.jukoz.me.gui.inscriptiontable;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
-import net.minecraft.recipe.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.jukoz.me.compat.SingleStackRecipeInput;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Holder;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.tags.TagKey;
 import net.minecraft.screen.*;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.gui.ModScreenHandlers;
@@ -43,19 +43,19 @@ import net.jukoz.me.compat.MEEnchants;
 
 public class InscriptionTableScreenHandler extends ScreenHandler {
     private final ScreenHandlerContext context;
-    private final World world;
+    private final Level world;
     public List<InscriptionRecipe> outputRecipes;
-    public RegistryEntry<Enchantment> enchant;
+    public Holder<Enchantment> enchant;
     public int level;
     public final Inventory input;
 
-    public PlayerEntity player;
+    public Player player;
 
     private byte[] availableWords;
     public List<String> selectedWords;
     private final Property levelCost;
 
-    private static final Identifier EMPTY_SLOT_CHISEL_TEXTURE = MiddleEarth.of("container/slot/chisel");
+    private static final ResourceLocation EMPTY_SLOT_CHISEL_TEXTURE = MiddleEarth.of("container/slot/chisel");
 
     public InscriptionTableScreenHandler(int syncId, PlayerInventory playerInventory) {
         this(syncId, playerInventory, ScreenHandlerContext.EMPTY);
@@ -99,7 +99,7 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
                 return 1;
             }
 
-            public Pair<Identifier, Identifier> getBackgroundSprite() {
+            public Pair<ResourceLocation, ResourceLocation> getBackgroundSprite() {
                 return Pair.of(EMPTY_SLOT_CHISEL_TEXTURE, EMPTY_SLOT_CHISEL_TEXTURE);
             }
         });
@@ -107,8 +107,8 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
         this.addSlot(new Slot(this.input, 2, 180, 48){
             @Override
             public boolean canInsert(ItemStack stack) {
-                return (stack.isIn(TagKey.of(RegistryKeys.ITEM, new Identifier("minecraft", "enchantable/bow"))) ||
-                        stack.isIn(TagKey.of(RegistryKeys.ITEM, new Identifier("minecraft", "enchantable/crossbow")))
+                return (stack.isIn(TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "enchantable/bow"))) ||
+                        stack.isIn(TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "enchantable/crossbow")))
                         || stack.isEnchantable() || stack.hasEnchantments()) && !stack.isOf(Items.BOOK);
             }
         });
@@ -147,7 +147,7 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
         return this.hasGem() && this.hasChisel() && this.hasInput();
     }
 
-    public boolean canUse(PlayerEntity player) {
+    public boolean canUse(Player player) {
         return canUse(this.context, player, ModDecorativeBlocks.INSCRIPTION_TABLE);
     }
 
@@ -173,7 +173,7 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
 
     public void updateWords(boolean add, String word, boolean reset){
         boolean foundEnchant = false;
-        RegistryEntry<Enchantment> resultEnchant = null;
+        Holder<Enchantment> resultEnchant = null;
         int resultLevel = 0;
         int resultMaxLevel = 0;
         int resultLevelCost = 0;
@@ -257,7 +257,7 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
                 this.level = 0;
                 this.levelCost.set(0);
             }
-            ServerPlayNetworking.send((ServerPlayerEntity) player, newPacket);
+            ServerPlayNetworking.send((ServerPlayer) player, newPacket);
         }
     }
 
@@ -276,7 +276,7 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
         }
     }
 
-    private boolean canEnchant(ItemStack stack, RegistryEntry<Enchantment> enchant, int level) {
+    private boolean canEnchant(ItemStack stack, Holder<Enchantment> enchant, int level) {
         boolean acceptableItem = enchant.value().isAcceptableItem(stack);
         if (acceptableItem && EnchantmentHelper.isCompatible(MEEnchants.list(stack), enchant.value())){
             return EnchantmentHelper.getLevel(enchant.value(), stack) == level - 1;
@@ -325,7 +325,7 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
         updateWords(false, "", true);
     }
 
-    public void calculateCost(int levelCost, RegistryEntry<Enchantment> enchant) {
+    public void calculateCost(int levelCost, Holder<Enchantment> enchant) {
         ItemStack itemStack = this.input.getStack(2);
         int k = 0;
 
@@ -343,7 +343,7 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
         return ModScreenHandlers.INSCRIPTION_SCREEN_HANDLER;
     }
 
-    public ItemStack quickMove(PlayerEntity player, int slot) {
+    public ItemStack quickMove(Player player, int slot) {
         ItemStack stack = ItemStack.EMPTY;
         Slot invSlot = this.slots.get(slot);
 
@@ -370,7 +370,7 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
         return stack;
     }
 
-    public void onClosed(PlayerEntity player) {
+    public void onClosed(Player player) {
         super.onClosed(player);
         this.dropInventory(player, this.input);
     }

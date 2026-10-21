@@ -2,7 +2,7 @@ package net.jukoz.me.item.items;
 
 import net.jukoz.me.MiddleEarth;
 import net.minecraft.item.HorseArmorItem;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class TrollArmorItem extends HorseArmorItem {
 
@@ -15,7 +15,7 @@ public class TrollArmorItem extends HorseArmorItem {
         this.entityTexture = "textures/entity/troll/armor/troll_armor_" + name + ".png";
     }
 
-    public Identifier getEntityTexture() {
-        return new Identifier(MiddleEarth.MOD_ID ,this.entityTexture);
+    public ResourceLocation getEntityTexture() {
+        return new ResourceLocation(MiddleEarth.MOD_ID ,this.entityTexture);
     }
 }

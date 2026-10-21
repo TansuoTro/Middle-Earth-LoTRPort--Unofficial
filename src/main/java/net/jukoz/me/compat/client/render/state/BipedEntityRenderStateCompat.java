@@ -2,10 +2,10 @@ package net.jukoz.me.compat.client.render.state;
 
 import java.util.UUID;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.entity.EntityPose;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.EntityPose;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.Vec3;
 import net.jukoz.me.client.renderer.ArmedEntityRenderStateAccess;
 import net.jukoz.me.client.renderer.BipedEntityRenderStateAccess;
 
@@ -35,8 +35,8 @@ public class BipedEntityRenderStateCompat extends LivingEntityRenderStateCompat
     private ItemStack offHandStack = ItemStack.EMPTY;
     private boolean restrained;
     private float tickProgress;
-    private Vec3d velocity = Vec3d.ZERO;
-    private Vec3d previousVelocity = Vec3d.ZERO;
+    private Vec3 velocity = Vec3.ZERO;
+    private Vec3 previousVelocity = Vec3.ZERO;
 
     public boolean isInPose(EntityPose pose) {
         return this.pose == pose;
@@ -78,12 +78,12 @@ public class BipedEntityRenderStateCompat extends LivingEntityRenderStateCompat
     }
 
     @Override
-    public Vec3d getPreviousVelocity() {
+    public Vec3 getPreviousVelocity() {
         return this.previousVelocity;
     }
 
     @Override
-    public Vec3d getVelocity() {
+    public Vec3 getVelocity() {
         return this.velocity;
     }
 
@@ -93,12 +93,12 @@ public class BipedEntityRenderStateCompat extends LivingEntityRenderStateCompat
     }
 
     @Override
-    public void setPreviousVelocity(Vec3d velocity) {
+    public void setPreviousVelocity(Vec3 velocity) {
         this.previousVelocity = velocity;
     }
 
     @Override
-    public void setVelocity(Vec3d velocity) {
+    public void setVelocity(Vec3 velocity) {
         this.velocity = velocity;
     }
 }

@@ -1,9 +1,9 @@
 package net.jukoz.me.gui.alloyfurnace;
 
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.inventory.Slot;
 
 public class AlloyFurnaceFuelSlot extends Slot {
     private final AlloyFurnaceScreenHandler handler;

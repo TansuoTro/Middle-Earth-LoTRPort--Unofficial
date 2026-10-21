@@ -1,28 +1,28 @@
 package net.jukoz.me.block.special;
 
 import net.minecraft.block.*;
-import net.minecraft.block.enums.DoubleBlockHalf;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelView;
 
 
 public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements Fertilizable, Waterloggable {
-    public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private final boolean randomBoneMeal;
     public CustomWaterloggableTallPlantBlock(Settings settings, boolean random) {
@@ -51,7 +51,7 @@ public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements
     }
 
     @Override
-    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos fromPos, boolean notify) {
+    public void neighborUpdate(BlockState state, Level world, BlockPos pos, Block sourceBlock, BlockPos fromPos, boolean notify) {
         if (!world.isClient && state.get(HALF) == DoubleBlockHalf.UPPER && (
                 world.getBlockState(pos.up()).getFluidState().isOf(Fluids.WATER)
                         || world.getBlockState(pos.north()).getFluidState().isOf(Fluids.WATER)
@@ -65,10 +65,10 @@ public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
+    public BlockState getPlacementState(BlockPlaceContext ctx) {
         BlockPos blockPos = ctx.getBlockPos();
         BlockState blockState = ctx.getWorld().getBlockState(ctx.getBlockPos());
-        World world = ctx.getWorld();
+        Level world = ctx.getWorld();
         if(blockPos.getY() < world.getTopY() - 2 && world.getBlockState(blockPos.up()).canReplace(ctx)){
             if(blockState.isOf(Blocks.WATER)){
                 return this.getDefaultState().with(WATERLOGGED, true);
@@ -81,7 +81,7 @@ public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(HALF, WATERLOGGED);
     }
 
@@ -96,7 +96,7 @@ public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements
     }
 
     @Override
-    public boolean canFillWithFluid(BlockView world, BlockPos pos, BlockState state, Fluid fluid) {
+    public boolean canFillWithFluid(BlockGetter world, BlockPos pos, BlockState state, Fluid fluid) {
         if (fluid != Fluids.WATER) {
             return false;
         }
@@ -121,7 +121,7 @@ public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements
     }
 
     @Override
-    public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
+    public void onPlaced(Level world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
         world.setBlockState(pos.up(), state.with(HALF, DoubleBlockHalf.UPPER).with(WATERLOGGED, false), 3);
     }
 
@@ -130,11 +130,11 @@ public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements
         return true;
     }
 
-    public boolean canGrow(World world, Random random, BlockPos pos, BlockState state) {
+    public boolean canGrow(Level world, RandomSource random, BlockPos pos, BlockState state) {
         return true;
     }
 
-    public void grow(ServerWorld world, Random random, BlockPos pos, BlockState state) {
+    public void grow(ServerLevel world, RandomSource random, BlockPos pos, BlockState state) {
         if(this.randomBoneMeal) {
             float val = random.nextFloat();
             if(val > 0.90f){
@@ -151,7 +151,7 @@ public class CustomWaterloggableTallPlantBlock extends TallPlantBlock implements
             return;
         }
 
-        if (world instanceof World actualWorld && !actualWorld.isClient) {
+        if (world instanceof Level actualWorld && !actualWorld.isClient) {
             dropStacks(upperState, actualWorld, upperPos);
         }
 

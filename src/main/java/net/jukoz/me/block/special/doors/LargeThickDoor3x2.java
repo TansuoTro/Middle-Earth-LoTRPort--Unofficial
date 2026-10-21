@@ -1,21 +1,21 @@
 package net.jukoz.me.block.special.doors;
 
 import net.jukoz.me.block.special.LargeDoorBlock;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
 import net.jukoz.me.item.ResourceItemsME;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ShapeContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.block.enums.DoorHinge;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.state.property.IntProperty;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 
 public class LargeThickDoor3x2 extends LargeDoorBlock {
     public static final IntProperty PART = IntProperty.of("part", 0, 5);
@@ -38,16 +38,16 @@ public class LargeThickDoor3x2 extends LargeDoorBlock {
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if(state.get(PART) == 4 && player.getMainHandStack().getItem() == ResourceItemsME.DWARVEN_KEY){
             return super.onUse(state, world, pos, player, hand, hit);
         } else {
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         }
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         Direction direction = (Direction) state.get(HORIZONTAL_FACING);
         VoxelShape var10000 = null;
         if (state.get(HINGE) == DoorHinge.LEFT) {

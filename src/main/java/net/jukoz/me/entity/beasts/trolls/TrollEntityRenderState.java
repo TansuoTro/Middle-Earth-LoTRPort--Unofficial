@@ -1,11 +1,11 @@
 package net.jukoz.me.entity.beasts.trolls;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.jukoz.me.compat.client.render.state.LivingEntityRenderState;
 import net.minecraft.entity.AnimationState;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class TrollEntityRenderState extends LivingEntityRenderState {
     public AnimationState attackAnimationState = new AnimationState();
     public AnimationState chargeAnimationState = new AnimationState();

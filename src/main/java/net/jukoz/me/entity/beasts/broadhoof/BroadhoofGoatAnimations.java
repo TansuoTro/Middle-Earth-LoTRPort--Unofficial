@@ -1,7 +1,7 @@
 package net.jukoz.me.entity.beasts.broadhoof;
 
 import net.minecraft.client.render.entity.animation.*;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
+import net.minecraft.client.model.geom.PartNames;
 
 public class BroadhoofGoatAnimations {
     public static final Animation WALK = Animation.Builder.create(2f).looping()
@@ -251,7 +251,7 @@ public class BroadhoofGoatAnimations {
                     new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 1f, 0f),
                                     Transformation.Interpolations.CUBIC)))
-            .addBoneAnimation(EntityModelPartNames.BODY,
+            .addBoneAnimation(PartNames.BODY,
                     new Transformation(Transformation.Targets.ROTATE,
                             new Keyframe(0f, AnimationHelper.createRotationalVector(-5f, 0f, 0f),
                                     Transformation.Interpolations.CUBIC)))

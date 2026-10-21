@@ -2,11 +2,11 @@ package net.jukoz.me.world.features.columns;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.intprovider.IntProvider;
-import net.minecraft.world.gen.feature.FeatureConfig;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 
-public class CaveColumnFeatureConfig implements FeatureConfig {
+public class CaveColumnFeatureConfig implements FeatureConfiguration {
     public static final Codec<CaveColumnFeatureConfig> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     IntProvider.createValidatingCodec(0, 3).fieldOf("reach").forGetter(config -> config.reach),

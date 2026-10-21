@@ -1,7 +1,7 @@
 package net.jukoz.me.gui.forge;
 
-import net.minecraft.inventory.Inventory;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
 
 public class ForgeSlot extends Slot {
     private final int MAX_ITEM_COUNT;

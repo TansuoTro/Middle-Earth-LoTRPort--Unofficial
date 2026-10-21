@@ -1,6 +1,6 @@
 package net.jukoz.me.registries.content.biomevents.pools;
 
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.core.Vec3i;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.registries.content.npctypes.NpcRegistry;
 import net.jukoz.me.resources.datas.biome_events.BiomeEventData;

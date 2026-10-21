@@ -6,9 +6,9 @@ import net.jukoz.me.entity.ModEntities;
 import net.jukoz.me.item.utils.ModItemGroups;
 import net.jukoz.me.utils.LoggerUtil;
 import net.minecraft.item.*;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 
 public class ModEggItems {
 
@@ -130,7 +130,7 @@ public class ModEggItems {
     private static Item registerItem(String name, Item item) {
         ModItemGroups.SPAWN_EGGS_CONTENTS.add(item.getDefaultStack());
         SimpleSpawnEggItemModel.items.add(item);
-        return Registry.register(Registries.ITEM, new Identifier(MiddleEarth.MOD_ID, name), item);
+        return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);
     }
 
     public static void registerModItems() {

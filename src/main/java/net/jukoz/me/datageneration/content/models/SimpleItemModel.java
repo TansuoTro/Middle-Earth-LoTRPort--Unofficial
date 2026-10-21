@@ -1,6 +1,6 @@
 package net.jukoz.me.datageneration.content.models;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.item.DecorativeItemsME;

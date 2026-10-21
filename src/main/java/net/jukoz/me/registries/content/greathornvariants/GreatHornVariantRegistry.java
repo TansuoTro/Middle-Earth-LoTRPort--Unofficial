@@ -2,7 +2,7 @@ package net.jukoz.me.registries.content.greathornvariants;
 
 import net.jukoz.me.compat.spawn.SpawnConditionSelectors;
 import net.minecraft.registry.*;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.tags.TagKey;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.beasts.great_horn.GreatHornVariant;
 import net.jukoz.me.registries.DynamicRegistriesME;

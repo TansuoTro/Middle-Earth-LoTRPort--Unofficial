@@ -1,10 +1,10 @@
 package net.jukoz.me.mixin.client;
 
-import net.minecraft.client.model.ModelPart;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.item.DecorativeItemsME;
 import net.jukoz.me.item.WeaponItemsME;
 import net.jukoz.me.item.items.weapons.ReachWeaponItem;

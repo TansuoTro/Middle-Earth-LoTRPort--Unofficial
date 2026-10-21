@@ -1,16 +1,16 @@
 package net.jukoz.me.compat.client.render;
 
 import net.jukoz.me.compat.client.render.state.LivingEntityRenderStateCompat;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.world.entity.Mob;
 
 /**
  * R2 base for donor-style renderers that used 1.21.8's {@code AgeableMobEntityRenderer}
  * (an adult model plus a baby model selected from the render state). 1.20.1 has no such
  * vanilla class, so the selection lives here on top of {@link MEMobEntityRenderer}.
  */
-public abstract class MEMAgeableMobEntityRenderer<T extends MobEntity, S extends LivingEntityRenderStateCompat, M extends EntityModel<T>>
+public abstract class MEMAgeableMobEntityRenderer<T extends Mob, S extends LivingEntityRenderStateCompat, M extends EntityModel<T>>
         extends MEMobEntityRenderer<T, S, M> {
 
     private final M babyModel;

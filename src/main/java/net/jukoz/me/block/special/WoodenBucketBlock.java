@@ -1,38 +1,38 @@
 package net.jukoz.me.block.special;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.util.Hand;
+import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.InteractionHand;
 
 import net.minecraft.block.*;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelView;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import org.jetbrains.annotations.Nullable;
 
 public class WoodenBucketBlock extends Block implements Waterloggable {
-    private static final EnumProperty<Direction> HORIZONTAL_FACING= Properties.HORIZONTAL_FACING;
-    public static final BooleanProperty HANGING = Properties.HANGING;
-    public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+    private static final EnumProperty<Direction> HORIZONTAL_FACING= BlockStateProperties.HORIZONTAL_FACING;
+    public static final BooleanProperty HANGING = BlockStateProperties.HANGING;
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public WoodenBucketBlock(Settings settings) {
         super(settings);
@@ -40,7 +40,7 @@ public class WoodenBucketBlock extends Block implements Waterloggable {
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(HORIZONTAL_FACING, HANGING, WATERLOGGED);
     }
 
@@ -66,19 +66,19 @@ public class WoodenBucketBlock extends Block implements Waterloggable {
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (player.getStackInHand(player.getActiveHand()).isEmpty() && !player.isCreative()){
             world.setBlockState(pos, Blocks.AIR.getDefaultState());
             player.equipStack(EquipmentSlot.MAINHAND,  new ItemStack(ModDecorativeBlocks.WOODEN_BUCKET.asItem()));
             world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.BLOCKS, 0.5f, world.random.nextFloat() * 0.1f - 1.0f);
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         } else{
             return super.onUse(state, world, pos, player, hand, hit);
         }
     }
 
     @Nullable
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
+    public BlockState getPlacementState(BlockPlaceContext ctx) {
         Direction[] var3 = ctx.getPlacementDirections();
         int var4 = var3.length;
 
@@ -98,7 +98,7 @@ public class WoodenBucketBlock extends Block implements Waterloggable {
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
         if(state.get(HANGING)){
             return Block.createCuboidShape(4, 0, 4, 12, 16, 12);
         } else {

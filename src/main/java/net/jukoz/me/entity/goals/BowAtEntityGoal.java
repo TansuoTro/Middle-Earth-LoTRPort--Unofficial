@@ -1,15 +1,15 @@
 package net.jukoz.me.entity.goals;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.ai.TargetPredicate;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.predicate.entity.EntityPredicates;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
@@ -40,7 +40,7 @@ public class BowAtEntityGoal extends Goal {
 		this.navigation = mob.getNavigation();
 		this.targetSelector = targetSelector;
 		this.setControls(EnumSet.of(Control.LOOK));
-		if (targetType == PlayerEntity.class) {
+		if (targetType == Player.class) {
 			Predicate<Entity> predicate = EntityPredicates.rides(mob);
 			this.targetPredicate = TargetPredicate.createNonAttackable().setBaseMaxDistance((double)range).setPredicate(targetSelector);
 		} else {
@@ -53,10 +53,10 @@ public class BowAtEntityGoal extends Goal {
 			this.target = this.mob.getTarget();
 		}
 
-		if (!(this.mob.getWorld() instanceof ServerWorld serverWorld)) {
+		if (!(this.mob.getWorld() instanceof ServerLevel serverWorld)) {
 			return false;
 		}
-		if (this.targetType == PlayerEntity.class) {
+		if (this.targetType == Player.class) {
 			this.target = serverWorld.getClosestPlayer(this.targetPredicate, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
 		} else {
 			this.target = serverWorld.getClosestEntity(this.mob.getWorld().getEntitiesByClass(this.targetType, this.mob.getBoundingBox().expand((double)this.range, 3.0, (double)this.range), (livingEntity) -> {

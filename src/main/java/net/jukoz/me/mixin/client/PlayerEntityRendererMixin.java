@@ -4,8 +4,8 @@ import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.jukoz.me.compat.client.render.equipment.EquipmentRenderer;
 import net.jukoz.me.entity.spider.EnwebbedFeatureRenderer;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,7 +33,7 @@ public abstract class PlayerEntityRendererMixin
     }
 
     @Inject(method = "scale(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/client/util/math/MatrixStack;F)V", at = @At("HEAD"))
-    private void me$raceScale(AbstractClientPlayerEntity player, net.minecraft.client.util.math.MatrixStack matrices,
+    private void me$raceScale(AbstractClientPlayerEntity player, com.mojang.blaze3d.vertex.PoseStack matrices,
                               float tickDelta, CallbackInfo ci) {
         float scale = net.jukoz.me.entity.EntityAttributesME.scale(player);
         float width = (float) net.jukoz.me.entity.EntityAttributesME.value(player, net.jukoz.me.entity.EntityAttributesME.WIDTH_SCALE);

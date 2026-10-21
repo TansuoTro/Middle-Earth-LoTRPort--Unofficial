@@ -9,13 +9,13 @@ import net.jukoz.me.item.items.*;
 import net.jukoz.me.item.utils.ModBannerPatternTags;
 import net.jukoz.me.item.utils.ModItemGroups;
 import net.jukoz.me.utils.LoggerUtil;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.item.*;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Rarity;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Rarity;
 
 public class ModResourceItems {
     public static final Item MIDDLE_EARTH_MAP = ResourceItemsME.MIDDLE_EARTH_MAP;
@@ -157,10 +157,10 @@ public class ModResourceItems {
 
     public static Block registerBlock(String name, Block block, boolean absent) {
         if(!absent) registerBlockItem(name, block);
-        return Registry.register(Registries.BLOCK, new Identifier(MiddleEarth.MOD_ID, name), block);
+        return Registry.register(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, name), block);
     }
     static Item registerBlockItem(String name, Block block) {
-        var item =  Registry.register(Registries.ITEM, new Identifier(MiddleEarth.MOD_ID, name),
+        var item =  Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name),
                 new BlockItem(block, new FabricItemSettings()));
 
         Item.BLOCK_ITEMS.put(block, item);
@@ -170,7 +170,7 @@ public class ModResourceItems {
 
     private static Item registerItem(String name, Item item) {
         ModItemGroups.RESOURCES_CONTENTS.add(item.getDefaultStack());
-        return Registry.register(Registries.ITEM, new Identifier(MiddleEarth.MOD_ID, name), item);
+        return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);
     }
 
     public static void registerModItems() {

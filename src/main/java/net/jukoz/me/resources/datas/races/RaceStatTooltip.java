@@ -2,16 +2,16 @@ package net.jukoz.me.resources.datas.races;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.resources.StateSaverAndLoader;
 import net.jukoz.me.resources.datas.attributes.AttributeModifierElement;
@@ -31,7 +31,7 @@ public class RaceStatTooltip {
     private static final String listStart = "●";
     private static final String modifierSpacing = "   ";
 
-    private static List<Text> tooltipText;
+    private static List<Component> tooltipText;
 
     public static void draw(Race race, LivingEntity entity, DrawContext context, TextRenderer renderer, int x, int y, List<AttributePoolElement> playerAttributes, boolean detailed){
         tooltipText = new ArrayList<>();
@@ -39,7 +39,7 @@ public class RaceStatTooltip {
         addAttributeListHeader();
 
         boolean hasAttribute = false;
-        var registry = entity.getWorld().getRegistryManager().getOptional(RegistryKeys.ATTRIBUTE).get();
+        var registry = entity.getWorld().getRegistryManager().getOptional(Registries.ATTRIBUTE).get();
         List<AttributePoolElement> nextBoundAttributes = race.getBaseAttributePool().getPool();
         for (AttributePoolElement currentEntityAttribute : playerAttributes){
             hasAttribute = addAttributeLine(entity, registry, currentEntityAttribute, nextBoundAttributes, detailed) || hasAttribute;
@@ -56,16 +56,16 @@ public class RaceStatTooltip {
     }
 
     private static void addAttributeListHeader() {
-        tooltipText.add(Text.translatable(MiddleEarth.of("attribute_header").toTranslationKey("race_tooltip")).formatted(Formatting.GRAY));
+        tooltipText.add(Component.translatable(MiddleEarth.of("attribute_header").toTranslationKey("race_tooltip")).formatted(Formatting.GRAY));
     }
 
     private static void addNoAttributeChanges() {
-        tooltipText.add(Text.translatable(MiddleEarth.of("no_attribute_change").toTranslationKey("race_tooltip")).formatted(Formatting.DARK_GRAY));
+        tooltipText.add(Component.translatable(MiddleEarth.of("no_attribute_change").toTranslationKey("race_tooltip")).formatted(Formatting.DARK_GRAY));
     }
 
     private static boolean addAttributeLine(LivingEntity entity, Registry<EntityAttribute> registry, AttributePoolElement currentEntityAttribute, List<AttributePoolElement> nextBoundAttributes, boolean detailed) {
-        Identifier attributeId = currentEntityAttribute.getIdentifier();
-        boolean buffIsReversed = registry.getEntry(net.minecraft.registry.RegistryKey.of(net.minecraft.registry.RegistryKeys.ATTRIBUTE, attributeId)).get().isIn(TagKey.of(RegistryKeys.ATTRIBUTE, MiddleEarth.of("is_buff_reversed")));
+        ResourceLocation attributeId = currentEntityAttribute.getIdentifier();
+        boolean buffIsReversed = registry.getEntry(net.minecraft.resources.ResourceKey.of(net.minecraft.core.registries.Registries.ATTRIBUTE, attributeId)).get().isIn(TagKey.of(Registries.ATTRIBUTE, MiddleEarth.of("is_buff_reversed")));
 
         AttributePoolElement nextAttribute = nextBoundAttributes.stream().filter(attribute -> attributeId.equals(attribute.getIdentifier())).findFirst().orElse(null);
 
@@ -75,7 +75,7 @@ public class RaceStatTooltip {
         double expectedNextValue = nextAttribute == null ? defaultValue : nextAttribute.getValue();
 
         // Compare modifiers
-        List<Text> modifierTexts = new ArrayList<>();
+        List<Component> modifierTexts = new ArrayList<>();
 
         List<AttributeModifierElement> currentModifiers = filterAttributeModifiers(currentEntityAttribute);
         List<AttributeModifierElement> nextBoundModifiers = filterAttributeModifiers(nextAttribute);
@@ -142,37 +142,37 @@ public class RaceStatTooltip {
                     formatting = Formatting.RED;
                 }
 
-                MutableText modifierLine = Text.literal(modifierSpacing + listStart).formatted(Formatting.GOLD);
-                modifierLine.append(Text.literal(" " + sign + " ").formatted(formatting));
-                modifierLine.append(Text.translatable("attribute.modifiers." + modifiedModifier.getIdentifier().getPath()).formatted(Formatting.GRAY));
-                modifierLine.append(Text.literal(" ["+ modifiedModifier.getValue() + " " + continuationSign + " " + nextModifier.getValue() + "] ").formatted(Formatting.WHITE));
+                MutableComponent modifierLine = Component.literal(modifierSpacing + listStart).formatted(Formatting.GOLD);
+                modifierLine.append(Component.literal(" " + sign + " ").formatted(formatting));
+                modifierLine.append(Component.translatable("attribute.modifiers." + modifiedModifier.getIdentifier().getPath()).formatted(Formatting.GRAY));
+                modifierLine.append(Component.literal(" ["+ modifiedModifier.getValue() + " " + continuationSign + " " + nextModifier.getValue() + "] ").formatted(Formatting.WHITE));
                 double difference = nextModifier.getValue() - modifiedModifier.getValue();
                 String differencePrefix = (difference > 0) ? "+" : "";
-                modifierLine.append(Text.literal("(" + differencePrefix + round(difference) + ")").formatted(Formatting.GRAY));
+                modifierLine.append(Component.literal("(" + differencePrefix + round(difference) + ")").formatted(Formatting.GRAY));
                 modifierTexts.add(modifierLine);
             }
 
             for (var addedModifier : addedModifiersList){
-                MutableText modifierLine = Text.literal(modifierSpacing + listStart).formatted(Formatting.GOLD);
-                modifierLine.append(Text.literal(" " + additionSign + " ").formatted(Formatting.GREEN));
-                modifierLine.append(Text.translatable("attribute.modifiers." + addedModifier.getIdentifier().getPath()).formatted(Formatting.GRAY));
-                modifierLine.append(Text.literal(" ["+ addedModifier.getValue() + "] ").formatted(Formatting.WHITE));
+                MutableComponent modifierLine = Component.literal(modifierSpacing + listStart).formatted(Formatting.GOLD);
+                modifierLine.append(Component.literal(" " + additionSign + " ").formatted(Formatting.GREEN));
+                modifierLine.append(Component.translatable("attribute.modifiers." + addedModifier.getIdentifier().getPath()).formatted(Formatting.GRAY));
+                modifierLine.append(Component.literal(" ["+ addedModifier.getValue() + "] ").formatted(Formatting.WHITE));
                 modifierTexts.add(modifierLine);
             }
 
             for (var unchangedModifier : unchangedModifierList){
-                MutableText modifierLine = Text.literal(modifierSpacing + listStart).formatted(Formatting.GOLD);
-                modifierLine.append(Text.literal(" " + equalSign + " ").formatted(Formatting.GRAY));
-                modifierLine.append(Text.translatable("attribute.modifiers." + unchangedModifier.getIdentifier().getPath()).formatted(Formatting.GRAY));
-                modifierLine.append(Text.literal(" ["+ unchangedModifier.getValue() + " " + continuationSign + " " + unchangedModifier.getValue() + "] ").formatted(Formatting.WHITE));
+                MutableComponent modifierLine = Component.literal(modifierSpacing + listStart).formatted(Formatting.GOLD);
+                modifierLine.append(Component.literal(" " + equalSign + " ").formatted(Formatting.GRAY));
+                modifierLine.append(Component.translatable("attribute.modifiers." + unchangedModifier.getIdentifier().getPath()).formatted(Formatting.GRAY));
+                modifierLine.append(Component.literal(" ["+ unchangedModifier.getValue() + " " + continuationSign + " " + unchangedModifier.getValue() + "] ").formatted(Formatting.WHITE));
                 modifierTexts.add(modifierLine);
             }
 
             for (var removedModifier : removedModifiersList){
-                MutableText modifierLine = Text.literal(modifierSpacing + listStart).formatted(Formatting.GOLD);
-                modifierLine.append(Text.literal(" " + removedSign + " ").formatted(Formatting.DARK_GRAY));
-                modifierLine.append(Text.translatable("attribute.modifiers." + removedModifier.getIdentifier().getPath()).formatted(Formatting.DARK_GRAY));
-                modifierLine.append(Text.literal(" ["+ removedModifier.getValue() + "] ").formatted(Formatting.WHITE));
+                MutableComponent modifierLine = Component.literal(modifierSpacing + listStart).formatted(Formatting.GOLD);
+                modifierLine.append(Component.literal(" " + removedSign + " ").formatted(Formatting.DARK_GRAY));
+                modifierLine.append(Component.translatable("attribute.modifiers." + removedModifier.getIdentifier().getPath()).formatted(Formatting.DARK_GRAY));
+                modifierLine.append(Component.literal(" ["+ removedModifier.getValue() + "] ").formatted(Formatting.WHITE));
                 modifierTexts.add(modifierLine);
             }
         }
@@ -240,30 +240,30 @@ public class RaceStatTooltip {
             }
         }
 
-        MutableText newCustomLine = Text.literal(sign).formatted(signFormatting);
-        newCustomLine.append(Text.literal(" "));
-        newCustomLine.append(Text.translatable("attribute.name." + attributeId.getPath()).formatted(textFormatting));
+        MutableComponent newCustomLine = Component.literal(sign).formatted(signFormatting);
+        newCustomLine.append(Component.literal(" "));
+        newCustomLine.append(Component.translatable("attribute.name." + attributeId.getPath()).formatted(textFormatting));
         if(!modifierTexts.isEmpty()){
-            newCustomLine.append(Text.literal("*").formatted(Formatting.GOLD));
+            newCustomLine.append(Component.literal("*").formatted(Formatting.GOLD));
         }
         if(!detailed){
             tooltipText.add(newCustomLine);
         } else {
             double difference;
             if(nextAttribute == null){
-                newCustomLine.append(Text.literal(" "));
-                newCustomLine.append(Text.literal("["+ currentValue +" " + continuationSign + " "+ defaultValue +"]").formatted(Formatting.WHITE));
+                newCustomLine.append(Component.literal(" "));
+                newCustomLine.append(Component.literal("["+ currentValue +" " + continuationSign + " "+ defaultValue +"]").formatted(Formatting.WHITE));
                 difference = defaultValue - currentValue;
             } else {
-                newCustomLine.append(Text.literal(" "));
+                newCustomLine.append(Component.literal(" "));
                 double newValue = round(expectedNextValue);
-                newCustomLine.append(Text.literal("[" + currentValue +" " + continuationSign + " "+ newValue +"]").formatted(Formatting.WHITE));
+                newCustomLine.append(Component.literal("[" + currentValue +" " + continuationSign + " "+ newValue +"]").formatted(Formatting.WHITE));
                 difference = newValue - currentValue;
             }
-            newCustomLine.append(Text.literal(" "));
+            newCustomLine.append(Component.literal(" "));
             String differencePrefix = (difference > 0) ? "+" : "";
 
-            newCustomLine.append(Text.literal("(" + differencePrefix + round(difference) + ")").formatted(Formatting.GRAY));
+            newCustomLine.append(Component.literal("(" + differencePrefix + round(difference) + ")").formatted(Formatting.GRAY));
 
             tooltipText.add(newCustomLine);
             tooltipText.addAll(modifierTexts);

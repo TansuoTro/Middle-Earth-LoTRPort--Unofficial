@@ -3,7 +3,7 @@ package net.jukoz.me.world.map;
 import net.jukoz.me.utils.LoggerUtil;
 import net.jukoz.me.world.biomes.surface.MEBiome;
 import net.jukoz.me.world.biomes.surface.MEBiomesData;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import org.joml.Vector2i;
 import java.awt.*;
 import java.util.*;
@@ -83,7 +83,7 @@ public class MiddleEarthMapRuntime {
         // Create purge array
         List<Vector2i> toPurge = new ArrayList<>();
         List<Vector2i> playerCoordinates = new ArrayList<>();
-        for(ServerPlayerEntity player : middleEarthMapUtils.getPlayers()){
+        for(ServerPlayer player : middleEarthMapUtils.getPlayers()){
             playerCoordinates.add(new Vector2i(player.getBlockX(), player.getBlockZ()));
         }
 

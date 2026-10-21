@@ -2,12 +2,12 @@ package net.jukoz.me.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerLevel;
 import net.jukoz.me.entity.npcs.NpcEntity;
 import net.jukoz.me.item.FoodItemsME;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +28,7 @@ public abstract class AbstractHorseEntityMixin {
     protected SimpleInventory items;
 
     @Shadow
-    protected abstract void dropInventory(ServerWorld world);
+    protected abstract void dropInventory(ServerLevel world);
 
     @WrapOperation(method = "receiveFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z", ordinal = 3))
     private boolean receiveFoodLettuce(ItemStack instance, Item item, Operation<Boolean> original) {
@@ -41,7 +41,7 @@ public abstract class AbstractHorseEntityMixin {
     }
 
     @Inject(at = @At("HEAD"), method = "dropInventory", cancellable = true)
-    protected void dropInventory(ServerWorld world, CallbackInfo ci) {
+    protected void dropInventory(ServerLevel world, CallbackInfo ci) {
         if(getControllingPassenger() != null && getControllingPassenger() instanceof NpcEntity){
             this.items.clear();
             ci.cancel();

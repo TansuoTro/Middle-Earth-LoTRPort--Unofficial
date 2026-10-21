@@ -1,11 +1,11 @@
 package net.jukoz.me.item.items.weapons.artefacts;
 import net.jukoz.me.entity.EntityAttributesME;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
 
 public class MorgulKnifeItem extends ArtefactCustomDaggerWeaponItem {

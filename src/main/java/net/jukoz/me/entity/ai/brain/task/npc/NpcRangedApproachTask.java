@@ -1,23 +1,23 @@
 package net.jukoz.me.entity.ai.brain.task.npc;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.EntityLookTarget;
 import net.minecraft.entity.ai.brain.LivingTargetCache;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
-import net.minecraft.entity.ai.brain.WalkTarget;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.WalkTarget;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.entity.ai.brain.task.TaskTriggerer;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.entity.Mob;
 
 import java.util.Optional;
 import java.util.function.Function;
 
 public class NpcRangedApproachTask {
-    public static Task<MobEntity> create(float speed, int distance) {
+    public static Task<Mob> create(float speed, int distance) {
         return create((entity) -> speed, (entity) -> distance);
     }
 
-    public static Task<MobEntity> create(Function<LivingEntity, Float> speed, Function<LivingEntity, Integer> distance) {
+    public static Task<Mob> create(Function<LivingEntity, Float> speed, Function<LivingEntity, Integer> distance) {
         return TaskTriggerer.task((context) -> context.group(
                     context.queryMemoryOptional(MemoryModuleType.WALK_TARGET),
                     context.queryMemoryOptional(MemoryModuleType.LOOK_TARGET),

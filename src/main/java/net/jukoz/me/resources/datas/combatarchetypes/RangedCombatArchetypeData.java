@@ -1,8 +1,8 @@
 package net.jukoz.me.resources.datas.combatarchetypes;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
 import net.jukoz.me.resources.datas.combatarchetypes.data.CombatArchetype;
 
 public class RangedCombatArchetypeData extends CombatArchetypeData {
@@ -21,7 +21,7 @@ public class RangedCombatArchetypeData extends CombatArchetypeData {
         this.replenishmentDelayAfterShooting = replenishmentDelayAfterShooting;
     }
 
-    public RangedCombatArchetypeData(NbtCompound data) {
+    public RangedCombatArchetypeData(CompoundTag data) {
         super(data);
         this.precisionModifier = data.getFloat("precision_modifier");
         this.ammoCountMax = data.getInt("ammo_count_max");
@@ -36,8 +36,8 @@ public class RangedCombatArchetypeData extends CombatArchetypeData {
     };
 
     @Override
-    protected NbtCompound getDataNbt() {
-        NbtCompound nbt = super.getDataNbt();
+    protected CompoundTag getDataNbt() {
+        CompoundTag nbt = super.getDataNbt();
         nbt.putFloat("precision_modifier", this.precisionModifier);
         nbt.putInt("ammo_count_max", this.ammoCountMax);
         nbt.putInt("replenishment_rate", this.replenishmentRateInTicks);

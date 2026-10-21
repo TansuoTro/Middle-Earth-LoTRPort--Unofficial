@@ -1,19 +1,19 @@
 package net.jukoz.me.item.items.weapons.artefacts;
 import net.jukoz.me.entity.EntityAttributesME;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.compat.BluntWeapon;
 import net.minecraft.item.ToolMaterial;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.item.items.weapons.CustomDaggerWeaponItem;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,13 +26,13 @@ public class ArtefactCustomGlowingDaggerWeaponItem extends CustomDaggerWeaponIte
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, net.minecraft.world.World world, Entity entity, int slot, boolean selected) {
+    public void inventoryTick(ItemStack stack, net.minecraft.world.level.Level world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, world, entity, slot, selected);
         ArtefactCustomGlowingDaggerWeaponItem item = (ArtefactCustomGlowingDaggerWeaponItem) stack.getItem();
         item.glowing = shouldBeGlowing(world, entity);
     }
 
-    public static boolean shouldBeGlowing(World world, Entity entity){
+    public static boolean shouldBeGlowing(Level world, Entity entity){
         int range = 50;
         if (entity != null){
             /*return ArtefactUtils.isInBound(world, entity, OrcNpcEntity.class, range)
@@ -67,7 +67,7 @@ public class ArtefactCustomGlowingDaggerWeaponItem extends CustomDaggerWeaponIte
     }
 
     @Override
-    public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
+    public boolean postMine(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity miner) {
         if (!world.isClient && state.getHardness(world, pos) != 0.0F) {
             if (stack.getDamage() == stack.getMaxDamage() - 1) {
                 BluntWeapon.blunt(stack);

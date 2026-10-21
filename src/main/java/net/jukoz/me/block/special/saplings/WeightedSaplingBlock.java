@@ -1,14 +1,14 @@
 package net.jukoz.me.block.special.saplings;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SaplingBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.block.sapling.SaplingGenerator;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class WeightedSaplingBlock extends SaplingBlock {
     }
 
     @Override
-    public void generate(ServerWorld world, BlockPos pos, BlockState state, Random random) {
+    public void generate(ServerLevel world, BlockPos pos, BlockState state, RandomSource random) {
         if (state.get(STAGE) == 0) {
             world.setBlockState(pos, (BlockState)state.cycle(STAGE), Block.NO_REDRAW);
         } else {
@@ -49,12 +49,12 @@ public class WeightedSaplingBlock extends SaplingBlock {
             this.saplingGenerator = saplingGenerator;
             this.weight = weight;
         }
-        public WeightedTree(RegistryKey<ConfiguredFeature<?, ?>> saplingGenerator, int weight, String name) {
+        public WeightedTree(ResourceKey<ConfiguredFeature<?, ?>> saplingGenerator, int weight, String name) {
             // 1.20.1 SaplingGenerator has only the no-arg constructor; the tree key is
             // returned from getTreeFeature instead of being passed through the ctor.
             this.saplingGenerator = new SaplingGenerator() {
                 @Override
-                protected RegistryKey<ConfiguredFeature<?, ?>> getTreeFeature(Random random, boolean large) {
+                protected ResourceKey<ConfiguredFeature<?, ?>> getTreeFeature(RandomSource random, boolean large) {
                     return saplingGenerator;
                 }
             };

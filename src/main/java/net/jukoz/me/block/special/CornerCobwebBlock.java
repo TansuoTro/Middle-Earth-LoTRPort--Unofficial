@@ -1,26 +1,26 @@
 package net.jukoz.me.block.special;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.block.CobwebBlock;
 import net.minecraft.block.enums.BlockHalf;
-import net.minecraft.entity.Entity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
-import net.minecraft.state.property.Properties;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelView;
 import org.jetbrains.annotations.Nullable;
 
 public class CornerCobwebBlock extends CobwebBlock {
@@ -32,13 +32,13 @@ public class CornerCobwebBlock extends CobwebBlock {
         this.setDefaultState(this.getDefaultState().with(HANGING, false).with(FACING, Direction.EAST));
     }
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add (HANGING).add(FACING);
         super.appendProperties(builder);
     }
 
     @Nullable
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
+    public BlockState getPlacementState(BlockPlaceContext ctx) {
         Direction direction = ctx.getSide();
         BlockPos blockPos = ctx.getBlockPos();
         return this.getDefaultState()
@@ -81,7 +81,7 @@ public class CornerCobwebBlock extends CobwebBlock {
     }
 
     static {
-        HANGING = Properties.HANGING;
-        FACING = Properties.HORIZONTAL_FACING;
+        HANGING = BlockStateProperties.HANGING;
+        FACING = BlockStateProperties.HORIZONTAL_FACING;
     }
 }

@@ -3,20 +3,20 @@ package net.jukoz.me.block.special.crockpot;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 
 public class CrockpotScreen extends HandledScreen<CrockpotScreenHandler> {
-    private static final Identifier WATER_TEXTURE = new Identifier("minecraft", "textures/block/water_still.png");
-    private static final Identifier TEXTURE = MiddleEarth.ofPath( "textures", "gui", "crockpot.png");
-    private static final Identifier BUBBLES_TEXTURE = new Identifier("minecraft", "container/brewing_stand/bubbles");
+    private static final ResourceLocation WATER_TEXTURE = new ResourceLocation("minecraft", "textures/block/water_still.png");
+    private static final ResourceLocation TEXTURE = MiddleEarth.ofPath( "textures", "gui", "crockpot.png");
+    private static final ResourceLocation BUBBLES_TEXTURE = new ResourceLocation("minecraft", "container/brewing_stand/bubbles");
     private static final int[] BUBBLE_PROGRESS = new int[]{29, 24, 20, 16, 11, 6, 0};
     private static final int LIQUID_SIZE = 24;
 
     private static final int PROGRESS_ARROW_SIZE = 24;
 
-    public CrockpotScreen(CrockpotScreenHandler handler, PlayerInventory inventory, Text title) {
+    public CrockpotScreen(CrockpotScreenHandler handler, PlayerInventory inventory, Component title) {
         super(handler, inventory, title);
     }
 

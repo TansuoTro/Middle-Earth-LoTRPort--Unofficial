@@ -3,28 +3,28 @@ package net.jukoz.me.recipe;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.recipe.*;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 public class AlloyRecipe implements Recipe<SimpleInventory> {
-    public final Identifier id;
+    public final ResourceLocation id;
     public final ItemStack output;
     public final DefaultedList<Ingredient> inputs;
 
-    public AlloyRecipe(Identifier id, ItemStack output, DefaultedList<Ingredient> recipeItems) {
+    public AlloyRecipe(ResourceLocation id, ItemStack output, DefaultedList<Ingredient> recipeItems) {
         this.id = id;
         this.output = output;
         this.inputs = recipeItems;
     }
 
     @Override
-    public boolean matches(SimpleInventory inventory, World world) {
+    public boolean matches(SimpleInventory inventory, Level world) {
         if(world.isClient()) return false;
         int i = 0;
         for (int j = 1; j < inventory.size() - 1; ++j) { // We avoid first and last indexes, because it's for fuel & output.
@@ -62,7 +62,7 @@ public class AlloyRecipe implements Recipe<SimpleInventory> {
     }
 
     @Override
-    public Identifier getId() {
+    public ResourceLocation getId() {
         return id;
     }
 
@@ -87,7 +87,7 @@ public class AlloyRecipe implements Recipe<SimpleInventory> {
         public static final String ID = "alloy_furnace";
 
         @Override
-        public AlloyRecipe read(Identifier id, JsonObject json) {
+        public AlloyRecipe read(ResourceLocation id, JsonObject json) {
             ItemStack output = ShapedRecipe.outputFromJson(JsonHelper.getObject(json, "output"));
             JsonArray ingredients = JsonHelper.getArray(json, "ingredients");
             DefaultedList<Ingredient> inputs = DefaultedList.ofSize(ingredients.size(), Ingredient.EMPTY);
@@ -101,7 +101,7 @@ public class AlloyRecipe implements Recipe<SimpleInventory> {
         }
 
         @Override
-        public AlloyRecipe read(Identifier id, PacketByteBuf buf) {
+        public AlloyRecipe read(ResourceLocation id, FriendlyByteBuf buf) {
             DefaultedList<Ingredient> inputs = DefaultedList.ofSize(buf.readInt(), Ingredient.EMPTY);
             for (int i = 0; i < inputs.size(); i++) {
                 inputs.set(i, Ingredient.fromPacket(buf));
@@ -112,7 +112,7 @@ public class AlloyRecipe implements Recipe<SimpleInventory> {
         }
 
         @Override
-        public void write(PacketByteBuf buf, AlloyRecipe recipe) {
+        public void write(FriendlyByteBuf buf, AlloyRecipe recipe) {
             buf.writeInt(recipe.getIngredients().size());
             for (Ingredient ingredient : recipe.getIngredients()) {
                 ingredient.write(buf);

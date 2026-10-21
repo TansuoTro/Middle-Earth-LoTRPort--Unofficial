@@ -11,13 +11,13 @@ import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import java.util.LinkedList;
 import java.util.List;
 
 public class AlloyFurnaceCategory implements DisplayCategory<BasicDisplay> {
-    public static final Identifier TEXTURE = new Identifier(MiddleEarth.MOD_ID, "textures/gui/alloy_furnace_rei.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(MiddleEarth.MOD_ID, "textures/gui/alloy_furnace_rei.png");
     public static final CategoryIdentifier<AlloyFurnaceDisplay> ALLOY_FURNACE = CategoryIdentifier.of(MiddleEarth.MOD_ID, "alloy_furnace");
 
     @Override
@@ -26,8 +26,8 @@ public class AlloyFurnaceCategory implements DisplayCategory<BasicDisplay> {
     }
 
     @Override
-    public Text getTitle() {
-        return Text.translatable("screen." + MiddleEarth.MOD_ID + ".alloy_furnace");
+    public Component getTitle() {
+        return Component.translatable("screen." + MiddleEarth.MOD_ID + ".alloy_furnace");
     }
 
     @Override

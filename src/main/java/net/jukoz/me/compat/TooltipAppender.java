@@ -1,8 +1,8 @@
 package net.jukoz.me.compat;
 
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
@@ -15,10 +15,10 @@ import java.util.List;
  * {@code Item.TooltipContext}; 1.20.1's equivalent is {@link TooltipContext}.
  */
 public interface TooltipAppender {
-    void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip);
+    void appendTooltip(ItemStack stack, TooltipContext context, List<Component> tooltip);
 
-    default void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip,
-                               net.minecraft.world.World world) {
+    default void appendTooltip(ItemStack stack, TooltipContext context, List<Component> tooltip,
+                               net.minecraft.world.level.Level world) {
         appendTooltip(stack, context, tooltip);
     }
 }

@@ -1,11 +1,11 @@
 package net.jukoz.me.compat;
 
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArmorMaterial;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.item.Item;
-import net.minecraft.sound.SoundEvent;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.sounds.SoundEvent;
 
 import java.util.EnumMap;
 

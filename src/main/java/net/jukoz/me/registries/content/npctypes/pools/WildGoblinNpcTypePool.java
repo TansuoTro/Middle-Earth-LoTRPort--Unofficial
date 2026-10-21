@@ -1,10 +1,10 @@
 package net.jukoz.me.registries.content.npctypes.pools;
 import net.jukoz.me.compat.METext;
 
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.item.Items;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.Items;
+import net.minecraft.resources.ResourceKey;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.entity.EntitiesME;
@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class WildGoblinNpcTypePool {
-    private final static RegistryKey<Faction> FACTION = FactionRegistry.WILD_GOBLINS;
+    private final static ResourceKey<Faction> FACTION = FactionRegistry.WILD_GOBLINS;
     
     private static final int DARK_BROWN_GOBLIN = 0x4a3c34;
 
@@ -52,8 +52,8 @@ public class WildGoblinNpcTypePool {
 
     public static final HashMap<EntityCategories, AttributePool> TANKY_ATTRIBUTES = new HashMap<>(){{
         put(EntityCategories.SHARED, new AttributePool().addElements(List.of(
-            AttributePoolElement.create(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.35, 0.45),
-            AttributePoolElement.create(EntityAttributes.GENERIC_ARMOR, 5, 10)
+            AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.35, 0.45),
+            AttributePoolElement.create(Attributes.GENERIC_ARMOR, 5, 10)
         )));
     }};
 
@@ -156,9 +156,9 @@ public class WildGoblinNpcTypePool {
                         )
         ), new HashMap<>(){{
             put(EntityCategories.SHARED, new AttributePool().addElements(List.of(
-                    AttributePoolElement.create(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25, 0.30),
-                    AttributePoolElement.create(EntityAttributes.GENERIC_MAX_HEALTH, 22),
-                    AttributePoolElement.create(EntityAttributes.GENERIC_ARMOR, 5, 10)
+                    AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.25, 0.30),
+                    AttributePoolElement.create(Attributes.GENERIC_MAX_HEALTH, 22),
+                    AttributePoolElement.create(Attributes.GENERIC_ARMOR, 5, 10)
             )));
         }}, CombatArchetypePool.DEFAULT, new MountData(EntitiesME.CAVE_TROLL).withPassengerSlots(
                 new MountPassengerSlotData(new MountPassengerData(NpcRegistry.WILD_GOBLIN_SCOUT).withDiscardChance(0.25)),
@@ -233,10 +233,10 @@ public class WildGoblinNpcTypePool {
         ), new HashMap<>(){{
             put(EntityCategories.SHARED, new AttributePool().addElements(List.of(
                     AttributePoolElement.create(EntityAttributesME.SCALE, 0.85, 0.91),
-                    AttributePoolElement.create(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25, 0.30),
-                    AttributePoolElement.create(EntityAttributes.GENERIC_MAX_HEALTH, 28),
+                    AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.25, 0.30),
+                    AttributePoolElement.create(Attributes.GENERIC_MAX_HEALTH, 28),
                     AttributePoolElement.create(EntityAttributesME.WIDTH_SCALE, 1.0, 1.05),
-                    AttributePoolElement.create(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2).withModifier(MiddleEarth.of("brute_attack_damage_buff"), 1.35)
+                    AttributePoolElement.create(Attributes.GENERIC_ATTACK_DAMAGE, 2).withModifier(MiddleEarth.of("brute_attack_damage_buff"), 1.35)
                 )
             ));
         }}, CombatArchetypePool.DEFAULT, NpcLoot.FROM_13_TO_20);

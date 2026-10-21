@@ -11,28 +11,28 @@ import net.jukoz.me.entity.uruks.misties.MistyHobgoblinEntity;
 import net.jukoz.me.entity.uruks.mordor.MordorBlackUrukEntity;
 import net.jukoz.me.item.ModEquipmentItems;
 import net.jukoz.me.item.ModWeaponItems;
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.world.entity.EntityData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.item.DyeableItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 public class RohanHumanEntity extends NpcEntity {
-    public RohanHumanEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
+    public RohanHumanEntity(EntityType<? extends PathAwareEntity> entityType, Level world) {
         super(entityType, world);
         String name = this.getDefaultName().toString();
         if(name.contains("militia")){
@@ -52,44 +52,44 @@ public class RohanHumanEntity extends NpcEntity {
 
     @Nullable
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable CompoundTag entityNbt) {
         entityData = super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
-        Random random = world.getRandom();
+        RandomSource random = world.getRandom();
         this.initEquipment(random, difficulty);
         return entityData;
     }
 
     public static DefaultAttributeContainer.Builder setSoldierAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25f)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 20.0)
-                .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2.0)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2.0);
+        return Mob.createMobAttributes()
+                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25f)
+                .add(Attributes.GENERIC_MAX_HEALTH, 20.0)
+                .add(Attributes.GENERIC_ATTACK_SPEED, 2.0)
+                .add(Attributes.GENERIC_FOLLOW_RANGE, 32.0)
+                .add(Attributes.GENERIC_ATTACK_DAMAGE, 2.0);
     }
     public static DefaultAttributeContainer.Builder setKnightAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25f)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 22.0)
-                .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2.0)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2.5);
+        return Mob.createMobAttributes()
+                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25f)
+                .add(Attributes.GENERIC_MAX_HEALTH, 22.0)
+                .add(Attributes.GENERIC_ATTACK_SPEED, 2.0)
+                .add(Attributes.GENERIC_FOLLOW_RANGE, 32.0)
+                .add(Attributes.GENERIC_ATTACK_DAMAGE, 2.5);
     }
     public static DefaultAttributeContainer.Builder setVeteranAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25f)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 24.0)
-                .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2.0)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 3.0);
+        return Mob.createMobAttributes()
+                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25f)
+                .add(Attributes.GENERIC_MAX_HEALTH, 24.0)
+                .add(Attributes.GENERIC_ATTACK_SPEED, 2.0)
+                .add(Attributes.GENERIC_FOLLOW_RANGE, 32.0)
+                .add(Attributes.GENERIC_ATTACK_DAMAGE, 3.0);
     }
     public static DefaultAttributeContainer.Builder setLeaderAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25f)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 26.0)
-                .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2.0)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 3.5);
+        return Mob.createMobAttributes()
+                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25f)
+                .add(Attributes.GENERIC_MAX_HEALTH, 26.0)
+                .add(Attributes.GENERIC_ATTACK_SPEED, 2.0)
+                .add(Attributes.GENERIC_FOLLOW_RANGE, 32.0)
+                .add(Attributes.GENERIC_ATTACK_DAMAGE, 3.5);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class RohanHumanEntity extends NpcEntity {
     }
 
     @Override
-    protected void initEquipment(Random random, LocalDifficulty localDifficulty) {
+    protected void initEquipment(RandomSource random, LocalDifficulty localDifficulty) {
         super.initEquipment(random, localDifficulty);
         switch (this.getRank()){
             case MILITIA -> militiaEquipment(random);
@@ -118,7 +118,7 @@ public class RohanHumanEntity extends NpcEntity {
         }
     }
 
-    private void militiaEquipment(Random random){
+    private void militiaEquipment(RandomSource random){
         int[] colors = {
                 0x446635,
                 0x2b5e2c,
@@ -163,7 +163,7 @@ public class RohanHumanEntity extends NpcEntity {
         }
     }
 
-    private void soldierEquipment(Random random){
+    private void soldierEquipment(RandomSource random){
         int[] colors = {
                 0x2b5e2c
         };
@@ -197,7 +197,7 @@ public class RohanHumanEntity extends NpcEntity {
         }
     }
 
-    private void knightEquipment(Random random){
+    private void knightEquipment(RandomSource random){
         equipStack(EquipmentSlot.HEAD, new ItemStack(ModEquipmentItems.ROHIRRIC_SCALE_HELMET));
         equipStack(EquipmentSlot.CHEST, new ItemStack(ModEquipmentItems.ROHIRRIC_SCALE_CHESTPLATE));
         equipStack(EquipmentSlot.LEGS, new ItemStack(ModEquipmentItems.ROHIRRIC_SCALE_LEGGINGS));
@@ -215,7 +215,7 @@ public class RohanHumanEntity extends NpcEntity {
         }
     }
 
-    private void veteranEquipment(Random random){
+    private void veteranEquipment(RandomSource random){
         if(random.nextFloat() >= 0.10f) {
             equipStack(EquipmentSlot.HEAD, new ItemStack(ModEquipmentItems.ROHIRRIC_ROYAL_GUARD_HELMET));
             equipStack(EquipmentSlot.CHEST, new ItemStack(ModEquipmentItems.ROHIRRIC_ROYAL_GUARD_CHESTPLATE));
@@ -238,7 +238,7 @@ public class RohanHumanEntity extends NpcEntity {
         }
     }
 
-    private void leaderEquipment(Random random) {
+    private void leaderEquipment(RandomSource random) {
         equipStack(EquipmentSlot.HEAD, new ItemStack(ModEquipmentItems.HORSE_LORD_HELMET));
         equipStack(EquipmentSlot.CHEST, new ItemStack(ModEquipmentItems.HORSE_LORD_CHESTPLATE));
         equipStack(EquipmentSlot.LEGS, new ItemStack(ModEquipmentItems.HORSE_LORD_LEGGINGS));

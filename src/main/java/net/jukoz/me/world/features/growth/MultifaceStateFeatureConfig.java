@@ -4,24 +4,24 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.block.MultifaceGrowthBlock;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryCodecs;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.intprovider.IntProvider;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.gen.feature.FeatureConfig;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.RegistryCodecs;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.HolderList;
+import net.minecraft.Util;
+import net.minecraft.core.Direction;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.jukoz.me.world.features.columns.CaveColumnFeatureConfig;
 
 import java.util.List;
 
-public class MultifaceStateFeatureConfig implements FeatureConfig {
+public class MultifaceStateFeatureConfig implements FeatureConfiguration {
 	public final MultifaceGrowthBlock block;
 	public final int searchRange;
 	public final boolean placeOnFloor;
@@ -46,7 +46,7 @@ public class MultifaceStateFeatureConfig implements FeatureConfig {
 					Codec.BOOL.fieldOf("can_place_on_wall").orElse(false).forGetter(config -> config.placeOnWalls),
 					Codec.BOOL.fieldOf("persistent").orElse(false).forGetter(config -> config.persistent),
 					Codec.floatRange(0.0F, 1.0F).fieldOf("chance_of_spreading").orElse(0.5F).forGetter(config -> config.spreadChance),
-					RegistryCodecs.entryList(RegistryKeys.BLOCK).fieldOf("can_be_placed_on").forGetter(config -> config.canPlaceOn)
+					RegistryCodecs.entryList(Registries.BLOCK).fieldOf("can_be_placed_on").forGetter(config -> config.canPlaceOn)
 			).apply(instance, MultifaceStateFeatureConfig::new));
 
     public MultifaceStateFeatureConfig(Block block, int searchRange, boolean placeOnFloor, boolean placeOnCeiling,
@@ -79,11 +79,11 @@ public class MultifaceStateFeatureConfig implements FeatureConfig {
 			: DataResult.error(() -> "Growth block should be a multiface spreadeable block");
 	}
 
-	public List<Direction> shuffleDirections(Random random, Direction excluded) {
+	public List<Direction> shuffleDirections(RandomSource random, Direction excluded) {
 		return Util.copyShuffled(this.directions.stream().filter(direction -> direction != excluded), random);
 	}
 
-	public List<Direction> shuffleDirections(Random random) {
+	public List<Direction> shuffleDirections(RandomSource random) {
 		return Util.copyShuffled(this.directions, random);
 	}
 }

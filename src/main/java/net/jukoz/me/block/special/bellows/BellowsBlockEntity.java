@@ -1,28 +1,28 @@
 package net.jukoz.me.block.special.bellows;
 
 
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import net.jukoz.me.block.special.forge.ForgeBlockEntity;
 import net.jukoz.me.sound.SoundsME;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.particle.ParticleTypes;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
@@ -50,18 +50,18 @@ public class BellowsBlockEntity extends BlockEntity {
         return BlockEntityUpdateS2CPacket.create(this);
     }
 
-    public boolean tryPumpingBellow(BlockState state, World world, BlockPos pos, BellowsBlockEntity blockEntity, Direction direction, Entity entity) {
+    public boolean tryPumpingBellow(BlockState state, Level world, BlockPos pos, BellowsBlockEntity blockEntity, Direction direction, Entity entity) {
         if(blockEntity.animationProgress == 0) {
             if (!world.isClient){
                 if(blockEntity.activate(direction)){
                     BlockPos forgePos = pos.offset(state.get(BellowsBlock.FACING));
-                    if(world.getBlockState(forgePos).isIn(TagKey.of(RegistryKeys.BLOCK, MiddleEarth.of("forge")))) {
+                    if(world.getBlockState(forgePos).isIn(TagKey.of(Registries.BLOCK, MiddleEarth.of("forge")))) {
                         ForgeBlockEntity forgeBlockEntity = (ForgeBlockEntity) world.getBlockEntity(forgePos);
                         if(forgeBlockEntity != null) {
                             forgeBlockEntity.bellowsBoost();
                         }
                     }
-                    world.playSound((PlayerEntity)null,  pos, SoundsME.BELLOWS_PUSH, SoundCategory.BLOCKS, 2.0F, 1.0F);
+                    world.playSound((Player)null,  pos, SoundsME.BELLOWS_PUSH, SoundCategory.BLOCKS, 2.0F, 1.0F);
                     world.emitGameEvent(entity, GameEvent.BLOCK_CHANGE, pos);
                     return true;
                 }
@@ -105,12 +105,12 @@ public class BellowsBlockEntity extends BlockEntity {
         }
     }
 
-    public static void clientTick(World world, BlockPos pos, BlockState state, BellowsBlockEntity blockEntity) {
+    public static void clientTick(Level world, BlockPos pos, BlockState state, BellowsBlockEntity blockEntity) {
         // Only occurs if it's the initial tick
         if(blockEntity.pumping && blockEntity.animationProgress == 0)
         {
             Vec3i directionVec = state.get(BellowsBlock.FACING).getVector();
-            Vec3d center = pos.toCenterPos();
+            Vec3 center = pos.toCenterPos();
 
             int particleAmount = RANDOM.nextInt(AVERAGE_PARTICLES - PARTICLE_AMOUNT_MODIFIER, AVERAGE_PARTICLES + PARTICLE_AMOUNT_MODIFIER);
             for(int i = 0; i < particleAmount; i++){
@@ -125,7 +125,7 @@ public class BellowsBlockEntity extends BlockEntity {
         tick(blockEntity);
     }
 
-    public static void serverTick(World world, BlockPos pos, BlockState state, BellowsBlockEntity blockEntity) {
+    public static void serverTick(Level world, BlockPos pos, BlockState state, BellowsBlockEntity blockEntity) {
         tick(blockEntity);
     }
 }

@@ -1,9 +1,9 @@
 package net.jukoz.me.resources.datas.combatarchetypes.runtime;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.entity.npcs.NpcEntity;
 import net.jukoz.me.resources.datas.combatarchetypes.MeleeCombatArchetypeData;
 import net.jukoz.me.resources.datas.combatarchetypes.RangedCombatArchetypeData;
@@ -20,7 +20,7 @@ public class RangedCombatArchetypeRuntimeData extends CombatArchetypeRuntimeData
     }
 
     @Override
-    public void tick(NpcEntity npcEntity, World world){
+    public void tick(NpcEntity npcEntity, Level world){
         super.tick(npcEntity, world);
         if(this.lastShootTick < 1000)
             this.lastShootTick ++;

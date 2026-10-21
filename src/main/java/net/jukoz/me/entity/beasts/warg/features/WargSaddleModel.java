@@ -2,8 +2,8 @@ package net.jukoz.me.entity.beasts.warg.features;
 
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.model.geom.PartNames;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.jukoz.me.entity.beasts.warg.WargModel;
 
 public class WargSaddleModel extends WargModel {
@@ -21,13 +21,13 @@ public class WargSaddleModel extends WargModel {
         super(root);
 
         this.warg = root.getChild("root");
-        ModelPart body = this.warg.getChild(EntityModelPartNames.BODY);
+        ModelPart body = this.warg.getChild(PartNames.BODY);
         ModelPart upperBody = body.getChild("upper_body");
         ModelPart bodyNoLegs = upperBody.getChild("body_no_legs");
         this.saddle = bodyNoLegs.getChild("saddle");
         this.bodyFur = bodyNoLegs.getChild("body_fur");
         this.mainBody = bodyNoLegs.getChild("main_body");
-        this.head = bodyNoLegs.getChild(EntityModelPartNames.HEAD);
+        this.head = bodyNoLegs.getChild(PartNames.HEAD);
         this.waitTail = bodyNoLegs.getChild("wait_tail");
         this.rightFrontLeg = upperBody.getChild("right_front_leg");
         this.leftFrontLeg = upperBody.getChild("left_front_leg");
@@ -36,7 +36,7 @@ public class WargSaddleModel extends WargModel {
 
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = getEmptyModelData();
-        ModelPartData bodyNoLegs = modelData.getRoot().getChild("root").getChild(EntityModelPartNames.BODY).getChild("upper_body").getChild("body_no_legs");
+        ModelPartData bodyNoLegs = modelData.getRoot().getChild("root").getChild(PartNames.BODY).getChild("upper_body").getChild("body_no_legs");
 
         ModelPartData saddle = bodyNoLegs.addChild("saddle", ModelPartBuilder.create(), ModelTransform.pivot(-9.5F, -3.75F, -4.5F));
 
@@ -50,7 +50,7 @@ public class WargSaddleModel extends WargModel {
         return TexturedModelData.of(modelData, 128, 128);
     }
 
-    public void renderSaddle(MatrixStack matrices, VertexConsumer vertices, int light, int overlay) {
+    public void renderSaddle(PoseStack matrices, VertexConsumer vertices, int light, int overlay) {
         boolean bodyFurVisible = this.bodyFur.visible;
         boolean mainBodyVisible = this.mainBody.visible;
         boolean headVisible = this.head.visible;

@@ -2,21 +2,21 @@ package net.jukoz.me.registries;
 import net.jukoz.me.item.MEComponents;
 
 import net.fabricmc.fabric.api.registry.*;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.block.LeveledCauldronBlock;
 import net.minecraft.block.cauldron.CauldronBehavior;
-import net.minecraft.entity.ai.pathing.PathNodeType;
+import net.minecraft.world.level.pathfinder.PathNodeType;
 import net.minecraft.item.HoeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.GenericBlockSets;
 import net.jukoz.me.block.registration.ModBlocks;
@@ -81,13 +81,13 @@ public class RegistriesME {
                     for (Map.Entry<String, String> map : specialAliases.entrySet()) {
                         name = name.replaceAll(map.getKey(), map.getValue());
                     }
-                    alias.registry().addAlias(new Identifier(MiddleEarth.OLD_MOD_ID, name), new Identifier(MiddleEarth.MOD_ID, alias.name()));
-                    myWriter.write(alias.registry().getKey().getValue().getPath() + ": " + new Identifier(MiddleEarth.OLD_MOD_ID, name) + " -> " + new Identifier(MiddleEarth.MOD_ID, alias.name()) + "\r\n");
+                    alias.registry().addAlias(new ResourceLocation(MiddleEarth.OLD_MOD_ID, name), new ResourceLocation(MiddleEarth.MOD_ID, alias.name()));
+                    myWriter.write(alias.registry().getKey().getValue().getPath() + ": " + new ResourceLocation(MiddleEarth.OLD_MOD_ID, name) + " -> " + new ResourceLocation(MiddleEarth.MOD_ID, alias.name()) + "\r\n");
                 }
 
                 for (RegistryAliasesME.ManualAlias alias: RegistryAliasesME.manualAliases) {
-                    alias.registry().addAlias(new Identifier(MiddleEarth.OLD_MOD_ID, alias.oldName()), new Identifier(MiddleEarth.MOD_ID, alias.newName()));
-                    myWriter.write(alias.registry().getKey().getValue().getPath() + ": " + new Identifier(MiddleEarth.OLD_MOD_ID, alias.oldName()) + " -> " + new Identifier(MiddleEarth.MOD_ID, alias.newName()) + "\r\n");
+                    alias.registry().addAlias(new ResourceLocation(MiddleEarth.OLD_MOD_ID, alias.oldName()), new ResourceLocation(MiddleEarth.MOD_ID, alias.newName()));
+                    myWriter.write(alias.registry().getKey().getValue().getPath() + ": " + new ResourceLocation(MiddleEarth.OLD_MOD_ID, alias.oldName()) + " -> " + new ResourceLocation(MiddleEarth.MOD_ID, alias.newName()) + "\r\n");
                 }
 
                 myWriter.close();
@@ -101,11 +101,11 @@ public class RegistriesME {
                 for (Map.Entry<String, String> map : specialAliases.entrySet()) {
                     name = name.replaceAll(map.getKey(), map.getValue());
                 }
-                alias.registry().addAlias(new Identifier(MiddleEarth.OLD_MOD_ID, name), new Identifier(MiddleEarth.MOD_ID, alias.name()));
+                alias.registry().addAlias(new ResourceLocation(MiddleEarth.OLD_MOD_ID, name), new ResourceLocation(MiddleEarth.MOD_ID, alias.name()));
             }
 
             for (RegistryAliasesME.ManualAlias alias: RegistryAliasesME.manualAliases) {
-                alias.registry().addAlias(new Identifier(MiddleEarth.OLD_MOD_ID, alias.oldName()), new Identifier(MiddleEarth.MOD_ID, alias.newName()));
+                alias.registry().addAlias(new ResourceLocation(MiddleEarth.OLD_MOD_ID, alias.oldName()), new ResourceLocation(MiddleEarth.MOD_ID, alias.newName()));
             }
         }
     }
@@ -719,17 +719,17 @@ public class RegistriesME {
             stack.decrement(1);
         }
 
-        //TODO Make sure this works well on server/client, ActionResult.SERVER_SUCCESS if not
-        return ActionResult.SUCCESS;
+        //TODO Make sure this works well on server/client, InteractionResult.SERVER_SUCCESS if not
+        return InteractionResult.SUCCESS;
     };
 
     public static final CauldronBehavior COOL_DOWN_METAL = (state, world, pos, player, hand, stack) -> {
-        Random random = world.getRandom();
+        RandomSource random = world.getRandom();
         int smokeAmount = random.nextInt(9) + 4;
         int bigSmokeAmount = random.nextInt(3) + 2;
 
         if (!MEComponents.contains(stack, MEComponents.TEMPERATURE_DATA)) {
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         }
         if (!world.isClient) {
             ItemStack originalStack = stack.copy();
@@ -761,14 +761,14 @@ public class RegistriesME {
                         0.0f);
             }
         }
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     };
 
     public static final CauldronBehavior CLEAN_EQUIPMENT = (state, world, pos, player, hand, stack) -> {
         if (!(stack.getItem() instanceof net.minecraft.item.DyeableItem)) {
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         } else if (!MEComponents.contains(stack, MEComponents.DYED_COLOR)) {
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         } else {
             if (!world.isClient) {
                 MEComponents.remove(stack, MEComponents.DYED_COLOR);
@@ -776,7 +776,7 @@ public class RegistriesME {
                 LeveledCauldronBlock.decrementFluidLevel(state, world, pos);
             }
 
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
     };
 }

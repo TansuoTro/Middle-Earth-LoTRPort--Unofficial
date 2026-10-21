@@ -5,14 +5,14 @@ import net.jukoz.me.item.MEComponents;
 import net.jukoz.me.item.MEDurability;
 
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.entity.ExperienceOrbEntity;
-import net.minecraft.item.trim.ArmorTrim;
-import net.minecraft.item.trim.ArmorTrimMaterial;
-import net.minecraft.item.trim.ArmorTrimPattern;
-import net.minecraft.recipe.RecipeManager;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.world.item.armortrim.ArmorTrim;
+import net.minecraft.world.item.armortrim.ArmorTrimMaterial;
+import net.minecraft.world.item.armortrim.ArmorTrimPattern;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.core.Holder;
 import net.jukoz.me.compat.nbt.ReadView;
 import net.jukoz.me.compat.nbt.WriteView;
 import net.jukoz.me.MiddleEarth;
@@ -24,41 +24,41 @@ import net.jukoz.me.item.ResourceItemsME;
 import net.jukoz.me.item.dataComponents.TemperatureDataComponent;
 import net.jukoz.me.particles.ModParticleTypes;
 import net.jukoz.me.recipe.AnvilShapingRecipe;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 
 import net.jukoz.me.compat.SingleStackRecipeInput;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.RegistryWrapper;
+import net.minecraft.tags.TagKey;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -131,7 +131,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
         };
     }
 
-    public static void updateIndex(int index, Vec3d coords, ServerPlayerEntity player){
+    public static void updateIndex(int index, Vec3 coords, ServerPlayer player){
         BlockPos pos = new BlockPos((int) coords.getX(), (int) coords.getY(), (int) coords.getZ());
         BlockEntity shapingAnvilBlockEntity = player.getWorld().getBlockEntity(pos);
 
@@ -147,7 +147,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
         return entity.getStack(0);
     }
 
-    public void bonk(ShapingAnvilBlockEntity entity, ServerWorld world, ItemStack tool){
+    public void bonk(ShapingAnvilBlockEntity entity, ServerLevel world, ItemStack tool){
         ItemStack input = entity.getStack(0);
 
         RecipeManager serverRecipeManager = (RecipeManager)entity.getWorld().getRecipeManager();
@@ -165,7 +165,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
             if(temperature <= 0) {
                 minRandProgress = maxRandProgress = 1;
             } else {
-                RegistryEntry<Enchantment> enchantmentRegistryEntry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(EnchantmentsME.AULE_BLESSING).orElseThrow();
+                Holder<Enchantment> enchantmentRegistryEntry = world.getRegistryManager().get(Registries.ENCHANTMENT).getEntry(EnchantmentsME.AULE_BLESSING).orElseThrow();
                 boolean hasEnchant = MEEnchants.has(tool, enchantmentRegistryEntry);
                 if (hasEnchant) {
                     int level = EnchantmentHelper.getLevel(enchantmentRegistryEntry.value(), tool);
@@ -181,9 +181,9 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
                 input.setDamage(input.getDamage() - (int) (Math.random() * (maxRandProgress - minRandProgress) + minRandProgress));
             }
 
-            World serverWorld = this.getWorld();
-            if (serverWorld instanceof ServerWorld) {
-                ((ServerWorld)serverWorld).spawnParticles(ModParticleTypes.ANVIL_SPARK_PARTICLE, pos.getX()+ 0.5f, pos.getY() + 1.0f, pos.getZ() + 0.5f, Math.max(temperature / 10, 3), 0.0, 0.0, 0.0, 0.0);
+            Level serverWorld = this.getWorld();
+            if (serverWorld instanceof ServerLevel) {
+                ((ServerLevel)serverWorld).spawnParticles(ModParticleTypes.ANVIL_SPARK_PARTICLE, pos.getX()+ 0.5f, pos.getY() + 1.0f, pos.getZ() + 0.5f, Math.max(temperature / 10, 3), 0.0, 0.0, 0.0, 0.0);
             }
 
             int minRandTemperature = 10;
@@ -195,8 +195,8 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
             } else {
                 MEComponents.set(input, MEComponents.TEMPERATURE_DATA, new TemperatureDataComponent(MEComponents.get(input, MEComponents.TEMPERATURE_DATA).temperature() - value));
             }
-            RegistryWrapper.Impl<ArmorTrimMaterial>  armorTrimMaterialRegistry = entity.getWorld().getRegistryManager().getWrapperOrThrow(RegistryKeys.TRIM_MATERIAL);
-            RegistryWrapper.Impl<ArmorTrimPattern>  armorTrimPatternRegistry = entity.getWorld().getRegistryManager().getWrapperOrThrow(RegistryKeys.TRIM_PATTERN);
+            RegistryWrapper.Impl<ArmorTrimMaterial>  armorTrimMaterialRegistry = entity.getWorld().getRegistryManager().getWrapperOrThrow(Registries.TRIM_MATERIAL);
+            RegistryWrapper.Impl<ArmorTrimPattern>  armorTrimPatternRegistry = entity.getWorld().getRegistryManager().getWrapperOrThrow(Registries.TRIM_PATTERN);
 
 
             if (input.getDamage() == 0){
@@ -211,19 +211,19 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
                     MEArmorTrim.set(output, MEArmorTrim.get(input));
                 } else{
                     MetalTypes metal = MetalTypes.EMPTY;
-                    if(input.isIn(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "ingot_shaping")))) {
+                    if(input.isIn(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "ingot_shaping")))) {
                         metal = MetalTypes.getMetalByIngot(input.getItem());
-                    }else if(input.isIn(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "nugget_shaping")))) {
+                    }else if(input.isIn(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "nugget_shaping")))) {
                         metal = MetalTypes.getMetalByNugget(input.getItem());
                     }
                     if (metal.isVanilla()){
                         MEArmorTrim.set(output, new ArmorTrim(
-                                armorTrimMaterialRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_MATERIAL, new Identifier(metal.getName()))),
-                                armorTrimPatternRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_PATTERN, new Identifier(MiddleEarth.MOD_ID,"smithing_part")))));
+                                armorTrimMaterialRegistry.getOrThrow(ResourceKey.of(Registries.TRIM_MATERIAL, new ResourceLocation(metal.getName()))),
+                                armorTrimPatternRegistry.getOrThrow(ResourceKey.of(Registries.TRIM_PATTERN, new ResourceLocation(MiddleEarth.MOD_ID,"smithing_part")))));
                     } else {
                         MEArmorTrim.set(output, new ArmorTrim(
-                                armorTrimMaterialRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_MATERIAL, new Identifier(MiddleEarth.MOD_ID, metal.getName()))),
-                                armorTrimPatternRegistry.getOrThrow(RegistryKey.of(RegistryKeys.TRIM_PATTERN, new Identifier(MiddleEarth.MOD_ID, "smithing_part")))));
+                                armorTrimMaterialRegistry.getOrThrow(ResourceKey.of(Registries.TRIM_MATERIAL, new ResourceLocation(MiddleEarth.MOD_ID, metal.getName()))),
+                                armorTrimPatternRegistry.getOrThrow(ResourceKey.of(Registries.TRIM_PATTERN, new ResourceLocation(MiddleEarth.MOD_ID, "smithing_part")))));
                     }
                 }
                 if (MEComponents.get(input, MEComponents.TEMPERATURE_DATA) != null){
@@ -234,15 +234,15 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
                 entity.update();
             }
         } else {
-            World serverWorld = this.getWorld();
-            if (serverWorld instanceof ServerWorld) {
-                ((ServerWorld)serverWorld).spawnParticles(ModParticleTypes.ANVIL_SPARK_PARTICLE, pos.getX()+ 0.5f, pos.getY() + 1.0f, pos.getZ() + 0.5f, 2, 0.0, 0.0, 0.0, 0.0);
+            Level serverWorld = this.getWorld();
+            if (serverWorld instanceof ServerLevel) {
+                ((ServerLevel)serverWorld).spawnParticles(ModParticleTypes.ANVIL_SPARK_PARTICLE, pos.getX()+ 0.5f, pos.getY() + 1.0f, pos.getZ() + 0.5f, 2, 0.0, 0.0, 0.0, 0.0);
             }
             entity.getWorld().playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.5f, 1.0f);
         }
     }
 
-    public static void tick(World world, BlockPos blockPos, BlockState blockState, ShapingAnvilBlockEntity entity) {
+    public static void tick(Level world, BlockPos blockPos, BlockState blockState, ShapingAnvilBlockEntity entity) {
         ItemStack input = entity.getStack(0);
         if (!input.isEmpty()){
             RecipeManager serverRecipeManager = (RecipeManager)entity.getWorld().getRecipeManager();
@@ -280,7 +280,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt) {
+    protected void writeNbt(CompoundTag nbt) {
         super.writeNbt(nbt);
         WriteView view = new WriteView(nbt);
         Inventories.writeNbt(view.nbt(), this.inventory, true);
@@ -289,7 +289,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
     }
 
     @Override
-    public void readNbt(NbtCompound nbt) {
+    public void readNbt(CompoundTag nbt) {
         super.readNbt(nbt);
         ReadView view = new ReadView(nbt);
         this.inventory.clear();
@@ -299,13 +299,13 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("screen." + MiddleEarth.MOD_ID + "." + ID);
+    public Component getDisplayName() {
+        return Component.translatable("screen." + MiddleEarth.MOD_ID + "." + ID);
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, Player player) {
         return new ShapingAnvilScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
@@ -316,7 +316,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt() {
+    public CompoundTag toInitialChunkDataNbt() {
         return createNbt();
     }
 
@@ -389,7 +389,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
+    public boolean canPlayerUse(Player player) {
         return Inventory.canPlayerUse(this, player);
     }
 
@@ -399,7 +399,7 @@ public class ShapingAnvilBlockEntity extends BlockEntity implements ExtendedScre
     }
 
     @Override
-    public void writeScreenOpeningData(net.minecraft.server.network.ServerPlayerEntity player, net.minecraft.network.PacketByteBuf buf) {
+    public void writeScreenOpeningData(net.minecraft.server.level.ServerPlayer player, net.minecraft.network.FriendlyByteBuf buf) {
         buf.writeBlockPos(this.pos);
     }
 }

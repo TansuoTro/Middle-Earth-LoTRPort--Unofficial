@@ -2,34 +2,34 @@ package net.jukoz.me.compat.nbt;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DynamicOps;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.RegistryOps;
+import net.minecraft.resources.RegistryOps;
 
 import java.util.function.Consumer;
 
 /**
- * Stand-in for 1.21.5's {@code net.minecraft.storage.WriteView}, backed by an {@link NbtCompound}.
+ * Stand-in for 1.21.5's {@code net.minecraft.storage.WriteView}, backed by an {@link CompoundTag}.
  *
  * @see ReadView
  */
 public final class WriteView {
-    private final NbtCompound nbt;
+    private final CompoundTag nbt;
     private final DynamicOps<NbtElement> ops;
 
-    public WriteView(NbtCompound nbt) {
+    public WriteView(CompoundTag nbt) {
         this(nbt, null);
     }
 
-    public WriteView(NbtCompound nbt, DynamicRegistryManager registries) {
+    public WriteView(CompoundTag nbt, DynamicRegistryManager registries) {
         this.nbt = nbt;
         this.ops = registries == null ? NbtOps.INSTANCE : RegistryOps.of(NbtOps.INSTANCE, registries);
     }
 
-    public NbtCompound nbt() {
+    public CompoundTag nbt() {
         return this.nbt;
     }
 

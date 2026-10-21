@@ -5,44 +5,44 @@ import com.mojang.serialization.Dynamic;
 import net.jukoz.me.entity.ModEntities;
 import net.jukoz.me.entity.duck.DuckEntity;
 import net.jukoz.me.entity.goals.BirdFlightGoal;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.ItemEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.entity.ai.FuzzyTargeting;
-import net.minecraft.entity.ai.brain.Brain;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
-import net.minecraft.entity.ai.brain.sensor.Sensor;
-import net.minecraft.entity.ai.brain.sensor.SensorType;
+import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.sensing.Sensor;
+import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.ai.pathing.BirdNavigation;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.mob.PiglinActivity;
 import net.minecraft.entity.mob.PiglinBrain;
 import net.minecraft.entity.passive.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.particle.ItemStackParticleEffect;
-import net.minecraft.particle.ParticleTypes;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
@@ -62,7 +62,7 @@ public class GooseEntity extends AnimalEntity {
     //protected static final ImmutableList<SensorType<? extends Sensor<? super GooseEntity>>> SENSORS;
     //protected static final ImmutableList MEMORY_MODULES;
 
-    public GooseEntity(EntityType<? extends AnimalEntity> entityType, World world) {
+    public GooseEntity(EntityType<? extends AnimalEntity> entityType, Level world) {
         super(entityType, world);
         this.setCanPickUpLoot(true);
     }
@@ -81,7 +81,7 @@ public class GooseEntity extends AnimalEntity {
 
     protected void mobTick() {
         this.getWorld().getProfiler().push("gooseBrain");
-        this.getBrain().tick((ServerWorld)this.getWorld(), this);
+        this.getBrain().tick((ServerLevel)this.getWorld(), this);
         this.getWorld().getProfiler().pop();
         this.getWorld().getProfiler().push("gooseActivityUpdate");
         GooseBrain.updateActivities(this);
@@ -102,7 +102,7 @@ public class GooseEntity extends AnimalEntity {
         this.goalSelector.add(6, new FollowParentGoal(this, 1.05));
         this.goalSelector.add(7, new GooseEntity.PickupItemGoal());
 
-        this.goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
+        this.goalSelector.add(8, new LookAtEntityGoal(this, Player.class, 6.0F));
         this.goalSelector.add(9, new LookAroundGoal(this));
         this.goalSelector.add(10, new WanderAroundGoal(this, 1.0F));
 
@@ -113,12 +113,12 @@ public class GooseEntity extends AnimalEntity {
 
 
     public static DefaultAttributeContainer.Builder createGooseAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 8.0)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 0.75)
-                .add(EntityAttributes.GENERIC_ATTACK_SPEED, 1.0)
-                .add(EntityAttributes.GENERIC_FLYING_SPEED, 0.4000000059604645);
+        return Mob.createMobAttributes()
+                .add(Attributes.GENERIC_MAX_HEALTH, 8.0)
+                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.4)
+                .add(Attributes.GENERIC_ATTACK_DAMAGE, 0.75)
+                .add(Attributes.GENERIC_ATTACK_SPEED, 1.0)
+                .add(Attributes.GENERIC_FLYING_SPEED, 0.4000000059604645);
     }
 
     public void handleStatus(byte status) {
@@ -126,7 +126,7 @@ public class GooseEntity extends AnimalEntity {
             ItemStack itemStack = this.getEquippedStack(EquipmentSlot.MAINHAND);
             if (!itemStack.isEmpty()) {
                 for(int i = 0; i < 8; ++i) {
-                    Vec3d vec3d = (new Vec3d(((double)this.random.nextFloat() - 0.5) * 0.1, Math.random() * 0.1 + 0.1, 0.0)).rotateX(-this.getPitch() * 0.017453292F).rotateY(-this.getYaw() * 0.017453292F);
+                    Vec3 vec3d = (new Vec3(((double)this.random.nextFloat() - 0.5) * 0.1, Math.random() * 0.1 + 0.1, 0.0)).rotateX(-this.getPitch() * 0.017453292F).rotateY(-this.getYaw() * 0.017453292F);
                     this.getWorld().addParticle(new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack), this.getX() + this.getRotationVector().x / 2.0, this.getY(), this.getZ() + this.getRotationVector().z / 2.0, vec3d.x, vec3d.y + 0.05, vec3d.z);
                 }
             }
@@ -137,7 +137,7 @@ public class GooseEntity extends AnimalEntity {
     }
 
     public boolean canEquip(ItemStack stack) {
-        EquipmentSlot equipmentSlot = MobEntity.getPreferredEquipmentSlot(stack);
+        EquipmentSlot equipmentSlot = Mob.getPreferredEquipmentSlot(stack);
         if (!this.getEquippedStack(equipmentSlot).isEmpty()) {
             return false;
         } else {
@@ -186,7 +186,7 @@ public class GooseEntity extends AnimalEntity {
         super.drop(source);
     }
 
-    protected EntityNavigation createNavigation(World world) {
+    protected EntityNavigation createNavigation(Level world) {
         BirdNavigation birdNavigation = new BirdNavigation(this, world);
         birdNavigation.setCanPathThroughDoors(true);
         birdNavigation.setCanSwim(true);
@@ -204,13 +204,13 @@ public class GooseEntity extends AnimalEntity {
         this.prevFlapProgress = this.flapProgress;
         this.prevMaxWingDeviation = this.maxWingDeviation;
         this.maxWingDeviation += (float)(!this.isOnGround() && !this.hasVehicle() ? 4 : -1) * 0.3F;
-        this.maxWingDeviation = MathHelper.clamp(this.maxWingDeviation, 0.0F, 1.0F);
+        this.maxWingDeviation = Mth.clamp(this.maxWingDeviation, 0.0F, 1.0F);
         if (!this.isOnGround() && this.flapSpeed < 1.0F) {
             this.flapSpeed = 1.0F;
         }
 
         this.flapSpeed *= 0.9F;
-        Vec3d vec3d = this.getVelocity();
+        Vec3 vec3d = this.getVelocity();
         if (!this.isOnGround() && vec3d.y < 0.0) {
             this.setVelocity(vec3d.multiply(1.0, 0.6, 1.0));
         }
@@ -247,7 +247,7 @@ public class GooseEntity extends AnimalEntity {
     }
 
     @Nullable
-    public GooseEntity createChild(ServerWorld serverWorld, PassiveEntity passiveEntity) {
+    public GooseEntity createChild(ServerLevel serverWorld, PassiveEntity passiveEntity) {
         return (GooseEntity) ModEntities.GOOSE.create(serverWorld);
     }
 

@@ -1,10 +1,10 @@
 package net.jukoz.me.item.utils;
 
 import net.jukoz.me.MiddleEarth;
-import net.minecraft.block.entity.BannerPattern;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.resources.ResourceLocation;
 
 public class BannerPatternTagsME {
     public static final TagKey<BannerPattern> GONDOR_PATTERN_ITEM = of("gondor");
@@ -32,6 +32,6 @@ public class BannerPatternTagsME {
     public static final TagKey<BannerPattern> OAK_LEAF_PATTERN_ITEM = of("oak_leaf");
 
     private static TagKey<BannerPattern> of(String name) {
-        return TagKey.of(RegistryKeys.BANNER_PATTERN, new Identifier(MiddleEarth.MOD_ID, "pattern_item/" + name));
+        return TagKey.of(Registries.BANNER_PATTERN, new ResourceLocation(MiddleEarth.MOD_ID, "pattern_item/" + name));
     }
 }

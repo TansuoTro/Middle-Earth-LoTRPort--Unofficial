@@ -1,27 +1,27 @@
 package net.jukoz.me.gui.utils.widgets.searchbar;
 
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.text.MutableText;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 
 public class SearchBarResult {
-    private MutableText text;
+    private MutableComponent text;
     private SearchBarResultType type;
-    private Identifier targetIdentifier;
+    private ResourceLocation targetIdentifier;
     private ButtonWidget.PressAction action;
 
-    public SearchBarResult(MutableText text, Identifier targetIdentifier, SearchBarResultType type, ButtonWidget.PressAction action){
+    public SearchBarResult(MutableComponent text, ResourceLocation targetIdentifier, SearchBarResultType type, ButtonWidget.PressAction action){
         this.text = text;
         this.targetIdentifier = targetIdentifier;
         this.type = type;
         this.action = action;
     }
 
-    public MutableText getText(){
+    public MutableComponent getText(){
         return text;
     }
 
-    public Identifier getTargetIdentifier(){
+    public ResourceLocation getTargetIdentifier(){
         return targetIdentifier;
     }
 

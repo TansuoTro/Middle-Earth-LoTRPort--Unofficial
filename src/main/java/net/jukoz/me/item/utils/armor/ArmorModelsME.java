@@ -35,7 +35,7 @@ import net.jukoz.me.item.utils.armor.backAttachments.BackAttachmentModelsME;
 import net.jukoz.me.item.utils.armor.backAttachments.BackAttachmentsME;
 import net.jukoz.me.item.utils.armor.helmetAttachments.HelmetAttachmentModelsME;
 import net.jukoz.me.item.utils.armor.helmetAttachments.HelmetAttachmentsME;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.minecraft.util.StringIdentifiable;
 
 public class ArmorModelsME {

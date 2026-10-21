@@ -1,17 +1,17 @@
 package net.jukoz.me.world.features.columns;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.jukoz.me.block.registration.WoodBlockSets;
@@ -25,7 +25,7 @@ public class WillowVinesFeature extends Feature<DefaultFeatureConfig> {
     public boolean generate(FeatureContext<DefaultFeatureConfig> context) {
         StructureWorldAccess structureWorldAccess = context.getWorld();
         BlockPos blockPos = context.getOrigin();
-        Random random = context.getRandom();
+        RandomSource random = context.getRandom();
         if (!structureWorldAccess.isAir(blockPos)) {
             return false;
         } else {
@@ -39,14 +39,14 @@ public class WillowVinesFeature extends Feature<DefaultFeatureConfig> {
         }
     }
 
-    private void generateVinesInArea(WorldAccess world, Random random, BlockPos pos) {
+    private void generateVinesInArea(WorldAccess world, RandomSource random, BlockPos pos) {
         BlockPos.Mutable mutable = new BlockPos.Mutable();
 
         for(int i = 0; i < 32; ++i) {
             mutable.set(pos, random.nextInt(8) - random.nextInt(8), random.nextInt(2) - random.nextInt(7), random.nextInt(8) - random.nextInt(8));
 
             if (world.isAir(mutable) && validateRoot(world, mutable)) {
-                int length = MathHelper.nextInt(random, 1, 8);
+                int length = Mth.nextInt(random, 1, 8);
 
                 if (random.nextInt(6) == 0) { // very long vine
                     length *= 2;

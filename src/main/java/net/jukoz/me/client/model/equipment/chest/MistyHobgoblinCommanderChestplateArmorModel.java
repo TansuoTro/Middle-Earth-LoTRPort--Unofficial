@@ -2,26 +2,26 @@ package net.jukoz.me.client.model.equipment.chest;
 
 import net.jukoz.me.MiddleEarth;
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.model.geom.PartNames;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.resources.ResourceLocation;
 
 public class MistyHobgoblinCommanderChestplateArmorModel<T extends LivingEntity> extends CustomChestplateModel<T> {
 
     public MistyHobgoblinCommanderChestplateArmorModel(ModelPart root) {
         super(root);
 
-        CHESTPLATE_ADDON_TEXTURE = new Identifier(MiddleEarth.MOD_ID, "textures/models/armor/misty_hobgoblin_commander_chestplate_addon.png");
+        CHESTPLATE_ADDON_TEXTURE = new ResourceLocation(MiddleEarth.MOD_ID, "textures/models/armor/misty_hobgoblin_commander_chestplate_addon.png");
     }
 
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();
 
-        modelPartData.addChild(EntityModelPartNames.HAT, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.HAT, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData body = modelPartData.addChild(EntityModelPartNames.BODY, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData body = modelPartData.addChild(PartNames.BODY, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         ModelPartData rightskullspear = body.addChild("rightskullspear", ModelPartBuilder.create(), ModelTransform.of(-3.0F, 8.0F, 0.0F, 0.2986F, 0.0651F, -0.5138F));
         rightskullspear.addChild("cube_r4", ModelPartBuilder.create().uv(0, 0).mirrored().cuboid(-2.5671F, -3.0474F, 2.0F, 8.0F, 8.0F, 8.0F, new Dilation(-1.2F)).mirrored(false), ModelTransform.of(8.0F, -28.0F, 7.0F, -0.3491F, 0.0F, 0.3054F));
@@ -44,19 +44,19 @@ public class MistyHobgoblinCommanderChestplateArmorModel<T extends LivingEntity>
         ModelPartData spears3 = leftskullspear.addChild("spears3", ModelPartBuilder.create(), ModelTransform.of(0.0F, -0.5F, 3.0F, 0.0F, 0.0F, -0.1309F));
         spears3.addChild("cube_r11", ModelPartBuilder.create().uv(32, 0).cuboid(-3.4329F, -23.6652F, 2.6678F, 2.0F, 35.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -10.0F, 0.0F, -0.3491F, 0.0F, -0.1745F));
 
-        ModelPartData right_arm = modelPartData.addChild(EntityModelPartNames.RIGHT_ARM, ModelPartBuilder.create(),
+        ModelPartData right_arm = modelPartData.addChild(PartNames.RIGHT_ARM, ModelPartBuilder.create(),
                 ModelTransform.pivot(0.0F, 0.0F, 0.0F));
         right_arm.addChild("glove_addon", ModelPartBuilder.create()
                 .uv(40, 0).cuboid(-7.0F, 4.0F, 0.0F, 3.0F, 5.0F, 0.0F, new Dilation(0.0F)),
                 ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData left_arm =modelPartData.addChild(EntityModelPartNames.LEFT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData left_arm =modelPartData.addChild(PartNames.LEFT_ARM, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
         left_arm.addChild("shoulder_addon", ModelPartBuilder.create()
                 .uv(40, 0).mirrored().cuboid(3.0F, -6.0F, 0.0F, 3.0F, 5.0F, 0.0F, new Dilation(0.0F)).mirrored(false),
                 ModelTransform.pivot(0.0F, 0.0F, 0.0F));;
 
-        modelPartData.addChild(EntityModelPartNames.RIGHT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(EntityModelPartNames.LEFT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.RIGHT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addChild(PartNames.LEFT_LEG, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         return TexturedModelData.of(modelData, 64, 64);
     }

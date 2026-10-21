@@ -1,20 +1,20 @@
 package net.jukoz.me.entity.goals;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.PounceAtTargetGoal;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
 public class FastPonceAtTargetGoal extends Goal {
-    private final MobEntity mob;
+    private final Mob mob;
     private LivingEntity target;
     private final float verticalVelocity;
     private final float horizontalVelocity;
 
-    public FastPonceAtTargetGoal(MobEntity mob, float verticalVelocity, float horizontalVelocity) {
+    public FastPonceAtTargetGoal(Mob mob, float verticalVelocity, float horizontalVelocity) {
         this.mob = mob;
         this.verticalVelocity = verticalVelocity;
         this.horizontalVelocity = horizontalVelocity;
@@ -47,8 +47,8 @@ public class FastPonceAtTargetGoal extends Goal {
 
     @Override
     public void start() {
-        Vec3d vec3d = this.mob.getVelocity();
-        Vec3d vec3d2 = new Vec3d(this.target.getX() - this.mob.getX(), 0.0, this.target.getZ() - this.mob.getZ());
+        Vec3 vec3d = this.mob.getVelocity();
+        Vec3 vec3d2 = new Vec3(this.target.getX() - this.mob.getX(), 0.0, this.target.getZ() - this.mob.getZ());
         if (vec3d2.lengthSquared() > 1.0E-7) {
             vec3d2 = vec3d2.multiply(horizontalVelocity).add(vec3d.multiply(0.2));;
         }

@@ -1,11 +1,11 @@
 package net.jukoz.me.compat.client.render;
 
 import net.jukoz.me.compat.client.render.state.EntityRenderStateCompat;
-import net.minecraft.client.model.ModelPart;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.LivingEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.entity.LivingEntity;
 
 /**
  * R2 bridge for donor-style 1.21.8 models written as
@@ -45,12 +45,12 @@ public abstract class MESinglePartEntityModel<S extends EntityRenderStateCompat>
         }
     }
 
-    public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay,
+    public void render(PoseStack matrices, VertexConsumer vertices, int light, int overlay,
                        float red, float green, float blue, float alpha) {
         this.getPart().render(matrices, vertices, light, overlay, red, green, blue, alpha);
     }
 
-    public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
+    public void render(PoseStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
         float alpha = (color >> 24 & 0xFF) / 255.0F;
         float red = (color >> 16 & 0xFF) / 255.0F;
         float green = (color >> 8 & 0xFF) / 255.0F;

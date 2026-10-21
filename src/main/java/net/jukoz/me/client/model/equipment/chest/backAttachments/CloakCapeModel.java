@@ -1,10 +1,10 @@
 package net.jukoz.me.client.model.equipment.chest.backAttachments;
 
 import net.jukoz.me.compat.client.render.state.BipedEntityRenderState;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import net.jukoz.me.client.model.equipment.chest.ChestplateAddonModel;
-import net.minecraft.client.model.ModelPart;
+import net.minecraft.client.model.geom.ModelPart;
 import net.jukoz.me.client.renderer.ArmedEntityRenderStateAccess;
 import net.jukoz.me.client.renderer.BipedEntityRenderStateAccess;
 import net.jukoz.me.utils.ToRad;
@@ -24,8 +24,8 @@ public class CloakCapeModel extends ChestplateAddonModel {
         BipedEntityRenderStateAccess renderStateAccess = ((BipedEntityRenderStateAccess)bipedEntityRenderState);
         if(renderStateAccess != null) {
             this.cape.traverse().forEach(ModelPart::resetTransform);
-            Vec3d currentVelocity = renderStateAccess.getVelocity();
-            if(currentVelocity == null) currentVelocity = new Vec3d(0, 0, 0);
+            Vec3 currentVelocity = renderStateAccess.getVelocity();
+            if(currentVelocity == null) currentVelocity = new Vec3(0, 0, 0);
 
             double sqrVel = currentVelocity.length();
             double speed = (sqrVel * 0.65f) + Math.sqrt(Math.abs(bipedEntityRenderState.limbSwingAmplitude)) * 0.35f;

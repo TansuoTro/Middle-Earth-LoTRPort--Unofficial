@@ -1,35 +1,35 @@
 package net.jukoz.me.registries.content.structuremanagerdatas;
 
-import net.minecraft.registry.Registerable;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryEntryLookup;
+import net.minecraft.resources.ResourceKey;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.datageneration.content.TranslationEntries;
 import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.resources.datas.structure_manager_datas.StructureManagerData;
 
 public class StructureManagerDataRegistry {
-    private static final RegistryKey<Registry<StructureManagerData>> STRUCTURE_MANAGER_DATA_KEY = DynamicRegistriesME.STRUCTURE_MANAGER_DATA;
+    private static final ResourceKey<Registry<StructureManagerData>> STRUCTURE_MANAGER_DATA_KEY = DynamicRegistriesME.STRUCTURE_MANAGER_DATA;
 
-    public final static RegistryKey<StructureManagerData> BRIGAND_DUNGEON_POOL      = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("brigand_dungeon_pool"));
-    public final static RegistryKey<StructureManagerData> DALE_VILLAGE_POOL         = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("dale_village_pool"));
-    public final static RegistryKey<StructureManagerData> DALE_KEEP_POOL            = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("dale_keep_pool"));
-    public final static RegistryKey<StructureManagerData> EREBOR_GENERIC_POOL       = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("erebor_generic_pool"));
-    public final static RegistryKey<StructureManagerData> GONDOR_VILLAGE_POOL       = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("gondor_village_pool"));
-    public final static RegistryKey<StructureManagerData> GONDOR_LORD_POOL          = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("gondor_lord_pool"));
-    public final static RegistryKey<StructureManagerData> GUNDABAD_CAMP_POOL        = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("gundabad_camp_pool"));
-    public final static RegistryKey<StructureManagerData> ISENGARD_CAMP_POOL        = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("isengard_camp_pool"));
-    public final static RegistryKey<StructureManagerData> LOTHLORIEN_HAMLET_POOL    = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("lothlorien_hamlet_pool"));
-    public final static RegistryKey<StructureManagerData> MORDOR_CAMP_POOL          = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("mordor_camp_pool"));
-    public final static RegistryKey<StructureManagerData> MORIA_HALL_POOL           = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("moria_hall_pool"));
-    public final static RegistryKey<StructureManagerData> ROHAN_VILLAGE_POOL        = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("rohan_village_pool"));
-    public final static RegistryKey<StructureManagerData> ROHAN_MILITARY_POOL       = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("rohan_military_pool"));
-    public final static RegistryKey<StructureManagerData> SHIRE_VILLAGE_POOL        = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("shire_village_pool"));
-    public final static RegistryKey<StructureManagerData> WOODLAND_REALM_HAMLET_POOL= DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("woodland_realm_hamlet_pool"));
-    public final static RegistryKey<StructureManagerData> WOODLAND_REALM_HALL_POOL  = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("woodland_realm_hall_pool"));
+    public final static ResourceKey<StructureManagerData> BRIGAND_DUNGEON_POOL      = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("brigand_dungeon_pool"));
+    public final static ResourceKey<StructureManagerData> DALE_VILLAGE_POOL         = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("dale_village_pool"));
+    public final static ResourceKey<StructureManagerData> DALE_KEEP_POOL            = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("dale_keep_pool"));
+    public final static ResourceKey<StructureManagerData> EREBOR_GENERIC_POOL       = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("erebor_generic_pool"));
+    public final static ResourceKey<StructureManagerData> GONDOR_VILLAGE_POOL       = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("gondor_village_pool"));
+    public final static ResourceKey<StructureManagerData> GONDOR_LORD_POOL          = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("gondor_lord_pool"));
+    public final static ResourceKey<StructureManagerData> GUNDABAD_CAMP_POOL        = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("gundabad_camp_pool"));
+    public final static ResourceKey<StructureManagerData> ISENGARD_CAMP_POOL        = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("isengard_camp_pool"));
+    public final static ResourceKey<StructureManagerData> LOTHLORIEN_HAMLET_POOL    = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("lothlorien_hamlet_pool"));
+    public final static ResourceKey<StructureManagerData> MORDOR_CAMP_POOL          = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("mordor_camp_pool"));
+    public final static ResourceKey<StructureManagerData> MORIA_HALL_POOL           = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("moria_hall_pool"));
+    public final static ResourceKey<StructureManagerData> ROHAN_VILLAGE_POOL        = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("rohan_village_pool"));
+    public final static ResourceKey<StructureManagerData> ROHAN_MILITARY_POOL       = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("rohan_military_pool"));
+    public final static ResourceKey<StructureManagerData> SHIRE_VILLAGE_POOL        = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("shire_village_pool"));
+    public final static ResourceKey<StructureManagerData> WOODLAND_REALM_HAMLET_POOL= DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("woodland_realm_hamlet_pool"));
+    public final static ResourceKey<StructureManagerData> WOODLAND_REALM_HALL_POOL  = DynamicRegistriesME.of(STRUCTURE_MANAGER_DATA_KEY, MiddleEarth.of("woodland_realm_hall_pool"));
 
-    public static void bootstrap(Registerable<StructureManagerData> context) {
+    public static void bootstrap(BootstrapContext<StructureManagerData> context) {
         RegistryEntryLookup<StructureManagerData> registryEntryLookup = context.getRegistryLookup(STRUCTURE_MANAGER_DATA_KEY);
         
         register(context, registryEntryLookup, BRIGAND_DUNGEON_POOL     , StructureManagerDataPools.BRIGAND_DUNGEON_NESTS);
@@ -50,7 +50,7 @@ public class StructureManagerDataRegistry {
         register(context, registryEntryLookup, WOODLAND_REALM_HALL_POOL , StructureManagerDataPools.WOODLAND_REALM_HALL_NESTS);
     }
 
-    private static void register(Registerable<StructureManagerData> context, RegistryEntryLookup<StructureManagerData> registryEntryLookup, RegistryKey<StructureManagerData> registryKey, StructureManagerData element){
+    private static void register(BootstrapContext<StructureManagerData> context, RegistryEntryLookup<StructureManagerData> registryEntryLookup, ResourceKey<StructureManagerData> registryKey, StructureManagerData element){
         DynamicRegistriesME.register(context, registryEntryLookup, registryKey, element);
         TranslationEntries.structureManagerEntries.add(element);
     }

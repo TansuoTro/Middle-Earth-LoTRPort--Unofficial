@@ -1,14 +1,14 @@
 package net.jukoz.me.entity.goals;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.ai.NoPenaltyTargeting;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.ai.pathing.Path;
+import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
@@ -64,7 +64,7 @@ public class PounceRetreatGoal extends Goal {
                 leaping = false;
             }
         } else {
-            Vec3d vec3d = NoPenaltyTargeting.findFrom(this.spider, 28, 12, this.target.getPos());
+            Vec3 vec3d = NoPenaltyTargeting.findFrom(this.spider, 28, 12, this.target.getPos());
             if (vec3d != null) {
                 this.path = this.fleeingEntityNavigation.findPathTo(vec3d.x, vec3d.y, vec3d.z, 0);
                 if(this.path != null) {
@@ -88,7 +88,7 @@ public class PounceRetreatGoal extends Goal {
         this.spider.getLookControl().lookAt(this.target.getX(), this.target.getEyeY(), this.target.getZ());
         this.spider.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 200, 1));
 
-        Vec3d backPounce = new Vec3d(1, 1, 1).multiply(-horizontalVelocity);
+        Vec3 backPounce = new Vec3(1, 1, 1).multiply(-horizontalVelocity);
         this.spider.setVelocity(backPounce.x, this.verticalVelocity, backPounce.z);
         leaping = true;
         timer = 100;

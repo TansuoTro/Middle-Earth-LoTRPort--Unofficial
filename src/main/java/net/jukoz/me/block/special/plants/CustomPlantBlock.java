@@ -1,16 +1,16 @@
 package net.jukoz.me.block.special.plants;
 
-import net.minecraft.block.*;import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.block.*;import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.particles.ModParticleTypes;
 import net.jukoz.me.utils.BlockTagsME;
 
@@ -24,12 +24,12 @@ public class CustomPlantBlock extends PlantBlock {
 
 
     @Override
-    protected boolean canPlantOnTop(BlockState floor, BlockView world, BlockPos pos) {
+    protected boolean canPlantOnTop(BlockState floor, BlockGetter world, BlockPos pos) {
         return (floor.isIn(BlockTags.DIRT) || floor.isIn(BlockTagsME.FARMLANDS)) && floor.isSideSolidFullSquare(world, pos, Direction.UP);
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
         return SHAPE;
     }
 }

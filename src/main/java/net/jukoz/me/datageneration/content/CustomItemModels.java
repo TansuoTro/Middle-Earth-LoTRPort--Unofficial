@@ -3,7 +3,7 @@ package net.jukoz.me.datageneration.content;
 import net.minecraft.data.client.Model;
 import net.minecraft.data.client.TextureKey;
 import net.jukoz.me.MiddleEarth;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Optional;
 
@@ -22,9 +22,9 @@ public class CustomItemModels {
             MiddleEarth.of("item/dagger_strike")), Optional.empty(), TextureKey.LAYER0);
 
     public static final Model CROSSBOW = new Model(Optional.of(
-            new Identifier("item/crossbow")), Optional.empty(), TextureKey.LAYER0);
+            new ResourceLocation("item/crossbow")), Optional.empty(), TextureKey.LAYER0);
 
     /** 1.20.1 has no {@code Models.TEMPLATE_SPAWN_EGG}; the parent is enough. */
     public static final Model TEMPLATE_SPAWN_EGG = new Model(Optional.of(
-            new Identifier("item/template_spawn_egg")), Optional.empty());
+            new ResourceLocation("item/template_spawn_egg")), Optional.empty());
 }

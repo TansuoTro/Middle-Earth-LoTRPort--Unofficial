@@ -2,15 +2,15 @@ package net.jukoz.me.world.features.columns;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +27,7 @@ public class CaveColumnFeature extends Feature<CaveColumnFeatureConfig> {
         int i = context.getGenerator().getSeaLevel();
         BlockPos blockPos = context.getOrigin();
         StructureWorldAccess structureWorldAccess = context.getWorld();
-        Random random = context.getRandom();
+        RandomSource random = context.getRandom();
         CaveColumnFeatureConfig basaltColumnsFeatureConfig = (CaveColumnFeatureConfig)context.getConfig();
         if (!canPlaceAt(structureWorldAccess, i, blockPos.mutableCopy())) {
             return false;

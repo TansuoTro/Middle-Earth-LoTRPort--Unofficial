@@ -1,7 +1,7 @@
 package net.jukoz.me.datageneration.content.loot_tables;
 
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 
 import java.util.ArrayList;
 import java.util.List;

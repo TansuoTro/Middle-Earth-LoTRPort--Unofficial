@@ -2,10 +2,10 @@ package net.jukoz.me.entity.spider.scuttler;
 import net.jukoz.me.compat.client.render.MEAnimationStates;
 import net.jukoz.me.compat.client.render.MEMobEntityRenderer;
 
-import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.model.EntityModelLayer;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.entity.EntityModelLayersME;
 
 public class ShelobiteScuttlerRenderer extends MEMobEntityRenderer<ShelobiteScuttlerEntity, ShelobiteScuttlerRenderState, ShelobiteScuttlerModel> {
@@ -24,7 +24,7 @@ public class ShelobiteScuttlerRenderer extends MEMobEntityRenderer<ShelobiteScut
     }
 
     @Override
-    public Identifier getTexture(ShelobiteScuttlerRenderState state) {
+    public ResourceLocation getTexture(ShelobiteScuttlerRenderState state) {
         return state.spiderVariant.assetInfo().scuttler().texturePath();
     }
 

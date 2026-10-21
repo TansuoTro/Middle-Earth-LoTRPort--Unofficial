@@ -1,43 +1,43 @@
 package net.jukoz.me.block.special.crockpot;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsage;
-import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.BlockWithEntity;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUsage;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.block.special.bellows.BellowsBlock;
 import org.jetbrains.annotations.Nullable;
 
 public class CrockpotBlock extends BlockWithEntity {
-    public static final EnumProperty<Direction> FACING = Properties.HORIZONTAL_FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty HANGING = BooleanProperty.of("hanging");
 
     public CrockpotBlock(Settings settings) {
@@ -48,7 +48,7 @@ public class CrockpotBlock extends BlockWithEntity {
 
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         ItemStack stack = player.getStackInHand(hand);
         BlockEntity blockEntity = player.getWorld().getBlockEntity(pos);
 
@@ -60,14 +60,14 @@ public class CrockpotBlock extends BlockWithEntity {
                 player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
                 world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.1F);
                 world.emitGameEvent(null, GameEvent.FLUID_PLACE, pos);
-                return ActionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             } else {
                 if(stack.isEmpty()) {
                     NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
                     if(screenHandlerFactory != null) {
                         player.openHandledScreen(screenHandlerFactory);
                     }
-                    return ActionResult.CONSUME;
+                    return InteractionResult.CONSUME;
                 } else {
                     ItemStack stackResult = crockpotBlockEntity.fillBowl(stack.getItem());
                     if(!stackResult.isEmpty()) {
@@ -83,7 +83,7 @@ public class CrockpotBlock extends BlockWithEntity {
                         }
 
                         world.emitGameEvent(player, GameEvent.FLUID_PICKUP, pos);
-                        return ActionResult.SUCCESS;
+                        return InteractionResult.SUCCESS;
                     }
                 }
             }
@@ -92,26 +92,26 @@ public class CrockpotBlock extends BlockWithEntity {
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return Block.createCuboidShape(4.0, 0.0, 4.0, 12, 7.0, 12.0);
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, HANGING);
         super.appendProperties(builder);
     }
 
     @Nullable
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        BlockView blockView = ctx.getWorld();
+    public BlockState getPlacementState(BlockPlaceContext ctx) {
+        BlockGetter blockView = ctx.getWorld();
         BlockPos blockPos = ctx.getBlockPos();
         BlockPos bottomBlockPos = blockPos.down();
         BlockState blockState = blockView.getBlockState(bottomBlockPos);
         if(blockState.isIn(BlockTags.CAMPFIRES) || blockState.isOf(ModDecorativeBlocks.BONFIRE)) {
-            return this.getDefaultState().with(Properties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(HANGING, true);
+            return this.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(HANGING, true);
         }
-        return this.getDefaultState().with(Properties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+        return this.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Nullable
@@ -122,19 +122,19 @@ public class CrockpotBlock extends BlockWithEntity {
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
         return null; //validateTicker(world, type, ModBlockEntities.CROCKPOT);
     }
 
     @Nullable
-    protected static <T extends BlockEntity> BlockEntityTicker<T> validateTicker(World world, BlockEntityType<T> givenType, BlockEntityType<CrockpotBlockEntity> expectedType) {
+    protected static <T extends BlockEntity> BlockEntityTicker<T> validateTicker(Level world, BlockEntityType<T> givenType, BlockEntityType<CrockpotBlockEntity> expectedType) {
         return world.isClient
                 ? checkType(givenType, expectedType, CrockpotBlockEntity::clientTick)
                 : checkType(givenType, expectedType, CrockpotBlockEntity::serverTick);
     }
 
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+    public void randomDisplayTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
         super.randomDisplayTick(state, world, pos, random);
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if(blockEntity instanceof CrockpotBlockEntity crockpotBlockEntity) {

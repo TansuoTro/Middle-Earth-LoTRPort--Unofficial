@@ -1,27 +1,27 @@
 package net.jukoz.me.api.utils;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.api.SevenStarsApi;
 
 public class IdentifierUtil {
-    public static Identifier getIdentifierFromString(String id){
+    public static ResourceLocation getIdentifierFromString(String id){
         if(id == null)
             return null;
         if(id.contains(":") && id.split(":").length == 2){
-            return new Identifier(id.split(":")[0], id.split(":")[1]);
+            return new ResourceLocation(id.split(":")[0], id.split(":")[1]);
         }
-        return new Identifier(SevenStarsApi.MOD_ID, id + "_error");
+        return new ResourceLocation(SevenStarsApi.MOD_ID, id + "_error");
     }
 
-    public static Identifier build(String key, String name) {
-        return new Identifier(key, name);
+    public static ResourceLocation build(String key, String name) {
+        return new ResourceLocation(key, name);
     }
 
-    public static Identifier ofVanilla(String name) {
-        return new Identifier(name);
+    public static ResourceLocation ofVanilla(String name) {
+        return new ResourceLocation(name);
     }
 
-    public static Identifier buildAggregate(String key, String... names) {
+    public static ResourceLocation buildAggregate(String key, String... names) {
         return build(key, createAggregateValue('.', names));
     }
 

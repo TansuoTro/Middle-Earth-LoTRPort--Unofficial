@@ -1,12 +1,12 @@
 package net.jukoz.me.world.features.platedfood;
 
-import net.minecraft.registry.Registerable;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.ConfiguredFeatures;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.world.features.chain.ChainFeatureConfig;
@@ -14,14 +14,14 @@ import net.jukoz.me.world.gen.ModFeatures;
 
 public class PlatedFoodConfiguredFeatures {
     // NOTE keep it here just in case
-    //public static final RegistryKey<ConfiguredFeature<?, ?>> CERAMIC_PLATE = registerKey("ceramic_plate");
+    //public static final ResourceKey<ConfiguredFeature<?, ?>> CERAMIC_PLATE = registerKey("ceramic_plate");
 
-    public static RegistryKey<ConfiguredFeature<?, ?>> registerKey(String name) {
-        return RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, new Identifier(MiddleEarth.MOD_ID, name));
+    public static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {
+        return ResourceKey.of(Registries.CONFIGURED_FEATURE, new ResourceLocation(MiddleEarth.MOD_ID, name));
     }
 
-    public static void bootstrap(Registerable<ConfiguredFeature<?, ?>> featureRegisterable) {
-        //ConfiguredFeatures.register(featureRegisterable, CERAMIC_PLATE, ModFeatures.PLATED_FOOD,
+    public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> featureRegisterable) {
+        //ConfiguredFeature.register(featureRegisterable, CERAMIC_PLATE, ModFeatures.PLATED_FOOD,
         //        new PlatedFoodFeatureConfig(ModDecorativeBlocks.CERAMIC_PLATE.getDefaultState(), MiddleEarth.of("structures/shire/food")));
 
     }

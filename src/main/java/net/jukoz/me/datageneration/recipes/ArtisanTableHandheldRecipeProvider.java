@@ -19,22 +19,22 @@ import net.jukoz.me.item.ToolItemsME;
 import net.jukoz.me.item.WeaponItemsME;
 import net.jukoz.me.resources.datas.common.DispositionType;
 import net.jukoz.me.utils.ItemTagsME;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Holder;
+import net.minecraft.tags.TagKey;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * Ported from the 1.21.8 donor package
@@ -44,14 +44,14 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
     private final int XP_MEDIUM_SHIELD = 2;
     private final int XP_HEAVY_SHIELD = 4;
 
-    private Identifier getMetalIdentifier(MetalTypes metal) {
+    private ResourceLocation getMetalIdentifier(MetalTypes metal) {
         if (metal.isVanilla()) {
-            return new Identifier(metal.getName());
+            return new ResourceLocation(metal.getName());
         }
-        return new Identifier(MiddleEarth.MOD_ID, metal.getName());
+        return new ResourceLocation(MiddleEarth.MOD_ID, metal.getName());
     }
 
-    private static NbtCompound trimNbt(Identifier materialId) {
+    private static CompoundTag trimNbt(ResourceLocation materialId) {
         return ArtisanTableRecipeJsonBuilder.trimNbt(materialId);
     }
 
@@ -378,130 +378,130 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
 
                 //region SHIELDS
                 ItemStack ironShieldBorder = new ItemStack(ResourceItemsME.SHIELD_BORDER);
-                ironShieldBorder.setSubNbt("Trim", trimNbt(new Identifier(MetalTypes.IRON.getName())));
+                ironShieldBorder.setSubNbt("Trim", trimNbt(new ResourceLocation(MetalTypes.IRON.getName())));
 
                 ItemStack bronzeShieldBorder = new ItemStack(ResourceItemsME.SHIELD_BORDER);
-                bronzeShieldBorder.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.BRONZE.getName())));
+                bronzeShieldBorder.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.BRONZE.getName())));
 
                 ItemStack crudeShieldBorder = new ItemStack(ResourceItemsME.SHIELD_BORDER);
-                crudeShieldBorder.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.CRUDE.getName())));
+                crudeShieldBorder.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.CRUDE.getName())));
 
                 ItemStack steelShieldPlate = new ItemStack(ResourceItemsME.SHIELD_PLATE);
-                steelShieldPlate.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.STEEL.getName())));
+                steelShieldPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.STEEL.getName())));
 
                 ItemStack edhelSteelShieldPlate = new ItemStack(ResourceItemsME.SHIELD_PLATE);
-                edhelSteelShieldPlate.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.EDHEL_STEEL.getName())));
+                edhelSteelShieldPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.EDHEL_STEEL.getName())));
 
                 ItemStack khazadSteelShieldPlate = new ItemStack(ResourceItemsME.SHIELD_PLATE);
-                khazadSteelShieldPlate.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.KHAZAD_STEEL.getName())));
+                khazadSteelShieldPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.KHAZAD_STEEL.getName())));
 
                 ItemStack burzumSteelShieldPlate = new ItemStack(ResourceItemsME.SHIELD_PLATE);
-                burzumSteelShieldPlate.setSubNbt("Trim", trimNbt(new Identifier(MiddleEarth.MOD_ID, MetalTypes.BURZUM_STEEL.getName())));
+                burzumSteelShieldPlate.setSubNbt("Trim", trimNbt(new ResourceLocation(MiddleEarth.MOD_ID, MetalTypes.BURZUM_STEEL.getName())));
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, Items.SHIELD.getDefaultStack(), "medium_shield", DispositionType.NEUTRAL, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(ironShieldBorder)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(Items.SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.ROUND_SHIELD.getDefaultStack(), "medium_shield", DispositionType.NEUTRAL, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(ironShieldBorder)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.ROUND_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.HEATER_SHIELD.getDefaultStack(), "medium_shield", DispositionType.NEUTRAL, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(ironShieldBorder)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.HEATER_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.KITE_SHIELD.getDefaultStack(), "medium_shield", DispositionType.NEUTRAL, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(ironShieldBorder)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.KITE_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.GONDORIAN_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.GONDOR_BANNER_PATTERN)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.BLACK_DYE)
                         .componentInput(ironShieldBorder)
                         .input(Items.BLACK_DYE)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.GONDORIAN_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.GONDORIAN_TOWER_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.GONDOR_BANNER_PATTERN)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.BLACK_DYE)
                         .componentInput(ironShieldBorder)
                         .input(Items.BLACK_DYE)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.GONDORIAN_TOWER_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.GONDORIAN_KINGS_GUARD_TOWER_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.GONDOR_BANNER_PATTERN)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.BLACK_DYE)
                         .componentInput(ironShieldBorder)
                         .input(Items.BLACK_DYE)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.GONDORIAN_KINGS_GUARD_TOWER_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.LAST_ALLIANCE_HEIRLOOM_TOWER_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.GONDOR_BANNER_PATTERN)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.BLACK_DYE)
                         .componentInput(ironShieldBorder)
                         .input(Items.BLACK_DYE)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.LAST_ALLIANCE_HEIRLOOM_TOWER_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.GONDORIAN_HERO_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.LEATHER)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.LEATHER)
                         .componentInput(ironShieldBorder)
                         .input(Items.LEATHER)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.GONDORIAN_HERO_SHIELD).getPath() + "_artisan");
@@ -510,9 +510,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.STEEL_NUGGET)
                         .input(ResourceItemsME.GONDOR_BANNER_PATTERN)
                         .input(ResourceItemsME.STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(steelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.STEEL_NUGGET)
@@ -524,9 +524,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.STEEL_NUGGET)
                         .input(ResourceItemsME.GONDOR_BANNER_PATTERN)
                         .input(ResourceItemsME.STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(steelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.GOLD_NUGGET)
                         .input(Items.GREEN_DYE)
                         .input(Items.GOLD_NUGGET)
@@ -535,73 +535,73 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.GONDORIAN_ORNAMENTED_KNIGHT_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.ROHIRRIC_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.WHITE_DYE)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.GREEN_DYE)
                         .componentInput(ironShieldBorder)
                         .input(Items.GREEN_DYE)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.ROHIRRIC_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.ROHIRRIC_BUCKING_HORSE_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.ROHAN_BANNER_PATTERN)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.GREEN_DYE)
                         .componentInput(ironShieldBorder)
                         .input(Items.GREEN_DYE)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.ROHIRRIC_BUCKING_HORSE_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.ROHIRRIC_GALLOPING_HORSE_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.ROHAN_BANNER_PATTERN)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.GREEN_DYE)
                         .componentInput(ironShieldBorder)
                         .input(Items.GREEN_DYE)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.ROHIRRIC_GALLOPING_HORSE_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.ROHIRRIC_HORSE_HEAD_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.ROHAN_BANNER_PATTERN)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.GREEN_DYE)
                         .componentInput(ironShieldBorder)
                         .input(Items.GREEN_DYE)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.ROHIRRIC_HORSE_HEAD_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.ROHIRRIC_PLAINSMAN_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.YELLOW_DYE)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.GREEN_DYE)
                         .componentInput(ironShieldBorder)
                         .input(Items.GREEN_DYE)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.ROHIRRIC_PLAINSMAN_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.ROHIRRIC_TWIN_HORSES_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.ROHAN_BANNER_PATTERN)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.GREEN_DYE)
                         .componentInput(ironShieldBorder)
                         .input(Items.GREEN_DYE)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.ROHIRRIC_TWIN_HORSES_SHIELD).getPath() + "_artisan");
@@ -610,9 +610,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.STEEL_NUGGET)
                         .input(Items.YELLOW_DYE)
                         .input(ResourceItemsME.STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(steelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.STEEL_NUGGET)
@@ -624,9 +624,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.STEEL_NUGGET)
                         .input(ResourceItemsME.ROHAN_BANNER_PATTERN)
                         .input(ResourceItemsME.STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(steelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.GOLD_NUGGET)
                         .input(Items.LEATHER)
                         .input(Items.GOLD_NUGGET)
@@ -638,9 +638,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.STEEL_NUGGET)
                         .input(Items.YELLOW_DYE)
                         .input(ResourceItemsME.STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(steelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.STEEL_NUGGET)
@@ -649,49 +649,49 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.ROHIRRIC_ROYAL_GUARD_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.DALISH_BLUE_OVAL_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.BLUE_DYE)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.BLUE_DYE)
                         .componentInput(ironShieldBorder)
                         .input(Items.BLUE_DYE)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.DALISH_BLUE_OVAL_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.DALISH_BARDING_OVAL_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.BLUE_DYE)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.GOLD_NUGGET)
                         .componentInput(ironShieldBorder)
                         .input(Items.GOLD_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.DALISH_BARDING_OVAL_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.DALISH_BLUE_BRACED_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.IRON_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.BLUE_DYE)
                         .componentInput(ironShieldBorder)
                         .input(Items.BLUE_DYE)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.DALISH_BLUE_BRACED_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.DALISH_BARDING_BRACED_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.IRON_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.GOLD_NUGGET)
                         .componentInput(ironShieldBorder)
                         .input(Items.GOLD_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.DALISH_BARDING_BRACED_SHIELD).getPath() + "_artisan");
@@ -700,9 +700,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.STEEL_NUGGET)
                         .input(Items.WHITE_DYE)
                         .input(ResourceItemsME.STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(steelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.STEEL_NUGGET)
@@ -714,9 +714,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.STEEL_NUGGET)
                         .input(Items.BLUE_DYE)
                         .input(ResourceItemsME.STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(steelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.STEEL_NUGGET)
@@ -728,9 +728,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(Items.GOLD_NUGGET)
                         .input(Items.LIGHT_BLUE_DYE)
                         .input(Items.GOLD_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(steelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.STEEL_NUGGET)
@@ -742,9 +742,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(Items.GOLD_NUGGET)
                         .input(Items.LIGHT_BLUE_DYE)
                         .input(Items.GOLD_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(steelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.GOLD_NUGGET)
                         .input(Items.LEATHER)
                         .input(Items.GOLD_NUGGET)
@@ -756,9 +756,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.STEEL_NUGGET)
                         .input(Items.ORANGE_DYE)
                         .input(ResourceItemsME.STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(steelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.STEEL_NUGGET)
@@ -767,37 +767,37 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.DALISH_HEYDAY_ROUND_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.LORIEN_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.LEATHER)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.LEATHER)
                         .componentInput(ironShieldBorder)
                         .input(Items.LEATHER)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.LORIEN_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.LORIEN_LAURELS_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.YELLOW_DYE)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.LEATHER)
                         .componentInput(ironShieldBorder)
                         .input(Items.LEATHER)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.LORIEN_LAURELS_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.LORIEN_MALLORN_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.YELLOW_DYE)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.LEATHER)
                         .componentInput(ironShieldBorder)
                         .input(Items.LEATHER)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.LORIEN_MALLORN_SHIELD).getPath() + "_artisan");
@@ -806,9 +806,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
                         .input(Items.YELLOW_DYE)
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(edhelSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
@@ -820,9 +820,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
                         .input(Items.YELLOW_DYE)
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(edhelSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.GOLD_NUGGET)
                         .input(Items.LEATHER)
                         .input(Items.GOLD_NUGGET)
@@ -831,36 +831,36 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.GALADHRIM_LORD_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.WOODLAND_REALM_BUCKLER_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.COPPER_INGOT)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.LEATHER)
                         .componentInput(bronzeShieldBorder)
                         .input(Items.LEATHER)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.WOODLAND_REALM_BUCKLER_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.WOODLAND_REALM_SCOUT_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.SILVER_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.LEATHER)
                         .componentInput(ironShieldBorder)
                         .input(Items.LEATHER)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.WOODLAND_REALM_SCOUT_SHIELD).getPath() + "_artisan");
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.WOODLAND_REALM_SCOUT_BRONZE_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.BRONZE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.LEATHER)
                         .componentInput(ironShieldBorder)
                         .input(Items.LEATHER)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.WOODLAND_REALM_SCOUT_BRONZE_SHIELD).getPath() + "_artisan");
@@ -869,9 +869,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
                         .input(Items.BROWN_DYE)
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(edhelSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
@@ -882,9 +882,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
                         .input(Items.GREEN_DYE)
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(edhelSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
@@ -895,9 +895,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
                         .input(Items.BLUE_DYE)
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(edhelSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
@@ -909,9 +909,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
                         .input(Items.BROWN_DYE)
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(edhelSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
                         .input(Items.GOLD_INGOT)
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
@@ -922,9 +922,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
                         .input(Items.GREEN_DYE)
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(edhelSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
                         .input(Items.GOLD_INGOT)
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
@@ -936,9 +936,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
                         .input(Items.GREEN_DYE)
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(edhelSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
                         .input(Items.GOLD_INGOT)
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
@@ -950,9 +950,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
                         .input(Items.BLACK_DYE)
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(edhelSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
@@ -963,9 +963,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
                         .input(Items.BLACK_DYE)
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(edhelSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
                         .input(Items.GOLD_INGOT)
                         .input(ResourceItemsME.EDHEL_STEEL_NUGGET)
@@ -977,61 +977,61 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
 
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.EREBOR_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.BRONZE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.LEATHER)
                         .componentInput(bronzeShieldBorder)
                         .input(Items.LEATHER)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.EREBOR_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.EREBOR_CROSS_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.BRONZE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.LEATHER)
                         .componentInput(bronzeShieldBorder)
                         .input(Items.LEATHER)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.EREBOR_CROSS_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.EREBOR_PLATED_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.BRONZE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.BRONZE_NUGGET)
                         .componentInput(bronzeShieldBorder)
                         .input(ResourceItemsME.BRONZE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.EREBOR_PLATED_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.EREBOR_ORNAMENTED_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.GOLD_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.BRONZE_NUGGET)
                         .componentInput(bronzeShieldBorder)
                         .input(ResourceItemsME.BRONZE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.EREBOR_ORNAMENTED_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.EREBOR_REINFORCED_SHIELD.getDefaultStack(), "medium_shield", DispositionType.GOOD, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.IRON_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.BRONZE_NUGGET)
                         .componentInput(bronzeShieldBorder)
                         .input(ResourceItemsME.BRONZE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.EREBOR_REINFORCED_SHIELD).getPath() + "_artisan");
@@ -1040,9 +1040,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
                         .input(ResourceItemsME.BRONZE_INGOT)
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(khazadSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
@@ -1054,9 +1054,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
                         .input(ResourceItemsME.KHAZAD_STEEL_INGOT)
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(khazadSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
@@ -1068,9 +1068,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
                         .input(ResourceItemsME.KHAZAD_STEEL_INGOT)
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(khazadSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
                         .input(ResourceItemsME.KHAZAD_STEEL_INGOT)
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
@@ -1082,9 +1082,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
                         .input(Items.GOLD_NUGGET)
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(khazadSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
                         .input(Items.GOLD_NUGGET)
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
@@ -1096,9 +1096,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
                         .input(ResourceItemsME.KHAZAD_STEEL_INGOT)
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(khazadSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
@@ -1110,9 +1110,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
                         .input(ResourceItemsME.KHAZAD_STEEL_INGOT)
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(khazadSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
                         .input(ResourceItemsME.KHAZAD_STEEL_INGOT)
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
@@ -1124,9 +1124,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
                         .input(Items.GOLD_NUGGET)
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(khazadSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
                         .input(Items.GOLD_NUGGET)
                         .input(ResourceItemsME.KHAZAD_STEEL_NUGGET)
@@ -1135,11 +1135,11 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.RAVENHILL_ORNAMENTED_TOWER_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.MORDOR_WOODEN_SHIELD.getDefaultStack(), "light_shield", DispositionType.EVIL)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.CRUDE_INGOT)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.CRUDE_INGOT),
                                 conditionsFromItem(ResourceItemsME.CRUDE_INGOT))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.MORDOR_WOODEN_SHIELD).getPath() + "_artisan");
@@ -1152,25 +1152,25 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.MORDOR_PAINTED_WOODEN_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.MORDOR_ROUND_SHIELD.getDefaultStack(), "medium_shield", DispositionType.EVIL, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.CRUDE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.CRUDE_NUGGET)
                         .componentInput(crudeShieldBorder)
                         .input(ResourceItemsME.CRUDE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.MORDOR_ROUND_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.MORDOR_PAINTED_ROUND_SHIELD.getDefaultStack(), "medium_shield", DispositionType.EVIL, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.MORDOR_BANNER_PATTERN)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.CRUDE_NUGGET)
                         .componentInput(crudeShieldBorder)
                         .input(ResourceItemsME.CRUDE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.MORDOR_BANNER_PATTERN),
                                 conditionsFromItem(ResourceItemsME.MORDOR_BANNER_PATTERN))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.MORDOR_PAINTED_ROUND_SHIELD).getPath() + "_artisan");
@@ -1183,13 +1183,13 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.MORDOR_BLACK_ROUND_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.MORDOR_BRACED_SHIELD.getDefaultStack(), "medium_shield", DispositionType.EVIL, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.IRON_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.CRUDE_NUGGET)
                         .componentInput(crudeShieldBorder)
                         .input(ResourceItemsME.CRUDE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.MORDOR_BRACED_SHIELD).getPath() + "_artisan");
@@ -1209,13 +1209,13 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.MORDOR_BLACK_BRACED_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.MORDOR_LARGE_SHIELD.getDefaultStack(), "medium_shield", DispositionType.EVIL, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.IRON_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.CRUDE_INGOT)
                         .componentInput(crudeShieldBorder)
                         .input(ResourceItemsME.CRUDE_INGOT)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.MORDOR_LARGE_SHIELD).getPath() + "_artisan");
@@ -1235,13 +1235,13 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.MORDOR_BLACK_LARGE_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.DOL_GULDUR_SHIELD.getDefaultStack(), "medium_shield", DispositionType.EVIL, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.IRON_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.CRUDE_NUGGET)
                         .componentInput(crudeShieldBorder)
                         .input(ResourceItemsME.CRUDE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.DOL_GULDUR_SHIELD).getPath() + "_artisan");
@@ -1250,9 +1250,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(burzumSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
@@ -1263,9 +1263,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(burzumSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
@@ -1276,9 +1276,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(burzumSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
@@ -1289,9 +1289,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(ModDecorativeBlocks.OLD_SKULL.asItem())
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(burzumSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
@@ -1311,9 +1311,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(burzumSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
@@ -1329,13 +1329,13 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.MORDOR_PAINTED_HEAVY_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.BLACK_NUMENOREAN_TOWER_SHIELD.getDefaultStack(), "medium_shield", DispositionType.EVIL, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.RED_DYE)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.BLACK_DYE)
                         .componentInput(ironShieldBorder)
                         .input(Items.BLACK_DYE)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.BLACK_NUMENOREAN_TOWER_SHIELD).getPath() + "_artisan");
@@ -1347,7 +1347,7 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.CRUDE_INGOT)
                         .componentInput(crudeShieldBorder)
                         .input(ResourceItemsME.CRUDE_INGOT)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.URUK_HAI_HEATER_SHIELD).getPath() + "_artisan");
@@ -1356,9 +1356,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(burzumSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
@@ -1391,9 +1391,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .componentInput(burzumSteelShieldPlate)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(burzumSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .componentInput(burzumSteelShieldPlate)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
@@ -1402,53 +1402,53 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.URUK_HAI_SIEGE_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.GUNDABAD_WOODEN_SHIELD.getDefaultStack(), "light_shield", DispositionType.EVIL)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.CRUDE_INGOT)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.CRUDE_INGOT),
                                 conditionsFromItem(ResourceItemsME.CRUDE_INGOT))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.GUNDABAD_WOODEN_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.GUNDABAD_PAINTED_WOODEN_SHIELD.getDefaultStack(), "light_shield", DispositionType.EVIL)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.MISTY_MOUNTAINS_ORCS_BANNER_PATTERN)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.CRUDE_INGOT),
                                 conditionsFromItem(ResourceItemsME.CRUDE_INGOT))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.GUNDABAD_PAINTED_WOODEN_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.GUNDABAD_GREAT_EYE_PAINTED_WOODEN_SHIELD.getDefaultStack(), "light_shield", DispositionType.EVIL)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.MISTY_MOUNTAINS_ORCS_BANNER_PATTERN)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.CRUDE_INGOT),
                                 conditionsFromItem(ResourceItemsME.CRUDE_INGOT))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.GUNDABAD_GREAT_EYE_PAINTED_WOODEN_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.GUNDABAD_PEAKS_PAINTED_WOODEN_SHIELD.getDefaultStack(), "light_shield", DispositionType.EVIL)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.MISTY_MOUNTAINS_ORCS_BANNER_PATTERN)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.CRUDE_INGOT),
                                 conditionsFromItem(ResourceItemsME.CRUDE_INGOT))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.GUNDABAD_PEAKS_PAINTED_WOODEN_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.GUNDABAD_REINFORCED_SHIELD.getDefaultStack(), "medium_shield", DispositionType.EVIL, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.CRUDE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.CRUDE_NUGGET)
                         .componentInput(crudeShieldBorder)
                         .input(ResourceItemsME.CRUDE_INGOT)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.GUNDABAD_REINFORCED_SHIELD).getPath() + "_artisan");
@@ -1468,13 +1468,13 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.GUNDABAD_HEAVY_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.MORIA_GOBLINS_BUCKLER_SHIELD.getDefaultStack(), "medium_shield", DispositionType.EVIL, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.CRUDE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.CRUDE_NUGGET)
                         .componentInput(crudeShieldBorder)
                         .input(ResourceItemsME.CRUDE_INGOT)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.MORIA_GOBLINS_BUCKLER_SHIELD).getPath() + "_artisan");
@@ -1482,9 +1482,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(burzumSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
@@ -1493,46 +1493,46 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.MORIA_GOBLINS_HEAVY_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.RUINED_DWARVEN_SHIELD.getDefaultStack(), "medium_shield", DispositionType.EVIL, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.CRUDE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.LEATHER)
                         .componentInput(crudeShieldBorder)
                         .input(Items.LEATHER)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.RUINED_DWARVEN_SHIELD).getPath() + "_artisan");
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.RUINED_DWARVEN_CROSS_SHIELD.getDefaultStack(), "medium_shield", DispositionType.EVIL, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.CRUDE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.LEATHER)
                         .componentInput(crudeShieldBorder)
                         .input(Items.LEATHER)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.RUINED_DWARVEN_CROSS_SHIELD).getPath() + "_artisan");
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.RUINED_DWARVEN_ORNAMENTED_SHIELD.getDefaultStack(), "medium_shield", DispositionType.EVIL, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.CRUDE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.LEATHER)
                         .componentInput(crudeShieldBorder)
                         .input(Items.LEATHER)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.RUINED_DWARVEN_ORNAMENTED_SHIELD).getPath() + "_artisan");
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.RUINED_DWARVEN_REINFORCED_SHIELD.getDefaultStack(), "medium_shield", DispositionType.EVIL, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.CRUDE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.LEATHER)
                         .componentInput(crudeShieldBorder)
                         .input(Items.LEATHER)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.RUINED_DWARVEN_REINFORCED_SHIELD).getPath() + "_artisan");
@@ -1541,9 +1541,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.CRUDE_NUGGET)
                         .input(Items.LEATHER)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(WeaponItemsME.RUINED_DWARVEN_ORNAMENTED_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.LEATHER)
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
@@ -1552,9 +1552,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.CRUDE_NUGGET)
                         .input(Items.LEATHER)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(WeaponItemsME.RUINED_DWARVEN_REINFORCED_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.LEATHER)
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
@@ -1573,13 +1573,13 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.GOBLIN_TOWN_BONE_SHIELD).getPath() + "_artisan");
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, WeaponItemsME.GOBLIN_TOWN_WOODEN_SHIELD.getDefaultStack(), "medium_shield", DispositionType.EVIL, XP_MEDIUM_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.CRUDE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.CRUDE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
                         .offerTo(exporter, Registries.ITEM.getId(WeaponItemsME.GOBLIN_TOWN_WOODEN_SHIELD).getPath() + "_artisan");
@@ -1587,9 +1587,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(Items.BONE)
                         .input(ResourceItemsME.CRUDE_NUGGET)
                         .input(Items.BONE)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(WeaponItemsME.GOBLIN_TOWN_WOODEN_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.BONE)
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
@@ -1598,9 +1598,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.CRUDE_NUGGET)
                         .input(Items.LEATHER)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(WeaponItemsME.GOBLIN_TOWN_WOODEN_SHIELD)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(Items.LEATHER)
                         .criterion(hasItem(ResourceItemsME.SHIELD_BORDER),
                                 conditionsFromItem(ResourceItemsME.SHIELD_BORDER))
@@ -1610,9 +1610,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .componentInput(burzumSteelShieldPlate)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
                         .input(Items.LEATHER)
                         .input(ResourceItemsME.BURZUM_STEEL_NUGGET)
@@ -1623,11 +1623,11 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, ToolItemsME.PIPE.getDefaultStack(), "pipe", DispositionType.NEUTRAL)
                         .input(Items.STICK)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("wooden_slabs")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("wooden_slabs")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("wooden_slabs")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("wooden_slabs")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(Items.STICK),
                                 conditionsFromItem(Items.STICK))
                         .offerTo(exporter, Registries.ITEM.getId(ToolItemsME.PIPE).getPath() + "_artisan");
@@ -1635,8 +1635,8 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, ToolItemsME.CLAY_PIPE.getDefaultStack(), "pipe", DispositionType.NEUTRAL)
                         .input(Items.STICK)
                         .input(Items.TERRACOTTA)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("wooden_slabs")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("wooden_slabs")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("wooden_slabs")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("wooden_slabs")))
                         .input(Items.TERRACOTTA)
                         .input(Items.TERRACOTTA)
                         .criterion(hasItem(Items.STICK),
@@ -1646,9 +1646,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, ToolItemsME.RIVERBEND_PIPE.getDefaultStack(), "pipe", DispositionType.NEUTRAL)
                         .input(Items.STICK)
                         .input(ResourceItemsME.BRONZE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("wooden_slabs")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("wooden_slabs")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("wooden_slabs")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("wooden_slabs")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.BRONZE_NUGGET)
                         .criterion(hasItem(Items.STICK),
                                 conditionsFromItem(Items.STICK))
@@ -1657,9 +1657,9 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, ToolItemsME.BRIMMINGBEND_PIPE.getDefaultStack(), "pipe", DispositionType.NEUTRAL)
                         .input(Items.STICK)
                         .input(ResourceItemsME.BRONZE_NUGGET)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("wooden_slabs")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("wooden_slabs")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("wooden_slabs")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("wooden_slabs")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .input(ResourceItemsME.BRONZE_NUGGET)
                         .criterion(hasItem(Items.STICK),
                                 conditionsFromItem(Items.STICK))
@@ -1667,11 +1667,11 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
 
                 ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, ToolItemsME.LONGBOTTOM_PIPE.getDefaultStack(), "pipe", DispositionType.NEUTRAL)
                         .input(Items.STICK)
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("wooden_slabs")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("wooden_slabs")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
-                        .input(TagKey.of(RegistryKeys.ITEM, new Identifier("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("wooden_slabs")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("wooden_slabs")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
+                        .input(TagKey.of(Registries.ITEM, new ResourceLocation("planks")))
                         .criterion(hasItem(Items.STICK),
                                 conditionsFromItem(Items.STICK))
                         .offerTo(exporter, Registries.ITEM.getId(ToolItemsME.LONGBOTTOM_PIPE).getPath() + "_artisan");
@@ -1714,7 +1714,7 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
         if (!noble) {
             swordHilt.setSubNbt("Trim", trimNbt(getMetalIdentifier(metal)));
         } else {
-            swordHilt.setSubNbt("Trim", trimNbt(new Identifier(MetalTypes.GOLD.getName())));
+            swordHilt.setSubNbt("Trim", trimNbt(new ResourceLocation(MetalTypes.GOLD.getName())));
             xp++;
         }
 
@@ -1741,7 +1741,7 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
         if (!noble) {
             swordHilt.setSubNbt("Trim", trimNbt(getMetalIdentifier(metal)));
         } else {
-            swordHilt.setSubNbt("Trim", trimNbt(new Identifier(MetalTypes.GOLD.getName())));
+            swordHilt.setSubNbt("Trim", trimNbt(new ResourceLocation(MetalTypes.GOLD.getName())));
             xp++;
         }
 
@@ -1768,7 +1768,7 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
         if (!noble) {
             swordHilt.setSubNbt("Trim", trimNbt(getMetalIdentifier(metal)));
         } else {
-            swordHilt.setSubNbt("Trim", trimNbt(new Identifier(MetalTypes.GOLD.getName())));
+            swordHilt.setSubNbt("Trim", trimNbt(new ResourceLocation(MetalTypes.GOLD.getName())));
             xp++;
         }
 
@@ -1801,7 +1801,7 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
         } else {
             ItemStack rod = new ItemStack(ResourceItemsME.ROD);
             xp++;
-            rod.setSubNbt("Trim", trimNbt(new Identifier(MetalTypes.GOLD.getName())));
+            rod.setSubNbt("Trim", trimNbt(new ResourceLocation(MetalTypes.GOLD.getName())));
             ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, output, "spear", dispositionType, xp)
                     .componentInput(blade)
                     .componentInput(rod)
@@ -1827,7 +1827,7 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
 
     private void createArtisanTableNobleBowRecipe(Consumer<RecipeJsonProvider> exporter, ItemStack output, DispositionType dispositionType) {
         ItemStack rod = new ItemStack(ResourceItemsME.ROD);
-        rod.setSubNbt("Trim", trimNbt(new Identifier(MetalTypes.GOLD.getName())));
+        rod.setSubNbt("Trim", trimNbt(new ResourceLocation(MetalTypes.GOLD.getName())));
         ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, output, "bow", dispositionType, XP_MEDIUM_SHIELD)
                 .input(Items.STICK)
                 .input(Items.STRING)
@@ -1842,11 +1842,11 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
 
     private void createArtisanTableLongbowRecipe(Consumer<RecipeJsonProvider> exporter, ItemStack output, DispositionType dispositionType) {
         ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, output, "bow", dispositionType)
-                .input(TagKey.of(RegistryKeys.ITEM, new Identifier("wooden_fences")))
+                .input(TagKey.of(Registries.ITEM, new ResourceLocation("wooden_fences")))
                 .input(Items.STRING)
-                .input(TagKey.of(RegistryKeys.ITEM, new Identifier("wooden_fences")))
+                .input(TagKey.of(Registries.ITEM, new ResourceLocation("wooden_fences")))
                 .input(Items.STRING)
-                .input(TagKey.of(RegistryKeys.ITEM, new Identifier("wooden_fences")))
+                .input(TagKey.of(Registries.ITEM, new ResourceLocation("wooden_fences")))
                 .input(Items.STRING)
                 .criterion(hasItem(Items.STRING),
                         conditionsFromItem(Items.STRING))
@@ -1855,13 +1855,13 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
 
     private void createArtisanTableNobleLongbowRecipe(Consumer<RecipeJsonProvider> exporter, ItemStack output, DispositionType dispositionType) {
         ItemStack rod = new ItemStack(ResourceItemsME.ROD);
-        rod.setSubNbt("Trim", trimNbt(new Identifier(MetalTypes.GOLD.getName())));
+        rod.setSubNbt("Trim", trimNbt(new ResourceLocation(MetalTypes.GOLD.getName())));
         ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, output, "bow", dispositionType, 2)
-                .input(TagKey.of(RegistryKeys.ITEM, new Identifier("wooden_fences")))
+                .input(TagKey.of(Registries.ITEM, new ResourceLocation("wooden_fences")))
                 .input(Items.STRING)
                 .componentInput(rod)
                 .input(Items.STRING)
-                .input(TagKey.of(RegistryKeys.ITEM, new Identifier("wooden_fences")))
+                .input(TagKey.of(Registries.ITEM, new ResourceLocation("wooden_fences")))
                 .input(Items.STRING)
                 .criterion(hasItem(Items.STRING),
                         conditionsFromItem(Items.STRING))
@@ -1870,7 +1870,7 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
 
     private void createArtisanTableCrossbowRecipe(Consumer<RecipeJsonProvider> exporter, ItemStack output, DispositionType dispositionType) {
         ItemStack rod = new ItemStack(ResourceItemsME.ROD);
-        rod.setSubNbt("Trim", trimNbt(new Identifier(MetalTypes.IRON.getName())));
+        rod.setSubNbt("Trim", trimNbt(new ResourceLocation(MetalTypes.IRON.getName())));
 
         ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, output, "crossbow", dispositionType, 2)
                 .input(Items.STICK)
@@ -1887,7 +1887,7 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
 
     private void createArtisanTableNobleCrossbowRecipe(Consumer<RecipeJsonProvider> exporter, ItemStack output, DispositionType dispositionType) {
         ItemStack rod = new ItemStack(ResourceItemsME.ROD);
-        rod.setSubNbt("Trim", trimNbt(new Identifier(MetalTypes.GOLD.getName())));
+        rod.setSubNbt("Trim", trimNbt(new ResourceLocation(MetalTypes.GOLD.getName())));
 
         ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, output, "crossbow", dispositionType, 2)
                 .input(Items.STICK)
@@ -1959,7 +1959,7 @@ public class ArtisanTableHandheldRecipeProvider extends FabricRecipeProvider {
             }
         } else {
             ItemStack rod = new ItemStack(ResourceItemsME.ROD);
-            rod.setSubNbt("Trim", trimNbt(new Identifier(MetalTypes.GOLD.getName())));
+            rod.setSubNbt("Trim", trimNbt(new ResourceLocation(MetalTypes.GOLD.getName())));
             ArtisanTableRecipeJsonBuilder.createArtisanRecipe(RecipeCategory.COMBAT, output, "axe", dispositionType, xp + 1)
                     .componentInput(axeHead)
                     .componentInput(rod)

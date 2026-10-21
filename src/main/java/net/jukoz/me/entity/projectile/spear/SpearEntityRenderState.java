@@ -1,10 +1,10 @@
 package net.jukoz.me.entity.projectile.spear;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.jukoz.me.compat.client.render.state.EntityRenderState;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class SpearEntityRenderState extends EntityRenderState {
 
     SpearEntityRenderState(){

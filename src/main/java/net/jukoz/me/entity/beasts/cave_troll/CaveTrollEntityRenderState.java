@@ -1,12 +1,12 @@
 package net.jukoz.me.entity.beasts.cave_troll;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.jukoz.me.entity.beasts.BeastEntityRenderState;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class CaveTrollEntityRenderState extends BeastEntityRenderState {
     public CaveTrollVariant variant = CaveTrollVariant.GREEN;
     public boolean isEnraged = false;

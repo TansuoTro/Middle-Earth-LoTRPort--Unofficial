@@ -4,8 +4,8 @@ import net.jukoz.me.block.registration.StoneBlockSets;
 import net.jukoz.me.world.biomes.MEBiomeKeys;
 import net.jukoz.me.world.biomes.surface.MapBasedCustomBiome;
 import net.jukoz.me.world.map.MiddleEarthMapConfigs;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.world.chunk.Chunk;
 

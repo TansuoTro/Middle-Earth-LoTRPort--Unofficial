@@ -1,11 +1,11 @@
 package net.jukoz.me.entity.goals;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.PounceAtTargetGoal;
-import net.minecraft.entity.ai.pathing.Path;
+import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.phys.Vec3;
 import net.jukoz.me.entity.spider.Pouncer;
 
 import java.util.EnumSet;
@@ -77,8 +77,8 @@ public class SpiderPonceAtTargetGoal extends Goal {
             preparationPounceTimer = Math.max(preparationPounceTimer - 1, 0);
             if(preparationPounceTimer == 0) {
                 this.spider.getNavigation().stop();
-                Vec3d vec3d = this.spider.getVelocity();
-                Vec3d vec3d2 = new Vec3d(this.target.getX() - this.spider.getX(), 0.0, this.target.getZ() - this.spider.getZ());
+                Vec3 vec3d = this.spider.getVelocity();
+                Vec3 vec3d2 = new Vec3(this.target.getX() - this.spider.getX(), 0.0, this.target.getZ() - this.spider.getZ());
                 if (vec3d2.lengthSquared() > 1.0E-7) {
                     vec3d2 = vec3d2.multiply(horizontalVelocity).add(vec3d.multiply(0.2));;
                 }

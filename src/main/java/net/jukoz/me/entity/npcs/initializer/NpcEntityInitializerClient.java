@@ -1,8 +1,8 @@
 package net.jukoz.me.entity.npcs.initializer;
 
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.entity.npcs.NpcEntity;
 
 public class NpcEntityInitializerClient {
@@ -10,7 +10,7 @@ public class NpcEntityInitializerClient {
         initializeForClient(clientWorld, npcEntity);
     }
 
-    private static void initializeForClient(World clientWorld, NpcEntity npcEntity) {
+    private static void initializeForClient(Level clientWorld, NpcEntity npcEntity) {
         if(NpcEntityInitializerUtil.characterIdentifierExist(clientWorld, npcEntity.getNpcTypeIdentifier())){
             NpcGenerator.generateCharacterTextures(clientWorld, npcEntity);
         }

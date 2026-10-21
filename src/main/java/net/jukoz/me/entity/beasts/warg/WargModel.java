@@ -1,7 +1,7 @@
 package net.jukoz.me.entity.beasts.warg;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
+import net.minecraft.client.model.geom.PartNames;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 
 public class WargModel extends SinglePartEntityModel<WargEntity> {
@@ -11,10 +11,10 @@ public class WargModel extends SinglePartEntityModel<WargEntity> {
 
     public WargModel(ModelPart root) {
         this.warg = root.getChild("root");
-        ModelPart body = this.warg.getChild(EntityModelPartNames.BODY);
+        ModelPart body = this.warg.getChild(PartNames.BODY);
         ModelPart upperBody = body.getChild("upper_body");
         ModelPart bodyNoLegs = upperBody.getChild("body_no_legs");
-        this.head = bodyNoLegs.getChild(EntityModelPartNames.HEAD);
+        this.head = bodyNoLegs.getChild(PartNames.HEAD);
         this.mane = bodyNoLegs.getChild("body_fur").getChild("mane");
     }
 
@@ -26,14 +26,14 @@ public class WargModel extends SinglePartEntityModel<WargEntity> {
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();
         ModelPartData root = modelPartData.addChild("root", ModelPartBuilder.create(), ModelTransform.of(-1.0F, 6.0F, -2.0F, 0.0F, 1.5708F, 0.0F));
-        ModelPartData body = root.addChild(EntityModelPartNames.BODY, ModelPartBuilder.create(), ModelTransform.pivot(-2.6142F, 2.1138F, 1.5F));
+        ModelPartData body = root.addChild(PartNames.BODY, ModelPartBuilder.create(), ModelTransform.pivot(-2.6142F, 2.1138F, 1.5F));
         ModelPartData upperBody = body.addChild("upper_body", ModelPartBuilder.create(), ModelTransform.pivot(-1.3858F, -1.1138F, -1.5F));
         ModelPartData bodyNoLegs = upperBody.addChild("body_no_legs", ModelPartBuilder.create(), ModelTransform.pivot(7.5F, -0.25F, 0.5F));
         ModelPartData bodyFur = bodyNoLegs.addChild("body_fur", ModelPartBuilder.create().uv(0, 0).cuboid(-6.5F, -7.5F, -6.0F, 14.0F, 15.0F, 13.0F, new Dilation(-0.3F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
         bodyFur.addChild("mane", ModelPartBuilder.create().uv(54, 15).cuboid(-9.5F, -5.0F, 0.0F, 20.0F, 8.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(-2.0F, -6.75F, 0.5F));
         bodyNoLegs.addChild("main_body", ModelPartBuilder.create().uv(0, 49).cuboid(-0.5F, -6.0F, -5.0F, 12.0F, 12.0F, 11.0F, new Dilation(0.0F)), ModelTransform.pivot(-5.3F, 0.25F, 0.0F));
 
-        ModelPartData head = bodyNoLegs.addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create()
+        ModelPartData head = bodyNoLegs.addChild(PartNames.HEAD, ModelPartBuilder.create()
                 .uv(74, 0).cuboid(-1.5F, -3.25F, -5.0F, 10.0F, 5.0F, 10.0F, new Dilation(0.0F))
                 .uv(74, 0).cuboid(-1.5F, -3.25F, -5.0F, 10.0F, 5.0F, 10.0F, new Dilation(0.025F))
                 .uv(54, 31).cuboid(-2.1142F, 1.6138F, -4.0F, 10.0F, 3.0F, 8.0F, new Dilation(0.0F)), ModelTransform.pivot(7.25F, -2.0F, 0.5F));
@@ -76,14 +76,14 @@ public class WargModel extends SinglePartEntityModel<WargEntity> {
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();
         ModelPartData root = modelPartData.addChild("root", ModelPartBuilder.create(), ModelTransform.of(-1.0F, 6.0F, -2.0F, 0.0F, 1.5708F, 0.0F));
-        ModelPartData body = root.addChild(EntityModelPartNames.BODY, ModelPartBuilder.create(), ModelTransform.pivot(-2.6142F, 2.1138F, 1.5F));
+        ModelPartData body = root.addChild(PartNames.BODY, ModelPartBuilder.create(), ModelTransform.pivot(-2.6142F, 2.1138F, 1.5F));
         ModelPartData upperBody = body.addChild("upper_body", ModelPartBuilder.create(), ModelTransform.pivot(-1.3858F, -1.1138F, -1.5F));
         ModelPartData bodyNoLegs = upperBody.addChild("body_no_legs", ModelPartBuilder.create(), ModelTransform.pivot(7.5F, -0.25F, 0.5F));
         ModelPartData bodyFur = bodyNoLegs.addChild("body_fur", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
         bodyFur.addChild("mane", ModelPartBuilder.create(), ModelTransform.pivot(-2.0F, -6.75F, 0.5F));
         bodyNoLegs.addChild("main_body", ModelPartBuilder.create(), ModelTransform.pivot(-5.3F, 0.25F, 0.0F));
 
-        ModelPartData head = bodyNoLegs.addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(7.25F, -2.0F, 0.5F));
+        ModelPartData head = bodyNoLegs.addChild(PartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(7.25F, -2.0F, 0.5F));
         head.addChild("snout", ModelPartBuilder.create(), ModelTransform.pivot(8.0F, -1.5F, 0.5F));
         head.addChild("ear_right", ModelPartBuilder.create(), ModelTransform.of(4.0F, -2.25F, -4.478F, 0.0F, -0.8727F, 0.0F));
         head.addChild("ear_left", ModelPartBuilder.create(), ModelTransform.of(4.0F, -2.25F, 4.522F, 0.0F, 0.8727F, 0.0F));

@@ -1,33 +1,33 @@
 package net.jukoz.me.block.special;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.world.level.LevelAccess;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.block.enums.DoubleBlockHalf;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.block.enums.Thickness;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelView;
 
 public class SpikesBlock extends Block {
-    public static final EnumProperty<DoubleBlockHalf> HALF = Properties.DOUBLE_BLOCK_HALF;
+    public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
 
     public SpikesBlock(Settings settings) {
         super(settings);
@@ -36,7 +36,7 @@ public class SpikesBlock extends Block {
 
 
 
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(HALF);
     }
 
@@ -60,7 +60,7 @@ public class SpikesBlock extends Block {
         }
     }
 
-    public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
+    public void onPlaced(Level world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
         BlockState downState = world.getBlockState(pos.down());
         if (downState.isOf(this)){
             world.setBlockState(pos.down(), downState.with(HALF, DoubleBlockHalf.LOWER));
@@ -70,11 +70,11 @@ public class SpikesBlock extends Block {
         }
     }
 
-    public void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
+    public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
         if (!world.isClient) {
             BlockPos blockPos = hit.getBlockPos();
-            if (world instanceof ServerWorld) {
-                ServerWorld serverWorld = (ServerWorld)world;
+            if (world instanceof ServerLevel) {
+                ServerLevel serverWorld = (ServerLevel)world;
                 if (projectile.canModifyAt(serverWorld, blockPos) && projectile instanceof TridentEntity && projectile.getVelocity().length() > 0.6) {
                     world.breakBlock(blockPos, true);
                 }
@@ -82,7 +82,7 @@ public class SpikesBlock extends Block {
         }
     }
 
-    public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, double fallDistance) {
+    public void onLandedUpon(Level world, BlockState state, BlockPos pos, Entity entity, double fallDistance) {
         entity.handleFallDamage((float)(fallDistance + 2.5), 2.0F, world.getDamageSources().fall());
     }
 }

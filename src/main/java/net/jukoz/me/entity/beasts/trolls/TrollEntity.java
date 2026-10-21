@@ -17,25 +17,25 @@ import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.entity.passive.AbstractDonkeyEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.math.*;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
@@ -56,19 +56,19 @@ public class TrollEntity extends BeastEntity {
         return false;
     }
 
-    public TrollEntity(EntityType<? extends AbstractDonkeyEntity> entityType, World world) {
+    public TrollEntity(EntityType<? extends AbstractDonkeyEntity> entityType, Level world) {
         super(entityType, world);
     }
 
     public static DefaultAttributeContainer.Builder setAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.35f)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 120.0)
-                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.6)
-                .add(EntityAttributes.GENERIC_ATTACK_SPEED, 0.9)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 28.0)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10.0)
-                .add(EntityAttributes.HORSE_JUMP_STRENGTH, 0.0);
+        return Mob.createMobAttributes()
+                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.35f)
+                .add(Attributes.GENERIC_MAX_HEALTH, 120.0)
+                .add(Attributes.GENERIC_KNOCKBACK_RESISTANCE, 0.6)
+                .add(Attributes.GENERIC_ATTACK_SPEED, 0.9)
+                .add(Attributes.GENERIC_FOLLOW_RANGE, 28.0)
+                .add(Attributes.GENERIC_ATTACK_DAMAGE, 10.0)
+                .add(Attributes.HORSE_JUMP_STRENGTH, 0.0);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class TrollEntity extends BeastEntity {
         this.goalSelector.add(4, new MeleeAttackGoal(this, 0.9f, false));
         this.goalSelector.add(6, new BeastFollowOwnerGoal(this, 1.0, 10.0f, 2.0f, false));
         this.goalSelector.add(7, new WanderAroundFarGoal(this, 1.0));
-        this.goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 6.0f));
+        this.goalSelector.add(8, new LookAtEntityGoal(this, Player.class, 6.0f));
         this.goalSelector.add(9, new LookAroundGoal(this));
         this.targetSelector.add(1, new BeastTrackOwnerAttackerGoal((BeastEntity) this));
         this.targetSelector.add(2, new BeastAttackWithOwnerGoal((BeastEntity)this));
@@ -167,11 +167,11 @@ public class TrollEntity extends BeastEntity {
     }
 
     public boolean isCommandItem(ItemStack stack) {
-        return stack.isIn(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "bones")));
+        return stack.isIn(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "bones")));
     }
 
     @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
+    public void writeCustomDataToNbt(CompoundTag nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putBoolean("ChestedTroll", this.hasChest());
         if (this.hasChest()) {
@@ -179,7 +179,7 @@ public class TrollEntity extends BeastEntity {
             for(int i = 2; i < this.items.size(); ++i) {
                 ItemStack itemStack = this.items.getStack(i);
                 if (!itemStack.isEmpty()) {
-                    NbtCompound nbtCompound = new NbtCompound();
+                    CompoundTag nbtCompound = new CompoundTag();
                     nbtCompound.putByte("Slot", (byte)i);
                     itemStack.writeNbt(nbtCompound);
                     nbtList.add(nbtCompound);
@@ -188,12 +188,12 @@ public class TrollEntity extends BeastEntity {
             nbt.put("Items", nbtList);
         }
         if (!this.items.getStack(1).isEmpty()) {
-            nbt.put("ArmorItem", this.items.getStack(1).writeNbt(new NbtCompound()));
+            nbt.put("ArmorItem", this.items.getStack(1).writeNbt(new CompoundTag()));
         }
     }
 
     @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
+    public void readCustomDataFromNbt(CompoundTag nbt) {
         super.readCustomDataFromNbt(nbt);
         this.setHasChest(nbt.getBoolean("ChestedTroll"));
         this.onChestedStatusChanged();
@@ -201,7 +201,7 @@ public class TrollEntity extends BeastEntity {
             NbtList nbtList = nbt.getList("Items", 10);
 
             for(int i = 0; i < nbtList.size(); ++i) {
-                NbtCompound nbtCompound = nbtList.getCompound(i);
+                CompoundTag nbtCompound = nbtList.getCompound(i);
                 int j = nbtCompound.getByte("Slot") & 255;
                 if (j >= 2 && j < this.items.size()) {
                     this.items.setStack(j, ItemStack.fromNbt(nbtCompound));
@@ -252,16 +252,16 @@ public class TrollEntity extends BeastEntity {
     }
 
     @Override
-    public void tryBonding(PlayerEntity player) {
+    public void tryBonding(Player player) {
         if(this.bondingTimeout <= 0) {
             if(random.nextFloat() <= 0.4f) {
                 this.bondingTries++;
                 if(bondingTries == 3) {
-                    if (player instanceof ServerPlayerEntity) {
+                    if (player instanceof ServerPlayer) {
                         this.setOwnerUuid(player.getUuid());
                         this.setTame(true);
                         this.setTarget(null);
-                        Criteria.TAME_ANIMAL.trigger((ServerPlayerEntity)player, this);
+                        Criteria.TAME_ANIMAL.trigger((ServerPlayer)player, this);
                     }
                     this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
 

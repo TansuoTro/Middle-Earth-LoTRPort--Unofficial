@@ -1,16 +1,16 @@
 package net.jukoz.me.entity.goals;
 
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
 import net.jukoz.me.entity.beasts.AbstractBeastEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.TrackTargetGoal;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.util.math.Box;
-import net.minecraft.world.GameRules;
+import net.minecraft.world.level.GameRules;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
@@ -38,7 +38,7 @@ public class BeastRevengeGoal extends TrackTargetGoal {
         if (i == this.lastAttackedTime || livingEntity == null) {
             return false;
         }
-        if (this.mob.getWorld() instanceof ServerWorld serverWorld && livingEntity.getType() == EntityType.PLAYER && serverWorld.getGameRules().getBoolean(GameRules.UNIVERSAL_ANGER)) {
+        if (this.mob.getWorld() instanceof ServerLevel serverWorld && livingEntity.getType() == EntityType.PLAYER && serverWorld.getGameRules().getBoolean(GameRules.UNIVERSAL_ANGER)) {
             return false;
         }
         if (((AbstractBeastEntity)this.mob).isTame()) {
@@ -72,8 +72,8 @@ public class BeastRevengeGoal extends TrackTargetGoal {
     protected void callSameTypeForRevenge() {
         double d = this.getFollowRange();
         Box box = Box.from(this.mob.getPos()).expand(d, 10.0, d);
-        List<MobEntity> list = (List<MobEntity>)this.mob.getWorld().getEntitiesByClass(this.mob.getClass(), box, EntityPredicates.EXCEPT_SPECTATOR);
-        for (MobEntity mobEntity : list) {
+        List<Mob> list = (List<Mob>)this.mob.getWorld().getEntitiesByClass(this.mob.getClass(), box, EntityPredicates.EXCEPT_SPECTATOR);
+        for (Mob mobEntity : list) {
             if (this.mob == mobEntity || mobEntity.getTarget() != null || this.mob instanceof TameableEntity && ((TameableEntity)this.mob).getOwner() != ((TameableEntity)mobEntity).getOwner() || mobEntity.isTeammate(this.mob.getAttacker())) continue;
             if (this.noHelpTypes != null) {
                 boolean bl = false;
@@ -88,7 +88,7 @@ public class BeastRevengeGoal extends TrackTargetGoal {
         }
     }
 
-    protected void setMobEntityTarget(MobEntity mob, LivingEntity target) {
+    protected void setMobEntityTarget(Mob mob, LivingEntity target) {
         mob.setTarget(target);
     }
 }

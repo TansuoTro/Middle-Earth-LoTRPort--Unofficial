@@ -1,7 +1,7 @@
 package net.jukoz.me.item;
 
-import net.minecraft.item.Item;
-import net.minecraft.text.Text;
+import net.minecraft.world.item.Item;
+import net.minecraft.network.chat.Component;
 
 import java.util.Collections;
 import java.util.IdentityHashMap;
@@ -18,7 +18,7 @@ import java.util.Map;
  */
 public final class ItemExtras {
 
-    private static final Map<Item, List<Text>> LORE =
+    private static final Map<Item, List<Component>> LORE =
             Collections.synchronizedMap(new IdentityHashMap<>());
     private static final Map<Item, String> BANNER_PATTERN_TAGS =
             Collections.synchronizedMap(new IdentityHashMap<>());
@@ -26,14 +26,14 @@ public final class ItemExtras {
     private ItemExtras() {
     }
 
-    public static void lore(Item item, List<Text> lines) {
+    public static void lore(Item item, List<Component> lines) {
         if (lines != null && !lines.isEmpty()) {
             LORE.put(item, lines);
         }
     }
 
     /** Lines declared on the item itself; shown before any component tooltip. */
-    public static List<Text> lore(Item item) {
+    public static List<Component> lore(Item item) {
         return LORE.getOrDefault(item, List.of());
     }
 

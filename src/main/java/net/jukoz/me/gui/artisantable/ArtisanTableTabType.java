@@ -1,17 +1,17 @@
 package net.jukoz.me.gui.artisantable;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
 enum ArtisanTableTabType {
-    ABOVE(new Textures(new Identifier("minecraft", "advancements/tab_above_left_selected"), new Identifier("minecraft", "advancements/tab_above_middle_selected"), new Identifier("minecraft", "advancements/tab_above_right_selected")), new Textures(new Identifier("minecraft", "advancements/tab_above_left"), new Identifier("minecraft", "advancements/tab_above_middle"), new Identifier("minecraft", "advancements/tab_above_right")), 28, 32, 8),
-    BELOW(new Textures(new Identifier("minecraft", "advancements/tab_below_left_selected"), new Identifier("minecraft", "advancements/tab_below_middle_selected"), new Identifier("minecraft", "advancements/tab_below_right_selected")), new Textures(new Identifier("minecraft", "advancements/tab_below_left"), new Identifier("minecraft", "advancements/tab_below_middle"), new Identifier("minecraft", "advancements/tab_below_right")), 28, 32, 8),
-    LEFT(new Textures(new Identifier("minecraft", "advancements/tab_left_top_selected"), new Identifier("minecraft", "advancements/tab_left_middle_selected"), new Identifier("minecraft", "advancements/tab_left_bottom_selected")), new Textures(new Identifier("minecraft", "advancements/tab_left_top"), new Identifier("minecraft", "advancements/tab_left_middle"), new Identifier("minecraft", "advancements/tab_left_bottom")), 32, 28, 5),
-    RIGHT(new Textures(new Identifier("minecraft", "advancements/tab_right_top_selected"), new Identifier("minecraft", "advancements/tab_right_middle_selected"), new Identifier("minecraft", "advancements/tab_right_bottom_selected")), new Textures(new Identifier("minecraft", "advancements/tab_right_top"), new Identifier("minecraft", "advancements/tab_right_middle"), new Identifier("minecraft", "advancements/tab_right_bottom")), 32, 28, 5);
+    ABOVE(new Textures(new ResourceLocation("minecraft", "advancements/tab_above_left_selected"), new ResourceLocation("minecraft", "advancements/tab_above_middle_selected"), new ResourceLocation("minecraft", "advancements/tab_above_right_selected")), new Textures(new ResourceLocation("minecraft", "advancements/tab_above_left"), new ResourceLocation("minecraft", "advancements/tab_above_middle"), new ResourceLocation("minecraft", "advancements/tab_above_right")), 28, 32, 8),
+    BELOW(new Textures(new ResourceLocation("minecraft", "advancements/tab_below_left_selected"), new ResourceLocation("minecraft", "advancements/tab_below_middle_selected"), new ResourceLocation("minecraft", "advancements/tab_below_right_selected")), new Textures(new ResourceLocation("minecraft", "advancements/tab_below_left"), new ResourceLocation("minecraft", "advancements/tab_below_middle"), new ResourceLocation("minecraft", "advancements/tab_below_right")), 28, 32, 8),
+    LEFT(new Textures(new ResourceLocation("minecraft", "advancements/tab_left_top_selected"), new ResourceLocation("minecraft", "advancements/tab_left_middle_selected"), new ResourceLocation("minecraft", "advancements/tab_left_bottom_selected")), new Textures(new ResourceLocation("minecraft", "advancements/tab_left_top"), new ResourceLocation("minecraft", "advancements/tab_left_middle"), new ResourceLocation("minecraft", "advancements/tab_left_bottom")), 32, 28, 5),
+    RIGHT(new Textures(new ResourceLocation("minecraft", "advancements/tab_right_top_selected"), new ResourceLocation("minecraft", "advancements/tab_right_middle_selected"), new ResourceLocation("minecraft", "advancements/tab_right_bottom_selected")), new Textures(new ResourceLocation("minecraft", "advancements/tab_right_top"), new ResourceLocation("minecraft", "advancements/tab_right_middle"), new ResourceLocation("minecraft", "advancements/tab_right_bottom")), 32, 28, 5);
 
     private final Textures selectedTextures;
     private final Textures unselectedTextures;
@@ -34,7 +34,7 @@ enum ArtisanTableTabType {
     public void drawBackground(DrawContext context, int x, int y, boolean selected, int index) {
         Textures textures;
         Textures textures2 = textures = selected ? this.selectedTextures : this.unselectedTextures;
-        Identifier identifier = index == 0 ? textures.first() : (index == this.tabCount - 1 ? textures.last() : textures.middle());
+        ResourceLocation identifier = index == 0 ? textures.first() : (index == this.tabCount - 1 ? textures.last() : textures.middle());
         context.drawTexture(identifier, x + this.getTabX(index), y + this.getTabY(index), 0, 0, this.width, this.height);
     }
 
@@ -92,7 +92,7 @@ enum ArtisanTableTabType {
     }
 
     @Environment(value=EnvType.CLIENT)
-    record Textures(Identifier first, Identifier middle, Identifier last) {
+    record Textures(ResourceLocation first, ResourceLocation middle, ResourceLocation last) {
     }
 }
 

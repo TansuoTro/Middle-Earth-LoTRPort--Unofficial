@@ -2,10 +2,10 @@ package net.jukoz.me.entity;
 
 import net.minecraft.entity.attribute.ClampedEntityAttribute;
 import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 
 /**
@@ -20,26 +20,26 @@ import net.jukoz.me.MiddleEarth;
  * Attribute compatibility mixins consume the values in movement, reach, damage and rendering.
  */
 public class EntityAttributesME {
-    public static final RegistryEntry<EntityAttribute> POWDERED_SNOW_IMMUNITY;
-    public static final RegistryEntry<EntityAttribute> DELVERS_FEAR_STRENGTH;
-    public static final RegistryEntry<EntityAttribute> CLIMBING_STRENGTH;
-    public static final RegistryEntry<EntityAttribute> DETECTION_RANGE;
-    public static final RegistryEntry<EntityAttribute> WIDTH_SCALE;
+    public static final Holder<EntityAttribute> POWDERED_SNOW_IMMUNITY;
+    public static final Holder<EntityAttribute> DELVERS_FEAR_STRENGTH;
+    public static final Holder<EntityAttribute> CLIMBING_STRENGTH;
+    public static final Holder<EntityAttribute> DETECTION_RANGE;
+    public static final Holder<EntityAttribute> WIDTH_SCALE;
 
     // 1.20.5+ vanilla attributes, registered locally so the ported data still resolves.
-    public static final RegistryEntry<EntityAttribute> SCALE;
-    public static final RegistryEntry<EntityAttribute> ENTITY_INTERACTION_RANGE;
-    public static final RegistryEntry<EntityAttribute> BLOCK_INTERACTION_RANGE;
-    public static final RegistryEntry<EntityAttribute> SAFE_FALL_DISTANCE;
-    public static final RegistryEntry<EntityAttribute> SNEAKING_SPEED;
-    public static final RegistryEntry<EntityAttribute> MINING_EFFICIENCY;
-    public static final RegistryEntry<EntityAttribute> FALL_DAMAGE_MULTIPLIER;
-    public static final RegistryEntry<EntityAttribute> WATER_MOVEMENT_EFFICIENCY;
-    public static final RegistryEntry<EntityAttribute> MOVEMENT_EFFICIENCY;
-    public static final RegistryEntry<EntityAttribute> BURNING_TIME;
+    public static final Holder<EntityAttribute> SCALE;
+    public static final Holder<EntityAttribute> ENTITY_INTERACTION_RANGE;
+    public static final Holder<EntityAttribute> BLOCK_INTERACTION_RANGE;
+    public static final Holder<EntityAttribute> SAFE_FALL_DISTANCE;
+    public static final Holder<EntityAttribute> SNEAKING_SPEED;
+    public static final Holder<EntityAttribute> MINING_EFFICIENCY;
+    public static final Holder<EntityAttribute> FALL_DAMAGE_MULTIPLIER;
+    public static final Holder<EntityAttribute> WATER_MOVEMENT_EFFICIENCY;
+    public static final Holder<EntityAttribute> MOVEMENT_EFFICIENCY;
+    public static final Holder<EntityAttribute> BURNING_TIME;
 
-    private static RegistryEntry<EntityAttribute> register(String name, double defaultValue, double minValue, double maxValue, boolean tracked) {
-        Identifier id = MiddleEarth.of(name);
+    private static Holder<EntityAttribute> register(String name, double defaultValue, double minValue, double maxValue, boolean tracked) {
+        ResourceLocation id = MiddleEarth.of(name);
         EntityAttribute attribute = new ClampedEntityAttribute(id.toTranslationKey(), defaultValue, minValue, maxValue).setTracked(tracked);
         return Registry.registerReference(Registries.ATTRIBUTE, id, attribute);
     }
@@ -47,13 +47,13 @@ public class EntityAttributesME {
     public static void register() {
         MiddleEarth.LOGGER.logDebugMsg("Registering Mod attributes");
         net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry.register(
-                net.minecraft.entity.EntityType.PLAYER,
-                addDefaults(net.minecraft.entity.player.PlayerEntity.createPlayerAttributes()));
+                net.minecraft.world.entity.EntityType.PLAYER,
+                addDefaults(net.minecraft.world.entity.player.Player.createPlayerAttributes()));
     }
 
     public static net.minecraft.entity.attribute.DefaultAttributeContainer.Builder addDefaults(
             net.minecraft.entity.attribute.DefaultAttributeContainer.Builder builder) {
-        for (RegistryEntry<EntityAttribute> attribute : java.util.List.of(POWDERED_SNOW_IMMUNITY,
+        for (Holder<EntityAttribute> attribute : java.util.List.of(POWDERED_SNOW_IMMUNITY,
                 DELVERS_FEAR_STRENGTH, CLIMBING_STRENGTH, DETECTION_RANGE, WIDTH_SCALE, SCALE,
                 ENTITY_INTERACTION_RANGE, BLOCK_INTERACTION_RANGE, SAFE_FALL_DISTANCE, SNEAKING_SPEED,
                 MINING_EFFICIENCY, FALL_DAMAGE_MULTIPLIER, WATER_MOVEMENT_EFFICIENCY,
@@ -63,21 +63,21 @@ public class EntityAttributesME {
         return builder;
     }
 
-    public static double value(net.minecraft.entity.LivingEntity entity, RegistryEntry<EntityAttribute> attribute) {
+    public static double value(net.minecraft.world.entity.LivingEntity entity, Holder<EntityAttribute> attribute) {
         var attributes = entity.getAttributes();
         return attributes != null && attributes.hasAttribute(attribute.value())
                 ? entity.getAttributeValue(attribute.value()) : attribute.value().getDefaultValue();
     }
 
-    public static float scale(net.minecraft.entity.LivingEntity entity) {
+    public static float scale(net.minecraft.world.entity.LivingEntity entity) {
         return (float) value(entity, SCALE);
     }
 
-    public static double entityReach(net.minecraft.entity.player.PlayerEntity player) {
+    public static double entityReach(net.minecraft.world.entity.player.Player player) {
         return value(player, ENTITY_INTERACTION_RANGE) + (player.getAbilities().creativeMode ? 2.0 : 0.0);
     }
 
-    public static double blockReach(net.minecraft.entity.player.PlayerEntity player) {
+    public static double blockReach(net.minecraft.world.entity.player.Player player) {
         return value(player, BLOCK_INTERACTION_RANGE) + (player.getAbilities().creativeMode ? 0.5 : 0.0);
     }
 

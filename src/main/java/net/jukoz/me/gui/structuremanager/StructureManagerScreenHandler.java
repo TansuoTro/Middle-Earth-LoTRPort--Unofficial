@@ -1,13 +1,13 @@
 package net.jukoz.me.gui.structuremanager;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.block.special.structureManager.StructureManagerBlockEntity;
 import net.jukoz.me.gui.ModScreenHandlers;
 import net.jukoz.me.network.packets.C2S.PacketStructureManagerRespawnEntities;
@@ -16,7 +16,7 @@ import net.jukoz.me.network.packets.C2S.PacketStructureManagerUpdateBlockEntityR
 
 public class StructureManagerScreenHandler extends ScreenHandler {
 
-    private final World world;
+    private final Level world;
     private StructureManagerScreenData data;
     StructureManagerBlockEntity blockEntity;
 
@@ -29,16 +29,16 @@ public class StructureManagerScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int slot) {
+    public ItemStack quickMove(Player player, int slot) {
         return null;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
+    public boolean canUse(Player player) {
         return true;
     }
 
-    public void selectIdentifier(PlayerEntity player, Identifier identifier) {
+    public void selectIdentifier(Player player, ResourceLocation identifier) {
         this.data.setStructureManagerIdentifier(identifier);
         ClientPlayNetworking.send(new PacketStructureManagerUpdateBlockEntityRequest(
                 data.getPos(),
@@ -51,7 +51,7 @@ public class StructureManagerScreenHandler extends ScreenHandler {
         return this.data.getPos();
     }
 
-    public Identifier getDataIdentifier() {
+    public ResourceLocation getDataIdentifier() {
         return this.data.getStructureManagerIdentifier();
     }
 

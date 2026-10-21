@@ -1,8 +1,8 @@
 package net.jukoz.me.entity;
 
 import com.google.common.collect.ImmutableMap;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.jukoz.me.block.special.bellows.BellowsBlockEntityRenderer;
 import net.jukoz.me.block.special.coffers.*;
@@ -18,9 +18,9 @@ import net.jukoz.me.entity.npcs.renderer.features.nose.NoseModel;
 import net.jukoz.me.entity.spider.EnwebbedModel;
 import net.jukoz.me.entity.spider.larva.ShelobiteLarvaModel;
 import net.jukoz.me.entity.spider.scuttler.ShelobiteScuttlerModel;
-import net.minecraft.client.model.Dilation;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.TexturedModelData;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.client.model.EntityModelLayer;
 import net.jukoz.me.entity.spider.spawn.SpawnOfShelobModel;
 
 import java.util.Map;
@@ -30,7 +30,7 @@ public class EntityModelsME {
     public static Map<EntityModelLayer, TexturedModelData> getModels() {
         ImmutableMap.Builder<EntityModelLayer, TexturedModelData> builder = ImmutableMap.builder();
 
-        builder.put(EntityModelLayersME.NPC, NpcEntityModel.getTexturedModelData(Dilation.NONE));
+        builder.put(EntityModelLayersME.NPC, NpcEntityModel.getTexturedModelData(CubeDeformation.NONE));
         builder.put(EntityModelLayersME.NPC_ENTITY_HAIR, HairModel.getTexturedModelData());
         builder.put(EntityModelLayersME.NPC_ENTITY_EAR, EarModel.getTexturedModelData());
         builder.put(EntityModelLayersME.NPC_ENTITY_NOSE, NoseModel.getTexturedModelData());

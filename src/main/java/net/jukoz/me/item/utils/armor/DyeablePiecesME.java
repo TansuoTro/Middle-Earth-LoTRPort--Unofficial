@@ -3,7 +3,7 @@ package net.jukoz.me.item.utils.armor;
 import net.jukoz.me.item.EquipmentItemsME;
 import net.jukoz.me.item.utils.armor.backAttachments.BackAttachmentsME;
 import net.jukoz.me.item.utils.armor.helmetAttachments.HelmetAttachmentsME;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 import java.util.HashMap;
 

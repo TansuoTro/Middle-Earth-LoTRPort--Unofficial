@@ -1,14 +1,14 @@
 package net.jukoz.me.resources;
 
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.PersistentStateManager;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.resources.persistent_datas.PlayerData;
 
 import java.util.HashMap;
@@ -25,11 +25,11 @@ public class StateSaverAndLoader extends PersistentState {
     public StateSaverAndLoader() {
         this.players = new HashMap<>();
     }
-    public StateSaverAndLoader(NbtCompound nbt){
+    public StateSaverAndLoader(CompoundTag nbt){
         this.players = new HashMap<>();
         NbtList list = nbt.getList("list", NbtElement.COMPOUND_TYPE);
         for(int i = 0; i < list.size(); i++){
-            NbtCompound playerDataNbt = list.getCompound(i);
+            CompoundTag playerDataNbt = list.getCompound(i);
             if(!playerDataNbt.contains("uuid", NbtElement.STRING_TYPE)) continue;
             PlayerData newPlayerData = new PlayerData(playerDataNbt.getCompound("data"));
             this.players.put(UUID.fromString(playerDataNbt.getString("uuid")), newPlayerData);
@@ -37,7 +37,7 @@ public class StateSaverAndLoader extends PersistentState {
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt) {
+    public CompoundTag writeNbt(CompoundTag nbt) {
         nbt.put("list", getPlayerDataNbt().getList("list", NbtElement.COMPOUND_TYPE));
         return nbt;
     }
@@ -48,11 +48,11 @@ public class StateSaverAndLoader extends PersistentState {
         return state;
     }
 
-    private NbtCompound getPlayerDataNbt() {
-        NbtCompound nbt = new NbtCompound();
+    private CompoundTag getPlayerDataNbt() {
+        CompoundTag nbt = new CompoundTag();
         NbtList list = new NbtList();
         for(UUID uuid : players.keySet()){
-            NbtCompound specificNbt = new NbtCompound();
+            CompoundTag specificNbt = new CompoundTag();
             specificNbt.putString("uuid", uuid.toString());
             specificNbt.put("data", this.players.get(uuid).createNbt());
             list.add(specificNbt);
@@ -62,12 +62,12 @@ public class StateSaverAndLoader extends PersistentState {
     }
 
     public static StateSaverAndLoader getServerState(MinecraftServer server) {
-        PersistentStateManager persistentStateManager = server.getWorld(World.OVERWORLD).getPersistentStateManager();
+        PersistentStateManager persistentStateManager = server.getWorld(Level.OVERWORLD).getPersistentStateManager();
         StateSaverAndLoader state = persistentStateManager.getOrCreate(StateSaverAndLoader::new, StateSaverAndLoader::new, KEY);
         state.markDirty();
         return state;
     }
-    public static PlayerData getPlayerState(PlayerEntity player) {
+    public static PlayerData getPlayerState(Player player) {
         if(player == null) return null;
         StateSaverAndLoader serverState = getServerState((MinecraftServer) player.getServer());
         UUID playerUUID = player.getUuid();

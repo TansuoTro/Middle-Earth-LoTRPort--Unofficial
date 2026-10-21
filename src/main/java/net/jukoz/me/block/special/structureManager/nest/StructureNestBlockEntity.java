@@ -2,21 +2,21 @@ package net.jukoz.me.block.special.structureManager.nest;
 
 import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.nbt.CompoundTag;
 import net.jukoz.me.compat.nbt.ReadView;
 import net.jukoz.me.compat.nbt.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import net.jukoz.me.block.special.structureManager.StructureManagerBlockEntity;
@@ -43,9 +43,9 @@ public class StructureNestBlockEntity extends BlockEntity implements ExtendedScr
         }
     }
     @Nullable
-    protected Identifier managerId;
+    protected ResourceLocation managerId;
     @Nullable
-    protected Identifier nestId;
+    protected ResourceLocation nestId;
     protected int spawnRadius;
     protected boolean isEnabled;
 
@@ -56,13 +56,13 @@ public class StructureNestBlockEntity extends BlockEntity implements ExtendedScr
         super(ModBlockEntities.STRUCTURE_NEST, pos, state);
     }
 
-    public Text getDisplayName() {
-        return Text.translatable("screen.%s.%s".formatted(MiddleEarth.MOD_ID, ID));
+    public Component getDisplayName() {
+        return Component.translatable("screen.%s.%s".formatted(MiddleEarth.MOD_ID, ID));
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, Player player) {
         return new StructureNestScreenHandler(syncId, playerInventory, new StructureNestScreenData(this.pos,
                 Optional.ofNullable(this.managerId),
                 Optional.ofNullable(this.nestId),
@@ -71,25 +71,25 @@ public class StructureNestBlockEntity extends BlockEntity implements ExtendedScr
     }
 
     @Override
-    public void readNbt(NbtCompound nbt) {
+    public void readNbt(CompoundTag nbt) {
         super.readNbt(nbt);
         ReadView view = new ReadView(nbt);
-        Optional<Identifier> managerId = view.read(SyncedData.MANAGER_ID.name, Identifier.CODEC);
+        Optional<ResourceLocation> managerId = view.read(SyncedData.MANAGER_ID.name, ResourceLocation.CODEC);
         managerId.ifPresent(identifier -> this.managerId = identifier);
-        Optional<Identifier> nestId = view.read(SyncedData.NEST_ID.name, Identifier.CODEC);
+        Optional<ResourceLocation> nestId = view.read(SyncedData.NEST_ID.name, ResourceLocation.CODEC);
         nestId.ifPresent(identifier -> this.nestId = identifier);
         spawnRadius = view.getInt(SyncedData.SPAWN_RADIUS.name, 0);
         isEnabled = view.getBoolean(SyncedData.IS_ENABLED.name, false);
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt) {
+    protected void writeNbt(CompoundTag nbt) {
         super.writeNbt(nbt);
         WriteView view = new WriteView(nbt);
         if(nestId != null)
-            view.put(SyncedData.NEST_ID.name, Identifier.CODEC, this.nestId);
+            view.put(SyncedData.NEST_ID.name, ResourceLocation.CODEC, this.nestId);
         if(managerId != null)
-            view.put(SyncedData.MANAGER_ID.name, Identifier.CODEC, this.managerId);
+            view.put(SyncedData.MANAGER_ID.name, ResourceLocation.CODEC, this.managerId);
         view.put(SyncedData.SPAWN_RADIUS.name, Codec.INT, this.spawnRadius);
         view.put(SyncedData.IS_ENABLED.name, Codec.BOOL, this.isEnabled);
     }
@@ -99,12 +99,12 @@ public class StructureNestBlockEntity extends BlockEntity implements ExtendedScr
         return BlockEntityUpdateS2CPacket.create(this);
     }
 
-    public void setStructureManagerId(Identifier structureManagerId) {
+    public void setStructureManagerId(ResourceLocation structureManagerId) {
         this.managerId = structureManagerId;
         updateListeners();
     }
 
-    public void setStructureNestId(Identifier structureNestId) {
+    public void setStructureNestId(ResourceLocation structureNestId) {
         this.nestId = structureNestId;
         updateListeners();
     }
@@ -124,11 +124,11 @@ public class StructureNestBlockEntity extends BlockEntity implements ExtendedScr
         this.world.updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), Block.NOTIFY_ALL);
     }
 
-    public static void tickEvent(World world, BlockPos blockPos, BlockState blockState, StructureNestBlockEntity entity) {
+    public static void tickEvent(Level world, BlockPos blockPos, BlockState blockState, StructureNestBlockEntity entity) {
         entity.tickEvent(world, blockState);
     }
 
-    private void tickEvent(World world, BlockState blockState) {
+    private void tickEvent(Level world, BlockState blockState) {
         if(world.isClient)
             return;
 
@@ -163,7 +163,7 @@ public class StructureNestBlockEntity extends BlockEntity implements ExtendedScr
     }
 
     @Override
-    public void writeScreenOpeningData(net.minecraft.server.network.ServerPlayerEntity player, net.minecraft.network.PacketByteBuf buf) {
+    public void writeScreenOpeningData(net.minecraft.server.level.ServerPlayer player, net.minecraft.network.FriendlyByteBuf buf) {
         net.jukoz.me.gui.structuremanager.structurenest.StructureNestScreenData.PACKET_CODEC.encode(buf,
                 new net.jukoz.me.gui.structuremanager.structurenest.StructureNestScreenData(this.pos,
                         java.util.Optional.ofNullable(this.managerId), java.util.Optional.ofNullable(this.nestId), this.spawnRadius, this.isEnabled));

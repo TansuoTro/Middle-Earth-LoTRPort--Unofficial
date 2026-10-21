@@ -13,15 +13,15 @@ import net.jukoz.me.item.items.weapons.ranged.PebbleItem;
 import net.jukoz.me.item.items.weapons.ranged.PineconeItem;
 import net.jukoz.me.item.utils.BannerPatternTagsME;
 import net.jukoz.me.item.utils.ModItemGroups;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.*;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Rarity;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Rarity;
 import net.jukoz.me.registries.RegistryAliasesME;
 
 import java.util.function.Function;
@@ -142,7 +142,7 @@ public class ResourceItemsME {
     public static final Item STRAW = registerItem("straw",
             Item::new, new MESettings());
     public static final Block REEDS = ModBlocks.registerBlock("reeds",
-            (settings) -> new CustomWaterloggableTallPlantBlock(settings, false), AbstractBlock.Settings.copy(Blocks.TALL_GRASS).breakInstantly(), false, ModItemGroups.RESOURCES_CONTENTS);
+            (settings) -> new CustomWaterloggableTallPlantBlock(settings, false), BlockBehaviour.Settings.copy(Blocks.TALL_GRASS).breakInstantly(), false, ModItemGroups.RESOURCES_CONTENTS);
     public static final Item SWAN_FEATHER = registerItem("swan_feather",
             Item::new, new MESettings());
 
@@ -303,20 +303,20 @@ public class ResourceItemsME {
 
     private static Item registerItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
         Item item = settings instanceof MESettings meSettings && meSettings.bannerPatternTag() != null
-                ? new net.minecraft.item.BannerPatternItem(net.minecraft.registry.tag.TagKey.of(
-                        net.minecraft.registry.RegistryKeys.BANNER_PATTERN,
-                        new Identifier(meSettings.bannerPatternTag())), settings)
+                ? new net.minecraft.item.BannerPatternItem(net.minecraft.tags.TagKey.of(
+                        net.minecraft.core.registries.Registries.BANNER_PATTERN,
+                        new ResourceLocation(meSettings.bannerPatternTag())), settings)
                 : factory.apply(settings);
         ModItemGroups.RESOURCES_CONTENTS.add(item.getDefaultStack());
         TranslationEntries.itemEntries.add(item);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ITEM, name));
-        return Registry.register(Registries.ITEM, new Identifier(MiddleEarth.MOD_ID, name), item);
+        return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);
     }
     private static Item registerHiddenItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
         Item item = factory.apply(settings);
         TranslationEntries.itemEntries.add(item);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ITEM, name));
-        return Registry.register(Registries.ITEM, new Identifier(MiddleEarth.MOD_ID, name), item);
+        return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);
     }
 
     public static void registerModItems() {

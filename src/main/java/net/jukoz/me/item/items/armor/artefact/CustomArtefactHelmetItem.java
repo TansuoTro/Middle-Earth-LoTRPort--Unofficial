@@ -1,6 +1,6 @@
 package net.jukoz.me.item.items.armor.artefact;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.item.items.armor.CustomHelmetItem;
 import net.jukoz.me.item.utils.armor.ExtendedArmorMaterial;
 

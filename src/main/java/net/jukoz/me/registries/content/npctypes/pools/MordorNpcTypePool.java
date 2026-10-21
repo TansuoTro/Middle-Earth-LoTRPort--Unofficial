@@ -1,8 +1,8 @@
 package net.jukoz.me.registries.content.npctypes.pools;
 
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.Items;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Items;
+import net.minecraft.resources.ResourceKey;
 import net.jukoz.me.item.EquipmentItemsME;
 import net.jukoz.me.item.ToolItemsME;
 import net.jukoz.me.item.WeaponItemsME;
@@ -23,7 +23,7 @@ import net.jukoz.me.resources.datas.npc_types.data.GearSlotPool;
 import java.util.List;
 
 public class MordorNpcTypePool {
-    private final static RegistryKey<Faction> FACTION = FactionRegistry.MORDOR;
+    private final static ResourceKey<Faction> FACTION = FactionRegistry.MORDOR;
 
     private static final int DARK_RED = 0x4f251d;
     private static final int DARK_BROWN = 0x4a3c34;

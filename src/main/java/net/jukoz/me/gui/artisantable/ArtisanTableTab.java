@@ -1,15 +1,15 @@
 package net.jukoz.me.gui.artisantable;
 
 import com.google.common.collect.Maps;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.advancement.Advancement;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.advancement.AdvancementWidget;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.gui.screens.advancements.AdvancementWidget;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 
 import java.util.Map;
 
@@ -20,7 +20,7 @@ public class ArtisanTableTab {
     private final ArtisanTableTabType type;
     private final int index;
     private final ItemStack icon;
-    private final Text title;
+    private final Component title;
     private final ArtisanTableInputsShape inputShape;
     private final Map<Advancement, AdvancementWidget> widgets = Maps.newLinkedHashMap();
     private double originX;
@@ -32,7 +32,7 @@ public class ArtisanTableTab {
     private boolean initialized;
 
     public ArtisanTableTab(MinecraftClient client, ArtisanTableScreen screen, ArtisanTableTabType type, int index,
-                           Text title, ItemStack icon, ArtisanTableInputsShape inputShape) {
+                           Component title, ItemStack icon, ArtisanTableInputsShape inputShape) {
         this.client = client;
         this.screen = screen;
         this.type = type;
@@ -43,7 +43,7 @@ public class ArtisanTableTab {
     }
 
     public ArtisanTableTab(MinecraftClient client, ArtisanTableScreen screen, ArtisanTableTabType type, int index,
-                           Text title, ItemStack icon) {
+                           Component title, ItemStack icon) {
         this(client, screen, type, index, title, icon, ArtisanTableInputsShape.ANY);
     }
 
@@ -56,7 +56,7 @@ public class ArtisanTableTab {
     }
 
 
-    public Text getTitle() {
+    public Component getTitle() {
         return this.title;
     }
 
@@ -86,10 +86,10 @@ public class ArtisanTableTab {
 
     public void move(double offsetX, double offsetY) {
         if (this.maxPanX - this.minPanX > 234) {
-            this.originX = MathHelper.clamp(this.originX + offsetX, (double)(-(this.maxPanX - 234)), 0.0);
+            this.originX = Mth.clamp(this.originX + offsetX, (double)(-(this.maxPanX - 234)), 0.0);
         }
         if (this.maxPanY - this.minPanY > 113) {
-            this.originY = MathHelper.clamp(this.originY + offsetY, (double)(-(this.maxPanY - 113)), 0.0);
+            this.originY = Mth.clamp(this.originY + offsetY, (double)(-(this.maxPanY - 113)), 0.0);
         }
     }
 

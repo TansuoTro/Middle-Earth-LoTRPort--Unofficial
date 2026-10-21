@@ -4,7 +4,7 @@ import net.jukoz.me.entity.beasts.trolls.TrollAnimations;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
-import net.minecraft.client.util.math.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 public class DeerModel extends SinglePartEntityModel<DeerEntity> {
     private final ModelPart deer;
@@ -44,7 +44,7 @@ public class DeerModel extends SinglePartEntityModel<DeerEntity> {
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void render(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
         this.deer.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
     }
 

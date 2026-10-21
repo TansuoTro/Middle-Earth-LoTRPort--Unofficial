@@ -1,14 +1,14 @@
 package net.jukoz.me.resources.datas.biome_events.data;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.World;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.structureManager.features.StructureManagerService;
 import net.jukoz.me.entity.EntitiesME;
@@ -20,23 +20,23 @@ import java.util.UUID;
 
 public class SpawnEventDataUtil {
     // # Comparators
-    static boolean compareId(NpcEntity entity, Identifier npcTypeToCompare) {
+    static boolean compareId(NpcEntity entity, ResourceLocation npcTypeToCompare) {
         if(entity == null)
             return false;
-        Identifier entityId = entity.getNpcTypeIdentifier();
+        ResourceLocation entityId = entity.getNpcTypeIdentifier();
         if(entityId == null || npcTypeToCompare == null)
             return false;
         return MiddleEarth.compareId(entityId, npcTypeToCompare);
     }
 
-    static boolean compareEntitiesByType(LivingEntity entity, Identifier entityType) {
+    static boolean compareEntitiesByType(LivingEntity entity, ResourceLocation entityType) {
         if(entity == null)
             return false;
         return MiddleEarth.compareId(Registries.ENTITY_TYPE.getId(entity.getType()), entityType);
     }
 
     // Conditions
-    static boolean meetEntityThresholdRequirements(WildSpawnEventData data, World world, BlockPos pos) {
+    static boolean meetEntityThresholdRequirements(WildSpawnEventData data, Level world, BlockPos pos) {
         EntityType<?> targetEntityType = Registries.ENTITY_TYPE.get(data.getEntityType());
         int sameEntityDistance = data.getSameEntityLimitDistance().orElse(256);
         int sameEntityAmount = data.getSameEntityLimitAmount().orElse(10);
@@ -78,12 +78,12 @@ public class SpawnEventDataUtil {
         return !hasNpcTypeLimit || counts[1] < sameNpcTypeAmount;
     }
 
-    static boolean meetsStructureManagerClearance(WildSpawnEventData data, World world, BlockPos pos) {
+    static boolean meetsStructureManagerClearance(WildSpawnEventData data, Level world, BlockPos pos) {
         int structureManagerDistance = data.getStructureManagerRadiusAvoidance().orElse(64);
         return !StructureManagerService.isClose(world, pos, structureManagerDistance);
     }
 
-    static boolean meetLightLevelRequirement(WildSpawnEventData data, World world, BlockPos pos) {
+    static boolean meetLightLevelRequirement(WildSpawnEventData data, Level world, BlockPos pos) {
         int currentLightLevel = world.getLightLevel(pos);
         int minimumLight = data.getLightLevelMinimum().orElse(0);
         if(currentLightLevel < minimumLight)
@@ -99,7 +99,7 @@ public class SpawnEventDataUtil {
         return currentY < data.getShouldSpawnBelow().orElse(Integer.MAX_VALUE);
     }
 
-    static boolean meetEnvironmentRequirements(WildSpawnEventData data, World world, BlockPos pos) {
+    static boolean meetEnvironmentRequirements(WildSpawnEventData data, Level world, BlockPos pos) {
         boolean requireSky = data.getSkyRequirement().orElse(false);
         boolean requireUnderground = data.getUndergroundRequirement().orElse(false);
 
@@ -117,7 +117,7 @@ public class SpawnEventDataUtil {
         return true;
     }
 
-    public static boolean isSurface(World world, BlockPos pos) {
+    public static boolean isSurface(Level world, BlockPos pos) {
         int surfaceY = world.getTopY(
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 pos.getX(),
@@ -125,7 +125,7 @@ public class SpawnEventDataUtil {
         );
         return pos.getY() >= surfaceY - 1 && pos.getY() <= surfaceY + 2;
     }
-    public static boolean isUnderground(World world, BlockPos pos) {
+    public static boolean isUnderground(Level world, BlockPos pos) {
         int surfaceY = world.getTopY(
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 pos.getX(),
@@ -134,12 +134,12 @@ public class SpawnEventDataUtil {
         return pos.getY() < surfaceY - 2;
     }
 
-    static boolean meetNightTimeRequirement(WildSpawnEventData data, World world) {
+    static boolean meetNightTimeRequirement(WildSpawnEventData data, Level world) {
         boolean requireNight = data.getNightRequirement().orElse(false);
         return !requireNight || world.isNight();
     }
 
-    private static boolean meetMinimumSpaceRequirement(WildSpawnEventData data, World world, BlockPos blockPos) {
+    private static boolean meetMinimumSpaceRequirement(WildSpawnEventData data, Level world, BlockPos blockPos) {
         Vec3i size = data.getMinimumSpaceCubeSize().orElse(null);
         if(size == null)
             return true;
@@ -152,7 +152,7 @@ public class SpawnEventDataUtil {
         return true;
     }
 
-    public static boolean isConsideredForSpawning(WildSpawnEventData data, Identifier id, World world, BlockPos blockPos) {
+    public static boolean isConsideredForSpawning(WildSpawnEventData data, ResourceLocation id, Level world, BlockPos blockPos) {
         if(!data.getEntityType().equals(id))
             return false;
         if(!meetLightLevelRequirement(data, world, blockPos))

@@ -1,16 +1,16 @@
 package net.jukoz.me.compat.client.render;
 
 import net.jukoz.me.compat.client.render.state.BipedEntityRenderStateCompat;
-import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.BipedEntityRenderer;
-import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.util.Identifier;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * R2 base for donor-style 1.21.8 {@code BipedEntityRenderer<T, S, M>} renderers.
@@ -19,7 +19,7 @@ import net.minecraft.util.Identifier;
  * into the state by the donor {@code updateRenderState} and read back by
  * {@link MEBipedEntityModel} while the model is posed.
  */
-public abstract class MEBipedEntityRenderer<T extends MobEntity, S extends BipedEntityRenderStateCompat, M extends BipedEntityModel<T>>
+public abstract class MEBipedEntityRenderer<T extends Mob, S extends BipedEntityRenderStateCompat, M extends BipedEntityModel<T>>
         extends BipedEntityRenderer<T, M> {
 
     protected MEBipedEntityRenderer(EntityRendererFactory.Context ctx, M model, float shadowRadius) {
@@ -46,12 +46,12 @@ public abstract class MEBipedEntityRenderer<T extends MobEntity, S extends Biped
         state.handSwingProgress = entity.getHandSwingProgress(tickDelta);
     }
 
-    public Identifier getTexture(S state) {
+    public ResourceLocation getTexture(S state) {
         return null;
     }
 
-    public void render(S state, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
-        Identifier texture = this.getTexture(state);
+    public void render(S state, PoseStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+        ResourceLocation texture = this.getTexture(state);
         VertexConsumer vertices = vertexConsumers.getBuffer(this.model.getLayer(texture));
         @SuppressWarnings("unchecked")
         T entity = (T) state.entity;
@@ -64,7 +64,7 @@ public abstract class MEBipedEntityRenderer<T extends MobEntity, S extends Biped
     }
 
     @Override
-    public Identifier getTexture(T entity) {
+    public ResourceLocation getTexture(T entity) {
         S state = createRenderState();
         state.entity = entity;
         updateRenderState(entity, state, 0.0F);
@@ -72,7 +72,7 @@ public abstract class MEBipedEntityRenderer<T extends MobEntity, S extends Biped
     }
 
     @Override
-    public void render(T entity, float yaw, float tickDelta, MatrixStack matrices,
+    public void render(T entity, float yaw, float tickDelta, PoseStack matrices,
                              VertexConsumerProvider vertexConsumers, int light) {
         S state = createRenderState();
         state.entity = entity;
@@ -91,11 +91,11 @@ public abstract class MEBipedEntityRenderer<T extends MobEntity, S extends Biped
         return (T) state.entity;
     }
 
-    protected void setupTransforms(S state, MatrixStack matrices, float bodyYaw, float animationProgress) {
+    protected void setupTransforms(S state, PoseStack matrices, float bodyYaw, float animationProgress) {
         super.setupTransforms(entityOf(state), matrices, bodyYaw, state.tickDelta, animationProgress);
     }
 
-    protected void scale(S state, MatrixStack matrices) {
+    protected void scale(S state, PoseStack matrices) {
         super.scale(entityOf(state), matrices, state.tickDelta);
     }
 
@@ -107,7 +107,7 @@ public abstract class MEBipedEntityRenderer<T extends MobEntity, S extends Biped
         return super.getAnimationCounter(entityOf(state), state.tickDelta);
     }
 
-    protected void renderLabelIfPresent(S state, net.minecraft.text.Text text, MatrixStack matrices,
+    protected void renderLabelIfPresent(S state, net.minecraft.network.chat.Component text, PoseStack matrices,
                                         VertexConsumerProvider vertexConsumers, int light) {
         super.renderLabelIfPresent(entityOf(state), text, matrices, vertexConsumers, light);
     }

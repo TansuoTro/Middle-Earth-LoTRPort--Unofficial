@@ -7,11 +7,11 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.network.packets.C2S.AnvilIndexPacket;
 
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShapingAnvilScreen extends HandledScreen<ShapingAnvilScreenHandler> {
-    private static final Identifier TEXTURE = MiddleEarth.ofPath( "textures", "gui", "shaping_anvil.png");
+    private static final ResourceLocation TEXTURE = MiddleEarth.ofPath( "textures", "gui", "shaping_anvil.png");
 
     private float scrollAmount;
     private boolean mouseClicked;
@@ -27,7 +27,7 @@ public class ShapingAnvilScreen extends HandledScreen<ShapingAnvilScreenHandler>
 
     private List<ItemStack> outputs;
 
-    public ShapingAnvilScreen(ShapingAnvilScreenHandler handler, PlayerInventory inventory, Text title) {
+    public ShapingAnvilScreen(ShapingAnvilScreenHandler handler, PlayerInventory inventory, Component title) {
         super(handler, inventory, title);
         outputs = new ArrayList<>();
     }
@@ -136,9 +136,9 @@ public class ShapingAnvilScreen extends HandledScreen<ShapingAnvilScreenHandler>
 
         if (mouseX >= x + 79 && mouseX <= x + 96 && mouseY >= y + 34 && mouseY <= y + 51){
             context.drawOrderedTooltip(this.client.textRenderer,
-                    Lists.transform(List.of(Text.translatable("tooltip." + MiddleEarth.MOD_ID +".anvil_hammer"),
-                            Text.translatable("tooltip." + MiddleEarth.MOD_ID +".anvil_hammer_2")),
-                            Text::asOrderedText), mouseX, mouseY);
+                    Lists.transform(List.of(Component.translatable("tooltip." + MiddleEarth.MOD_ID +".anvil_hammer"),
+                            Component.translatable("tooltip." + MiddleEarth.MOD_ID +".anvil_hammer_2")),
+                            Component::asOrderedText), mouseX, mouseY);
         }
     }
 

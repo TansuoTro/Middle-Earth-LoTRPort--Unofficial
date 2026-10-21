@@ -1,20 +1,20 @@
 package net.jukoz.me.entity.projectile.smoke;
 
 import net.minecraft.entity.*;
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.entity.projectile.ProjectileUtil;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.nbt.CompoundTag;
 import net.jukoz.me.compat.nbt.ReadView;
 import net.jukoz.me.compat.nbt.WriteView;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.utils.ModCollisionUtils;
 
 public class SmokeRingProjectileEntity extends ProjectileEntity {
@@ -28,7 +28,7 @@ public class SmokeRingProjectileEntity extends ProjectileEntity {
 
     public SmokeRingProjectileEntity(
             EntityType<? extends SmokeRingProjectileEntity> type,
-            World world) {
+            Level world) {
         super(type, world);
         this.setNoGravity(true);
     }
@@ -62,13 +62,13 @@ public class SmokeRingProjectileEntity extends ProjectileEntity {
     }
 
     @Override
-    protected void readCustomDataFromNbt(NbtCompound nbt) {
+    protected void readCustomDataFromNbt(CompoundTag nbt) {
         ReadView view = new ReadView(nbt);
         this.setFailed(view.getBoolean("Failed", false));
     }
 
     @Override
-    protected void writeCustomDataToNbt(NbtCompound nbt) {
+    protected void writeCustomDataToNbt(CompoundTag nbt) {
         WriteView view = new WriteView(nbt);
         view.putBoolean("Failed", this.isFailed());
     }
@@ -85,7 +85,7 @@ public class SmokeRingProjectileEntity extends ProjectileEntity {
         isFadingOut = true;
         this.age = this.getMaxLifespanTicks() - 3;
 
-        this.setVelocity(Vec3d.ZERO);
+        this.setVelocity(Vec3.ZERO);
         this.setPosition(this.getX(), this.getY(), this.getZ());
     }
 
@@ -105,8 +105,8 @@ public class SmokeRingProjectileEntity extends ProjectileEntity {
     }
 
     private boolean checkEntityCollision() {
-        Vec3d start = this.getPos();
-        Vec3d end = this.getPos().add(this.getVelocity());
+        Vec3 start = this.getPos();
+        Vec3 end = this.getPos().add(this.getVelocity());
 
         EntityHitResult hit = ProjectileUtil.getEntityCollision(this.getWorld(),
                 this,

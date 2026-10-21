@@ -1,14 +1,14 @@
 package net.jukoz.me.item.items;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.sound.SoundEvent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.UseAction;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -35,7 +35,7 @@ public class BottledDrinkItem extends Item {
     }
 
     @Override
-    public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
+    public ItemStack finishUsing(ItemStack stack, Level world, LivingEntity user) {
         ItemStack result = super.finishUsing(stack, world, user);
         if (!world.isClient && this.curePoison) {
             user.removeStatusEffect(StatusEffects.POISON);
@@ -44,7 +44,7 @@ public class BottledDrinkItem extends Item {
         if (result.isEmpty()) {
             return new ItemStack(Items.GLASS_BOTTLE);
         }
-        if (user instanceof PlayerEntity player && !player.getAbilities().creativeMode) {
+        if (user instanceof Player player && !player.getAbilities().creativeMode) {
             ItemStack bottle = new ItemStack(Items.GLASS_BOTTLE);
             if (!player.getInventory().insertStack(bottle)) {
                 player.dropItem(bottle, false);

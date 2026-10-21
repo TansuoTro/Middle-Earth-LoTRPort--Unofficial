@@ -2,14 +2,14 @@ package net.jukoz.me.entity.npcs.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.npcs.NpcEntity;
 import net.jukoz.me.registries.DynamicRegistriesME;
@@ -22,9 +22,9 @@ import java.util.Random;
 
 public class NpcInitializationData {
     public static final Codec<NpcInitializationData> CODEC;
-    public static final PacketCodec<PacketByteBuf, NpcInitializationData> PACKET_CODEC;
+    public static final PacketCodec<FriendlyByteBuf, NpcInitializationData> PACKET_CODEC;
 
-    private Identifier type;
+    private ResourceLocation type;
     private Boolean isRandom;
 
     static {
@@ -45,7 +45,7 @@ public class NpcInitializationData {
         this.isRandom = isRandom == null || isRandom.isEmpty() || isRandom.get() == false ? null : isRandom.get();
     }
 
-    public NpcInitializationData(Identifier type, Boolean isRandom) {
+    public NpcInitializationData(ResourceLocation type, Boolean isRandom) {
         this.type = type;
         this.isRandom = isRandom;
     }
@@ -55,7 +55,7 @@ public class NpcInitializationData {
         this.isRandom = null;
     }
 
-    public NpcInitializationData withType(Identifier newType) {
+    public NpcInitializationData withType(ResourceLocation newType) {
         return new NpcInitializationData(newType, this.isRandom);
     }
 
@@ -71,15 +71,15 @@ public class NpcInitializationData {
 
 
     public boolean tryToInitialize(NpcEntity entity) {
-        World world = entity.getWorld();
+        Level world = entity.getWorld();
         if(world == null)
             return false;
 
         if(isRandom != null && isRandom){
             Registry<NpcType> registry = world.getRegistryManager().get(DynamicRegistriesME.NPC_TYPE);
-            List<RegistryKey<NpcType>> entryList =  registry.getKeys().stream().toList();
+            List<ResourceKey<NpcType>> entryList =  registry.getKeys().stream().toList();
             Random random = new Random();
-            RegistryKey<NpcType> randomKey = entryList.get(random.nextInt(entryList.size()));
+            ResourceKey<NpcType> randomKey = entryList.get(random.nextInt(entryList.size()));
             this.type = randomKey.getValue();
             this.isRandom = false;
         }
@@ -89,7 +89,7 @@ public class NpcInitializationData {
             NpcType npcType = registry.get(type);
             if(npcType == null)
                 return false;
-            RegistryEntry<NpcType> entry = registry.getEntry(npcType);
+            Holder<NpcType> entry = registry.getEntry(npcType);
             this.type = null;
             EntityCategories category = null;
             if(!npcType.hasCategory(world, category))

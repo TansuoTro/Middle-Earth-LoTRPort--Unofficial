@@ -1,10 +1,10 @@
 package net.jukoz.me.world.biomes.surface;
 
-import net.minecraft.registry.Registerable;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.biome.*;
-import net.minecraft.world.gen.GenerationStep;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.gen.feature.*;
 import net.jukoz.me.particles.ModParticleTypes;
 import net.jukoz.me.world.biomes.BiomeColorsDTO;
@@ -19,11 +19,11 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ModBiomes {
-    private static List<RegistryKey<PlacedFeature>> surfaceStructures = new ArrayList<>();;
-    private static List<RegistryKey<PlacedFeature>> vegetation = new ArrayList<>();;
-    private static ArrayList<RegistryKey<PlacedFeature>> undergroundOres = new ArrayList<>();;
+    private static List<ResourceKey<PlacedFeature>> surfaceStructures = new ArrayList<>();;
+    private static List<ResourceKey<PlacedFeature>> vegetation = new ArrayList<>();;
+    private static ArrayList<ResourceKey<PlacedFeature>> undergroundOres = new ArrayList<>();;
     
-    public static void bootstrap(Registerable<Biome> context) {
+    public static void bootstrap(BootstrapContext<Biome> context) {
         createAnduinBiome(context, MEBiomeKeys.ANDUIN_VALES, false);
         createAnduinBiome(context, MEBiomeKeys.ANDUIN_VALES_FOREST, true);
         createAnorienBiome(context, MEBiomeKeys.ANORIEN);
@@ -279,9 +279,9 @@ public class ModBiomes {
         createMirkwoodMountainsBiome(context, MEBiomeKeys.WOODLAND_HILLS, true);
     }
 
-    public static void createAnduinBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, boolean forest) {
+    public static void createAnduinBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, boolean forest) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModSpawnSettingsBuilder.addRareWarg(spawnSettings);
         ModSpawnSettingsBuilder.addRabbits(spawnSettings);
@@ -335,10 +335,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createAnorienBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createAnorienBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addPlainsMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addGondorVegetation(generationSettings);
         ModBiomeFeatures.addGravelOre(vegetation);
@@ -353,9 +353,9 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createBarrowDownsBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createBarrowDownsBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addDisks(undergroundOres);
         ModBiomeFeatures.addGravelOre(vegetation);
@@ -384,11 +384,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings, new BiomeParticleConfig(ModParticleTypes.BIOME_FOG_PARTICLE, 0.003f), 0.5f, true);
     }
 
-    public static void createBeleriandIslandBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createBeleriandIslandBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addFarmAnimals(spawnSettings);
         ModSpawnSettingsBuilder.addMountainsMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addDefaultVegetation(generationSettings);
         ModBiomeFeatures.addCornflower(vegetation);
@@ -402,11 +402,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createBelfalasBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createBelfalasBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addPlainsMobs(spawnSettings);
         ModSpawnSettingsBuilder.addSwan(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addCornflower(vegetation);
         ModBiomeFeatures.addTuftGrass(vegetation);
@@ -450,9 +450,9 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createBelfalasShoresBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createBelfalasShoresBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addGondorVegetation(generationSettings);
         ModBiomeFeatures.addBeachGrass(vegetation);
@@ -466,9 +466,9 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createBlackRootVale(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, boolean forest) {
+    public static void createBlackRootVale(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, boolean forest) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addFlowerGreenJewel(vegetation);
         ModBiomeFeatures.addTuftGrass(vegetation);
@@ -505,11 +505,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createBlueMountainsBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createBlueMountainsBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addMountainsMobs(spawnSettings);
         ModSpawnSettingsBuilder.addBroadhoofGoats(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
         float temperature = 0.5f;
 
         ModBiomeFeatures.addGrassyPeatOre(vegetation);
@@ -584,12 +584,12 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings, temperature, true);
     }
 
-    public static void createCorsairCoastBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createCorsairCoastBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addHaradMobs(spawnSettings);
         ModSpawnSettingsBuilder.addWolves(spawnSettings);
         ModSpawnSettingsBuilder.addLlama(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addHaradVegetation(generationSettings);
         ModBiomeFeatures.addCoastalFoliage(vegetation);
@@ -607,9 +607,9 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createDaleBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createDaleBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         if (step == 0){
             ModSpawnSettingsBuilder.addCats(spawnSettings);
@@ -662,9 +662,9 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createDeadMarshesBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createDeadMarshesBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         undergroundOres.add(MiscPlacedFeatures.DISK_CLAY);
         ModBiomeFeatures.addMistweed(vegetation);
@@ -691,9 +691,9 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createDeadMarshesWaterBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createDeadMarshesWaterBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         undergroundOres.add(MiscPlacedFeatures.DISK_CLAY);
         ModBiomeFeatures.addAshenGravelOre(undergroundOres);
@@ -707,9 +707,9 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createDesolatedLandsBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createDesolatedLandsBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addGrassyDirtOre(vegetation);
         ModBiomeFeatures.addAshenGravelOre(undergroundOres);
@@ -734,10 +734,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createDorwinionBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createDorwinionBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addPlainsMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addDisks(undergroundOres);
         ModBiomeFeatures.addGrass(vegetation);
@@ -779,10 +779,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createDorwinionHillsBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createDorwinionHillsBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addMountainsMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addNordicVegetation(generationSettings);
         ModBiomeFeatures.addTuffOre(vegetation);
@@ -797,10 +797,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createDunlandFoothillsBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createDunlandFoothillsBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addMountainsMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addNordicVegetation(generationSettings);
         ModBiomeFeatures.addGravelOre(vegetation);
@@ -835,10 +835,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createEasternRhovanionBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createEasternRhovanionBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addPlainsMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addRhunVegetation(generationSettings);
         ModBiomeFeatures.addLimestoneBoulder(vegetation);
@@ -866,11 +866,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createEmynMuilBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createEmynMuilBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addRabbits(spawnSettings);
 
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addGrass(vegetation);
         vegetation.add(VegetationPlacedFeatures.FLOWER_DEFAULT);
@@ -890,11 +890,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createEnedwaithBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createEnedwaithBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addPlainsMobs(spawnSettings);
         ModSpawnSettingsBuilder.addRabbits(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addDefaultVegetation(generationSettings);
         ModBiomeFeatures.addGreenShrub(vegetation);
@@ -928,12 +928,12 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createLonelyMountainBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createLonelyMountainBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addMountainsMobs(spawnSettings);
         ModSpawnSettingsBuilder.addBroadhoofGoats(spawnSettings);
         ModSpawnSettingsBuilder.addNordicMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
         float temperature = 0.4f;
 
         if(step == 0) {
@@ -970,10 +970,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings, temperature, true);
     }
 
-    public static void createEregionBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createEregionBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addFarmAnimals(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addDefaultVegetation(generationSettings);
         ModBiomeFeatures.addGrassyDirtOre(vegetation);
@@ -1034,11 +1034,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createEthirAnduin(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createEthirAnduin(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addPlainsMobs(spawnSettings);
         ModSpawnSettingsBuilder.addSwampMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addDisks(undergroundOres);
         ModBiomeFeatures.addGrass(vegetation);
@@ -1068,9 +1068,9 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createNenHithoelBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createNenHithoelBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addDisks(undergroundOres);
         ModBiomeFeatures.addGrass(vegetation);
@@ -1125,11 +1125,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createNindalf(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createNindalf(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addPlainsMobs(spawnSettings);
         ModSpawnSettingsBuilder.addSwampMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addDisks(undergroundOres);
         ModBiomeFeatures.addGrass(vegetation);
@@ -1159,12 +1159,12 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createFangornBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createFangornBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addWolves(spawnSettings);
         ModSpawnSettingsBuilder.addDeer(spawnSettings);
         ModSpawnSettingsBuilder.addGreatHorn(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addDisks(undergroundOres);
         ModBiomeFeatures.addGrass(vegetation);
@@ -1202,20 +1202,20 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createForodwaithBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createForodwaithBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addForochelMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addForodwaithVegetation(generationSettings);
 
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings, -0.8f, true);
     }
 
-    public static void createGondorBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createGondorBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addPlainsMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addGondorVegetation(generationSettings);
         ModBiomeFeatures.addGravelOre(vegetation);
@@ -1271,9 +1271,9 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createGondorRiverSideBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createGondorRiverSideBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addGondorVegetation(generationSettings);
         ModBiomeFeatures.addGravelOre(vegetation);
@@ -1287,13 +1287,13 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createGreyMountainsBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createGreyMountainsBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addMountainsMobs(spawnSettings);
         ModSpawnSettingsBuilder.addNordicMobs(spawnSettings);
         ModSpawnSettingsBuilder.addBroadhoofGoats(spawnSettings);
         
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addAbundantTuffOre(vegetation);
         ModBiomeFeatures.addTuftGrass(vegetation);
@@ -1336,13 +1336,13 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createMountGundabadBiomes(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createMountGundabadBiomes(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addMountainsMobs(spawnSettings);
         ModSpawnSettingsBuilder.addNordicMobs(spawnSettings);
         ModSpawnSettingsBuilder.addBroadhoofGoats(spawnSettings);
         
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addGravelOre(vegetation);
         ModBiomeFeatures.addAbundantTuffOre(vegetation);
@@ -1368,12 +1368,12 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createGreyPlainsBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createGreyPlainsBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addMountainsMobs(spawnSettings);
         ModSpawnSettingsBuilder.addWolves(spawnSettings);
         ModSpawnSettingsBuilder.addNordicMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addDisks(undergroundOres);
         vegetation.add(VegetationPlacedFeatures.PATCH_LARGE_FERN);
@@ -1432,12 +1432,12 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createGundabadPlains(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createGundabadPlains(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addFarmAnimals(spawnSettings);
         ModSpawnSettingsBuilder.addWolves(spawnSettings);
         ModSpawnSettingsBuilder.addNordicMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
         ModSpawnSettingsBuilder.addUncommonWarg(spawnSettings);
 
         ModBiomeFeatures.addDisks(undergroundOres);
@@ -1483,11 +1483,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createHaradBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createHaradBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addHaradMobs(spawnSettings);
         ModSpawnSettingsBuilder.addFarmAnimals(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addHaradVegetation(generationSettings);
         ModBiomeFeatures.addSandOre(vegetation);
@@ -1521,12 +1521,12 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createHarondorBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createHarondorBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addHaradMobs(spawnSettings);
         ModSpawnSettingsBuilder.addFarmAnimals(spawnSettings);
         ModSpawnSettingsBuilder.addCats(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addHaradVegetation(generationSettings);
         ModBiomeFeatures.addDryHeather(vegetation);
@@ -1544,10 +1544,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createHaradDesertBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createHaradDesertBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addHaradMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addHaradDesertVegetation(generationSettings);
         vegetation.add(VegetationPlacedFeatures.PATCH_DEAD_BUSH_2);
@@ -1556,11 +1556,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings, 0.8f, false);
     }
 
-    public static void createHillsOfEvendim(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createHillsOfEvendim(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addMountainsMobs(spawnSettings);
         ModSpawnSettingsBuilder.addNordicMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addArthedainVegetation(generationSettings);
 
@@ -1583,12 +1583,12 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createIronHillsBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, boolean foothills) {
+    public static void createIronHillsBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, boolean foothills) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addMountainsMobs(spawnSettings);
         ModSpawnSettingsBuilder.addBroadhoofGoats(spawnSettings);
         ModSpawnSettingsBuilder.addNordicMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addNordicVegetation(generationSettings);
         if(foothills) {
@@ -1603,11 +1603,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createIsengardBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, boolean trees) {
+    public static void createIsengardBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, boolean trees) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addFarmAnimals(spawnSettings);
         ModSpawnSettingsBuilder.addUncommonWarg(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addRareWilderGrass(vegetation);
         ModBiomeFeatures.addOakBushes(vegetation);
@@ -1624,11 +1624,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createRhovanionTaigaBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createRhovanionTaigaBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addFarmAnimals(spawnSettings);
         ModSpawnSettingsBuilder.addNordicMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addNordicVegetation(generationSettings);
         ModBiomeFeatures.addSpruceBushes(vegetation);
@@ -1670,14 +1670,14 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createIthilienBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, boolean wastes, boolean glade) {
+    public static void createIthilienBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, boolean wastes, boolean glade) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addFarmAnimals(spawnSettings);
         ModSpawnSettingsBuilder.addDeer(spawnSettings);
         ModSpawnSettingsBuilder.addRabbits(spawnSettings);
         ModSpawnSettingsBuilder.addRareWarg(spawnSettings);
         ModSpawnSettingsBuilder.addWolves(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addGravelOre(vegetation);
         ModBiomeFeatures.addWildGrass(vegetation);
@@ -1741,10 +1741,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createLamedonBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createLamedonBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addPlainsMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addGondorVegetation(generationSettings);
         ModBiomeFeatures.addDioriteOre(vegetation);
@@ -1779,10 +1779,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createLebennin(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createLebennin(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addPlainsMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addGondorVegetation(generationSettings);
         ModBiomeFeatures.addLebenninFlowers(vegetation);
@@ -1814,11 +1814,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createLindonBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createLindonBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addFarmAnimals(spawnSettings);
         ModSpawnSettingsBuilder.addPlainsMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addDisks(undergroundOres);
         ModBiomeFeatures.addGrassyDirtOre(vegetation);
@@ -1929,11 +1929,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createLorienEdgeBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createLorienEdgeBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addFarmAnimals(spawnSettings);
         ModSpawnSettingsBuilder.addSwan(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addLothlorienVegetation(generationSettings);
         ModBiomeFeatures.addMallornTrees(vegetation);
@@ -1941,13 +1941,13 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createLothlorienBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createLothlorienBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addFarmAnimals(spawnSettings);
         ModSpawnSettingsBuilder.addDeer(spawnSettings);
         ModSpawnSettingsBuilder.addGreatHorn(spawnSettings);
         ModSpawnSettingsBuilder.addSwan(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addLothlorienVegetation(generationSettings);
         ModBiomeFeatures.addRareAzureBluetFlower(vegetation);
@@ -1986,10 +1986,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createLossarnach(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createLossarnach(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addPlainsMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addGondorVegetation(generationSettings);
         ModBiomeFeatures.addWildBellPepper(vegetation);
@@ -2055,10 +2055,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createLossarnachCherryBlossom(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createLossarnachCherryBlossom(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addFarmAnimals(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addGondorVegetation(generationSettings);
         ModBiomeFeatures.addOakBushes(vegetation);
@@ -2073,10 +2073,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createMinhiriathBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createMinhiriathBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addEriadorMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         if(step == 0){
             addEriadorVegetation(generationSettings);
@@ -2102,9 +2102,9 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createDolGuldurBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createDolGuldurBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addDisks(undergroundOres);
         ModBiomeFeatures.addGrass(vegetation);
@@ -2166,7 +2166,7 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createMirkwoodBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, boolean bigTrees, boolean dark, boolean hasWarg) {
+    public static void createMirkwoodBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, boolean bigTrees, boolean dark, boolean hasWarg) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addWolves(spawnSettings);
 
@@ -2184,7 +2184,7 @@ public class ModBiomes {
             ModSpawnSettingsBuilder.addGreatHorn(spawnSettings);
         }
 
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addMirkwoodVegetation(generationSettings);
         ModBiomeFeatures.addMirkwoodRoots(vegetation);
@@ -2217,9 +2217,9 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createMirkwoodMountainsBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createMirkwoodMountainsBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         float temperature = 0.3f;
 
@@ -2273,10 +2273,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings, temperature, true);
     }
 
-    public static void createMirkwoodMountainsBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, boolean foothill) {
+    public static void createMirkwoodMountainsBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, boolean foothill) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
 
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
         ModBiomeFeatures.addGraniteBoulder(vegetation);
         float temperature = 0.3f;
         if(foothill) {
@@ -2300,13 +2300,13 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings, temperature, true);
     }
 
-    public static void createWebbedMirkwoodBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, boolean dark) {
+    public static void createWebbedMirkwoodBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, boolean dark) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addWolves(spawnSettings);
         ModSpawnSettingsBuilder.addMirkwoodSpider(spawnSettings);
         ModSpawnSettingsBuilder.addSwampMobs(spawnSettings);
 
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addMirkwoodVegetation(generationSettings);
         ModBiomeFeatures.addMirkwoodRoots(vegetation);
@@ -2331,10 +2331,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createMirkwoodSwampBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createMirkwoodSwampBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addSwampMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addMirkwoodVegetation(generationSettings);
         ModBiomeFeatures.addWaterDelta(vegetation);
@@ -2380,10 +2380,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createMistyMountainsBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createMistyMountainsBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         float temperature = 0.35f;
 
@@ -2429,10 +2429,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings,temperature, true);
     }
 
-    public static void createMordorBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createMordorBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
         ModSpawnSettingsBuilder.addUncommonWarg(spawnSettings);
         ModSpawnSettingsBuilder.addCommonWolves(spawnSettings);
         ModSpawnSettingsBuilder.addUncommonBats(spawnSettings);
@@ -2451,10 +2451,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings, 0.7f, false, true);
     }
 
-    public static void createMordorAshenForestBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createMordorAshenForestBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
         ModSpawnSettingsBuilder.addRareWarg(spawnSettings);
         ModSpawnSettingsBuilder.addRareWolves(spawnSettings);
         ModSpawnSettingsBuilder.addUncommonBats(spawnSettings);
@@ -2480,10 +2480,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings, 0.7f, false, true);
     }
 
-    public static void createMordorHillBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createMordorHillBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
         ModSpawnSettingsBuilder.addRareWarg(spawnSettings);
         ModSpawnSettingsBuilder.addWolves(spawnSettings);
         ModSpawnSettingsBuilder.addUncommonBats(spawnSettings);
@@ -2503,10 +2503,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings, 0.7f, false, true);
     }
 
-    public static void createGorgorothBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createGorgorothBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
         ModSpawnSettingsBuilder.addRareWarg(spawnSettings);
         ModSpawnSettingsBuilder.addWolves(spawnSettings);
         ModSpawnSettingsBuilder.addUncommonBats(spawnSettings);
@@ -2558,9 +2558,9 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings, 0.7f, false, true);
     }
 
-    public static void createMordorMountainsBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createMordorMountainsBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         if (step == 0) {
             ModBiomeFeatures.addShriveledShrubs(vegetation);
@@ -2597,9 +2597,9 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings, 0.7f, false, true);
     }
 
-    public static void createMordorWastesBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createMordorWastesBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
         ModSpawnSettingsBuilder.addSwampMobs(spawnSettings);
 
         addMordorVegetation(generationSettings);
@@ -2613,11 +2613,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createMorgulVale(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createMorgulVale(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addRareWolves(spawnSettings);
         
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
         ModSpawnSettingsBuilder.addRareWarg(spawnSettings);
         ModSpawnSettingsBuilder.addRareWolves(spawnSettings);
 
@@ -2646,11 +2646,11 @@ public class ModBiomes {
 
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
-    public static void createMorgulForest(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createMorgulForest(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addWolves(spawnSettings);
         
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addGrass(vegetation);
         ModBiomeFeatures.addTuftGrass(vegetation);
@@ -2688,12 +2688,12 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createNanCurunirBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createNanCurunirBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addFarmAnimals(spawnSettings);
         ModSpawnSettingsBuilder.addRareWarg(spawnSettings);
 
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addRareWilderGrass(vegetation);
         ModBiomeFeatures.addOakBushes(vegetation);
@@ -2708,11 +2708,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createNorthDownsBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createNorthDownsBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addMountainsMobs(spawnSettings);
         ModSpawnSettingsBuilder.addNordicMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addRareWilderGrass(vegetation);
         ModBiomeFeatures.addAndesiteBoulder(vegetation);
@@ -2727,11 +2727,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createDunlandBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createDunlandBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addNordicMobs(spawnSettings);
         ModSpawnSettingsBuilder.addWolves(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addNordicVegetation(generationSettings);
         ModBiomeFeatures.addGravelOre(vegetation);
@@ -2791,13 +2791,13 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createNorthernWastelands(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createNorthernWastelands(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addMountainsMobs(spawnSettings);
         ModSpawnSettingsBuilder.addWolves(spawnSettings);
         ModSpawnSettingsBuilder.addNordicMobs(spawnSettings);
         ModSpawnSettingsBuilder.addGreatHorn(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         vegetation.add(VegetationPlacedFeatures.PATCH_GRASS_TAIGA);
         vegetation.add(VegetationPlacedFeatures.BROWN_MUSHROOM_NORMAL);
@@ -2820,14 +2820,14 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings, -0.1f, true);
     }
 
-    public static void createNurnEdgeBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createNurnEdgeBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addPlainsMobs(spawnSettings);
         ModSpawnSettingsBuilder.addRareWarg(spawnSettings);
         ModSpawnSettingsBuilder.addRabbits(spawnSettings);
         ModSpawnSettingsBuilder.addWolves(spawnSettings);
 
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addDisks(undergroundOres);
         ModBiomeFeatures.addGrass(vegetation);
@@ -2872,14 +2872,14 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createNurnBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createNurnBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addPlainsMobs(spawnSettings);
         ModSpawnSettingsBuilder.addRareWarg(spawnSettings);
         ModSpawnSettingsBuilder.addRabbits(spawnSettings);
         ModSpawnSettingsBuilder.addWolves(spawnSettings);
 
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addDefaultVegetation(generationSettings);
         ModBiomeFeatures.addToughBerries(vegetation);
@@ -2926,11 +2926,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createNurnWaterBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createNurnWaterBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addSwampMobs(spawnSettings);
         ModSpawnSettingsBuilder.addRiverAnimals(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addOceanVegetation(generationSettings);
         ModBiomeFeatures.addMudOre(vegetation);
@@ -2940,9 +2940,9 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createOldAngmarBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createOldAngmarBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModSpawnSettingsBuilder.addRareWarg(spawnSettings);
         ModSpawnSettingsBuilder.addWolves(spawnSettings);
@@ -3019,10 +3019,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings, temperature, true);
     }
 
-    public static void createOldArthedainBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createOldArthedainBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addEriadorMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addArthedainVegetation(generationSettings);
         ModBiomeFeatures.addHeather(vegetation);
@@ -3090,11 +3090,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createOldCardolanBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createOldCardolanBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addEriadorMobs(spawnSettings);
         ModSpawnSettingsBuilder.addRareWolves(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addEriadorVegetation(generationSettings);
         vegetation.add(VegetationPlacedFeatures.PATCH_BERRY_RARE);
@@ -3155,14 +3155,14 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createOldRhudaurBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createOldRhudaurBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addRareWarg(spawnSettings);
         ModSpawnSettingsBuilder.addWolves(spawnSettings);
         ModSpawnSettingsBuilder.addDeer(spawnSettings);
         ModSpawnSettingsBuilder.addRabbits(spawnSettings);
 
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addNordicVegetation(generationSettings);
         ModBiomeFeatures.addFalseOatgrass(vegetation);
@@ -3215,10 +3215,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createRhunBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createRhunBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addPlainsMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addDryDirtOre(vegetation);
 
@@ -3277,10 +3277,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createRivendellBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createRivendellBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addPlainsMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addRivendellVegetation(generationSettings);
 
@@ -3321,10 +3321,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createRivendellFoothillsBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createRivendellFoothillsBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addMountainsMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addTurfOre(vegetation);
         ModBiomeFeatures.addGrassyChalksoilOre(vegetation);
@@ -3344,10 +3344,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings, 0.4f, true);
     }
 
-    public static void createRohanBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createRohanBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addPlainsMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
         addDefaultVegetation(generationSettings);
 
         ModBiomeFeatures.addGrassyDirtOre(vegetation);
@@ -3404,9 +3404,9 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createSarnGebir(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createSarnGebir(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addDisks(undergroundOres);
         ModBiomeFeatures.addGrass(vegetation);
@@ -3461,9 +3461,9 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createShireBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createShireBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addShireVegetation(generationSettings);
 
@@ -3539,10 +3539,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createSoutheastRhovanionBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createSoutheastRhovanionBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addPlainsMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addRhunVegetation(generationSettings);
         ModBiomeFeatures.addBasaltBoulder(vegetation);
@@ -3569,11 +3569,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createSouthernForochelBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createSouthernForochelBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addNordicMobs(spawnSettings);
         ModSpawnSettingsBuilder.addWolves(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addDisks(undergroundOres);
         vegetation.add(VegetationPlacedFeatures.PATCH_LARGE_FERN);
@@ -3602,10 +3602,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings, -0.4f, true);
     }
 
-    public static void createTheAngleBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createTheAngleBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addEriadorMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addEriadorVegetation(generationSettings);
         ModBiomeFeatures.addRareHeather(vegetation);
@@ -3625,11 +3625,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createTheOldForestBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createTheOldForestBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addDeer(spawnSettings);
         ModSpawnSettingsBuilder.addWolves(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addEriadorVegetation(generationSettings);
         vegetation.add(VegetationPlacedFeatures.PATCH_TALL_GRASS_2);
@@ -3651,10 +3651,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createTheWhiteDownsBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createTheWhiteDownsBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addFarmAnimals(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addNordicVegetation(generationSettings);
         ModBiomeFeatures.addDryHeatherField(vegetation);
@@ -3671,10 +3671,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings, 0.4f, true);
     }
 
-    public static void createTolfalasBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createTolfalasBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addFarmAnimals(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addDefaultVegetation(generationSettings);
         ModBiomeFeatures.addCoarseDirtOre(vegetation);
@@ -3691,9 +3691,9 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createTorogwaithBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createTorogwaithBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
         ModSpawnSettingsBuilder.addRareWarg(spawnSettings);
         ModSpawnSettingsBuilder.addRareWolves(spawnSettings);
         ModSpawnSettingsBuilder.addRareCaveTroll(spawnSettings);
@@ -3716,14 +3716,14 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings, 0.7f, false);
     }
 
-    public static void createTrollshawsBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createTrollshawsBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addDeer(spawnSettings);
         ModSpawnSettingsBuilder.addGreatHorn(spawnSettings);
         ModSpawnSettingsBuilder.addWolves(spawnSettings);
         ModSpawnSettingsBuilder.addRareStoneTroll(spawnSettings);
 
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addEriadorVegetation(generationSettings);
 
@@ -3762,13 +3762,13 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createUmbarBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createUmbarBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addHaradMobs(spawnSettings);
         ModSpawnSettingsBuilder.addRareWolves(spawnSettings);
         ModSpawnSettingsBuilder.addFarmAnimals(spawnSettings);
         ModSpawnSettingsBuilder.addCats(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addHaradVegetation(generationSettings);
         ModBiomeFeatures.addGraniteBoulder(vegetation);
@@ -3794,10 +3794,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createRiverBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createRiverBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addRiverAnimals(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addRiverDisks(undergroundOres);
         vegetation.add(OceanPlacedFeatures.KELP_COLD);
@@ -3811,31 +3811,31 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createLakeBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createLakeBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addRiverAnimals(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addOceanVegetation(generationSettings);
 
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createOasisBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createOasisBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addRiverAnimals(spawnSettings);
         ModSpawnSettingsBuilder.addCamel(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addOasisVegetation(generationSettings);
 
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createWastePondBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createWastePondBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addRiverAnimals(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         ModBiomeFeatures.addDisks(undergroundOres);
         vegetation.add(OceanPlacedFeatures.KELP_WARM);
@@ -3847,9 +3847,9 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createWitheredHeathBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createWitheredHeathBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         vegetation.add(VegetationPlacedFeatures.PATCH_GRASS_TAIGA);
         vegetation.add(VegetationPlacedFeatures.BROWN_MUSHROOM_NORMAL);
@@ -3875,10 +3875,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings, 0.4f, true);
     }
 
-    public static void createWhiteMountainsBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createWhiteMountainsBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addMountainsMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         float temperature = 0.5f;
 
@@ -3920,12 +3920,12 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings, temperature, true);
     }
 
-    public static void createWoodlandRealmBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createWoodlandRealmBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addWolves(spawnSettings);
         ModSpawnSettingsBuilder.addDeer(spawnSettings);
 
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addMirkwoodVegetation(generationSettings);
         ModBiomeFeatures.addGreenShrub(vegetation);
@@ -3977,20 +3977,20 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createOceanBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createOceanBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addOceanAnimals(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addOceanVegetation(generationSettings);
 
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createOceanCoastBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createOceanCoastBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addOceanAnimals(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addOceanVegetation(generationSettings);
         ModBiomeFeatures.addCoastalFoliage(vegetation);
@@ -3998,11 +3998,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createPelennorFields(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, int step) {
+    public static void createPelennorFields(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, int step) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addPlainsMobs(spawnSettings);
         ModSpawnSettingsBuilder.addCats(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         vegetation.add(VegetationPlacedFeatures.TREES_PLAINS);
 
@@ -4029,11 +4029,11 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createPondBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createPondBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addSwan(spawnSettings);
         ModSpawnSettingsBuilder.addSwampMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addPondVegetation(generationSettings);
         ModBiomeFeatures.addAbundantWaterDelta(undergroundOres);
@@ -4055,12 +4055,12 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createMangrovePondBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createMangrovePondBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addRiverAnimals(spawnSettings);
         ModSpawnSettingsBuilder.addSwan(spawnSettings);
         ModSpawnSettingsBuilder.addSwampMobs(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addPondVegetation(generationSettings);
         ModBiomeFeatures.addAbundantWaterDelta(undergroundOres);
@@ -4078,10 +4078,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createFrozenOceanBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createFrozenOceanBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addOceanAnimals(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
 
         addOceanVegetation(generationSettings);
         ModBiomeFeatures.addFloatingIce(vegetation);
@@ -4090,10 +4090,10 @@ public class ModBiomes {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings);
     }
 
-    public static void createFrozenPond(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey) {
+    public static void createFrozenPond(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey) {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         ModSpawnSettingsBuilder.addColdWaterAnimals(spawnSettings);
-        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE), context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        GenerationSettings.LookupBackedBuilder generationSettings = new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(Registries.PLACED_FEATURE), context.getRegistryLookup(Registries.CONFIGURED_CARVER));
         
         ModBiomeFeatures.addDisks(undergroundOres);
 
@@ -4417,11 +4417,11 @@ public class ModBiomes {
         ModBiomeFeatures.addStoneBoulder(vegetation);
     }
 
-    public static void registerBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, SpawnSettings.Builder spawnSettings, GenerationSettings.LookupBackedBuilder generationSettings) {
+    public static void registerBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, SpawnSettings.Builder spawnSettings, GenerationSettings.LookupBackedBuilder generationSettings) {
         registerBiome(context, biomeRegistryKey, spawnSettings, generationSettings, 0.5f, true);
     }
 
-    public static void registerBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, SpawnSettings.Builder spawnSettings, GenerationSettings.LookupBackedBuilder generationSettings, float temperature, boolean precipitation, boolean... removeDefaultOres) {
+    public static void registerBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, SpawnSettings.Builder spawnSettings, GenerationSettings.LookupBackedBuilder generationSettings, float temperature, boolean precipitation, boolean... removeDefaultOres) {
         if(removeDefaultOres.length == 0) {
             undergroundOres.add(OrePlacedFeatures.ORE_DIRT);
             undergroundOres.add(OrePlacedFeatures.ORE_GRAVEL);
@@ -4446,13 +4446,13 @@ public class ModBiomes {
                 throw new IllegalStateException("Duplicate value in list for: " + vegetation.get(i).getValue().toString());
             }
         }
-        for (RegistryKey<PlacedFeature> feature: surfaceStructures) {
+        for (ResourceKey<PlacedFeature> feature: surfaceStructures) {
             generationSettings.feature(GenerationStep.Feature.SURFACE_STRUCTURES, feature);
         }
-        for (RegistryKey<PlacedFeature> feature: vegetation) {
+        for (ResourceKey<PlacedFeature> feature: vegetation) {
             generationSettings.feature(GenerationStep.Feature.VEGETAL_DECORATION, feature);
         }
-        for (RegistryKey<PlacedFeature> feature: undergroundOres.stream().sorted(Comparator.comparing(a -> a.getValue().toString())).toList()) {
+        for (ResourceKey<PlacedFeature> feature: undergroundOres.stream().sorted(Comparator.comparing(a -> a.getValue().toString())).toList()) {
             generationSettings.feature(GenerationStep.Feature.UNDERGROUND_ORES, feature);
         }
 
@@ -4483,7 +4483,7 @@ public class ModBiomes {
         undergroundOres = new ArrayList<>();
     }
 
-    public static void registerBiome(Registerable<Biome> context, RegistryKey<Biome> biomeRegistryKey, SpawnSettings.Builder spawnSettings, GenerationSettings.LookupBackedBuilder generationSettings, BiomeParticleConfig particleConfig, float temperature, boolean precipitation, boolean... removeDefaultOres) {
+    public static void registerBiome(BootstrapContext<Biome> context, ResourceKey<Biome> biomeRegistryKey, SpawnSettings.Builder spawnSettings, GenerationSettings.LookupBackedBuilder generationSettings, BiomeParticleConfig particleConfig, float temperature, boolean precipitation, boolean... removeDefaultOres) {
         if(removeDefaultOres.length == 0) {
             undergroundOres.add(OrePlacedFeatures.ORE_DIRT);
             undergroundOres.add(OrePlacedFeatures.ORE_GRAVEL);
@@ -4508,13 +4508,13 @@ public class ModBiomes {
                 throw new IllegalStateException("Duplicate value in list for: " + vegetation.get(i).getValue().toString());
             }
         }
-        for (RegistryKey<PlacedFeature> feature: surfaceStructures) {
+        for (ResourceKey<PlacedFeature> feature: surfaceStructures) {
             generationSettings.feature(GenerationStep.Feature.SURFACE_STRUCTURES, feature);
         }
-        for (RegistryKey<PlacedFeature> feature: vegetation) {
+        for (ResourceKey<PlacedFeature> feature: vegetation) {
             generationSettings.feature(GenerationStep.Feature.VEGETAL_DECORATION, feature);
         }
-        for (RegistryKey<PlacedFeature> feature: undergroundOres.stream().sorted(Comparator.comparing(a -> a.getValue().toString())).toList()) {
+        for (ResourceKey<PlacedFeature> feature: undergroundOres.stream().sorted(Comparator.comparing(a -> a.getValue().toString())).toList()) {
             generationSettings.feature(GenerationStep.Feature.UNDERGROUND_ORES, feature);
         }
 

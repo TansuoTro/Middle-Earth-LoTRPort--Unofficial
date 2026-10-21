@@ -9,25 +9,25 @@ import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.network.ModNetworks;
 import net.jukoz.me.utils.ImplementedInventory;
 import net.jukoz.me.gui.wood_pile.WoodPileScreenHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import org.jetbrains.annotations.Nullable;
 
 import static net.jukoz.me.block.special.wood_pile.WoodPileBlock.STAGE;
@@ -42,24 +42,24 @@ public class WoodPileBlockEntity extends BlockEntity implements NamedScreenHandl
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("screen." + MiddleEarth.MOD_ID + "." + ID);
+    public Component getDisplayName() {
+        return Component.translatable("screen." + MiddleEarth.MOD_ID + "." + ID);
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, Player player) {
         return new WoodPileScreenHandler(syncId, playerInventory, this);
     }
 
     @Override
-    public void readNbt(NbtCompound nbt) {
+    public void readNbt(CompoundTag nbt) {
         super.readNbt(nbt);
         Inventories.readNbt(nbt, inventory);
     }
 
     @Override
-    public void writeNbt(NbtCompound nbt) {
+    public void writeNbt(CompoundTag nbt) {
         super.writeNbt(nbt);
         Inventories.writeNbt(nbt, inventory);
     }
@@ -82,15 +82,15 @@ public class WoodPileBlockEntity extends BlockEntity implements NamedScreenHandl
         if(this.hasAmount(5)){
             this.getWorld().setBlockState(this.getPos(), ModDecorativeBlocks.WOOD_PILE.getDefaultState()
                     .with(STAGE, 2)
-                    .with(Properties.HORIZONTAL_FACING, this.getWorld().getBlockState(this.getPos()).get(Properties.HORIZONTAL_FACING)));
+                    .with(BlockStateProperties.HORIZONTAL_FACING, this.getWorld().getBlockState(this.getPos()).get(BlockStateProperties.HORIZONTAL_FACING)));
         }  else if (this.isEmpty()){
             this.getWorld().setBlockState(this.getPos(), ModDecorativeBlocks.WOOD_PILE.getDefaultState()
                     .with(STAGE, 0)
-                    .with(Properties.HORIZONTAL_FACING, this.getWorld().getBlockState(this.getPos()).get(Properties.HORIZONTAL_FACING)));
+                    .with(BlockStateProperties.HORIZONTAL_FACING, this.getWorld().getBlockState(this.getPos()).get(BlockStateProperties.HORIZONTAL_FACING)));
         } else if (!this.hasAmount(5) && !isEmpty()){
             this.getWorld().setBlockState(this.getPos(), ModDecorativeBlocks.WOOD_PILE.getDefaultState()
                     .with(STAGE, 1)
-                    .with(Properties.HORIZONTAL_FACING, this.getWorld().getBlockState(this.getPos()).get(Properties.HORIZONTAL_FACING)));
+                    .with(BlockStateProperties.HORIZONTAL_FACING, this.getWorld().getBlockState(this.getPos()).get(BlockStateProperties.HORIZONTAL_FACING)));
         }
     }
     @Override
@@ -117,14 +117,14 @@ public class WoodPileBlockEntity extends BlockEntity implements NamedScreenHandl
     @Override
     public void markDirty() {
         if(world != null && !world.isClient()) {
-            PacketByteBuf data = PacketByteBufs.create();
+            FriendlyByteBuf data = PacketByteBufs.create();
             data.writeInt(inventory.size());
             for(int i = 0; i < inventory.size(); i++) {
                 data.writeItemStack(inventory.get(i));
             }
             data.writeBlockPos(getPos());
 
-            for (ServerPlayerEntity player : PlayerLookup.tracking((ServerWorld) world, getPos())) {
+            for (ServerPlayer player : PlayerLookup.tracking((ServerLevel) world, getPos())) {
                 ServerPlayNetworking.send(player, ModNetworks.ITEM_SYNC, data);
             }
         }
@@ -138,7 +138,7 @@ public class WoodPileBlockEntity extends BlockEntity implements NamedScreenHandl
 
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
+    public boolean canPlayerUse(Player player) {
         return Inventory.canPlayerUse(this, player);
     }
 }

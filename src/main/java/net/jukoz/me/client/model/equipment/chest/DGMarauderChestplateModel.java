@@ -1,7 +1,7 @@
 package net.jukoz.me.client.model.equipment.chest;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
+import net.minecraft.client.model.geom.PartNames;
 
 public class DGMarauderChestplateModel extends BlackCastellanChestplateModel {
 
@@ -12,7 +12,7 @@ public class DGMarauderChestplateModel extends BlackCastellanChestplateModel {
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = getModelData();
 
-        ModelPartData body = modelData.getRoot().addChild(EntityModelPartNames.BODY, ModelPartBuilder.create(),
+        ModelPartData body = modelData.getRoot().addChild(PartNames.BODY, ModelPartBuilder.create(),
                 ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         body.addChild("spike_right", ModelPartBuilder.create()

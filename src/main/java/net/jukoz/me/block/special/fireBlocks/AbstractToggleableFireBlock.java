@@ -1,58 +1,58 @@
 package net.jukoz.me.block.special.fireBlocks;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BlockRenderType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.BlockWithEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.block.entity.CampfireBlockEntity;
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.ai.pathing.NavigationType;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.particle.ParticleTypes;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.state.property.Property;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractToggleableFireBlock extends BlockWithEntity {
 
-    public static final BooleanProperty LIT = Properties.LIT;
+    public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-    public AbstractToggleableFireBlock(AbstractBlock.Settings settings) {
+    public AbstractToggleableFireBlock(BlockBehaviour.Settings settings) {
         super(settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(LIT, true));
     }
 
 
     @Override
-    public boolean canPathfindThrough(BlockState state, BlockView world, BlockPos pos, NavigationType type) {
+    public boolean canPathfindThrough(BlockState state, BlockGetter world, BlockPos pos, NavigationType type) {
         return false;
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!world.isClient && player.getAbilities().allowModifyWorld) {
             if(player.isCreative()){
                 world.setBlockState(pos, state.cycle(LIT));
@@ -65,7 +65,7 @@ public abstract class AbstractToggleableFireBlock extends BlockWithEntity {
                 }
             }
         }
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     protected static void setLit(WorldAccess world, BlockState state, BlockPos pos, boolean lit) {
@@ -78,15 +78,15 @@ public abstract class AbstractToggleableFireBlock extends BlockWithEntity {
     public static void extinguish(@Nullable Entity entity, WorldAccess world, BlockPos pos, BlockState state) {
         if (world.isClient()) {
             for(int i = 0; i < 20; ++i) {
-                spawnSmokeParticle((World)world, pos, true, true);
+                spawnSmokeParticle((Level)world, pos, true, true);
             }
         }
 
         world.emitGameEvent(entity, GameEvent.BLOCK_CHANGE, pos);
     }
 
-    public static void spawnSmokeParticle(World world, BlockPos pos, boolean isSignal, boolean lotsOfSmoke) {
-        Random random = world.getRandom();
+    public static void spawnSmokeParticle(Level world, BlockPos pos, boolean isSignal, boolean lotsOfSmoke) {
+        RandomSource random = world.getRandom();
         DefaultParticleType simpleParticleType = isSignal ? ParticleTypes.CAMPFIRE_SIGNAL_SMOKE : ParticleTypes.CAMPFIRE_COSY_SMOKE;
         world.addImportantParticle(simpleParticleType, true, (double)pos.getX() + 0.5 + random.nextDouble() / 3.0 * (double)(random.nextBoolean() ? 1 : -1), (double)pos.getY() + random.nextDouble() + random.nextDouble(), (double)pos.getZ() + 0.5 + random.nextDouble() / 3.0 * (double)(random.nextBoolean() ? 1 : -1), 0.0, 0.07, 0.0);
         if (lotsOfSmoke) {
@@ -94,7 +94,7 @@ public abstract class AbstractToggleableFireBlock extends BlockWithEntity {
         }
     }
 
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(new Property[]{LIT});
     }
 
@@ -103,7 +103,7 @@ public abstract class AbstractToggleableFireBlock extends BlockWithEntity {
     }
 
     @Override
-    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+    public void onEntityCollision(BlockState state, Level world, BlockPos pos, Entity entity) {
         if (state.get(LIT) && entity instanceof LivingEntity) {
             if (!world.isClient) {
                 if (isEntityAbove(pos, entity)) {
@@ -115,12 +115,12 @@ public abstract class AbstractToggleableFireBlock extends BlockWithEntity {
         super.onEntityCollision(state, world, pos, entity);
     }
 
-    public void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
+    public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
         BlockPos blockPos = hit.getBlockPos();
         if (!world.isClient && projectile.isOnFire()) {
-            ServerWorld serverWorld = (ServerWorld)world;
+            ServerLevel serverWorld = (ServerLevel)world;
             if (projectile.canModifyAt(serverWorld, blockPos) && !(Boolean)state.get(LIT)){
-                world.setBlockState(blockPos, (BlockState)state.with(Properties.LIT, true), 11);
+                world.setBlockState(blockPos, (BlockState)state.with(BlockStateProperties.LIT, true), 11);
             }
         }
     }

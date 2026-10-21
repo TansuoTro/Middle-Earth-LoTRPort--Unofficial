@@ -1,11 +1,11 @@
 package net.jukoz.me.block.special.coffers;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.ChestBlockEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlockEntities;
 
@@ -17,7 +17,7 @@ public class OakCofferBlockEntity extends ChestBlockEntity {
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable(MiddleEarth.of("oak_coffer").toTranslationKey("screen"));
+    public Component getDisplayName() {
+        return Component.translatable(MiddleEarth.of("oak_coffer").toTranslationKey("screen"));
     }
 }

@@ -1,18 +1,18 @@
 package net.jukoz.me.entity.dwarves.longbeards;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.util.Arm;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
 
 @Environment(value= EnvType.CLIENT)
-public class LongbeardDwarfModel<T extends MobEntity>
+public class LongbeardDwarfModel<T extends Mob>
         extends BipedEntityModel<T> {
 
     public LongbeardDwarfModel(ModelPart root) {
@@ -23,9 +23,9 @@ public class LongbeardDwarfModel<T extends MobEntity>
     public void animateModel(T mobEntity, float f, float g, float h) {
         this.rightArmPose = ArmPose.EMPTY;
         this.leftArmPose = ArmPose.EMPTY;
-        ItemStack itemStack = ((LivingEntity)mobEntity).getStackInHand(Hand.MAIN_HAND);
-        if (itemStack.isOf(Items.BOW) && ((MobEntity)mobEntity).isAttacking()) {
-            if (((MobEntity)mobEntity).getMainArm() == Arm.RIGHT) {
+        ItemStack itemStack = ((LivingEntity)mobEntity).getStackInHand(InteractionHand.MAIN_HAND);
+        if (itemStack.isOf(Items.BOW) && ((Mob)mobEntity).isAttacking()) {
+            if (((Mob)mobEntity).getMainArm() == Arm.RIGHT) {
                 this.rightArmPose = ArmPose.BOW_AND_ARROW;
             } else {
                 this.leftArmPose = ArmPose.BOW_AND_ARROW;

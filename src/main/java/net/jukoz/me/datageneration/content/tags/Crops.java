@@ -1,7 +1,7 @@
 package net.jukoz.me.datageneration.content.tags;
 
 import net.jukoz.me.block.registration.ModNatureBlocks;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,10 +1,10 @@
 package net.jukoz.me.network.packets.C2S;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.structureManager.StructureManagerBlockEntity;
 import net.jukoz.me.network.contexts.ServerPacketContext;
@@ -12,15 +12,15 @@ import net.jukoz.me.network.packets.ClientToServerPacket;
 
 public class PacketStructureManagerUpdateBlockEntityRequest extends ClientToServerPacket<PacketStructureManagerUpdateBlockEntityRequest>
 {
-    public static final Identifier ID = new Identifier(MiddleEarth.MOD_ID, "structure_manager_update_block_entity_request");
+    public static final ResourceLocation ID = new ResourceLocation(MiddleEarth.MOD_ID, "structure_manager_update_block_entity_request");
 
     public static final PacketType<PacketStructureManagerUpdateBlockEntityRequest> TYPE = PacketType.create(ID, PacketStructureManagerUpdateBlockEntityRequest::new);
     private final BlockPos pos;
-    private final Identifier structureManagerId;
+    private final ResourceLocation structureManagerId;
     private final boolean toInitialize;
     private final boolean isActive;
 
-    public PacketStructureManagerUpdateBlockEntityRequest(BlockPos pos, Identifier structureManagerId, boolean toInitialize, boolean isActive) {
+    public PacketStructureManagerUpdateBlockEntityRequest(BlockPos pos, ResourceLocation structureManagerId, boolean toInitialize, boolean isActive) {
         this.pos = pos;
         this.structureManagerId = structureManagerId;
         this.toInitialize = toInitialize;
@@ -29,7 +29,7 @@ public class PacketStructureManagerUpdateBlockEntityRequest extends ClientToServ
 
 
 
-    public PacketStructureManagerUpdateBlockEntityRequest(PacketByteBuf buf) {
+    public PacketStructureManagerUpdateBlockEntityRequest(FriendlyByteBuf buf) {
         this(buf.readBlockPos(), buf.readIdentifier(), buf.readBoolean(), buf.readBoolean());
     }
 
@@ -39,7 +39,7 @@ public class PacketStructureManagerUpdateBlockEntityRequest extends ClientToServ
     }
 
     @Override
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
         buf.writeBlockPos(this.pos);
         buf.writeIdentifier(this.structureManagerId);
         buf.writeBoolean(this.toInitialize);

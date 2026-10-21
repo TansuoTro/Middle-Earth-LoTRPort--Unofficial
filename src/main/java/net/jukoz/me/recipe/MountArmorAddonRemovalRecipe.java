@@ -1,25 +1,25 @@
 package net.jukoz.me.recipe;
 
 import net.jukoz.me.item.MEComponents;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.ShearsItem;
-import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ShearsItem;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.core.RegistryWrapper;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.item.EquipmentItemsME;
 import net.jukoz.me.utils.ItemTagsME;
 
 
 public class MountArmorAddonRemovalRecipe extends SpecialCraftingRecipe {
 
-    public MountArmorAddonRemovalRecipe(Identifier id, CraftingRecipeCategory category) {
+    public MountArmorAddonRemovalRecipe(ResourceLocation id, CraftingRecipeCategory category) {
         super(id, category);
     }
 
@@ -40,7 +40,7 @@ public class MountArmorAddonRemovalRecipe extends SpecialCraftingRecipe {
     }
 
     @Override
-    public boolean matches(RecipeInputInventory input, World world) {
+    public boolean matches(RecipeInputInventory input, Level world) {
         ItemStack itemStackArmor = ItemStack.EMPTY;
         ItemStack itemStackShears = ItemStack.EMPTY;
 

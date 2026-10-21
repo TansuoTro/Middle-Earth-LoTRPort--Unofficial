@@ -1,20 +1,20 @@
 package net.jukoz.me.api.entity.ai.brain.task;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityPose;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityPose;
 import net.minecraft.entity.ai.FuzzyTargeting;
-import net.minecraft.entity.ai.brain.Brain;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
-import net.minecraft.entity.ai.brain.WalkTarget;
+import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.WalkTarget;
 import net.minecraft.entity.ai.brain.task.MultiTickTask;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class FleeFromEntityTask<E extends PathAwareEntity> extends MultiTickTask
     }
 
     @Override
-    protected boolean shouldRun(ServerWorld world, E pathAwareEntity) {
+    protected boolean shouldRun(ServerLevel world, E pathAwareEntity) {
         for(Class<? extends Entity> mob : entities) {
             if(!world.getEntitiesByClass(mob, pathAwareEntity.getBoundingBox().expand(distance), EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR).isEmpty()) {
                 return true;
@@ -44,26 +44,26 @@ public class FleeFromEntityTask<E extends PathAwareEntity> extends MultiTickTask
         return false;
     }
 
-    protected void run(ServerWorld serverWorld, E pathAwareEntity, long l) {
+    protected void run(ServerLevel serverWorld, E pathAwareEntity, long l) {
         pathAwareEntity.getBrain().remember(MemoryModuleType.IS_PANICKING, true);
         pathAwareEntity.getBrain().forget(MemoryModuleType.WALK_TARGET);
         pathAwareEntity.setPose(EntityPose.STANDING);
     }
 
-    protected void finishRunning(ServerWorld serverWorld, E pathAwareEntity, long l) {
+    protected void finishRunning(ServerLevel serverWorld, E pathAwareEntity, long l) {
         Brain<?> brain = pathAwareEntity.getBrain();
         brain.forget(MemoryModuleType.IS_PANICKING);
         pathAwareEntity.setPose(EntityPose.STANDING);
     }
 
     @Override
-    protected boolean shouldKeepRunning(ServerWorld world, E entity, long time) {
+    protected boolean shouldKeepRunning(ServerLevel world, E entity, long time) {
         return true;
     }
 
-    protected void keepRunning(ServerWorld serverWorld, E pathAwareEntity, long l) {
+    protected void keepRunning(ServerLevel serverWorld, E pathAwareEntity, long l) {
         if (pathAwareEntity.getNavigation().isIdle()) {
-            Vec3d vec3d = this.findTarget(pathAwareEntity, serverWorld);
+            Vec3 vec3d = this.findTarget(pathAwareEntity, serverWorld);
             if (vec3d != null) {
                 pathAwareEntity.getBrain().remember(MemoryModuleType.WALK_TARGET, new WalkTarget(vec3d, this.speed, 0));
             }
@@ -71,9 +71,9 @@ public class FleeFromEntityTask<E extends PathAwareEntity> extends MultiTickTask
     }
 
     @Nullable
-    private Vec3d findTarget(E entity, ServerWorld world) {
+    private Vec3 findTarget(E entity, ServerLevel world) {
         List<? extends Entity> fleeEntities = new ArrayList<>();
-        Vec3d direction = entity.getPos();
+        Vec3 direction = entity.getPos();
 
         for(Class<? extends Entity> mob : entities) {
             if(!(fleeEntities = world.getEntitiesByClass(mob, entity.getBoundingBox().expand(distance), EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR)).isEmpty()) {

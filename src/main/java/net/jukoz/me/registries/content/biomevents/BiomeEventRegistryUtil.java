@@ -1,9 +1,9 @@
 package net.jukoz.me.registries.content.biomevents;
 
 import net.minecraft.registry.*;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.structure.Structure;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.registries.content.biomevents.pools.GenericHostilesBiomeEventPool;
@@ -29,7 +29,7 @@ public class BiomeEventRegistryUtil {
     }
 
 
-    public static void removeBiomeEntry(Identifier biomeId) {
+    public static void removeBiomeEntry(ResourceLocation biomeId) {
         if (biomeEntries != null) {
             biomeEntries.removeIf(entry -> entry.getValue().equals(biomeId));
         }
@@ -57,6 +57,6 @@ public class BiomeEventRegistryUtil {
     }
 
     public static RegistryKey<Structure> register(String name) {
-        return RegistryKey.of(RegistryKeys.STRUCTURE, new Identifier(MiddleEarth.MOD_ID, name));
+        return RegistryKey.of(RegistryKeys.STRUCTURE, new ResourceLocation(MiddleEarth.MOD_ID, name));
     }
 }

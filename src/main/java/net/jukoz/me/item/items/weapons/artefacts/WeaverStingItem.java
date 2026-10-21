@@ -1,9 +1,9 @@
 package net.jukoz.me.item.items.weapons.artefacts;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.compat.BluntWeapon;
 import net.minecraft.item.ToolMaterial;
 import net.jukoz.me.item.items.weapons.CustomDaggerWeaponItem;

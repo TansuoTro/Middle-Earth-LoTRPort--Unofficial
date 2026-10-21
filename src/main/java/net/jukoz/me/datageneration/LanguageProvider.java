@@ -2,8 +2,8 @@ package net.jukoz.me.datageneration;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
-import net.minecraft.block.Block;
-import net.minecraft.registry.Registries;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.core.registries.Registries;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.forge.MetalTypes;
 import net.jukoz.me.datageneration.content.TranslationEntries;
@@ -136,12 +136,12 @@ public class LanguageProvider extends FabricLanguageProvider {
             if (!MiddleEarth.MOD_ID.equals(id.getNamespace())) continue;
             addKey(translationBuilder, "block." + id.getNamespace() + "." + id.getPath(), generateName(id.getPath()));
             var blockItem = block.asItem();
-            if (blockItem != null && blockItem != net.minecraft.item.Items.AIR) {
+            if (blockItem != null && blockItem != net.minecraft.world.item.Items.AIR) {
                 var itemId = Registries.ITEM.getId(blockItem);
                 addKey(translationBuilder, "item." + itemId.getNamespace() + "." + itemId.getPath(), generateName(itemId.getPath()));
             }
         }
-        for (net.minecraft.item.Item item : Registries.ITEM) {
+        for (net.minecraft.world.item.Item item : Registries.ITEM) {
             var id = Registries.ITEM.getId(item);
             if (!MiddleEarth.MOD_ID.equals(id.getNamespace())) continue;
             addKey(translationBuilder, "item." + id.getNamespace() + "." + id.getPath(), generateName(id.getPath()));

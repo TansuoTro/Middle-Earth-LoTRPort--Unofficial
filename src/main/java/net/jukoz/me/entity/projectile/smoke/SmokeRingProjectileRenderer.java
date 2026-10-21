@@ -1,28 +1,28 @@
 package net.jukoz.me.entity.projectile.smoke;
 import net.jukoz.me.compat.client.render.MEEntityRenderer;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.jukoz.me.MiddleEarth;
 import org.joml.Matrix4f;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import org.joml.Quaternionf;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class SmokeRingProjectileRenderer extends MEEntityRenderer<SmokeRingProjectileEntity, SmokeRingProjectileRenderState> {
     private final Sprite[] frames;
 
-    private static final Identifier SPRITES_ATLAS_ID = new Identifier(MiddleEarth.MOD_ID, "sprites");
+    private static final ResourceLocation SPRITES_ATLAS_ID = new ResourceLocation(MiddleEarth.MOD_ID, "sprites");
     private static final String SPRITE_PATH_PREFIX = "sprites/smoke_ring/big_smoke_ring_";
     private static final int FRAME_COUNT = 12;
     private static final int FAILED_FIRST_FRAME = 7;
@@ -37,7 +37,7 @@ public class SmokeRingProjectileRenderer extends MEEntityRenderer<SmokeRingProje
     @Override
     public void render(
             SmokeRingProjectileRenderState state,
-            MatrixStack matrices,
+            PoseStack matrices,
             VertexConsumerProvider vertexConsumers,
             int light) {
         matrices.push();
@@ -58,7 +58,7 @@ public class SmokeRingProjectileRenderer extends MEEntityRenderer<SmokeRingProje
         float minV = sprite.getMinV();
         float maxV = sprite.getMaxV();
 
-        int overlay = net.minecraft.client.render.OverlayTexture.DEFAULT_UV;
+        int overlay = net.minecraft.client.renderer.texture.OverlayTexture.DEFAULT_UV;
 
         drawQuad(vc, matrix, SMOKE_RING_SIZE, minU, maxU, minV, maxV, light, overlay);
 
@@ -92,7 +92,7 @@ public class SmokeRingProjectileRenderer extends MEEntityRenderer<SmokeRingProje
 
         Sprite[] sprites = new Sprite[FRAME_COUNT];
         for (int i = 0; i < FRAME_COUNT; i++) {
-            Identifier spriteId = new Identifier(MiddleEarth.MOD_ID, SPRITE_PATH_PREFIX + i);
+            ResourceLocation spriteId = new ResourceLocation(MiddleEarth.MOD_ID, SPRITE_PATH_PREFIX + i);
             sprites[i] = atlas.getSprite(spriteId);
         }
         return sprites;
@@ -123,10 +123,10 @@ public class SmokeRingProjectileRenderer extends MEEntityRenderer<SmokeRingProje
             SmokeRingProjectileEntity entity,
             SmokeRingProjectileRenderState state,
             float tickDelta) {
-        float yawRad = (float) Math.toRadians(-MathHelper.lerp(tickDelta,
+        float yawRad = (float) Math.toRadians(-Mth.lerp(tickDelta,
                 entity.prevYaw,
                 entity.getYaw()));
-        float pitchRad = (float) Math.toRadians(MathHelper.lerp(tickDelta,
+        float pitchRad = (float) Math.toRadians(Mth.lerp(tickDelta,
                 entity.prevPitch,
                 entity.getPitch()));
         state.orientationQuat = new Quaternionf().rotateYXZ(yawRad, pitchRad, 0f);

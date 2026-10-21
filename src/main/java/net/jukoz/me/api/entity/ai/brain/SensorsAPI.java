@@ -1,10 +1,10 @@
 package net.jukoz.me.api.entity.ai.brain;
 
-import net.minecraft.entity.ai.brain.sensor.Sensor;
-import net.minecraft.entity.ai.brain.sensor.SensorType;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.entity.ai.sensing.Sensor;
+import net.minecraft.world.entity.ai.sensing.SensorType;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.api.SevenStarsApi;
 
 import java.util.function.Supplier;
@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 public class SensorsAPI {
 
     private static <U extends Sensor<?>> SensorType<U> register(String id, Supplier<U> factory) {
-        return Registry.register(Registries.SENSOR_TYPE, new Identifier(SevenStarsApi.MOD_ID, id), new SensorType<>(factory));
+        return Registry.register(Registries.SENSOR_TYPE, new ResourceLocation(SevenStarsApi.MOD_ID, id), new SensorType<>(factory));
     }
 
     public static void registerModSensors() {

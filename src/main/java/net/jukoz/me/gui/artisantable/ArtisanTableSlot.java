@@ -1,10 +1,10 @@
 package net.jukoz.me.gui.artisantable;
 
 import net.jukoz.me.item.ResourceItemsME;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.inventory.Slot;
 
 public class ArtisanTableSlot extends Slot {
     private boolean enabled = true;

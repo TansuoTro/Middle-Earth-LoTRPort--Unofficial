@@ -1,10 +1,10 @@
 package net.jukoz.me.resources.datas.npc_types.data;
 import net.jukoz.me.compat.NbtCompat;
 
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtElement;
 import net.jukoz.me.api.dtos.WeightedItem;
 import net.jukoz.me.MiddleEarth;
@@ -20,7 +20,7 @@ public class WeightedGearData extends WeightedItem<HashMap<EquipmentSlot, GearSl
         return new WeightedGearData();
     }
 
-    public WeightedGearData(NbtCompound gearNbt) {
+    public WeightedGearData(CompoundTag gearNbt) {
         this.item = new HashMap<>();
 
         addSlot(gearNbt, EquipmentSlot.HEAD);
@@ -31,7 +31,7 @@ public class WeightedGearData extends WeightedItem<HashMap<EquipmentSlot, GearSl
         addSlot(gearNbt, EquipmentSlot.OFFHAND);
     }
 
-    private void addSlot(NbtCompound gearNbt, EquipmentSlot equipmentSlot) {
+    private void addSlot(CompoundTag gearNbt, EquipmentSlot equipmentSlot) {
         if(gearNbt.get(equipmentSlot.getName().toLowerCase()) != null){
             if(gearNbt.get(equipmentSlot.getName().toLowerCase()) != null){
                 NbtElement element = gearNbt.get(equipmentSlot.getName());
@@ -65,7 +65,7 @@ public class WeightedGearData extends WeightedItem<HashMap<EquipmentSlot, GearSl
     public NbtElement getNbt(){
         NbtElement nbt = super.getNbt();
         if(nbt == null)
-            nbt = new NbtCompound();
+            nbt = new CompoundTag();
 
         for(EquipmentSlot slot : item.keySet()){
             NbtCompat.compound(nbt).put(slot.getName().toLowerCase(), GearSlotPool.createNbt(item.get(slot)));
@@ -79,7 +79,7 @@ public class WeightedGearData extends WeightedItem<HashMap<EquipmentSlot, GearSl
         return this;
     }
 
-    public static WeightedGearData readNbt(NbtCompound nbt){
+    public static WeightedGearData readNbt(CompoundTag nbt){
         return new WeightedGearData(nbt);
     }
 }

@@ -4,16 +4,16 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.utils.ToRad;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.model.geom.PartNames;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 
 public class CustomHelmetModel<T extends LivingEntity> extends BipedEntityModel<T> {
 
-    public  Identifier HELMET_ADDON_TEXTURE;
+    public  ResourceLocation HELMET_ADDON_TEXTURE;
 
     public CustomHelmetModel(ModelPart root) {
         super(root);

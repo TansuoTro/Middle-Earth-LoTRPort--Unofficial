@@ -2,13 +2,13 @@ package net.jukoz.me.item.items;
 
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.item.utils.ModArmorMaterials;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.item.ArmorItem;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.item.DyeableItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -34,26 +34,26 @@ public class CustomBootsItem extends ArmorItem implements DyeableItem {
 
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipContext context) {
 
-        tooltip.add(Text.of(""));
+        tooltip.add(Component.of(""));
         if(Screen.hasShiftDown()){
-            tooltip.add(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".faction").append(material.getFaction()));
+            tooltip.add(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".faction").append(material.getFaction()));
             if(material.getSubFaction() != null){
-                tooltip.add(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".sub_faction").append(material.getSubFaction()));
+                tooltip.add(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".sub_faction").append(material.getSubFaction()));
             }
-            tooltip.add(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".tier" + this.material.getTier()));
-            tooltip.add(Text.of(""));
+            tooltip.add(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".tier" + this.material.getTier()));
+            tooltip.add(Component.of(""));
 
         } else {
-            tooltip.add(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".shift"));
+            tooltip.add(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".shift"));
         }
         if (this.customsList != null) {
             if (Screen.hasAltDown()) {
-                tooltip.add(Text.of(""));
-                tooltip.add(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".customizations"));
+                tooltip.add(Component.of(""));
+                tooltip.add(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".customizations"));
             } else {
-                tooltip.add(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".alt"));
+                tooltip.add(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".alt"));
             }
         }
 

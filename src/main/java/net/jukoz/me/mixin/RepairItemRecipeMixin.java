@@ -2,11 +2,11 @@ package net.jukoz.me.mixin;
 
 import net.jukoz.me.MiddleEarth;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.RepairItemRecipe;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RepairItemRecipe;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,8 +27,8 @@ public class RepairItemRecipeMixin {
                 && first.isDamageable()
                 && second.isDamageable()
 
-                && !first.isIn(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "anvil_items")))
-                && !second.isIn(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "anvil_items")))
+                && !first.isIn(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "anvil_items")))
+                && !second.isIn(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "anvil_items")))
                 );
     }
 }

@@ -1,26 +1,26 @@
 package net.jukoz.me.entity.projectile.boulder;
 
 import net.jukoz.me.MiddleEarth;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayers;
+import net.minecraft.world.level.block.BlockRenderType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.entity.layers.RenderLayers;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.BlockRenderManager;
-import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.entity.FlyingItemEntity;
 import net.minecraft.entity.projectile.thrown.ThrownEntity;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.util.math.RotationAxis;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
 
 public class BoulderEntityRenderer extends EntityRenderer<BoulderEntity> {
     private final BlockRenderManager blockRenderManager;
@@ -30,12 +30,12 @@ public class BoulderEntityRenderer extends EntityRenderer<BoulderEntity> {
     }
 
     @Override
-    public Identifier getTexture(BoulderEntity entity) {
-        return new Identifier("minecraft", "textures/block/stone.png");
+    public ResourceLocation getTexture(BoulderEntity entity) {
+        return new ResourceLocation("minecraft", "textures/block/stone.png");
     }
 
     @Override
-    public void render(BoulderEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+    public void render(BoulderEntity entity, float yaw, float tickDelta, PoseStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         if(entity.getOwner() == null) {
             return;
         }
@@ -43,16 +43,16 @@ public class BoulderEntityRenderer extends EntityRenderer<BoulderEntity> {
         if (blockState.getRenderType() != BlockRenderType.MODEL) {
             return;
         }
-        World world = entity.getWorld();
+        Level world = entity.getWorld();
         if (blockState == world.getBlockState(entity.getBlockPos()) || blockState.getRenderType() == BlockRenderType.INVISIBLE) {
             return;
         }
         matrices.push();
-        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(MathHelper.lerp(tickDelta, entity.prevPitch, entity.getPitch()) + 90.0F));
+        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(Mth.lerp(tickDelta, entity.prevPitch, entity.getPitch()) + 90.0F));
         BlockPos blockPos = BlockPos.ofFloored(entity.getX(), entity.getBoundingBox().maxY, entity.getZ());
         matrices.translate(-0.5, 0.0, -0.5);
 
-        this.blockRenderManager.getModelRenderer().render(world, this.blockRenderManager.getModel(blockState), blockState, blockPos, matrices, vertexConsumers.getBuffer(RenderLayers.getMovingBlockLayer(blockState)), false, Random.create(), blockState.getRenderingSeed(entity.getOwner().getBlockPos()), OverlayTexture.DEFAULT_UV);
+        this.blockRenderManager.getModelRenderer().render(world, this.blockRenderManager.getModel(blockState), blockState, blockPos, matrices, vertexConsumers.getBuffer(RenderLayers.getMovingBlockLayer(blockState)), false, RandomSource.create(), blockState.getRenderingSeed(entity.getOwner().getBlockPos()), OverlayTexture.DEFAULT_UV);
         matrices.pop();
         super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light);
     }

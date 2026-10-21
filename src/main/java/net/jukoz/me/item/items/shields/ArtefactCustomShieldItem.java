@@ -1,8 +1,8 @@
 package net.jukoz.me.item.items.shields;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.jukoz.me.item.utils.ShieldTypesME;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class ArtefactCustomShieldItem extends CustomShieldItem {
 

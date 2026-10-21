@@ -1,16 +1,16 @@
 package net.jukoz.me.compat.net;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Identifier;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Holder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public final class PacketCodecs {
         clientRegistries = supplier;
     }
 
-    public static <T> T decode(PacketCodec<PacketByteBuf, T> codec, PacketByteBuf buf,
+    public static <T> T decode(PacketCodec<FriendlyByteBuf, T> codec, FriendlyByteBuf buf,
                                DynamicRegistryManager registries) {
         DynamicRegistryManager previous = REGISTRIES.get();
         REGISTRIES.set(registries);
@@ -60,43 +60,43 @@ public final class PacketCodecs {
         return activeServer == null ? null : activeServer.getRegistryManager();
     }
 
-    public static final PacketCodec<PacketByteBuf, net.minecraft.util.Identifier> IDENTIFIER =
-            PacketCodec.of((buf, value) -> buf.writeIdentifier(value), PacketByteBuf::readIdentifier);
+    public static final PacketCodec<FriendlyByteBuf, net.minecraft.resources.ResourceLocation> IDENTIFIER =
+            PacketCodec.of((buf, value) -> buf.writeIdentifier(value), FriendlyByteBuf::readIdentifier);
 
-    public static final PacketCodec<PacketByteBuf, net.minecraft.util.math.BlockPos> BLOCK_POS =
-            PacketCodec.of((buf, value) -> buf.writeBlockPos(value), PacketByteBuf::readBlockPos);
+    public static final PacketCodec<FriendlyByteBuf, net.minecraft.core.BlockPos> BLOCK_POS =
+            PacketCodec.of((buf, value) -> buf.writeBlockPos(value), FriendlyByteBuf::readBlockPos);
 
-    public static final PacketCodec<PacketByteBuf, Boolean> BOOLEAN =
-            PacketCodec.of((buf, value) -> buf.writeBoolean(value), PacketByteBuf::readBoolean);
+    public static final PacketCodec<FriendlyByteBuf, Boolean> BOOLEAN =
+            PacketCodec.of((buf, value) -> buf.writeBoolean(value), FriendlyByteBuf::readBoolean);
 
-    public static final PacketCodec<PacketByteBuf, Byte> BYTE =
-            PacketCodec.of((buf, value) -> buf.writeByte(value), PacketByteBuf::readByte);
+    public static final PacketCodec<FriendlyByteBuf, Byte> BYTE =
+            PacketCodec.of((buf, value) -> buf.writeByte(value), FriendlyByteBuf::readByte);
 
-    public static final PacketCodec<PacketByteBuf, Integer> INTEGER =
-            PacketCodec.of((buf, value) -> buf.writeVarInt(value), PacketByteBuf::readVarInt);
+    public static final PacketCodec<FriendlyByteBuf, Integer> INTEGER =
+            PacketCodec.of((buf, value) -> buf.writeVarInt(value), FriendlyByteBuf::readVarInt);
 
-    public static final PacketCodec<PacketByteBuf, Long> LONG =
-            PacketCodec.of((buf, value) -> buf.writeLong(value), PacketByteBuf::readLong);
+    public static final PacketCodec<FriendlyByteBuf, Long> LONG =
+            PacketCodec.of((buf, value) -> buf.writeLong(value), FriendlyByteBuf::readLong);
 
-    public static final PacketCodec<PacketByteBuf, Float> FLOAT =
-            PacketCodec.of((buf, value) -> buf.writeFloat(value), PacketByteBuf::readFloat);
+    public static final PacketCodec<FriendlyByteBuf, Float> FLOAT =
+            PacketCodec.of((buf, value) -> buf.writeFloat(value), FriendlyByteBuf::readFloat);
 
-    public static final PacketCodec<PacketByteBuf, Double> DOUBLE =
-            PacketCodec.of((buf, value) -> buf.writeDouble(value), PacketByteBuf::readDouble);
+    public static final PacketCodec<FriendlyByteBuf, Double> DOUBLE =
+            PacketCodec.of((buf, value) -> buf.writeDouble(value), FriendlyByteBuf::readDouble);
 
-    public static final PacketCodec<PacketByteBuf, String> STRING =
-            PacketCodec.of((buf, value) -> buf.writeString(value), PacketByteBuf::readString);
+    public static final PacketCodec<FriendlyByteBuf, String> STRING =
+            PacketCodec.of((buf, value) -> buf.writeString(value), FriendlyByteBuf::readString);
 
-    public static final PacketCodec<PacketByteBuf, NbtCompound> NBT_COMPOUND =
-            PacketCodec.of((buf, value) -> buf.writeNbt(value), PacketByteBuf::readNbt);
+    public static final PacketCodec<FriendlyByteBuf, CompoundTag> NBT_COMPOUND =
+            PacketCodec.of((buf, value) -> buf.writeNbt(value), FriendlyByteBuf::readNbt);
 
-    public static final PacketCodec<PacketByteBuf, byte[]> BYTE_ARRAY =
-            PacketCodec.of((buf, value) -> buf.writeByteArray(value), PacketByteBuf::readByteArray);
+    public static final PacketCodec<FriendlyByteBuf, byte[]> BYTE_ARRAY =
+            PacketCodec.of((buf, value) -> buf.writeByteArray(value), FriendlyByteBuf::readByteArray);
 
     private PacketCodecs() {
     }
 
-    public static <T> PacketCodec<PacketByteBuf, Optional<T>> optional(PacketCodec<PacketByteBuf, T> element) {
+    public static <T> PacketCodec<FriendlyByteBuf, Optional<T>> optional(PacketCodec<FriendlyByteBuf, T> element) {
         return PacketCodec.of((buf, value) -> {
             boolean present = value != null && value.isPresent();
             buf.writeBoolean(present);
@@ -106,7 +106,7 @@ public final class PacketCodecs {
         }, buf -> buf.readBoolean() ? Optional.ofNullable(element.decode(buf)) : Optional.empty());
     }
 
-    public static <T> PacketCodec<PacketByteBuf, List<T>> list(PacketCodec<PacketByteBuf, T> element) {
+    public static <T> PacketCodec<FriendlyByteBuf, List<T>> list(PacketCodec<FriendlyByteBuf, T> element) {
         return PacketCodec.of((buf, value) -> {
             buf.writeVarInt(value.size());
             for (T t : value) {
@@ -122,22 +122,22 @@ public final class PacketCodecs {
         });
     }
 
-    public static <T> PacketCodec.Collector<PacketByteBuf, T, List<T>> toList() {
+    public static <T> PacketCodec.Collector<FriendlyByteBuf, T, List<T>> toList() {
         return PacketCodecs::list;
     }
 
-    public static <T> PacketCodec<PacketByteBuf, T> indexed(IntFunction<T> byId, ToIntFunction<T> toId) {
+    public static <T> PacketCodec<FriendlyByteBuf, T> indexed(IntFunction<T> byId, ToIntFunction<T> toId) {
         return PacketCodec.of((buf, value) -> buf.writeVarInt(toId.applyAsInt(value)),
                 buf -> byId.apply(buf.readVarInt()));
     }
 
     /** NBT round-trip for any data codec; the donor uses it for whole-object fields. */
-    public static <T> PacketCodec<PacketByteBuf, T> codec(Codec<T> codec) {
+    public static <T> PacketCodec<FriendlyByteBuf, T> codec(Codec<T> codec) {
         return PacketCodec.of((buf, value) -> {
-            NbtElement encoded = codec.encodeStart(NbtOps.INSTANCE, value).result().orElse(new NbtCompound());
-            buf.writeNbt((NbtCompound) encoded);
+            NbtElement encoded = codec.encodeStart(NbtOps.INSTANCE, value).result().orElse(new CompoundTag());
+            buf.writeNbt((CompoundTag) encoded);
         }, buf -> {
-            NbtCompound nbt = buf.readNbt();
+            CompoundTag nbt = buf.readNbt();
             if (nbt == null) {
                 return null;
             }
@@ -151,24 +151,24 @@ public final class PacketCodecs {
      * Named entries retain their registry identity. Inline entries require an element codec;
      * unresolved named entries fail decoding instead of silently erasing tracked entity data.
      */
-    public static <T> PacketCodec<PacketByteBuf, RegistryEntry<T>> registryEntry(
-            RegistryKey<? extends Registry<T>> registryKey) {
+    public static <T> PacketCodec<FriendlyByteBuf, Holder<T>> registryEntry(
+            ResourceKey<? extends Registry<T>> registryKey) {
         return registryEntry(registryKey, null);
     }
 
-    public static <T> PacketCodec<PacketByteBuf, RegistryEntry<T>> registryEntry(
-            RegistryKey<? extends Registry<T>> registryKey, PacketCodec<PacketByteBuf, T> element) {
+    public static <T> PacketCodec<FriendlyByteBuf, Holder<T>> registryEntry(
+            ResourceKey<? extends Registry<T>> registryKey, PacketCodec<FriendlyByteBuf, T> element) {
         return PacketCodec.of((buf, value) -> {
             if (value == null) {
                 buf.writeBoolean(false);
                 return;
             }
             buf.writeBoolean(true);
-            Identifier id = value.getKey().map(RegistryKey::getValue).orElse(null);
+            ResourceLocation id = value.getKey().map(ResourceKey::getValue).orElse(null);
             if (id == null && element == null) {
                 throw new IllegalArgumentException("Inline registry entry requires a codec: " + registryKey.getValue());
             }
-            buf.writeIdentifier(id == null ? new Identifier("unknown", "unknown") : id);
+            buf.writeIdentifier(id == null ? new ResourceLocation("unknown", "unknown") : id);
             if (element != null) {
                 element.encode(buf, value.value());
             }
@@ -176,13 +176,13 @@ public final class PacketCodecs {
             if (!buf.readBoolean()) {
                 return null;
             }
-            Identifier id = buf.readIdentifier();
+            ResourceLocation id = buf.readIdentifier();
             T inline = element == null ? null : element.decode(buf);
             DynamicRegistryManager manager = registries();
-            RegistryEntry<T> resolved = manager == null ? null : manager.getOptional(registryKey)
-                    .flatMap(registry -> registry.getEntry(RegistryKey.of(registryKey, id))).orElse(null);
+            Holder<T> resolved = manager == null ? null : manager.getOptional(registryKey)
+                    .flatMap(registry -> registry.getEntry(ResourceKey.of(registryKey, id))).orElse(null);
             if (resolved != null) return resolved;
-            if (inline != null) return RegistryEntry.of(inline);
+            if (inline != null) return Holder.of(inline);
             throw new io.netty.handler.codec.DecoderException("Unknown registry entry " + registryKey.getValue()
                     + "/" + id + (manager == null ? " (no registry context)" : ""));
         });

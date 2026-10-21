@@ -5,14 +5,14 @@ import com.google.common.collect.Multimap;
 import net.jukoz.me.entity.EntityAttributesME;
 import net.jukoz.me.item.MESettings;
 
-import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.item.Item;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.Item;
 import net.minecraft.item.ToolMaterial;
 import net.jukoz.me.MiddleEarth;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * Shared item settings helpers.
@@ -47,9 +47,9 @@ public interface ItemSettingsME {
     static Multimap<EntityAttribute, EntityAttributeModifier> createWeaponAttibutes(
             ToolMaterial material, float attackDamage, float attackSpeed, float attackRange) {
         ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(
+        builder.put(Attributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(
                 "me.weapon_damage", attackDamage + material.getAttackDamage(), EntityAttributeModifier.Operation.ADDITION));
-        builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(
+        builder.put(Attributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(
                 "me.weapon_speed", attackSpeed, EntityAttributeModifier.Operation.ADDITION));
         builder.put(EntityAttributesME.ENTITY_INTERACTION_RANGE.value(), new EntityAttributeModifier(
                 ENTITY_INTERACTION_RANGE_MODIFIER_ID, attackRange, EntityAttributeModifier.Operation.ADDITION));
@@ -64,24 +64,24 @@ public interface ItemSettingsME {
      */
     static Multimap<EntityAttribute, EntityAttributeModifier> createBluntedWeaponAttibutes() {
         ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(
+        builder.put(Attributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(
                 "me.weapon_damage", 0.0F, EntityAttributeModifier.Operation.ADDITION));
-        builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(
+        builder.put(Attributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(
                 "me.weapon_speed", -3.0F, EntityAttributeModifier.Operation.ADDITION));
         builder.put(EntityAttributesME.ENTITY_INTERACTION_RANGE.value(), new EntityAttributeModifier(
                 ENTITY_INTERACTION_RANGE_MODIFIER_ID, 0.0F, EntityAttributeModifier.Operation.ADDITION));
         return builder.build();
     }
 
-    static MESettings goatArmor(net.minecraft.item.ArmorMaterial material) {
+    static MESettings goatArmor(net.minecraft.world.item.ArmorMaterial material) {
         return mountArmor(material, "broadhoof_goat", "beast_armor/");
     }
 
-    static MESettings wargArmor(net.minecraft.item.ArmorMaterial material) {
+    static MESettings wargArmor(net.minecraft.world.item.ArmorMaterial material) {
         return mountArmor(material, "warg", "beast_armor/");
     }
 
-    static MESettings greatHornArmor(net.minecraft.item.ArmorMaterial material) {
+    static MESettings greatHornArmor(net.minecraft.world.item.ArmorMaterial material) {
         return mountArmor(material, "great_horn", "");
     }
 
@@ -89,8 +89,8 @@ public interface ItemSettingsME {
      * Mount armor is consumed by AbstractBeastEntity and its render features. It has no
      * damageable item setting, preserving the donor's no-damage-on-hurt equipment behavior.
      */
-    private static MESettings mountArmor(net.minecraft.item.ArmorMaterial material, String entity, String assetPrefix) {
-        int bodyDefense = switch (material.getProtection(net.minecraft.item.ArmorItem.Type.CHESTPLATE)) {
+    private static MESettings mountArmor(net.minecraft.world.item.ArmorMaterial material, String entity, String assetPrefix) {
+        int bodyDefense = switch (material.getProtection(net.minecraft.world.item.ArmorItem.Type.CHESTPLATE)) {
             case 4 -> 5;
             case 5 -> 6;
             case 6 -> 8;
@@ -102,6 +102,6 @@ public interface ItemSettingsME {
                 .component(net.jukoz.me.item.MEComponents.MOUNT_EQUIPPABLE,
                         new net.jukoz.me.item.dataComponents.MountEquippableComponent(MiddleEarth.of(entity), bodyDefense,
                                 material.getToughness(), material.getKnockbackResistance(),
-                                net.minecraft.registry.Registries.SOUND_EVENT.getId(material.getEquipSound())));
+                                net.minecraft.core.registries.Registries.SOUND_EVENT.getId(material.getEquipSound())));
     }
 }

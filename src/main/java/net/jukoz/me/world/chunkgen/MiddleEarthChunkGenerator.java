@@ -12,22 +12,22 @@ import net.jukoz.me.world.biomes.MEBiomeKeys;
 import net.jukoz.me.world.biomes.surface.MEBiomesData;
 import net.jukoz.me.world.biomes.surface.ModBiomeSource;
 import net.jukoz.me.world.chunkgen.map.MiddleEarthHeightMap;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryOps;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.RegistryEntryLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.RegistryOps;
+import net.minecraft.core.Holder;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.util.math.random.CheckedRandom;
 import net.minecraft.util.math.random.ChunkRandom;
-import net.minecraft.util.math.random.RandomSeed;
+import net.minecraft.util.RandomSourceSeed;
 import net.minecraft.world.*;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.biome.source.BiomeAccess;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.gen.GenerationStep;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.*;
 import net.minecraft.world.gen.noise.NoiseConfig;
@@ -61,7 +61,7 @@ public class MiddleEarthChunkGenerator extends ChunkGenerator {
     private static float maxNoise = -10000;
     RegistryEntryLookup<Biome> biomeRegistry;
     public static final Codec<MiddleEarthChunkGenerator> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(RegistryOps.getEntryLookupCodec(RegistryKeys.BIOME))
+            instance.group(RegistryOps.getEntryLookupCodec(Registries.BIOME))
                     .apply(instance, instance.stable(MiddleEarthChunkGenerator::new)));
 
     public MiddleEarthChunkGenerator(RegistryEntryLookup<Biome> biomeRegistry) {
@@ -370,7 +370,7 @@ public class MiddleEarthChunkGenerator extends ChunkGenerator {
                 MEBiome meBiome = null;
 
                 if(middleEarthMapUtils.isWorldCoordinateInBorder(posX, posZ)) {
-                    RegistryEntry<Biome> biome = region.getBiome(new BlockPos(posX, chunk.getTopY(), posZ));
+                    Holder<Biome> biome = region.getBiome(new BlockPos(posX, chunk.getTopY(), posZ));
                     meBiome = MEBiomesData.getBiomeByKey(biome);
                     if(meBiome == null) {
                         meBiome = MEBiomesData.defaultBiome;
@@ -453,7 +453,7 @@ public class MiddleEarthChunkGenerator extends ChunkGenerator {
     @Override
     public void populateEntities(ChunkRegion region) {
         ChunkPos chunkPos = region.getCenterPos();
-        RegistryEntry<Biome> registryEntry = region.getBiome(chunkPos.getStartPos().withY(region.getTopY() - 1));
+        Holder<Biome> registryEntry = region.getBiome(chunkPos.getStartPos().withY(region.getTopY() - 1));
         ChunkRandom chunkRandom = new ChunkRandom(new CheckedRandom(RandomSeed.getSeed()));
         chunkRandom.setPopulationSeed(region.getSeed(), chunkPos.getStartX(), chunkPos.getStartZ());
         SpawnHelper.populateEntities(region, registryEntry, chunkPos, chunkRandom);
@@ -461,7 +461,7 @@ public class MiddleEarthChunkGenerator extends ChunkGenerator {
 
     @Override
     public net.minecraft.world.gen.chunk.placement.StructurePlacementCalculator createStructurePlacementCalculator(
-            net.minecraft.registry.RegistryWrapper<net.minecraft.structure.StructureSet> structureSetRegistry,
+            net.minecraft.core.RegistryWrapper<net.minecraft.structure.StructureSet> structureSetRegistry,
             NoiseConfig noiseConfig, long seed) {
         // The base ChunkGenerator returns StructurePlacementCalculator.EMPTY, which silently
         // disables every structure set (and makes /locate structure throw). A custom generator

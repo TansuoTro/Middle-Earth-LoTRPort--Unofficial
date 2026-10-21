@@ -1,17 +1,17 @@
 package net.jukoz.me.entity.model;
 
 import com.google.common.collect.ImmutableMap;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.jukoz.me.entity.crab.CrabModel;
 import net.jukoz.me.entity.nazguls.NazgulModel;
 import net.jukoz.me.entity.snail.SnailModel;
 import net.jukoz.me.entity.spider.MirkwoodSpiderModel;
 import net.jukoz.me.entity.beasts.trolls.cave.CaveTrollModel;
 import net.jukoz.me.entity.beasts.trolls.snow.SnowTrollModel;
-import net.minecraft.client.model.Dilation;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.TexturedModelData;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.client.model.EntityModelLayer;
 
 import java.util.Map;
 
@@ -20,13 +20,13 @@ public class ModEntityModels {
     public static Map<EntityModelLayer, TexturedModelData> getModels() {
         ImmutableMap.Builder<EntityModelLayer, TexturedModelData> builder = ImmutableMap.builder();
 
-        builder.put(ModEntityModelLayers.HUMAN, HumanModel.getTexturedModelData(Dilation.NONE));
-        builder.put(ModEntityModelLayers.DWARF, DwarfModel.getTexturedModelData(Dilation.NONE));
-        builder.put(ModEntityModelLayers.ELF, ElfModel.getTexturedModelData(Dilation.NONE));
-        builder.put(ModEntityModelLayers.HOBBIT, HobbitModel.getTexturedModelData(Dilation.NONE));
-        builder.put(ModEntityModelLayers.NAZGUL, NazgulModel.getTexturedModelData(Dilation.NONE));
-        builder.put(ModEntityModelLayers.ORC, OrcModel.getTexturedModelData(Dilation.NONE));
-        builder.put(ModEntityModelLayers.URUK, UrukModel.getTexturedModelData(Dilation.NONE));
+        builder.put(ModEntityModelLayers.HUMAN, HumanModel.getTexturedModelData(CubeDeformation.NONE));
+        builder.put(ModEntityModelLayers.DWARF, DwarfModel.getTexturedModelData(CubeDeformation.NONE));
+        builder.put(ModEntityModelLayers.ELF, ElfModel.getTexturedModelData(CubeDeformation.NONE));
+        builder.put(ModEntityModelLayers.HOBBIT, HobbitModel.getTexturedModelData(CubeDeformation.NONE));
+        builder.put(ModEntityModelLayers.NAZGUL, NazgulModel.getTexturedModelData(CubeDeformation.NONE));
+        builder.put(ModEntityModelLayers.ORC, OrcModel.getTexturedModelData(CubeDeformation.NONE));
+        builder.put(ModEntityModelLayers.URUK, UrukModel.getTexturedModelData(CubeDeformation.NONE));
         builder.put(ModEntityModelLayers.CAVE_TROLL, CaveTrollModel.getTexturedModelData());
         builder.put(ModEntityModelLayers.SNOW_TROLL, SnowTrollModel.getTexturedModelData());
         builder.put(ModEntityModelLayers.SPIDER, MirkwoodSpiderModel.getTexturedModelData());

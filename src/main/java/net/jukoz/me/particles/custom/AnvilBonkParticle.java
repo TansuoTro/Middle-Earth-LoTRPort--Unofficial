@@ -1,10 +1,10 @@
 package net.jukoz.me.particles.custom;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particle.ParticleTypes;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.particle.DefaultParticleType;
 
 public class AnvilBonkParticle extends SpriteBillboardParticle {
@@ -46,7 +46,7 @@ public class AnvilBonkParticle extends SpriteBillboardParticle {
 
     }
 
-    @Environment(EnvType.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static class Factory implements ParticleFactory<DefaultParticleType> {
         private final SpriteProvider spriteProvider;
 

@@ -8,91 +8,91 @@ import net.jukoz.me.block.registration.WoodBlockSets;
 import net.jukoz.me.world.features.tree.foliages.OvalFoliagePlacer;
 import net.jukoz.me.world.features.tree.foliages.PalmFoliagePlacer;
 import net.jukoz.me.world.features.tree.trunks.*;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.registry.Registerable;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.core.RegistryEntryLookup;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.math.intprovider.ConstantIntProvider;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.FeatureConfig;
-import net.minecraft.world.gen.feature.TreeFeatureConfig;
-import net.minecraft.world.gen.feature.size.TwoLayersFeatureSize;
-import net.minecraft.world.gen.foliage.BlobFoliagePlacer;
-import net.minecraft.world.gen.foliage.BushFoliagePlacer;
-import net.minecraft.world.gen.foliage.PineFoliagePlacer;
-import net.minecraft.world.gen.foliage.SpruceFoliagePlacer;
-import net.minecraft.world.gen.stateprovider.BlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.TreeFeatureConfig;
+import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.BushFoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.PineFoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.SpruceFoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.gen.treedecorator.BeehiveTreeDecorator;
 import net.minecraft.world.gen.treedecorator.LeavesVineTreeDecorator;
-import net.minecraft.world.gen.trunk.StraightTrunkPlacer;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class ModTreeConfiguredFeatures {
-    public static final RegistryKey<ConfiguredFeature<?, ?>> ASPEN_TREE_KEY = registerKey("aspen_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> BEECH_TREE_KEY = registerKey("beech_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> BIRCH_TREE_KEY = registerKey("birch_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> CHESTNUT_TREE_KEY = registerKey("chestnut_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> DARK_OAK_TREE_KEY = registerKey("dark_oak_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> MEGA_DARK_OAK_TREE_KEY = registerKey("mega_dark_oak_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> MEGA_BIRCH_TREE_KEY = registerKey("mega_birch_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> DEADWOOD_TREE_KEY = registerKey("deadwood_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> FIR_TREE_KEY = registerKey("fir_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> HOLLY_TREE_KEY = registerKey("holy_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> LARCH_TREE_KEY = registerKey("larch_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> BLACK_LEBETHRON_TREE_KEY = registerKey("black_lebethron_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> WHITE_LEBETHRON_TREE_KEY = registerKey("white_lebethron_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> SMALL_MIRKWOOD_TREE_KEY = registerKey("small_mirkwood_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> MIRKWOOD_TREE_KEY = registerKey("mirkwood_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> DEAD_MIRKWOOD_TREE_KEY = registerKey("dead_mirkwood_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> MEGA_MIRKWOOD_TREE_KEY = registerKey("mega_mirkwood_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> DEAD_MEGA_MIRKWOOD_TREE_KEY = registerKey("dead_mega_mirkwood_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> MALLORN_TREE_KEY = registerKey("mallorn_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> SMALL_MALLORN_TREE_KEY = registerKey("small_mallorn_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> MALLORN_BUSH_KEY = registerKey("mallorn_bush");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> MALLORN_FLOWERING_BUSH_KEY = registerKey("mallorn_flowering_bush");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> MEGA_MALLORN_TREE_KEY = registerKey("mega_mallorn_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> MEGA_MALLORN_STRUCTURE_TREE_KEY = registerKey("mega_mallorn_structure_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> MAPLE_TREE_KEY = registerKey("maple_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> YELLOW_MAPLE_TREE_KEY = registerKey("yellow_maple_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> ORANGE_MAPLE_TREE_KEY = registerKey("orange_maple_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> RED_MAPLE_TREE_KEY = registerKey("red_maple_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> SILVER_MAPLE_TREE_KEY = registerKey("silver_maple_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> SILVER_YELLOW_MAPLE_TREE_KEY = registerKey("silver_yellow_maple_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> SILVER_ORANGE_MAPLE_TREE_KEY = registerKey("silver_orange_maple_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> SILVER_RED_MAPLE_TREE_KEY = registerKey("silver_red_maple_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> OAK_BUSH_TREE_KEY = registerKey("silver_oak_bush_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> OAK_TREE_KEY = registerKey("oak_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> BEES_OAK_TREE_KEY = registerKey("bees_oak_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> OAK_TREE_VINES_KEY = registerKey("oak_vines_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> OAK_SMALL_TREE_VINES_KEY = registerKey("oak_small_vines_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> MEGA_OAK_TREE_KEY = registerKey("mega_oak_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> PALM_TREE_KEY = registerKey("palm_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> WHITE_PALM_TREE_KEY = registerKey("white_palm_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> PINE_TREE_KEY = registerKey("pine_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> DEAD_PINE_TREE_KEY = registerKey("dead_pine_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> DRY_PINE_TREE_KEY = registerKey("dry_pine_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> DRY_PINE_BUSH_TREE_KEY = registerKey("dry_pine_bush_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> BLACK_PINE_TREE_KEY = registerKey("black_pine_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> DEAD_BLACK_PINE_TREE_KEY = registerKey("dead_black_pine_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> ROTTEN_TREE_KEY = registerKey("rotten_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> SCORCHED_TREE_KEY = registerKey("scorched_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> SPRUCE_TREE_KEY = registerKey("spruce_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> SPRUCE_BUSH_TREE_KEY = registerKey("spruce_bush_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> WHITE_SPRUCE_TREE_KEY = registerKey("white_spruce_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> WHITE_SPRUCE_BUSH_TREE_KEY = registerKey("white_spruce_bush_tree");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> WILLOW_TREE_KEY = registerKey("willow_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> ASPEN_TREE_KEY = registerKey("aspen_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> BEECH_TREE_KEY = registerKey("beech_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> BIRCH_TREE_KEY = registerKey("birch_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> CHESTNUT_TREE_KEY = registerKey("chestnut_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> DARK_OAK_TREE_KEY = registerKey("dark_oak_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> MEGA_DARK_OAK_TREE_KEY = registerKey("mega_dark_oak_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> MEGA_BIRCH_TREE_KEY = registerKey("mega_birch_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> DEADWOOD_TREE_KEY = registerKey("deadwood_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> FIR_TREE_KEY = registerKey("fir_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> HOLLY_TREE_KEY = registerKey("holy_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> LARCH_TREE_KEY = registerKey("larch_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> BLACK_LEBETHRON_TREE_KEY = registerKey("black_lebethron_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> WHITE_LEBETHRON_TREE_KEY = registerKey("white_lebethron_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_MIRKWOOD_TREE_KEY = registerKey("small_mirkwood_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> MIRKWOOD_TREE_KEY = registerKey("mirkwood_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> DEAD_MIRKWOOD_TREE_KEY = registerKey("dead_mirkwood_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> MEGA_MIRKWOOD_TREE_KEY = registerKey("mega_mirkwood_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> DEAD_MEGA_MIRKWOOD_TREE_KEY = registerKey("dead_mega_mirkwood_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> MALLORN_TREE_KEY = registerKey("mallorn_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_MALLORN_TREE_KEY = registerKey("small_mallorn_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> MALLORN_BUSH_KEY = registerKey("mallorn_bush");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> MALLORN_FLOWERING_BUSH_KEY = registerKey("mallorn_flowering_bush");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> MEGA_MALLORN_TREE_KEY = registerKey("mega_mallorn_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> MEGA_MALLORN_STRUCTURE_TREE_KEY = registerKey("mega_mallorn_structure_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> MAPLE_TREE_KEY = registerKey("maple_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> YELLOW_MAPLE_TREE_KEY = registerKey("yellow_maple_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> ORANGE_MAPLE_TREE_KEY = registerKey("orange_maple_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> RED_MAPLE_TREE_KEY = registerKey("red_maple_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SILVER_MAPLE_TREE_KEY = registerKey("silver_maple_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SILVER_YELLOW_MAPLE_TREE_KEY = registerKey("silver_yellow_maple_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SILVER_ORANGE_MAPLE_TREE_KEY = registerKey("silver_orange_maple_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SILVER_RED_MAPLE_TREE_KEY = registerKey("silver_red_maple_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> OAK_BUSH_TREE_KEY = registerKey("silver_oak_bush_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> OAK_TREE_KEY = registerKey("oak_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> BEES_OAK_TREE_KEY = registerKey("bees_oak_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> OAK_TREE_VINES_KEY = registerKey("oak_vines_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> OAK_SMALL_TREE_VINES_KEY = registerKey("oak_small_vines_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> MEGA_OAK_TREE_KEY = registerKey("mega_oak_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> PALM_TREE_KEY = registerKey("palm_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> WHITE_PALM_TREE_KEY = registerKey("white_palm_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> PINE_TREE_KEY = registerKey("pine_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> DEAD_PINE_TREE_KEY = registerKey("dead_pine_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> DRY_PINE_TREE_KEY = registerKey("dry_pine_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> DRY_PINE_BUSH_TREE_KEY = registerKey("dry_pine_bush_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> BLACK_PINE_TREE_KEY = registerKey("black_pine_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> DEAD_BLACK_PINE_TREE_KEY = registerKey("dead_black_pine_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> ROTTEN_TREE_KEY = registerKey("rotten_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SCORCHED_TREE_KEY = registerKey("scorched_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SPRUCE_TREE_KEY = registerKey("spruce_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SPRUCE_BUSH_TREE_KEY = registerKey("spruce_bush_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> WHITE_SPRUCE_TREE_KEY = registerKey("white_spruce_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> WHITE_SPRUCE_BUSH_TREE_KEY = registerKey("white_spruce_bush_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> WILLOW_TREE_KEY = registerKey("willow_tree");
 
-    public static void bootstrap(Registerable<ConfiguredFeature<?, ?>> context) {
-        RegistryEntryLookup<Block> registryEntryLookup = context.getRegistryLookup(RegistryKeys.BLOCK);
+    public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
+        RegistryEntryLookup<Block> registryEntryLookup = context.getRegistryLookup(Registries.BLOCK);
         final ArrayList<BlockState> emptyList = new ArrayList<>();
         final ArrayList<BlockState> mallornLeaves = new ArrayList<>(Arrays.asList(WoodBlockSets.MALLORN_SET.leaves.getDefaultState(), WoodBlockSets.MALLORN_SET.leaves.getDefaultState(), ModNatureBlocks.FLOWERING_MALLORN_LEAVES.getDefaultState()));
         final ArrayList<BlockState> hollyLeaves = new ArrayList<>(Arrays.asList(WoodBlockSets.HOLLY_SET.leaves.getDefaultState(), WoodBlockSets.HOLLY_SET.leaves.getDefaultState(), ModNatureBlocks.BERRY_HOLLY_LEAVES.getDefaultState()));
@@ -494,13 +494,13 @@ public class ModTreeConfiguredFeatures {
         return builder(Blocks.OAK_LOG, Blocks.OAK_LEAVES, 4, 2, 0, 2).ignoreVines();
     }
 
-    public static RegistryKey<ConfiguredFeature<?, ?>> registerKey(String name) {
-        return RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, new Identifier(MiddleEarth.MOD_ID, name));
+    public static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {
+        return ResourceKey.of(Registries.CONFIGURED_FEATURE, new ResourceLocation(MiddleEarth.MOD_ID, name));
     }
 
-    private static <FC extends FeatureConfig, F extends Feature<FC>> void register(
-            Registerable<ConfiguredFeature<?, ?>> context,
-            RegistryKey<ConfiguredFeature<?, ?>> key, F feature, FC configuration) {
+    private static <FC extends FeatureConfiguration, F extends Feature<FC>> void register(
+            BootstrapContext<ConfiguredFeature<?, ?>> context,
+            ResourceKey<ConfiguredFeature<?, ?>> key, F feature, FC configuration) {
         context.register(key, new ConfiguredFeature<>(feature, configuration));
     }
 }

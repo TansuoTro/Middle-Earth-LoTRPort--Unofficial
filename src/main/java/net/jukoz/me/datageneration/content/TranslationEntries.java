@@ -1,9 +1,9 @@
 package net.jukoz.me.datageneration.content;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.registries.content.races.RacePools;
 import net.jukoz.me.resources.datas.structure_manager_datas.StructureManagerData;
@@ -20,7 +20,7 @@ public class TranslationEntries {
     public static List<Item> itemEntries = new ArrayList<>() {
     };
 
-    public static List<Identifier> spawnEggEntries = new ArrayList<>() {
+    public static List<ResourceLocation> spawnEggEntries = new ArrayList<>() {
     };
 
     public static List<EntityType<?>> entityEntries = new ArrayList<>() {

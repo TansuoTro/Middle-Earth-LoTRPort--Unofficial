@@ -3,18 +3,18 @@ import net.jukoz.me.item.MEComponents;
 import net.jukoz.me.entity.EntityAttributesME;
 
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ArmorItem;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.particle.*;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.biome.Biome;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.item.dataComponents.CooldownDataComponent;
 import net.jukoz.me.item.dataComponents.SeasonDataComponent;
@@ -33,9 +33,9 @@ public class WoodlandRealmCrownItem extends CustomHelmetItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, net.minecraft.world.World world, Entity entity, int slot, boolean selected) {
+    public void inventoryTick(ItemStack stack, net.minecraft.world.level.Level world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, world, entity, slot, selected);
-        RegistryEntry<Biome> biomeEntry = world.getBiome(entity.getBlockPos());
+        Holder<Biome> biomeEntry = world.getBiome(entity.getBlockPos());
 
         int cooldown = 5;
         if(MEComponents.get(stack, MEComponents.COOLDOWN) != null) {
@@ -61,26 +61,26 @@ public class WoodlandRealmCrownItem extends CustomHelmetItem {
                 LivingEntity livingEntity = (LivingEntity) entity;
                 MEComponents.set(stack, MEComponents.COOLDOWN, new CooldownDataComponent(35));
                 double scale = 1.8f * livingEntity.getAttributeValue(EntityAttributesME.SCALE);
-                Vec3d pos = entity.getPos().add(0, 1.8f * scale, 0).add(0, -1.1f, 0);
+                Vec3 pos = entity.getPos().add(0, 1.8f * scale, 0).add(0, -1.1f, 0);
 
                 if(season.equals(SeasonDataComponent.Season.DEAD) && !newSeason.equals(SeasonDataComponent.Season.WINTER)) {
-                    ((net.minecraft.server.world.ServerWorld) world).spawnParticles(ParticleTypes.COMPOSTER, pos.getX(), pos.getY(), pos.getZ(), 9, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 1);
+                    ((net.minecraft.server.level.ServerLevel) world).spawnParticles(ParticleTypes.COMPOSTER, pos.getX(), pos.getY(), pos.getZ(), 9, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 1);
                 } else if(season.equals(SeasonDataComponent.Season.SPRING)) {
-                    ((net.minecraft.server.world.ServerWorld) world).spawnParticles(ParticleTypes.CHERRY_LEAVES, pos.getX(), pos.getY(), pos.getZ(), 9, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 1);
+                    ((net.minecraft.server.level.ServerLevel) world).spawnParticles(ParticleTypes.CHERRY_LEAVES, pos.getX(), pos.getY(), pos.getZ(), 9, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 1);
                 } else if(season.equals(SeasonDataComponent.Season.SUMMER)) {
                     int leavesColor = world.getBiome(entity.getBlockPos()).value().getFoliageColor();
-                    ((net.minecraft.server.world.ServerWorld) world).spawnParticles(ParticleTypes.CHERRY_LEAVES, pos.getX(), pos.getY(), pos.getZ(), 9, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 1);
+                    ((net.minecraft.server.level.ServerLevel) world).spawnParticles(ParticleTypes.CHERRY_LEAVES, pos.getX(), pos.getY(), pos.getZ(), 9, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 1);
                 } else if(season.equals(SeasonDataComponent.Season.AUTUMN)) {
-                    ((net.minecraft.server.world.ServerWorld) world).spawnParticles(ParticleTypes.CHERRY_LEAVES, pos.getX(), pos.getY(), pos.getZ(), 9, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 1);
+                    ((net.minecraft.server.level.ServerLevel) world).spawnParticles(ParticleTypes.CHERRY_LEAVES, pos.getX(), pos.getY(), pos.getZ(), 9, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 1);
                 } else if(season.equals(SeasonDataComponent.Season.WINTER)) {
-                    ((net.minecraft.server.world.ServerWorld) world).spawnParticles(ParticleTypes.SNOWFLAKE, pos.getX(), pos.getY(), pos.getZ(), 12, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 0.05f);
+                    ((net.minecraft.server.level.ServerLevel) world).spawnParticles(ParticleTypes.SNOWFLAKE, pos.getX(), pos.getY(), pos.getZ(), 12, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 0.05f);
                 }
 
                 String itemModelName = "woodland_realm_crown";
                 if(newSeason != SeasonDataComponent.Season.DEAD) {
                     itemModelName += "_" + newSeason;
                 }
-                Identifier newItemModel = new Identifier(MiddleEarth.MOD_ID, itemModelName.toLowerCase());
+                ResourceLocation newItemModel = new ResourceLocation(MiddleEarth.MOD_ID, itemModelName.toLowerCase());
                 MEComponents.set(stack, MEComponents.ITEM_MODEL, newItemModel);
                 MEComponents.set(stack, MEComponents.SEASON_DATA, new SeasonDataComponent(newSeason));
             }

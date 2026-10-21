@@ -1,11 +1,11 @@
 package net.jukoz.me.registries;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.registry.Registerable;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.core.RegistryEntryLookup;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.registries.content.factions.FactionRegistry;
@@ -23,7 +23,7 @@ public class StructureManagerDataRegistryME {
     public final static StructureManagerData EREBOR_GENERIC_NESTS;
     public final static StructureManagerData DALE_KEEP_NESTS;
 
-    public static void bootstrap(Registerable<StructureManagerData> context) {
+    public static void bootstrap(BootstrapContext<StructureManagerData> context) {
         RegistryEntryLookup<StructureManagerData> structureDataRegistryEntryLookup = context.getRegistryLookup(DynamicRegistriesME.STRUCTURE_MANAGER_DATA);
         // [TEMPLATE]
         register(context, structureDataRegistryEntryLookup, GONDOR_GENERIC_NESTS);
@@ -31,19 +31,19 @@ public class StructureManagerDataRegistryME {
         register(context, structureDataRegistryEntryLookup, DALE_KEEP_NESTS);
     }
 
-    private static StructureManagerData register(Registerable<StructureManagerData> context, RegistryEntryLookup<StructureManagerData> registryEntryLookup, StructureManagerData structureManagerData) {
-        RegistryKey<StructureManagerData> registryKey = RegistryKey.of(DynamicRegistriesME.STRUCTURE_MANAGER_DATA, structureManagerData.getId());
+    private static StructureManagerData register(BootstrapContext<StructureManagerData> context, RegistryEntryLookup<StructureManagerData> registryEntryLookup, StructureManagerData structureManagerData) {
+        ResourceKey<StructureManagerData> registryKey = ResourceKey.of(DynamicRegistriesME.STRUCTURE_MANAGER_DATA, structureManagerData.getId());
         String name = registryKey.getValue().getPath();
-        RegistryKey<StructureManagerData> structureDataKey = RegistryKey.of(DynamicRegistriesME.STRUCTURE_MANAGER_DATA, new Identifier(MiddleEarth.MOD_ID,name));
+        ResourceKey<StructureManagerData> structureDataKey = ResourceKey.of(DynamicRegistriesME.STRUCTURE_MANAGER_DATA, new ResourceLocation(MiddleEarth.MOD_ID,name));
 
-        Optional<RegistryEntry.Reference<StructureManagerData>> optionalStructureDataReference = registryEntryLookup.getOptional(registryKey);
+        Optional<Holder.Reference<StructureManagerData>> optionalStructureDataReference = registryEntryLookup.getOptional(registryKey);
         optionalStructureDataReference.ifPresent(biomeReference -> context.register(structureDataKey, structureManagerData));
         
         return structureManagerData;
     }
 
     static {
-        GONDOR_GENERIC_NESTS = new StructureManagerData(new Identifier(MiddleEarth.MOD_ID, "gondor_generic_nests"), List.of(
+        GONDOR_GENERIC_NESTS = new StructureManagerData(new ResourceLocation(MiddleEarth.MOD_ID, "gondor_generic_nests"), List.of(
             new SpawnNestNodeData(MiddleEarth.fetchId("gondor_generic_nests.captain_nest"), 1500, List.of(
                     new StructureSpawnNestPool(EntitiesME.NPC, 1).SetNpcData(FactionRegistry.GONDOR, NpcRegistry.GONDOR_LEADER).SetFixAmount(1),
                     new StructureSpawnNestPool(EntitiesME.NPC, 2).SetNpcData(FactionRegistry.GONDOR, NpcRegistry.GONDOR_KNIGHT).SetFixAmount(1),
@@ -70,7 +70,7 @@ public class StructureManagerDataRegistryME {
             ))
         ));
 
-        EREBOR_GENERIC_NESTS = new StructureManagerData(new Identifier(MiddleEarth.MOD_ID, "erebor_generic_nests"), List.of(
+        EREBOR_GENERIC_NESTS = new StructureManagerData(new ResourceLocation(MiddleEarth.MOD_ID, "erebor_generic_nests"), List.of(
             new SpawnNestNodeData(MiddleEarth.fetchId("erebor_generic_nests.captain_nest"), 1500, List.of(
                     new StructureSpawnNestPool(EntitiesME.NPC, 1).SetNpcData(FactionRegistry.LONGBEARDS_EREBOR, NpcRegistry.EREBOR_LEADER).SetFixAmount(1),
                     new StructureSpawnNestPool(EntitiesME.NPC, 2).SetNpcData(FactionRegistry.LONGBEARDS_EREBOR, NpcRegistry.EREBOR_GATEWARDEN).SetFixAmount(1),
@@ -98,7 +98,7 @@ public class StructureManagerDataRegistryME {
             ))
         ));
 
-        DALE_KEEP_NESTS = new StructureManagerData(new Identifier(MiddleEarth.MOD_ID, "dale_keep_nests"), List.of(
+        DALE_KEEP_NESTS = new StructureManagerData(new ResourceLocation(MiddleEarth.MOD_ID, "dale_keep_nests"), List.of(
                 new SpawnNestNodeData(MiddleEarth.fetchId("dale_keep_nests.captain"), 1500, List.of(
                         new StructureSpawnNestPool(EntitiesME.NPC, 1).SetNpcData(FactionRegistry.DALE, NpcRegistry.DALE_VETERAN).SetFixAmount(1),
                         new StructureSpawnNestPool(EntitiesME.NPC, 2).SetNpcData(FactionRegistry.DALE, NpcRegistry.DALE_SERGEANT).SetFixAmount(1)

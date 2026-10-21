@@ -12,20 +12,20 @@ import net.jukoz.me.item.ModWeaponItems;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.item.DyeableItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 public class MistyGoblinEntity extends NpcEntity {
-    public MistyGoblinEntity(EntityType<? extends NpcEntity> entityType, World world) {
+    public MistyGoblinEntity(EntityType<? extends NpcEntity> entityType, Level world) {
         super(entityType, world);
         String name = this.getDefaultName().toString();
         if(name.contains("snaga")){
@@ -39,20 +39,20 @@ public class MistyGoblinEntity extends NpcEntity {
 
     @Nullable
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable CompoundTag entityNbt) {
         entityData = super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
-        Random random = world.getRandom();
+        RandomSource random = world.getRandom();
         this.initEquipment(random, difficulty);
         return entityData;
     }
 
     public static DefaultAttributeContainer.Builder setSoldierAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25f)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 20.0)
-                .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2.0)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2.0);
+        return Mob.createMobAttributes()
+                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25f)
+                .add(Attributes.GENERIC_MAX_HEALTH, 20.0)
+                .add(Attributes.GENERIC_ATTACK_SPEED, 2.0)
+                .add(Attributes.GENERIC_FOLLOW_RANGE, 32.0)
+                .add(Attributes.GENERIC_ATTACK_DAMAGE, 2.0);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class MistyGoblinEntity extends NpcEntity {
     }
 
     @Override
-    protected void initEquipment(Random random, LocalDifficulty localDifficulty) {
+    protected void initEquipment(RandomSource random, LocalDifficulty localDifficulty) {
         super.initEquipment(random, localDifficulty);
         switch (this.getRank()){
             case MILITIA -> militiaEquipment(random);
@@ -76,7 +76,7 @@ public class MistyGoblinEntity extends NpcEntity {
         }
     }
 
-    private void militiaEquipment(Random random){
+    private void militiaEquipment(RandomSource random){
         int[] colors = {
                 0x5c544b,
                 0x574a3b,
@@ -116,7 +116,7 @@ public class MistyGoblinEntity extends NpcEntity {
         }
     }
 
-    private void soldierEquipment(Random random){
+    private void soldierEquipment(RandomSource random){
         float val = random.nextFloat();
         if(val >= 0.30f){
             equipStack(EquipmentSlot.HEAD, new ItemStack(ModEquipmentItems.MISTY_GOBLIN_MAIL_HELMET));

@@ -1,24 +1,24 @@
 package net.jukoz.me.block.special;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ScaffoldingBlock;
-import net.minecraft.entity.FallingBlockEntity;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.ScaffoldingBlock;
+import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.state.property.IntProperty;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelView;
 import net.jukoz.me.item.DecorativeItemsME;
 import java.util.ArrayDeque;
 import java.util.HashMap;
@@ -29,7 +29,7 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
     private static final int MAX_STORED_DISTANCE = 7;
     public static final IntProperty SUPPORT_DISTANCE = IntProperty.of("support_distance", 0, MAX_SUPPORT_DISTANCE);
 
-    public ReinforcedScaffoldingBlock(AbstractBlock.Settings settings) {
+    public ReinforcedScaffoldingBlock(BlockBehaviour.Settings settings) {
         super(settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(SUPPORT_DISTANCE, 0));
     }
@@ -37,9 +37,9 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
 
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
+    public BlockState getPlacementState(BlockPlaceContext ctx) {
         BlockPos pos = ctx.getBlockPos();
-        World world = ctx.getWorld();
+        Level world = ctx.getWorld();
         int distance = calculateDistance(world, pos, this);
         return this.getDefaultState()
                 .with(WATERLOGGED, world.getFluidState(pos).getFluid() == Fluids.WATER)
@@ -49,7 +49,7 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
     }
 
     @Override
-    public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
+    public ItemStack getPickStack(BlockGetter world, BlockPos pos, BlockState state) {
         return DecorativeItemsME.REINFORCED_SCAFFOLDING.getDefaultStack();
     }
 
@@ -67,7 +67,7 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
     }
 
     @Override
-    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void scheduledTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         int distance = calculateDistance(world, pos, this);
         BlockState updatedState = state.with(DISTANCE, toStoredDistance(distance))
                 .with(SUPPORT_DISTANCE, distance)
@@ -89,22 +89,22 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
     }
 
     @Override
-    public boolean canReplace(BlockState state, ItemPlacementContext context) {
+    public boolean canReplace(BlockState state, BlockPlaceContext context) {
         return context.getStack().getItem() instanceof BlockItem blockItem
                 && blockItem.getBlock() == this;
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         super.appendProperties(builder);
         builder.add(SUPPORT_DISTANCE);
     }
 
-    public static boolean shouldBeBottom(BlockView world, BlockPos pos, int distance, Block scaffoldingBlock) {
+    public static boolean shouldBeBottom(BlockGetter world, BlockPos pos, int distance, Block scaffoldingBlock) {
         return distance > 0 && !world.getBlockState(pos.down()).isOf(scaffoldingBlock);
     }
 
-    public static int calculateDistance(BlockView world, BlockPos pos, Block scaffoldingBlock) {
+    public static int calculateDistance(BlockGetter world, BlockPos pos, Block scaffoldingBlock) {
         Map<BlockPos, Integer> supportDistances = new HashMap<>();
         ArrayDeque<BlockPos> positionsToCheck = new ArrayDeque<>();
         BlockPos startPos = pos.toImmutable();

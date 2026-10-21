@@ -3,32 +3,32 @@ import net.jukoz.me.compat.NbtCompat;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.recipe.*;
 import net.jukoz.me.compat.SingleStackRecipeInput;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class InscriptionRecipe implements Recipe<SingleStackRecipeInput> {
-    public final Identifier id;
-    public final RegistryEntry<Enchantment> enchant;
+    public final ResourceLocation id;
+    public final Holder<Enchantment> enchant;
     public final int level;
     public final List<String> inputWords;
     public final Ingredient inputChisel;
     public final int levelCost;
 
-    public InscriptionRecipe(Identifier id, RegistryEntry<Enchantment> enchant, int level, List<String> inputWords, Ingredient inputChisel, int levelCost) {
+    public InscriptionRecipe(ResourceLocation id, Holder<Enchantment> enchant, int level, List<String> inputWords, Ingredient inputChisel, int levelCost) {
         this.id = id;
         this.enchant = enchant;
         this.level = level;
@@ -42,7 +42,7 @@ public class InscriptionRecipe implements Recipe<SingleStackRecipeInput> {
     }
 
     @Override
-    public boolean matches(SingleStackRecipeInput input, World world) {
+    public boolean matches(SingleStackRecipeInput input, Level world) {
         return this.inputChisel.test(input.getStack(0));
     }
 
@@ -67,7 +67,7 @@ public class InscriptionRecipe implements Recipe<SingleStackRecipeInput> {
     }
 
     @Override
-    public Identifier getId() {
+    public ResourceLocation getId() {
         return id;
     }
 
@@ -97,9 +97,9 @@ public class InscriptionRecipe implements Recipe<SingleStackRecipeInput> {
         public static final String ID = "inscription_table";
 
         @Override
-        public InscriptionRecipe read(Identifier id, JsonObject json) {
-            Identifier enchantmentId = new Identifier(JsonHelper.getString(json, "enchantment"));
-            RegistryEntry<Enchantment> enchant = RegistryEntry.of(Registries.ENCHANTMENT.get(enchantmentId));
+        public InscriptionRecipe read(ResourceLocation id, JsonObject json) {
+            ResourceLocation enchantmentId = new ResourceLocation(JsonHelper.getString(json, "enchantment"));
+            Holder<Enchantment> enchant = Holder.of(Registries.ENCHANTMENT.get(enchantmentId));
             int level = JsonHelper.getInt(json, "level");
             JsonArray words = JsonHelper.getArray(json, "words");
             List<String> inputWords = new ArrayList<>(words.size());
@@ -113,9 +113,9 @@ public class InscriptionRecipe implements Recipe<SingleStackRecipeInput> {
         }
 
         @Override
-        public InscriptionRecipe read(Identifier id, PacketByteBuf buf) {
-            Identifier enchantmentId = buf.readIdentifier();
-            RegistryEntry<Enchantment> enchant = RegistryEntry.of(Registries.ENCHANTMENT.get(enchantmentId));
+        public InscriptionRecipe read(ResourceLocation id, FriendlyByteBuf buf) {
+            ResourceLocation enchantmentId = buf.readIdentifier();
+            Holder<Enchantment> enchant = Holder.of(Registries.ENCHANTMENT.get(enchantmentId));
             int level = buf.readVarInt();
             int wordCount = buf.readVarInt();
             List<String> inputWords = new ArrayList<>(wordCount);
@@ -129,7 +129,7 @@ public class InscriptionRecipe implements Recipe<SingleStackRecipeInput> {
         }
 
         @Override
-        public void write(PacketByteBuf buf, InscriptionRecipe recipe) {
+        public void write(FriendlyByteBuf buf, InscriptionRecipe recipe) {
             buf.writeIdentifier(Registries.ENCHANTMENT.getId(recipe.enchant.value()));
             buf.writeVarInt(recipe.level);
             buf.writeVarInt(recipe.inputWords.size());

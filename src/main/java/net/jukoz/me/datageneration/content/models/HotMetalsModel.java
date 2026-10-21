@@ -2,11 +2,11 @@ package net.jukoz.me.datageneration.content.models;
 
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.item.ResourceItemsME;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,13 +94,13 @@ public class HotMetalsModel {
 
     public static List<ShapingTag> shapesTag = new ArrayList<>() {
         {
-            //add(new ShapingTag(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "nugget_shaping")), ModResourceItems.MAIL_RING, 25));
-            //add(new ShapingTag(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "nugget_shaping")), ModResourceItems.SCALE, 25));
+            //add(new ShapingTag(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "nugget_shaping")), ModResourceItems.MAIL_RING, 25));
+            //add(new ShapingTag(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "nugget_shaping")), ModResourceItems.SCALE, 25));
 
-            add(new ShapingTag(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "ingot_shaping")), ResourceItemsME.SHORT_BLADE, 80));
-            add(new ShapingTag(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "ingot_shaping")), ResourceItemsME.SHOVEL_HEAD, 80));
-            add(new ShapingTag(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "ingot_shaping")), ResourceItemsME.SWORD_HILT, 80));
-            add(new ShapingTag(TagKey.of(RegistryKeys.ITEM, new Identifier(MiddleEarth.MOD_ID, "ingot_shaping")), ResourceItemsME.SHIELD_BORDER, 80));
+            add(new ShapingTag(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "ingot_shaping")), ResourceItemsME.SHORT_BLADE, 80));
+            add(new ShapingTag(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "ingot_shaping")), ResourceItemsME.SHOVEL_HEAD, 80));
+            add(new ShapingTag(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "ingot_shaping")), ResourceItemsME.SWORD_HILT, 80));
+            add(new ShapingTag(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "ingot_shaping")), ResourceItemsME.SHIELD_BORDER, 80));
         }
     };
 

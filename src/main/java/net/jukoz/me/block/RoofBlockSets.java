@@ -13,8 +13,8 @@ import net.jukoz.me.block.special.OxidizableWallBlock;
 import net.jukoz.me.block.special.verticalSlabs.VerticalSlabBlock;
 import net.jukoz.me.utils.LoggerUtil;
 import net.minecraft.block.*;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 
 public class RoofBlockSets {
 
@@ -145,7 +145,7 @@ public class RoofBlockSets {
      *  are already registered. Look them up instead of building throwaway Block instances that never
      *  reach the registry (those leave unbound intrusive holders behind). */
     private static Block existingBlock(String path) {
-        Block block = Registries.BLOCK.get(new Identifier(MiddleEarth.MOD_ID, path));
+        Block block = Registries.BLOCK.get(new ResourceLocation(MiddleEarth.MOD_ID, path));
         return block == Blocks.AIR ? null : block;
     }
 

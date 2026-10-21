@@ -3,28 +3,28 @@ package net.jukoz.me.block.special;
 import net.minecraft.block.*;
 import net.jukoz.me.compat.MEBlockShapes;
 import net.minecraft.entity.ai.pathing.NavigationType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.state.StateManager;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.state.property.IntProperty;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.gameevent.GameEvent;
 
 public class LayeredCakeBlock extends Block {
     public static final int MAX_BITES = 8;
@@ -39,11 +39,11 @@ public class LayeredCakeBlock extends Block {
         this.setDefaultState((this.stateManager.getDefaultState()));
     }
 
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
         return SHAPES_BY_BITES[state.get(BITES)];
     }
 
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         ItemStack stack = player.getStackInHand(hand);
         Item item = stack.getItem();
         if (stack.isIn(ItemTags.CANDLES) && (Integer)state.get(BITES) == 0) {
@@ -55,26 +55,26 @@ public class LayeredCakeBlock extends Block {
                 world.setBlockState(pos, CandleLayeredCakeBlock.getCandleCakeFromCandle(candleBlock));
                 world.emitGameEvent(player, GameEvent.BLOCK_CHANGE, pos);
                 player.incrementStat(Stats.USED.getOrCreateStat(item));
-                return ActionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
 
         if (world.isClient) {
             if (tryEat(world, pos, state, player).isAccepted()) {
-                return ActionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
 
-            if (player.getStackInHand(Hand.MAIN_HAND).isEmpty()) {
-                return ActionResult.CONSUME;
+            if (player.getStackInHand(InteractionHand.MAIN_HAND).isEmpty()) {
+                return InteractionResult.CONSUME;
             }
         }
 
         return tryEat(world, pos, state, player);
     }
 
-    protected static ActionResult tryEat(WorldAccess world, BlockPos pos, BlockState state, PlayerEntity player) {
+    protected static InteractionResult tryEat(WorldAccess world, BlockPos pos, BlockState state, Player player) {
         if (!player.canConsume(false)) {
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         } else {
             player.incrementStat(Stats.EAT_CAKE_SLICE);
             player.getHungerManager().add(3, 0.15F);
@@ -87,7 +87,7 @@ public class LayeredCakeBlock extends Block {
                 world.emitGameEvent(player, GameEvent.BLOCK_DESTROY, pos);
             }
 
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
     }
 
@@ -99,11 +99,11 @@ public class LayeredCakeBlock extends Block {
         return world.getBlockState(pos.down()).isSolid();
     }
 
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(BITES);
     }
 
-    public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
+    public int getComparatorOutput(BlockState state, Level world, BlockPos pos) {
         return getComparatorOutput(state.get(BITES));
     }
 
@@ -115,7 +115,7 @@ public class LayeredCakeBlock extends Block {
         return true;
     }
 
-    public boolean canPathfindThrough(BlockState state, net.minecraft.world.BlockView world, BlockPos pos, NavigationType type) {
+    public boolean canPathfindThrough(BlockState state, net.minecraft.world.level.BlockGetter world, BlockPos pos, NavigationType type) {
         return false;
     }
 

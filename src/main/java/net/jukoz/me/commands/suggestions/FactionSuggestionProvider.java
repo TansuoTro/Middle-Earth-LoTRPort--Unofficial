@@ -8,7 +8,7 @@ import net.jukoz.me.resources.datas.common.FactionType;
 import net.jukoz.me.resources.datas.factions.Faction;
 import net.jukoz.me.resources.datas.factions.FactionLookup;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class FactionSuggestionProvider implements SuggestionProvider<ServerComma
     @Override
     public CompletableFuture<Suggestions> getSuggestions(CommandContext<ServerCommandSource> context, SuggestionsBuilder builder) {
         List<Faction> candidates = FactionLookup.getAllJoinableFaction(context.getSource().getWorld());
-        List<Identifier> identifiers = new ArrayList<>();
+        List<ResourceLocation> identifiers = new ArrayList<>();
         for(Faction faction : candidates){
             if(onlyJoinable){
                 if(faction.getFactionType() == FactionType.SUBFACTION)

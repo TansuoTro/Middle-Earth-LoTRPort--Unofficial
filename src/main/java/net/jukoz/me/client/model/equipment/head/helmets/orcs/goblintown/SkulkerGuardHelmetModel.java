@@ -1,7 +1,7 @@
 package net.jukoz.me.client.model.equipment.head.helmets.orcs.goblintown;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
+import net.minecraft.client.model.geom.PartNames;
 import net.jukoz.me.client.model.equipment.head.helmets.EggHelmetModel;
 
 public class SkulkerGuardHelmetModel extends EggHelmetModel {
@@ -12,7 +12,7 @@ public class SkulkerGuardHelmetModel extends EggHelmetModel {
 
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = getModelData();
-        ModelPartData head = modelData.getRoot().addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData head = modelData.getRoot().addChild(PartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         head.addChild("large_crest", ModelPartBuilder.create()
                         .uv(28, -18).cuboid(0.0F, -15.25F, -7.0F, 0.0F, 14.0F, 18.0F, new Dilation(0.0F)),

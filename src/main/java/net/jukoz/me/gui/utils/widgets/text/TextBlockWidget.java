@@ -2,8 +2,8 @@ package net.jukoz.me.gui.utils.widgets.text;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.resource.language.LanguageManager;
-import net.minecraft.text.Text;
+import net.minecraft.client.resources.language.LanguageManager;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Colors;
 import net.jukoz.me.gui.utils.widgets.ModWidget;
 import net.jukoz.me.utils.resources.FileUtils;
@@ -22,7 +22,7 @@ public class TextBlockWidget extends ModWidget {
     private final boolean hasNoSpace;
 
     private List<List<Word>> wordsPerLine = new ArrayList<>();
-    private List<Text> rawTexts = new ArrayList<>();
+    private List<Component> rawTexts = new ArrayList<>();
 
     public TextBlockWidget(int startX, int startY, int width, int height){
         this.startX = startX;
@@ -63,16 +63,16 @@ public class TextBlockWidget extends ModWidget {
         return this;
     }
 
-    public List<Text> setText(List<Text> texts){
+    public List<Component> setText(List<Component> texts){
         if(texts == null)
             return texts;
         rawTexts = texts;
         wordsPerLine.clear();
-        List<Text> textOverflow = new ArrayList<>();
+        List<Component> textOverflow = new ArrayList<>();
         int currentHeight = 0;
 
         int _spaceWidth = this.hasNoSpace ? 0 : this.spaceWidth;
-        for(Text text : texts){ // Parse through texts (1 text is 1 paragraph)
+        for(Component text : texts){ // Parse through texts (1 text is 1 paragraph)
             boolean isManipulated = false;  // Simple variable to check if the input was manipulated
             List<Word> textWords = getWordListFromText(text, this.hasNoSpace); // The text split in words
             while(!textWords.isEmpty() && currentHeight < height){ // Parse the input until it reaches the end of it or the height limit
@@ -129,32 +129,32 @@ public class TextBlockWidget extends ModWidget {
         }
     }
 
-    private Text createTextFromWords(List<Word> words) {
+    private Component createTextFromWords(List<Word> words) {
         StringBuilder textContentBuilder = new StringBuilder();
         for(Word word : words) {
             textContentBuilder.append(word.content);
             if(word != words.get(words.size()-1))
                 textContentBuilder.append(" ");
         }
-        return Text.literal(textContentBuilder.toString());
+        return Component.literal(textContentBuilder.toString());
     }
 
     private void drawTextLimitLine(DrawContext context, int currentStart) {
-        Text text = Text.of("...");
+        Component text = Component.of("...");
         context.drawText(textRenderer, text,
                 startX + (width / 2) - (textRenderer.getWidth(text) / 2), startY + currentStart, Colors.RED, false);
     }
 
     private void drawTextLine(DrawContext context, List<Word> currentLine, int currentStart, boolean isEnd) {
         if (isJustified && !isEnd) {
-            Text text = getJustifiedTextFromList(currentLine);
-            Text lastWordText = Text.literal(currentLine.get(currentLine.size()-1).content);
+            Component text = getJustifiedTextFromList(currentLine);
+            Component lastWordText = Component.literal(currentLine.get(currentLine.size()-1).content);
             context.drawText(textRenderer, text,
                     startX, startY + currentStart, Colors.BLACK, false);
             context.drawText(textRenderer, lastWordText,
                     startX + width - textRenderer.getWidth(lastWordText), startY + currentStart, Colors.BLACK, false);
         } else {
-            Text text = getTextFromList(currentLine);
+            Component text = getTextFromList(currentLine);
             // draw alignment
             int x = switch (textAlignment) {
                 case LEFT -> startX;
@@ -167,7 +167,7 @@ public class TextBlockWidget extends ModWidget {
         }
     }
 
-    private Text getJustifiedTextFromList(List<Word> currentLine) {
+    private Component getJustifiedTextFromList(List<Word> currentLine) {
         int currentWidth = 0;
         int _spaceWidth = this.hasNoSpace ? 0 : this.spaceWidth;
         for(Word word : currentLine){
@@ -202,10 +202,10 @@ public class TextBlockWidget extends ModWidget {
                     stringBuilder.append(" ".repeat(1 + extraSpaceAmount));
             }
         }
-        return Text.literal(stringBuilder.toString());
+        return Component.literal(stringBuilder.toString());
     }
 
-    private Text getTextFromList(List<Word> currentLine) {
+    private Component getTextFromList(List<Word> currentLine) {
         StringBuilder stringBuilder = new StringBuilder();
         for (Word word : currentLine) {
             stringBuilder.append(word.content);
@@ -213,10 +213,10 @@ public class TextBlockWidget extends ModWidget {
                 if (!hasNoSpace)
                     stringBuilder.append(" ");
         }
-        return Text.literal(stringBuilder.toString());
+        return Component.literal(stringBuilder.toString());
     }
 
-    private List<Word> getWordListFromText(Text textToSplit, boolean hasNoSpace){
+    private List<Word> getWordListFromText(Component textToSplit, boolean hasNoSpace){
         List<Word> words = new ArrayList<>();
         if (hasNoSpace) {
             for (char character : textToSplit.getString().toCharArray()) {
@@ -231,7 +231,7 @@ public class TextBlockWidget extends ModWidget {
         return words;
     }
 
-    public List<Text> getValue() {
+    public List<Component> getValue() {
         return rawTexts;
     }
 }

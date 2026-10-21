@@ -1,23 +1,23 @@
 package net.jukoz.me.gui.onboarding.onboarding_faction;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.block.entity.BannerPattern;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.render.entity.model.EntityModelLayers;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.EntityModelLayers;
 import net.jukoz.me.compat.MEBannerPatterns;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Holder;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Colors;
-import net.minecraft.util.DyeColor;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.gui.utils.CycledSelectionButtonType;
 import net.jukoz.me.gui.utils.widgets.CycledSelectionWidget;
@@ -32,10 +32,10 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class OnboardingFactionScreen extends Screen {
-    private static final Identifier MAP_UI_IDENTIFIER = new Identifier(MiddleEarth.MOD_ID,"textures/gui/faction_selection_map.png");
-    private static final Identifier BUTTON_UI_IDENTIFIER = new Identifier(MiddleEarth.MOD_ID,"textures/gui/faction_selection_buttons.png");
+    private static final ResourceLocation MAP_UI_IDENTIFIER = new ResourceLocation(MiddleEarth.MOD_ID,"textures/gui/faction_selection_map.png");
+    private static final ResourceLocation BUTTON_UI_IDENTIFIER = new ResourceLocation(MiddleEarth.MOD_ID,"textures/gui/faction_selection_buttons.png");
     private static final int TEXT_COLOR = Color.BLACK.getRGB();
 
     public class OnboardingFactionScreenElements {
@@ -55,15 +55,15 @@ public class OnboardingFactionScreen extends Screen {
         public ButtonWidget fullRandomizerButton;
         public ButtonWidget spawnConfirmButton;
         //endregion
-        //region [Text and Displays]
+        //region [Component and Displays]
         public DrawablePanel informationPanel =
-                new DrawablePanel(169, 207, 0, 0, new Identifier(MiddleEarth.MOD_ID,"textures/gui/faction_selection.png"));
+                new DrawablePanel(169, 207, 0, 0, new ResourceLocation(MiddleEarth.MOD_ID,"textures/gui/faction_selection.png"));
         public DrawablePanel mapPanel =
                 new DrawablePanel(124, 124, 0, 0, MAP_UI_IDENTIFIER);
 
         public ModelPart bannerField;
-        public Text factionName;
-        public Text subfactionName;
+        public Component factionName;
+        public Component subfactionName;
         public TextBlockWidget raceList = new TextBlockWidget(0,0, informationPanel.width - 10, 30);
         public TextBlockWidget descriptionTextBlock;
         public List<BannerData.BannerPatternWithColor> bannerComponents;
@@ -76,11 +76,11 @@ public class OnboardingFactionScreen extends Screen {
         public final int height;
         public final int uvX;
         public final int uvY;
-        public final Identifier texture;
+        public final ResourceLocation texture;
         public int startX;
         public int startY;
 
-        public DrawablePanel(int width, int height, int uvX, int uvY, Identifier texture){
+        public DrawablePanel(int width, int height, int uvX, int uvY, ResourceLocation texture){
             this.width = width;
             this.height = height;
             this.uvX = uvX;
@@ -95,7 +95,7 @@ public class OnboardingFactionScreen extends Screen {
         }
     }
 
-    private static final Text TITLE = Text.translatable("screen." + MiddleEarth.MOD_ID + ".onboarding_faction_screen");
+    private static final Component TITLE = Component.translatable("screen." + MiddleEarth.MOD_ID + ".onboarding_faction_screen");
 
 
     // Public fields
@@ -154,20 +154,20 @@ public class OnboardingFactionScreen extends Screen {
         elements.subfactionSelectionWidget.getButtons().forEach(this::addDrawableChild);
 
         // PlayerFactionPayload Randomizer
-        elements.npcRandomizerButton = ButtonWidget.builder(Text.translatable("screen." + MiddleEarth.MOD_ID + ".button.faction_randomizer"),
+        elements.npcRandomizerButton = ButtonWidget.builder(Component.translatable("screen." + MiddleEarth.MOD_ID + ".button.faction_randomizer"),
                 x -> this.controller.randomizeNpc()).build();
         addDrawableChild(elements.npcRandomizerButton);
 
         // Map Widget
-        elements.mapFocusButton = ButtonWidget.builder(Text.translatable("screen." + MiddleEarth.MOD_ID + ".button.focus_current"), this::mapFocusToggle).build(); // TODO
+        elements.mapFocusButton = ButtonWidget.builder(Component.translatable("screen." + MiddleEarth.MOD_ID + ".button.focus_current"), this::mapFocusToggle).build(); // TODO
         net.jukoz.me.compat.client.gui.MEGui.setSize(elements.mapFocusButton, 10, 10);
         addDrawableChild(elements.mapFocusButton);
 
-        elements.mapZoomInButton = ButtonWidget.builder(Text.translatable("screen." + MiddleEarth.MOD_ID + ".button.zoom_in"), this::mapZoomIn).build();
+        elements.mapZoomInButton = ButtonWidget.builder(Component.translatable("screen." + MiddleEarth.MOD_ID + ".button.zoom_in"), this::mapZoomIn).build();
         net.jukoz.me.compat.client.gui.MEGui.setSize(elements.mapZoomInButton, 10, 10);
         addDrawableChild(elements.mapZoomInButton);
 
-        elements.mapZoomOutButton = ButtonWidget.builder(Text.translatable("screen." + MiddleEarth.MOD_ID + ".button.zoom_out"), this::mapZoomOut).build();
+        elements.mapZoomOutButton = ButtonWidget.builder(Component.translatable("screen." + MiddleEarth.MOD_ID + ".button.zoom_out"), this::mapZoomOut).build();
 
         net.jukoz.me.compat.client.gui.MEGui.setSize(elements.mapZoomOutButton, 10, 10);
         addDrawableChild(elements.mapZoomOutButton);
@@ -190,19 +190,19 @@ public class OnboardingFactionScreen extends Screen {
 
 
         // Random spawn selection
-        elements.fullRandomizerButton = ButtonWidget.builder(Text.translatable("screen." + MiddleEarth.MOD_ID + ".button.full_randomizer"),
+        elements.fullRandomizerButton = ButtonWidget.builder(Component.translatable("screen." + MiddleEarth.MOD_ID + ".button.full_randomizer"),
                 x -> controller.randomizeAll()).build();
         addDrawableChild(elements.fullRandomizerButton);
 
-        elements.spawnConfirmButton = ButtonWidget.builder(Text.translatable("screen." + MiddleEarth.MOD_ID + ".button.confirm"),
+        elements.spawnConfirmButton = ButtonWidget.builder(Component.translatable("screen." + MiddleEarth.MOD_ID + ".button.confirm"),
                 x -> controller.confirmSelection()).build();
         addDrawableChild(elements.spawnConfirmButton);
 
-        elements.factionName = ((MutableText)Text.of("N/A")).formatted(Formatting.BOLD).formatted(Formatting.DARK_GRAY);
-        elements.subfactionName = Text.of("N/A");
-        elements.raceList.setText(List.of(Text.of("N/A")));
+        elements.factionName = ((MutableComponent)Component.of("N/A")).formatted(Formatting.BOLD).formatted(Formatting.DARK_GRAY);
+        elements.subfactionName = Component.of("N/A");
+        elements.raceList.setText(List.of(Component.of("N/A")));
         elements.descriptionTextBlock = new TextBlockWidget(0,0, elements.informationPanel.width - 9,textRenderer.fontHeight * 10);
-        elements.descriptionTextBlock.setText(List.of(Text.of("N/A")));
+        elements.descriptionTextBlock.setText(List.of(Component.of("N/A")));
 
         this.elements.mapWidget = new FactionSelectionMapWidget(114, 114, this.controller.getMaxSpawnAmount());
         Arrays.stream(this.elements.mapWidget.getButtons()).forEach(this::addDrawableChild);
@@ -253,7 +253,7 @@ public class OnboardingFactionScreen extends Screen {
         // Subfaction
         if(elements.subfactionName != null){
             startY += textRenderer.fontHeight + 3;
-            Text subfactionTitle = Text.translatable("screen." + MiddleEarth.MOD_ID + ".information.subfaction");
+            Component subfactionTitle = Component.translatable("screen." + MiddleEarth.MOD_ID + ".information.subfaction");
 
             context.drawText(textRenderer, subfactionTitle, startX, startY, TEXT_COLOR, false);
             context.drawText(textRenderer, elements.subfactionName, startX + textRenderer.getWidth(subfactionTitle), startY, TEXT_COLOR, false);
@@ -263,7 +263,7 @@ public class OnboardingFactionScreen extends Screen {
             startY += textRenderer.fontHeight + 3;
             var text = elements.raceList.getValue().get(0).getString();
             boolean hasManyRaces = text.contains(",");
-            Text raceTitle = Text.translatable((hasManyRaces)
+            Component raceTitle = Component.translatable((hasManyRaces)
                     ? "screen." + MiddleEarth.MOD_ID + ".information.races.many"
                     : "screen." + MiddleEarth.MOD_ID + ".information.races").formatted(Formatting.UNDERLINE);
             context.drawText(client.textRenderer, raceTitle, startX, startY, TEXT_COLOR, false);
@@ -277,7 +277,7 @@ public class OnboardingFactionScreen extends Screen {
 
         startY =  elements.informationPanel.startY + 90;
 
-        context.drawText(client.textRenderer, Text.translatable("screen." + MiddleEarth.MOD_ID + ".information.description").formatted(Formatting.UNDERLINE),
+        context.drawText(client.textRenderer, Component.translatable("screen." + MiddleEarth.MOD_ID + ".information.description").formatted(Formatting.UNDERLINE),
                 startX,startY - textRenderer.fontHeight, TEXT_COLOR, false);
         startY += 3;
         elements.descriptionTextBlock.setStartX(startX);
@@ -286,12 +286,12 @@ public class OnboardingFactionScreen extends Screen {
 
         // Banner
         if(elements.bannerComponents != null && this.client.world != null) {
-            var bannerPatternRegistry = this.client.world.getRegistryManager().getOptional(RegistryKeys.BANNER_PATTERN);
+            var bannerPatternRegistry = this.client.world.getRegistryManager().getOptional(Registries.BANNER_PATTERN);
             MEBannerPatterns.Builder bannerBuilder = new MEBannerPatterns.Builder();
             for(BannerData.BannerPatternWithColor entry : elements.bannerComponents){
                 if(entry == null) continue;
                 if (bannerPatternRegistry.isEmpty()) continue;
-                RegistryEntry<BannerPattern> pattern = bannerPatternRegistry.get().getEntry(entry.pattern);
+                Holder<BannerPattern> pattern = bannerPatternRegistry.get().getEntry(entry.pattern);
                 if (pattern != null) bannerBuilder.add(pattern, entry.color);
             }
             int bannerX = elements.informationPanel.startX + elements.informationPanel.width - 48;
@@ -355,7 +355,7 @@ public class OnboardingFactionScreen extends Screen {
         } else {
             context.drawTexture(BUTTON_UI_IDENTIFIER, this.elements.spawnConfirmButton.getX(), this.elements.spawnConfirmButton.getY(), 156, 55, this.elements.spawnConfirmButton.getWidth(), this.elements.spawnConfirmButton.getHeight(), 256, 256);
 
-            Text delayText = Text.literal(String.valueOf(controller.getCurrentDelay()));
+            Component delayText = Component.literal(String.valueOf(controller.getCurrentDelay()));
             context.drawText(textRenderer, delayText,
                     this.elements.spawnConfirmButton.getX() + (52 / 2) - (textRenderer.getWidth(delayText) / 2),
                     this.elements.spawnConfirmButton.getY() + 5, Colors.RED, true);

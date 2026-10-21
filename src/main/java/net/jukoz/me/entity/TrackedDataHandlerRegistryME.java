@@ -3,9 +3,9 @@ package net.jukoz.me.entity;
 import net.jukoz.me.compat.net.TrackedDataHandlerME;
 import net.minecraft.entity.data.TrackedDataHandler;
 import net.jukoz.me.compat.net.PacketCodecs;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.beasts.great_horn.GreatHornVariant;
 import net.jukoz.me.entity.npcs.data.NpcData;
@@ -24,8 +24,8 @@ public class TrackedDataHandlerRegistryME {
     public static final TrackedDataHandler<String> NPC_DATA_ID;
     public static final TrackedDataHandler<String> CATEGORY;
     public static final TrackedDataHandler<BlockPos> STRUCTURE_MANAGER_HOST_POS;
-    public static final TrackedDataHandler<RegistryEntry<SpiderVariant>> SPIDER_VARIANT;
-    public static final TrackedDataHandler<RegistryEntry<GreatHornVariant>> GREAT_HORN_VARIANT;
+    public static final TrackedDataHandler<Holder<SpiderVariant>> SPIDER_VARIANT;
+    public static final TrackedDataHandler<Holder<GreatHornVariant>> GREAT_HORN_VARIANT;
 
     public static void register() {
         of("npc_data", NPC_DATA);

@@ -5,11 +5,11 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.beasts.trolls.cave.CaveTrollEntity;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.Util;
 
 import java.util.Map;
 
@@ -22,20 +22,20 @@ public class PheasantRenderer extends MobEntityRenderer<PheasantEntity, Pheasant
 
     }
 
-    public static final Map<PheasantVariant, Identifier> LOCATION_BY_VARIANT =
+    public static final Map<PheasantVariant, ResourceLocation> LOCATION_BY_VARIANT =
             Util.make(Maps.newEnumMap(PheasantVariant.class), (map) -> {
                 map.put(PheasantVariant.MALE,
-                        new Identifier(MiddleEarth.MOD_ID, PATH + "pheasant1m.png"));
+                        new ResourceLocation(MiddleEarth.MOD_ID, PATH + "pheasant1m.png"));
                 map.put(PheasantVariant.FEMALE,
-                        new Identifier(MiddleEarth.MOD_ID, PATH + "pheasant1f.png"));
+                        new ResourceLocation(MiddleEarth.MOD_ID, PATH + "pheasant1f.png"));
             });
 
     @Override
-    public Identifier getTexture(PheasantEntity entity) {
+    public ResourceLocation getTexture(PheasantEntity entity) {
         return LOCATION_BY_VARIANT.get(entity.getVariant());
     }
 
-    public void render(PheasantEntity entity, float entityYaw, float partialTick, MatrixStack poseStack,
+    public void render(PheasantEntity entity, float entityYaw, float partialTick, PoseStack poseStack,
                        VertexConsumerProvider bufferSource, int packedLight) {
 
         if(entity.isBaby()) {

@@ -2,12 +2,12 @@ package net.jukoz.me.item.dataComponents;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.compat.TooltipAppender;
 import net.jukoz.me.compat.net.PacketCodec;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.utils.BlockAuthor;
 
@@ -19,7 +19,7 @@ public record BlockAuthorDataComponent(BlockAuthor author) implements TooltipApp
                 .apply(instance, BlockAuthorDataComponent::new);
     });
     public static final Codec<BlockAuthorDataComponent> CODEC  = ComponentCodecs.alternative(BASE_CODEC, BlockAuthor.CODEC, BlockAuthorDataComponent::new);
-    public static final PacketCodec<PacketByteBuf, BlockAuthorDataComponent> PACKET_CODEC  = PacketCodec.tuple(BlockAuthor.PACKET_CODEC, BlockAuthorDataComponent::author, BlockAuthorDataComponent::new);
+    public static final PacketCodec<FriendlyByteBuf, BlockAuthorDataComponent> PACKET_CODEC  = PacketCodec.tuple(BlockAuthor.PACKET_CODEC, BlockAuthorDataComponent::author, BlockAuthorDataComponent::new);
     ;
     @Override
     public BlockAuthor author() {
@@ -27,7 +27,7 @@ public record BlockAuthorDataComponent(BlockAuthor author) implements TooltipApp
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, net.minecraft.client.item.TooltipContext context, List<Text> tooltip) {
-        tooltip.add(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".author").append(this.author.getAuthorName()));
+    public void appendTooltip(ItemStack stack, net.minecraft.client.item.TooltipContext context, List<Component> tooltip) {
+        tooltip.add(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".author").append(this.author.getAuthorName()));
     }
 }

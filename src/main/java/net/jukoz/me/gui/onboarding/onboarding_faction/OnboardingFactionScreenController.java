@@ -7,14 +7,14 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.registry.Registry;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.core.Registry;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.npcs.NpcEntity;
@@ -40,10 +40,10 @@ import java.util.*;
 
 public class OnboardingFactionScreenController {
     public static OnboardingFactionScreenController INSTANCE;
-    private static final Text TITLE = Text.translatable("screen." + MiddleEarth.MOD_ID + ".onboarding_faction_screen");
+    private static final Component TITLE = Component.translatable("screen." + MiddleEarth.MOD_ID + ".onboarding_faction_screen");
     private static final float DEFAULT_DELAY = 3;
 
-    World world;
+    Level world;
     OnboardingFactionScreen screen;
     OnboardingFactionScreenService service;
     private float currentDelay;
@@ -60,7 +60,7 @@ public class OnboardingFactionScreenController {
     private List<SearchBarResult> searchBarResults;
     private List<AttributePoolElement> playerAttributes;
 
-    public OnboardingFactionScreenController(World world, float delay, List<AttributePoolElement> playerAttributes) {
+    public OnboardingFactionScreenController(Level world, float delay, List<AttributePoolElement> playerAttributes) {
         screen = new OnboardingFactionScreen(this);
         this.world = world;
         this.currentDelay = delay;
@@ -187,7 +187,7 @@ public class OnboardingFactionScreenController {
     }
 
     //region [Helpers]
-    private Text getRaceText() {
+    private Component getRaceText() {
         Faction factionToUse = getCurrentFaction();
         if(factionToUse == null) return null;
         StringBuilder raceListStringBuilder = new StringBuilder();
@@ -198,7 +198,7 @@ public class OnboardingFactionScreenController {
              raceListStringBuilder.append(race.getFullName().getString());
         }
 
-        return Text.of(raceListStringBuilder.toString());
+        return Component.of(raceListStringBuilder.toString());
     }
 
     private Faction getCurrentFaction() {
@@ -377,8 +377,8 @@ public class OnboardingFactionScreenController {
 
         var npcRegistry = optionalNpcRegistry.get();
 
-        var filteredList = new ArrayList<Identifier>();
-        for(Identifier idToFilter : idList){
+        var filteredList = new ArrayList<ResourceLocation>();
+        for(ResourceLocation idToFilter : idList){
             if(filterNpc(npcRegistry, idToFilter))
                 filteredList.add(idToFilter);
         }
@@ -386,12 +386,12 @@ public class OnboardingFactionScreenController {
         if(filteredList.isEmpty())
             return;
 
-        Identifier id = filteredList.get((new Random()).nextInt(filteredList.size()));
+        ResourceLocation id = filteredList.get((new Random()).nextInt(filteredList.size()));
         if(world instanceof ClientWorld clientWorld)
             this.screen.elements.npcPreviewWidget.updateEntity(id, selectedRace, clientWorld, false);
     }
 
-    private boolean filterNpc(Registry<NpcType> registry, Identifier elementToFilter){
+    private boolean filterNpc(Registry<NpcType> registry, ResourceLocation elementToFilter){
         NpcType foundData = registry.get(elementToFilter);
         if(foundData == null) return false;
 
@@ -489,7 +489,7 @@ public class OnboardingFactionScreenController {
         Faction faction = getCurrentFaction();
         if(faction == null) return;
 
-        Vec3d coordinate = selectedSpawn.getCoordinates();
+        Vec3 coordinate = selectedSpawn.getCoordinates();
         if(selectedSpawn.isDynamic()){
             ClientPlayNetworking.send(new PacketTeleportToDynamicCoordinate(coordinate.getX(), coordinate.getZ(), true));
         } else {
@@ -536,7 +536,7 @@ public class OnboardingFactionScreenController {
                 if(faction.isJoinable()){
                     newList.add(getSearchBarResult(faction));
                     if(faction.getSubFactions() != null){
-                        for(Identifier subfacId : faction.getSubFactions()){
+                        for(ResourceLocation subfacId : faction.getSubFactions()){
                             try{
                                 Faction subfac = FactionLookup.getFactionById(world, subfacId);
                                 newList.add(getSearchBarResult(faction, subfac));
@@ -551,16 +551,16 @@ public class OnboardingFactionScreenController {
     }
 
     private SearchBarResult getSearchBarResult(Faction faction) {
-        MutableText text = faction.tryGetShortName();
-        Identifier factionId = faction.getId();
+        MutableComponent text = faction.tryGetShortName();
+        ResourceLocation factionId = faction.getId();
         SearchBarResultType type = SearchBarResultType.NORMAL;
         return new SearchBarResult(text, factionId, type, button -> selectFactionByIdentifier(factionId, null));
     }
 
     private SearchBarResult getSearchBarResult(Faction faction, Faction subfaction) {
-        MutableText text = subfaction.tryGetShortName();
-        Identifier factionId = faction.getId();
-        Identifier subfactionId = subfaction.getId();
+        MutableComponent text = subfaction.tryGetShortName();
+        ResourceLocation factionId = faction.getId();
+        ResourceLocation subfactionId = subfaction.getId();
         SearchBarResultType type = SearchBarResultType.SUB;
         return new SearchBarResult(text, subfactionId, type, button -> selectFactionByIdentifier(factionId, subfactionId));
     }
@@ -569,7 +569,7 @@ public class OnboardingFactionScreenController {
         return searchBarResults;
     }
 
-    public void selectFactionByIdentifier(Identifier factionId, Identifier subfactionId){
+    public void selectFactionByIdentifier(ResourceLocation factionId, ResourceLocation subfactionId){
         try{
             Faction faction = FactionLookup.getFactionById(world, factionId);
             setDisposition(faction.getDisposition());
@@ -593,7 +593,7 @@ public class OnboardingFactionScreenController {
         return (Math.round(this.currentDelay * 10f) /10f);
     }
 
-    public Text getCurrentFactionFullName() {
+    public Component getCurrentFactionFullName() {
         return selectedFaction.getFullName();
     }
 

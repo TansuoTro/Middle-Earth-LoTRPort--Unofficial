@@ -1,36 +1,36 @@
 package net.jukoz.me.entity.spider.larva;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.ai.pathing.SpiderNavigation;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Holder;
+import net.minecraft.tags.TagKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.nbt.CompoundTag;
 import net.jukoz.me.compat.nbt.ReadView;
 import net.jukoz.me.compat.nbt.WriteView;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.TrackedDataHandlerRegistryME;
 import net.jukoz.me.entity.VariantsME;
@@ -51,7 +51,7 @@ public class ShelobiteLarvaEntity extends HostileEntity {
     public static final float MOVEMENT_SPEED = 1f;
     private static final TrackedData<Byte> SPIDER_FLAGS;
     private static final TrackedData<Boolean> ATTACK_FLAG;
-    private static final TrackedData<RegistryEntry<SpiderVariant>> VARIANT;
+    private static final TrackedData<Holder<SpiderVariant>> VARIANT;
 
     public final AnimationState idleAnimation = new AnimationState();
     public final AnimationState walkingAnimation = new AnimationState();
@@ -59,15 +59,15 @@ public class ShelobiteLarvaEntity extends HostileEntity {
 
     private int climbingTicks = 0;
 
-    public ShelobiteLarvaEntity(EntityType<? extends HostileEntity> entityType, World world) {
+    public ShelobiteLarvaEntity(EntityType<? extends HostileEntity> entityType, Level world) {
         super(entityType, world);
     }
 
     public static DefaultAttributeContainer.Builder setAttributes() {
         return HostileEntity.createHostileAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 8.0)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.27)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 24.0);
+                .add(Attributes.GENERIC_MAX_HEALTH, 8.0)
+                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.27)
+                .add(Attributes.GENERIC_FOLLOW_RANGE, 24.0);
     }
 
     protected void initGoals() {
@@ -76,21 +76,21 @@ public class ShelobiteLarvaEntity extends HostileEntity {
         this.goalSelector.add(4, new WanderAroundFarGoal(this, 0.8));
         this.goalSelector.add(5, new FollowDifferentMobGoal<ShelobiteScuttlerEntity>(this,
                 ShelobiteScuttlerEntity.class, 1.0, 7, 16));
-        this.goalSelector.add(6, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.add(6, new LookAtEntityGoal(this, Player.class, 8.0F));
         this.goalSelector.add(6, new LookAroundGoal(this));
         this.targetSelector.add(1, new RevengeGoal(this));
-        this.targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
+        this.targetSelector.add(2, new ActiveTargetGoal<>(this, Player.class, true));
         this.targetSelector.add(3, new ActiveTargetGoal<>(this, NpcEntity.class, true));
         this.targetSelector.add(4, new ActiveTargetGoal<>(this, CaveTrollEntity.class, true));
     }
 
     @Nullable
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound nbt) {
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable CompoundTag nbt) {
         if (entityData instanceof ShelobiteScuttlerEntity.SpiderData spiderData) {
             this.setVariant(spiderData.variant);
         } else {
-            Optional<RegistryEntry<SpiderVariant>> optional = VariantsME.select(world,
+            Optional<Holder<SpiderVariant>> optional = VariantsME.select(world,
                     VariantsME.registry(world.toServerWorld().getRegistryManager(), DynamicRegistriesME.SPIDER_VARIANTS));
             if (optional.isPresent()) {
                 this.setVariant(optional.get());
@@ -105,13 +105,13 @@ public class ShelobiteLarvaEntity extends HostileEntity {
     }
 
     @Override
-    protected EntityNavigation createNavigation(World world) {
+    protected EntityNavigation createNavigation(Level world) {
         return new SpiderNavigation(this, world);
     }
 
     protected void initDataTracker() {
         super.initDataTracker();
-        RegistryEntry<SpiderVariant> spiderVariantRegistryEntry = VariantsME.getOrDefaultOrThrow(this.getWorld().getRegistryManager(), SpiderVariantRegistry.DEFAULT);
+        Holder<SpiderVariant> spiderVariantRegistryEntry = VariantsME.getOrDefaultOrThrow(this.getWorld().getRegistryManager(), SpiderVariantRegistry.DEFAULT);
         this.dataTracker.startTracking(VARIANT, spiderVariantRegistryEntry);
         this.dataTracker.startTracking(ATTACK_FLAG, false);
         this.dataTracker.startTracking(SPIDER_FLAGS, (byte)0);
@@ -165,11 +165,11 @@ public class ShelobiteLarvaEntity extends HostileEntity {
         return getRegistryVariant().value();
     }
 
-    private RegistryEntry<SpiderVariant> getRegistryVariant() {
+    private Holder<SpiderVariant> getRegistryVariant() {
         return this.dataTracker.get(VARIANT);
     }
 
-    private void setVariant(RegistryEntry<SpiderVariant> variant) {
+    private void setVariant(Holder<SpiderVariant> variant) {
         this.dataTracker.set(VARIANT, variant);
     }
 
@@ -193,8 +193,8 @@ public class ShelobiteLarvaEntity extends HostileEntity {
         return this.isClimbingWall();
     }
 
-    public void slowMovement(BlockState state, Vec3d multiplier) {
-        if (!state.isIn(TagKey.of(RegistryKeys.BLOCK, new Identifier(MiddleEarth.MOD_ID, "cobwebs")))) {
+    public void slowMovement(BlockState state, Vec3 multiplier) {
+        if (!state.isIn(TagKey.of(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "cobwebs")))) {
             super.slowMovement(state, multiplier);
         }
     }
@@ -228,14 +228,14 @@ public class ShelobiteLarvaEntity extends HostileEntity {
     }
 
     @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
+    public void writeCustomDataToNbt(CompoundTag nbt) {
         super.writeCustomDataToNbt(nbt);
         WriteView view = new WriteView(nbt);
         VariantsME.writeVariantToNbt(view, this.getRegistryVariant());
     }
 
     @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
+    public void readCustomDataFromNbt(CompoundTag nbt) {
         super.readCustomDataFromNbt(nbt);
         ReadView view = new ReadView(nbt);
         VariantsME.readVariantFromNbt(view, this.getWorld().getRegistryManager(), DynamicRegistriesME.SPIDER_VARIANTS).ifPresent(this::setVariant);
@@ -247,7 +247,7 @@ public class ShelobiteLarvaEntity extends HostileEntity {
         VARIANT = DataTracker.registerData(ShelobiteLarvaEntity.class, TrackedDataHandlerRegistryME.SPIDER_VARIANT);
     }
 
-    public static boolean canSpawn(EntityType<ShelobiteLarvaEntity> type, ServerWorldAccess serverWorldAccess, SpawnReason spawnReason, BlockPos blockPos, Random random) {
+    public static boolean canSpawn(EntityType<ShelobiteLarvaEntity> type, ServerWorldAccess serverWorldAccess, SpawnReason spawnReason, BlockPos blockPos, RandomSource random) {
         if(spawnReason != SpawnReason.NATURAL)
             return ShelobiteLarvaEntity.canSpawnInDark(type, serverWorldAccess, spawnReason, blockPos, random);
         return SpawnUtil.canSpawn(blockPos, serverWorldAccess, spawnReason);

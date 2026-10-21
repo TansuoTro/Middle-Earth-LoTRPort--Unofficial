@@ -2,13 +2,13 @@ package net.jukoz.me.item.dataComponents;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.compat.TooltipAppender;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
@@ -19,11 +19,11 @@ public record ArmorVariantDataComponent(Integer id) implements TooltipAppender {
     });
     public static final Codec<ArmorVariantDataComponent> CODEC = ComponentCodecs.alternative(BASE_CODEC, Codec.INT, ArmorVariantDataComponent::new);
 
-    public static final PacketCodec<PacketByteBuf, ArmorVariantDataComponent> PACKET_CODEC  = PacketCodec.tuple(PacketCodecs.INTEGER, ArmorVariantDataComponent::id,
+    public static final PacketCodec<FriendlyByteBuf, ArmorVariantDataComponent> PACKET_CODEC  = PacketCodec.tuple(PacketCodecs.INTEGER, ArmorVariantDataComponent::id,
             ArmorVariantDataComponent::new);
 
     @Override
-    public void appendTooltip(ItemStack stack, net.minecraft.client.item.TooltipContext context, List<Text> tooltip) {
+    public void appendTooltip(ItemStack stack, net.minecraft.client.item.TooltipContext context, List<Component> tooltip) {
     }
 
     @Override

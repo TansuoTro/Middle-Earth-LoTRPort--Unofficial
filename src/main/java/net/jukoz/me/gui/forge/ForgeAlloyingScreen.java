@@ -5,12 +5,12 @@ import com.google.common.collect.Lists;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.tooltip.Tooltip;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.gui.widget.ToggleButtonWidget;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.forge.MetalTypes;
 import net.jukoz.me.network.packets.C2S.ForgeModeSwitchPacket;
@@ -19,22 +19,22 @@ import net.jukoz.me.network.packets.C2S.ForgeOutputPacket;
 import java.util.List;
 
 public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandler> {
-    private static final Identifier TEXTURE = MiddleEarth.ofPath( "textures", "gui", "forge.png");
+    private static final ResourceLocation TEXTURE = MiddleEarth.ofPath( "textures", "gui", "forge.png");
 
-    private static final Identifier EXTRACT_BUTTON = MiddleEarth.of("extract");
-    private static final Identifier EXTRACT_BUTTON_DISABLED = MiddleEarth.of("extract_disabled");
-    private static final Identifier EXTRACT_BUTTON_FOCUSED = MiddleEarth.of("extract_focused");
+    private static final ResourceLocation EXTRACT_BUTTON = MiddleEarth.of("extract");
+    private static final ResourceLocation EXTRACT_BUTTON_DISABLED = MiddleEarth.of("extract_disabled");
+    private static final ResourceLocation EXTRACT_BUTTON_FOCUSED = MiddleEarth.of("extract_focused");
 
-    private static final Identifier LEFT_CYCLE_EXTRACT_BUTTON = MiddleEarth.of("left_cycle_arrow");
-    private static final Identifier LEFT_CYCLE_EXTRACT_BUTTON_FOCUSED = MiddleEarth.of("left_cycle_arrow_focused");
+    private static final ResourceLocation LEFT_CYCLE_EXTRACT_BUTTON = MiddleEarth.of("left_cycle_arrow");
+    private static final ResourceLocation LEFT_CYCLE_EXTRACT_BUTTON_FOCUSED = MiddleEarth.of("left_cycle_arrow_focused");
 
-    private static final Identifier RIGHT_CYCLE_EXTRACT_BUTTON = MiddleEarth.of("right_cycle_arrow");
-    private static final Identifier RIGHT_CYCLE_EXTRACT_BUTTON_FOCUSED = MiddleEarth.of("right_cycle_arrow_focused");
+    private static final ResourceLocation RIGHT_CYCLE_EXTRACT_BUTTON = MiddleEarth.of("right_cycle_arrow");
+    private static final ResourceLocation RIGHT_CYCLE_EXTRACT_BUTTON_FOCUSED = MiddleEarth.of("right_cycle_arrow_focused");
 
-    private static final Identifier ALLOYING_SWITCH_BUTTON = MiddleEarth.of("alloying_mode");
-    private static final Identifier ALLOYING_SWITCH_BUTTON_FOCUSED = MiddleEarth.of("alloying_mode_highlighted");
-    private static final Identifier HEATING_SWITCH_BUTTON = MiddleEarth.of("heating_mode");
-    private static final Identifier HEATING_SWITCH_BUTTON_FOCUSED = MiddleEarth.of("heating_mode_highlighted");
+    private static final ResourceLocation ALLOYING_SWITCH_BUTTON = MiddleEarth.of("alloying_mode");
+    private static final ResourceLocation ALLOYING_SWITCH_BUTTON_FOCUSED = MiddleEarth.of("alloying_mode_highlighted");
+    private static final ResourceLocation HEATING_SWITCH_BUTTON = MiddleEarth.of("heating_mode");
+    private static final ResourceLocation HEATING_SWITCH_BUTTON_FOCUSED = MiddleEarth.of("heating_mode_highlighted");
 
     private static final int PROGRESS_ARROW_SIZE = 27;
     private static final int COOKING_FIRE_SIZE = 14;
@@ -56,7 +56,7 @@ public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandle
     private int outputMode = 0;
     private boolean heatingMode = true;
 
-    public ForgeAlloyingScreen(ForgeAlloyingScreenHandler handler, PlayerInventory inventory, Text title) {
+    public ForgeAlloyingScreen(ForgeAlloyingScreenHandler handler, PlayerInventory inventory, Component title) {
         super(handler, inventory, title);
     }
 
@@ -86,11 +86,11 @@ public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandle
             }
 
             ClientPlayNetworking.send(new ForgeOutputPacket(amount, handler.getPos().getX(),handler.getPos().getY(),handler.getPos().getZ(), outputMode));
-            }, Text.translatable("button." + MiddleEarth.MOD_ID + ".extract_metal")
+            }, Component.translatable("button." + MiddleEarth.MOD_ID + ".extract_metal")
         );
 
         if(this.outputMode == 0 && handler.checkMaxOutput() > 0) {
-            this.extractButton.setTooltip(Tooltip.of(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".forge_output_mode_await")));
+            this.extractButton.setTooltip(Tooltip.of(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".forge_output_mode_await")));
         } else {
             setExtractButtonTooltip();
         }
@@ -101,17 +101,17 @@ public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandle
             this.modeSwitchToAlloyButton.active = false;
             this.modeSwitchToHeatingButton.visible = true;
             this.modeSwitchToHeatingButton.active = true;
-        }, Text.translatable("button." + MiddleEarth.MOD_ID + ".switch_mode"));
+        }, Component.translatable("button." + MiddleEarth.MOD_ID + ".switch_mode"));
         this.modeSwitchToHeatingButton = new TexturedButtonWidget(x + 23, y + 60, 10 ,10, 0, 0, 0, ALLOYING_SWITCH_BUTTON, 256, 256, (button)-> {
             ClientPlayNetworking.send(new ForgeModeSwitchPacket(handler.getPos().getX(),handler.getPos().getY(),handler.getPos().getZ()));
             this.modeSwitchToHeatingButton.visible = false;
             this.modeSwitchToHeatingButton.active = false;
             this.modeSwitchToAlloyButton.visible = true;
             this.modeSwitchToAlloyButton.active = true;
-        }, Text.translatable("button." + MiddleEarth.MOD_ID + ".switch_mode"));
+        }, Component.translatable("button." + MiddleEarth.MOD_ID + ".switch_mode"));
 
-        this.modeSwitchToHeatingButton.setTooltip(Tooltip.of(Text.translatable("tooltip." + MiddleEarth.MOD_ID +".forge_mode_switch_heating")));
-        this.modeSwitchToAlloyButton.setTooltip(Tooltip.of(Text.translatable("tooltip." + MiddleEarth.MOD_ID +".forge_mode_switch_alloying")));
+        this.modeSwitchToHeatingButton.setTooltip(Tooltip.of(Component.translatable("tooltip." + MiddleEarth.MOD_ID +".forge_mode_switch_heating")));
+        this.modeSwitchToAlloyButton.setTooltip(Tooltip.of(Component.translatable("tooltip." + MiddleEarth.MOD_ID +".forge_mode_switch_alloying")));
 
         addDrawableChild(leftExtractCycleButton);
         addDrawableChild(extractButton);
@@ -158,7 +158,7 @@ public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandle
         }
 
         if(this.outputMode == 0 && handler.checkMaxOutput() > 0) {
-            this.extractButton.setTooltip(Tooltip.of(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".forge_output_mode_await")));
+            this.extractButton.setTooltip(Tooltip.of(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".forge_output_mode_await")));
         } else {
             setExtractButtonTooltip();
         }
@@ -193,7 +193,7 @@ public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandle
     protected void setExtractButtonTooltip() {
         int id = outputMode;
         if(outputMode == 4) id = 3;
-        this.extractButton.setTooltip(Tooltip.of(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".forge_output_mode" + id)));
+        this.extractButton.setTooltip(Tooltip.of(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".forge_output_mode" + id)));
     }
 
     protected void updateSwitchState() {
@@ -256,10 +256,10 @@ public class ForgeAlloyingScreen extends HandledScreen<ForgeAlloyingScreenHandle
             MetalTypes metal = MetalTypes.getValue(handler.getCurrentMetal());
             if(metal != MetalTypes.EMPTY){
                 context.drawOrderedTooltip(this.client.textRenderer, Lists.transform(
-                        List.of(METext.withColor( Text.translatable("tooltip." + MiddleEarth.MOD_ID +".liquid_" + metal.asString().toLowerCase()), metal.getColor()),
-                                Text.literal(handler.getStoredLiquid() / 144  + " ").append(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".ingots_number")),
-                                Text.literal(handler.getStoredLiquid() % 144 / 16  + " ").append(Text.translatable("tooltip." + MiddleEarth.MOD_ID + ".nuggets_number"))
-                        ), Text::asOrderedText), mouseX, mouseY);
+                        List.of(METext.withColor( Component.translatable("tooltip." + MiddleEarth.MOD_ID +".liquid_" + metal.asString().toLowerCase()), metal.getColor()),
+                                Component.literal(handler.getStoredLiquid() / 144  + " ").append(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".ingots_number")),
+                                Component.literal(handler.getStoredLiquid() % 144 / 16  + " ").append(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".nuggets_number"))
+                        ), Component::asOrderedText), mouseX, mouseY);
             }
         }
     }

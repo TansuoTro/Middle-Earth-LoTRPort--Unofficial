@@ -15,23 +15,23 @@ import net.jukoz.me.item.ModResourceItems;
 import net.jukoz.me.item.ModWeaponItems;
 import net.jukoz.me.item.items.PebbleItem;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.RangedAttackMob;
+import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.item.DyeableItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 public class ShireHobbitEntity extends NpcEntity {
@@ -39,7 +39,7 @@ public class ShireHobbitEntity extends NpcEntity {
     private static float FLEE_SPEED_MIN = 0.8f;
     private static float FLEE_SPEED_MAX = 1.2f;
 
-    public ShireHobbitEntity(EntityType<? extends NpcEntity> entityType, World world) {
+    public ShireHobbitEntity(EntityType<? extends NpcEntity> entityType, Level world) {
         super(entityType, world);
         String name = this.getDefaultName().toString();
         if(name.contains("civilian")){
@@ -54,9 +54,9 @@ public class ShireHobbitEntity extends NpcEntity {
 
     @Nullable
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable CompoundTag entityNbt) {
         entityData = super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
-        Random random = world.getRandom();
+        RandomSource random = world.getRandom();
         this.initEquipment(random, difficulty);
         return entityData;
     }
@@ -75,7 +75,7 @@ public class ShireHobbitEntity extends NpcEntity {
         this.goalSelector.add(++i, new FleeEntityGoal<>(this, NazgulEntity.class, FLEE_DISTANCE, FLEE_SPEED_MIN, FLEE_SPEED_MAX));
         this.goalSelector.add(++i, new ProjectileAttackGoal(this, 1.0, 12, 24, 20.0f));
         this.goalSelector.add(++i, new WanderAroundFarGoal(this, 1.0));
-        this.goalSelector.add(++i, new LookAtEntityGoal(this, PlayerEntity.class, 6.0f));
+        this.goalSelector.add(++i, new LookAtEntityGoal(this, Player.class, 6.0f));
         this.goalSelector.add(++i, new LookAroundGoal(this));
         i = 1;
         this.targetSelector.add(++i, new RevengeGoal(this).setGroupRevenge());
@@ -90,24 +90,24 @@ public class ShireHobbitEntity extends NpcEntity {
     }
 
     public static DefaultAttributeContainer.Builder setSoldierAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3f)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 20.0)
-                .add(EntityAttributes.GENERIC_ATTACK_SPEED, 1.0)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 48.0)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1.0);
+        return Mob.createMobAttributes()
+                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.3f)
+                .add(Attributes.GENERIC_MAX_HEALTH, 20.0)
+                .add(Attributes.GENERIC_ATTACK_SPEED, 1.0)
+                .add(Attributes.GENERIC_FOLLOW_RANGE, 48.0)
+                .add(Attributes.GENERIC_ATTACK_DAMAGE, 1.0);
     }
     public static DefaultAttributeContainer.Builder setKnightAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3f)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 22.0)
-                .add(EntityAttributes.GENERIC_ATTACK_SPEED, 1.0)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 48.0)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1.5);
+        return Mob.createMobAttributes()
+                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.3f)
+                .add(Attributes.GENERIC_MAX_HEALTH, 22.0)
+                .add(Attributes.GENERIC_ATTACK_SPEED, 1.0)
+                .add(Attributes.GENERIC_FOLLOW_RANGE, 48.0)
+                .add(Attributes.GENERIC_ATTACK_DAMAGE, 1.5);
     }
 
     @Override
-    protected void initEquipment(Random random, LocalDifficulty localDifficulty) {
+    protected void initEquipment(RandomSource random, LocalDifficulty localDifficulty) {
         super.initEquipment(random, localDifficulty);
 
         switch (this.getRank()){
@@ -117,7 +117,7 @@ public class ShireHobbitEntity extends NpcEntity {
         }
     }
 
-    private void civilianEquipement(Random random){
+    private void civilianEquipement(RandomSource random){
         float randomVal = random.nextFloat();
         if(randomVal < 0.03f){
             equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.FISHING_ROD));
@@ -151,7 +151,7 @@ public class ShireHobbitEntity extends NpcEntity {
         }
     }
 
-    private void militiaEquipment(Random random){
+    private void militiaEquipment(RandomSource random){
         if(random.nextFloat() < 0.5f){
             equipStack(EquipmentSlot.HEAD, new ItemStack(ModEquipmentItems.KETTLE_HAT));
         }
@@ -159,7 +159,7 @@ public class ShireHobbitEntity extends NpcEntity {
         equipStack(EquipmentSlot.MAINHAND, new ItemStack(ModWeaponItems.IRON_DAGGER));
     }
 
-    private void soldierEquipment(Random random){
+    private void soldierEquipment(RandomSource random){
         float  randomVal = random.nextFloat();
         equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
         if(randomVal < 0.50f){

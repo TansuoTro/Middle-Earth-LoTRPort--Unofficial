@@ -2,9 +2,9 @@ package net.jukoz.me.entity.deer;
 
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
-import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class DeerRenderer extends MobEntityRenderer<DeerEntity, DeerModel> {
     private static final String PATH = "textures/entities/deer/";
@@ -14,8 +14,8 @@ public class DeerRenderer extends MobEntityRenderer<DeerEntity, DeerModel> {
     }
 
     @Override
-    public Identifier getTexture(DeerEntity entity) {
-        return new Identifier(MiddleEarth.MOD_ID, PATH + "deer1.png");
+    public ResourceLocation getTexture(DeerEntity entity) {
+        return new ResourceLocation(MiddleEarth.MOD_ID, PATH + "deer1.png");
     }
 
 

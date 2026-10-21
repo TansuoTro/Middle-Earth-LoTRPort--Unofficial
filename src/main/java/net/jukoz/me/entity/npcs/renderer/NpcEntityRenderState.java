@@ -2,36 +2,36 @@ package net.jukoz.me.entity.npcs.renderer;
 
 import net.jukoz.me.compat.client.render.state.BipedEntityRenderState;
 import net.minecraft.entity.AnimationState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
 public class NpcEntityRenderState extends BipedEntityRenderState {
     public float widthScale;
 
     public AnimationState aimingState = new AnimationState();
 
-    public Identifier simplifiedSkinId;
-    public Identifier simplifiedEarId;
-    public Identifier simplifiedNoseId;
-    public Identifier simplifiedHairAddonId;
-    public Identifier simplifiedFeetId;
+    public ResourceLocation simplifiedSkinId;
+    public ResourceLocation simplifiedEarId;
+    public ResourceLocation simplifiedNoseId;
+    public ResourceLocation simplifiedHairAddonId;
+    public ResourceLocation simplifiedFeetId;
 
-    public Identifier skinId;
-    public Identifier feetId;
-    public Identifier headId;
-    public Identifier earId;
-    public Identifier noseId;
-    public Identifier eyesId;
-    public Identifier eyesEmissiveId;
-    public Identifier eyebrowId;
-    public Identifier scarId;
-    public Identifier beardId;
-    public Identifier beardAddonId;
-    public Identifier hairId;
-    public Identifier hairAddonId;
-    public Identifier clothingBase;
-    public Identifier clothingOver;
-    public Identifier clothingExtra;
+    public ResourceLocation skinId;
+    public ResourceLocation feetId;
+    public ResourceLocation headId;
+    public ResourceLocation earId;
+    public ResourceLocation noseId;
+    public ResourceLocation eyesId;
+    public ResourceLocation eyesEmissiveId;
+    public ResourceLocation eyebrowId;
+    public ResourceLocation scarId;
+    public ResourceLocation beardId;
+    public ResourceLocation beardAddonId;
+    public ResourceLocation hairId;
+    public ResourceLocation hairAddonId;
+    public ResourceLocation clothingBase;
+    public ResourceLocation clothingOver;
+    public ResourceLocation clothingExtra;
 
     public boolean haveEmissiveEyes;
     public boolean blinking;

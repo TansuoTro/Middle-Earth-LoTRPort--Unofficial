@@ -1,11 +1,11 @@
 package net.jukoz.me.entity.beasts;
 
 import net.minecraft.entity.ai.pathing.MobNavigation;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.Level;
 
 public class BeastEntityNavigation extends MobNavigation {
-    public BeastEntityNavigation(MobEntity mobEntity, World world) {
+    public BeastEntityNavigation(Mob mobEntity, Level world) {
         super(mobEntity, world);
     }
 

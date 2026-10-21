@@ -1,7 +1,7 @@
 package net.jukoz.me.resources.datas.factions;
 
-import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.exceptions.FactionIdentifierException;
 import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.resources.datas.common.DispositionType;
@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class FactionLookup {
-    public static List<Faction> getAllFactions(World world) {
+    public static List<Faction> getAllFactions(Level world) {
         return world.getRegistryManager().get(DynamicRegistriesME.FACTION).stream().toList();
     }
-    public static Faction getFactionById(World world, Identifier id) throws FactionIdentifierException {
+    public static Faction getFactionById(Level world, ResourceLocation id) throws FactionIdentifierException {
         if(id == null)
             return null;
         Faction faction = world.getRegistryManager().get(DynamicRegistriesME.FACTION).get(id);
@@ -25,9 +25,9 @@ public class FactionLookup {
         return faction;
     }
 
-    public static HashMap<Identifier, Faction> getFactionsByDisposition(World world, DispositionType dispositionType){
+    public static HashMap<ResourceLocation, Faction> getFactionsByDisposition(Level world, DispositionType dispositionType){
         Stream<Faction> factions = getAllJoinableFaction(world).stream();
-        HashMap<Identifier, Faction> foundFactions = new HashMap<>();
+        HashMap<ResourceLocation, Faction> foundFactions = new HashMap<>();
 
         for(Faction faction : factions.filter(x -> x.getDisposition() == dispositionType).toList()){
             if(faction.getFactionType() == FactionType.FACTION)
@@ -36,7 +36,7 @@ public class FactionLookup {
         return foundFactions;
     }
 
-    public static List<Faction> getAllJoinableFaction(World world) {
+    public static List<Faction> getAllJoinableFaction(Level world) {
         List<Faction> factions = getAllFactions(world);
         List<Faction> factionList = new ArrayList<>();
         for(Faction faction : factions) {

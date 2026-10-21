@@ -1,9 +1,9 @@
 package net.jukoz.me.compat.client;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.client.model.EntityModelLayer;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,7 +17,7 @@ import java.util.Set;
  * and kills the initial resource reload (the client then crashes in WorldRenderer with a null
  * shader program). Registering through here makes the second declaration a no-op.
  */
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public final class MEModelLayers {
     private static final Set<EntityModelLayer> REGISTERED = new HashSet<>();
 

@@ -1,23 +1,23 @@
 package net.jukoz.me.gui.inscriptiontable;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.CyclingSlotIcon;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.sound.SoundManager;
+import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.StringVisitable;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Colors;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.math.ColorHelper;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.network.packets.C2S.InscriptionConfirmationPacket;
 import net.jukoz.me.network.packets.C2S.InscriptionWordUpdatePacket;
@@ -29,18 +29,18 @@ import java.util.List;
 
 @Environment(value= EnvType.CLIENT)
 public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreenHandler> {
-    private static final Identifier TEXTURE = MiddleEarth.ofPath( "textures", "gui", "inscription_table.png");
+    private static final ResourceLocation TEXTURE = MiddleEarth.ofPath( "textures", "gui", "inscription_table.png");
 
-    private static final Identifier SCROLLER_TEXTURE = new Identifier("minecraft", "container/villager/scroller");
-    private static final Identifier SCROLLER_DISABLED_TEXTURE = new Identifier("minecraft", "container/villager/scroller_disabled");
+    private static final ResourceLocation SCROLLER_TEXTURE = new ResourceLocation("minecraft", "container/villager/scroller");
+    private static final ResourceLocation SCROLLER_DISABLED_TEXTURE = new ResourceLocation("minecraft", "container/villager/scroller_disabled");
 
-    private static final Identifier EMPTY_SLOT_EMERALD_TEXTURE = new Identifier("minecraft", "container/slot/emerald");
-    private static final Identifier EMPTY_SLOT_LAPIS_LAZULI_TEXTURE = new Identifier("minecraft", "container/slot/lapis_lazuli");
-    private static final Identifier EMPTY_SLOT_ADAMANT_TEXTURE = MiddleEarth.ofPath( "container", "slot", "adamant");
-    private static final Identifier EMPTY_SLOT_RUBY_TEXTURE = MiddleEarth.ofPath( "container", "slot", "ruby");
-    private static final Identifier EMPTY_SLOT_SAPPHIRE_TEXTURE = MiddleEarth.ofPath( "container", "slot", "sapphire");
+    private static final ResourceLocation EMPTY_SLOT_EMERALD_TEXTURE = new ResourceLocation("minecraft", "container/slot/emerald");
+    private static final ResourceLocation EMPTY_SLOT_LAPIS_LAZULI_TEXTURE = new ResourceLocation("minecraft", "container/slot/lapis_lazuli");
+    private static final ResourceLocation EMPTY_SLOT_ADAMANT_TEXTURE = MiddleEarth.ofPath( "container", "slot", "adamant");
+    private static final ResourceLocation EMPTY_SLOT_RUBY_TEXTURE = MiddleEarth.ofPath( "container", "slot", "ruby");
+    private static final ResourceLocation EMPTY_SLOT_SAPPHIRE_TEXTURE = MiddleEarth.ofPath( "container", "slot", "sapphire");
 
-    private static final Identifier FONT_ID = new Identifier("minecraft", "alt");
+    private static final ResourceLocation FONT_ID = new ResourceLocation("minecraft", "alt");
     private static final Style STYLE = Style.EMPTY.withFont(FONT_ID);
 
     int indexStartOffset;
@@ -49,7 +49,7 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
     private String enchant;
     private int level;
     private int maxLevel;
-    private Text enchantText;
+    private Component enchantText;
 
     private final CyclingSlotIcon catalystSlotIcon = new CyclingSlotIcon(0);
 
@@ -59,7 +59,7 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
     private final List<String> selectedWords = new ArrayList<>();
     private final List<Integer> selectedButtons = new ArrayList<>();
 
-    public InscriptionTableScreen(InscriptionTableScreenHandler handler, PlayerInventory inventory, Text title) {
+    public InscriptionTableScreen(InscriptionTableScreenHandler handler, PlayerInventory inventory, Component title) {
         super(handler, inventory, title);
         this.backgroundWidth = 275;
         this.backgroundHeight = 183;
@@ -126,7 +126,7 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
                             this.selectedButtons.remove(buttonIndex);
                         }
                     }
-                    this.enchantText = Text.literal("awaiting runes").fillStyle(STYLE.withObfuscated(true));
+                    this.enchantText = Component.literal("awaiting runes").fillStyle(STYLE.withObfuscated(true));
                 }
             }));
             k += 14;
@@ -135,7 +135,7 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
         this.confirmationButton = new WidgetArrowButtonPage(i + 204, j + 50, button -> {
             if (button instanceof WidgetArrowButtonPage){
                 ClientPlayNetworking.send(new InscriptionConfirmationPacket());
-                this.enchantText = Text.of(this.enchant);
+                this.enchantText = Component.of(this.enchant);
             }
         });
         this.confirmationButton.active = false;
@@ -171,7 +171,7 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
 
             int color;
             String levelKey = (k == 1) ? ".level" : ".levels";
-            Text text = Text.translatable("inscription." + MiddleEarth.MOD_ID + levelKey, k);
+            Component text = Component.translatable("inscription." + MiddleEarth.MOD_ID + levelKey, k);
 
             if (this.client.player.isCreative() || (l >= k && k != 0)){
                 color = -8323296;
@@ -204,12 +204,12 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
         int m = 0;
         for(String word : this.selectedWords){
             if (m != 0){
-                stringBuilder.append(Text.translatable("inscription." + MiddleEarth.MOD_ID + ".linking_dash").getString());
+                stringBuilder.append(Component.translatable("inscription." + MiddleEarth.MOD_ID + ".linking_dash").getString());
             }
-            stringBuilder.append(Text.translatable("inscription." + MiddleEarth.MOD_ID + "." + word).getString());
+            stringBuilder.append(Component.translatable("inscription." + MiddleEarth.MOD_ID + "." + word).getString());
             m++;
         }
-        StringVisitable stringVisitable = textRenderer.getTextHandler().trimToWidth(Text.literal(stringBuilder.toString()), 159, Style.EMPTY);
+        StringVisitable stringVisitable = textRenderer.getTextHandler().trimToWidth(Component.literal(stringBuilder.toString()), 159, Style.EMPTY);
         context.drawCenteredTextWithShadow(this.textRenderer, stringVisitable.getString(), i + 186, j + 11, Colors.WHITE);
     }
 
@@ -242,14 +242,14 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
                 if(index - indexStartOffset >= 0 && index - indexStartOffset < this.words.length) {
                     WidgetInscriptionButtonPage widgetButtonPage = this.words[index - indexStartOffset];
                     if(widgetButtonPage.hidden) {
-//                        Text text = Text.literal(StringUtils.capitalize(word)).setStyle(Style.EMPTY.withStrikethrough(widgetButtonPage.hidden));
-                        Text text = Text.translatable("inscription." + MiddleEarth.MOD_ID + "." + word).setStyle(Style.EMPTY.withStrikethrough(widgetButtonPage.hidden));
+//                        Component text = Component.literal(StringUtils.capitalize(word)).setStyle(Style.EMPTY.withStrikethrough(widgetButtonPage.hidden));
+                        Component text = Component.translatable("inscription." + MiddleEarth.MOD_ID + "." + word).setStyle(Style.EMPTY.withStrikethrough(widgetButtonPage.hidden));
                         context.drawText(this.textRenderer, text, i + 11, n, Colors.GRAY, false);
                     } else {
-                        context.drawText(this.textRenderer, Text.translatable("inscription." + MiddleEarth.MOD_ID + "." + word), i + 11, n, Colors.WHITE, false);
+                        context.drawText(this.textRenderer, Component.translatable("inscription." + MiddleEarth.MOD_ID + "." + word), i + 11, n, Colors.WHITE, false);
                     }
                 } else {
-                    context.drawText(this.textRenderer, Text.translatable("inscription." + MiddleEarth.MOD_ID + "." + word), i + 11, n, Colors.WHITE, false);
+                    context.drawText(this.textRenderer, Component.translatable("inscription." + MiddleEarth.MOD_ID + "." + word), i + 11, n, Colors.WHITE, false);
                 }
                 n += 14;
             }
@@ -284,7 +284,7 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
             int i = this.handler.getWords().size();
             if (this.canScroll(i)) {
                 int j = i - 11;
-                this.indexStartOffset = MathHelper.clamp((int) ((double) this.indexStartOffset - verticalAmount), 0, j);
+                this.indexStartOffset = Mth.clamp((int) ((double) this.indexStartOffset - verticalAmount), 0, j);
             }
 
         }
@@ -299,7 +299,7 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
             int l = i - 11;
             float f = ((float)mouseY - (float)j - 13.5F) / ((float)(k - j) - 27.0F);
             f = f * (float)l + 0.5F;
-            this.indexStartOffset = MathHelper.clamp((int)f, 0, l);
+            this.indexStartOffset = Mth.clamp((int)f, 0, l);
             return true;
         } else {
             return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
@@ -323,11 +323,11 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
         int selectedIndex = -1;
         boolean hidden;
 
-        private static final Identifier BUTTON_TEXTURE = MiddleEarth.of("word_button");
-        private static final Identifier DISABLED_BUTTON_TEXTURE = MiddleEarth.of("word_button_disabled");
-        private static final Identifier SELECTED_BUTTON_TEXTURE = MiddleEarth.of("word_button_selected");
-        private static final Identifier HIGHLIGHTED_BUTTON_TEXTURE = MiddleEarth.of("word_button_highlighted");
-        private static final Identifier BUTTON_MARKERS = MiddleEarth.of("inscription_table_markers");
+        private static final ResourceLocation BUTTON_TEXTURE = MiddleEarth.of("word_button");
+        private static final ResourceLocation DISABLED_BUTTON_TEXTURE = MiddleEarth.of("word_button_disabled");
+        private static final ResourceLocation SELECTED_BUTTON_TEXTURE = MiddleEarth.of("word_button_selected");
+        private static final ResourceLocation HIGHLIGHTED_BUTTON_TEXTURE = MiddleEarth.of("word_button_highlighted");
+        private static final ResourceLocation BUTTON_MARKERS = MiddleEarth.of("inscription_table_markers");
 
         public WidgetInscriptionButtonPage(final int x, final int y, final int index, final ButtonWidget.PressAction onPress) {
             super(x, y, 86, 14, ScreenTexts.EMPTY, onPress, DEFAULT_NARRATION_SUPPLIER);
@@ -384,9 +384,9 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
 
     static class WidgetArrowButtonPage extends ButtonWidget {
 
-        private static final Identifier BUTTON_TEXTURE = MiddleEarth.of("arrow_button");
-        private static final Identifier BUTTON_UNAVAILABLE = MiddleEarth.of("arrow_button_unavailable");
-        private static final Identifier HIGHLIGHTED_BUTTON_TEXTURE = MiddleEarth.of("arrow_button_highlighted");
+        private static final ResourceLocation BUTTON_TEXTURE = MiddleEarth.of("arrow_button");
+        private static final ResourceLocation BUTTON_UNAVAILABLE = MiddleEarth.of("arrow_button_unavailable");
+        private static final ResourceLocation HIGHLIGHTED_BUTTON_TEXTURE = MiddleEarth.of("arrow_button_highlighted");
 
         public WidgetArrowButtonPage(final int x, final int y, final ButtonWidget.PressAction onPress) {
             super(x, y, 16, 11, ScreenTexts.EMPTY, onPress, DEFAULT_NARRATION_SUPPLIER);

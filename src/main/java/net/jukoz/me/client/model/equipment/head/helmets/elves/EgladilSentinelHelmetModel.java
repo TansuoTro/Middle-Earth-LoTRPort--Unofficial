@@ -1,7 +1,7 @@
 package net.jukoz.me.client.model.equipment.head.helmets.elves;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
+import net.minecraft.client.model.geom.PartNames;
 import net.jukoz.me.client.model.equipment.head.helmets.HelmetAddonModel;
 
 public class EgladilSentinelHelmetModel extends LorienHelmetModel {
@@ -14,7 +14,7 @@ public class EgladilSentinelHelmetModel extends LorienHelmetModel {
         ModelData modelData = getModelData();
         ModelPartData modelPartData = modelData.getRoot();
 
-        ModelPartData head = modelPartData.addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData head = modelPartData.addChild(PartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         head.addChild("lower_extension", ModelPartBuilder.create()
                 .uv(0, 11).cuboid(-4.0F, 0.85F, -4.0F, 8.0F, 8.0F, 8.0F, new Dilation(0.55F)),

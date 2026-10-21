@@ -1,7 +1,7 @@
 package net.jukoz.me.client.model.equipment.head.helmets.orcs.isengard;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
+import net.minecraft.client.model.geom.PartNames;
 
 public class IsenUrukSoldierHelmetModel extends IsenUrukCrestHelmetModel {
 
@@ -12,7 +12,7 @@ public class IsenUrukSoldierHelmetModel extends IsenUrukCrestHelmetModel {
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = getModelData();
 
-        ModelPartData head = modelData.getRoot().addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData head = modelData.getRoot().addChild(PartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         ModelPartData side_spikes = head.addChild("side_spikes", ModelPartBuilder.create(),
                 ModelTransform.pivot(6.75F, -1.65F, -1.0F));

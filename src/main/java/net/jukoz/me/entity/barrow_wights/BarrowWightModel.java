@@ -1,13 +1,13 @@
 package net.jukoz.me.entity.barrow_wights;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.MathHelper;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 
 @Environment(value = EnvType.CLIENT)
 public class BarrowWightModel extends SinglePartEntityModel<BarrowWightEntity> {
@@ -91,16 +91,16 @@ public class BarrowWightModel extends SinglePartEntityModel<BarrowWightEntity> {
         this.head.yaw = netHeadYaw * RAD;
 
 
-        this.bottomJaw.pitch = 0.25F * Math.max(0, MathHelper.cos(ageInTicks * 0.1f));
+        this.bottomJaw.pitch = 0.25F * Math.max(0, Mth.cos(ageInTicks * 0.1f));
 
         float k = 0.8f * limbSwingAmount;
-        this.rightLeg.pitch = MathHelper.cos(limbSwing * ROTATION_SPEED) * k;
-        this.leftLeg.pitch = MathHelper.cos(limbSwing * ROTATION_SPEED + (float)Math.PI) * k;
+        this.rightLeg.pitch = Mth.cos(limbSwing * ROTATION_SPEED) * k;
+        this.leftLeg.pitch = Mth.cos(limbSwing * ROTATION_SPEED + (float)Math.PI) * k;
 
 
         float kA = 0.3f * limbSwingAmount;
-        this.rightArm.pitch = -MathHelper.cos(limbSwing * ROTATION_SPEED) * kA;
-        this.leftArm.pitch = MathHelper.cos(limbSwing * ROTATION_SPEED) * kA;
+        this.rightArm.pitch = -Mth.cos(limbSwing * ROTATION_SPEED) * kA;
+        this.leftArm.pitch = Mth.cos(limbSwing * ROTATION_SPEED) * kA;
 
         this.rightArm.yaw = 0;
         this.leftArm.yaw = 0;
@@ -142,7 +142,7 @@ public class BarrowWightModel extends SinglePartEntityModel<BarrowWightEntity> {
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void render(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
         //quick matrix translation to fix floating wight .-.
         matrices.translate(0f, 1.5f, 0f);
         root.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
@@ -154,6 +154,6 @@ public class BarrowWightModel extends SinglePartEntityModel<BarrowWightEntity> {
     }
 
     private float getRadSin(float degree){
-        return MathHelper.sin(degree * RAD);
+        return Mth.sin(degree * RAD);
     }
 }

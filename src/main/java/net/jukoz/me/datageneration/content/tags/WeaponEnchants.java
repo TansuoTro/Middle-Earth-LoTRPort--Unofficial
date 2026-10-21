@@ -1,6 +1,6 @@
 package net.jukoz.me.datageneration.content.tags;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.jukoz.me.item.ToolItemsME;
 import net.jukoz.me.item.WeaponItemsME;
 

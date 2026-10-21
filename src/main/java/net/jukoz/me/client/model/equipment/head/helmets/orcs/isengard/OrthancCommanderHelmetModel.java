@@ -1,7 +1,7 @@
 package net.jukoz.me.client.model.equipment.head.helmets.orcs.isengard;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
+import net.minecraft.client.model.geom.PartNames;
 
 public class OrthancCommanderHelmetModel extends OrthancGuardHelmetModel {
 
@@ -12,7 +12,7 @@ public class OrthancCommanderHelmetModel extends OrthancGuardHelmetModel {
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = getModelData();
 
-        ModelPartData head = modelData.getRoot().addChild(EntityModelPartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData head = modelData.getRoot().addChild(PartNames.HEAD, ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         head.addChild("addons_commander", ModelPartBuilder.create()
                 .uv(1, 16).cuboid(-11.0F, -18.625F, -0.7F, 22.0F, 12.0F, 1.0F, new Dilation(0.0F))

@@ -1,11 +1,11 @@
 package net.jukoz.me.network.packets.C2S;
 
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.shapingAnvil.ShapingAnvilBlockEntity;
 import net.jukoz.me.gui.artisantable.ArtisanTableScreenHandler;
@@ -13,7 +13,7 @@ import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
 
 public class ArtisanIndexPacket extends ClientToServerPacket<ArtisanIndexPacket> {
-    public static final Identifier ID = MiddleEarth.of("artisan_index_packet");
+    public static final ResourceLocation ID = MiddleEarth.of("artisan_index_packet");
     public static final PacketType<ArtisanIndexPacket> TYPE = PacketType.create(ID, ArtisanIndexPacket::new);
 
     public int getIndex() {
@@ -34,7 +34,7 @@ public class ArtisanIndexPacket extends ClientToServerPacket<ArtisanIndexPacket>
 
 
 
-    public ArtisanIndexPacket(PacketByteBuf buf) {
+    public ArtisanIndexPacket(FriendlyByteBuf buf) {
         this(buf.readInt(), buf.readInt());
     }
 
@@ -44,7 +44,7 @@ public class ArtisanIndexPacket extends ClientToServerPacket<ArtisanIndexPacket>
     }
 
     @Override
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
         buf.writeInt(this.index);
         buf.writeInt(this.syncId);
     }
@@ -53,7 +53,7 @@ public class ArtisanIndexPacket extends ClientToServerPacket<ArtisanIndexPacket>
     public void process(ServerPacketContext context) {
         try{
             context.player().getServer().execute(() -> {
-                ServerPlayerEntity player = context.player();
+                ServerPlayer player = context.player();
                 ScreenHandler screenHandler = player.currentScreenHandler;
                 if (screenHandler.syncId == this.syncId && screenHandler instanceof ArtisanTableScreenHandler artisanTableScreenHandler) {
                     artisanTableScreenHandler.updateIndex(index);

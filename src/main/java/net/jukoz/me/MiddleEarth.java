@@ -3,7 +3,7 @@ package net.jukoz.me;
 import net.fabricmc.api.ModInitializer;
 import net.jukoz.me.api.utils.IdentifierUtil;
 import net.jukoz.me.api.utils.ModLogger;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
@@ -134,49 +134,49 @@ public class MiddleEarth implements ModInitializer {
 	}
 
 	// ------------------------------------------------------------------
-	// Identifier helpers introduced by the 1.21 rewrite. Ported files call
-	// MiddleEarth.of(...) in place of new Identifier(MOD_ID, ...) everywhere,
+	// ResourceLocation helpers introduced by the 1.21 rewrite. Ported files call
+	// MiddleEarth.of(...) in place of new ResourceLocation(MOD_ID, ...) everywhere,
 	// so the helpers live here rather than being inlined at ~400 call sites.
 	// ------------------------------------------------------------------
 
-	public static Identifier fetchId(String stringId) {
+	public static ResourceLocation fetchId(String stringId) {
 		return IdentifierUtil.getIdentifierFromString(stringId);
 	}
 
-	public static Identifier ofPrefix(Identifier base, Identifier prefixId) {
+	public static ResourceLocation ofPrefix(ResourceLocation base, ResourceLocation prefixId) {
 		if (base == null) return null;
 		return base.withPrefixedPath(String.format("%s/", prefixId.getPath()));
 	}
 
-	public static Identifier of(String path) {
+	public static ResourceLocation of(String path) {
 		return IdentifierUtil.build(MOD_ID, path);
 	}
 
-	public static Identifier of(String... names) {
+	public static ResourceLocation of(String... names) {
 		return IdentifierUtil.buildAggregate(MOD_ID, names);
 	}
 
-	public static Identifier of(char splitter, String... names) {
+	public static ResourceLocation of(char splitter, String... names) {
 		return IdentifierUtil.build(MOD_ID, createAggregate(splitter, names));
 	}
 
-	public static Identifier ofPath(String... names) {
+	public static ResourceLocation ofPath(String... names) {
 		return IdentifierUtil.build(MOD_ID, createAggregate('/', names));
 	}
 
-	public static Identifier ofVanillaPath(String... names) {
+	public static ResourceLocation ofVanillaPath(String... names) {
 		return IdentifierUtil.ofVanilla(createAggregate('/', names));
 	}
 
-	public static Identifier append(Identifier base, String suffix) {
-		return new Identifier(base.toString() + suffix);
+	public static ResourceLocation append(ResourceLocation base, String suffix) {
+		return new ResourceLocation(base.toString() + suffix);
 	}
 
 	public static String createAggregate(char splitter, String... names) {
 		return IdentifierUtil.createAggregateValue(splitter, names);
 	}
 
-	public static boolean compareId(Identifier id1, Identifier id2) {
+	public static boolean compareId(ResourceLocation id1, ResourceLocation id2) {
 		return id1.compareTo(id2) == 0;
 	}
 }

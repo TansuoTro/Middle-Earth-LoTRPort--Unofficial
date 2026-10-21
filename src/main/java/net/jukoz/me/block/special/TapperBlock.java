@@ -2,31 +2,31 @@ package net.jukoz.me.block.special;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.state.StateManager;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.state.property.IntProperty;
-import net.minecraft.util.ActionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.jukoz.me.block.registration.WoodBlockSets;
 import net.jukoz.me.item.FoodItemsME;
 
@@ -43,14 +43,14 @@ public class TapperBlock extends HorizontalFacingBlock {
                 .with(FACING, Direction.NORTH));
     }
 
-    public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
+    public int getComparatorOutput(BlockState state, Level world, BlockPos pos) {
         return state.get(TAP_LEVEL);
     }
 
 
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
+    public BlockState getPlacementState(BlockPlaceContext ctx) {
         return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
     }
 
@@ -60,7 +60,7 @@ public class TapperBlock extends HorizontalFacingBlock {
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, ShapeContext context) {
         return switch (state.get(FACING)) {
             case SOUTH -> Block.createCuboidShape(4.0, 0.0, 0.0, 12.0, 10.0, 8.0);
             default -> Block.createCuboidShape(4.0, 0.0, 8.0, 12.0, 10.0, 16.0);
@@ -70,7 +70,7 @@ public class TapperBlock extends HorizontalFacingBlock {
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         ItemStack stack = player.getStackInHand(hand);
         int i = state.get(TAP_LEVEL);
         boolean bl = false;
@@ -115,19 +115,19 @@ public class TapperBlock extends HorizontalFacingBlock {
         }
 
         if (bl) {
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         } else {
             return super.onUse(state, world, pos, player, hand, hit);
         }
     }
 
-    private void emptyBucket(BlockState state, World world, BlockPos pos) {
-        if(world instanceof ServerWorld serverWorld) {
+    private void emptyBucket(BlockState state, Level world, BlockPos pos) {
+        if(world instanceof ServerLevel serverWorld) {
             serverWorld.setBlockState(pos, state.with(TAP_LEVEL, 0), 2);
         }
     }
 
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         int rand = world.random.nextInt(RANDOM_TICK_CHANCE);
         if (rand == 0) {
             int i = state.get(TAP_LEVEL);
@@ -137,7 +137,7 @@ public class TapperBlock extends HorizontalFacingBlock {
         }
     }
 
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(TAP_LEVEL, FACING);
     }
 

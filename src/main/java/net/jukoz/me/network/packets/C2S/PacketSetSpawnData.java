@@ -2,19 +2,19 @@ package net.jukoz.me.network.packets.C2S;
 
 import net.minecraft.world.dimension.DimensionTypes;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.network.contexts.ServerPacketContext;
 import net.jukoz.me.network.packets.ClientToServerPacket;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.jukoz.me.resources.persistent_datas.PlayerDataService;
 
 public class PacketSetSpawnData extends ClientToServerPacket<PacketSetSpawnData>
 {
-    public static final Identifier ID = new Identifier(MiddleEarth.MOD_ID, "packet_spawn_data");
+    public static final ResourceLocation ID = new ResourceLocation(MiddleEarth.MOD_ID, "packet_spawn_data");
 
     public static final PacketType<PacketSetSpawnData> TYPE = PacketType.create(ID, PacketSetSpawnData::new);
 
@@ -29,7 +29,7 @@ public class PacketSetSpawnData extends ClientToServerPacket<PacketSetSpawnData>
 
 
 
-    public PacketSetSpawnData(PacketByteBuf buf) {
+    public PacketSetSpawnData(FriendlyByteBuf buf) {
         this(buf.readInt(), buf.readInt(), buf.readInt());
     }
 
@@ -39,7 +39,7 @@ public class PacketSetSpawnData extends ClientToServerPacket<PacketSetSpawnData>
     }
 
     @Override
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
         buf.writeInt(this.overworldX);
         buf.writeInt(this.overworldY);
         buf.writeInt(this.overworldZ);
@@ -51,7 +51,7 @@ public class PacketSetSpawnData extends ClientToServerPacket<PacketSetSpawnData>
             context.player().getServer().execute(() -> {
 
                 MinecraftServer server = context.player().getServer();
-                ServerPlayerEntity player = server.getPlayerManager().getPlayer(context.player().getUuid());
+                ServerPlayer player = server.getPlayerManager().getPlayer(context.player().getUuid());
 
 
                 BlockPos overworldSpawnBlockpos = new BlockPos(overworldX, overworldY, overworldZ);

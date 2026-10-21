@@ -3,13 +3,13 @@ package net.jukoz.me.world.features.ores;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.block.BlockState;
-import net.minecraft.structure.rule.RuleTest;
-import net.minecraft.world.gen.feature.FeatureConfig;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 
 import java.util.List;
 
-public class ModOreFeatureConfig implements FeatureConfig {
+public class ModOreFeatureConfig implements FeatureConfiguration {
     public static final Codec<ModOreFeatureConfig> CODEC = RecordCodecBuilder.create((instance) -> {
         return instance.group(Codec.list(Target.CODEC).fieldOf("targets").forGetter((config) -> {
             return config.targets;

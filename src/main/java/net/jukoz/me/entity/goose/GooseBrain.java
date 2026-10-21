@@ -6,17 +6,17 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import net.jukoz.me.entity.ModEntities;
 import net.jukoz.me.entity.duck.DuckEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.Activity;
-import net.minecraft.entity.ai.brain.Brain;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.schedule.Activity;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.entity.ai.brain.MemoryModuleState;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.*;
-import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
 
 
 public class GooseBrain {
@@ -27,7 +27,7 @@ public class GooseBrain {
     public GooseBrain() {
     }
 
-    protected static void initialize(GooseEntity goose, Random random) {
+    protected static void initialize(GooseEntity goose, RandomSource random) {
     }
 
     protected static Brain<?> create(GooseEntity goose, Brain<GooseEntity> brain) {
@@ -71,7 +71,7 @@ public class GooseBrain {
                         return isTargeting(goose, entity);
                     }
                     return false;
-                }, (float)goose.getAttributeValue(EntityAttributes.GENERIC_FOLLOW_RANGE)),
+                }, (float)goose.getAttributeValue(Attributes.GENERIC_FOLLOW_RANGE)),
                 MeleeAttackTask.create(18)),
                 MemoryModuleType.ATTACK_TARGET);
     }

@@ -25,7 +25,7 @@ public enum BroadhoofGoatColor implements StringIdentifiable {
     private static final IntFunction<BroadhoofGoatColor> INDEX_MAPPER = ValueLists.createIdToValueFunction(
             BroadhoofGoatColor::getIndex, values(), ValueLists.OutOfBoundsHandling.WRAP
     );
-    public static final PacketCodec<net.minecraft.network.PacketByteBuf, BroadhoofGoatColor> PACKET_CODEC = PacketCodecs.indexed(INDEX_MAPPER, BroadhoofGoatColor::getIndex);
+    public static final PacketCodec<net.minecraft.network.FriendlyByteBuf, BroadhoofGoatColor> PACKET_CODEC = PacketCodecs.indexed(INDEX_MAPPER, BroadhoofGoatColor::getIndex);
     private final int index;
     private final String id;
 

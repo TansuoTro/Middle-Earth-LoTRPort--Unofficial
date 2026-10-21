@@ -78,30 +78,30 @@ import net.jukoz.me.particles.ModParticleTypes;
 import net.jukoz.me.particles.custom.AnvilBonkParticle;
 import net.jukoz.me.particles.custom.BiomeFogParticle;
 import net.jukoz.me.particles.custom.LeavesParticle;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.color.world.BiomeColors;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.color.world.FoliageColors;
 import net.minecraft.client.color.world.GrassColors;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.item.BlockItem;
+import net.minecraft.client.model.EntityModelLayer;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.item.DyeableItem;
-import net.minecraft.item.Item;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.item.Item;
+import net.minecraft.resources.ResourceLocation;
 
 public class MiddleEarthClient implements ClientModInitializer {
 
-    public static final EntityModelLayer INNER_ARMOR_MODEL_LAYER = new EntityModelLayer(new Identifier(MiddleEarth.MOD_ID, "armor"), "layer_0");
-    public static final EntityModelLayer HELMET_ADDON_MODEL_LAYER = new EntityModelLayer(new Identifier(MiddleEarth.MOD_ID, "armor"), "helmet_addon");
-    public static final EntityModelLayer CAPE_MODEL_LAYER = new EntityModelLayer(new Identifier(MiddleEarth.MOD_ID, "armor"), "cape");
-    public static final EntityModelLayer HOOD_MODEL_LAYER = new EntityModelLayer(new Identifier(MiddleEarth.MOD_ID, "armor"), "hood");
-    public static final EntityModelLayer HEATER_SHIELD_LAYER = new EntityModelLayer(new Identifier(MiddleEarth.MOD_ID, "heater_shield"), "main");
-    public static final EntityModelLayer KITE_SHIELD_LAYER = new EntityModelLayer(new Identifier(MiddleEarth.MOD_ID, "kite_shield"), "main");
-    public static final EntityModelLayer ROUND_SHIELD_LAYER = new EntityModelLayer(new Identifier(MiddleEarth.MOD_ID, "round_shield"), "main");
-    public static final EntityModelLayer HELD_BANNER_LAYER = new EntityModelLayer(new Identifier(MiddleEarth.MOD_ID, "held_banner"), "main");
+    public static final EntityModelLayer INNER_ARMOR_MODEL_LAYER = new EntityModelLayer(new ResourceLocation(MiddleEarth.MOD_ID, "armor"), "layer_0");
+    public static final EntityModelLayer HELMET_ADDON_MODEL_LAYER = new EntityModelLayer(new ResourceLocation(MiddleEarth.MOD_ID, "armor"), "helmet_addon");
+    public static final EntityModelLayer CAPE_MODEL_LAYER = new EntityModelLayer(new ResourceLocation(MiddleEarth.MOD_ID, "armor"), "cape");
+    public static final EntityModelLayer HOOD_MODEL_LAYER = new EntityModelLayer(new ResourceLocation(MiddleEarth.MOD_ID, "armor"), "hood");
+    public static final EntityModelLayer HEATER_SHIELD_LAYER = new EntityModelLayer(new ResourceLocation(MiddleEarth.MOD_ID, "heater_shield"), "main");
+    public static final EntityModelLayer KITE_SHIELD_LAYER = new EntityModelLayer(new ResourceLocation(MiddleEarth.MOD_ID, "kite_shield"), "main");
+    public static final EntityModelLayer ROUND_SHIELD_LAYER = new EntityModelLayer(new ResourceLocation(MiddleEarth.MOD_ID, "round_shield"), "main");
+    public static final EntityModelLayer HELD_BANNER_LAYER = new EntityModelLayer(new ResourceLocation(MiddleEarth.MOD_ID, "held_banner"), "main");
 
     @Override
     public void onInitializeClient() {
@@ -260,14 +260,14 @@ public class MiddleEarthClient implements ClientModInitializer {
                 com.google.gson.JsonObject layers = com.google.gson.JsonParser.parseReader(
                         new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8)).getAsJsonObject();
                 for (com.google.gson.JsonElement e : layers.getAsJsonArray("cutout")) {
-                    net.minecraft.util.Identifier id = new net.minecraft.util.Identifier(e.getAsString());
-                    if (net.minecraft.registry.Registries.BLOCK.containsId(id))
-                        BlockRenderLayerMap.INSTANCE.putBlock(net.minecraft.registry.Registries.BLOCK.get(id), RenderLayer.getCutout());
+                    net.minecraft.resources.ResourceLocation id = new net.minecraft.resources.ResourceLocation(e.getAsString());
+                    if (net.minecraft.core.registries.Registries.BLOCK.containsId(id))
+                        BlockRenderLayerMap.INSTANCE.putBlock(net.minecraft.core.registries.Registries.BLOCK.get(id), RenderLayer.getCutout());
                 }
                 for (com.google.gson.JsonElement e : layers.getAsJsonArray("cutout_mipped")) {
-                    net.minecraft.util.Identifier id = new net.minecraft.util.Identifier(e.getAsString());
-                    if (net.minecraft.registry.Registries.BLOCK.containsId(id))
-                        BlockRenderLayerMap.INSTANCE.putBlock(net.minecraft.registry.Registries.BLOCK.get(id), RenderLayer.getCutoutMipped());
+                    net.minecraft.resources.ResourceLocation id = new net.minecraft.resources.ResourceLocation(e.getAsString());
+                    if (net.minecraft.core.registries.Registries.BLOCK.containsId(id))
+                        BlockRenderLayerMap.INSTANCE.putBlock(net.minecraft.core.registries.Registries.BLOCK.get(id), RenderLayer.getCutoutMipped());
                 }
             }
         } catch (Throwable t) {
@@ -276,23 +276,23 @@ public class MiddleEarthClient implements ClientModInitializer {
         // 1.20.1 has no data-driven model render_type, and the donor (1.21.8) relied on it. Any
         // plant / cluster / multiface / hanging-root / leaf block that is not explicitly listed
         // below would otherwise render SOLID, turning its transparent pixels black.
-        for (net.minecraft.block.Block block : net.minecraft.registry.Registries.BLOCK) {
-            if (!net.minecraft.registry.Registries.BLOCK.getId(block).getNamespace().equals(MiddleEarth.MOD_ID)) continue;
+        for (net.minecraft.world.level.block.Block block : net.minecraft.core.registries.Registries.BLOCK) {
+            if (!net.minecraft.core.registries.Registries.BLOCK.getId(block).getNamespace().equals(MiddleEarth.MOD_ID)) continue;
             if (block instanceof net.minecraft.block.PlantBlock
                     || block instanceof net.minecraft.block.MultifaceGrowthBlock
-                    || block instanceof net.minecraft.block.AmethystClusterBlock
+                    || block instanceof net.minecraft.world.level.block.AmethystClusterBlock
                     || block instanceof net.minecraft.block.HangingRootsBlock) {
                 BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout());
-            } else if (block instanceof net.minecraft.block.LeavesBlock) {
+            } else if (block instanceof net.minecraft.world.level.block.LeavesBlock) {
                 BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutoutMipped());
             }
         }
         // Dirt/soil blocks with a tinted grass "overlay" layer (grassy_dirt/chalksoil/loam/peat/
         // silt + *_grass_block + pebbled_grass). Their overlay is ~50% transparent, so a SOLID
         // layer paints the empty half black.
-        for (net.minecraft.block.Block block : net.minecraft.registry.Registries.BLOCK) {
-            if (!net.minecraft.registry.Registries.BLOCK.getId(block).getNamespace().equals(MiddleEarth.MOD_ID)) continue;
-            String path = net.minecraft.registry.Registries.BLOCK.getId(block).getPath();
+        for (net.minecraft.world.level.block.Block block : net.minecraft.core.registries.Registries.BLOCK) {
+            if (!net.minecraft.core.registries.Registries.BLOCK.getId(block).getNamespace().equals(MiddleEarth.MOD_ID)) continue;
+            String path = net.minecraft.core.registries.Registries.BLOCK.getId(block).getPath();
             if (path.startsWith("grassy_") || path.endsWith("_grass_block") || path.startsWith("pebbled_grass")) {
                 BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutoutMipped());
             }

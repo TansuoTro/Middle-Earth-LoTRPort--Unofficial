@@ -1,29 +1,29 @@
 package net.jukoz.me.block.special.plate;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.inventory.SingleStackInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootTable;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.loot.context.LootContextTypes;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import org.jetbrains.annotations.Nullable;
 
 public class PlateBlockEntity extends BlockEntity implements SingleStackInventory {
     private ItemStack food = ItemStack.EMPTY;
     @Nullable
-    private Identifier lootTable;
+    private ResourceLocation lootTable;
     private long lootTableSeed;
     private boolean blockPlaced = false;
 
@@ -32,17 +32,17 @@ public class PlateBlockEntity extends BlockEntity implements SingleStackInventor
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt) {
+    protected void writeNbt(CompoundTag nbt) {
         super.writeNbt(nbt);
         nbt.putBoolean("placed", blockPlaced);
 
         if (!this.writeLootTableToData(nbt) && !this.food.isEmpty()) {
-            nbt.put("item", this.food.writeNbt(new NbtCompound()));
+            nbt.put("item", this.food.writeNbt(new CompoundTag()));
         }
     }
 
     @Override
-    public void readNbt(NbtCompound nbt) {
+    public void readNbt(CompoundTag nbt) {
         super.readNbt(nbt);
         this.food = ItemStack.EMPTY;
         this.blockPlaced = nbt.getBoolean("placed");
@@ -51,18 +51,18 @@ public class PlateBlockEntity extends BlockEntity implements SingleStackInventor
         }
     }
 
-    public void setLootTable(Identifier lootTable, long seed) {
+    public void setLootTable(ResourceLocation lootTable, long seed) {
         this.lootTable = lootTable;
         this.lootTableSeed = seed;
     }
 
-    private boolean readLootTableFromData(NbtCompound nbt) {
-        this.lootTable = nbt.contains("LootTable") ? Identifier.tryParse(nbt.getString("LootTable")) : null;
+    private boolean readLootTableFromData(CompoundTag nbt) {
+        this.lootTable = nbt.contains("LootTable") ? ResourceLocation.tryParse(nbt.getString("LootTable")) : null;
         this.lootTableSeed = nbt.getLong("LootTableSeed");
         return this.lootTable != null;
     }
 
-    private boolean writeLootTableToData(NbtCompound nbt) {
+    private boolean writeLootTableToData(CompoundTag nbt) {
         if (this.lootTable == null) {
             return false;
         }
@@ -81,9 +81,9 @@ public class PlateBlockEntity extends BlockEntity implements SingleStackInventor
         return blockPlaced;
     }
 
-    public static void tick(World world, BlockPos pos, BlockState state, PlateBlockEntity blockEntity) {
+    public static void tick(Level world, BlockPos pos, BlockState state, PlateBlockEntity blockEntity) {
         if(blockEntity.blockPlaced) {
-            blockEntity.generateItem((ServerWorld) world);
+            blockEntity.generateItem((ServerLevel) world);
         }
     }
 
@@ -94,12 +94,12 @@ public class PlateBlockEntity extends BlockEntity implements SingleStackInventor
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt() {
+    public CompoundTag toInitialChunkDataNbt() {
         return createNbt();
     }
 
     @Override
-    public boolean canPlayerUse(net.minecraft.entity.player.PlayerEntity player) {
+    public boolean canPlayerUse(net.minecraft.world.entity.player.Player player) {
         return true;
     }
 
@@ -129,7 +129,7 @@ public class PlateBlockEntity extends BlockEntity implements SingleStackInventor
         update();
     }
 
-    public void generateItem(ServerWorld world) {
+    public void generateItem(ServerLevel world) {
         if (this.lootTable != null && blockPlaced) {
             LootTable lootTable = world.getServer().getLootManager().getLootTable(this.lootTable);
             LootContextParameterSet lootContext = new LootContextParameterSet.Builder(world).build(LootContextTypes.EMPTY);

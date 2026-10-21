@@ -1,11 +1,11 @@
 package net.jukoz.me.client;
 
-import net.minecraft.block.entity.BannerPattern;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.render.TexturedRenderLayers;
 import net.minecraft.client.util.SpriteIdentifier;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.registries.AtlasesME;
 
@@ -17,11 +17,11 @@ public class ModTexturedRenderLayers extends TexturedRenderLayers {
     public static final SpriteIdentifier KITE_SHIELD_BASE;
     public static final SpriteIdentifier ROUND_SHIELD_BASE;
 
-    private static final Map<Identifier, SpriteIdentifier> HEATER_SHIELD_PATTERN_TEXTURES;
-    private static final Map<Identifier, SpriteIdentifier> KITE_SHIELD_PATTERN_TEXTURES;
-    private static final Map<Identifier, SpriteIdentifier> ROUND_SHIELD_PATTERN_TEXTURES;
+    private static final Map<ResourceLocation, SpriteIdentifier> HEATER_SHIELD_PATTERN_TEXTURES;
+    private static final Map<ResourceLocation, SpriteIdentifier> KITE_SHIELD_PATTERN_TEXTURES;
+    private static final Map<ResourceLocation, SpriteIdentifier> ROUND_SHIELD_PATTERN_TEXTURES;
 
-    public static final Identifier CHARACTER_ATLAS_TEXTURES = AtlasesME.getAtlasPath(AtlasesME.CHARACTER_TEXTURES);
+    public static final ResourceLocation CHARACTER_ATLAS_TEXTURES = AtlasesME.getAtlasPath(AtlasesME.CHARACTER_TEXTURES);
     public static final RenderLayer CHARACTER_TEXTURES_RENDER_LAYER;
     public static final RenderLayer CHARACTER_TEXTURES_EMISSIVE_RENDER_LAYER;
 
@@ -47,23 +47,23 @@ public class ModTexturedRenderLayers extends TexturedRenderLayers {
         return CHARACTER_TEXTURES_EMISSIVE_RENDER_LAYER;
     }
 
-    public static SpriteIdentifier getHeaterShieldPatternTextureId(RegistryEntry<BannerPattern> pattern) {
+    public static SpriteIdentifier getHeaterShieldPatternTextureId(Holder<BannerPattern> pattern) {
         return HEATER_SHIELD_PATTERN_TEXTURES.computeIfAbsent(pattern.getKey().orElseThrow().getValue(), (id) -> {
-            Identifier identifier = id.withPrefixedPath("entity/heater_shield/");
+            ResourceLocation identifier = id.withPrefixedPath("entity/heater_shield/");
             return new SpriteIdentifier(SHIELD_PATTERNS_ATLAS_TEXTURE, identifier);
         });
     }
 
-    public static SpriteIdentifier getKiteShieldPatternTextureId(RegistryEntry<BannerPattern> pattern) {
+    public static SpriteIdentifier getKiteShieldPatternTextureId(Holder<BannerPattern> pattern) {
         return KITE_SHIELD_PATTERN_TEXTURES.computeIfAbsent(pattern.getKey().orElseThrow().getValue(), (id) -> {
-            Identifier identifier = id.withPrefixedPath("entity/kite_shield/");
+            ResourceLocation identifier = id.withPrefixedPath("entity/kite_shield/");
             return new SpriteIdentifier(SHIELD_PATTERNS_ATLAS_TEXTURE, identifier);
         });
     }
 
-    public static SpriteIdentifier getRoundShieldPatternTextureId(RegistryEntry<BannerPattern> pattern) {
+    public static SpriteIdentifier getRoundShieldPatternTextureId(Holder<BannerPattern> pattern) {
         return ROUND_SHIELD_PATTERN_TEXTURES.computeIfAbsent(pattern.getKey().orElseThrow().getValue(), (id) -> {
-            Identifier identifier = id.withPrefixedPath("entity/round_shield/");
+            ResourceLocation identifier = id.withPrefixedPath("entity/round_shield/");
             return new SpriteIdentifier(SHIELD_PATTERNS_ATLAS_TEXTURE, identifier);
         });
     }

@@ -2,9 +2,9 @@ package net.jukoz.me.entity.swan;
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.model.EntityModel;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.util.Mth;
 
 public class SwanModel<T extends SwanEntity> extends EntityModel<SwanEntity> {
     private final ModelPart head;
@@ -52,7 +52,7 @@ public class SwanModel<T extends SwanEntity> extends EntityModel<SwanEntity> {
         return TexturedModelData.of(modelData, 64, 64);
     }
     @Override
-    public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void render(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
         head.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
         body.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
         right_wing.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
@@ -63,17 +63,17 @@ public class SwanModel<T extends SwanEntity> extends EntityModel<SwanEntity> {
 
     @Override
     public void setAngles(SwanEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.right_leg.pitch = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-        this.left_leg.pitch = MathHelper.cos(limbSwing * 0.6662F + 3.1415927F) * 1.4F * limbSwingAmount;
+        this.right_leg.pitch = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+        this.left_leg.pitch = Mth.cos(limbSwing * 0.6662F + 3.1415927F) * 1.4F * limbSwingAmount;
         this.right_wing.roll = 0;
         this.left_wing.roll = -0;
         this.head.pitch = 0;
         if(!entity.isOnGround()) {
-            float angle = MathHelper.cos(MathHelper.cos(ageInTicks * 0.5f));
+            float angle = Mth.cos(Mth.cos(ageInTicks * 0.5f));
             this.right_wing.roll = -4 + (4 * angle);
             this.left_wing.roll = 4 - (4 * angle);
         } else if(entity.isAttacking()) {
-            float angle = MathHelper.cos(MathHelper.cos(ageInTicks * 0.4f));
+            float angle = Mth.cos(Mth.cos(ageInTicks * 0.4f));
             this.right_wing.roll = -3 + (2 * angle);
             this.left_wing.roll = 3 - (2 * angle);
             this.head.pitch = (float) Math.toRadians(-70);
