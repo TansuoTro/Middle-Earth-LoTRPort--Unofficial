@@ -15,7 +15,7 @@ public class CustomAxeWeaponItem extends AxeItem {
 
     private final Tier material;
 
-    public CustomAxeWeaponItem(Tier toolMaterial, Item.Settings settings) {
+    public CustomAxeWeaponItem(Tier toolMaterial, Item.Properties settings) {
         super(toolMaterial, WeaponTypesME.AXE.attack, WeaponTypesME.AXE.attackSpeed,
                 ((net.jukoz.me.item.MESettings) settings).component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(WeaponTypesME.AXE.name)));
         this.material = toolMaterial;

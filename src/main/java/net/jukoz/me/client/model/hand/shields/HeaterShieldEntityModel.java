@@ -29,14 +29,14 @@ public class HeaterShieldEntityModel extends Model {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
 
-        modelPartData.addChild("plate", CubeListBuilder.create().uv(0, 0).cuboid(-6.0F, -7.0F, -2.0F, 12.0F, 10.0F, 1.0F, new CubeDeformation(0.0F))
-                .uv(1, 11).cuboid(-5.0F, 3.0F, -2.0F, 10.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
-                .uv(2, 14).cuboid(-4.0F, 5.0F, -2.0F, 8.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
-                .uv(3, 17).mirrored().cuboid(-3.0F, 7.0F, -2.0F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirrored(false)
-                .uv(5, 19).mirrored().cuboid(-2.0F, 8.0F, -2.0F, 4.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirrored(false)
-                .uv(7, 21).mirrored().cuboid(-1.0F, 9.0F, -2.0F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirrored(false), PartPose.NONE);
+        modelPartData.addOrReplaceChild("plate", CubeListBuilder.create().texOffs(0, 0).addBox(-6.0F, -7.0F, -2.0F, 12.0F, 10.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(1, 11).addBox(-5.0F, 3.0F, -2.0F, 10.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(2, 14).addBox(-4.0F, 5.0F, -2.0F, 8.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(3, 17).mirror().addBox(-3.0F, 7.0F, -2.0F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false)
+                .texOffs(5, 19).mirror().addBox(-2.0F, 8.0F, -2.0F, 4.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false)
+                .texOffs(7, 21).mirror().addBox(-1.0F, 9.0F, -2.0F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.NONE);
 
-        modelPartData.addChild("handle", CubeListBuilder.create().uv(26, 0).mirrored().cuboid(-1.0F, -3.0F, -1.0F, 2.0F, 6.0F, 6.0F, new CubeDeformation(0.0F)).mirrored(false), PartPose.NONE);
+        modelPartData.addOrReplaceChild("handle", CubeListBuilder.create().texOffs(26, 0).mirror().addBox(-1.0F, -3.0F, -1.0F, 2.0F, 6.0F, 6.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.NONE);
         return LayerDefinition.of(modelData, 64, 64);
     }
 

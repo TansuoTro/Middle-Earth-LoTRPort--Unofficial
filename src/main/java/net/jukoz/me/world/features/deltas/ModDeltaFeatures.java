@@ -9,7 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.levelgen.feature.configurations.DeltaFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
@@ -41,20 +41,20 @@ public class ModDeltaFeatures extends Feature<DeltaFeatureConfiguration> {
 
         while(var14.hasNext()) {
             BlockPos blockPos2 = (BlockPos)var14.next();
-            if (blockPos2.getManhattanDistance(blockPos) > m) {
+            if (blockPos2.distanceManhattan(blockPos) > m) {
                 break;
             }
 
             if (canPlace(structureWorldAccess, blockPos2, deltaFeatureConfig)) {
                 if (bl3) {
                     bl = true;
-                    this.setBlockState(structureWorldAccess, blockPos2, deltaFeatureConfig.getRim());
+                    this.setBlock(structureWorldAccess, blockPos2, deltaFeatureConfig.getRim());
                 }
 
                 BlockPos blockPos3 = blockPos2.add(i, 0, j);
                 if (canPlace(structureWorldAccess, blockPos3, deltaFeatureConfig)) {
                     bl = true;
-                    this.setBlockState(structureWorldAccess, blockPos3, deltaFeatureConfig.getContents());
+                    this.setBlock(structureWorldAccess, blockPos3, deltaFeatureConfig.getContents());
                 }
             }
         }
@@ -65,7 +65,7 @@ public class ModDeltaFeatures extends Feature<DeltaFeatureConfiguration> {
     private static boolean canPlace(LevelAccessor world, BlockPos pos, DeltaFeatureConfiguration config) {
         //pos = pos.offset(Direction.Axis.Y, -1);
         BlockState blockState = world.getBlockState(pos);
-        if (blockState.isOf(config.getContents().getBlock())) {
+        if (blockState.is(config.getContents().getBlock())) {
             return false;
         } else if (CANNOT_REPLACE_BLOCKS.contains(blockState.getBlock())) {
             return false;
@@ -81,7 +81,7 @@ public class ModDeltaFeatures extends Feature<DeltaFeatureConfiguration> {
                 } else if (currentDirection == Direction.DOWN) {
                     if(!isSolidBlock)
                         return false;
-                } else if (!isSolidBlock && !directionBlockState.isOf(Blocks.WATER)) {
+                } else if (!isSolidBlock && !directionBlockState.is(Blocks.WATER)) {
                     return false;
                 }
             }

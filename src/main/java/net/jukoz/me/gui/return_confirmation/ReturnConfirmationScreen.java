@@ -15,8 +15,8 @@ import java.awt.event.KeyEvent;
 public class ReturnConfirmationScreen extends Screen {
     private static final Component RETURN_CONFIRMATION_TITLE = Component.translatable("ui.%s.return_confirmation.title".formatted(MiddleEarth.MOD_ID));
     private static final ResourceLocation BUTTON_WIDGET = new ResourceLocation(MiddleEarth.MOD_ID,"textures/gui/widget/button_widget.png");
-    public ButtonWidget returnToOverworldButton;
-    public ButtonWidget closeButton;
+    public Button returnToOverworldButton;
+    public Button closeButton;
     float currentDelay;
     public ReturnConfirmationScreen(float delay) {
         super(RETURN_CONFIRMATION_TITLE);
@@ -25,10 +25,10 @@ public class ReturnConfirmationScreen extends Screen {
 
     @Override
     protected void init() {
-        ButtonWidget.PressAction returnToOverworldAction = button -> {
+        Button.PressAction returnToOverworldAction = button -> {
             returnToOverworld();
         };
-        returnToOverworldButton = ButtonWidget.builder(Component.translatable("ui.%s.return_confirmation.continue_character.title".formatted(MiddleEarth.MOD_ID)), returnToOverworldAction).build();
+        returnToOverworldButton = Button.builder(Component.translatable("ui.%s.return_confirmation.continue_character.title".formatted(MiddleEarth.MOD_ID)), returnToOverworldAction).build();
         addDrawableChild(returnToOverworldButton);
         if(currentDelay > 0)
             returnToOverworldButton.active = false;
@@ -64,24 +64,24 @@ public class ReturnConfirmationScreen extends Screen {
         int startX = (width / 2) - (panelSizeX / 2);
         int startY = (height / 2) - (panelSizeY / 2);
         if(returnToOverworldButton.active){
-            context.drawTexture(BUTTON_WIDGET, startX, startY, 0, returnToOverworldButton.isFocused() || isMouseOver(startX, panelSizeX, startY, panelSizeY) ? 19 : 0, panelSizeX, panelSizeY, 256, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, BUTTON_WIDGET, startX, startY, 0, returnToOverworldButton.isFocused() || isMouseOver(startX, panelSizeX, startY, panelSizeY) ? 19 : 0, panelSizeX, panelSizeY, 256, 256);
 
             Component continueText = Component.translatable("ui.%s.return_confirmation.continue_character.content".formatted(MiddleEarth.MOD_ID));
-            context.drawText(textRenderer, continueText,
-                    startX + (int)((panelSizeX - textRenderer.getWidth(continueText)) / 2f),
-                    startY + (int) ((panelSizeY / 2f) - (textRenderer.fontHeight / 2f)) + 1,
+            context.drawText(font, continueText,
+                    startX + (int)((panelSizeX - font.getWidth(continueText)) / 2f),
+                    startY + (int) ((panelSizeY / 2f) - (font.fontHeight / 2f)) + 1,
                     CommonColors.BLACK, false);
 
             net.jukoz.me.compat.client.gui.MEGui.setBounds(returnToOverworldButton, panelSizeX, panelSizeY, startX, startY);
             if(ModWidget.getFocusEnabled() && returnToOverworldButton.isFocused()){
-                context.drawTexture(BUTTON_WIDGET, startX, startY, 103, 0, panelSizeX, panelSizeY, 256, 256);
+                net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, BUTTON_WIDGET, startX, startY, 103, 0, panelSizeX, panelSizeY, 256, 256);
             }
         } else {
-            context.drawTexture(BUTTON_WIDGET, startX, startY, 0, 38, panelSizeX, panelSizeY, 256, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, BUTTON_WIDGET, startX, startY, 0, 38, panelSizeX, panelSizeY, 256, 256);
 
             Component delayText = Component.literal(String.valueOf((Math.round(this.currentDelay * 10f) /10f)));
-            context.drawText(textRenderer, delayText,
-                    startX + (panelSizeX / 2) - (textRenderer.getWidth(delayText) / 2),
+            context.drawText(font, delayText,
+                    startX + (panelSizeX / 2) - (font.getWidth(delayText) / 2),
                     startY + 5, 0xc4343e, true);
         }
     }

@@ -48,7 +48,7 @@ public class NpcGenerator {
             currentStep = "Generating eyes...";
             entityTextureData = generateEyeTextureData(entityTextureData, identity, currentNpcType.getNpcTextureData(world).haveEmissiveEyes(identity));
             currentStep = "Generating hair...";
-            entityTextureData = generateHairTextureData(entityTextureData, identity, world.getRegistryManager());
+            entityTextureData = generateHairTextureData(entityTextureData, identity, world.registryAccess());
             currentStep = "Generating clothing...";
             entityTextureData = generateClothingTextureData(entityTextureData, identity);
             npcEntity.saveNpcTextureData(entityTextureData);
@@ -63,7 +63,7 @@ public class NpcGenerator {
     }
 
     private static void spawnMount(NpcEntity entity) {
-        if(entity.getWorld() instanceof ServerLevel serverWorld)
+        if(entity.level() instanceof ServerLevel serverWorld)
         {
             NpcType type = entity.getNpcType();
             if(type == null || !type.hasMount())

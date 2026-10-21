@@ -52,12 +52,12 @@ public abstract class AbstractProjectleEntity extends ThrowableItemProjectile {
         super.onEntityHit(entityHitResult);
         Entity entity = entityHitResult.getEntity();
         if(this.getOwner() instanceof ShireHobbitEntity && entity instanceof ShireHobbitEntity) return;
-        entity.damage(this.getDamageSources().thrown(this, this.getOwner()), this.damage);
+        entity.damage(this.damageSources().thrown(this, this.getOwner()), this.damage);
     }
 
     protected void onCollision(HitResult hitResult) {
         super.onCollision(hitResult);
-        if (!getWorld().isClient) {
+        if (!getWorld().isClientSide) {
             getWorld().sendEntityStatus(this, (byte)3);
             this.discard();
         }

@@ -31,22 +31,22 @@ public class RohirricHelmetArmorModel<T extends LivingEntity> extends CustomHelm
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
 
-        modelPartData.addChild(PartNames.HAT, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.HAT, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition head = modelPartData.addChild(PartNames.HEAD, CubeListBuilder.create().uv(0, -1)
-                .cuboid(0.0F, -16.0F, -7.0F, 0.0F, 11.0F, 17.0F, new CubeDeformation(0.0F)),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition head = modelPartData.addOrReplaceChild(PartNames.HEAD, CubeListBuilder.create().texOffs(0, -1)
+                .addBox(0.0F, -16.0F, -7.0F, 0.0F, 11.0F, 17.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        head.addChild("hair", CubeListBuilder.create().uv(0, 27)
-                .cuboid(-1.0F, -2.0F, 0.0F, 2.0F, 3.0F, 18.0F, new CubeDeformation(0.0F)),
-                PartPose.of(0.0F, -9.0F, 5.0F, -1.5708F, 0.0F, 0.0F));
+        head.addOrReplaceChild("hair", CubeListBuilder.create().texOffs(0, 27)
+                .addBox(-1.0F, -2.0F, 0.0F, 2.0F, 3.0F, 18.0F, new CubeDeformation(0.0F)),
+                PartPose.offsetAndRotation(0.0F, -9.0F, 5.0F, -1.5708F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.BODY, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.RIGHT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.BODY, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.RIGHT_ARM, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.LEFT_ARM, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.of(modelData, 64, 48);
     }
@@ -70,6 +70,6 @@ public class RohirricHelmetArmorModel<T extends LivingEntity> extends CustomHelm
             degree -= 90;
         }
 
-        this.hair.pitch = ToRad.ex(degree);
+        this.hair.xRot = ToRad.ex(degree);
     }
 }

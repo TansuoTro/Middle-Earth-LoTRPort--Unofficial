@@ -28,13 +28,13 @@ public class ChainFeature extends Feature<ChainFeatureConfig> {
         int maxDistance = config.maxLength;
         Direction direction = config.direction;
 
-        this.setBlockState(structureWorldAccess, blockPos, config.startBlock);
+        this.setBlock(structureWorldAccess, blockPos, config.startBlock);
         for(int i = 1; i <= maxDistance; i++) {
             BlockState mutableBlockState = structureWorldAccess.getBlockState(blockPos.mutableCopy().offset(direction, i));
-            if(mutableBlockState.isOf(Blocks.AIR) || mutableBlockState.isIn(BlockTags.REPLACEABLE_BY_TREES)) {
-                this.setBlockState(structureWorldAccess, blockPos.mutableCopy().offset(direction, i), config.chainBlock);
+            if(mutableBlockState.is(Blocks.AIR) || mutableBlockState.is(BlockTags.REPLACEABLE_BY_TREES)) {
+                this.setBlock(structureWorldAccess, blockPos.mutableCopy().offset(direction, i), config.chainBlock);
             } else {
-                this.setBlockState(structureWorldAccess, blockPos.mutableCopy().offset(direction, Math.max(0, i - 1)), config.endBlock);
+                this.setBlock(structureWorldAccess, blockPos.mutableCopy().offset(direction, Math.max(0, i - 1)), config.endBlock);
                 break;
             }
         }

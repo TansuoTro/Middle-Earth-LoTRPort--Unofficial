@@ -40,7 +40,7 @@ public record ArtisanDataComponent(UUID uuid) implements TooltipAppender {
         // such lookup, so use the name the client already knows and fall back to the uuid.
         net.minecraft.client.multiplayer.PlayerInfo entry = null;
         net.minecraft.client.multiplayer.ClientPacketListener handler =
-                net.minecraft.client.Minecraft.getInstance().getNetworkHandler();
+                net.minecraft.client.Minecraft.getInstance().getConnection();
         if (handler != null) {
             entry = handler.getPlayerListEntry(uuid);
         }

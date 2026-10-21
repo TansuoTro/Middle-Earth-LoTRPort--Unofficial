@@ -10,13 +10,14 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.core.Direction;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class OrcSconceBlock extends METorchBlock{
     public static final EnumProperty<Direction> HORIZONTAL_FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-    public OrcSconceBlock(Settings settings) {
+    public OrcSconceBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState((BlockState)((BlockState)((BlockState)((BlockState)((BlockState)this.stateManager.getDefaultState()).with(LIT, true).with(HORIZONTAL_FACING, Direction.NORTH)))));
+        this.setDefaultState((BlockState)((BlockState)((BlockState)((BlockState)((BlockState)this.stateManager.defaultBlockState()).with(LIT, true).with(HORIZONTAL_FACING, Direction.NORTH)))));
     }
 
     protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
@@ -25,12 +26,12 @@ public class OrcSconceBlock extends METorchBlock{
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(HORIZONTAL_FACING, rotation.rotate(state.get(HORIZONTAL_FACING)));
+        return state.setValue(HORIZONTAL_FACING, rotation.rotate(state.get(HORIZONTAL_FACING)));
     }
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return this.getDefaultState().with(HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+        return this.defaultBlockState().with(HORIZONTAL_FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
     @Override

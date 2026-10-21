@@ -39,7 +39,7 @@ public class RaceStatTooltip {
         addAttributeListHeader();
 
         boolean hasAttribute = false;
-        var registry = entity.getWorld().getRegistryManager().getOptional(Registries.ATTRIBUTE).get();
+        var registry = entity.level().registryAccess().getOptional(Registries.ATTRIBUTE).get();
         List<AttributePoolElement> nextBoundAttributes = race.getBaseAttributePool().getPool();
         for (AttributePoolElement currentEntityAttribute : playerAttributes){
             hasAttribute = addAttributeLine(entity, registry, currentEntityAttribute, nextBoundAttributes, detailed) || hasAttribute;
@@ -56,16 +56,16 @@ public class RaceStatTooltip {
     }
 
     private static void addAttributeListHeader() {
-        tooltipText.add(Component.translatable(MiddleEarth.of("attribute_header").toTranslationKey("race_tooltip")).formatted(ChatFormatting.GRAY));
+        tooltipText.add(Component.translatable(MiddleEarth.of("attribute_header").toLanguageKey("race_tooltip")).formatted(ChatFormatting.GRAY));
     }
 
     private static void addNoAttributeChanges() {
-        tooltipText.add(Component.translatable(MiddleEarth.of("no_attribute_change").toTranslationKey("race_tooltip")).formatted(ChatFormatting.DARK_GRAY));
+        tooltipText.add(Component.translatable(MiddleEarth.of("no_attribute_change").toLanguageKey("race_tooltip")).formatted(ChatFormatting.DARK_GRAY));
     }
 
     private static boolean addAttributeLine(LivingEntity entity, Registry<Attribute> registry, AttributePoolElement currentEntityAttribute, List<AttributePoolElement> nextBoundAttributes, boolean detailed) {
         ResourceLocation attributeId = currentEntityAttribute.getIdentifier();
-        boolean buffIsReversed = registry.getEntry(net.minecraft.resources.ResourceKey.of(net.minecraft.core.registries.Registries.ATTRIBUTE, attributeId)).get().isIn(TagKey.of(Registries.ATTRIBUTE, MiddleEarth.of("is_buff_reversed")));
+        boolean buffIsReversed = registry.getEntry(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.ATTRIBUTE, attributeId)).get().is(TagKey.create(Registries.ATTRIBUTE, MiddleEarth.of("is_buff_reversed")));
 
         AttributePoolElement nextAttribute = nextBoundAttributes.stream().filter(attribute -> attributeId.equals(attribute.getIdentifier())).findFirst().orElse(null);
 
@@ -274,7 +274,7 @@ public class RaceStatTooltip {
         if(nextBoundModifiers == null || nextBoundModifiers.isEmpty()){
             return false;
         }
-        return nextBoundModifiers.stream().anyMatch(x -> x.getIdentifier().equals(currentModifier.getIdentifier()));
+        return nextBoundModifiers.stream().contains(x -> x.getIdentifier().equals(currentModifier.getIdentifier()));
     }
 
     private static List<AttributeModifierElement> filterAttributeModifiers(AttributePoolElement attributePoolElement) {

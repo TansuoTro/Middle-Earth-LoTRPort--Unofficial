@@ -32,7 +32,7 @@ public class CaveTrollBrain {
     protected static final ImmutableList<MemoryModuleType<?>> MEMORY_MODULES;
 
     protected static Brain<?> create(CaveTrollEntity troll, Dynamic<?> dynamic) {
-        Brain.Profile<CaveTrollEntity> profile = Brain.createProfile(MEMORY_MODULES, SENSORS);
+        Brain.Provider<CaveTrollEntity> profile = Brain.createProfile(MEMORY_MODULES, SENSORS);
         Brain<CaveTrollEntity> brain = profile.deserialize(dynamic);
 
         addCoreActivities(brain);
@@ -47,7 +47,7 @@ public class CaveTrollBrain {
     }
 
     private static void addCoreActivities(Brain<CaveTrollEntity> brain) {
-        brain.forget(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
+        brain.erase(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
         brain.setTaskList(Activity.CORE, 0, ImmutableList.of(
         ));
     }
@@ -59,8 +59,8 @@ public class CaveTrollBrain {
                 Tuple.of(1, new RunOne<>(ImmutableList.of(
                         Tuple.of(RandomStroll.create(1.0F), 5),
                         Tuple.of(new GateBehavior<>(ImmutableMap.of(MemoryModulesME.ACTION_TIMEOUT, MemoryStatus.VALUE_ABSENT), ImmutableSet.of(),
-                                GateBehavior.Order.ORDERED,
-                                GateBehavior.RunMode.TRY_ALL,
+                                GateBehavior.OrderPolicy.ORDERED,
+                                GateBehavior.RunningPolicy.TRY_ALL,
                                 ImmutableList.of(
                                         Tuple.of(new CaveTrollDigForFoodTask(), 1),
                                         Tuple.of(new CaveTrollEatFoodTask(), 1),
@@ -77,8 +77,8 @@ public class CaveTrollBrain {
         brain.setTaskList(ActivitiesME.TAMED, ImmutableList.of(
                 Tuple.of(0, StartAttacking.create(CaveTrollBrain::getAttackTarget)),
                 Tuple.of(1, new GateBehavior<>(ImmutableMap.of(MemoryModulesME.SITTING, MemoryStatus.VALUE_ABSENT), ImmutableSet.of(),
-                        GateBehavior.Order.SHUFFLED,
-                        GateBehavior.RunMode.RUN_ONE,
+                        GateBehavior.OrderPolicy.SHUFFLED,
+                        GateBehavior.RunningPolicy.RUN_ONE,
                         ImmutableList.of(
                                 Tuple.of(RandomStroll.create(1.0f), 1)
                         )))

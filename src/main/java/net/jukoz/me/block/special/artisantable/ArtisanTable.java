@@ -39,10 +39,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import org.jetbrains.annotations.Nullable;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -55,14 +55,15 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class ArtisanTable extends HorizontalDirectionalBlock {
-    public static final EnumProperty<ArtisanTablePart> PART = EnumProperty.of("part", ArtisanTablePart.class);
+    public static final EnumProperty<ArtisanTablePart> PART = EnumProperty.create("part", ArtisanTablePart.class);
     private static final Component TITLE = Component.translatable("container.artisan_table");
 
-    public ArtisanTable(Settings settings) {
+    public ArtisanTable(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(PART, ArtisanTablePart.LEFT).with(FACING, Direction.NORTH));
+        this.setDefaultState(this.stateManager.defaultBlockState().with(PART, ArtisanTablePart.LEFT).with(FACING, Direction.NORTH));
     }
 
     @Nullable
@@ -72,23 +73,23 @@ public class ArtisanTable extends HorizontalDirectionalBlock {
     }
 
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
-        if (direction == getDirectionTowardsOtherPart((ArtisanTablePart)state.get(PART), (Direction)state.get(FACING).rotateYClockwise())) {
-            return neighborState.isOf(this) && neighborState.get(PART) != state.get(PART) ? (BlockState)state : Blocks.AIR.getDefaultState();
+        if (direction == getDirectionTowardsOtherPart((ArtisanTablePart)state.get(PART), (Direction)state.get(FACING).getClockWise())) {
+            return neighborState.is(this) && neighborState.get(PART) != state.get(PART) ? (BlockState)state : Blocks.AIR.defaultBlockState();
         } else {
             return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
         }
     }
 
     public void onBreak(Level world, BlockPos pos, BlockState state, Player player) {
-        if (!world.isClient && player.isCreative()) {
+        if (!world.isClientSide && player.isCreative()) {
             ArtisanTablePart tablePart = (ArtisanTablePart)state.get(PART);
             ArtisanTablePart tablePartOpposite = (ArtisanTablePart)state.get(PART).getOpposite(state.get(PART));
 
-            BlockPos blockPos = pos.offset(getDirectionTowardsOtherPart(tablePart, (Direction)state.get(FACING).rotateYClockwise()));
+            BlockPos blockPos = pos.offset(getDirectionTowardsOtherPart(tablePart, (Direction)state.get(FACING).getClockWise()));
             BlockState blockState = world.getBlockState(blockPos);
-            if (blockState.isOf(this) && blockState.get(PART) == tablePartOpposite) {
-                world.setBlockState(blockPos, Blocks.AIR.getDefaultState(), 35);
-                world.syncWorldEvent(player, 2001, blockPos, Block.getRawIdFromState(blockState));
+            if (blockState.is(this) && blockState.get(PART) == tablePartOpposite) {
+                world.setBlock(blockPos, Blocks.AIR.defaultBlockState(), 35);
+                world.levelEvent(player, 2001, blockPos, Block.getRawIdFromState(blockState));
             }
         }
 
@@ -101,11 +102,11 @@ public class ArtisanTable extends HorizontalDirectionalBlock {
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        Direction direction = ctx.getHorizontalPlayerFacing();
+        Direction direction = ctx.getHorizontalDirection();
         BlockPos blockPos = ctx.getBlockPos();
-        BlockPos blockPos2 = blockPos.offset(direction.rotateYClockwise());
+        BlockPos blockPos2 = blockPos.offset(direction.getClockWise());
         Level world = ctx.getWorld();
-        return world.getBlockState(blockPos2).canReplace(ctx) && world.getWorldBorder().contains(blockPos2) ? (BlockState)this.getDefaultState().with(FACING, direction).with(PART, ArtisanTablePart.LEFT) : null;
+        return world.getBlockState(blockPos2).canReplace(ctx) && world.getWorldBorder().contains(blockPos2) ? (BlockState)this.defaultBlockState().with(FACING, direction).with(PART, ArtisanTablePart.LEFT) : null;
     }
 
     public static Direction getOppositePartDirection(BlockState state) {
@@ -113,18 +114,18 @@ public class ArtisanTable extends HorizontalDirectionalBlock {
         return state.get(PART) == ArtisanTablePart.RIGHT ? direction.getOpposite() : direction;
     }
 
-    public static DoubleBlockCombiner.Type getTablePart(BlockState state) {
+    public static DoubleBlockCombiner.BlockType getTablePart(BlockState state) {
         ArtisanTablePart tablePart = (ArtisanTablePart)state.get(PART);
-        return tablePart == ArtisanTablePart.RIGHT ? DoubleBlockCombiner.Type.FIRST : DoubleBlockCombiner.Type.SECOND;
+        return tablePart == ArtisanTablePart.RIGHT ? DoubleBlockCombiner.BlockType.FIRST : DoubleBlockCombiner.BlockType.SECOND;
     }
 
     public void onPlaced(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
         super.onPlaced(world, pos, state, placer, itemStack);
-        if (!world.isClient) {
-            BlockPos blockPos = pos.offset((Direction)state.get(FACING).rotateYClockwise());
-            world.setBlockState(blockPos, (BlockState)state.with(PART, ArtisanTablePart.RIGHT), 3);
-            world.updateNeighbors(pos, Blocks.AIR);
-            state.updateNeighbors(world, pos, 3);
+        if (!world.isClientSide) {
+            BlockPos blockPos = pos.offset((Direction)state.get(FACING).getClockWise());
+            world.setBlock(blockPos, (BlockState)state.setValue(PART, ArtisanTablePart.RIGHT), 3);
+            world.updateNeighbours(pos, Blocks.AIR);
+            state.updateNeighbours(world, pos, 3);
         }
     }
 
@@ -143,10 +144,10 @@ public class ArtisanTable extends HorizontalDirectionalBlock {
     }
 
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (world.isClient) {
+        if (world.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
-            player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
+            player.openMenu(state.getMenuProvider(world, pos));
             player.incrementStat(Stats.INTERACT_WITH_STONECUTTER);
             return InteractionResult.CONSUME;
         }
@@ -194,24 +195,24 @@ public class ArtisanTable extends HorizontalDirectionalBlock {
                         case DOWN -> null;
                         case UP -> null;
                         case NORTH -> Stream.of(
-                                Block.createCuboidShape(1, 0, 1, 4, 12, 15),
-                                Block.createCuboidShape(0, 12, 0, 16, 16, 16),
-                                Block.createCuboidShape(4, 4, 7, 16, 8, 9)
+                                Block.box(1, 0, 1, 4, 12, 15),
+                                Block.box(0, 12, 0, 16, 16, 16),
+                                Block.box(4, 4, 7, 16, 8, 9)
                         ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
                         case SOUTH -> Stream.of(
-                                Block.createCuboidShape(12, 0, 1, 15, 12, 15),
-                                Block.createCuboidShape(0, 12, 0, 16, 16, 16),
-                                Block.createCuboidShape(0, 4, 7, 12, 8, 9)
+                                Block.box(12, 0, 1, 15, 12, 15),
+                                Block.box(0, 12, 0, 16, 16, 16),
+                                Block.box(0, 4, 7, 12, 8, 9)
                         ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
                         case WEST -> Stream.of(
-                                Block.createCuboidShape(1, 0, 12, 15, 12, 15),
-                                Block.createCuboidShape(0, 12, 0, 16, 16, 16),
-                                Block.createCuboidShape(7, 4, 0, 9, 8, 12)
+                                Block.box(1, 0, 12, 15, 12, 15),
+                                Block.box(0, 12, 0, 16, 16, 16),
+                                Block.box(7, 4, 0, 9, 8, 12)
                         ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
                         case EAST -> Stream.of(
-                                Block.createCuboidShape(1, 0, 1, 15, 12, 4),
-                                Block.createCuboidShape(0, 12, 0, 16, 16, 16),
-                                Block.createCuboidShape(7, 4, 4, 9, 8, 16)
+                                Block.box(1, 0, 1, 15, 12, 4),
+                                Block.box(0, 12, 0, 16, 16, 16),
+                                Block.box(7, 4, 4, 9, 8, 16)
                         ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
                     };
             case RIGHT ->
@@ -219,24 +220,24 @@ public class ArtisanTable extends HorizontalDirectionalBlock {
                         case DOWN -> null;
                         case UP -> null;
                         case NORTH -> Stream.of(
-                                Block.createCuboidShape(12, 0, 1, 15, 12, 15),
-                                Block.createCuboidShape(0, 12, 0, 16, 16, 16),
-                                Block.createCuboidShape(0, 4, 7, 12, 8, 9)
+                                Block.box(12, 0, 1, 15, 12, 15),
+                                Block.box(0, 12, 0, 16, 16, 16),
+                                Block.box(0, 4, 7, 12, 8, 9)
                         ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
                         case SOUTH -> Stream.of(
-                                Block.createCuboidShape(1, 0, 1, 4, 12, 15),
-                                Block.createCuboidShape(0, 12, 0, 16, 16, 16),
-                                Block.createCuboidShape(4, 4, 7, 16, 8, 9)
+                                Block.box(1, 0, 1, 4, 12, 15),
+                                Block.box(0, 12, 0, 16, 16, 16),
+                                Block.box(4, 4, 7, 16, 8, 9)
                         ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
                         case WEST -> Stream.of(
-                                Block.createCuboidShape(1, 0, 1, 15, 12, 4),
-                                Block.createCuboidShape(0, 12, 0, 16, 16, 16),
-                                Block.createCuboidShape(7, 4, 4, 9, 8, 16)
+                                Block.box(1, 0, 1, 15, 12, 4),
+                                Block.box(0, 12, 0, 16, 16, 16),
+                                Block.box(7, 4, 4, 9, 8, 16)
                         ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
                         case EAST -> Stream.of(
-                                Block.createCuboidShape(1, 0, 12, 15, 12, 15),
-                                Block.createCuboidShape(0, 12, 0, 16, 16, 16),
-                                Block.createCuboidShape(7, 4, 0, 9, 8, 12)
+                                Block.box(1, 0, 12, 15, 12, 15),
+                                Block.box(0, 12, 0, 16, 16, 16),
+                                Block.box(7, 4, 0, 9, 8, 12)
                         ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
                     };
 

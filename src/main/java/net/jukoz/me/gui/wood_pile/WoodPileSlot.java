@@ -13,7 +13,7 @@ public class WoodPileSlot extends Slot {
 
     @Override
     public boolean canInsert(ItemStack stack) {
-        return stack.isIn(ItemTags.LOGS);
+        return stack.is(ItemTags.LOGS);
     }
 
     @Override

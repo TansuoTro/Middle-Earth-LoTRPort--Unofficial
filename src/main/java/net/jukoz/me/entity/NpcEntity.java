@@ -63,12 +63,12 @@ public class NpcEntity extends PathfinderMob implements RangedAttackMob {
     }
 
     public void updateAttackType() {
-        if (this.getWorld() != null && !this.getWorld().isClient) {
+        if (this.level() != null && !this.level().isClientSide) {
             this.goalSelector.remove(this.meleeAttackGoal);
             this.goalSelector.remove(this.bowAttackGoal);
-            ItemStack itemStack = this.getStackInHand(ProjectileUtil.getHandPossiblyHolding(this, this.bow));
+            ItemStack itemStack = this.getItemInHand(ProjectileUtil.getHandPossiblyHolding(this, this.bow));
 
-            if (itemStack.isOf(this.bow)) {
+            if (itemStack.is(this.bow)) {
                 this.bowAttackGoal.setAttackInterval(20);
                 this.goalSelector.add(2, this.bowAttackGoal);
             } else {
@@ -99,7 +99,7 @@ public class NpcEntity extends PathfinderMob implements RangedAttackMob {
     }
 
     public NpcEntity.State getState() {
-        if (this.isAttacking()) {
+        if (this.isAggressive()) {
             return NpcEntity.State.ATTACKING;
         }
         return NpcEntity.State.NEUTRAL;
@@ -116,7 +116,7 @@ public class NpcEntity extends PathfinderMob implements RangedAttackMob {
 
     public void equipStack(EquipmentSlot slot, ItemStack stack) {
         super.equipStack(slot, stack);
-        if (!this.getWorld().isClient) {
+        if (!this.level().isClientSide) {
             this.updateAttackType();
         }
     }
@@ -127,19 +127,19 @@ public class NpcEntity extends PathfinderMob implements RangedAttackMob {
     }
 
     public void attack(LivingEntity target, float pullProgress) {
-        ItemStack itemStack = this.getProjectileType(this.getStackInHand(ProjectileUtil.getHandPossiblyHolding(this, getBow())));
+        ItemStack itemStack = this.getProjectileType(this.getItemInHand(ProjectileUtil.getHandPossiblyHolding(this, getBow())));
         AbstractArrow persistentProjectileEntity = this.createArrowProjectile(itemStack, pullProgress);
         double d = target.getX() - this.getX();
         double e = target.getBodyY(0.3333333333333333) - persistentProjectileEntity.getY();
         double f = target.getZ() - this.getZ();
         double g = Math.sqrt(d * d + f * f);
-        persistentProjectileEntity.setVelocity(d, e + g * 0.20000000298023224, f, 1.6F, (float)(14 - this.getWorld().getDifficulty().getId() * 4));
+        persistentProjectileEntity.setVelocity(d, e + g * 0.20000000298023224, f, 1.6F, (float)(14 - this.level().getDifficulty().getId() * 4));
         this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-        this.getWorld().spawnEntity(persistentProjectileEntity);
+        this.level().spawnEntity(persistentProjectileEntity);
     }
 
     protected AbstractArrow createArrowProjectile(ItemStack arrow, float damageModifier) {
-        return ProjectileUtil.createArrowProjectile(this, arrow, damageModifier);
+        return ProjectileUtil.getMobArrow(this, arrow, damageModifier);
     }
 
     public void readCustomDataFromNbt(CompoundTag nbt) {

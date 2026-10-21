@@ -8,7 +8,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -19,16 +19,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 
 public class MordorPlant extends BushBlock implements BonemealableBlock {
-    protected static final VoxelShape SHAPE = Block.createCuboidShape(2.0, 0.0, 2.0, 14.0, 13.0, 14.0);
+    protected static final VoxelShape SHAPE = Block.box(2.0, 0.0, 2.0, 14.0, 13.0, 14.0);
 
-    public MordorPlant(BlockBehaviour.Settings settings) {
+    public MordorPlant(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
     @Override
     protected boolean canPlantOnTop(BlockState floor, BlockGetter world, BlockPos pos) {
-        return  floor.isIn(BlockTags.DIRT) || floor.isIn(BlockTags.SAND) || floor.isOf(StoneBlockSets.ASHENSTONE_SET.base())
-                || floor.isOf(Blocks.BASALT) || floor.isOf(Blocks.FARMLAND);
+        return  floor.is(BlockTags.DIRT) || floor.is(BlockTags.SAND) || floor.is(StoneBlockSets.ASHENSTONE_SET.base())
+                || floor.is(Blocks.BASALT) || floor.is(Blocks.FARMLAND);
     }
 
     @Override
@@ -48,9 +48,9 @@ public class MordorPlant extends BushBlock implements BonemealableBlock {
 
     @Override
     public void grow(ServerLevel world, RandomSource random, BlockPos pos, BlockState state) {
-        DoublePlantBlock tallPlantBlock = (DoublePlantBlock)(state.isOf(Blocks.FERN) ? Blocks.LARGE_FERN : Blocks.TALL_GRASS);
-        if (tallPlantBlock.getDefaultState().canPlaceAt(world, pos) && world.isAir(pos.up())) {
-            DoublePlantBlock.placeAt(world, tallPlantBlock.getDefaultState(), pos, 2);
+        DoublePlantBlock tallPlantBlock = (DoublePlantBlock)(state.is(Blocks.FERN) ? Blocks.LARGE_FERN : Blocks.TALL_GRASS);
+        if (tallPlantBlock.defaultBlockState().canPlaceAt(world, pos) && world.isAir(pos.above())) {
+            DoublePlantBlock.placeAt(world, tallPlantBlock.defaultBlockState(), pos, 2);
         }
     }
 }

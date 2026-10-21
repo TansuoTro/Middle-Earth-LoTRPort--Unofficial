@@ -26,17 +26,17 @@ public class BiomeEventDataLookup {
 
     public static BiomeEventData.ContextualizedBiomeData findNpcDataForBiome(Level world, Holder<Biome> biome, NpcEntity entity) {
         ResourceLocation biomeEventId = biome.getKey().map(k -> k.getValue()).orElse(new ResourceLocation("minecraft", "plains"));
-        BiomeEventData eventData = world.getRegistryManager().get(DynamicRegistriesME.BIOME_EVENT).get(biomeEventId);
+        BiomeEventData eventData = world.registryAccess().get(DynamicRegistriesME.BIOME_EVENT).get(biomeEventId);
         if(eventData != null){
             var foundNpcData = eventData.findNpcData(world, entity);
             if(foundNpcData == null && eventData.getSpawnDefaultWhenUnmet()){
-                eventData = world.getRegistryManager().get(DynamicRegistriesME.BIOME_EVENT).get(BiomeEventRegistry.DEFAULT);
+                eventData = world.registryAccess().get(DynamicRegistriesME.BIOME_EVENT).get(BiomeEventRegistry.DEFAULT);
                 foundNpcData = eventData.findNpcData(world, entity);
             }
             return foundNpcData;
         }
         else {
-            eventData = world.getRegistryManager().get(DynamicRegistriesME.BIOME_EVENT).get(BiomeEventRegistry.DEFAULT);
+            eventData = world.registryAccess().get(DynamicRegistriesME.BIOME_EVENT).get(BiomeEventRegistry.DEFAULT);
             if(eventData != null)
                 return eventData.findNpcData(world, entity);
         }
@@ -44,17 +44,17 @@ public class BiomeEventDataLookup {
     }
 
     public static BiomeEventData.ContextualizedBiomeData findNpcDataForStructure(Level world, ResourceLocation structure, NpcEntity entity) {
-        BiomeEventData eventData = world.getRegistryManager().get(DynamicRegistriesME.STRUCTURE_EVENT).get(structure);
+        BiomeEventData eventData = world.registryAccess().get(DynamicRegistriesME.STRUCTURE_EVENT).get(structure);
         if(eventData != null){
             var foundNpcData = eventData.findNpcData(world, entity);
             if(foundNpcData == null && eventData.getSpawnDefaultWhenUnmet()){
-                eventData = world.getRegistryManager().get(DynamicRegistriesME.STRUCTURE_EVENT).get(BiomeEventRegistry.DEFAULT);
+                eventData = world.registryAccess().get(DynamicRegistriesME.STRUCTURE_EVENT).get(BiomeEventRegistry.DEFAULT);
                 foundNpcData = eventData.findNpcData(world, entity);
             }
             return foundNpcData;
         }
         else {
-            eventData = world.getRegistryManager().get(DynamicRegistriesME.STRUCTURE_EVENT).get(BiomeEventRegistry.DEFAULT);
+            eventData = world.registryAccess().get(DynamicRegistriesME.STRUCTURE_EVENT).get(BiomeEventRegistry.DEFAULT);
             if(eventData != null)
                 return eventData.findNpcData(world, entity);
         }
@@ -62,7 +62,7 @@ public class BiomeEventDataLookup {
     }
 
     public static boolean canEntitySpawn(ServerLevel world, Holder<Biome> biome, BlockPos pos, EntityType<?> type, RandomSource random) {
-        Holder.Reference<BiomeEventData> dataRef = world.getRegistryManager().get(DynamicRegistriesME.BIOME_EVENT).getEntry(net.minecraft.resources.ResourceKey.of(DynamicRegistriesME.BIOME_EVENT, biome.getKey().map(k -> k.getValue()).orElse(new ResourceLocation("minecraft", "plains")))).orElse(null);
+        Holder.Reference<BiomeEventData> dataRef = world.registryAccess().get(DynamicRegistriesME.BIOME_EVENT).getEntry(net.minecraft.resources.ResourceKey.create(DynamicRegistriesME.BIOME_EVENT, biome.getKey().map(k -> k.getValue()).orElse(new ResourceLocation("minecraft", "plains")))).orElse(null);
         if(dataRef == null)
             return true;
         BiomeEventData data = dataRef.value();
@@ -70,7 +70,7 @@ public class BiomeEventDataLookup {
 
         if(!canSpawn)
             return false;
-        if(type.getSpawnGroup() != MobCategory.MONSTER)
+        if(type.getCategory() != MobCategory.MONSTER)
             return true;
 
         if(!entities.containsKey(type)){
@@ -84,13 +84,13 @@ public class BiomeEventDataLookup {
     }
 
     public static void addEntity(LivingEntity entity){
-        if (!entity.getWorld().getRegistryKey().equals(ModDimensions.ME_WORLD_KEY)) {
+        if (!entity.level().getRegistryKey().equals(ModDimensions.ME_WORLD_KEY)) {
             return;
         }
 
         EntityType<?> type = entity.getType();
         UUID uuid = entity.getUuid();
-        if(type.getSpawnGroup() != MobCategory.MONSTER)
+        if(type.getCategory() != MobCategory.MONSTER)
             return;
         if(entity instanceof Mob mobEntity && mobEntity.isPersistent()){
             return;
@@ -99,7 +99,7 @@ public class BiomeEventDataLookup {
     }
 
     public static void removeEntity(EntityType<?> type, UUID uuid){
-        if(type.getSpawnGroup() != MobCategory.MONSTER) return;
+        if(type.getCategory() != MobCategory.MONSTER) return;
         Set<UUID> set = entities.get(type);
         if (set == null) return;
         set.remove(uuid);

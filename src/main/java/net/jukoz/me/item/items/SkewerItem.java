@@ -6,9 +6,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class SkewerItem extends Item {
-    public SkewerItem(Settings settings) {
+    public SkewerItem(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
@@ -18,7 +19,7 @@ public class SkewerItem extends Item {
             if(((Player) user).getAbilities().creativeMode){
                 return itemStack;
             }
-            ((Player) user).giveItemStack(Items.STICK.getDefaultStack());
+            ((Player) user).giveItemStack(Items.STICK.getDefaultInstance());
             return itemStack;
         } else {
             return itemStack;

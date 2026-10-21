@@ -24,12 +24,12 @@ public class ModModelPredicateProvider {
         ItemProperties.register(bow, new ResourceLocation("pull"),
                 (stack, world, entity, seed) -> {
                    if(entity == null) return 0.0f;
-                   else if (entity.getActiveItem() != stack) return 0.0f;
-                   return (float)(stack.getMaxUseTime() - entity.getItemUseTimeLeft()) / 20.0f;
+                   else if (entity.getUseItem() != stack) return 0.0f;
+                   return (float)(stack.getMaxUseTime() - entity.getUseItemRemainingTicks()) / 20.0f;
                 });
 
         ItemProperties.register(bow, new ResourceLocation("pulling"),
-                (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0f : 0.0f);
+                (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0f : 0.0f);
     }
 
     private static void registerShieldModel() {
@@ -43,6 +43,6 @@ public class ModModelPredicateProvider {
 
     private static void registerShield(Item shield) {
         ItemProperties.register(shield, new ResourceLocation("blocking"),
-                (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F);
+                (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
     }
 }

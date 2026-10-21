@@ -23,14 +23,14 @@ public class CaveTrollHeldItemFeatureRenderer extends MEFeatureRenderer<CaveTrol
 
     @Override
     public void render(PoseStack matrices, MultiBufferSource vertexConsumers, int light, CaveTrollEntityRenderState state, float limbAngle, float limbDistance) {
-        this.getContextModel().setArmAngle(matrices);
+        this.getParentModel().setArmAngle(matrices);
         matrices.multiply(Axis.POSITIVE_X.rotationDegrees(-90.0F));
         matrices.multiply(Axis.POSITIVE_Y.rotationDegrees(180.0F));
         matrices.translate(0.3f, 0, -2.6);
         matrices.scale(1.5f,1.5f,1.5f);
 
         if (state.entity instanceof net.minecraft.world.entity.LivingEntity living) {
-            ItemStack held = living.getStackInHand(net.minecraft.world.InteractionHand.MAIN_HAND);
+            ItemStack held = living.getItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND);
             if (!held.isEmpty()) {
                 Minecraft.getInstance().getItemRenderer().renderItem(held, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND,
                         light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, living.getWorld(), living.getId());

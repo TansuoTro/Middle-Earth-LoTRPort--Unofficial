@@ -5,9 +5,9 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
-import net.minecraft.client.model.EntityModelLayers;
+import net.minecraft.client.model.geom.ModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
@@ -19,9 +19,9 @@ public class GondorHumanRenderer extends HumanoidMobRenderer<GondorHumanEntity, 
     private static final String PATH = "textures/entities/humans/gondor/";
 
     public GondorHumanRenderer(EntityRendererProvider.Context ctx) {
-        super(ctx, new GondorHumanModel<>(ctx.getPart(ModEntityModelLayers.HUMAN)), 0.5f);
-        this.addFeature(new HumanoidArmorLayer<>(this, new GondorHumanModel(ctx.getPart(ModelLayers.PLAYER_INNER_ARMOR)),
-                new GondorHumanModel(ctx.getPart(ModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
+        super(ctx, new GondorHumanModel<>(ctx.bakeLayer(ModEntityModelLayers.HUMAN)), 0.5f);
+        this.addFeature(new HumanoidArmorLayer<>(this, new GondorHumanModel(ctx.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)),
+                new GondorHumanModel(ctx.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
 
     }
 

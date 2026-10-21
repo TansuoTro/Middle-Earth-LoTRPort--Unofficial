@@ -48,7 +48,7 @@ public record SeasonDataComponent(Season season) implements TooltipAppender {
         WINTER("winter"),
         DEAD("dead");
 
-        public static final Codec<Season> CODEC = StringRepresentable.createCodec(Season::values);
+        public static final Codec<Season> CODEC = StringRepresentable.fromEnum(Season::values);
         public static final PacketCodec<FriendlyByteBuf, Season> PACKET_CODEC =
                 PacketCodec.ofStatic(Season::writeToBuf, Season::readFromBuf);
         private final String name;

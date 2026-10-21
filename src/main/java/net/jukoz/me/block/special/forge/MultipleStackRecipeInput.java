@@ -21,7 +21,7 @@ public class MultipleStackRecipeInput implements Inventory {
     }
 
     public ItemStack getStackInSlot(int slot) {
-        return this.getStack(slot);
+        return this.getItem(slot);
     }
 
     @Override

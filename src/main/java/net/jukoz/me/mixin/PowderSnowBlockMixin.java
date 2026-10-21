@@ -21,9 +21,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(PowderSnowBlock.class)
 public class PowderSnowBlockMixin {
 
-    @WrapOperation(method = "canWalkOnPowderSnow", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z", ordinal = 0))
+    @WrapOperation(method = "canWalkOnPowderSnow", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;is(Lnet/minecraft/item/Item;)Z", ordinal = 0))
     private static boolean canWalkOnPowderSnowTag(ItemStack instance, Item item, Operation<Boolean> original) {
-        return original.call(instance, item) || instance.isIn(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "powder_snow_walk_on")));
+        return original.call(instance, item) || instance.is(TagKey.create(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "powder_snow_walk_on")));
     }
 
     @Inject(method = "canWalkOnPowderSnow", at = @At("HEAD"), cancellable = true)

@@ -16,16 +16,17 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class LargeThickDoor3x2 extends LargeDoorBlock {
-    public static final IntegerProperty PART = IntegerProperty.of("part", 0, 5);
+    public static final IntegerProperty PART = IntegerProperty.create("part", 0, 5);
 
-    protected static final VoxelShape NORTH_SHAPE = Block.createCuboidShape(0, 0, 0, 16, 16, 8);
-    protected static final VoxelShape SOUTH_SHAPE = Block.createCuboidShape(0, 0, 8, 16, 16, 16);
-    protected static final VoxelShape EAST_SHAPE = Block.createCuboidShape(8, 0, 0, 16, 16, 16);
-    protected static final VoxelShape WEST_SHAPE = Block.createCuboidShape(0, 0, 0, 8, 16, 16);
+    protected static final VoxelShape NORTH_SHAPE = Block.box(0, 0, 0, 16, 16, 8);
+    protected static final VoxelShape SOUTH_SHAPE = Block.box(0, 0, 8, 16, 16, 16);
+    protected static final VoxelShape EAST_SHAPE = Block.box(8, 0, 0, 16, 16, 16);
+    protected static final VoxelShape WEST_SHAPE = Block.box(0, 0, 0, 8, 16, 16);
 
-    public LargeThickDoor3x2(Settings settings) {
+    public LargeThickDoor3x2(BlockBehaviour.Properties settings) {
         super(settings);
         this.doorHeight = 3;
         this.doorWidth  = 2;

@@ -4,9 +4,9 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
-import net.minecraft.client.model.EntityModelLayers;
+import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.ZombieModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
@@ -18,8 +18,8 @@ public class NazgulRenderer extends HumanoidMobRenderer<NazgulEntity, NazgulMode
     private static final String PATH = "textures/entities/nazgul/nazgul.png";
 
     public NazgulRenderer(EntityRendererProvider.Context ctx) {
-        super(ctx, new NazgulModel<>(ctx.getPart(ModEntityModelLayers.NAZGUL)), 0.5f);
-        this.addFeature(new HumanoidArmorLayer<>(this, new ZombieModel(ctx.getPart(ModelLayers.ZOMBIE_INNER_ARMOR)), new ZombieModel(ctx.getPart(ModelLayers.ZOMBIE_OUTER_ARMOR)), ctx.getModelManager()));
+        super(ctx, new NazgulModel<>(ctx.bakeLayer(ModEntityModelLayers.NAZGUL)), 0.5f);
+        this.addFeature(new HumanoidArmorLayer<>(this, new ZombieModel(ctx.bakeLayer(ModelLayers.ZOMBIE_INNER_ARMOR)), new ZombieModel(ctx.bakeLayer(ModelLayers.ZOMBIE_OUTER_ARMOR)), ctx.getModelManager()));
     }
 
     @Override
@@ -44,7 +44,7 @@ public class NazgulRenderer extends HumanoidMobRenderer<NazgulEntity, NazgulMode
         float scale = 1 - (float)entity.getFadingTicks() / NazgulEntity.FADING_TIME;
         scale = (float) Math.pow(scale, 0.35f);
         poseStack.scale(1.05f * scale, 1.05f * scale, 1.05f * scale);
-        if(entity.hasVehicle()) {
+        if(entity.isPassenger()) {
             poseStack.translate(0, -0.4f, 0);
         }
 

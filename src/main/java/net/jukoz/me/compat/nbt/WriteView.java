@@ -25,7 +25,7 @@ public final class WriteView {
 
     public WriteView(CompoundTag nbt, RegistryAccess registries) {
         this.nbt = nbt;
-        this.ops = registries == null ? NbtOps.INSTANCE : RegistryOps.of(NbtOps.INSTANCE, registries);
+        this.ops = registries == null ? NbtOps.INSTANCE : RegistryOps.create(NbtOps.INSTANCE, registries);
     }
 
     public CompoundTag nbt() {

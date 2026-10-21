@@ -7,15 +7,15 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
 import java.util.List;
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.argument;
+import static net.minecraft.commands.Commands.literal;
 
 public class CommandUtils {
     public static final String COMMAND_PLAYER_REPLACEMENT = "<p>";
 
     public static void sendAllCommands(ServerPlayer player, List<String> commands){
-        Commands commandManager =  player.getWorld().getServer().getCommandManager();
-        CommandSourceStack commandSource = player.getWorld().getServer().getCommandSource();
+        Commands commandManager =  player.level().getServer().getCommands();
+        CommandSourceStack commandSource = player.level().getServer().createCommandSourceStack();
 
         for(String com : commands) {
             com = com.replace(COMMAND_PLAYER_REPLACEMENT, player.getName().getString());

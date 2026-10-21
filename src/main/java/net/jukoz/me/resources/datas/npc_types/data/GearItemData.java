@@ -155,13 +155,13 @@ public class GearItemData {
         ItemStack itemStack = new ItemStack(this.item);
 
         if(this.color != null){
-            List<TagKey<Item>> tags = itemStack.streamTags().toList();
+            List<TagKey<Item>> tags = itemStack.getTags().toList();
             if(itemStack.getItem() instanceof net.minecraft.world.item.DyeableLeatherItem)
                 MEComponents.set(itemStack, MEComponents.DYED_COLOR, new DyedColorComponent(this.color));
             else if(itemStack.getItem() instanceof net.minecraft.world.item.DyeableLeatherItem)
                 MEComponents.set(itemStack, MEComponents.DYED_COLOR, new DyedColorComponent(this.color));
         } else if(this.colors != null){
-            List<TagKey<Item>> tags = itemStack.streamTags().toList();
+            List<TagKey<Item>> tags = itemStack.getTags().toList();
             if(itemStack.getItem() instanceof net.minecraft.world.item.DyeableLeatherItem)
                 MEComponents.set(itemStack, MEComponents.DYED_COLOR, new DyedColorComponent(getRandomColor(colors)));
             else if(itemStack.getItem() instanceof net.minecraft.world.item.DyeableLeatherItem)
@@ -273,7 +273,7 @@ public class GearItemData {
             nbt.putBoolean("no_cape", noCape);
 
         if(cape != null){
-            nbt.putString("cape", cape.getName().toLowerCase());
+            nbt.putString("cape", cape.getName().lowercaseVariant());
             if(capeColor != null)
                 nbt.putInt("cape_color", capeColor);
 
@@ -288,7 +288,7 @@ public class GearItemData {
             nbt.putBoolean("no_hood", noHood);
 
         if(hood != null){
-            nbt.putString("hood", hood.getName().toLowerCase());
+            nbt.putString("hood", hood.getName().lowercaseVariant());
             if(isDown != null)
                 nbt.putBoolean("hood_is_down", isDown);
         }

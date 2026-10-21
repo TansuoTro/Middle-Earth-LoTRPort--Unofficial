@@ -9,15 +9,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class OrcishFoodItem extends Item {
-    public OrcishFoodItem(Settings settings) {
+    public OrcishFoodItem(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
     @Override
     public ItemStack finishUsing(ItemStack stack, Level world, LivingEntity user) {
-        if(world.isClient) return super.finishUsing(stack, world, user);
+        if(world.isClientSide) return super.finishUsing(stack, world, user);
 
         if(user instanceof Player playerEntity) {
             RaceType raceType = RaceUtil.getRaceType(playerEntity);

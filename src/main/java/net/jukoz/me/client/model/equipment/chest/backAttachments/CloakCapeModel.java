@@ -23,7 +23,7 @@ public class CloakCapeModel extends ChestplateAddonModel {
     public void setAngles(BipedEntityRenderState bipedEntityRenderState) {
         BipedEntityRenderStateAccess renderStateAccess = ((BipedEntityRenderStateAccess)bipedEntityRenderState);
         if(renderStateAccess != null) {
-            this.cape.traverse().forEach(ModelPart::resetTransform);
+            this.cape.getAllParts().forEach(ModelPart::resetTransform);
             Vec3 currentVelocity = renderStateAccess.getVelocity();
             if(currentVelocity == null) currentVelocity = new Vec3(0, 0, 0);
 
@@ -42,7 +42,7 @@ public class CloakCapeModel extends ChestplateAddonModel {
             double result = renderStateAccess.getVelocity().dotProduct(currentVelocity);
 
             if(result > 0) {
-                this.cape.pitch = ToRad.ex(degree);
+                this.cape.xRot = ToRad.ex(degree);
             }
         }
     }

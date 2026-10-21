@@ -14,7 +14,7 @@ import net.jukoz.me.item.items.weapons.CustomSwordWeaponItem;
 
 public class ArtefactCustomSwordWeaponItem extends CustomSwordWeaponItem {
 
-    public ArtefactCustomSwordWeaponItem(Tier toolMaterial, Item.Settings settings) {
+    public ArtefactCustomSwordWeaponItem(Tier toolMaterial, Item.Properties settings) {
         super(toolMaterial, settings);
     }
 
@@ -40,7 +40,7 @@ public class ArtefactCustomSwordWeaponItem extends CustomSwordWeaponItem {
 
     @Override
     public boolean postMine(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity miner) {
-        if (!world.isClient && state.getHardness(world, pos) != 0.0F) {
+        if (!world.isClientSide && state.defaultDestroyTime(world, pos) != 0.0F) {
             if (stack.getDamage() == stack.getMaxDamage() - 1) {
                 BluntWeapon.blunt(stack);
             }

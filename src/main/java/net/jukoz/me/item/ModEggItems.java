@@ -129,7 +129,7 @@ public class ModEggItems {
             new SpawnEggItem(ModEntities.SNAIL, 7765379, 7165482, new MESettings()));
 
     private static Item registerItem(String name, Item item) {
-        ModItemGroups.SPAWN_EGGS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.SPAWN_EGGS_CONTENTS.add(item.getDefaultInstance());
         SimpleSpawnEggItemModel.items.add(item);
         return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);
     }

@@ -23,7 +23,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import java.util.OptionalInt;
 
 public class ModLeavesBlock extends LeavesBlock {
@@ -37,7 +37,7 @@ public class ModLeavesBlock extends LeavesBlock {
 
     @Override
     public void scheduledTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-        world.setBlockState(pos, updateDistanceFromLogs(state, world, pos), Block.NOTIFY_ALL);
+        world.setBlock(pos, updateDistanceFromLogs(state, world, pos), (Block.UPDATE_NEIGHBORS | Block.UPDATE_CLIENTS));
     }
 
     @Override
@@ -47,14 +47,14 @@ public class ModLeavesBlock extends LeavesBlock {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
         if ((i = getDistanceFromLog(neighborState) + 1) != 1 || state.get(DISTANCE) != i) {
-            world.scheduleBlockTick(pos, this, 1);
+            world.scheduleRecheck(pos, this, 1);
         }
         return state;
     }
 
     private static BlockState updateDistanceFromLogs(BlockState state, LevelAccessor world, BlockPos pos) {
         int i = 7;
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
         for(int x = -1; x <= 1; x++) {
             for(int y = -1; y <= 1; y++) {
                 for(int z = -1; z <= 1; z++) {
@@ -66,11 +66,11 @@ public class ModLeavesBlock extends LeavesBlock {
             }
         }
 
-        return state.with(DISTANCE, i);
+        return state.setValue(DISTANCE, i);
     }
 
     private static int getDistanceFromLog(BlockState state) {
-        return LeavesBlock.getOptionalDistanceFromLog(state).orElse(7);
+        return LeavesBlock.getOptionalDistanceAt(state).orElse(7);
     }
 
     @Override
@@ -82,7 +82,7 @@ public class ModLeavesBlock extends LeavesBlock {
     @Override
     public BlockState getPlacementState(BlockPlaceContext ctx) {
         FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
-        BlockState blockState = (this.getDefaultState().with(PERSISTENT, true)).with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
+        BlockState blockState = (this.defaultBlockState().with(PERSISTENT, true)).with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
         return updateDistanceFromLogs(blockState, ctx.getWorld(), ctx.getBlockPos());
     }
 
@@ -90,7 +90,7 @@ public class ModLeavesBlock extends LeavesBlock {
         super.randomDisplayTick(state, world, pos, random);
         if(this.particleType != null){
             if (random.nextInt(10) == 0) {
-                BlockPos blockPos = pos.down();
+                BlockPos blockPos = pos.below();
                 BlockState blockState = world.getBlockState(blockPos);
                 if (!isFaceFullSquare(blockState.getCollisionShape(world, blockPos), Direction.UP)) {
                     ParticleUtils.spawnParticle(world, pos, random, this.particleType);

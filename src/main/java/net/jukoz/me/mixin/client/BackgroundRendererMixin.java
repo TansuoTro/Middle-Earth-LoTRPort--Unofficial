@@ -28,14 +28,14 @@ public class BackgroundRendererMixin {
     private static float fogEndMultiplier = 1;
 
     @Inject(method = "applyFog", at = @At("TAIL"))
-    private static void applyFog(Camera camera, FogRenderer.FogType fogType, float viewDistance, boolean thickFog, float tickDelta, CallbackInfo ci) {
-        Entity entity = camera.getFocusedEntity();
+    private static void applyFog(Camera camera, FogRenderer.FogMode fogType, float viewDistance, boolean thickFog, float tickDelta, CallbackInfo ci) {
+        Entity entity = camera.getEntity();
 
         if (entity instanceof LocalPlayer clientPlayerEntity) {
             if(
                     !clientPlayerEntity.hasStatusEffect(MobEffects.DARKNESS) &&
                     !clientPlayerEntity.hasStatusEffect(MobEffects.BLINDNESS) &&
-                    !clientPlayerEntity.isSubmergedInWater() &&
+                    !clientPlayerEntity.isUnderWater() &&
                     ModDimensions.isInMiddleEarth(clientPlayerEntity.getWorld()))
             {
                 Optional<ResourceKey<Biome>> biomeRegistry = clientPlayerEntity.getWorld().getBiome(clientPlayerEntity.getBlockPos()).getKey();

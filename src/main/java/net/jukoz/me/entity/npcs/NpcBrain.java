@@ -45,7 +45,7 @@ public class NpcBrain {
     }
 
     protected static Brain<?> create(Dynamic<?> dynamic) {
-        Brain.Profile<NpcEntity> profile = Brain.createProfile(MEMORY_MODULES, SENSORS);
+        Brain.Provider<NpcEntity> profile = Brain.createProfile(MEMORY_MODULES, SENSORS);
         Brain<NpcEntity> brain = profile.deserialize(dynamic);
 
         addCoreActivities(brain);
@@ -96,7 +96,7 @@ public class NpcBrain {
     }
 
     private static void addCoreActivities(Brain<NpcEntity> brain) {
-        brain.forget(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
+        brain.erase(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
 
         brain.setTaskList(Activity.CORE, 0, ImmutableList.of(
                 //StartAttacking.create((world, npc) -> npc.getHurtBy()),
@@ -141,7 +141,7 @@ public class NpcBrain {
         Optional<GlobalPos> home = npc.getBrain().getOptionalMemory(MemoryModuleType.HOME);
 
         if(home != null && home.isPresent() && defendingHome != null && defendingHome.isPresent()) {
-            return target.getBlockPos().getSquaredDistance(npc.getBlockPos()) > 36;
+            return target.blockPosition().getSquaredDistance(npc.blockPosition()) > 36;
         }
 
         return false;

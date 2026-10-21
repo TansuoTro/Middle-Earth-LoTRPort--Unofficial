@@ -61,7 +61,7 @@ public class SackScreenHandler extends AbstractContainerMenu {
 		ItemStack itemStack = ItemStack.EMPTY;
 		Slot slot2 = (Slot)this.slots.get(slot);
 		if (slot2 != null && slot2.hasStack()) {
-			ItemStack itemStack2 = slot2.getStack();
+			ItemStack itemStack2 = slot2.getItem();
 			itemStack = itemStack2.copy();
 			if (slot < 9) {
 				if (!this.insertItem(itemStack2, INVENTORY_START, HOTBAR_END, true)) {

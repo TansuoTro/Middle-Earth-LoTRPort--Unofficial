@@ -42,9 +42,9 @@ public class BowAtEntityGoal extends Goal {
 		this.setControls(EnumSet.of(Control.LOOK));
 		if (targetType == Player.class) {
 			Predicate<Entity> predicate = EntitySelector.rides(mob);
-			this.targetPredicate = TargetingConditions.createNonAttackable().setBaseMaxDistance((double)range).setPredicate(targetSelector);
+			this.targetPredicate = TargetingConditions.forNonCombat().setBaseMaxDistance((double)range).setPredicate(targetSelector);
 		} else {
-			this.targetPredicate = TargetingConditions.createNonAttackable().setBaseMaxDistance((double)range);
+			this.targetPredicate = TargetingConditions.forNonCombat().setBaseMaxDistance((double)range);
 		}
 	}
 
@@ -53,13 +53,13 @@ public class BowAtEntityGoal extends Goal {
 			this.target = this.mob.getTarget();
 		}
 
-		if (!(this.mob.getWorld() instanceof ServerLevel serverWorld)) {
+		if (!(this.mob.level() instanceof ServerLevel serverWorld)) {
 			return false;
 		}
 		if (this.targetType == Player.class) {
 			this.target = serverWorld.getClosestPlayer(this.targetPredicate, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
 		} else {
-			this.target = serverWorld.getClosestEntity(this.mob.getWorld().getEntitiesByClass(this.targetType, this.mob.getBoundingBox().expand((double)this.range, 3.0, (double)this.range), (livingEntity) -> {
+			this.target = serverWorld.getClosestEntity(this.mob.level().getEntitiesByClass(this.targetType, this.mob.getBoundingBox().expand((double)this.range, 3.0, (double)this.range), (livingEntity) -> {
 				return true;
 			}), this.targetPredicate, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
 		}
@@ -71,7 +71,7 @@ public class BowAtEntityGoal extends Goal {
 	public boolean shouldContinue() {
 		if (!this.target.isAlive()) {
 			return false;
-		} else if (this.mob.squaredDistanceTo(this.target) > (double)(this.range * this.range)) {
+		} else if (this.mob.distanceTo(this.target) > (double)(this.range * this.range)) {
 			return false;
 		} else {
 			return this.lookTime > 0;

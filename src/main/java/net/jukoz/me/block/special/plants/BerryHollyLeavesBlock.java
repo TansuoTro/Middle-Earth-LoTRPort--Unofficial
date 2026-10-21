@@ -14,15 +14,15 @@ import net.jukoz.me.block.registration.ModNatureBlocks;
 
 public class BerryHollyLeavesBlock extends TintedParticleLeavesBlock {
 
-    public BerryHollyLeavesBlock(float f, BlockBehaviour.Settings settings) {
+    public BerryHollyLeavesBlock(float f, BlockBehaviour.Properties settings) {
         super(f, settings);
     }
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        ItemStack stack = player.getStackInHand(hand);
-        if (stack.isOf(Items.BONE_MEAL)) {
-            world.setBlockState(pos, ModNatureBlocks.BERRY_HOLLY_LEAVES.getDefaultState());
+        ItemStack stack = player.getItemInHand(hand);
+        if (stack.is(Items.BONE_MEAL)) {
+            world.setBlock(pos, ModNatureBlocks.BERRY_HOLLY_LEAVES.defaultBlockState());
             return InteractionResult.SUCCESS;
         }
         return super.onUse(state, world, pos, player, hand, hit);

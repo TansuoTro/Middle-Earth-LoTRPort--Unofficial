@@ -16,7 +16,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
@@ -25,19 +25,19 @@ import net.minecraft.world.phys.shapes.Shapes;
 public class SmallCurtainsBlock extends HorizontalDirectionalBlock {
     public static final BooleanProperty OPEN;
 
-    public SmallCurtainsBlock(BlockBehaviour.Settings settings) {
+    public SmallCurtainsBlock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return this.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+        return this.defaultBlockState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (!world.isClient && player.getAbilities().allowModifyWorld) {
-            world.setBlockState(pos, state.cycle(OPEN));
+        if (!world.isClientSide && player.getAbilities().allowModifyWorld) {
+            world.setBlock(pos, state.cycle(OPEN));
         }
         return InteractionResult.SUCCESS;
     }
@@ -45,11 +45,11 @@ public class SmallCurtainsBlock extends HorizontalDirectionalBlock {
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return switch (state.get(BlockStateProperties.HORIZONTAL_FACING)) {
-            case WEST -> Block.createCuboidShape(14, 2, 0, 16, 16, 16);
-            case EAST -> Block.createCuboidShape(0, 2, 0, 2, 16, 16);
-            case SOUTH -> Block.createCuboidShape(0, 2, 0, 16, 16, 2);
-            case NORTH -> Block.createCuboidShape(0, 2, 14, 16, 16, 16);
-            default -> Shapes.cuboid(0, 2, 0, 16, 16, 16);
+            case WEST -> Block.box(14, 2, 0, 16, 16, 16);
+            case EAST -> Block.box(0, 2, 0, 2, 16, 16);
+            case SOUTH -> Block.box(0, 2, 0, 16, 16, 2);
+            case NORTH -> Block.box(0, 2, 14, 16, 16, 16);
+            default -> Shapes.addBox(0, 2, 0, 16, 16, 16);
         };
     }
 

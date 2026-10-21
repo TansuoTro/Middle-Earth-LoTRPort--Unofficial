@@ -1,6 +1,6 @@
 package net.jukoz.me.block.special.shelobiteeggs;
 
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
@@ -17,11 +17,11 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.spider.larva.ShelobiteLarvaEntity;
@@ -29,13 +29,14 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class ShelobiteLarvaEggBlock extends AbstractShelobiteLarvaEgg {
     private static final EnumProperty<Direction> FACING;
 
-    public ShelobiteLarvaEggBlock(Settings settings) {
+    public ShelobiteLarvaEggBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(this.getDefaultState().with(FACING, Direction.EAST));
+        this.setDefaultState(this.defaultBlockState().with(FACING, Direction.EAST));
     }
     @Override
     protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
@@ -44,18 +45,18 @@ public class ShelobiteLarvaEggBlock extends AbstractShelobiteLarvaEgg {
     }
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return this.getDefaultState()
-                .with(FACING, ctx.getHorizontalPlayerFacing());
+        return this.defaultBlockState()
+                .with(FACING, ctx.getHorizontalDirection());
     }
 
     public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
-        BlockPos blockPos = pos.down();
+        BlockPos blockPos = pos.below();
         return world.getBlockState(blockPos).isSolidBlock(world, blockPos);
     }
 
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
-        return !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+        return !state.canPlaceAt(world, pos) ? Blocks.AIR.defaultBlockState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
     @Override
@@ -77,8 +78,8 @@ public class ShelobiteLarvaEggBlock extends AbstractShelobiteLarvaEgg {
 
     public static void breakEgg(Level world, BlockPos pos, BlockState state) {
         world.playSound(null, pos, SoundEvents.ENTITY_TURTLE_EGG_BREAK, SoundSource.BLOCKS, 0.7F, 0.9F + world.random.nextFloat() * 0.2F);
-        world.emitGameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Emitter.of(state));
-        world.syncWorldEvent(2001, pos, Block.getRawIdFromState(state));
+        world.emitGameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(state));
+        world.levelEvent(2001, pos, Block.getRawIdFromState(state));
         RandomSource random = RandomSource.create();
         int amountOfSpider = random.nextInt(3) + 1;
         for(int i = 0; i < amountOfSpider; i++)
@@ -91,7 +92,7 @@ public class ShelobiteLarvaEggBlock extends AbstractShelobiteLarvaEgg {
         entity.age = 0;
         entity.refreshPositionAndAngles(pos, 0, 0);
         if(world instanceof ServerLevelAccessor serverWorldAccess) {
-            entity.initialize(serverWorldAccess, serverWorldAccess.getLocalDifficulty(pos), MobSpawnType.NATURAL, null, null);
+            entity.initialize(serverWorldAccess, serverWorldAccess.getEffectiveDifficulty(pos), MobSpawnType.NATURAL, null, null);
         }
         world.spawnEntity(entity);
     }
@@ -99,7 +100,7 @@ public class ShelobiteLarvaEggBlock extends AbstractShelobiteLarvaEgg {
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return Shapes.union(
-                Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 8.0, 16.0));
+                Block.box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0));
     }
 
     static {

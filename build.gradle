@@ -40,6 +40,11 @@ sourceSets.main.java.exclude 'net/jukoz/me/compat/REICommonPluginME.java'
 sourceSets.main.java.exclude 'net/jukoz/me/compat/alloyFurnace/**'
 sourceSets.main.java.exclude 'net/jukoz/me/compat/artisanTable/**'
 sourceSets.main.java.exclude 'net/jukoz/me/compat/forge/**'
+// Datagen providers still target Fabric's datagen API (FabricDataOutput / FabricModelProvider /
+// the varargs criterion(...) builder calls). Their output is already committed under
+// src/main/generated, so the Forge build excludes the providers themselves and reuses the data.
+sourceSets.main.java.exclude 'net/jukoz/me/datageneration/**'
+
 
 processResources {
     inputs.property 'version', project.version

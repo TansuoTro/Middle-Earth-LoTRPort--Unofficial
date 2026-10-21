@@ -24,7 +24,7 @@ public abstract class MEFeatureRenderer<T extends LivingEntity, S extends Entity
     }
 
     protected M getModel() {
-        return this.getContextModel();
+        return this.getParentModel();
     }
 
     public abstract void render(PoseStack matrices, MultiBufferSource vertexConsumers, int light,

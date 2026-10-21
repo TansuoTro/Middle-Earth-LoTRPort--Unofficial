@@ -23,7 +23,7 @@ public class EnshroudedStatusEffect extends MobEffect {
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
         if(entity instanceof Player){
-            Map<MobEffect, MobEffectInstance> map = entity.getActiveStatusEffects();
+            Map<MobEffect, MobEffectInstance> map = entity.getActiveEffectsMap();
             int ticksLeft = map.get(ModStatusEffects.ENSHROUDED).getDuration();
             if(ticksLeft != -1 && ticksLeft < EnshroudedData.STOPPING_TICK)
                 EnshroudedData.addEffect((IEntityDataSaver) entity, -2);

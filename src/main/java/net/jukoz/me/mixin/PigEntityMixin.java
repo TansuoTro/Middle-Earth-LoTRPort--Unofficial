@@ -17,7 +17,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderList;
+import net.minecraft.core.HolderSet;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;

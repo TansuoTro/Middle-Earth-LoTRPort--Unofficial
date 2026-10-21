@@ -49,7 +49,7 @@ public class PacketTeleportToCurrentOverworldSpawn extends ClientToServerPacket<
                     }
 
                     if(!context.player().isCreative() && context.player().getMainHandStack().getItem() instanceof StarlightPhialItem)
-                        context.player().getStackInHand(InteractionHand.MAIN_HAND).decrement(1);
+                        context.player().getItemInHand(InteractionHand.MAIN_HAND).decrement(1);
                 }
             });
         } catch (Exception e){

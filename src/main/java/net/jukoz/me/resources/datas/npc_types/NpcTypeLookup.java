@@ -9,7 +9,7 @@ import java.util.List;
 
 public class NpcTypeLookup {
     public static List<NpcType> getAllNpcTypes(Level world, List<ResourceLocation> ids) {
-        Registry<NpcType> registry = world.getRegistryManager().get(DynamicRegistriesME.NPC_TYPE);
+        Registry<NpcType> registry = world.registryAccess().get(DynamicRegistriesME.NPC_TYPE);
         List<NpcType> list = new ArrayList<>();
         for(ResourceLocation id : ids){
             list.add(registry.get(id));
@@ -27,6 +27,6 @@ public class NpcTypeLookup {
         return list;
     }
     public static NpcType getNpcType(Level world, ResourceLocation id) {
-        return world.getRegistryManager().get(DynamicRegistriesME.NPC_TYPE).get(id);
+        return world.registryAccess().get(DynamicRegistriesME.NPC_TYPE).get(id);
     }
 }

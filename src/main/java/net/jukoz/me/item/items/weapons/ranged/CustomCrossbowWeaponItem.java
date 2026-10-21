@@ -12,7 +12,7 @@ import java.util.function.Predicate;
 public class CustomCrossbowWeaponItem extends CrossbowItem {
     public RangedWeaponTypesME type;
 
-    public CustomCrossbowWeaponItem(RangedWeaponTypesME type, Item.Settings settings) {
+    public CustomCrossbowWeaponItem(RangedWeaponTypesME type, Item.Properties settings) {
         super(settings.maxDamage(type.durability));
         this.type = type;
     }

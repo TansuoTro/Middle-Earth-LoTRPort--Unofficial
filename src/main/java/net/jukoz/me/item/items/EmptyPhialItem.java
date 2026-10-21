@@ -4,7 +4,7 @@ import net.jukoz.me.item.ModResourceItems;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUsage;
+import net.minecraft.world.item.ItemUtils;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
@@ -18,16 +18,17 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.level.material.Fluid;
 
 public class EmptyPhialItem  extends Item {
-    public EmptyPhialItem(Item.Settings settings) {
+    public EmptyPhialItem(Item.Properties settings) {
         super(settings);
     }
 
     public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
-        ItemStack itemStack = user.getStackInHand(hand);
+        ItemStack itemStack = user.getItemInHand(hand);
 
-        BlockHitResult blockHitResult = raycast(world, user, ClipContext.FluidHandling.SOURCE_ONLY);
+        BlockHitResult blockHitResult = raycast(world, user, ClipContext.Fluid.SOURCE_ONLY);
         if (blockHitResult.getType() != HitResult.Type.MISS) {
             if (blockHitResult.getType() == HitResult.Type.BLOCK) {
                 BlockPos blockPos = blockHitResult.getBlockPos();
@@ -35,10 +36,10 @@ public class EmptyPhialItem  extends Item {
                     return InteractionResultHolder.pass(itemStack);
                 }
 
-                if (world.getFluidState(blockPos).isIn(FluidTags.WATER)) {
+                if (world.getFluidState(blockPos).is(FluidTags.WATER)) {
                     world.playSound(user, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.15F);
                     world.emitGameEvent(user, GameEvent.FLUID_PICKUP, blockPos);
-                    return InteractionResultHolder.success(this.fill(itemStack, user, new ItemStack(ModResourceItems.WATER_PHIAL)), world.isClient());
+                    return InteractionResultHolder.success(this.fill(itemStack, user, new ItemStack(ModResourceItems.WATER_PHIAL)), world.isClientSide());
                 }
             }
 

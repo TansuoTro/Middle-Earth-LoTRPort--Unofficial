@@ -13,11 +13,11 @@ public class WillowCofferBlockEntity extends ChestBlockEntity {
     public WillowCofferBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.WILLOW_COFFER, pos, state);
 
-        this.setInvStackList(NonNullList.ofSize(this.size(), ItemStack.EMPTY));
+        this.setInvStackList(NonNullList.withSize(this.size(), ItemStack.EMPTY));
     }
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable(MiddleEarth.of("willow_coffer").toTranslationKey("screen"));
+        return Component.translatable(MiddleEarth.of("willow_coffer").toLanguageKey("screen"));
     }
 }

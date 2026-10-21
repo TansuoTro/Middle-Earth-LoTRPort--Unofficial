@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class ItemMixin {
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void me$captureComponentDefaults(Item.Settings settings, CallbackInfo ci) {
+    private void me$captureComponentDefaults(Item.Properties settings, CallbackInfo ci) {
         if (settings instanceof MESettings meSettings) {
             if (!meSettings.components().isEmpty()) {
                 MEComponents.captureDefaults((Item) (Object) this, meSettings.components());

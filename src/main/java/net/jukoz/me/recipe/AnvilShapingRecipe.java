@@ -108,7 +108,7 @@ public class AnvilShapingRecipe implements Recipe<SingleStackRecipeInput> {
         @Override
         public AnvilShapingRecipe read(ResourceLocation id, FriendlyByteBuf buf) {
             Ingredient input = Ingredient.fromPacket(buf);
-            ItemStack output = buf.readItemStack();
+            ItemStack output = buf.readItem();
             int amount = buf.readInt();
             return new AnvilShapingRecipe(id, input, output, amount);
         }

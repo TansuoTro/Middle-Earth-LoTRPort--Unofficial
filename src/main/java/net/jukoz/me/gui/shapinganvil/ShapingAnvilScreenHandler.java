@@ -41,8 +41,8 @@ public class ShapingAnvilScreenHandler extends AbstractContainerMenu {
     private List<AnvilShapingRecipe> availableRecipes;
     private ItemStack outputStack;
     private Player player;
-    private Property selectedIndex;
-    private Property recipesSize;
+    private DataSlot selectedIndex;
+    private DataSlot recipesSize;
 
     public ShapingAnvilScreenHandler(int syncId, Inventory playerInventory, BlockPos blockPos) {
         this(syncId, playerInventory, new SimpleContainer(1), new SimpleContainerData(2));
@@ -56,12 +56,12 @@ public class ShapingAnvilScreenHandler extends AbstractContainerMenu {
         inventory.onOpen(playerInventory.player);
         this.propertyDelegate = delegate;
         this.pos = BlockPos.ORIGIN;
-        this.world = playerInventory.player.getWorld();
+        this.world = playerInventory.player.level();
         this.outputStack = ItemStack.EMPTY;
         this.player = playerInventory.player;
 
-        this.selectedIndex = Property.create();
-        this.recipesSize = Property.create();
+        this.selectedIndex = DataSlot.create();
+        this.recipesSize = DataSlot.create();
 
         this.addProperty(selectedIndex).set(-1);
         this.addProperty(recipesSize).set(0);
@@ -70,7 +70,7 @@ public class ShapingAnvilScreenHandler extends AbstractContainerMenu {
             @Override
             public void markDirty() {
                 super.markDirty();
-                if(player.getWorld().isClient) {
+                if(player.level().isClientSide) {
                     ShapingAnvilScreen screen = (ShapingAnvilScreen)Minecraft.getInstance().currentScreen;
                     if(screen != null) screen.clearOutputs();
                 }
@@ -90,7 +90,7 @@ public class ShapingAnvilScreenHandler extends AbstractContainerMenu {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
         if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
             if (invSlot < this.inventory.size()) {
                 if (!this.insertItem(originalStack, this.inventory.size(), this.slots.size(), true)) {
@@ -119,8 +119,8 @@ public class ShapingAnvilScreenHandler extends AbstractContainerMenu {
     }
 
     public void updateStack(Inventory inventory) {
-        ItemStack input = inventory.getStack(0);
-        if (!this.world.isClient){
+        ItemStack input = inventory.getItem(0);
+        if (!this.world.isClientSide){
             RecipeManager serverRecipeManager = (RecipeManager) this.world.getRecipeManager();
             this.availableRecipes = serverRecipeManager.getAllMatches(RecipesME.ANVIL_SHAPING, new SingleStackRecipeInput(input), this.world);
             recipesSize.set(this.availableRecipes.size());
@@ -134,8 +134,8 @@ public class ShapingAnvilScreenHandler extends AbstractContainerMenu {
 
     public int getAvailableRecipeCount() {
         int count = 0;
-        ItemStack input = inventory.getStack(0);
-        if (!this.world.isClient){
+        ItemStack input = inventory.getItem(0);
+        if (!this.world.isClientSide){
             RecipeManager serverRecipeManager = (RecipeManager) this.world.getRecipeManager();
             this.availableRecipes = serverRecipeManager.getAllMatches(RecipesME.ANVIL_SHAPING, new SingleStackRecipeInput(input), this.world);
             count = this.availableRecipes.size();

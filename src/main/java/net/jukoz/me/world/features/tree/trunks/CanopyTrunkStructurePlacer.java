@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelSimulatedReader;
-import net.minecraft.world.level.levelgen.feature.TreeFeatureConfig;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 import net.jukoz.me.world.gen.ModTreeGeneration;
@@ -57,7 +57,7 @@ public class CanopyTrunkStructurePlacer extends CanopyTrunkPlacer {
     }
 
     @Override
-    public List<FoliagePlacer.TreeNode> generate(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, int height, BlockPos startPos, TreeConfiguration config) {
+    public List<FoliagePlacer.FoliageAttachment> generate(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, int height, BlockPos startPos, TreeConfiguration config) {
         // Deprecated, although it can be useful later on, so keeping it there
         /*if(world instanceof ServerLevel serverWorld) {
             StructureTemplate template = getStructureTemplate(serverWorld);
@@ -72,7 +72,7 @@ public class CanopyTrunkStructurePlacer extends CanopyTrunkPlacer {
     // NOTE keep it for later maybe
     /*private void generateStructurePool(ServerLevel world, BlockPos startPos, int height) {
         ResourceKey<StructureTemplatePool> pool = ModStructureKeys.LOTHLORIEN_TALAN_KEY;
-        Registry<StructureTemplatePool> registry = world.getRegistryManager().get(Registries.TEMPLATE_POOL);
+        Registry<StructureTemplatePool> registry = world.registryAccess().get(Registries.TEMPLATE_POOL);
         Holder<StructureTemplatePool> registryEntry = registry.get(pool);
         BlockPos blockPos = startPos.mutableCopy().add(new Vec3i(0, (int)(this.structureStart * height), 0));
         JigsawPlacement.generate(world, registryEntry, ModStructureKeys.LOTHLORIEN_TALAN_KEY.getValue(), 8, blockPos, false);
@@ -80,11 +80,11 @@ public class CanopyTrunkStructurePlacer extends CanopyTrunkPlacer {
 
     @Nullable
     private StructureTemplate getStructureTemplate(ServerLevel world) {
-        return structureName == null ? null : world.getStructureTemplateManager().getTemplate(this.structureName).orElse(null);
+        return structureName == null ? null : world.getStructureManager().getTemplate(this.structureName).orElse(null);
     }
 
     @Nullable
     private StructureTemplate getStructureTemplate(WorldGenRegion world) {
-        return structureName == null ? null : world.toServerWorld().getStructureTemplateManager().getTemplate(this.structureName).orElse(null);
+        return structureName == null ? null : world.toServerWorld().getStructureManager().getTemplate(this.structureName).orElse(null);
     }*/
 }

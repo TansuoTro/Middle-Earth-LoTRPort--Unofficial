@@ -37,7 +37,7 @@ public class AlloyingCategory implements DisplayCategory<AlloyingDisplay> {
 
     @Override
     public Renderer getIcon() {
-        return EntryStacks.of(ModDecorativeBlocks.FORGE.asItem().getDefaultStack());
+        return EntryStacks.of(ModDecorativeBlocks.FORGE.asItem().getDefaultInstance());
     }
 
     @Override

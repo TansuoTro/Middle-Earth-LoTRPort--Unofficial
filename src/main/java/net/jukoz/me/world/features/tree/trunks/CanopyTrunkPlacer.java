@@ -10,7 +10,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelSimulatedReader;
-import net.minecraft.world.level.levelgen.feature.TreeFeatureConfig;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
@@ -76,15 +76,15 @@ public class CanopyTrunkPlacer extends TrunkPlacer {
     }
 
     @Override
-    public List<FoliagePlacer.TreeNode> generate(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, int height, BlockPos startPos, TreeConfiguration config) {
-        BlockPos blockPos = startPos.down();
+    public List<FoliagePlacer.FoliageAttachment> generate(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, int height, BlockPos startPos, TreeConfiguration config) {
+        BlockPos blockPos = startPos.below();
         setToDirt(world, replacer, random, blockPos, config);
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
         float heightProgress = (float) Math.pow((float) 1 / iterations, iteration_percentage);
 
         BlockPos newPos = new BlockPos(startPos).add(0, (int)(height * heightProgress), 0);
-        List<FoliagePlacer.TreeNode> treeNodes = createCircleBranches(world, replacer, random, mutable, config,
+        List<FoliagePlacer.FoliageAttachment> treeNodes = createCircleBranches(world, replacer, random, mutable, config,
                 newPos, (int) (getHeight(random) - (height * heightProgress)), Mth.lerp(heightProgress, baseRadius, tipRadius), tipRadius);
 
         float direction = 0;
@@ -93,18 +93,18 @@ public class CanopyTrunkPlacer extends TrunkPlacer {
             direction = (float) (Math.random() * (360 / Math.PI));
             velocity = this.velocity;
         }
-        FoliagePlacer.TreeNode treeNode = new FoliagePlacer.TreeNode(createBranch(world, replacer, random, mutable, config,
+        FoliagePlacer.FoliageAttachment treeNode = new FoliagePlacer.FoliageAttachment(createBranch(world, replacer, random, mutable, config,
                 startPos, height, direction, velocity, baseRadius, tipRadius), 1, false);
         treeNodes.add(treeNode);
 
         createRoots(world, replacer, random, mutable, config, startPos.add(0, this.roots_offset, 0), (int) (getHeight(random) / 2.5f), baseRadius * 0.95f, tipRadius);
 
-        return ImmutableList.copyOf(treeNodes);
+        return ImmutableList.bind(treeNodes);
     }
 
-    private List<FoliagePlacer.TreeNode> createCircleBranches(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable mutable,
+    private List<FoliagePlacer.FoliageAttachment> createCircleBranches(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.MutableBlockPos mutable,
                                                         TreeConfiguration config, BlockPos startPos, int height, float radiusA, float radiusB) {
-        List<FoliagePlacer.TreeNode> treeNodes = new ArrayList<>();
+        List<FoliagePlacer.FoliageAttachment> treeNodes = new ArrayList<>();
         List<BlockPos> lastTopBranches = List.of(startPos);
         float heightProgress = 0;
 
@@ -143,7 +143,7 @@ public class CanopyTrunkPlacer extends TrunkPlacer {
 
                     if (Math.random() < 0.4f) {
                         int index = currentTopBranches.size() - 1;
-                        treeNodes.add(new FoliagePlacer.TreeNode(currentTopBranches.get(index), 0, false));
+                        treeNodes.add(new FoliagePlacer.FoliageAttachment(currentTopBranches.get(index), 0, false));
                         currentTopBranches.remove(index);
                     }
                 }
@@ -152,12 +152,12 @@ public class CanopyTrunkPlacer extends TrunkPlacer {
         }
 
         for(BlockPos pos : lastTopBranches) {
-            treeNodes.add(new FoliagePlacer.TreeNode(pos, 0, false));
+            treeNodes.add(new FoliagePlacer.FoliageAttachment(pos, 0, false));
         }
         return treeNodes;
     }
 
-    protected void createRoots(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable mutable,
+    protected void createRoots(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.MutableBlockPos mutable,
                                TreeConfiguration config, BlockPos startPos, int height, float radiusA, float radiusB) {
         int rootsNb = 5 + (int)(Math.random() * 2);
         startPos = startPos.add(0, (int) (height * 0.6f), 0);
@@ -168,7 +168,7 @@ public class CanopyTrunkPlacer extends TrunkPlacer {
         }
     }
 
-    protected BlockPos createLinearBranch(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable mutable,
+    protected BlockPos createLinearBranch(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.MutableBlockPos mutable,
                                     TreeConfiguration config, BlockPos startPos, int height, double angle, float velocity, float radiusA, float radiusB) {
         if(height < 0) {
             height *= -1;
@@ -185,7 +185,7 @@ public class CanopyTrunkPlacer extends TrunkPlacer {
         return new BlockPos((int) currentPos.x, (int) currentPos.y, (int) currentPos.z);
     }
 
-    protected BlockPos createBranch(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable mutable,
+    protected BlockPos createBranch(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.MutableBlockPos mutable,
                                     TreeConfiguration config, BlockPos startPos, int height, double direction, float velocity, float radiusA, float radiusB) {
         int multiplier = 1;
         if(height < 0) {
@@ -221,7 +221,7 @@ public class CanopyTrunkPlacer extends TrunkPlacer {
         return new BlockPos(startPos).add((int) offsetX, multiplier * height, (int) offsetZ);
     }
 
-    protected void setLog(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable tmpPos,
+    protected void setLog(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.MutableBlockPos tmpPos,
                           TreeConfiguration config, BlockPos startPos, int dx, int dy, int dz) {
         tmpPos.set(startPos, dx, dy, dz);
         this.trySetState(world, replacer, random, tmpPos, config);

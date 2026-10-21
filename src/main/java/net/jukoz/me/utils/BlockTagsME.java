@@ -7,8 +7,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 
 public class BlockTagsME {
-    public static TagKey<Block> CURTAINS = TagKey.of(Registries.BLOCK, MiddleEarth.of("curtains"));
-    public static TagKey<Block> SMALL_CURTAINS = TagKey.of(Registries.BLOCK, MiddleEarth.of("small_curtains"));
-    public static TagKey<Block> FARMLANDS = TagKey.of(Registries.BLOCK, MiddleEarth.of("farmlands"));
-    public static TagKey<Block> COBWEBS = TagKey.of(Registries.BLOCK, MiddleEarth.of("cobwebs"));
+    public static TagKey<Block> CURTAINS = TagKey.create(Registries.BLOCK, MiddleEarth.of("curtains"));
+    public static TagKey<Block> SMALL_CURTAINS = TagKey.create(Registries.BLOCK, MiddleEarth.of("small_curtains"));
+    public static TagKey<Block> FARMLANDS = TagKey.create(Registries.BLOCK, MiddleEarth.of("farmlands"));
+    public static TagKey<Block> COBWEBS = TagKey.create(Registries.BLOCK, MiddleEarth.of("cobwebs"));
 }

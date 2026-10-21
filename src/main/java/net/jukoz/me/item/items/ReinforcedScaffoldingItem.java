@@ -23,19 +23,19 @@ public class ReinforcedScaffoldingItem extends ScaffoldingBlockItem {
         Level world = context.getWorld();
         BlockState blockState = world.getBlockState(blockPos);
         Block block = this.getBlock();
-        if (blockState.isOf(block)) {
+        if (blockState.is(block)) {
             Direction direction;
-            if (context.shouldCancelInteraction()) {
-                direction = context.hitsInsideBlock() ? context.getSide().getOpposite() : context.getSide();
+            if (context.isSecondaryUseActive()) {
+                direction = context.isInside() ? context.getSide().getOpposite() : context.getSide();
             } else {
-                direction = context.getSide() == Direction.UP ? context.getHorizontalPlayerFacing() : Direction.UP;
+                direction = context.getSide() == Direction.UP ? context.getHorizontalDirection() : Direction.UP;
             }
 
             int horizontalDistance = 0;
-            BlockPos.Mutable mutable = blockPos.mutableCopy().move(direction);
+            BlockPos.MutableBlockPos mutable = blockPos.mutableCopy().move(direction);
 
             while (horizontalDistance < ReinforcedScaffoldingBlock.MAX_SUPPORT_DISTANCE) {
-                if (!world.isClient && !world.isInBuildLimit(mutable)) {
+                if (!world.isClientSide && !world.isInWorldBounds(mutable)) {
                     if (context.getPlayer() instanceof ServerPlayer serverPlayer && mutable.getY() > world.getTopY()) {
                         serverPlayer.sendMessageToClient(
                                 Component.translatable("build.tooHigh", world.getTopY()).formatted(ChatFormatting.RED),
@@ -46,7 +46,7 @@ public class ReinforcedScaffoldingItem extends ScaffoldingBlockItem {
                 }
 
                 blockState = world.getBlockState(mutable);
-                if (!blockState.isOf(block)) {
+                if (!blockState.is(block)) {
                     return blockState.canReplace(context) ? BlockPlaceContext.offset(context, mutable, direction) : null;
                 }
 

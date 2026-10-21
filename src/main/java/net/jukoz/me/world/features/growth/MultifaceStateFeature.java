@@ -31,7 +31,7 @@ public class MultifaceStateFeature extends Feature<MultifaceStateFeatureConfig> 
 			if (generate(structureWorldAccess, blockPos, structureWorldAccess.getBlockState(blockPos), multifaceGrowthFeatureConfig, random, list)) {
 				return true;
 			} else {
-				BlockPos.Mutable mutable = blockPos.mutableCopy();
+				BlockPos.MutableBlockPos mutable = blockPos.mutableCopy();
 
 				for (Direction direction : list) {
 					mutable.set(blockPos);
@@ -40,7 +40,7 @@ public class MultifaceStateFeature extends Feature<MultifaceStateFeatureConfig> 
 					for (int i = 0; i < multifaceGrowthFeatureConfig.searchRange; i++) {
 						mutable.set(blockPos, direction);
 						BlockState blockState = structureWorldAccess.getBlockState(mutable);
-						if (!isAirOrWater(blockState) && !blockState.isOf(multifaceGrowthFeatureConfig.block)) {
+						if (!isAirOrWater(blockState) && !blockState.is(multifaceGrowthFeatureConfig.block)) {
 							break;
 						}
 
@@ -58,19 +58,19 @@ public class MultifaceStateFeature extends Feature<MultifaceStateFeatureConfig> 
 	public static boolean generate(
 			WorldGenLevel world, BlockPos pos, BlockState state, MultifaceStateFeatureConfig config, RandomSource random, List<Direction> directions
 	) {
-		BlockPos.Mutable mutable = pos.mutableCopy();
+		BlockPos.MutableBlockPos mutable = pos.mutableCopy();
 
 		for (Direction direction : directions) {
 			BlockState blockState = world.getBlockState(mutable.set(pos, direction));
-			if (blockState.isIn(config.canPlaceOn)) {
+			if (blockState.is(config.canPlaceOn)) {
 				BlockState blockState2 = config.block.withDirection(state, world, pos, direction);
 				if (blockState2 == null) {
 					return false;
 				}
 				blockState2 = blockState2.with(WebbingBlock.PERSISTENT, config.persistent);
 
-				world.setBlockState(pos, blockState2, Block.NOTIFY_ALL);
-				world.getChunk(pos).markBlockForPostProcessing(pos);
+				world.setBlock(pos, blockState2, (Block.UPDATE_NEIGHBORS | Block.UPDATE_CLIENTS));
+				world.getChunk(pos).markPosForPostprocessing(pos);
 				if (random.nextFloat() < config.spreadChance) {
 					config.block.getGrower().grow(blockState2, world, pos, direction, random, true);
 				}
@@ -83,6 +83,6 @@ public class MultifaceStateFeature extends Feature<MultifaceStateFeatureConfig> 
 	}
 
 	private static boolean isAirOrWater(BlockState state) {
-		return state.isAir() || state.isOf(Blocks.WATER);
+		return state.isAir() || state.is(Blocks.WATER);
 	}
 }

@@ -8,7 +8,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryOps;
-import net.minecraft.core.RegistryWrapper;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
@@ -24,19 +24,19 @@ import java.util.List;
 import net.minecraft.core.HolderLookup;
 
 public class NpcSpawnEggHelper {
-    public static ItemStack getSpawnEgg(NpcType npcType, HolderLookup.WrapperLookup wrapper) {
+    public static ItemStack getSpawnEgg(NpcType npcType, HolderLookup.Provider wrapper) {
         if(npcType == null)
             return ItemStack.EMPTY;
         return buildItemStackBasedOnNpcData(npcType, wrapper);
     }
 
     public static ItemStack getSpawnEgg(Level world, ResourceLocation identifier) {
-        NpcType npcType = world.getRegistryManager().get(DynamicRegistriesME.NPC_TYPE).get(identifier);
-        HolderLookup.WrapperLookup wrapperLookup = world.getRegistryManager();
+        NpcType npcType = world.registryAccess().get(DynamicRegistriesME.NPC_TYPE).get(identifier);
+        HolderLookup.Provider wrapperLookup = world.registryAccess();
         return buildItemStackBasedOnNpcData(npcType, wrapperLookup);
     }
 
-    private static ItemStack buildItemStackBasedOnNpcData(NpcType npcType, HolderLookup.WrapperLookup wrapper) {
+    private static ItemStack buildItemStackBasedOnNpcData(NpcType npcType, HolderLookup.Provider wrapper) {
         if(npcType == null)
             return ItemStack.EMPTY;
 
@@ -48,7 +48,7 @@ public class NpcSpawnEggHelper {
 
         NpcInitializationData npcInitializationData = new NpcInitializationData(npcType.getId(), false);
 
-        RegistryOps<Tag> ops = RegistryOps.of(
+        RegistryOps<Tag> ops = RegistryOps.create(
                 NbtOps.INSTANCE,
                 wrapper
         );
@@ -61,7 +61,7 @@ public class NpcSpawnEggHelper {
         itemStack.getOrCreateSubNbt("EntityTag").copyFrom(compoundData);
         MEComponents.set(itemStack, MEComponents.FACTION_DATA, new FactionDataComponent(npcType.getFactionIdentifier()));
         MEComponents.set(itemStack, MEComponents.RACE_DATA, new RaceDataComponent(npcType.getRace()));
-        itemStack.setCustomName(Component.translatable(itemId.toTranslationKey("item")));
+        itemStack.setCustomName(Component.translatable(itemId.toLanguageKey("item")));
         MEComponents.set(itemStack, MEComponents.ITEM_MODEL, new ResourceLocation(MiddleEarth.MOD_ID, npcType.getId().getPath().replaceAll("\\.", "_") + "_spawn_egg"));
 
         return itemStack;

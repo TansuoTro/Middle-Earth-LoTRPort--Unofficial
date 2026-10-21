@@ -22,7 +22,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
@@ -38,15 +38,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import com.mojang.math.Axis;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class AlloyFurnace extends BaseEntityBlock implements EntityBlock {
     private static final VoxelShape RAYCAST_SHAPE = createCuboidShape(2.0, 12.0, 2.0, 14.0, 16.0, 14.0);
     protected static final VoxelShape OUTLINE_SHAPE = Shapes.combineAndSimplify(Shapes.fullCube(), RAYCAST_SHAPE, BooleanOp.ONLY_FIRST);
     public static final DirectionProperty FACING = BlockStateProperties.HOPPER_FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
-    public AlloyFurnace(Settings settings) {
+    public AlloyFurnace(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(((this.stateManager.getDefaultState()).with(FACING, Direction.NORTH)).with(LIT, false));
+        this.setDefaultState(((this.stateManager.defaultBlockState()).with(FACING, Direction.NORTH)).with(LIT, false));
     }
 
     @Override
@@ -68,12 +69,12 @@ public class AlloyFurnace extends BaseEntityBlock implements EntityBlock {
     @Nullable
     @Override
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+        return this.defaultBlockState().with(FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+        return state.setValue(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override
@@ -89,10 +90,10 @@ public class AlloyFurnace extends BaseEntityBlock implements EntityBlock {
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if(!world.isClient) {
-            MenuProvider screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+        if(!world.isClientSide) {
+            MenuProvider screenHandlerFactory = state.getMenuProvider(world, pos);
             if(screenHandlerFactory != null) {
-                player.openHandledScreen(screenHandlerFactory);
+                player.openMenu(screenHandlerFactory);
             }
         }
         return InteractionResult.SUCCESS;

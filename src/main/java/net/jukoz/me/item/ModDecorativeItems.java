@@ -25,7 +25,7 @@ public class ModDecorativeItems {
     public static final Item TROLL_STATUE = DecorativeItemsME.TROLL_STATUE;
 
     private static Item registerItem(String name, Item item) {
-        ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(item.getDefaultStack());
+        ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(item.getDefaultInstance());
         return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);
     }
 

@@ -21,11 +21,11 @@ public class EgladilSentinelHelmetModel extends LorienHelmetModel {
         MeshDefinition modelData = getModelData();
         PartDefinition modelPartData = modelData.getRoot();
 
-        PartDefinition head = modelPartData.addChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition head = modelPartData.addOrReplaceChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        head.addChild("lower_extension", CubeListBuilder.create()
-                .uv(0, 11).cuboid(-4.0F, 0.85F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.55F)),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        head.addOrReplaceChild("lower_extension", CubeListBuilder.create()
+                .texOffs(0, 11).addBox(-4.0F, 0.85F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.55F)),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.of(modelData, 64, 64);
     }

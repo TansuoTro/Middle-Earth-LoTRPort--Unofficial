@@ -67,12 +67,12 @@ public class NpcInitializationData {
     }
 
     public boolean tryToInitialize(NpcEntity entity) {
-        Level world = entity.getWorld();
+        Level world = entity.level();
         if(world == null)
             return false;
 
         if(isRandom != null && isRandom){
-            Registry<NpcType> registry = world.getRegistryManager().get(DynamicRegistriesME.NPC_TYPE);
+            Registry<NpcType> registry = world.registryAccess().get(DynamicRegistriesME.NPC_TYPE);
             List<ResourceKey<NpcType>> entryList =  registry.getKeys().stream().toList();
             RandomSource random = new RandomSource();
             ResourceKey<NpcType> randomKey = entryList.get(random.nextInt(entryList.size()));
@@ -81,7 +81,7 @@ public class NpcInitializationData {
         }
 
         if(type != null){
-            Registry<NpcType> registry = world.getRegistryManager().get(DynamicRegistriesME.NPC_TYPE);
+            Registry<NpcType> registry = world.registryAccess().get(DynamicRegistriesME.NPC_TYPE);
             NpcType npcType = registry.get(type);
             if(npcType == null)
                 return false;

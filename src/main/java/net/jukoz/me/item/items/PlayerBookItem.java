@@ -14,20 +14,21 @@ import net.jukoz.me.gui.playerbook.PlayerBookScreen;
 import net.jukoz.me.gui.return_confirmation.ReturnConfirmationScreen;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class PlayerBookItem extends Item {
-    public PlayerBookItem(Settings settings) {
+    public PlayerBookItem(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
     public net.minecraft.world.InteractionResultHolder<net.minecraft.world.item.ItemStack> use(Level world, Player user, InteractionHand hand) {
-        if(world.isClient) {
+        if(world.isClientSide) {
             Minecraft client = Minecraft.getInstance();
             client.setScreen(new PlayerBookScreen(Component.of("Player's book")));
-            return net.minecraft.util.InteractionResultHolder.success(user.getStackInHand(hand));
+            return net.minecraft.util.InteractionResultHolder.success(user.getItemInHand(hand));
         }
-        return net.minecraft.util.InteractionResultHolder.fail(user.getStackInHand(hand));
+        return net.minecraft.util.InteractionResultHolder.fail(user.getItemInHand(hand));
     }
 }

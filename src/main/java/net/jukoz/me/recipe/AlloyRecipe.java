@@ -29,17 +29,17 @@ public class AlloyRecipe implements Recipe<SimpleContainer> {
 
     @Override
     public boolean matches(SimpleContainer inventory, Level world) {
-        if(world.isClient()) return false;
+        if(world.isClientSide()) return false;
         int i = 0;
         for (int j = 1; j < inventory.size() - 1; ++j) { // We avoid first and last indexes, because it's for fuel & output.
-            ItemStack itemStack = inventory.getStack(j);
+            ItemStack itemStack = inventory.getItem(j);
             if (itemStack.isEmpty()) continue;
             ++i;
         }
         if(i != this.inputs.size()) return false;
 
         for (int j = 0; j < inputs.size(); j++) {
-            if(!inputs.get(j).test(inventory.getStack(j + 1))) return false;
+            if(!inputs.get(j).test(inventory.getItem(j + 1))) return false;
         }
         return true;
     }
@@ -93,8 +93,8 @@ public class AlloyRecipe implements Recipe<SimpleContainer> {
         @Override
         public AlloyRecipe read(ResourceLocation id, JsonObject json) {
             ItemStack output = ShapedRecipe.outputFromJson(GsonHelper.getObject(json, "output"));
-            JsonArray ingredients = GsonHelper.getArray(json, "ingredients");
-            NonNullList<Ingredient> inputs = NonNullList.ofSize(ingredients.size(), Ingredient.EMPTY);
+            JsonArray ingredients = GsonHelper.getAsJsonArray(json, "ingredients");
+            NonNullList<Ingredient> inputs = NonNullList.withSize(ingredients.size(), Ingredient.EMPTY);
             for (int i = 0; i < ingredients.size(); i++) {
                 Ingredient ingredient = Ingredient.fromJson(ingredients.get(i), true);
                 if (ingredient.isEmpty()) continue;
@@ -106,12 +106,12 @@ public class AlloyRecipe implements Recipe<SimpleContainer> {
 
         @Override
         public AlloyRecipe read(ResourceLocation id, FriendlyByteBuf buf) {
-            NonNullList<Ingredient> inputs = NonNullList.ofSize(buf.readInt(), Ingredient.EMPTY);
+            NonNullList<Ingredient> inputs = NonNullList.withSize(buf.readInt(), Ingredient.EMPTY);
             for (int i = 0; i < inputs.size(); i++) {
                 inputs.set(i, Ingredient.fromPacket(buf));
             }
 
-            ItemStack output = buf.readItemStack();
+            ItemStack output = buf.readItem();
             return new AlloyRecipe(id, output, inputs);
         }
 

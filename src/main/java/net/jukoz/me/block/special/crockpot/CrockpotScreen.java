@@ -22,13 +22,13 @@ public class CrockpotScreen extends AbstractContainerScreen<CrockpotScreenHandle
 
     @Override
     protected void init() {
-        titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2;
+        titleX = (backgroundWidth - font.getWidth(title)) / 2;
         super.init();
     }
 
     @Override
     protected void drawBackground(GuiGraphics context, float deltaTicks, int mouseX, int mouseY) {
-        context.drawTexture(TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight, 256, 256);
-        context.drawTexture(WATER_TEXTURE, this.x + 120, this.y + 31, 0, 0, 24, 24, 16, 16, 0xFF66AAEE);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, WATER_TEXTURE, this.x + 120, this.y + 31, 0, 0, 24, 24, 16, 16, 0xFF66AAEE);
     }
 }

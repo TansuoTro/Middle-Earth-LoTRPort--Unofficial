@@ -1358,8 +1358,8 @@ public class ModBiomeFeatures {
     // endregion
 
     // region MISC
-    public static void addLavaMagmaLake(BiomeGenerationSettings.LookupBackedBuilder generationSettings) {
-        generationSettings.feature(GenerationStep.Feature.LAKES, ModMiscPlacedFeatures.LAVA_MAGMA_POOL);
+    public static void addLavaMagmaLake(BiomeGenerationSettings.PlainBuilder generationSettings) {
+        generationSettings.feature(GenerationStep.Decoration.LAKES, ModMiscPlacedFeatures.LAVA_MAGMA_POOL);
     }
     // endregion
 }

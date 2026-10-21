@@ -4,10 +4,9 @@ import net.jukoz.me.compat.client.render.MEEntityRenderer;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.jukoz.me.compat.client.render.state.BoatEntityRenderState;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
@@ -17,6 +16,7 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.EntityModelLayersME;
 import org.joml.Quaternionf;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.RenderType;
 
 public class BarrelEntityRenderer extends MEEntityRenderer<BarrelEntity, BoatEntityRenderState> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(MiddleEarth.MOD_ID, "textures/entities/reinforced_barrel/reinforced_barrel.png");
@@ -37,7 +37,7 @@ public class BarrelEntityRenderer extends MEEntityRenderer<BarrelEntity, BoatEnt
     public void render(BoatEntityRenderState state, PoseStack matrices, MultiBufferSource vertexConsumers, int light) {
         matrices.push();
         matrices.scale(1.35f, 1.35f, 1.35f);
-        matrices.multiply(Axis.POSITIVE_Y.rotationDegrees(180.0F - state.yaw));
+        matrices.multiply(Axis.POSITIVE_Y.rotationDegrees(180.0F - state.yRot));
         matrices.multiply(Axis.POSITIVE_Z.rotationDegrees(180.0F));
 
         float f = state.damageWobbleTicks;
@@ -50,26 +50,26 @@ public class BarrelEntityRenderer extends MEEntityRenderer<BarrelEntity, BoatEnt
         }
 
         matrices.translate(0f, -1.4f, 0f);
-        modelPart.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityCutout(TEXTURE)), light, OverlayTexture.DEFAULT_UV);
+        modelPart.render(matrices, vertexConsumers.getBuffer(RenderType.cutoutBlockSheet(TEXTURE)), light, OverlayTexture.DEFAULT_UV);
         this.renderWaterMask(state, matrices, vertexConsumers, light);
         matrices.pop();
     }
 
     public void updateRenderState(BarrelEntity barrelEntity, BoatEntityRenderState boatEntityRenderState, float f) {
         super.updateRenderState(barrelEntity, boatEntityRenderState, f);
-        boatEntityRenderState.yaw = Mth.lerpAngleDegrees(f, barrelEntity.prevYaw, barrelEntity.getYaw());
-        boatEntityRenderState.damageWobbleTicks = (float)barrelEntity.getDamageWobbleTicks() - f;
-        boatEntityRenderState.damageWobbleSide = barrelEntity.getDamageWobbleSide();
-        boatEntityRenderState.damageWobbleStrength = Math.max(barrelEntity.getDamageWobbleStrength() - f, 0.0F);
+        boatEntityRenderState.yRot = Mth.lerpAngleDegrees(f, barrelEntity.prevYaw, barrelEntity.getYaw());
+        boatEntityRenderState.damageWobbleTicks = (float)barrelEntity.getHurtTime() - f;
+        boatEntityRenderState.damageWobbleSide = barrelEntity.getHurtDir();
+        boatEntityRenderState.damageWobbleStrength = Math.max(barrelEntity.getDamage() - f, 0.0F);
         boatEntityRenderState.bubbleWobble = barrelEntity.interpolateBubbleWobble(f);
-        boatEntityRenderState.submergedInWater = barrelEntity.isSubmergedInWater();
+        boatEntityRenderState.submergedInWater = barrelEntity.isUnderWater();
         boatEntityRenderState.leftPaddleAngle = barrelEntity.interpolatePaddlePhase(0, f);
         boatEntityRenderState.rightPaddleAngle = barrelEntity.interpolatePaddlePhase(1, f);
     }
 
     protected void renderWaterMask(BoatEntityRenderState state, PoseStack matrices, MultiBufferSource vertexConsumers, int light) {
         if (!state.submergedInWater) {
-            this.modelPart.render(matrices, vertexConsumers.getBuffer(RenderLayer.getWaterMask()), light, OverlayTexture.DEFAULT_UV);
+            this.modelPart.render(matrices, vertexConsumers.getBuffer(RenderType.waterMask()), light, OverlayTexture.DEFAULT_UV);
         }
 
     }

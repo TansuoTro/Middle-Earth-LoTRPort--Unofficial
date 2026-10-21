@@ -2,7 +2,6 @@ package net.jukoz.me.client;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.model.EntityModel;
@@ -10,6 +9,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.RenderType;
 
 @OnlyIn(Dist.CLIENT)
 public final class RenderUtil {
@@ -19,13 +19,13 @@ public final class RenderUtil {
     public static void renderCutoutTexture(EntityModel<?> model, PoseStack matrices,
                                            MultiBufferSource vertexConsumers, ResourceLocation texture,
                                            int light, int overlay) {
-        renderModel(model, matrices, vertexConsumers.getBuffer(RenderLayer.getEntityCutoutNoCull(texture)), light, overlay);
+        renderModel(model, matrices, vertexConsumers.getBuffer(RenderType.entityCutoutNoCull(texture)), light, overlay);
     }
 
     public static void renderEmissiveTexture(EntityModel<?> model, PoseStack matrices,
                                              MultiBufferSource vertexConsumers, ResourceLocation texture,
                                              int light, int overlay) {
-        renderModel(model, matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentEmissive(texture)), light, overlay);
+        renderModel(model, matrices, vertexConsumers.getBuffer(RenderType.getEntityTranslucentEmissive(texture)), light, overlay);
     }
 
     public static void renderAtlasTexture(TextureAtlas atlas, EntityModel<?> model, PoseStack matrices,

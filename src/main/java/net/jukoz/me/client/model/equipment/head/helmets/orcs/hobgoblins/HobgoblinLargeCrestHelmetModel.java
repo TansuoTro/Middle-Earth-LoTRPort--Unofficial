@@ -21,22 +21,22 @@ public class HobgoblinLargeCrestHelmetModel extends HelmetAddonModel {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
 
-        PartDefinition head = modelPartData.addChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        head.addChild(PartNames.HAT, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition head = modelPartData.addOrReplaceChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        head.addOrReplaceChild(PartNames.HAT, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        head.addChild("large_crest", CubeListBuilder.create()
-                .uv(20, 12).mirrored().cuboid(-11.0F, -20.75F, 0.0F, 22.0F, 18.0F, 0.0F, new CubeDeformation(0.0F)).mirrored(false)
-                .uv(28, 53).cuboid(-0.5F, -17.75F, -0.5F, 1.0F, 10.0F, 1.0F, new CubeDeformation(0.0F))
-                .uv(24, 44).cuboid(-9.5F, -7.75F, -0.5F, 19.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        head.addOrReplaceChild("large_crest", CubeListBuilder.create()
+                .texOffs(20, 12).mirror().addBox(-11.0F, -20.75F, 0.0F, 22.0F, 18.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
+                .texOffs(28, 53).addBox(-0.5F, -17.75F, -0.5F, 1.0F, 10.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(24, 44).addBox(-9.5F, -7.75F, -0.5F, 19.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.BODY, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.BODY, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.RIGHT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.RIGHT_ARM, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.LEFT_ARM, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.of(modelData, 64, 64);
     }

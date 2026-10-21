@@ -39,7 +39,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.TrackedDataHandlerRegistryME;
@@ -117,10 +117,10 @@ public class ShelobiteScuttlerEntity extends Monster implements Pouncer {
     }
 
     public static AttributeSupplier.Builder setAttributes() {
-        return Monster.createHostileAttributes()
-                .add(Attributes.GENERIC_MAX_HEALTH, 16.0)
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.34)
-                .add(Attributes.GENERIC_ATTACK_DAMAGE, 4)
+        return Monster.createMonsterAttributes()
+                .add(Attributes.MAX_HEALTH, 16.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.34)
+                .add(Attributes.ATTACK_DAMAGE, 4)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 36.0);
     }
 
@@ -131,7 +131,7 @@ public class ShelobiteScuttlerEntity extends Monster implements Pouncer {
             this.setVariant(spiderData.variant);
         } else {
             Optional<Holder<SpiderVariant>> optional = VariantsME.select(world,
-                    VariantsME.registry(world.toServerWorld().getRegistryManager(), DynamicRegistriesME.SPIDER_VARIANTS));
+                    VariantsME.registry(world.toServerWorld().registryAccess(), DynamicRegistriesME.SPIDER_VARIANTS));
             if (optional.isPresent()) {
                 this.setVariant(optional.get());
                 entityData = new SpiderData(optional.get());
@@ -146,7 +146,7 @@ public class ShelobiteScuttlerEntity extends Monster implements Pouncer {
     }
 
     @Override
-    protected Brain.Profile<ShelobiteScuttlerEntity> createBrainProfile() {
+    protected Brain.Provider<ShelobiteScuttlerEntity> createBrainProfile() {
         return Brain.createProfile(MEMORY_MODULE_TYPES, SENSOR_TYPES);
     }
 
@@ -180,11 +180,11 @@ public class ShelobiteScuttlerEntity extends Monster implements Pouncer {
 
     protected void initDataTracker() {
         super.initDataTracker();
-        Holder<SpiderVariant> spiderVariantRegistryEntry = VariantsME.getOrDefaultOrThrow(this.getWorld().getRegistryManager(), SpiderVariantRegistry.DEFAULT);
-        this.dataTracker.startTracking(VARIANT, spiderVariantRegistryEntry);
-        this.dataTracker.startTracking(SPIDER_FLAGS, (byte)0);
-        this.dataTracker.startTracking(BITE_FLAG, 0);
-        this.dataTracker.startTracking(POUNCE_FLAG, 0);
+        Holder<SpiderVariant> spiderVariantRegistryEntry = VariantsME.getOrDefaultOrThrow(this.level().registryAccess(), SpiderVariantRegistry.DEFAULT);
+        this.entityData.define(VARIANT, spiderVariantRegistryEntry);
+        this.entityData.define(SPIDER_FLAGS, (byte)0);
+        this.entityData.define(BITE_FLAG, 0);
+        this.entityData.define(POUNCE_FLAG, 0);
     }
 
     //@Override
@@ -205,28 +205,28 @@ public class ShelobiteScuttlerEntity extends Monster implements Pouncer {
     }
 
     protected void setTrackerState(EntityDataAccessor<Integer> trackedData, AnimationState animationState) {
-        int state = this.dataTracker.get(trackedData);
+        int state = this.entityData.get(trackedData);
         if(state == 1) {
             animationState.start(this.age);
         } else if (state == -1) {
             animationState.stop();
         }
-        this.dataTracker.set(trackedData, 0);
+        this.entityData.set(trackedData, 0);
     }
 
     @Override
     public boolean tryAttack(Entity target) {
-        this.dataTracker.set(BITE_FLAG, 1);
+        this.entityData.set(BITE_FLAG, 1);
         if(biteAnimationCooldown == 0) biteAnimationCooldown = 40;
         return super.tryAttack(target);
     }
 
     @Override
     public void onLanding() {
-        if (this.getWorld() instanceof ServerLevel serverWorld) {
+        if (this.level() instanceof ServerLevel serverWorld) {
             if (this.isOnGround() && this.fallDistance > 1.5) {
                 Vec3 vec3d = getPos().add(0.0, 0.5, 0.0);
-                BlockState blockState = this.getSteppingBlockState();
+                BlockState blockState = this.getBlockStateOn();
                 int count = (int) Mth.clamp(20.0 * this.fallDistance - 1, 0.0, 120.0);
                 serverWorld.spawnParticles(new BlockParticleOption(ParticleTypes.BLOCK, blockState), vec3d.x, vec3d.y, vec3d.z,
                         count, this.random.nextDouble() - 0.5, 0.15, this.random.nextDouble() - 0.5, 0.16f);
@@ -236,17 +236,17 @@ public class ShelobiteScuttlerEntity extends Monster implements Pouncer {
     }
 
     public void startPounceAnimation() {
-        this.dataTracker.set(POUNCE_FLAG, 1);
+        this.entityData.set(POUNCE_FLAG, 1);
     }
     public void stopPounceAnimation() {
-        this.dataTracker.set(POUNCE_FLAG, -1);
+        this.entityData.set(POUNCE_FLAG, -1);
     }
 
     public void tick() {
         super.tick();
-        if (!this.getWorld().isClient) {
+        if (!this.level().isClientSide) {
             if(biteAnimationCooldown <= 1) {
-                this.dataTracker.set(BITE_FLAG, -1);
+                this.entityData.set(BITE_FLAG, -1);
             }
             biteAnimationCooldown = Math.max(biteAnimationCooldown - 1, 0);
             this.setClimbingWall(this.horizontalCollision);
@@ -293,11 +293,11 @@ public class ShelobiteScuttlerEntity extends Monster implements Pouncer {
     }
 
     private Holder<SpiderVariant> getRegistryVariant() {
-        return this.dataTracker.get(VARIANT);
+        return this.entityData.get(VARIANT);
     }
 
     private void setVariant(Holder<SpiderVariant> variant) {
-        this.dataTracker.set(VARIANT, variant);
+        this.entityData.set(VARIANT, variant);
     }
 
     protected SoundEvent getAmbientSound() {
@@ -321,7 +321,7 @@ public class ShelobiteScuttlerEntity extends Monster implements Pouncer {
     }
 
     public void slowMovement(BlockState state, Vec3 multiplier) {
-        if (!state.isIn(TagKey.of(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "cobwebs")))) {
+        if (!state.is(TagKey.create(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "cobwebs")))) {
             super.slowMovement(state, multiplier);
         }
     }
@@ -332,7 +332,7 @@ public class ShelobiteScuttlerEntity extends Monster implements Pouncer {
     }
 
     public boolean isClimbingWall() {
-        return (this.dataTracker.get(SPIDER_FLAGS) & 1) != 0;
+        return (this.entityData.get(SPIDER_FLAGS) & 1) != 0;
     }
 
     public boolean isCollidingWall() {
@@ -340,14 +340,14 @@ public class ShelobiteScuttlerEntity extends Monster implements Pouncer {
     }
 
     public void setClimbingWall(boolean climbing) {
-        byte b = (Byte)this.dataTracker.get(SPIDER_FLAGS);
+        byte b = (Byte)this.entityData.get(SPIDER_FLAGS);
         if (climbing) {
             b = (byte)(b | 1);
         } else {
             b &= -2;
         }
 
-        this.dataTracker.set(SPIDER_FLAGS, b);
+        this.entityData.set(SPIDER_FLAGS, b);
     }
 
     public int getClimbingTicks() {
@@ -369,7 +369,7 @@ public class ShelobiteScuttlerEntity extends Monster implements Pouncer {
     public void readCustomDataFromNbt(CompoundTag nbt) {
         super.readCustomDataFromNbt(nbt);
         ReadView view = new ReadView(nbt);
-        VariantsME.readVariantFromNbt(view, this.getWorld().getRegistryManager(), DynamicRegistriesME.SPIDER_VARIANTS).ifPresent(this::setVariant);
+        VariantsME.readVariantFromNbt(view, this.level().registryAccess(), DynamicRegistriesME.SPIDER_VARIANTS).ifPresent(this::setVariant);
     }
 
     static {
@@ -381,7 +381,7 @@ public class ShelobiteScuttlerEntity extends Monster implements Pouncer {
 
     public static boolean canSpawn(EntityType<ShelobiteScuttlerEntity> type, ServerLevelAccessor serverWorldAccess, MobSpawnType spawnReason, BlockPos blockPos, RandomSource random) {
         if(spawnReason != MobSpawnType.NATURAL)
-            return ShelobiteScuttlerEntity.canSpawnInDark(type, serverWorldAccess, spawnReason, blockPos, random);
+            return ShelobiteScuttlerEntity.checkMonsterSpawnRules(type, serverWorldAccess, spawnReason, blockPos, random);
         return SpawnUtil.canSpawn(blockPos, serverWorldAccess, spawnReason);
     }
 

@@ -2,7 +2,7 @@ package net.jukoz.me.block.registration;
 
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
-import net.minecraft.world.level.block.NoteBlockInstrument;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.block.SoundType;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.utils.BlockSetRegistration;
@@ -298,19 +298,19 @@ public class GenericBlockSets {
 
     public static OxidizableBlockSetBuilder THATCH = registerOxidizableBlockSet(new OxidizableBlockSetBuilder(
             "thatch", 0.5f, 0.0f, MapColor.PALE_YELLOW, NoteBlockInstrument.BANJO, SoundType.GRASS, false,
-            ModItemGroups.MISC_BLOCKS_CONTENTS, WeatheringCopper.OxidationLevel.UNAFFECTED));
+            ModItemGroups.MISC_BLOCKS_CONTENTS, WeatheringCopper.WeatherState.UNAFFECTED));
     public static OxidizableBlockSetBuilder WEATHERED_THATCH = registerOxidizableBlockSet(new OxidizableBlockSetBuilder(
             "weathered_thatch", 0.5f, 0.0f, MapColor.PALE_YELLOW, NoteBlockInstrument.BANJO, SoundType.GRASS, false,
-            ModItemGroups.MISC_BLOCKS_CONTENTS, WeatheringCopper.OxidationLevel.EXPOSED));
+            ModItemGroups.MISC_BLOCKS_CONTENTS, WeatheringCopper.WeatherState.EXPOSED));
     public static OxidizableBlockSetBuilder AGED_THATCH = registerOxidizableBlockSet(new OxidizableBlockSetBuilder(
             "aged_thatch", 0.5f, 0.0f, MapColor.PALE_YELLOW, NoteBlockInstrument.BANJO, SoundType.GRASS, false,
-            ModItemGroups.MISC_BLOCKS_CONTENTS, WeatheringCopper.OxidationLevel.WEATHERED));
+            ModItemGroups.MISC_BLOCKS_CONTENTS, WeatheringCopper.WeatherState.WEATHERED));
     public static OxidizableBlockSetBuilder OLD_THATCH = registerOxidizableBlockSet(new OxidizableBlockSetBuilder(
             "old_thatch", 0.5f, 0.0f, MapColor.PALE_YELLOW, NoteBlockInstrument.BANJO, SoundType.GRASS, false,
-            ModItemGroups.MISC_BLOCKS_CONTENTS, WeatheringCopper.OxidationLevel.OXIDIZED));
+            ModItemGroups.MISC_BLOCKS_CONTENTS, WeatheringCopper.WeatherState.OXIDIZED));
     public static OxidizableBlockSetBuilder ROTTEN_THATCH = registerOxidizableBlockSet(new OxidizableBlockSetBuilder(
             "rotten_thatch", 0.5f, 0.0f, MapColor.PALE_YELLOW, NoteBlockInstrument.BANJO, SoundType.GRASS, false,
-            ModItemGroups.MISC_BLOCKS_CONTENTS, WeatheringCopper.OxidationLevel.OXIDIZED));
+            ModItemGroups.MISC_BLOCKS_CONTENTS, WeatheringCopper.WeatherState.OXIDIZED));
 
     public static GenericBlockSetBuilder WAXED_THATCH = registerBlockSet(new GenericBlockSetBuilder(
             "waxed_thatch", 0.5f, 0.0f, MapColor.PALE_YELLOW, NoteBlockInstrument.BANJO, SoundType.GRASS, false,
@@ -330,19 +330,19 @@ public class GenericBlockSets {
 
     public static OxidizableBlockSetBuilder REED_THATCH = registerOxidizableBlockSet(new OxidizableBlockSetBuilder(
             "reed_thatch", 0.5f, 0.0f, MapColor.PALE_YELLOW, NoteBlockInstrument.BANJO, SoundType.GRASS, false,
-            ModItemGroups.MISC_BLOCKS_CONTENTS, WeatheringCopper.OxidationLevel.UNAFFECTED));
+            ModItemGroups.MISC_BLOCKS_CONTENTS, WeatheringCopper.WeatherState.UNAFFECTED));
     public static OxidizableBlockSetBuilder WEATHERED_REED_THATCH = registerOxidizableBlockSet(new OxidizableBlockSetBuilder(
             "weathered_reed_thatch", 0.5f, 0.0f, MapColor.PALE_YELLOW, NoteBlockInstrument.BANJO, SoundType.GRASS, false,
-            ModItemGroups.MISC_BLOCKS_CONTENTS, WeatheringCopper.OxidationLevel.EXPOSED));
+            ModItemGroups.MISC_BLOCKS_CONTENTS, WeatheringCopper.WeatherState.EXPOSED));
     public static OxidizableBlockSetBuilder AGED_REED_THATCH = registerOxidizableBlockSet(new OxidizableBlockSetBuilder(
             "aged_reed_thatch", 0.5f, 0.0f, MapColor.PALE_YELLOW, NoteBlockInstrument.BANJO, SoundType.GRASS, false,
-            ModItemGroups.MISC_BLOCKS_CONTENTS, WeatheringCopper.OxidationLevel.WEATHERED));
+            ModItemGroups.MISC_BLOCKS_CONTENTS, WeatheringCopper.WeatherState.WEATHERED));
     public static OxidizableBlockSetBuilder OLD_REED_THATCH = registerOxidizableBlockSet(new OxidizableBlockSetBuilder(
             "old_reed_thatch", 0.5f, 0.0f, MapColor.PALE_YELLOW, NoteBlockInstrument.BANJO, SoundType.GRASS, false,
-            ModItemGroups.MISC_BLOCKS_CONTENTS, WeatheringCopper.OxidationLevel.OXIDIZED));
+            ModItemGroups.MISC_BLOCKS_CONTENTS, WeatheringCopper.WeatherState.OXIDIZED));
     public static OxidizableBlockSetBuilder ROTTEN_REED_THATCH = registerOxidizableBlockSet(new OxidizableBlockSetBuilder(
             "rotten_reed_thatch", 0.5f, 0.0f, MapColor.PALE_YELLOW, NoteBlockInstrument.BANJO, SoundType.GRASS, false,
-            ModItemGroups.MISC_BLOCKS_CONTENTS, WeatheringCopper.OxidationLevel.OXIDIZED));
+            ModItemGroups.MISC_BLOCKS_CONTENTS, WeatheringCopper.WeatherState.OXIDIZED));
 
     public static GenericBlockSetBuilder WAXED_REED_THATCH = registerBlockSet(new GenericBlockSetBuilder(
             "waxed_reed_thatch", 0.5f, 0.0f, MapColor.PALE_YELLOW, NoteBlockInstrument.BANJO, SoundType.GRASS, false,

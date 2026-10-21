@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.registry.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.core.cauldron.CauldronInteraction;
-import net.minecraft.world.level.pathfinder.PathNodeType;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -189,26 +189,26 @@ public class RegistriesME {
     }
 
     public static void registerTillableBlocks() {
-        TillableBlockRegistry.register(ModBlocks.DRY_DIRT, HoeItem::canTillFarmland, HoeItem.createTillAction(Blocks.FARMLAND.getDefaultState()));
-        TillableBlockRegistry.register(ModBlocks.CHALKSOIL_GRASS_BLOCK, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.CHALKSOIL_FARMLAND.getDefaultState()));
-        TillableBlockRegistry.register(ModBlocks.CHALKSOIL, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.CHALKSOIL_FARMLAND.getDefaultState()));
-        TillableBlockRegistry.register(ModBlocks.GRASSY_CHALKSOIL, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.CHALKSOIL_FARMLAND.getDefaultState()));
-        TillableBlockRegistry.register(ModBlocks.COARSE_CHALKSOIL, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.CHALKSOIL_FARMLAND.getDefaultState()));
-        TillableBlockRegistry.register(ModBlocks.LOAM_GRASS_BLOCK, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.LOAM_FARMLAND.getDefaultState()));
-        TillableBlockRegistry.register(ModBlocks.LOAM, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.LOAM_FARMLAND.getDefaultState()));
-        TillableBlockRegistry.register(ModBlocks.GRASSY_LOAM, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.LOAM_FARMLAND.getDefaultState()));
-        TillableBlockRegistry.register(ModBlocks.COARSE_LOAM, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.LOAM_FARMLAND.getDefaultState()));
-        TillableBlockRegistry.register(ModBlocks.PEAT_GRASS_BLOCK, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.PEAT_FARMLAND.getDefaultState()));
-        TillableBlockRegistry.register(ModBlocks.PEAT, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.PEAT_FARMLAND.getDefaultState()));
-        TillableBlockRegistry.register(ModBlocks.GRASSY_PEAT, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.PEAT_FARMLAND.getDefaultState()));
-        TillableBlockRegistry.register(ModBlocks.COARSE_PEAT, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.PEAT_FARMLAND.getDefaultState()));
-        TillableBlockRegistry.register(ModBlocks.SILT_GRASS_BLOCK, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.SILT_FARMLAND.getDefaultState()));
-        TillableBlockRegistry.register(ModBlocks.SILT, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.SILT_FARMLAND.getDefaultState()));
-        TillableBlockRegistry.register(ModBlocks.GRASSY_SILT, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.SILT_FARMLAND.getDefaultState()));
-        TillableBlockRegistry.register(ModBlocks.COARSE_SILT, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.SILT_FARMLAND.getDefaultState()));
-        TillableBlockRegistry.register(ModBlocks.DIRTY_ROOTS, HoeItem::canTillFarmland, HoeItem.createTillAction(Blocks.FARMLAND.getDefaultState()));
-        TillableBlockRegistry.register(ModBlocks.GRASSY_DIRT, HoeItem::canTillFarmland, HoeItem.createTillAction(Blocks.FARMLAND.getDefaultState()));
-        TillableBlockRegistry.register(ModBlocks.TURF, HoeItem::canTillFarmland, HoeItem.createTillAction(Blocks.FARMLAND.getDefaultState()));
+        TillableBlockRegistry.register(ModBlocks.DRY_DIRT, HoeItem::canTillFarmland, HoeItem.createTillAction(Blocks.FARMLAND.defaultBlockState()));
+        TillableBlockRegistry.register(ModBlocks.CHALKSOIL_GRASS_BLOCK, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.CHALKSOIL_FARMLAND.defaultBlockState()));
+        TillableBlockRegistry.register(ModBlocks.CHALKSOIL, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.CHALKSOIL_FARMLAND.defaultBlockState()));
+        TillableBlockRegistry.register(ModBlocks.GRASSY_CHALKSOIL, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.CHALKSOIL_FARMLAND.defaultBlockState()));
+        TillableBlockRegistry.register(ModBlocks.COARSE_CHALKSOIL, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.CHALKSOIL_FARMLAND.defaultBlockState()));
+        TillableBlockRegistry.register(ModBlocks.LOAM_GRASS_BLOCK, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.LOAM_FARMLAND.defaultBlockState()));
+        TillableBlockRegistry.register(ModBlocks.LOAM, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.LOAM_FARMLAND.defaultBlockState()));
+        TillableBlockRegistry.register(ModBlocks.GRASSY_LOAM, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.LOAM_FARMLAND.defaultBlockState()));
+        TillableBlockRegistry.register(ModBlocks.COARSE_LOAM, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.LOAM_FARMLAND.defaultBlockState()));
+        TillableBlockRegistry.register(ModBlocks.PEAT_GRASS_BLOCK, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.PEAT_FARMLAND.defaultBlockState()));
+        TillableBlockRegistry.register(ModBlocks.PEAT, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.PEAT_FARMLAND.defaultBlockState()));
+        TillableBlockRegistry.register(ModBlocks.GRASSY_PEAT, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.PEAT_FARMLAND.defaultBlockState()));
+        TillableBlockRegistry.register(ModBlocks.COARSE_PEAT, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.PEAT_FARMLAND.defaultBlockState()));
+        TillableBlockRegistry.register(ModBlocks.SILT_GRASS_BLOCK, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.SILT_FARMLAND.defaultBlockState()));
+        TillableBlockRegistry.register(ModBlocks.SILT, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.SILT_FARMLAND.defaultBlockState()));
+        TillableBlockRegistry.register(ModBlocks.GRASSY_SILT, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.SILT_FARMLAND.defaultBlockState()));
+        TillableBlockRegistry.register(ModBlocks.COARSE_SILT, HoeItem::canTillFarmland, HoeItem.createTillAction(ModBlocks.SILT_FARMLAND.defaultBlockState()));
+        TillableBlockRegistry.register(ModBlocks.DIRTY_ROOTS, HoeItem::canTillFarmland, HoeItem.createTillAction(Blocks.FARMLAND.defaultBlockState()));
+        TillableBlockRegistry.register(ModBlocks.GRASSY_DIRT, HoeItem::canTillFarmland, HoeItem.createTillAction(Blocks.FARMLAND.defaultBlockState()));
+        TillableBlockRegistry.register(ModBlocks.TURF, HoeItem::canTillFarmland, HoeItem.createTillAction(Blocks.FARMLAND.defaultBlockState()));
     }
 
     public static void registerAgingCopperBlocks() {
@@ -714,7 +714,7 @@ public class RegistriesME {
 
     //This not good but will do for now until more cases appear
     public static final CauldronInteraction CLEAN_ITEM = (state, world, pos, player, hand, stack) -> {
-        if (!world.isClient) {
+        if (!world.isClientSide) {
             player.giveItemStack(new ItemStack(Items.BONE));
             stack.decrement(1);
         }
@@ -731,14 +731,14 @@ public class RegistriesME {
         if (!MEComponents.contains(stack, MEComponents.TEMPERATURE_DATA)) {
             return InteractionResult.PASS;
         }
-        if (!world.isClient) {
+        if (!world.isClientSide) {
             ItemStack originalStack = stack.copy();
             originalStack.setCount(1);
             MEComponents.remove(originalStack, MEComponents.TEMPERATURE_DATA);
             stack.decrement(1);
             player.getInventory().offerOrDrop(originalStack);
 
-            LayeredCauldronBlock.decrementFluidLevel(state, world, pos);
+            LayeredCauldronBlock.lowerFillLevel(state, world, pos);
 
             world.playSound(null, pos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundSource.BLOCKS, 1.0f, 1.0f);
         } else {
@@ -770,10 +770,10 @@ public class RegistriesME {
         } else if (!MEComponents.contains(stack, MEComponents.DYED_COLOR)) {
             return InteractionResult.PASS;
         } else {
-            if (!world.isClient) {
+            if (!world.isClientSide) {
                 MEComponents.remove(stack, MEComponents.DYED_COLOR);
                 player.incrementStat(Stats.CLEAN_ARMOR);
-                LayeredCauldronBlock.decrementFluidLevel(state, world, pos);
+                LayeredCauldronBlock.lowerFillLevel(state, world, pos);
             }
 
             return InteractionResult.SUCCESS;

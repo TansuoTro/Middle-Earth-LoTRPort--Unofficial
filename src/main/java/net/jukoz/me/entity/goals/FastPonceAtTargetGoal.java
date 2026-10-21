@@ -18,19 +18,19 @@ public class FastPonceAtTargetGoal extends Goal {
         this.mob = mob;
         this.verticalVelocity = verticalVelocity;
         this.horizontalVelocity = horizontalVelocity;
-        this.setControls(EnumSet.of(Goal.Control.JUMP, Goal.Control.MOVE));
+        this.setControls(EnumSet.of(Goal.Flag.JUMP, Goal.Flag.MOVE));
     }
 
     @Override
     public boolean canStart() {
-        if (this.mob.hasPassengers()) {
+        if (this.mob.isVehicle()) {
             return false;
         }
         this.target = this.mob.getTarget();
         if (this.target == null) {
             return false;
         }
-        double d = this.mob.squaredDistanceTo(this.target);
+        double d = this.mob.distanceTo(this.target);
         if (d < 4.0 || d > 16.0) {
             return false;
         }

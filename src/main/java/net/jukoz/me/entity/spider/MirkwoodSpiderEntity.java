@@ -9,7 +9,7 @@ import net.jukoz.me.entity.orcs.mordor.MordorOrcEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityGroup;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -52,9 +52,9 @@ public class MirkwoodSpiderEntity extends Monster {
     }
 
     public static AttributeSupplier.Builder setAttributes() {
-        return Monster.createHostileAttributes()
-                .add(Attributes.GENERIC_MAX_HEALTH, 16.0)
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.4)
+        return Monster.createMonsterAttributes()
+                .add(Attributes.MAX_HEALTH, 16.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.4)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 36.0);
     }
 
@@ -78,9 +78,9 @@ public class MirkwoodSpiderEntity extends Monster {
         if (super.tryAttack(target)) {
             if (target instanceof LivingEntity) {
                 int i = 0;
-                if (this.getWorld().getDifficulty() == Difficulty.NORMAL) {
+                if (this.level().getDifficulty() == Difficulty.NORMAL) {
                     i = 7;
-                } else if (this.getWorld().getDifficulty() == Difficulty.HARD) {
+                } else if (this.level().getDifficulty() == Difficulty.HARD) {
                     i = 15;
                 }
 
@@ -109,12 +109,12 @@ public class MirkwoodSpiderEntity extends Monster {
 
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(SPIDER_FLAGS, (byte)0);
+        this.entityData.define(SPIDER_FLAGS, (byte)0);
     }
 
     public void tick() {
         super.tick();
-        if (!this.getWorld().isClient) {
+        if (!this.level().isClientSide) {
             this.setClimbingWall(this.horizontalCollision);
         }
     }
@@ -150,7 +150,7 @@ public class MirkwoodSpiderEntity extends Monster {
     }
 
     public void slowMovement(BlockState state, Vec3 multiplier) {
-        if (!state.isOf(Blocks.COBWEB) && !state.isOf(ModNatureBlocks.CORNER_COBWEB) && !state.isOf(net.jukoz.me.compat.MEBlocksLegacy.HANGING_COBWEB)) {
+        if (!state.is(Blocks.COBWEB) && !state.is(ModNatureBlocks.CORNER_COBWEB) && !state.is(net.jukoz.me.compat.MEBlocksLegacy.HANGING_COBWEB)) {
             super.slowMovement(state, multiplier);
         }
     }
@@ -165,7 +165,7 @@ public class MirkwoodSpiderEntity extends Monster {
     }
 
     public boolean isClimbingWall() {
-        return (this.dataTracker.get(SPIDER_FLAGS) & 1) != 0;
+        return (this.entityData.get(SPIDER_FLAGS) & 1) != 0;
     }
 
     public boolean isCollidingWall() {
@@ -173,14 +173,14 @@ public class MirkwoodSpiderEntity extends Monster {
     }
 
     public void setClimbingWall(boolean climbing) {
-        byte b = (Byte)this.dataTracker.get(SPIDER_FLAGS);
+        byte b = (Byte)this.entityData.get(SPIDER_FLAGS);
         if (climbing) {
             b = (byte)(b | 1);
         } else {
             b &= -2;
         }
 
-        this.dataTracker.set(SPIDER_FLAGS, b);
+        this.entityData.set(SPIDER_FLAGS, b);
     }
 
     public int getClimbingTicks() {

@@ -27,11 +27,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccess;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
@@ -65,9 +65,9 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
     private static final float MAX_HORIZONTAL_MODEL_OFFSET;
     private static final VoxelShape DRIP_COLLISION_SHAPE;
 
-    public PointedDolomiteBlock(BlockBehaviour.Settings settings) {
+    public PointedDolomiteBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState((BlockState)((BlockState)((BlockState)((BlockState)this.stateManager.getDefaultState()).with(VERTICAL_DIRECTION, Direction.UP)).with(THICKNESS, DripstoneThickness.TIP)).with(WATERLOGGED, false));
+        this.setDefaultState((BlockState)((BlockState)((BlockState)((BlockState)this.stateManager.defaultBlockState()).with(VERTICAL_DIRECTION, Direction.UP)).with(THICKNESS, DripstoneThickness.TIP)).with(WATERLOGGED, false));
     }
 
     protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
@@ -91,22 +91,22 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
                 return state;
             } else if (direction == direction2.getOpposite() && !this.canPlaceAt(state, world, pos)) {
                 if (direction2 == Direction.DOWN) {
-                    world.scheduleBlockTick(pos, this, 2);
+                    world.scheduleRecheck(pos, this, 2);
                 } else {
-                    world.scheduleBlockTick(pos, this, 1);
+                    world.scheduleRecheck(pos, this, 1);
                 }
 
                 return state;
             } else {
                 boolean bl = state.get(THICKNESS) == DripstoneThickness.TIP_MERGE;
                 DripstoneThickness thickness = getThickness(world, pos, direction2, bl);
-                return (BlockState)state.with(THICKNESS, thickness);
+                return (BlockState)state.setValue(THICKNESS, thickness);
             }
         }
     }
 
     public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
-        if (!world.isClient) {
+        if (!world.isClientSide) {
             BlockPos blockPos = hit.getBlockPos();
             if (world instanceof ServerLevel) {
                 ServerLevel serverWorld = (ServerLevel)world;
@@ -120,7 +120,7 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
 
     public void onLandedUpon(Level world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
         if (state.get(VERTICAL_DIRECTION) == Direction.UP && state.get(THICKNESS) == DripstoneThickness.TIP) {
-            entity.handleFallDamage((float)(fallDistance + 2.5), 2.0F, world.getDamageSources().stalagmite());
+            entity.handleFallDamage((float)(fallDistance + 2.5), 2.0F, world.damageSources().stalagmite());
         } else {
             super.onLandedUpon(world, state, pos, entity, fallDistance);
         }
@@ -178,20 +178,20 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
                     if (!(dripChance >= f)) {
                         BlockPos blockPos = getTipPos(state, world, pos, 11, false);
                         if (blockPos != null) {
-                            if (((PointedDolomiteBlock.DrippingFluid)optional.get()).sourceState.isOf(Blocks.MUD) && fluid == Fluids.WATER) {
-                                BlockState blockState = Blocks.CLAY.getDefaultState();
-                                world.setBlockState(((PointedDolomiteBlock.DrippingFluid)optional.get()).pos, blockState);
+                            if (((PointedDolomiteBlock.DrippingFluid)optional.get()).sourceState.is(Blocks.MUD) && fluid == Fluids.WATER) {
+                                BlockState blockState = Blocks.CLAY.defaultBlockState();
+                                world.setBlock(((PointedDolomiteBlock.DrippingFluid)optional.get()).pos, blockState);
                                 Block.pushEntitiesUpBeforeBlockChange(((PointedDolomiteBlock.DrippingFluid)optional.get()).sourceState, blockState, world, ((PointedDolomiteBlock.DrippingFluid)optional.get()).pos);
-                                world.emitGameEvent(GameEvent.BLOCK_CHANGE, ((PointedDolomiteBlock.DrippingFluid)optional.get()).pos, GameEvent.Emitter.of(blockState));
-                                world.syncWorldEvent(1504, blockPos, 0);
+                                world.emitGameEvent(GameEvent.BLOCK_CHANGE, ((PointedDolomiteBlock.DrippingFluid)optional.get()).pos, GameEvent.Context.of(blockState));
+                                world.levelEvent(1504, blockPos, 0);
                             } else {
                                 BlockPos blockPos2 = getCauldronPos(world, blockPos, fluid);
                                 if (blockPos2 != null) {
-                                    world.syncWorldEvent(1504, blockPos, 0);
+                                    world.levelEvent(1504, blockPos, 0);
                                     int i = blockPos.getY() - blockPos2.getY();
                                     int j = 50 + i;
                                     BlockState blockState2 = world.getBlockState(blockPos2);
-                                    world.scheduleBlockTick(blockPos2, blockState2.getBlock(), j);
+                                    world.scheduleRecheck(blockPos2, blockState2.getBlock(), j);
                                 }
                             }
                         }
@@ -205,14 +205,14 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
     public BlockState getPlacementState(BlockPlaceContext ctx) {
         LevelAccessor worldAccess = ctx.getWorld();
         BlockPos blockPos = ctx.getBlockPos();
-        Direction direction = ctx.getVerticalPlayerLookDirection().getOpposite();
+        Direction direction = ctx.getNearestLookingVerticalDirection().getOpposite();
         Direction direction2 = getDirectionToPlaceAt(worldAccess, blockPos, direction);
         if (direction2 == null) {
             return null;
         } else {
-            boolean bl = !ctx.shouldCancelInteraction();
+            boolean bl = !ctx.isSecondaryUseActive();
             DripstoneThickness thickness = getThickness(worldAccess, blockPos, direction2, bl);
-            return thickness == null ? null : (BlockState)((BlockState)((BlockState)this.getDefaultState().with(VERTICAL_DIRECTION, direction2)).with(THICKNESS, thickness)).with(WATERLOGGED, worldAccess.getFluidState(blockPos).getFluid() == Fluids.WATER);
+            return thickness == null ? null : (BlockState)((BlockState)((BlockState)this.defaultBlockState().with(VERTICAL_DIRECTION, direction2)).with(THICKNESS, thickness)).with(WATERLOGGED, worldAccess.getFluidState(blockPos).getFluid() == Fluids.WATER);
         }
     }
 
@@ -250,17 +250,17 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
 
     public void onDestroyedOnLanding(Level world, BlockPos pos, FallingBlockEntity fallingBlockEntity) {
         if (!fallingBlockEntity.isSilent()) {
-            world.syncWorldEvent(1045, pos, 0);
+            world.levelEvent(1045, pos, 0);
         }
 
     }
 
     public DamageSource getDamageSource(Entity attacker) {
-        return attacker.getDamageSources().fallingStalactite(attacker);
+        return attacker.damageSources().fallingStalactite(attacker);
     }
 
     private static void spawnFallingBlock(BlockState state, ServerLevel world, BlockPos pos) {
-        BlockPos.Mutable mutable = pos.mutableCopy();
+        BlockPos.MutableBlockPos mutable = pos.mutableCopy();
 
         for(BlockState blockState = state; isPointingDown(blockState); blockState = world.getBlockState(mutable)) {
             FallingBlockEntity fallingBlockEntity = FallingBlockEntity.spawnFromBlock(world, mutable, blockState);
@@ -278,8 +278,8 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
 
     @VisibleForTesting
     public static void tryGrow(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-        BlockState blockState = world.getBlockState(pos.up(1));
-        BlockState blockState2 = world.getBlockState(pos.up(2));
+        BlockState blockState = world.getBlockState(pos.above(1));
+        BlockState blockState2 = world.getBlockState(pos.above(2));
         if (canGrow(blockState, blockState2)) {
             BlockPos blockPos = getTipPos(state, world, pos, 7, false);
             if (blockPos != null) {
@@ -297,7 +297,7 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
     }
 
     private static void tryGrowStalagmite(ServerLevel world, BlockPos pos) {
-        BlockPos.Mutable mutable = pos.mutableCopy();
+        BlockPos.MutableBlockPos mutable = pos.mutableCopy();
 
         for(int i = 0; i < 10; ++i) {
             mutable.move(Direction.DOWN);
@@ -311,8 +311,8 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
                 return;
             }
 
-            if (canPlaceAtWithDirection(world, mutable, Direction.UP) && !world.isWater(mutable.down())) {
-                tryGrow(world, mutable.down(), Direction.UP);
+            if (canPlaceAtWithDirection(world, mutable, Direction.UP) && !world.isWater(mutable.below())) {
+                tryGrow(world, mutable.below(), Direction.UP);
                 return;
             }
 
@@ -328,15 +328,15 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
         BlockState blockState = world.getBlockState(blockPos);
         if (isTip(blockState, direction.getOpposite())) {
             growMerged(blockState, world, blockPos);
-        } else if (blockState.isAir() || blockState.isOf(Blocks.WATER)) {
+        } else if (blockState.isAir() || blockState.is(Blocks.WATER)) {
             place(world, blockPos, direction, DripstoneThickness.TIP);
         }
 
     }
 
     private static void place(LevelAccessor world, BlockPos pos, Direction direction, DripstoneThickness thickness) {
-        BlockState blockState = (BlockState)((BlockState)((BlockState)ModBlocks.POINTED_DOLOMITE.getDefaultState().with(VERTICAL_DIRECTION, direction)).with(THICKNESS, thickness)).with(WATERLOGGED, world.getFluidState(pos).getFluid() == Fluids.WATER);
-        world.setBlockState(pos, blockState, 3);
+        BlockState blockState = (BlockState)((BlockState)((BlockState)ModBlocks.POINTED_DOLOMITE.defaultBlockState().with(VERTICAL_DIRECTION, direction)).with(THICKNESS, thickness)).with(WATERLOGGED, world.getFluidState(pos).getFluid() == Fluids.WATER);
+        world.setBlock(pos, blockState, 3);
     }
 
     private static void growMerged(BlockState state, LevelAccessor world, BlockPos pos) {
@@ -344,10 +344,10 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
         BlockPos blockPos;
         if (state.get(VERTICAL_DIRECTION) == Direction.UP) {
             blockPos = pos;
-            blockPos2 = pos.up();
+            blockPos2 = pos.above();
         } else {
             blockPos2 = pos;
-            blockPos = pos.down();
+            blockPos = pos.below();
         }
 
         place(world, blockPos2, Direction.DOWN, DripstoneThickness.TIP_MERGE);
@@ -367,7 +367,7 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
         double f = (double)pos.getY() + DOWN_TIP_Y - 0.0625;
         double g = (double)pos.getZ() + 0.5 + vec3d.z;
         Fluid fluid2 = getDripFluid(world, fluid);
-        ParticleOptions particleEffect = fluid2.isIn(FluidTags.LAVA) ? ParticleTypes.DRIPPING_DRIPSTONE_LAVA : ParticleTypes.DRIPPING_DRIPSTONE_WATER;
+        ParticleOptions particleEffect = fluid2.is(FluidTags.LAVA) ? ParticleTypes.DRIPPING_DRIPSTONE_LAVA : ParticleTypes.DRIPPING_DRIPSTONE_WATER;
         world.addParticle(particleEffect, e, f, g, 0.0, 0.0, 0.0);
     }
 
@@ -378,7 +378,7 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
         } else {
             Direction direction = (Direction)state.get(VERTICAL_DIRECTION);
             BiPredicate<BlockPos, BlockState> biPredicate = (posx, statex) -> {
-                return statex.isOf(ModBlocks.POINTED_DOLOMITE) && statex.get(VERTICAL_DIRECTION) == direction;
+                return statex.is(ModBlocks.POINTED_DOLOMITE) && statex.get(VERTICAL_DIRECTION) == direction;
             };
             return (BlockPos)searchInDirection(world, pos, direction.getDirection(), biPredicate, (statex) -> {
                 return isTip(statex, allowMerged);
@@ -438,10 +438,10 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
     private static Optional<BlockPos> getSupportingPos(Level world, BlockPos pos, BlockState state, int range) {
         Direction direction = (Direction)state.get(VERTICAL_DIRECTION);
         BiPredicate<BlockPos, BlockState> biPredicate = (posx, statex) -> {
-            return statex.isOf(ModBlocks.POINTED_DOLOMITE) && statex.get(VERTICAL_DIRECTION) == direction;
+            return statex.is(ModBlocks.POINTED_DOLOMITE) && statex.get(VERTICAL_DIRECTION) == direction;
         };
         return searchInDirection(world, pos, direction.getOpposite().getDirection(), biPredicate, (statex) -> {
-            return !statex.isOf(ModBlocks.POINTED_DOLOMITE);
+            return !statex.is(ModBlocks.POINTED_DOLOMITE);
         }, range);
     }
 
@@ -452,7 +452,7 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
     }
 
     private static boolean isTip(BlockState state, boolean allowMerged) {
-        if (!state.isOf(ModBlocks.POINTED_DOLOMITE)) {
+        if (!state.is(ModBlocks.POINTED_DOLOMITE)) {
             return false;
         } else {
             DripstoneThickness thickness = (DripstoneThickness)state.get(THICKNESS);
@@ -473,7 +473,7 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
     }
 
     private static boolean isHeldByPointedDripstone(BlockState state, LevelReader world, BlockPos pos) {
-        return isPointingDown(state) && !world.getBlockState(pos.up()).isOf(ModBlocks.POINTED_DOLOMITE);
+        return isPointingDown(state) && !world.getBlockState(pos.above()).is(ModBlocks.POINTED_DOLOMITE);
     }
 
     public boolean canPathfindThrough(BlockState state, net.minecraft.world.level.BlockGetter world, BlockPos pos, PathComputationType type) {
@@ -481,7 +481,7 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
     }
 
     private static boolean isPointedDripstoneFacingDirection(BlockState state, Direction direction) {
-        return state.isOf(ModBlocks.POINTED_DOLOMITE) && state.get(VERTICAL_DIRECTION) == direction;
+        return state.is(ModBlocks.POINTED_DOLOMITE) && state.get(VERTICAL_DIRECTION) == direction;
     }
 
     @Nullable
@@ -511,10 +511,10 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
 
     private static Optional<PointedDolomiteBlock.DrippingFluid> getFluid(Level world, BlockPos pos, BlockState state) {
         return !isPointingDown(state) ? Optional.empty() : getSupportingPos(world, pos, state, 11).map((posx) -> {
-            BlockPos blockPos = posx.up();
+            BlockPos blockPos = posx.above();
             BlockState blockState = world.getBlockState(blockPos);
             Object fluid;
-            if (blockState.isOf(Blocks.MUD) && !world.getDimension().ultrawarm()) {
+            if (blockState.is(Blocks.MUD) && !world.getDimension().ultraWarm()) {
                 fluid = Fluids.WATER;
             } else {
                 fluid = world.getFluidState(blockPos).getFluid();
@@ -529,12 +529,12 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
     }
 
     private static boolean canGrow(BlockState dripstoneBlockState, BlockState waterState) {
-        return dripstoneBlockState.isOf(StoneBlockSets.DOLOMITE_SET.baseBlocks.base()) && waterState.isOf(Blocks.WATER) && waterState.getFluidState().isStill();
+        return dripstoneBlockState.is(StoneBlockSets.DOLOMITE_SET.baseBlocks.base()) && waterState.is(Blocks.WATER) && waterState.getFluidState().isStill();
     }
 
     private static Fluid getDripFluid(Level world, Fluid fluid) {
         if (fluid.matchesType(Fluids.EMPTY)) {
-            return world.getDimension().ultrawarm() ? Fluids.LAVA : Fluids.WATER;
+            return world.getDimension().ultraWarm() ? Fluids.LAVA : Fluids.WATER;
         } else {
             return fluid;
         }
@@ -542,7 +542,7 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
 
     private static Optional<BlockPos> searchInDirection(LevelAccessor world, BlockPos pos, Direction.AxisDirection direction, BiPredicate<BlockPos, BlockState> continuePredicate, Predicate<BlockState> stopPredicate, int range) {
         Direction direction2 = Direction.get(direction, Direction.Axis.Y);
-        BlockPos.Mutable mutable = pos.mutableCopy();
+        BlockPos.MutableBlockPos mutable = pos.mutableCopy();
 
         for(int i = 1; i < range; ++i) {
             mutable.move(direction2);
@@ -551,7 +551,7 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
                 return Optional.of(mutable.toImmutable());
             }
 
-            if (world.isOutOfHeightLimit(mutable.getY()) || !continuePredicate.test(mutable, blockState)) {
+            if (world.isOutsideBuildHeight(mutable.getY()) || !continuePredicate.test(mutable, blockState)) {
                 return Optional.empty();
             }
         }
@@ -576,15 +576,15 @@ public class PointedDolomiteBlock extends Block implements SimpleWaterloggedBloc
         VERTICAL_DIRECTION = BlockStateProperties.VERTICAL_DIRECTION;
         THICKNESS = BlockStateProperties.THICKNESS;
         WATERLOGGED = BlockStateProperties.WATERLOGGED;
-        TIP_MERGE_SHAPE = Block.createCuboidShape(8.0 - (6.0), 0.0, 8.0 - (6.0), 8.0 + (6.0), 16.0, 8.0 + (6.0));
-        UP_TIP_SHAPE = Block.createCuboidShape(8.0 - (6.0), 0.0, 8.0 - (6.0), 8.0 + (6.0), 11.0, 8.0 + (6.0));
-        DOWN_TIP_SHAPE = Block.createCuboidShape(8.0 - (6.0), 5.0, 8.0 - (6.0), 8.0 + (6.0), 16.0, 8.0 + (6.0));
-        BASE_SHAPE = Block.createCuboidShape(8.0 - (8.0), 0.0, 8.0 - (8.0), 8.0 + (8.0), 16.0, 8.0 + (8.0));
-        FRUSTUM_SHAPE = Block.createCuboidShape(8.0 - (10.0), 0.0, 8.0 - (10.0), 8.0 + (10.0), 16.0, 8.0 + (10.0));
-        MIDDLE_SHAPE = Block.createCuboidShape(8.0 - (12.0), 0.0, 8.0 - (12.0), 8.0 + (12.0), 16.0, 8.0 + (12.0));
+        TIP_MERGE_SHAPE = Block.box(8.0 - (6.0), 0.0, 8.0 - (6.0), 8.0 + (6.0), 16.0, 8.0 + (6.0));
+        UP_TIP_SHAPE = Block.box(8.0 - (6.0), 0.0, 8.0 - (6.0), 8.0 + (6.0), 11.0, 8.0 + (6.0));
+        DOWN_TIP_SHAPE = Block.box(8.0 - (6.0), 5.0, 8.0 - (6.0), 8.0 + (6.0), 16.0, 8.0 + (6.0));
+        BASE_SHAPE = Block.box(8.0 - (8.0), 0.0, 8.0 - (8.0), 8.0 + (8.0), 16.0, 8.0 + (8.0));
+        FRUSTUM_SHAPE = Block.box(8.0 - (10.0), 0.0, 8.0 - (10.0), 8.0 + (10.0), 16.0, 8.0 + (10.0));
+        MIDDLE_SHAPE = Block.box(8.0 - (12.0), 0.0, 8.0 - (12.0), 8.0 + (12.0), 16.0, 8.0 + (12.0));
         DOWN_TIP_Y = DOWN_TIP_SHAPE.getMin(Direction.Axis.Y);
         MAX_HORIZONTAL_MODEL_OFFSET = (float)MIDDLE_SHAPE.getMin(Direction.Axis.X);
-        DRIP_COLLISION_SHAPE = Block.createCuboidShape(8.0 - (4.0), 0.0, 8.0 - (4.0), 8.0 + (4.0), 16.0, 8.0 + (4.0));
+        DRIP_COLLISION_SHAPE = Block.box(8.0 - (4.0), 0.0, 8.0 - (4.0), 8.0 + (4.0), 16.0, 8.0 + (4.0));
     }
 
     static record DrippingFluid(BlockPos pos, Fluid fluid, BlockState sourceState) {

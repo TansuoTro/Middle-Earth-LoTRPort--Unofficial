@@ -15,7 +15,7 @@ import java.util.Optional;
 public class DefendHomeTask {
     public static OneShot<LivingEntity> create(double radius) {
         return BehaviorBuilder.task((context) -> {
-            return context.group(context.queryMemoryAbsent(MemoryModuleType.ATTACK_TARGET)).apply(context, (attackTarget) -> {
+            return context.group(context.absent(MemoryModuleType.ATTACK_TARGET)).apply(context, (attackTarget) -> {
                 return (world, entity, time) -> {
                     Optional<LivingEntity> optional = Optional.ofNullable(threatClose(world, entity, radius));
 
@@ -41,7 +41,7 @@ public class DefendHomeTask {
         if(optionalHome != null && optionalHome.isPresent()) {
             if(optionalPlayers != null && optionalPlayers.isPresent()) {
                 for(Player player : optionalPlayers.get()) {
-                    if(world.isNight() && player.isSneaking()) { // Don't trigger if player is sneaking
+                    if(world.isNight() && player.isShiftKeyDown()) { // Don't trigger if player is sneaking
                         return null;
                     }
 
@@ -49,7 +49,7 @@ public class DefendHomeTask {
                         return null;
                     }
 
-                    if(player.getPos().squaredDistanceTo(optionalHome.get().getPos().toCenterPos()) < (radius*radius) && !player.isCreative()) {
+                    if(player.getPos().distanceTo(optionalHome.get().getPos().toCenterPos()) < (radius*radius) && !player.isCreative()) {
                         return player;
                     }
                 }

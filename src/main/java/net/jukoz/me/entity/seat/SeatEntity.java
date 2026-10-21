@@ -20,13 +20,13 @@ public class SeatEntity extends Entity {    public SeatEntity(EntityType<?> type
         return null;
     }    @Override
     public void tick() {
-        if(!this.getWorld().isClient){
-            Level world = this.getWorld();
+        if(!this.level().isClientSide){
+            Level world = this.level();
             BlockPos pos = this.getBlockPos();
-            if (!this.hasPassengers() && this.getWorld().getBlockState(pos).isIn(TagKey.of(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "seat")))){
-                world.setBlockState(this.getBlockPos(), world.getBlockState(pos).with(SeatBlock.OCCUPIED, false));
+            if (!this.isVehicle() && this.level().getBlockState(pos).is(TagKey.create(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "seat")))){
+                world.setBlock(this.getBlockPos(), world.getBlockState(pos).with(SeatBlock.OCCUPIED, false));
                 this.discard();
-            } else if(!this.hasPassengers() || !this.getWorld().getBlockState(pos).isIn(TagKey.of(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "seat")))){
+            } else if(!this.isVehicle() || !this.level().getBlockState(pos).is(TagKey.create(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "seat")))){
                 this.discard();
             }
         }
@@ -37,7 +37,7 @@ public class SeatEntity extends Entity {    public SeatEntity(EntityType<?> type
     }    @Override
     protected void removePassenger(Entity passenger) {
         Level world = passenger.getWorld();
-        if (!world.isClient){
+        if (!world.isClientSide){
             BlockPos pos = this.getBlockPos();
             passenger.requestTeleport(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 

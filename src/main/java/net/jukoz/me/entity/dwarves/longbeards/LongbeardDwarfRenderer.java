@@ -7,9 +7,9 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
-import net.minecraft.client.model.EntityModelLayers;
+import net.minecraft.client.model.geom.ModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
@@ -24,8 +24,8 @@ public class LongbeardDwarfRenderer extends HumanoidMobRenderer<LongbeardDwarfEn
     private static final float SIZE = 0.78f;
 
     public LongbeardDwarfRenderer(EntityRendererProvider.Context ctx) {
-        super(ctx, new LongbeardDwarfModel(ctx.getPart(ModEntityModelLayers.DWARF)), 0.5f);
-        this.addFeature(new HumanoidArmorLayer<>(this, new LongbeardDwarfModel(ctx.getPart(ModelLayers.PLAYER_INNER_ARMOR)), new LongbeardDwarfModel(ctx.getPart(ModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
+        super(ctx, new LongbeardDwarfModel(ctx.bakeLayer(ModEntityModelLayers.DWARF)), 0.5f);
+        this.addFeature(new HumanoidArmorLayer<>(this, new LongbeardDwarfModel(ctx.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)), new LongbeardDwarfModel(ctx.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
     }
 
     public static final Map<LongbeardDwarfVariant, String> LOCATION_BY_VARIANT =

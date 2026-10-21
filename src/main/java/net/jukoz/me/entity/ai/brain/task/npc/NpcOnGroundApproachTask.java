@@ -23,26 +23,26 @@ public class NpcOnGroundApproachTask extends Behavior<NpcEntity> {
 
     @Override
     protected boolean shouldRun(ServerLevel world, NpcEntity entity) {
-        return entity.getTarget() != null && !entity.hasVehicle() && entity.squaredDistanceTo(entity.getTarget()) < 16;
+        return entity.getTarget() != null && !entity.isPassenger() && entity.distanceTo(entity.getTarget()) < 16;
     }
 
     @Override
     protected boolean shouldKeepRunning(ServerLevel world, NpcEntity entity, long time) {
-        return !entity.hasVehicle();
+        return !entity.isPassenger();
     }
 
     @Override
     protected void run(ServerLevel world, NpcEntity entity, long time) {
         LivingEntity target = entity.getTarget();
-        if(target == null || entity.hasVehicle()){
-            entity.getBrain().forget(MemoryModuleType.WALK_TARGET);
+        if(target == null || entity.isPassenger()){
+            entity.getBrain().erase(MemoryModuleType.WALK_TARGET);
             return;
         }
 
         float distance = target.distanceTo(entity);
         entity.setBlocking(true);
 
-        entity.getBrain().forget(MemoryModuleType.WALK_TARGET);
+        entity.getBrain().erase(MemoryModuleType.WALK_TARGET);
     }
 
     @Override

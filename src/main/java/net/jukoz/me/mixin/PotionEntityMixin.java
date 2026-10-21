@@ -28,9 +28,9 @@ public abstract class PotionEntityMixin extends ThrowableItemProjectile {
     private void onDestroyedByExplosion(BlockPos pos, CallbackInfo ci, @Local BlockState blockState) {
 
         if (AbstractToggleableFireBlock.isLitFireBlock(blockState) || METorchBlock.isLitTorch(blockState) || MEWallTorchBlock.isLitWallTorch(blockState)){
-            this.getWorld().syncWorldEvent((Player)null, 1009, pos, 0);
-            AbstractToggleableFireBlock.extinguish(this.getOwner(), this.getWorld(), pos, blockState);
-            this.getWorld().setBlockState(pos, (BlockState)blockState.with(CampfireBlock.LIT, false));
+            this.level().levelEvent((Player)null, 1009, pos, 0);
+            AbstractToggleableFireBlock.extinguish(this.getOwner(), this.level(), pos, blockState);
+            this.level().setBlock(pos, (BlockState)blockState.setValue(CampfireBlock.LIT, false));
         }
     }
 }

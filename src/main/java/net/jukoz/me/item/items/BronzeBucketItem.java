@@ -11,7 +11,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUsage;
+import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
@@ -35,8 +35,8 @@ public class BronzeBucketItem extends BucketItem {
 
     /*@Override
     public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
-        ItemStack itemStack = user.getStackInHand(hand);
-        BlockHitResult blockHitResult = raycast(world, user, this.fluid == Fluids.EMPTY ? ClipContext.FluidHandling.SOURCE_ONLY : ClipContext.FluidHandling.NONE);
+        ItemStack itemStack = user.getItemInHand(hand);
+        BlockHitResult blockHitResult = raycast(world, user, this.fluid == Fluids.EMPTY ? ClipContext.Fluid.SOURCE_ONLY : ClipContext.Fluid.NONE);
         if (blockHitResult.getType() == HitResult.Type.MISS) {
             return InteractionResultHolder.pass(itemStack);
         } else if (blockHitResult.getType() != HitResult.Type.BLOCK) {
@@ -52,21 +52,21 @@ public class BronzeBucketItem extends BucketItem {
                     if (blockState.getBlock() instanceof BucketPickup) {
                         BucketPickup fluidDrainable = (BucketPickup)blockState.getBlock();
                         if(fluidDrainable == Fluids.LAVA){
-                            user.getStackInHand(hand).decrement(1);
-                            return InteractionResultHolder.success(ModToolItems.BROKEN_BRONZE_BUCKET.getDefaultStack(), world.isClient());
+                            user.getItemInHand(hand).decrement(1);
+                            return InteractionResultHolder.success(ModToolItems.BROKEN_BRONZE_BUCKET.getDefaultInstance(), world.isClientSide());
                         }
                         ItemStack itemStack2 = fluidDrainable.tryDrainFluid(world, blockPos, blockState);
                         if (!itemStack2.isEmpty()) {
                             user.incrementStat(Stats.USED.getOrCreateStat(this));
-                            fluidDrainable.getBucketFillSound().ifPresent((sound) -> {
+                            fluidDrainable.getPickupSound().ifPresent((sound) -> {
                                 user.playSound(sound, 1.0F, 1.0F);
                             });
                             world.emitGameEvent(user, GameEvent.FLUID_PICKUP, blockPos);
                             ItemStack itemStack3 = ItemUtils.exchangeStack(itemStack, user, itemStack2);
-                            if (!world.isClient) {
+                            if (!world.isClientSide) {
                                 CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer)user, itemStack2);
                             }
-                            return InteractionResultHolder.success(itemStack3, world.isClient());
+                            return InteractionResultHolder.success(itemStack3, world.isClientSide());
                         }
                     }
                     return InteractionResultHolder.fail(itemStack);
@@ -79,7 +79,7 @@ public class BronzeBucketItem extends BucketItem {
                             CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayer)user, blockPos3, itemStack);
                         }
                         user.incrementStat(Stats.USED.getOrCreateStat(this));
-                        return InteractionResultHolder.success(getEmptiedStack(itemStack, user), world.isClient());
+                        return InteractionResultHolder.success(getEmptiedStack(itemStack, user), world.isClientSide());
                     } else {
                         return InteractionResultHolder.fail(itemStack);
                     }

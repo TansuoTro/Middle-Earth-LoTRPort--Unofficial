@@ -45,14 +45,14 @@ public class WargSaddleModel extends WargModel {
         MeshDefinition modelData = getEmptyModelData();
         PartDefinition bodyNoLegs = modelData.getRoot().getChild("root").getChild(PartNames.BODY).getChild("upper_body").getChild("body_no_legs");
 
-        PartDefinition saddle = bodyNoLegs.addChild("saddle", CubeListBuilder.create(), PartPose.pivot(-9.5F, -3.75F, -4.5F));
+        PartDefinition saddle = bodyNoLegs.addOrReplaceChild("saddle", CubeListBuilder.create(), PartPose.offset(-9.5F, -3.75F, -4.5F));
 
-        saddle.addChild("cube_r3", CubeListBuilder.create().uv(26, 12).cuboid(-2.5F, -0.5F, -7.0F, 11.0F, 16.0F, 11.0F, new CubeDeformation(0.4F)), PartPose.of(-1.0F, -2.0F, 2.0F, 0.0F, -1.5708F, 0.0F));
+        saddle.addOrReplaceChild("cube_r3", CubeListBuilder.create().texOffs(26, 12).addBox(-2.5F, -0.5F, -7.0F, 11.0F, 16.0F, 11.0F, new CubeDeformation(0.4F)), PartPose.offsetAndRotation(-1.0F, -2.0F, 2.0F, 0.0F, -1.5708F, 0.0F));
 
-        PartDefinition cloth = saddle.addChild("cloth", CubeListBuilder.create(), PartPose.pivot(-1.0F, -2.0F, 2.0F));
-        cloth.addChild("cube_r4", CubeListBuilder.create().uv(4, 44).cuboid(-2.5F, -0.5F, -9.0F, 11.0F, 16.0F, 12.0F, new CubeDeformation(0.2F)), PartPose.of(-3.0F, 0.25F, 0.0F, 0.0F, -1.5708F, 0.0F));
+        PartDefinition cloth = saddle.addOrReplaceChild("cloth", CubeListBuilder.create(), PartPose.offset(-1.0F, -2.0F, 2.0F));
+        cloth.addOrReplaceChild("cube_r4", CubeListBuilder.create().texOffs(4, 44).addBox(-2.5F, -0.5F, -9.0F, 11.0F, 16.0F, 12.0F, new CubeDeformation(0.2F)), PartPose.offsetAndRotation(-3.0F, 0.25F, 0.0F, 0.0F, -1.5708F, 0.0F));
 
-        saddle.addChild("saddle_addons", CubeListBuilder.create(), PartPose.pivot(-6.0F, -2.0F, 2.0F));
+        saddle.addOrReplaceChild("saddle_addons", CubeListBuilder.create(), PartPose.offset(-6.0F, -2.0F, 2.0F));
 
         return LayerDefinition.of(modelData, 128, 128);
     }

@@ -4,7 +4,7 @@ import net.jukoz.me.compat.client.render.equipment.EquipmentRenderer;
 import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.jukoz.me.compat.client.render.MEMobEntityRenderer;
 import com.google.common.collect.Maps;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.resources.ResourceLocation;
@@ -24,7 +24,7 @@ public class CaveTrollRenderer extends MEMobEntityRenderer<CaveTrollEntity, Cave
     public CaveTrollRenderer(EntityRendererProvider.Context context) {
         super(context, new CaveTrollEntityModel(context.getPart(EntityModelLayersME.CAVE_TROLL)), 1.1f);
         this.addFeature(new CaveTrollDroolFeatureRenderer(this));
-        this.addFeature(new CaveTrollSaddleFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader()), EquipmentRenderer.INSTANCE));
+        this.addFeature(new CaveTrollSaddleFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelSet()), EquipmentRenderer.INSTANCE));
         this.addFeature(new CaveTrollHeldItemFeatureRenderer(this));
     }
 

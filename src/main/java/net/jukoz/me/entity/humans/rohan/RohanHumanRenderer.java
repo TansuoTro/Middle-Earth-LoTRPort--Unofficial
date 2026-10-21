@@ -5,9 +5,9 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
-import net.minecraft.client.model.EntityModelLayers;
+import net.minecraft.client.model.geom.ModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
@@ -19,9 +19,9 @@ public class RohanHumanRenderer extends HumanoidMobRenderer<RohanHumanEntity, Ro
     private static final String PATH = "textures/entities/humans/rohan/";
 
     public RohanHumanRenderer(EntityRendererProvider.Context ctx) {
-        super(ctx, new RohanHumanModel<>(ctx.getPart(ModEntityModelLayers.HUMAN)), 0.5f);
-        this.addFeature(new HumanoidArmorLayer<>(this, new RohanHumanModel(ctx.getPart(ModelLayers.PLAYER_INNER_ARMOR)),
-                new RohanHumanModel(ctx.getPart(ModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
+        super(ctx, new RohanHumanModel<>(ctx.bakeLayer(ModEntityModelLayers.HUMAN)), 0.5f);
+        this.addFeature(new HumanoidArmorLayer<>(this, new RohanHumanModel(ctx.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)),
+                new RohanHumanModel(ctx.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
 
     }
 

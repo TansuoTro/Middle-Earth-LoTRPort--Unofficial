@@ -29,26 +29,26 @@ public class SnailModel<T extends SnailEntity> extends HierarchicalModel<T> {
 	public static LayerDefinition getTexturedModelData() {
 		MeshDefinition modelData = new MeshDefinition();
 		PartDefinition modelPartData = modelData.getRoot();
-		PartDefinition snail = modelPartData.addChild("snail", CubeListBuilder.create(), PartPose.pivot(0.0F, 24.0F, -2.0F));
+		PartDefinition snail = modelPartData.addOrReplaceChild("snail", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, -2.0F));
 
-		PartDefinition house = snail.addChild("house", CubeListBuilder.create().uv(0, 9).cuboid(-1.5F, -5.5F, 1.0F, 3.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.pivot(0.0F, 0.0F, 0.0F));
+		PartDefinition house = snail.addOrReplaceChild("house", CubeListBuilder.create().texOffs(0, 9).addBox(-1.5F, -5.5F, 1.0F, 3.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition body = snail.addChild("body", CubeListBuilder.create().uv(0, 0).cuboid(-1.0F, -2.0F, -4.0F, 2.0F, 2.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.pivot(0.0F, 0.0F, 3.0F));
+		PartDefinition body = snail.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, -2.0F, -4.0F, 2.0F, 2.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 3.0F));
 
-		PartDefinition eyes = body.addChild("eyes", CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, -3.0F));
+		PartDefinition eyes = body.addOrReplaceChild("eyes", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, -3.0F));
 
-		PartDefinition eye_r1 = eyes.addChild("eye_r1", CubeListBuilder.create().uv(0, 0).cuboid(0.0F, -2.0F, -1.0F, 0.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.of(-1.0F, -2.0F, 0.0F, 0.0F, 0.0F, -0.3491F));
+		PartDefinition eye_r1 = eyes.addOrReplaceChild("eye_r1", CubeListBuilder.create().texOffs(0, 0).addBox(0.0F, -2.0F, -1.0F, 0.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.0F, -2.0F, 0.0F, 0.0F, 0.0F, -0.3491F));
 
-		PartDefinition eye_r2 = eyes.addChild("eye_r2", CubeListBuilder.create().uv(0, 2).cuboid(0.0F, -2.0F, -1.0F, 0.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.of(1.0F, -2.0F, 0.0F, 0.0F, 0.0F, 0.3491F));
+		PartDefinition eye_r2 = eyes.addOrReplaceChild("eye_r2", CubeListBuilder.create().texOffs(0, 2).addBox(0.0F, -2.0F, -1.0F, 0.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.0F, -2.0F, 0.0F, 0.0F, 0.0F, 0.3491F));
 		return LayerDefinition.of(modelData, 32, 32);
 	}
 	@Override
 	public void setAngles(SnailEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.getPart().traverse().forEach(ModelPart::resetTransform);
+		this.getPart().getAllParts().forEach(ModelPart::resetTransform);
 
 		float percentage = (float) entity.getClimbingTicks() / SnailEntity.CLIMBING_TIME_TRANSITION;
 
-		snail.pitch = -1.6f * percentage;
+		snail.xRot = -1.6f * percentage;
 
 		if(limbSwingAmount >= 0.001) {
 			float stretch = ((ageInTicks % 201) / 500);

@@ -10,7 +10,7 @@ import net.minecraft.world.item.Tier;
 
 public class MorgulKnifeItem extends ArtefactCustomDaggerWeaponItem {
 
-    public MorgulKnifeItem(Tier toolMaterial, Item.Settings settings) {
+    public MorgulKnifeItem(Tier toolMaterial, Item.Properties settings) {
         super(toolMaterial, settings);
     }
 

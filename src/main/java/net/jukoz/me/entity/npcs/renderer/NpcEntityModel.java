@@ -46,17 +46,17 @@ public class NpcEntityModel extends MEBipedEntityModel<NpcEntity, NpcEntityRende
         PartDefinition modelPartData2;
         PartDefinition modelPartData3;
 
-        modelPartData2 = modelPartData.addChild("left_arm", CubeListBuilder.create().uv(32, 48).cuboid(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation), PartPose.pivot(5.0F, 2.0F, 0.0F));
+        modelPartData2 = modelPartData.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(32, 48).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation), PartPose.offset(5.0F, 2.0F, 0.0F));
         modelPartData3 = modelPartData.getChild("right_arm");
-        modelPartData2.addChild(LEFT_SLEEVE, CubeListBuilder.create().uv(48, 48).cuboid(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation.add(0.25F)), PartPose.NONE);
-        modelPartData3.addChild(RIGHT_SLEEVE, CubeListBuilder.create().uv(40, 32).cuboid(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation.add(0.25F)), PartPose.NONE);
+        modelPartData2.addOrReplaceChild(LEFT_SLEEVE, CubeListBuilder.create().texOffs(48, 48).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation.add(0.25F)), PartPose.NONE);
+        modelPartData3.addOrReplaceChild(RIGHT_SLEEVE, CubeListBuilder.create().texOffs(40, 32).addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation.add(0.25F)), PartPose.NONE);
 
-        modelPartData2 = modelPartData.addChild("left_leg", CubeListBuilder.create().uv(16, 48).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation), PartPose.pivot(1.9F, 12.0F, 0.0F));
+        modelPartData2 = modelPartData.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(16, 48).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation), PartPose.offset(1.9F, 12.0F, 0.0F));
         modelPartData3 = modelPartData.getChild("right_leg");
-        modelPartData2.addChild(LEFT_PANTS, CubeListBuilder.create().uv(0, 48).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation.add(0.25F)), PartPose.NONE);
-        modelPartData3.addChild(RIGHT_PANTS, CubeListBuilder.create().uv(0, 32).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation.add(0.25F)), PartPose.NONE);
+        modelPartData2.addOrReplaceChild(LEFT_PANTS, CubeListBuilder.create().texOffs(0, 48).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation.add(0.25F)), PartPose.NONE);
+        modelPartData3.addOrReplaceChild(RIGHT_PANTS, CubeListBuilder.create().texOffs(0, 32).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation.add(0.25F)), PartPose.NONE);
         PartDefinition modelPartData4 = modelPartData.getChild("body");
-        modelPartData4.addChild("jacket", CubeListBuilder.create().uv(16, 32).cuboid(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, dilation.add(0.25F)), PartPose.NONE);
+        modelPartData4.addOrReplaceChild("jacket", CubeListBuilder.create().texOffs(16, 32).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, dilation.add(0.25F)), PartPose.NONE);
         return LayerDefinition.of(modelData, 64, 64);
     }
 

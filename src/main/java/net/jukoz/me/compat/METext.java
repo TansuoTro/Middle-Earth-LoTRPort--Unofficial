@@ -15,6 +15,6 @@ public final class METext {
     }
 
     public static MutableComponent withColor(Component text, int rgb) {
-        return text.copy().styled(style -> style.withColor(rgb));
+        return text.copy().codepoint(style -> style.withColor(rgb));
     }
 }

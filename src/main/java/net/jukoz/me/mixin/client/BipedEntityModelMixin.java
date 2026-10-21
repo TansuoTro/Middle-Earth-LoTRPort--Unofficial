@@ -51,15 +51,15 @@ public class BipedEntityModelMixin {
     }
 
     private static boolean isRestrained(LivingEntity entity) {
-        MobEffectInstance effect = entity.getStatusEffect(ModStatusEffects.RESTRAINED);
+        MobEffectInstance effect = entity.getMobEffect(ModStatusEffects.RESTRAINED);
         return effect != null && effect.getDuration() > 0;
     }
 
     private void restrainedAnimation() {
-        this.rightArm.pitch = 0.0F;
-        this.rightArm.yaw = 0.0F;
-        this.leftArm.pitch = 0.0F;
-        this.leftArm.yaw = 0.0F;
+        this.rightArm.xRot = 0.0F;
+        this.rightArm.yRot = 0.0F;
+        this.leftArm.xRot = 0.0F;
+        this.leftArm.yRot = 0.0F;
     }
 
     private void tryItemAnimation(ItemStack itemStack, boolean rightHand) {
@@ -67,23 +67,23 @@ public class BipedEntityModelMixin {
             return;
         }
         if (itemStack.getItem().equals(DecorativeItemsME.FIRE_OF_ORTHANC)) {
-            float pitch = this.rightArm.pitch * 0.25F - 0.5F;
-            this.rightArm.pitch = pitch;
-            this.rightArm.yaw = 0.0F;
-            this.leftArm.pitch = pitch;
-            this.leftArm.yaw = 0.0F;
+            float pitch = this.rightArm.xRot * 0.25F - 0.5F;
+            this.rightArm.xRot = pitch;
+            this.rightArm.yRot = 0.0F;
+            this.leftArm.xRot = pitch;
+            this.leftArm.yRot = 0.0F;
         } else if (itemStack.getItem() instanceof ReachWeaponItem reachWeapon && reachWeapon.type.twoHanded) {
             float pitch = -1.15f;
-            this.rightArm.pitch = pitch;
-            this.leftArm.pitch = pitch - 0.2f;
-            this.rightArm.yaw = -0.35f;
-            this.leftArm.yaw = 0.8f;
+            this.rightArm.xRot = pitch;
+            this.leftArm.xRot = pitch - 0.2f;
+            this.rightArm.yRot = -0.35f;
+            this.leftArm.yRot = 0.8f;
         } else if (itemStack.getItem() == WeaponItemsME.HELD_BANNER) {
-            if (rightHand) this.rightArm.pitch = VERTICAL_ANGLE;
-            else this.leftArm.pitch = VERTICAL_ANGLE;
+            if (rightHand) this.rightArm.xRot = VERTICAL_ANGLE;
+            else this.leftArm.xRot = VERTICAL_ANGLE;
         } else if (itemStack.getItem() == DecorativeItemsME.TORCH_OF_ORTHANC) {
-            if (rightHand) this.rightArm.pitch = VERTICAL_ANGLE;
-            else this.leftArm.pitch = VERTICAL_ANGLE;
+            if (rightHand) this.rightArm.xRot = VERTICAL_ANGLE;
+            else this.leftArm.xRot = VERTICAL_ANGLE;
         }
     }
 }

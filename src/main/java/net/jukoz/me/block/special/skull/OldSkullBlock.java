@@ -1,6 +1,6 @@
 package net.jukoz.me.block.special.skull;
 
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.pathfinder.PathComputationType;
@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.properties.RotationSegment;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
 import net.jukoz.me.block.special.bellows.BellowsBlock;
 import net.jukoz.me.block.special.bellows.BellowsBlockEntity;
 import org.jetbrains.annotations.Nullable;
@@ -25,16 +25,17 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class OldSkullBlock extends BaseEntityBlock {
     public static final IntegerProperty ROTATION = BlockStateProperties.ROTATION;
     public static final int MAX_ROTATION_INDEX = RotationSegment.getMax();
     private static final int MAX_ROTATIONS = MAX_ROTATION_INDEX + 1;
-    private static final VoxelShape SHAPE = Block.createCuboidShape(8.0 - (8.0), 0.0, 8.0 - (8.0), 8.0 + (8.0), 8.0, 8.0 + (8.0));
+    private static final VoxelShape SHAPE = Block.box(8.0 - (8.0), 0.0, 8.0 - (8.0), 8.0 + (8.0), 8.0, 8.0 + (8.0));
 
-    public OldSkullBlock(Settings settings) {
+    public OldSkullBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState((this.stateManager.getDefaultState()).with(ROTATION, 0));
+        this.setDefaultState((this.stateManager.defaultBlockState()).with(ROTATION, 0));
     }
 
     @Override
@@ -49,22 +50,22 @@ public class OldSkullBlock extends BaseEntityBlock {
 
     @Override
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return super.getPlacementState(ctx).with(ROTATION, RotationSegment.fromYaw(ctx.getPlayerYaw()));
+        return super.getPlacementState(ctx).with(ROTATION, RotationSegment.fromYaw(ctx.getRotation()));
     }
 
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
-        return direction == Direction.DOWN && !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() :
+        return direction == Direction.DOWN && !state.canPlaceAt(world, pos) ? Blocks.AIR.defaultBlockState() :
                 super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(ROTATION, rotation.rotate((Integer)state.get(ROTATION), MAX_ROTATIONS));
+        return state.setValue(ROTATION, rotation.rotate((Integer)state.get(ROTATION), MAX_ROTATIONS));
     }
 
     @Override
     public BlockState mirror(BlockState state, Mirror mirror) {
-        return state.with(ROTATION, mirror.mirror((Integer)state.get(ROTATION), MAX_ROTATIONS));
+        return state.setValue(ROTATION, mirror.mirror((Integer)state.get(ROTATION), MAX_ROTATIONS));
     }
 
     @Override

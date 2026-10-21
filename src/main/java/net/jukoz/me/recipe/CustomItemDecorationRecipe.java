@@ -11,7 +11,7 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.RegistryWrapper;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.level.Level;
 
 public class CustomItemDecorationRecipe extends CustomRecipe {
@@ -27,7 +27,7 @@ public class CustomItemDecorationRecipe extends CustomRecipe {
         ItemStack itemStack2 = ItemStack.EMPTY;
 
         for(int i = 0; i < craftingRecipeInput.size(); ++i) {
-            ItemStack itemStack3 = craftingRecipeInput.getStack(i);
+            ItemStack itemStack3 = craftingRecipeInput.getItem(i);
             if (!itemStack3.isEmpty()) {
                 if (itemStack3.getItem() instanceof BannerItem) {
                     if (!itemStack2.isEmpty()) {
@@ -66,7 +66,7 @@ public class CustomItemDecorationRecipe extends CustomRecipe {
         ItemStack itemStack2 = ItemStack.EMPTY;
 
         for(int i = 0; i < craftingRecipeInput.size(); ++i) {
-            ItemStack itemStack3 = craftingRecipeInput.getStack(i);
+            ItemStack itemStack3 = craftingRecipeInput.getItem(i);
             if (!itemStack3.isEmpty()) {
                 if (itemStack3.getItem() instanceof BannerItem) {
                     itemStack = itemStack3;

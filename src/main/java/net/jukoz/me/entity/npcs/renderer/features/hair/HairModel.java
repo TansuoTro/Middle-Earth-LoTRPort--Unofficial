@@ -35,10 +35,10 @@ public class HairModel extends HierarchicalModel<NpcEntity> {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
 
-        PartDefinition hairGroup = modelPartData.addChild("hair", CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        hairGroup.addChild("hairBase", CubeListBuilder.create().uv(0, 0).cuboid(-4.0f, 0f, -4.0f, 8, 11, 8, CubeDeformation.NONE), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        hairGroup.addChild("hairHat", CubeListBuilder.create().uv(32, 0).cuboid(-4.0f, 1f, -4f, 8, 11, 8, CubeDeformation.NONE.add(0.5f)), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        hairGroup.addChild("largeBeard", CubeListBuilder.create().uv(37, 37).cuboid(-6.5F, -3.5F, -4.1F,14.0F, 25.0F, -0.5F, CubeDeformation.NONE.add(0.25f)), PartPose.NONE);
+        PartDefinition hairGroup = modelPartData.addOrReplaceChild("hair", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        hairGroup.addOrReplaceChild("hairBase", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0f, 0f, -4.0f, 8, 11, 8, CubeDeformation.NONE), PartPose.offset(0.0F, 0.0F, 0.0F));
+        hairGroup.addOrReplaceChild("hairHat", CubeListBuilder.create().texOffs(32, 0).addBox(-4.0f, 1f, -4f, 8, 11, 8, CubeDeformation.NONE.add(0.5f)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        hairGroup.addOrReplaceChild("largeBeard", CubeListBuilder.create().texOffs(37, 37).addBox(-6.5F, -3.5F, -4.1F,14.0F, 25.0F, -0.5F, CubeDeformation.NONE.add(0.25f)), PartPose.NONE);
         return LayerDefinition.of(modelData, 64, 64);
     }
 
@@ -47,13 +47,13 @@ public class HairModel extends HierarchicalModel<NpcEntity> {
         // Taken from HumanoidModel.class
         float f = state.leaningPitch;
         boolean bl = state.isGliding;
-        this.hair.pitch = state.pitch * 0.017453292F;
-        this.hair.yaw = state.relativeHeadYaw * 0.017453292F;
+        this.hair.xRot = state.xRot * 0.017453292F;
+        this.hair.yRot = state.relativeHeadYaw * 0.017453292F;
 
         if (bl) {
-            this.hair.pitch = -0.7853982F;
+            this.hair.xRot = -0.7853982F;
         } else if (f > 0.0F) {
-            this.hair.pitch = net.jukoz.me.compat.MEAngles.lerpAngleRadians(f, this.hair.pitch, -0.7853982F);
+            this.hair.xRot = net.jukoz.me.compat.MEAngles.lerpAngleRadians(f, this.hair.xRot, -0.7853982F);
         }
     }
 

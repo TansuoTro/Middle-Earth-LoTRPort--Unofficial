@@ -116,7 +116,7 @@ public class MountPassengerData {
             if (entity instanceof Mob mob) {
                 mob.initialize(
                         serverWorld,
-                        serverWorld.getLocalDifficulty(owner.getBlockPos()),
+                        serverWorld.getEffectiveDifficulty(owner.getBlockPos()),
                         MobSpawnType.EVENT,
                         null,
                         null

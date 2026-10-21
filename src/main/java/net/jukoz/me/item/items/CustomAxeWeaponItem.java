@@ -18,19 +18,19 @@ public class CustomAxeWeaponItem extends AxeItem {
     private final MutableComponent faction;
     private final MutableComponent subFaction;
     public CustomAxeWeaponItem(Tier toolMaterial, int attackDamage, float attackSpeed, Settings settings) {
-        super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getDurability()));
+        super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getUses()));
         this.faction = null;
         this.subFaction = null;
     }
 
     public CustomAxeWeaponItem(Tier toolMaterial, int attackDamage, float attackSpeed, MutableComponent faction, Settings settings) {
-        super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getDurability()));
+        super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getUses()));
         this.faction = faction;
         this.subFaction = null;
     }
 
     public CustomAxeWeaponItem(Tier toolMaterial, int attackDamage, float attackSpeed, MutableComponent faction, MutableComponent subFaction, Settings settings) {
-        super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getDurability()));
+        super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getUses()));
         this.faction = faction;
         this.subFaction = subFaction;
     }

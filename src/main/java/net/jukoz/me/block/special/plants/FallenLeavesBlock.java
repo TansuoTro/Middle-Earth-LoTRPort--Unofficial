@@ -18,11 +18,12 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import com.mojang.math.Axis;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class FallenLeavesBlock extends BushBlock {
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 
-    public FallenLeavesBlock(Settings settings) {
+    public FallenLeavesBlock(BlockBehaviour.Properties settings) {
         super(settings);
         setDefaultState(getDefaultState().with(FACING, Direction.NORTH));
     }
@@ -33,7 +34,7 @@ public class FallenLeavesBlock extends BushBlock {
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return this.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+        return this.defaultBlockState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
     @Override
@@ -43,12 +44,12 @@ public class FallenLeavesBlock extends BushBlock {
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+        return state.setValue(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 1.5, 15.0);
+        return Block.box(1.0, 0.0, 1.0, 15.0, 1.5, 15.0);
     }
 
     @Override

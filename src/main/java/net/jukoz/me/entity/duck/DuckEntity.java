@@ -66,8 +66,8 @@ public class DuckEntity extends Animal {
 
     public static AttributeSupplier.Builder createDuckAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MAX_HEALTH, 6.0)
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.3);
+                .add(Attributes.MAX_HEALTH, 6.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.3);
     }
 
     public void tickMovement() {

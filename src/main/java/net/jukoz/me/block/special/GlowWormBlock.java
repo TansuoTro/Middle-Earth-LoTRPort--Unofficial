@@ -21,17 +21,17 @@ import net.minecraft.world.level.block.GrowingPlantHeadBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class GlowWormBlock extends GrowingPlantBodyBlock {
-    public static final VoxelShape SHAPE = Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 16.0, 15.0);
+    public static final VoxelShape SHAPE = Block.box(1.0, 0.0, 1.0, 15.0, 16.0, 15.0);
 
-    public GlowWormBlock(BlockBehaviour.Settings settings) {
+    public GlowWormBlock(BlockBehaviour.Properties settings) {
         super(settings, Direction.DOWN, SHAPE, false);
     }
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        ItemStack itemStack = player.getStackInHand(hand);
+        ItemStack itemStack = player.getItemInHand(hand);
 
-        if (itemStack.isOf(Items.GLASS_BOTTLE)) {
+        if (itemStack.is(Items.GLASS_BOTTLE)) {
             itemStack.decrement(1);
             world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
             if (itemStack.isEmpty()) {
@@ -41,7 +41,7 @@ public class GlowWormBlock extends GrowingPlantBodyBlock {
             }
             world.removeBlock(pos,false);
         }
-        return InteractionResult.success(world.isClient);
+        return InteractionResult.success(world.isClientSide);
     }
 
     protected GrowingPlantHeadBlock getStem() {

@@ -36,7 +36,7 @@ public class StructureManagerService {
         BlockPos chosenBlockPos = null;
         for(BlockPos blockPos : BlockPos.iterateRandomly(random, chances, pos, spawnRadius)){
             blockPos = blockPos.withY(pos.getY());
-            if(world.getBlockState(blockPos).isAir() && world.getBlockState(blockPos.up()).isAir()){
+            if(world.getBlockState(blockPos).isAir() && world.getBlockState(blockPos.above()).isAir()){
                 chosenBlockPos = blockPos;
                 break;
             }
@@ -53,7 +53,7 @@ public class StructureManagerService {
         } else {
             entity = (LivingEntity) pool.getEntityType().create(world);
             if(entity instanceof Mob mob)
-                mob.initialize(world, world.getLocalDifficulty(pos), MobSpawnType.STRUCTURE, null, null);
+                mob.initialize(world, world.getEffectiveDifficulty(pos), MobSpawnType.STRUCTURE, null, null);
             entity.setPosition(chosenBlockPos.toCenterPos());
         }
 
@@ -66,7 +66,7 @@ public class StructureManagerService {
 
     public static void register(StructureManagerBlockEntity manager) {
         Level world = manager.getWorld();
-        if (world == null || world.isClient())
+        if (world == null || world.isClientSide())
             return;
         STRUCTURE_MANAGERS.computeIfAbsent(world.getRegistryKey(), key -> new HashSet<>())
                           .add(manager.getPos().toImmutable());
@@ -74,7 +74,7 @@ public class StructureManagerService {
 
     public static void unregister(StructureManagerBlockEntity manager) {
         Level world = manager.getWorld();
-        if (world == null || world.isClient())
+        if (world == null || world.isClientSide())
             return;
         Set<BlockPos> managers = STRUCTURE_MANAGERS.get(world.getRegistryKey());
         if (managers == null)

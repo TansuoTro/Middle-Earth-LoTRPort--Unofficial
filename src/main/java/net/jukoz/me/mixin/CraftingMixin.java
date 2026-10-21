@@ -30,11 +30,11 @@ public class CraftingMixin {
                                            CraftingContainer craftingInventory, ResultContainer resultInventory,
                                            @Nullable CraftingRecipe recipe, CallbackInfo ci, CraftingContainer craftingRecipeInput,
                                            ServerPlayer serverPlayerEntity, ItemStack itemStack){
-        if (world.isClient){
+        if (world.isClientSide){
             return;
         }
         if (!ModServerConfigs.ENABLE_GOLDEN_FOOD_RECIPES && ModDimensions.isInMiddleEarth(world)
-                && (itemStack.isOf(Items.GOLDEN_APPLE) || itemStack.isOf(Items.GOLDEN_CARROT))){
+                && (itemStack.is(Items.GOLDEN_APPLE) || itemStack.is(Items.GOLDEN_CARROT))){
             itemStack = new ItemStack(Items.AIR);
         }
         resultInventory.setStack(0, itemStack);

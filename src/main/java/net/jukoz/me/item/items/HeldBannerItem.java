@@ -8,9 +8,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
 import net.minecraft.world.level.Level;
 import java.util.List;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class HeldBannerItem extends Item {
-    public HeldBannerItem(Settings settings) {
+    public HeldBannerItem(BlockBehaviour.Properties settings) {
         super(settings.maxCount(1));
     }
 

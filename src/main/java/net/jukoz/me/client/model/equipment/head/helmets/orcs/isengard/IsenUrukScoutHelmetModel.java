@@ -19,11 +19,11 @@ public class IsenUrukScoutHelmetModel extends IsenUrukCrestHelmetModel {
     public static LayerDefinition getTexturedModelData() {
         MeshDefinition modelData = getModelData();
 
-        PartDefinition head = modelData.getRoot().addChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition head = modelData.getRoot().addOrReplaceChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        head.addChild("flaps", CubeListBuilder.create()
-                .uv(35, 3).cuboid(-4.0F, 0.75F, -4.0F, 8.0F, 5.0F, 5.0F, new CubeDeformation(0.55F)),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        head.addOrReplaceChild("flaps", CubeListBuilder.create()
+                .texOffs(35, 3).addBox(-4.0F, 0.75F, -4.0F, 8.0F, 5.0F, 5.0F, new CubeDeformation(0.55F)),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.of(modelData, 64, 64);
     }

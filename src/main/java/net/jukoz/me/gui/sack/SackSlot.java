@@ -14,7 +14,7 @@ public class SackSlot extends Slot {
 
     @Override
     public boolean canInsert(ItemStack stack) {
-        if(stack.isOf(DecorativeItemsME.SACK) || (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof ShulkerBoxBlock)) return false;
+        if(stack.is(DecorativeItemsME.SACK) || (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof ShulkerBoxBlock)) return false;
         return super.canInsert(stack);
     }
 }

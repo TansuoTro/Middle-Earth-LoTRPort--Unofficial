@@ -14,9 +14,9 @@ public class ItemStackSyncS2CPacket {
     public static void receive(Minecraft client, ClientPacketListener handler,
                                FriendlyByteBuf buf, PacketSender responseSender) {
         int size = buf.readInt();
-        NonNullList<ItemStack> list = NonNullList.ofSize(size, ItemStack.EMPTY);
+        NonNullList<ItemStack> list = NonNullList.withSize(size, ItemStack.EMPTY);
         for(int i = 0; i < size; i++) {
-            list.set(i, buf.readItemStack());
+            list.set(i, buf.readItem());
         }
         BlockPos position = buf.readBlockPos();
 

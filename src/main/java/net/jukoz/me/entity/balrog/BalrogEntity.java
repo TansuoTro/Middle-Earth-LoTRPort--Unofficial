@@ -65,13 +65,13 @@ public class BalrogEntity extends Monster {
 
     public static AttributeSupplier.Builder createBalrogAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MAX_HEALTH, 300.0)
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.4)
-                .add(Attributes.GENERIC_KNOCKBACK_RESISTANCE, 1.0)
+                .add(Attributes.MAX_HEALTH, 300.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.4)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1.0)
                 .add(Attributes.GENERIC_ATTACK_SPEED, 1.0)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 40.0)
-                .add(Attributes.GENERIC_ATTACK_DAMAGE, 25.0)
-                .add(Attributes.GENERIC_ARMOR, 10.0);
+                .add(Attributes.ATTACK_DAMAGE, 25.0)
+                .add(Attributes.ARMOR, 10.0);
     }
 
     public int getAttackTicksLeft() {
@@ -89,15 +89,15 @@ public class BalrogEntity extends Monster {
     @Override
     public boolean tryAttack(Entity target) {
         this.attackTicksLeft = ATTACK_COOLDOWN;
-        this.getWorld().sendEntityStatus(this, EntityEvent.PLAY_ATTACK_SOUND);
+        this.level().sendEntityStatus(this, EntityEvent.PLAY_ATTACK_SOUND);
         float f = this.getAttackDamage();
         float g = (int)f > 0 ? f / 2.0f + (float)this.random.nextInt((int)f) : f;
-        boolean bl = target.damage(this.getDamageSources().mobAttack(this), g);
+        boolean bl = target.damage(this.damageSources().mobAttack(this), g);
         if (bl) {
             double d;
             if (target instanceof LivingEntity) {
                 LivingEntity livingEntity = (LivingEntity)target;
-                d = livingEntity.getAttributeValue(Attributes.GENERIC_KNOCKBACK_RESISTANCE);
+                d = livingEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
             } else {
                 d = 0.0;
             }
@@ -110,7 +110,7 @@ public class BalrogEntity extends Monster {
     }
 
     private float getAttackDamage() {
-        return (float)this.getAttributeValue(Attributes.GENERIC_ATTACK_DAMAGE);
+        return (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
     }
 
     @Override
@@ -136,7 +136,7 @@ public class BalrogEntity extends Monster {
     @Override
     public void tick() {
         super.tick();
-        if(this.getWorld().isClient){
+        if(this.level().isClientSide){
             setupAnimationStates();
         }
 

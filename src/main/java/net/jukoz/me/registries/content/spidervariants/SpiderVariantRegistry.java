@@ -27,10 +27,10 @@ public class SpiderVariantRegistry {
             SpawnConditionSelectors.createFallback(0)));
         register(context, registryEntryLookup, CAVE, new SpiderVariant(
             SpiderVariantRegistryHelper.createAssetInfos("blind"),
-            SpiderVariantRegistryHelper.createSpawnConditions(context, TagKey.of(Registries.BIOME, MiddleEarth.of("is_cave")), 1)));
+            SpiderVariantRegistryHelper.createSpawnConditions(context, TagKey.create(Registries.BIOME, MiddleEarth.of("is_cave")), 1)));
         register(context, registryEntryLookup, MORDOR, new SpiderVariant(
             SpiderVariantRegistryHelper.createAssetInfos("mordor"),
-            SpiderVariantRegistryHelper.createSpawnConditions(context, TagKey.of(Registries.BIOME, MiddleEarth.of("is_mordor")), 2)));
+            SpiderVariantRegistryHelper.createSpawnConditions(context, TagKey.create(Registries.BIOME, MiddleEarth.of("is_mordor")), 2)));
     }
 
     private static void register(BootstapContext<SpiderVariant> context, HolderGetter<SpiderVariant> registryEntryLookup, ResourceKey<SpiderVariant> registryKey, SpiderVariant element){

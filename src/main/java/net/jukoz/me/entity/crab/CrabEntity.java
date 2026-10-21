@@ -13,7 +13,7 @@ import net.minecraft.world.entity.monster.Guardian;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemConvertible;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -59,8 +59,8 @@ public class CrabEntity extends WaterAnimal {
     }
 
     public static AttributeSupplier.Builder createCrabAttributes() {
-        return Mob.createMobAttributes().add(Attributes.GENERIC_MAX_HEALTH, 10.0).add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25)
-                .add(Attributes.GENERIC_ATTACK_DAMAGE, 5f);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0).add(Attributes.MOVEMENT_SPEED, 0.25)
+                .add(Attributes.ATTACK_DAMAGE, 5f);
     }
 
     @Override

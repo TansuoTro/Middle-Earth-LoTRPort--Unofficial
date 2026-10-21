@@ -19,7 +19,7 @@ public class CustomPathBlock extends DirtPathBlock {
     }
 
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return !this.getDefaultState().canPlaceAt(ctx.getWorld(), ctx.getBlockPos()) ? Block.pushEntitiesUpBeforeBlockChange(this.getDefaultState(), target.getDefaultState(), ctx.getWorld(), ctx.getBlockPos()) : super.getPlacementState(ctx);
+        return !this.defaultBlockState().canPlaceAt(ctx.getWorld(), ctx.getBlockPos()) ? Block.pushEntitiesUpBeforeBlockChange(this.defaultBlockState(), target.defaultBlockState(), ctx.getWorld(), ctx.getBlockPos()) : super.getPlacementState(ctx);
     }
 
     public void scheduledTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {

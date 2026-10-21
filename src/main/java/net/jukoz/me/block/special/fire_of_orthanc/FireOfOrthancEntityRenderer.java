@@ -1,13 +1,13 @@
 package net.jukoz.me.block.special.fire_of_orthanc;
 
 import net.jukoz.me.compat.client.render.MEEntityRenderer;
-import net.minecraft.world.level.block.BlockRenderType;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.core.BlockPos;
 import com.mojang.math.Axis;
@@ -32,7 +32,7 @@ public class FireOfOrthancEntityRenderer extends MEEntityRenderer<FireOfOrthancE
     }
 
     public void render(FireOfOrthancEntity fireOfOrthancEntity, float yaw, float tickDelta, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int light) {
-        BlockState blockState = ModDecorativeBlocks.FIRE_OF_ORTHANC.getDefaultState();
+        BlockState blockState = ModDecorativeBlocks.FIRE_OF_ORTHANC.defaultBlockState();
         if (blockState.getRenderType() != RenderShape.MODEL) {
             return;
         }
@@ -47,7 +47,7 @@ public class FireOfOrthancEntityRenderer extends MEEntityRenderer<FireOfOrthancE
         scale = Math.min(1.2f, scale);
         matrixStack.scale(scale, scale, scale);
 
-        BlockPos blockPos = BlockPos.ofFloored(fireOfOrthancEntity.getX(), fireOfOrthancEntity.getBoundingBox().maxY, fireOfOrthancEntity.getZ());
+        BlockPos blockPos = BlockPos.containing(fireOfOrthancEntity.getX(), fireOfOrthancEntity.getBoundingBox().maxY, fireOfOrthancEntity.getZ());
         matrixStack.translate(-0.5, 0.0, -0.5);
 
         //TODO to test if this worky

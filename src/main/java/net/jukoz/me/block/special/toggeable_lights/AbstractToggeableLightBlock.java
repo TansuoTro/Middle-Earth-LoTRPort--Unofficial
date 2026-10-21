@@ -39,12 +39,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public abstract class AbstractToggeableLightBlock extends Block {
     public static final BooleanProperty LIT;
     public static final IntegerProperty LEVEL_15;
     public static final BooleanProperty WATERLOGGED;
-    protected AbstractToggeableLightBlock(Settings settings) {
+    protected AbstractToggeableLightBlock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
@@ -69,7 +70,7 @@ public abstract class AbstractToggeableLightBlock extends Block {
         if (level != 15) {
             CompoundTag nbtCompound = new CompoundTag();
             nbtCompound.putString(LEVEL_15.getName(), String.valueOf(level));
-            stack.setSubNbt("BlockStateTag", nbtCompound);
+            stack.addTagElement("BlockStateTag", nbtCompound);
         }
         return stack;
     }
@@ -92,7 +93,7 @@ public abstract class AbstractToggeableLightBlock extends Block {
             extinguish(null, state, world, pos);
         }
 
-        return attachedDirection(state).getOpposite() == direction && !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+        return attachedDirection(state).getOpposite() == direction && !state.canPlaceAt(world, pos) ? Blocks.AIR.defaultBlockState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
     protected abstract Direction attachedDirection(BlockState state);
@@ -106,14 +107,14 @@ public abstract class AbstractToggeableLightBlock extends Block {
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (!world.isClient && player.getAbilities().allowModifyWorld) {
+        if (!world.isClientSide && player.getAbilities().allowModifyWorld) {
             if(player.isCreative()){
-                world.setBlockState(pos, state.cycle(LIT));
+                world.setBlock(pos, state.cycle(LIT));
             } else {
-                ItemStack itemStack = player.getStackInHand(hand);
-                if (state.get(LIT) && itemStack.isIn(ItemTags.SHOVELS)) {
+                ItemStack itemStack = player.getItemInHand(hand);
+                if (state.get(LIT) && itemStack.is(ItemTags.SHOVELS)) {
                     extinguish(null, state, world, pos);
-                } else if (!state.get(LIT) && itemStack.isOf(Items.FLINT_AND_STEEL) || itemStack.isOf(Items.TORCH)) {
+                } else if (!state.get(LIT) && itemStack.is(Items.FLINT_AND_STEEL) || itemStack.is(Items.TORCH)) {
                     setLit(world, state, pos, true);
                 }
             }
@@ -126,7 +127,7 @@ public abstract class AbstractToggeableLightBlock extends Block {
     }
 
     protected static void setLit(LevelAccessor world, BlockState state, BlockPos pos, boolean lit) {
-        world.setBlockState(pos, state.with(LIT, lit).cycle(LEVEL_15), 2 | 3);
+        world.setBlock(pos, state.setValue(LIT, lit).cycle(LEVEL_15), 2 | 3);
         if(lit){
             world.playSound((Player)null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.5F, 1.0F);
         }

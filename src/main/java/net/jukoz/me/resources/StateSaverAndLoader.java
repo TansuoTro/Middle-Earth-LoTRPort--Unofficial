@@ -61,7 +61,7 @@ public class StateSaverAndLoader extends SavedData {
     }
 
     public static StateSaverAndLoader getServerState(MinecraftServer server) {
-        DimensionDataStorage persistentStateManager = server.getWorld(Level.OVERWORLD).getPersistentStateManager();
+        DimensionDataStorage persistentStateManager = server.getWorld(Level.OVERWORLD).getDataStorage();
         StateSaverAndLoader state = persistentStateManager.getOrCreate(StateSaverAndLoader::new, StateSaverAndLoader::new, KEY);
         state.markDirty();
         return state;

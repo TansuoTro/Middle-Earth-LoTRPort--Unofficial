@@ -25,8 +25,8 @@ public class OnboardingSelectionScreen extends Screen {
 private static final Component ONBOARDING_SELECTION_TITLE = Component.translatable("ui.%s.onboarding_selection.title".formatted(MiddleEarth.MOD_ID));
     private static final ResourceLocation BUTTON_WIDGET = new ResourceLocation(MiddleEarth.MOD_ID,"textures/gui/widget/button_widget.png");
     private boolean focusEnabled;
-    public ButtonWidget continueAsCharacterButton;
-    public ButtonWidget resetCharacterButton;
+    public Button continueAsCharacterButton;
+    public Button resetCharacterButton;
 
     private int mouseX;
     private int mouseY;
@@ -46,20 +46,20 @@ private static final Component ONBOARDING_SELECTION_TITLE = Component.translatab
 
     @Override
     protected void init() {
-        ButtonWidget.PressAction continueAsFaction = button -> {
+        Button.PressAction continueAsFaction = button -> {
             teleportPlayerToMiddleEarth();
         };
-        continueAsCharacterButton = ButtonWidget.builder(Component.of("continue_character"), continueAsFaction).build();
+        continueAsCharacterButton = Button.builder(Component.of("continue_character"), continueAsFaction).build();
         addDrawableChild(continueAsCharacterButton);
         if(currentDelay > 0)
             continueAsCharacterButton.active = false;
 
         if(canResetCharacter){
-            ButtonWidget.PressAction resetCharacterAction = button -> {
-                var controller = new OnboardingFactionScreenController(this.player.getWorld(), currentDelay, playerAttributes);
+            Button.PressAction resetCharacterAction = button -> {
+                var controller = new OnboardingFactionScreenController(this.player.level(), currentDelay, playerAttributes);
                 controller.open();
             };
-            resetCharacterButton = ButtonWidget.builder(Component.of("reset_character"), resetCharacterAction).build();
+            resetCharacterButton = Button.builder(Component.of("reset_character"), resetCharacterAction).build();
             addDrawableChild(resetCharacterButton);
         }
     }
@@ -103,23 +103,23 @@ private static final Component ONBOARDING_SELECTION_TITLE = Component.translatab
         int startX = (width / 2) - (panelSizeX / 2);
         int startY = (height / 2) - (panelSizeY / 2);
         if(continueAsCharacterButton.active){
-            context.drawTexture(BUTTON_WIDGET, startX, startY, 0, continueAsCharacterButton.isFocused() || isMouseOver(startX, panelSizeX, startY, panelSizeY) ? 19 : 0, panelSizeX, panelSizeY, 256, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, BUTTON_WIDGET, startX, startY, 0, continueAsCharacterButton.isFocused() || isMouseOver(startX, panelSizeX, startY, panelSizeY) ? 19 : 0, panelSizeX, panelSizeY, 256, 256);
 
             Component continueText = Component.translatable("ui.%s.continue_character".formatted(MiddleEarth.MOD_ID));
-            context.drawText(textRenderer, continueText,
-                    startX + (int)((panelSizeX - textRenderer.getWidth(continueText)) / 2f),
-                    startY + (int) ((panelSizeY / 2f) - (textRenderer.fontHeight / 2f)) + 1,
+            context.drawText(font, continueText,
+                    startX + (int)((panelSizeX - font.getWidth(continueText)) / 2f),
+                    startY + (int) ((panelSizeY / 2f) - (font.fontHeight / 2f)) + 1,
                     CommonColors.BLACK, false);
 
             net.jukoz.me.compat.client.gui.MEGui.setBounds(continueAsCharacterButton, panelSizeX, panelSizeY, startX, startY);
             if(focusEnabled && continueAsCharacterButton.isFocused()){
-                context.drawTexture(BUTTON_WIDGET, startX, startY, 103, 0, panelSizeX, panelSizeY, 256, 256);
+                net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, BUTTON_WIDGET, startX, startY, 103, 0, panelSizeX, panelSizeY, 256, 256);
             }
         } else {
-            context.drawTexture(BUTTON_WIDGET, startX, startY, 0, 38, panelSizeX, panelSizeY, 256, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, BUTTON_WIDGET, startX, startY, 0, 38, panelSizeX, panelSizeY, 256, 256);
             Component delayText = Component.literal(String.valueOf((Math.round(this.currentDelay * 10f) /10f)));
-            context.drawText(textRenderer, delayText,
-                    startX + (panelSizeX / 2) - (textRenderer.getWidth(delayText) / 2),
+            context.drawText(font, delayText,
+                    startX + (panelSizeX / 2) - (font.getWidth(delayText) / 2),
                     startY + 5, CommonColors.RED, true);
         }
 
@@ -127,16 +127,16 @@ private static final Component ONBOARDING_SELECTION_TITLE = Component.translatab
 
             startY += panelSizeY + margin;
 
-            context.drawTexture(BUTTON_WIDGET, startX, startY, 0, resetCharacterButton.isFocused() || isMouseOver(startX, panelSizeX, startY, panelSizeY) ? 19 : 0, panelSizeX, panelSizeY, 256, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, BUTTON_WIDGET, startX, startY, 0, resetCharacterButton.isFocused() || isMouseOver(startX, panelSizeX, startY, panelSizeY) ? 19 : 0, panelSizeX, panelSizeY, 256, 256);
 
             Component resetText = Component.translatable("ui.%s.reset_character".formatted(MiddleEarth.MOD_ID));
-            context.drawText(textRenderer, resetText,
-                    startX + (int) ((panelSizeX - textRenderer.getWidth(resetText)) / 2f),
-                    startY + (int) ((panelSizeY / 2f) - (textRenderer.fontHeight / 2f)) + 1,
+            context.drawText(font, resetText,
+                    startX + (int) ((panelSizeX - font.getWidth(resetText)) / 2f),
+                    startY + (int) ((panelSizeY / 2f) - (font.fontHeight / 2f)) + 1,
                     CommonColors.BLACK, false);
             net.jukoz.me.compat.client.gui.MEGui.setBounds(resetCharacterButton, panelSizeX, panelSizeY, startX, startY);
             if(focusEnabled && resetCharacterButton.isFocused()){
-                context.drawTexture(BUTTON_WIDGET, startX, startY, 0, 103, 0, panelSizeX, panelSizeY, 256, 256);
+                net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, BUTTON_WIDGET, startX, startY, 0, 103, 0, panelSizeX, panelSizeY, 256, 256);
             }
         }
     }

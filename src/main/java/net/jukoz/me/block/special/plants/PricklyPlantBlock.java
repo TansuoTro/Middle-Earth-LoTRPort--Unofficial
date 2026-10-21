@@ -8,9 +8,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.utils.DamageablePlantsUtil;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class PricklyPlantBlock extends CustomPlantBlock {
-    public PricklyPlantBlock(Settings settings) {
+    public PricklyPlantBlock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
@@ -22,7 +23,7 @@ public class PricklyPlantBlock extends CustomPlantBlock {
                 double d = Math.abs(vec3d.getX());
                 double e = Math.abs(vec3d.getZ());
                 if (d >= 0.003 || e >= 0.003) {
-                    DamageablePlantsUtil.tryDamageEntity(livingEntity, serverWorld, serverWorld.getDamageSources().cactus());
+                    DamageablePlantsUtil.tryDamageEntity(livingEntity, serverWorld, serverWorld.damageSources().cactus());
                 }
             }
         }

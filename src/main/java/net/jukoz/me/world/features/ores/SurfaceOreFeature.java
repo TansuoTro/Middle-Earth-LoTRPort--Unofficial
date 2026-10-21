@@ -49,7 +49,7 @@ public class SurfaceOreFeature extends Feature<OreConfiguration> {
         int r = 2 * (2 + i);
         for (int s = n; s <= n + q; ++s) {
             for (int t = p; t <= p + q; ++t) {
-                if (o > structureWorldAccess.getTopY(Heightmap.Type.OCEAN_FLOOR_WG, s, t)) continue;
+                if (o > structureWorldAccess.getTopY(Heightmap.Types.OCEAN_FLOOR_WG, s, t)) continue;
                 return this.generateVeinPart(structureWorldAccess, random, oreFeatureConfig, d, e, h, j, l, m, n, o, p, q, r);
             }
         }
@@ -64,7 +64,7 @@ public class SurfaceOreFeature extends Feature<OreConfiguration> {
         int k;
         int i = 0;
         BitSet bitSet = new BitSet(horizontalSize * verticalSize * horizontalSize);
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
         int j = config.size;
         double[] ds = new double[j * 4];
         for (k = 0; k < j; ++k) {
@@ -113,17 +113,17 @@ public class SurfaceOreFeature extends Feature<OreConfiguration> {
                             LevelChunkSection chunkSection;
                             int ac;
                             double ab = ((double)aa + 0.5 - h) / d;
-                            if (!(u * u + w * w + ab * ab < 1.0) || world.isOutOfHeightLimit(v) || bitSet.get(ac = t - x + (v - y) * horizontalSize + (aa - z) * horizontalSize * verticalSize)) continue;
+                            if (!(u * u + w * w + ab * ab < 1.0) || world.isOutsideBuildHeight(v) || bitSet.get(ac = t - x + (v - y) * horizontalSize + (aa - z) * horizontalSize * verticalSize)) continue;
                             bitSet.set(ac);
                             mutable.set(t, v, aa);
-                            if (!world.isValidForSetBlock(mutable) || (chunkSection = chunkSectionCache.getSection(mutable)) == null) continue;
+                            if (!world.ensureCanWrite(mutable) || (chunkSection = chunkSectionCache.getSection(mutable)) == null) continue;
                             int ad = SectionPos.getLocalCoord(t);
                             int ae = SectionPos.getLocalCoord(v);
                             int af = SectionPos.getLocalCoord(aa);
                             BlockState blockState = chunkSection.getBlockState(ad, ae, af);
-                            for (OreConfiguration.Target target : config.targets) {
+                            for (OreConfiguration.TargetBlockState target : config.targets) {
                                 if (!shouldPlace(blockState, chunkSectionCache::getBlockState, random, config, target, mutable)) continue;
-                                chunkSection.setBlockState(ad, ae, af, target.state, false);
+                                chunkSection.setBlock(ad, ae, af, target.state, false);
                                 ++i;
                                 continue block11;
                             }
@@ -135,9 +135,9 @@ public class SurfaceOreFeature extends Feature<OreConfiguration> {
         return i > 0;
     }
 
-    public static boolean shouldPlace(BlockState state, Function<BlockPos, BlockState> posToState, RandomSource random, OreConfiguration config, OreConfiguration.Target target, BlockPos.Mutable pos) {
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
-        Predicate<BlockState> predicate = BlockBehaviour.AbstractBlockState::isAir;
+    public static boolean shouldPlace(BlockState state, Function<BlockPos, BlockState> posToState, RandomSource random, OreConfiguration config, OreConfiguration.TargetBlockState target, BlockPos.MutableBlockPos pos) {
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
+        Predicate<BlockState> predicate = BlockBehaviour.BlockStateBase::isAir;
         mutable.set(pos, Direction.UP);
         if (!predicate.test(posToState.apply(mutable))) return false;
 

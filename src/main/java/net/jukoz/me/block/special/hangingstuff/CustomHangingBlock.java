@@ -11,16 +11,17 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccess;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class CustomHangingBlock extends Block {
 
-    public static final BooleanProperty TIP = BooleanProperty.of("tip");
+    public static final BooleanProperty TIP = BooleanProperty.create("tip");
 
-    public CustomHangingBlock(Settings settings) {
+    public CustomHangingBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(this.getDefaultState().with(TIP, false));
+        this.setDefaultState(this.defaultBlockState().with(TIP, false));
     }
 
     @Override
@@ -36,16 +37,16 @@ public class CustomHangingBlock extends Block {
     private boolean canPlaceAt(BlockGetter world, BlockPos pos) {
         BlockPos blockPos = pos.offset(Direction.UP);
         BlockState blockState = world.getBlockState(blockPos);
-        return MultifaceBlock.canGrowOn(world, Direction.UP, blockPos, blockState) || blockState.isOf(this);
+        return MultifaceBlock.canGrowOn(world, Direction.UP, blockPos, blockState) || blockState.is(this);
     }
 
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (!this.canPlaceAt(world, pos)) {
-            world.scheduleBlockTick(pos, this, 1);
+            world.scheduleRecheck(pos, this, 1);
         }
 
-        return state.with(TIP, !world.getBlockState(pos.down()).isOf(this));
+        return state.setValue(TIP, !world.getBlockState(pos.below()).is(this));
     }
 
     @Override

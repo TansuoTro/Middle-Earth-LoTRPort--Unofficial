@@ -32,7 +32,7 @@ public class ShieldAgainstProjectileGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        if (this.blocker.hasPassengers()) {
+        if (this.blocker.isVehicle()) {
             return false;
         }
         this.target = this.blocker.getTarget();
@@ -67,7 +67,7 @@ public class ShieldAgainstProjectileGoal extends Goal {
         ItemStack mainStack = target.getMainHandStack();
         if (mainStack.getItem() instanceof ProjectileWeaponItem) {
             if(target instanceof Player player) {
-                return player.getItemUseTime() > 1;
+                return player.getTicksUsingItem() > 1;
             } else if(mainStack.getItem() instanceof CrossbowItem) {
                 if(CrossbowItem.isCharged(mainStack)) {
                     return true;

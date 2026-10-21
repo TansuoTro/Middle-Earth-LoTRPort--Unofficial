@@ -6,7 +6,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class ArtefactCustomShieldItem extends CustomShieldItem {
 
-    public ArtefactCustomShieldItem(ShieldTypesME type, Item.Settings settings) {
+    public ArtefactCustomShieldItem(ShieldTypesME type, Item.Properties settings) {
         super(type, settings);
     }
 

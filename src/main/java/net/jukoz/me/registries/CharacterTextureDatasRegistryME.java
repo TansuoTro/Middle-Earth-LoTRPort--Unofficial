@@ -1,7 +1,7 @@
 package net.jukoz.me.registries;
 
-import net.minecraft.data.worldgen.BootstrapContext;
-import net.minecraft.core.RegistryEntryLookup;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.Holder;
 import net.jukoz.me.MiddleEarth;
@@ -50,7 +50,7 @@ public class CharacterTextureDatasRegistryME {
     }
 
     private static ResourceKey<TexturePresetDataPool> of(String idPath) {
-        return ResourceKey.of(DynamicRegistriesME.TEXTURE_PRESETS, MiddleEarth.of(idPath));
+        return ResourceKey.create(DynamicRegistriesME.TEXTURE_PRESETS, MiddleEarth.of(idPath));
     }
 
     private static final class Generic{

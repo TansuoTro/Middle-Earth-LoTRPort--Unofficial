@@ -1,7 +1,7 @@
 package net.jukoz.me.block.special.torches;
 
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BlockRenderType;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.world.entity.player.Player;
@@ -21,30 +21,31 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class MEWallTorchBlock extends WallTorchBlock {
 
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-    public MEWallTorchBlock(Settings settings) {
+    public MEWallTorchBlock(BlockBehaviour.Properties settings) {
         super(settings, ParticleTypes.FLAME);
-        this.setDefaultState((BlockState)((BlockState)((BlockState)((BlockState)((BlockState)this.stateManager.getDefaultState()).with(LIT, true).with(FACING, Direction.NORTH)))));
+        this.setDefaultState((BlockState)((BlockState)((BlockState)((BlockState)((BlockState)this.stateManager.defaultBlockState()).with(LIT, true).with(FACING, Direction.NORTH)))));
     }
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (!world.isClient && player.getAbilities().allowModifyWorld) {
+        if (!world.isClientSide && player.getAbilities().allowModifyWorld) {
             if(player.isCreative()){
-                world.setBlockState(pos, state.cycle(LIT));
+                world.setBlock(pos, state.cycle(LIT));
             } else {
-                ItemStack itemStack = player.getStackInHand(hand);
-                if (state.get(LIT) && itemStack.isIn(ItemTags.SHOVELS)) {
+                ItemStack itemStack = player.getItemInHand(hand);
+                if (state.get(LIT) && itemStack.is(ItemTags.SHOVELS)) {
                     extinguish(null, state, world, pos);
-                } else if (!state.get(LIT) && itemStack.isOf(Items.FLINT_AND_STEEL) || itemStack.isOf(Items.TORCH)) {
+                } else if (!state.get(LIT) && itemStack.is(Items.FLINT_AND_STEEL) || itemStack.is(Items.TORCH)) {
                     setLit(world, state, pos, true);
                 }
             }
@@ -53,7 +54,7 @@ public class MEWallTorchBlock extends WallTorchBlock {
     }
 
     protected static void setLit(LevelAccessor world, BlockState state, BlockPos pos, boolean lit) {
-        world.setBlockState(pos, state.cycle(LIT), 2 | 3);
+        world.setBlock(pos, state.cycle(LIT), 2 | 3);
         if(lit){
             world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.5F, 1.0F);
         }

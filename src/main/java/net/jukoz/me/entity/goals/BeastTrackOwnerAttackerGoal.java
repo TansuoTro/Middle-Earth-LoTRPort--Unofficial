@@ -17,7 +17,7 @@ public class BeastTrackOwnerAttackerGoal extends TargetGoal {
     public BeastTrackOwnerAttackerGoal(BeastEntity mob) {
         super(mob, false);
         this.mob = mob;
-        this.setControls(EnumSet.of(Goal.Control.TARGET));
+        this.setControls(EnumSet.of(Goal.Flag.TARGET));
     }
 
     @Override
@@ -30,7 +30,7 @@ public class BeastTrackOwnerAttackerGoal extends TargetGoal {
             return false;
         }
         this.attacker = livingEntity.getAttacker();
-        int i = livingEntity.getLastAttackedTime();
+        int i = livingEntity.getLastHurtByMobTimestamp();
         return i != this.lastAttackedTime && this.canTrack(this.attacker, TargetingConditions.DEFAULT);
     }
 
@@ -39,7 +39,7 @@ public class BeastTrackOwnerAttackerGoal extends TargetGoal {
         this.mob.setTarget(this.attacker);
         LivingEntity livingEntity = this.mob.getOwner();
         if (livingEntity != null) {
-            this.lastAttackedTime = livingEntity.getLastAttackedTime();
+            this.lastAttackedTime = livingEntity.getLastHurtByMobTimestamp();
         }
         super.start();
     }

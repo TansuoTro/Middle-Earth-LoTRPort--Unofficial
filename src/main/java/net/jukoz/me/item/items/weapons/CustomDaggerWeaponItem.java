@@ -23,7 +23,7 @@ public class CustomDaggerWeaponItem extends ReachWeaponItem {
     public static final ResourceLocation ENTITY_INTERACTION_RANGE_MODIFIER_ID = new ResourceLocation(MiddleEarth.MOD_ID, "entity_interaction_range");
     private static final int SNEAK_ATTACK_TIME = 40;
 
-    public CustomDaggerWeaponItem(Tier toolMaterial, Item.Settings settings) {
+    public CustomDaggerWeaponItem(Tier toolMaterial, Item.Properties settings) {
         super(toolMaterial, WeaponTypesME.DAGGER, settings);
         this.type = WeaponTypesME.DAGGER;
     }
@@ -36,7 +36,7 @@ public class CustomDaggerWeaponItem extends ReachWeaponItem {
             SneakAttackDataComponent sneakAttackDataComponent = MEComponents.get(stack, MEComponents.SNEAK_ATTACK_DATA);
             if(sneakAttackDataComponent != null) timer = sneakAttackDataComponent.timer();
 
-            if(playerEntity.isSneaking()) {
+            if(playerEntity.isShiftKeyDown()) {
                 MEComponents.set(stack, MEComponents.SNEAK_ATTACK_DATA, new SneakAttackDataComponent(Math.min(timer + 1, SNEAK_ATTACK_TIME)));
             } else {
                 MEComponents.set(stack, MEComponents.SNEAK_ATTACK_DATA, new SneakAttackDataComponent(0));

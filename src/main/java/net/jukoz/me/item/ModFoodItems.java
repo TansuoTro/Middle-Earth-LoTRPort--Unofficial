@@ -99,7 +99,7 @@ public class ModFoodItems {
     public static final Item VEGETABLE_SOUP = FoodItemsME.VEGETABLE_SOUP;
 
     private static Item registerItem(String name, Item item) {
-        ModItemGroups.FOOD_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.FOOD_CONTENTS.add(item.getDefaultInstance());
         return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);
     }
 

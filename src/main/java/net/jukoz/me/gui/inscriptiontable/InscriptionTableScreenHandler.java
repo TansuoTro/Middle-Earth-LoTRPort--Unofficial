@@ -54,7 +54,7 @@ public class InscriptionTableScreenHandler extends AbstractContainerMenu {
 
     private byte[] availableWords;
     public List<String> selectedWords;
-    private final Property levelCost;
+    private final DataSlot levelCost;
 
     private static final ResourceLocation EMPTY_SLOT_CHISEL_TEXTURE = MiddleEarth.of("container/slot/chisel");
 
@@ -81,7 +81,7 @@ public class InscriptionTableScreenHandler extends AbstractContainerMenu {
         this.addSlot(new Slot(this.input, 0, 135, 48) {
             @Override
             public boolean canInsert(ItemStack stack) {
-                return stack.isIn(ItemTagsME.INSCRIPTION_CATALYSTS) && !this.hasStack();
+                return stack.is(ItemTagsME.INSCRIPTION_CATALYSTS) && !this.hasStack();
             }
 
             @Override
@@ -92,7 +92,7 @@ public class InscriptionTableScreenHandler extends AbstractContainerMenu {
         this.addSlot(new Slot(this.input, 1, 225, 48) {
             @Override
             public boolean canInsert(ItemStack stack) {
-                return stack.isIn(ItemTagsME.EARLY_CHISELS);
+                return stack.is(ItemTagsME.EARLY_CHISELS);
             }
 
             @Override
@@ -108,16 +108,16 @@ public class InscriptionTableScreenHandler extends AbstractContainerMenu {
         this.addSlot(new Slot(this.input, 2, 180, 48){
             @Override
             public boolean canInsert(ItemStack stack) {
-                return (stack.isIn(TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "enchantable/bow"))) ||
-                        stack.isIn(TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "enchantable/crossbow")))
-                        || stack.isEnchantable() || stack.hasEnchantments()) && !stack.isOf(Items.BOOK);
+                return (stack.is(TagKey.create(Registries.ITEM, new ResourceLocation("minecraft", "enchantable/bow"))) ||
+                        stack.is(TagKey.create(Registries.ITEM, new ResourceLocation("minecraft", "enchantable/crossbow")))
+                        || stack.isEnchantable() || stack.isEnchanted()) && !stack.is(Items.BOOK);
             }
         });
 
         this.context = context;
-        this.world = playerInventory.player.getWorld();
+        this.world = playerInventory.player.level();
 
-        this.levelCost = Property.create();
+        this.levelCost = DataSlot.create();
         this.addProperty(this.levelCost);
 
         addPlayerInventory(playerInventory);
@@ -133,15 +133,15 @@ public class InscriptionTableScreenHandler extends AbstractContainerMenu {
     }
 
     public boolean hasGem(){
-        return !this.input.getStack(0).isEmpty();
+        return !this.input.getItem(0).isEmpty();
     }
 
     public boolean hasChisel(){
-        return !this.input.getStack(1).isEmpty();
+        return !this.input.getItem(1).isEmpty();
     }
 
     public boolean hasInput(){
-        return !this.input.getStack(2).isEmpty();
+        return !this.input.getItem(2).isEmpty();
     }
 
     public boolean hasAll(){
@@ -153,7 +153,7 @@ public class InscriptionTableScreenHandler extends AbstractContainerMenu {
     }
 
     public List<String> getWords(){
-        ItemStack catalyst = this.input.getStack(0);
+        ItemStack catalyst = this.input.getItem(0);
 
         List<String> words = new ArrayList<>();
 
@@ -182,11 +182,11 @@ public class InscriptionTableScreenHandler extends AbstractContainerMenu {
         if (!reset){
             if (add){
                 if (this.selectedWords.isEmpty()){
-                    world.playSound(null, this.player.getBlockPos(), SoundsME.CHISEL_HIT_FIRST, SoundSource.BLOCKS, 1.0F, 0.95F + world.random.nextFloat() * 0.1F);
+                    world.playSound(null, this.player.blockPosition(), SoundsME.CHISEL_HIT_FIRST, SoundSource.BLOCKS, 1.0F, 0.95F + world.random.nextFloat() * 0.1F);
                 } else if(this.selectedWords.size() == 1) {
-                    world.playSound(null, this.player.getBlockPos(), SoundsME.CHISEL_HIT_SECOND, SoundSource.BLOCKS, 1.0F, 0.95F + world.random.nextFloat() * 0.1F);
+                    world.playSound(null, this.player.blockPosition(), SoundsME.CHISEL_HIT_SECOND, SoundSource.BLOCKS, 1.0F, 0.95F + world.random.nextFloat() * 0.1F);
                 }else if(this.selectedWords.size() == 2) {
-                    world.playSound(null, this.player.getBlockPos(), SoundsME.CHISEL_HIT_THIRD, SoundSource.BLOCKS, 1.0F, 0.95F + world.random.nextFloat() * 0.1F);
+                    world.playSound(null, this.player.blockPosition(), SoundsME.CHISEL_HIT_THIRD, SoundSource.BLOCKS, 1.0F, 0.95F + world.random.nextFloat() * 0.1F);
                 }
                 this.selectedWords.add(word);
             } else {
@@ -197,12 +197,12 @@ public class InscriptionTableScreenHandler extends AbstractContainerMenu {
             for (InscriptionRecipe recipe : this.outputRecipes){
                 if (this.selectedWords.size() == 2 && recipe.inputWords.size() == 3 && add){
                     if (Objects.equals(this.selectedWords.get(1), recipe.inputWords.get(1))
-                            && recipe.enchant.value().isAcceptableItem(input.getStack(2))
+                            && recipe.enchant.value().isAcceptableItem(input.getItem(2))
                             && this.selectedWords.get(0).equals(recipe.inputWords.get(0))){
                     }
                 }
                 if (recipe.inputWords.equals(this.selectedWords)){
-                    if (canEnchant(input.getStack(2), recipe.enchant, recipe.level)){
+                    if (canEnchant(input.getItem(2), recipe.enchant, recipe.level)){
                         foundEnchant = true;
                         resultEnchant = recipe.enchant;
                         resultLevel = recipe.level;
@@ -215,7 +215,7 @@ public class InscriptionTableScreenHandler extends AbstractContainerMenu {
             List<String> words = new ArrayList<>();
             List<String> allowedWords = new ArrayList<>();
             if(this.hasAll()){
-                words.addAll(InscriptionWordBank.wordBank.get(this.input.getStack(0).getItem()));
+                words.addAll(InscriptionWordBank.wordBank.get(this.input.getItem(0).getItem()));
                 words.addAll(InscriptionWordBank.wordBank.get(null));
             }
 
@@ -224,7 +224,7 @@ public class InscriptionTableScreenHandler extends AbstractContainerMenu {
             RecipeManager serverRecipeManager = (RecipeManager) this.world.getRecipeManager();
             List<InscriptionRecipe> availableRecipes = serverRecipeManager.listAllOfType(RecipesME.INSCRIPTION_TABLE)
                     .stream().filter((inscriptionRecipeRecipeEntry -> {
-                            if(!inscriptionRecipeRecipeEntry.enchant.value().isAcceptableItem(input.getStack(2))) return false;
+                            if(!inscriptionRecipeRecipeEntry.enchant.value().isAcceptableItem(input.getItem(2))) return false;
                             if(selectedWords.isEmpty()) return true;
                             else return inscriptionRecipeRecipeEntry.inputWords.get(0).equals(selectedWords.get(0));
                     })).toList();
@@ -263,9 +263,9 @@ public class InscriptionTableScreenHandler extends AbstractContainerMenu {
     }
 
     private void updateInput(Inventory inventory) {
-        ItemStack inputChisel = inventory.getStack(1);
+        ItemStack inputChisel = inventory.getItem(1);
         if (this.hasAll()) {
-             if (!this.world.isClient){
+             if (!this.world.isClientSide){
                 updateWords(false, "", true);
                 RecipeManager serverRecipeManager = (RecipeManager) this.world.getRecipeManager();
                 this.outputRecipes = serverRecipeManager.getAllMatches(RecipesME.INSCRIPTION_TABLE, new SingleStackRecipeInput(inputChisel), this.world);
@@ -291,12 +291,12 @@ public class InscriptionTableScreenHandler extends AbstractContainerMenu {
     }
 
     public void enchantItem(){
-        ItemStack stackCatalyst = this.input.getStack(0);
-        ItemStack stackChisel = this.input.getStack(1);
-        ItemStack stack = this.input.getStack(2);
+        ItemStack stackCatalyst = this.input.getItem(0);
+        ItemStack stackChisel = this.input.getItem(1);
+        ItemStack stack = this.input.getItem(2);
 
         if(!MEDurability.hasCustom(stackCatalyst)){
-            if (stackCatalyst.isOf(Items.LAPIS_LAZULI)) this.input.setStack(0, ItemStack.EMPTY);
+            if (stackCatalyst.is(Items.LAPIS_LAZULI)) this.input.setStack(0, ItemStack.EMPTY);
             MEDurability.set(stackCatalyst, 2);
             stackCatalyst.setDamage(stackCatalyst.getDamage() + 1);
         } else {
@@ -307,7 +307,7 @@ public class InscriptionTableScreenHandler extends AbstractContainerMenu {
             }
         }
 
-        if ((stackChisel.getDamage() == stackChisel.getMaxDamage()) && !stackChisel.isOf(ToolItemsME.MITHRIL_CHISEL)){
+        if ((stackChisel.getDamage() == stackChisel.getMaxDamage()) && !stackChisel.is(ToolItemsME.MITHRIL_CHISEL)){
             this.input.setStack(1, ItemStack.EMPTY);
         } else {
             stackChisel.setDamage(stackChisel.getDamage() + 1);
@@ -320,14 +320,14 @@ public class InscriptionTableScreenHandler extends AbstractContainerMenu {
             this.levelCost.set(0);
 
             stack.addEnchantment(this.enchant.value(), this.level);
-            world.playSound(null, this.player.getBlockPos(), SoundsME.CHISEL_ENCHANT, SoundSource.BLOCKS, 1.0F, world.random.nextFloat() * 0.1F + 0.9F);
+            world.playSound(null, this.player.blockPosition(), SoundsME.CHISEL_ENCHANT, SoundSource.BLOCKS, 1.0F, world.random.nextFloat() * 0.1F + 0.9F);
         }
 
         updateWords(false, "", true);
     }
 
     public void calculateCost(int levelCost, Holder<Enchantment> enchant) {
-        ItemStack itemStack = this.input.getStack(2);
+        ItemStack itemStack = this.input.getItem(2);
         int k = 0;
 
         if (!itemStack.isEmpty()){
@@ -349,7 +349,7 @@ public class InscriptionTableScreenHandler extends AbstractContainerMenu {
         Slot invSlot = this.slots.get(slot);
 
         if(invSlot.hasStack()) {
-            ItemStack originalStack = invSlot.getStack();
+            ItemStack originalStack = invSlot.getItem();
             Item item = originalStack.getItem();
             stack = originalStack.copy();
             if(slot < this.input.size()) {

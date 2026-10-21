@@ -10,7 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelSimulatedReader;
-import net.minecraft.world.level.levelgen.feature.TreeFeatureConfig;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
@@ -46,18 +46,18 @@ public class SpruceTrunkPlacer extends TrunkPlacer {
     }
 
     @Override
-    public List<FoliagePlacer.TreeNode> generate(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random,
+    public List<FoliagePlacer.FoliageAttachment> generate(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random,
                                                  int height, BlockPos startPos, TreeConfiguration config) {
-        BlockPos blockPos = startPos.down();
+        BlockPos blockPos = startPos.below();
         setToDirt(world, replacer, random, blockPos, config);
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
-        List<FoliagePlacer.TreeNode> treeNodes = createTrunk(world, replacer, random, mutable, config, startPos, getHeight(random));
+        List<FoliagePlacer.FoliageAttachment> treeNodes = createTrunk(world, replacer, random, mutable, config, startPos, getHeight(random));
 
-        return ImmutableList.copyOf(treeNodes);
+        return ImmutableList.bind(treeNodes);
     }
 
-    protected List<FoliagePlacer.TreeNode> createTrunk(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable mutable,
+    protected List<FoliagePlacer.FoliageAttachment> createTrunk(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.MutableBlockPos mutable,
                                                        TreeConfiguration config, BlockPos startPos, int height) {
         for (int i = 0; i < height; ++i) {
             this.setLog(world, replacer, random, mutable, config, startPos, 0, i, 0);
@@ -68,19 +68,19 @@ public class SpruceTrunkPlacer extends TrunkPlacer {
                     if(direction == Direction.NORTH || direction == Direction.SOUTH) {
                         axis = Direction.Axis.Z;
                     }
-                    replacer.accept(startPos.up(i).offset(direction, j),
+                    replacer.accept(startPos.above(i).offset(direction, j),
                             (BlockState) Function.identity().apply(config.trunkProvider
-                                    .get(random, startPos.up(i).offset(direction, j))
+                                    .get(random, startPos.above(i).offset(direction, j))
                                     .with(RotatedPillarBlock.AXIS, axis)));
                 }
             }
         }
-        List<FoliagePlacer.TreeNode> treeNodes = new ArrayList<>();
-        treeNodes.add(new FoliagePlacer.TreeNode(startPos.add(0, height, 0), 0, false));
+        List<FoliagePlacer.FoliageAttachment> treeNodes = new ArrayList<>();
+        treeNodes.add(new FoliagePlacer.FoliageAttachment(startPos.add(0, height, 0), 0, false));
         return treeNodes;
     }
 
-    protected void setLog(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.Mutable tmpPos,
+    protected void setLog(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos.MutableBlockPos tmpPos,
                         TreeConfiguration config, BlockPos startPos, int dx, int dy, int dz) {
         tmpPos.set(startPos, dx, dy, dz);
         this.trySetState(world, replacer, random, tmpPos, config);

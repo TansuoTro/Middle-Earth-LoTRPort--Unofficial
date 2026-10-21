@@ -7,7 +7,7 @@ import net.jukoz.me.block.registration.StoneBlockSets;
 import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.jukoz.me.block.registration.WoodBlockSets;
 import net.jukoz.me.item.*;
-import net.minecraft.world.item.ItemGroup;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;

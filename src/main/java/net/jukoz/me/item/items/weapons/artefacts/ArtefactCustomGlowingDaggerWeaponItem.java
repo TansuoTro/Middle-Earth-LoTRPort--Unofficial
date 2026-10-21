@@ -21,7 +21,7 @@ public class ArtefactCustomGlowingDaggerWeaponItem extends CustomDaggerWeaponIte
     public boolean glowing;
     private int counter = 0;
 
-    public ArtefactCustomGlowingDaggerWeaponItem(Tier toolMaterial, Item.Settings settings) {
+    public ArtefactCustomGlowingDaggerWeaponItem(Tier toolMaterial, Item.Properties settings) {
         super(toolMaterial, settings);
     }
 
@@ -68,7 +68,7 @@ public class ArtefactCustomGlowingDaggerWeaponItem extends CustomDaggerWeaponIte
 
     @Override
     public boolean postMine(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity miner) {
-        if (!world.isClient && state.getHardness(world, pos) != 0.0F) {
+        if (!world.isClientSide && state.defaultDestroyTime(world, pos) != 0.0F) {
             if (stack.getDamage() == stack.getMaxDamage() - 1) {
                 BluntWeapon.blunt(stack);
             }

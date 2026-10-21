@@ -100,27 +100,27 @@ public class StructureNestBlockEntity extends BlockEntity implements ExtendedScr
 
     public void setStructureManagerId(ResourceLocation structureManagerId) {
         this.managerId = structureManagerId;
-        updateListeners();
+        sendBlockUpdated();
     }
 
     public void setStructureNestId(ResourceLocation structureNestId) {
         this.nestId = structureNestId;
-        updateListeners();
+        sendBlockUpdated();
     }
 
     public void setSpawnRadius(int newRadius) {
         this.spawnRadius = newRadius;
-        updateListeners();
+        sendBlockUpdated();
     }
 
     public void setIsEnabled(boolean isEnabled) {
         this.isEnabled = isEnabled;
-        updateListeners();
+        sendBlockUpdated();
     }
 
-    private void updateListeners() {
+    private void sendBlockUpdated() {
         this.markDirty();
-        this.world.updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), Block.NOTIFY_ALL);
+        this.world.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), (Block.UPDATE_NEIGHBORS | Block.UPDATE_CLIENTS));
     }
 
     public static void tickEvent(Level world, BlockPos blockPos, BlockState blockState, StructureNestBlockEntity entity) {
@@ -128,7 +128,7 @@ public class StructureNestBlockEntity extends BlockEntity implements ExtendedScr
     }
 
     private void tickEvent(Level world, BlockState blockState) {
-        if(world.isClient)
+        if(world.isClientSide)
             return;
 
         if(!blockState.get(StructureNestBlock.ENABLED)) {
@@ -149,7 +149,7 @@ public class StructureNestBlockEntity extends BlockEntity implements ExtendedScr
                 world.breakBlock(pos, false);
                 world.removeBlockEntity(pos);
                 initialized = true;
-                updateListeners();
+                sendBlockUpdated();
             } else {
                 fails++;
             }
@@ -157,7 +157,7 @@ public class StructureNestBlockEntity extends BlockEntity implements ExtendedScr
         if(fails >= 12) {
             world.breakBlock(pos, false);
             world.removeBlockEntity(pos);
-            updateListeners();
+            sendBlockUpdated();
         }
     }
 

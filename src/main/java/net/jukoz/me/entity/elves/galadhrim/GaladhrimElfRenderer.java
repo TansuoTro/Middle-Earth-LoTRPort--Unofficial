@@ -7,9 +7,9 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
-import net.minecraft.client.model.EntityModelLayers;
+import net.minecraft.client.model.geom.ModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
@@ -23,8 +23,8 @@ public class GaladhrimElfRenderer extends HumanoidMobRenderer<GaladhrimElfEntity
     private static final String PATH = "textures/entities/elves/galadhrim/";
 
     public GaladhrimElfRenderer(EntityRendererProvider.Context ctx) {
-        super(ctx, new GaladhrimElfModel<>(ctx.getPart(ModEntityModelLayers.ELF)), 0.5f);
-        this.addFeature(new HumanoidArmorLayer<>(this, new GaladhrimElfModel(ctx.getPart(ModelLayers.PLAYER_INNER_ARMOR)), new GaladhrimElfModel(ctx.getPart(ModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
+        super(ctx, new GaladhrimElfModel<>(ctx.bakeLayer(ModEntityModelLayers.ELF)), 0.5f);
+        this.addFeature(new HumanoidArmorLayer<>(this, new GaladhrimElfModel(ctx.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)), new GaladhrimElfModel(ctx.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
     }
 
     public static final Map<GaladhrimElfVariant, String> LOCATION_BY_VARIANT =

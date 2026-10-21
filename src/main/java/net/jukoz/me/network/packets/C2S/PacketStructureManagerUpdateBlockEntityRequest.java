@@ -28,7 +28,7 @@ public class PacketStructureManagerUpdateBlockEntityRequest extends ClientToServ
     }
 
     public PacketStructureManagerUpdateBlockEntityRequest(FriendlyByteBuf buf) {
-        this(buf.readBlockPos(), buf.readIdentifier(), buf.readBoolean(), buf.readBoolean());
+        this(buf.readBlockPos(), buf.readResourceLocation(), buf.readBoolean(), buf.readBoolean());
     }
 
     @Override

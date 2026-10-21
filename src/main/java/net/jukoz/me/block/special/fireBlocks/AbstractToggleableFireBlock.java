@@ -2,9 +2,9 @@ package net.jukoz.me.block.special.fireBlocks;
 
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BlockRenderType;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.BlockWithEntity;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.CampfireBlockEntity;
 import net.minecraft.world.entity.Entity;
@@ -31,7 +31,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -41,9 +41,9 @@ public abstract class AbstractToggleableFireBlock extends BaseEntityBlock {
 
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-    public AbstractToggleableFireBlock(BlockBehaviour.Settings settings) {
+    public AbstractToggleableFireBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(LIT, true));
+        this.setDefaultState(this.stateManager.defaultBlockState().with(LIT, true));
     }
 
     @Override
@@ -53,14 +53,14 @@ public abstract class AbstractToggleableFireBlock extends BaseEntityBlock {
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (!world.isClient && player.getAbilities().allowModifyWorld) {
+        if (!world.isClientSide && player.getAbilities().allowModifyWorld) {
             if(player.isCreative()){
-                world.setBlockState(pos, state.cycle(LIT));
+                world.setBlock(pos, state.cycle(LIT));
             } else {
-                ItemStack itemStack = player.getStackInHand(hand);
-                if (state.get(LIT) && itemStack.isIn(ItemTags.SHOVELS)) {
+                ItemStack itemStack = player.getItemInHand(hand);
+                if (state.get(LIT) && itemStack.is(ItemTags.SHOVELS)) {
                     extinguish((Entity)null, world, pos, state);
-                } else if (!state.get(LIT) && itemStack.isOf(Items.FLINT_AND_STEEL) || itemStack.isOf(Items.TORCH)) {
+                } else if (!state.get(LIT) && itemStack.is(Items.FLINT_AND_STEEL) || itemStack.is(Items.TORCH)) {
                     setLit(world, state, pos, true);
                 }
             }
@@ -69,14 +69,14 @@ public abstract class AbstractToggleableFireBlock extends BaseEntityBlock {
     }
 
     protected static void setLit(LevelAccessor world, BlockState state, BlockPos pos, boolean lit) {
-        world.setBlockState(pos, state.with(LIT, lit), 2 | 3);
+        world.setBlock(pos, state.setValue(LIT, lit), 2 | 3);
         if(lit){
             world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.5F, 1.0F);
         }
     }
 
     public static void extinguish(@Nullable Entity entity, LevelAccessor world, BlockPos pos, BlockState state) {
-        if (world.isClient()) {
+        if (world.isClientSide()) {
             for(int i = 0; i < 20; ++i) {
                 spawnSmokeParticle((Level)world, pos, true, true);
             }
@@ -105,9 +105,9 @@ public abstract class AbstractToggleableFireBlock extends BaseEntityBlock {
     @Override
     public void onEntityCollision(BlockState state, Level world, BlockPos pos, Entity entity) {
         if (state.get(LIT) && entity instanceof LivingEntity) {
-            if (!world.isClient) {
+            if (!world.isClientSide) {
                 if (isEntityAbove(pos, entity)) {
-                    entity.damage(world.getDamageSources().inFire(), (float) 1);
+                    entity.damage(world.damageSources().inFire(), (float) 1);
                 }
             }
         }
@@ -117,10 +117,10 @@ public abstract class AbstractToggleableFireBlock extends BaseEntityBlock {
 
     public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
         BlockPos blockPos = hit.getBlockPos();
-        if (!world.isClient && projectile.isOnFire()) {
+        if (!world.isClientSide && projectile.isOnFire()) {
             ServerLevel serverWorld = (ServerLevel)world;
             if (projectile.canModifyAt(serverWorld, blockPos) && !(Boolean)state.get(LIT)){
-                world.setBlockState(blockPos, (BlockState)state.with(BlockStateProperties.LIT, true), 11);
+                world.setBlock(blockPos, (BlockState)state.setValue(BlockStateProperties.LIT, true), 11);
             }
         }
     }
@@ -130,6 +130,6 @@ public abstract class AbstractToggleableFireBlock extends BaseEntityBlock {
     }
 
     private static boolean isEntityAbove(BlockPos pos, Entity entity) {
-        return entity.isOnGround() && entity.getPos().y > (double)((float)pos.getY() + 0.51F);
+        return entity.isOnGround() && entity.position().y > (double)((float)pos.getY() + 0.51F);
     }
 }

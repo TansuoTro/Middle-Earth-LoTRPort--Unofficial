@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.MultifaceBlock;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.RegistryCodecs;
-import net.minecraft.core.HolderList;
+import net.minecraft.core.HolderSet;
 import net.minecraft.Util;
 import net.minecraft.core.Direction;
 import net.minecraft.util.valueproviders.IntProvider;
@@ -68,7 +68,7 @@ public class MultifaceStateFeatureConfig implements FeatureConfiguration {
 		}
 
 		if (placeOnWalls) {
-			Direction.Type.HORIZONTAL.forEach(this.directions::add);
+			Direction.Axis.HORIZONTAL.forEach(this.directions::add);
 		}
     }
 

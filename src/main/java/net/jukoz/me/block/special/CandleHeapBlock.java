@@ -3,7 +3,7 @@ package net.jukoz.me.block.special;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BlockRenderType;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.entity.Entity;
@@ -26,7 +26,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.level.block.RenderShape;
@@ -49,21 +49,21 @@ public class CandleHeapBlock extends Block {
             new Vec3(0.3125, 0.34375, 0.125)
     );
 
-    public CandleHeapBlock(BlockBehaviour.Settings settings) {
+    public CandleHeapBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(LIT, false));
+        this.setDefaultState(this.stateManager.defaultBlockState().with(LIT, false));
     }
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (!world.isClient && player.getAbilities().allowModifyWorld) {
+        if (!world.isClientSide && player.getAbilities().allowModifyWorld) {
             if(player.isCreative()){
-                world.setBlockState(pos, state.cycle(LIT));
+                world.setBlock(pos, state.cycle(LIT));
             } else {
-                ItemStack itemStack = player.getStackInHand(hand);
+                ItemStack itemStack = player.getItemInHand(hand);
                 if (state.get(LIT) && player.getMainHandStack().isEmpty()) {
                     extinguish((Entity)null, world, pos, state);
-                } else if (!state.get(LIT) && itemStack.isOf(Items.FLINT_AND_STEEL) || itemStack.isOf(Items.TORCH)) {
+                } else if (!state.get(LIT) && itemStack.is(Items.FLINT_AND_STEEL) || itemStack.is(Items.TORCH)) {
                     setLit(world, state, pos, true);
                 }
             }
@@ -72,14 +72,14 @@ public class CandleHeapBlock extends Block {
     }
 
     protected static void setLit(LevelAccessor world, BlockState state, BlockPos pos, boolean lit) {
-        world.setBlockState(pos, state.with(LIT, lit), 2 | 3);
+        world.setBlock(pos, state.setValue(LIT, lit), 2 | 3);
         if(lit){
             world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.5F, 1.0F);
         }
     }
 
     public static void extinguish(@Nullable Entity entity, LevelAccessor world, BlockPos pos, BlockState state) {
-        if (world.isClient()) {
+        if (world.isClientSide()) {
             for(int i = 0; i < 20; ++i) {
                 spawnSmokeParticle((Level)world, pos, true, true);
             }
@@ -107,7 +107,7 @@ public class CandleHeapBlock extends Block {
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 8.0, 16.0);
+        return Block.box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0);
     }
 
     public void randomDisplayTick(BlockState state, Level world, BlockPos pos, RandomSource random) {

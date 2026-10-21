@@ -54,7 +54,7 @@ public class CrockpotScreenHandler extends AbstractContainerMenu {
         ItemStack itemStack = ItemStack.EMPTY;
         Slot slot2 = this.slots.get(slot);
         if (slot2.hasStack()) {
-            ItemStack itemStack2 = slot2.getStack();
+            ItemStack itemStack2 = slot2.getItem();
             itemStack = itemStack2.copy();
             if (slot == CrockpotBlockEntity.OUTPUT_SLOT) {
                 if (!this.insertItem(itemStack2, 3, 39, true)) {

@@ -20,10 +20,10 @@ public enum RaceType {
 
     @Override
     public String toString() {
-        return super.toString().toLowerCase();
+        return super.toString().lowercaseVariant();
     }
 
     public MutableComponent getName() {
-        return Component.translatable("race_type.".concat(new ResourceLocation(MiddleEarth.MOD_ID, toString()).toTranslationKey()));
+        return Component.translatable("race_type.".concat(new ResourceLocation(MiddleEarth.MOD_ID, toString()).toLanguageKey()));
     }
 }

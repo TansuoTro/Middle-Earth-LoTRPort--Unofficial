@@ -51,10 +51,10 @@ public class BellowsBlockEntity extends BlockEntity {
 
     public boolean tryPumpingBellow(BlockState state, Level world, BlockPos pos, BellowsBlockEntity blockEntity, Direction direction, Entity entity) {
         if(blockEntity.animationProgress == 0) {
-            if (!world.isClient){
+            if (!world.isClientSide){
                 if(blockEntity.activate(direction)){
                     BlockPos forgePos = pos.offset(state.get(BellowsBlock.FACING));
-                    if(world.getBlockState(forgePos).isIn(TagKey.of(Registries.BLOCK, MiddleEarth.of("forge")))) {
+                    if(world.getBlockState(forgePos).is(TagKey.create(Registries.BLOCK, MiddleEarth.of("forge")))) {
                         ForgeBlockEntity forgeBlockEntity = (ForgeBlockEntity) world.getBlockEntity(forgePos);
                         if(forgeBlockEntity != null) {
                             forgeBlockEntity.bellowsBoost();
@@ -74,8 +74,8 @@ public class BellowsBlockEntity extends BlockEntity {
             this.pumping = true;
             this.animationProgress = 0;
             if(this.world != null){
-                BlockPos blockPos = this.getPos();
-                this.world.addSyncedBlockEvent(blockPos, this.getCachedState().getBlock(), 1, direction.getId());
+                BlockPos blockPos = this.getBlockPos();
+                this.world.addSyncedBlockEvent(blockPos, this.getBlockState().getBlock(), 1, direction.getId());
             }
             return true;
         }
@@ -108,7 +108,7 @@ public class BellowsBlockEntity extends BlockEntity {
         // Only occurs if it's the initial tick
         if(blockEntity.pumping && blockEntity.animationProgress == 0)
         {
-            Vec3i directionVec = state.get(BellowsBlock.FACING).getVector();
+            Vec3i directionVec = state.get(BellowsBlock.FACING).getNormal();
             Vec3 center = pos.toCenterPos();
 
             int particleAmount = RANDOM.nextInt(AVERAGE_PARTICLES - PARTICLE_AMOUNT_MODIFIER, AVERAGE_PARTICLES + PARTICLE_AMOUNT_MODIFIER);

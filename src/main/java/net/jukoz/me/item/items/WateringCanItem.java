@@ -7,7 +7,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUsageContext;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
@@ -29,6 +28,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.jukoz.me.utils.BlockTagsME;
 import net.jukoz.me.utils.item.DamageableItemUtils;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.level.material.Fluid;
 
 public class WateringCanItem extends BlockItem {
     private static final int MAX_WATER_LEVEL = 48;
@@ -51,14 +51,14 @@ public class WateringCanItem extends BlockItem {
             return super.useOnBlock(context);
         }
 
-        ItemStack stack = context.getStack();
+        ItemStack stack = context.getItem();
         Level world = context.getWorld();
 
         if (tryRefilling(world, player, stack, context.getBlockPos())) {
             return InteractionResult.SUCCESS;
         }
 
-        if (player.isSneaking()) {
+        if (player.isShiftKeyDown()) {
             return super.useOnBlock(context);
         }
 
@@ -75,9 +75,9 @@ public class WateringCanItem extends BlockItem {
 
     @Override
     public net.minecraft.world.InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
-        ItemStack stack = user.getStackInHand(hand);
+        ItemStack stack = user.getItemInHand(hand);
 
-        BlockHitResult blockHitResult = raycast(world, user, ClipContext.FluidHandling.SOURCE_ONLY);
+        BlockHitResult blockHitResult = raycast(world, user, ClipContext.Fluid.SOURCE_ONLY);
         if (blockHitResult.getType() == HitResult.Type.BLOCK
                 && tryRefilling(world, user, stack, blockHitResult.getBlockPos())) {
             return net.minecraft.util.InteractionResultHolder.success(stack);
@@ -149,7 +149,7 @@ public class WateringCanItem extends BlockItem {
     }
 
     private boolean tryRefilling(Level world, Player user, ItemStack stack, BlockPos pos) {
-        if (!world.canPlayerModifyAt(user, pos) || !world.getFluidState(pos).isIn(FluidTags.WATER) || !world.getFluidState(pos).isStill()) {
+        if (!world.canPlayerModifyAt(user, pos) || !world.getFluidState(pos).is(FluidTags.WATER) || !world.getFluidState(pos).isStill()) {
             return false;
         }
 
@@ -174,7 +174,7 @@ public class WateringCanItem extends BlockItem {
 
         double handOffset = user.getMainArm() == HumanoidArm.RIGHT ? 0.2D : -0.2D;
         if(user.getOffHandStack().getItem() == this && user.getMainHandStack().getItem() != this) handOffset *= -1;
-        Vec3 origin = user.getEyePos()
+        Vec3 origin = user.getEyePosition()
                 .add(look.multiply(0.35D))
                 .add(side.multiply(handOffset))
                 .add(0.0D, -0.3D, 0.0D);
@@ -185,10 +185,10 @@ public class WateringCanItem extends BlockItem {
     }
 
     private void waterPlants(ServerLevel world, LivingEntity user) {
-        Vec3 eyePos = user.getEyePos();
+        Vec3 eyePos = user.getEyePosition();
         Vec3 look = user.getRotationVec(1.0F).normalize();
-        BlockPos min = BlockPos.ofFloored(eyePos.x - WATERING_RANGE, user.getY() - 1.0D, eyePos.z - WATERING_RANGE);
-        BlockPos max = BlockPos.ofFloored(eyePos.x + WATERING_RANGE, user.getY() + 2.5D, eyePos.z + WATERING_RANGE);
+        BlockPos min = BlockPos.containing(eyePos.x - WATERING_RANGE, user.getY() - 1.0D, eyePos.z - WATERING_RANGE);
+        BlockPos max = BlockPos.containing(eyePos.x + WATERING_RANGE, user.getY() + 2.5D, eyePos.z + WATERING_RANGE);
 
         for (BlockPos pos : BlockPos.iterate(min, max)) {
             Vec3 center = Vec3.ofCenter(pos);
@@ -215,8 +215,8 @@ public class WateringCanItem extends BlockItem {
     }
 
     private void hydrateFarmland(ServerLevel world, BlockPos pos, BlockState state) {
-        if (state.contains(BlockStateProperties.MOISTURE) && state.isIn(BlockTagsME.FARMLANDS) && state.get(BlockStateProperties.MOISTURE) < FarmBlock.MAX_MOISTURE) {
-            world.setBlockState(pos, state.with(BlockStateProperties.MOISTURE, FarmBlock.MAX_MOISTURE), 2);
+        if (state.contains(BlockStateProperties.MOISTURE) && state.is(BlockTagsME.FARMLANDS) && state.get(BlockStateProperties.MOISTURE) < FarmBlock.MAX_MOISTURE) {
+            world.setBlock(pos, state.setValue(BlockStateProperties.MOISTURE, FarmBlock.MAX_MOISTURE), 2);
         }
     }
 

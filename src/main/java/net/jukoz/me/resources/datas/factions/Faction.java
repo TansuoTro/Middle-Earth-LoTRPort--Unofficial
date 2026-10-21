@@ -13,9 +13,9 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.jukoz.me.compat.net.PacketCodec;
 import net.jukoz.me.compat.net.PacketCodecs;
-import net.minecraft.core.RegistryEntryLookup;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.core.RegistryWrapper;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryFileCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.MutableComponent;
@@ -64,7 +64,7 @@ public class Faction {
     ).apply(instance, Faction::new));
 
     public static final PacketCodec<net.minecraft.network.FriendlyByteBuf, Faction> PACKET_CODEC = PacketCodecs.codec(CODEC);
-    public static final Codec<Holder<Faction>> ENTRY_CODEC = RegistryFileCodec.of(DynamicRegistriesME.FACTION, CODEC);
+    public static final Codec<Holder<Faction>> ENTRY_CODEC = RegistryFileCodec.create(DynamicRegistriesME.FACTION, CODEC);
     public static final PacketCodec<FriendlyByteBuf, Holder<Faction>> ENTRY_PACKET_CODEC = PacketCodecs.registryEntry(DynamicRegistriesME.FACTION, PACKET_CODEC);
 
     private final ResourceLocation id;
@@ -93,7 +93,7 @@ public class Faction {
 
         this.factionSelectionOrderIndex = factionSelectionOrderIndex; // TODO : Validation, rework this part in the future
 
-        this.translatableKey = "faction.".concat(this.id.toTranslationKey());
+        this.translatableKey = "faction.".concat(this.id.toLanguageKey());
         this.joinable = joinable;
         this.dispositionType = DispositionType.valueOf(disposition.toUpperCase());
 
@@ -163,7 +163,7 @@ public class Faction {
         }
         this.initialDiplomacies = initialDiplomacies;
 
-        this.translatableKey = "faction.".concat(this.id.toTranslationKey());
+        this.translatableKey = "faction.".concat(this.id.toLanguageKey());
         this.joinable = joinable;
         this.dispositionType = dispositionType;
         this.factionType = factionType;
@@ -195,7 +195,7 @@ public class Faction {
         if(this.id.toString().contains("dorwinion")){
             throw new RuntimeException("There is no dorwinion in Middle-earth");
         }
-        if(this.id.toString().toLowerCase().contains("dorw")){
+        if(this.id.toString().lowercaseVariant().contains("dorw")){
             throw new RuntimeException("Do not even try... We are watching you");
         }
 
@@ -246,11 +246,11 @@ public class Faction {
         }
     }
 
-    public Faction getParentFaction(HolderLookup.WrapperLookup lookup){
+    public Faction getParentFaction(HolderLookup.Provider lookup){
         if(factionType != FactionType.SUBFACTION || parentFactionId == null)
             return null;
         try{
-            Faction test = lookup.getWrapperOrThrow(DynamicRegistriesME.FACTION).getOrThrow(ResourceKey.of(DynamicRegistriesME.FACTION, this.parentFactionId)).value();
+            Faction test = lookup.lookupOrThrow(DynamicRegistriesME.FACTION).getOrThrow(ResourceKey.create(DynamicRegistriesME.FACTION, this.parentFactionId)).value();
             return test;
         } catch (Exception e){
             return null;
@@ -357,7 +357,7 @@ public class Faction {
         return bannerData.getBannerPatternsWithColors(world);
     }
 
-    public ItemStack getBannerItem(HolderLookup.WrapperLookup wrapper){
+    public ItemStack getBannerItem(HolderLookup.Provider wrapper){
         if(bannerData == null) return ItemStack.EMPTY;
         return bannerData.getBannerItem(wrapper, Component.translatable("block.%s.faction_banner".formatted(MiddleEarth.MOD_ID), getFullName()).formatted(ChatFormatting.GOLD));
     }
@@ -414,7 +414,7 @@ public class Faction {
     public Faction getSubfactionById(Level world, ResourceLocation id) {
         if(subFactions == null)
             return null;
-        return world.getRegistryManager().get(DynamicRegistriesME.FACTION).get(id);
+        return world.registryAccess().get(DynamicRegistriesME.FACTION).get(id);
     }
 
     public List<Race> getRaces(Level world) {

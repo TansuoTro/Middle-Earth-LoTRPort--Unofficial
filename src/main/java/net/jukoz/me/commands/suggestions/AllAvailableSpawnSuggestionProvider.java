@@ -34,7 +34,7 @@ public class AllAvailableSpawnSuggestionProvider implements SuggestionProvider<C
         try {
             targettedPlayer = EntityArgument.getPlayer(context, "player");  // Targeted player when the argument is there
         } catch (Exception e){ // There is no player argument in the command
-            if(context.getSource().isExecutedByPlayer()){
+            if(context.getSource().isPlayer()){
                 targettedPlayer = context.getSource().getPlayer(); // Channel player when no player argument
             }
         }

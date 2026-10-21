@@ -6,7 +6,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.jukoz.me.compat.client.render.equipment.EquipmentRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -67,7 +67,7 @@ public class SpearEntityRenderer extends MEEntityRenderer<SpearEntity, SpearEnti
 
         ItemStack itemStack = state.getTrackedItemStackData();
         if(itemStack == null) state.getDefaultItemStack();
-        this.itemRenderer.renderItem(itemStack, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), entity.getId());
+        this.itemRenderer.renderItem(itemStack, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.level(), entity.getId());
         matrices.pop();
 
         */

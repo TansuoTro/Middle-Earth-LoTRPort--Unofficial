@@ -11,8 +11,8 @@ import net.minecraft.client.Minecraft;
 public class ModClientNetworkHandler {
     public static void register(IConnectionToServer connection) {
         net.jukoz.me.compat.net.PacketCodecs.setClientRegistries(() -> {
-            var handler = net.minecraft.client.Minecraft.getInstance().getNetworkHandler();
-            return handler == null ? null : handler.getRegistryManager();
+            var handler = net.minecraft.client.Minecraft.getInstance().getConnection();
+            return handler == null ? null : handler.registryAccess();
         });
         // Application [CLIENT SIDE]
         ClientPlayNetworking.registerGlobalReceiver(PacketForceOnboardingScreen.TYPE, wrapClientHandler(connection, PacketForceOnboardingScreen::process));

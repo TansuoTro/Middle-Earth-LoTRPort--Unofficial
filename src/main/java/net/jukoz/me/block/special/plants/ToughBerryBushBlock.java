@@ -28,19 +28,20 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class ToughBerryBushBlock extends CustomPlantBlock
         implements BonemealableBlock {
     public static final int MAX_AGE = 3;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
-    private static final VoxelShape SMALL_SHAPE = Block.createCuboidShape(3.0, 0.0, 3.0, 13.0, 8.0, 13.0);
-    private static final VoxelShape LARGE_SHAPE = Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 16.0, 15.0);
+    private static final VoxelShape SMALL_SHAPE = Block.box(3.0, 0.0, 3.0, 13.0, 8.0, 13.0);
+    private static final VoxelShape LARGE_SHAPE = Block.box(1.0, 0.0, 1.0, 15.0, 16.0, 15.0);
 
-    public ToughBerryBushBlock(Settings settings) {
+    public ToughBerryBushBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(AGE, 0));
+        this.setDefaultState(this.stateManager.defaultBlockState().with(AGE, 0));
     }
 
     @Override
@@ -72,10 +73,10 @@ public class ToughBerryBushBlock extends CustomPlantBlock
     @Override
     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         int i = state.get(AGE);
-        if (i < 3 && random.nextInt(5) == 0 && world.getBaseLightLevel(pos.up(), 0) >= 9) {
-            BlockState blockState = (BlockState) state.with(AGE, i + 1);
-            world.setBlockState(pos, blockState, Block.NOTIFY_LISTENERS);
-            world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(blockState));
+        if (i < 3 && random.nextInt(5) == 0 && world.getRawBrightness(pos.above(), 0) >= 9) {
+            BlockState blockState = (BlockState) state.setValue(AGE, i + 1);
+            world.setBlock(pos, blockState, Block.UPDATE_CLIENTS);
+            world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(blockState));
         }
     }
 
@@ -91,7 +92,7 @@ public class ToughBerryBushBlock extends CustomPlantBlock
                         double d = Math.abs(vec3d.getX());
                         double e = Math.abs(vec3d.getZ());
                         if (d >= 0.003000000026077032 || e >= 0.003000000026077032) {
-                            entity.damage(world.getDamageSources().sweetBerryBush(), 1.0F);
+                            entity.damage(world.damageSources().sweetBerryBush(), 1.0F);
                         }
                     }
                 }
@@ -104,16 +105,16 @@ public class ToughBerryBushBlock extends CustomPlantBlock
         boolean bl;
         int i = state.get(AGE);
         boolean bl2 = bl = i == MAX_AGE;
-        if (!bl && player.getStackInHand(hand).isOf(Items.BONE_MEAL)) {
+        if (!bl && player.getItemInHand(hand).is(Items.BONE_MEAL)) {
             return InteractionResult.PASS;
         }
         if (i > 1) {
             int j = 1 + world.random.nextInt(2);
             ToughBerryBushBlock.dropStack(world, pos, new ItemStack(FoodItemsME.TOUGH_BERRIES, j + (bl ? 1 : 0)));
             world.playSound(null, pos, SoundEvents.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0f, 0.8f + world.random.nextFloat() * 0.4f);
-            BlockState blockState = (BlockState) state.with(AGE, 1);
-            world.setBlockState(pos, blockState, Block.NOTIFY_LISTENERS);
-            world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(player, blockState));
+            BlockState blockState = (BlockState) state.setValue(AGE, 1);
+            world.setBlock(pos, blockState, Block.UPDATE_CLIENTS);
+            world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, blockState));
             return InteractionResult.SUCCESS;
         }
         return super.onUse(state, world, pos, player, hand, hit);
@@ -137,6 +138,6 @@ public class ToughBerryBushBlock extends CustomPlantBlock
     @Override
     public void grow(ServerLevel world, RandomSource random, BlockPos pos, BlockState state) {
         int i = Math.min(MAX_AGE, state.get(AGE) + 1);
-        world.setBlockState(pos, (BlockState) state.with(AGE, i), Block.NOTIFY_LISTENERS);
+        world.setBlock(pos, (BlockState) state.setValue(AGE, i), Block.UPDATE_CLIENTS);
     }
 }

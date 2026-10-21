@@ -18,7 +18,7 @@ public class CommandDimensionTeleport {
     private static final String TP = "tp";
     private static final String PLAYER = "player";
     private static final String LOCATION = "location";
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandRegistryAccess, Commands.RegistrationEnvironment registrationEnvironment) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandRegistryAccess, Commands.CommandSelection registrationEnvironment) {
         dispatcher.register((Commands.literal(ModCommands.BASE_COMMAND)
                 .requires(source -> source.hasPermissionLevel(2)))
                 .then((Commands.literal(TP))
@@ -29,7 +29,7 @@ public class CommandDimensionTeleport {
 
     public static int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         try{
-            Coordinates posArgument = Vec3Argument.getPosArgument(context, LOCATION);
+            Coordinates posArgument = Vec3Argument.getCoordinates(context, LOCATION);
             BlockPos coordinates = posArgument.toAbsoluteBlockPos(context.getSource());
 
             ServerPlayer targettedPlayer = EntityArgument.getPlayer(context, PLAYER);

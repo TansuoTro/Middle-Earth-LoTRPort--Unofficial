@@ -165,12 +165,12 @@ public class ModResourceItems {
                 new BlockItem(block, new FabricItemSettings()));
 
         Item.BLOCK_ITEMS.put(block, item);
-        ModItemGroups.RESOURCES_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.RESOURCES_CONTENTS.add(item.getDefaultInstance());
         return item;
     }
 
     private static Item registerItem(String name, Item item) {
-        ModItemGroups.RESOURCES_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.RESOURCES_CONTENTS.add(item.getDefaultInstance());
         return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);
     }
 

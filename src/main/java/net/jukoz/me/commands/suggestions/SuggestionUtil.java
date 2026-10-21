@@ -9,7 +9,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class SuggestionUtil {
     public static CompletableFuture<Suggestions> getCorrespondingIdentifiers(List<ResourceLocation> candidates, SuggestionsBuilder builder){
-        String string = builder.getRemaining().toLowerCase(Locale.ROOT);
+        String string = builder.getRemaining().lowercaseVariant(Locale.ROOT);
 
         for (ResourceLocation id : candidates){
             if(id.toString().contains(string)){
@@ -21,7 +21,7 @@ public class SuggestionUtil {
     }
 
     public static CompletableFuture<Suggestions> getCorrespondingNames(List<String> candidates, SuggestionsBuilder builder){
-        String string = builder.getRemaining().toLowerCase(Locale.ROOT);
+        String string = builder.getRemaining().lowercaseVariant(Locale.ROOT);
 
         for (String name : candidates){
             if(name.contains(string)){

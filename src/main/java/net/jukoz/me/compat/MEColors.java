@@ -9,7 +9,7 @@ public final class MEColors {
     }
 
     public static int getWhite(float alpha) {
-        return FastColor.Argb.getArgb(Math.round(alpha * 255.0F), 255, 255, 255);
+        return FastColor.ARGB32.getArgb(Math.round(alpha * 255.0F), 255, 255, 255);
     }
 
     /** 1.21's {@code FastColor.withAlpha(float, int)} (absent from 1.20.1). */

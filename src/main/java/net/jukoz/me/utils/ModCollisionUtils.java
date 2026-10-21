@@ -11,6 +11,8 @@ import net.minecraft.world.level.Level;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
 
 public class ModCollisionUtils {
     // Default ray length used for collision detection
@@ -56,9 +58,9 @@ public class ModCollisionUtils {
             // Perform the raycast to check for a collision
             HitResult hit = world.raycast(new ClipContext(origin,
                     end,
-                    ClipContext.ShapeType.OUTLINE,
+                    ClipContext.Block.OUTLINE,
                     // We use OUTLINE shape for detecting blocks
-                    ClipContext.FluidHandling.NONE,
+                    ClipContext.Fluid.NONE,
                     // No fluid handling
                     contextEntity));
 
@@ -102,7 +104,7 @@ public class ModCollisionUtils {
             AABB box,
             Direction faceDir,
             Vec3 velocity) {
-        Vec3 normal = Vec3.of(faceDir.getVector()).normalize();
+        Vec3 normal = new Vec3(faceDir.getNormal()).normalize();
         Vec3 center = box.getCenter();
         double minX = box.minX, minY = box.minY, minZ = box.minZ;
         double maxX = box.maxX, maxY = box.maxY, maxZ = box.maxZ;

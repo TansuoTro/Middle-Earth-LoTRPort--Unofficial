@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererFactory;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -36,7 +36,7 @@ public class ForgeEntityRenderer implements BlockEntityRenderer<ForgeBlockEntity
 
         matrices.multiply(Axis.POSITIVE_X.rotation((float) Math.toRadians(90)));
 
-        Direction direction = entity.getCachedState().get(ForgeBlock.FACING);
+        Direction direction = entity.getBlockState().get(ForgeBlock.FACING);
 
         switch (direction) {
             case NORTH -> matrices.multiply(Axis.POSITIVE_Z.rotation((float) Math.toRadians(225)));
@@ -45,17 +45,17 @@ public class ForgeEntityRenderer implements BlockEntityRenderer<ForgeBlockEntity
             case WEST -> matrices.multiply(Axis.POSITIVE_Z.rotation((float) Math.toRadians(315)));
         }
 
-        int currentLight = getLightLevel(entity.getWorld(), entity.getPos(), direction);
+        int currentLight = getLightLevel(entity.level(), entity.position(), direction);
 
         this.context.getItemRenderer().renderItem(stack, ItemDisplayContext.FIXED, currentLight, OverlayTexture.DEFAULT_UV,
-                matrices, vertexConsumers, entity.getWorld(), 1);
+                matrices, vertexConsumers, entity.level(), 1);
 
         matrices.pop();
     }
 
     private int getLightLevel(Level world, BlockPos pos, Direction direction) {
-        int bLight = world.getLightLevel(LightLayer.BLOCK, pos.offset(direction).up());
-        int sLight = world.getLightLevel(LightLayer.SKY, pos.offset(direction).up());
+        int bLight = world.getLightLevel(LightLayer.BLOCK, pos.offset(direction).above());
+        int sLight = world.getLightLevel(LightLayer.SKY, pos.offset(direction).above());
         return LightTexture.pack(bLight, sLight);
     }
 }

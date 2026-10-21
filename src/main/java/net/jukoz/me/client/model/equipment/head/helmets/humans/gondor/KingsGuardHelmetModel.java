@@ -19,10 +19,10 @@ public class KingsGuardHelmetModel extends EggHelmetModel {
     public static LayerDefinition getTexturedModelData() {
         MeshDefinition modelData = getModelData();
         //+0.75
-        modelData.getRoot().addChild(PartNames.HEAD, CubeListBuilder.create()
-                        .uv(50, 0).mirrored().cuboid(2.0F, -19.55F, 0.0F, 7.0F, 16.0F, 0.0F, new CubeDeformation(0.0F)).mirrored(false)
-                        .uv(50, 16).cuboid(-9.0F, -19.55F, 0.0F, 7.0F, 16.0F, 0.0F, new CubeDeformation(0.0F)),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelData.getRoot().addOrReplaceChild(PartNames.HEAD, CubeListBuilder.create()
+                        .texOffs(50, 0).mirror().addBox(2.0F, -19.55F, 0.0F, 7.0F, 16.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
+                        .texOffs(50, 16).addBox(-9.0F, -19.55F, 0.0F, 7.0F, 16.0F, 0.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.of(modelData, 64, 64);
     }

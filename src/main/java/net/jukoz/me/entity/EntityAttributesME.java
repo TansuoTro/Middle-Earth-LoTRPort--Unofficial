@@ -15,7 +15,7 @@ import net.minecraft.world.entity.player.Player;
  * Attributes the 1.21 tree relies on.
  *
  * <p>Most of them moved out of vanilla in the 1.20.5 attribute rework, where
- * {@code Attributes.GENERIC_MAX_HEALTH} lost its {@code GENERIC_} prefix and a
+ * {@code Attributes.MAX_HEALTH} lost its {@code GENERIC_} prefix and a
  * batch of new attributes appeared. On 1.20.1 the renames are handled by the importer;
  * the ones that simply did not exist yet are registered here under the mod namespace so
  * the 1.21 data (race pools, npc type pools, weapon modifiers) still loads.
@@ -43,15 +43,15 @@ public class EntityAttributesME {
 
     private static Holder<Attribute> register(String name, double defaultValue, double minValue, double maxValue, boolean tracked) {
         ResourceLocation id = MiddleEarth.of(name);
-        Attribute attribute = new RangedAttribute(id.toTranslationKey(), defaultValue, minValue, maxValue).setTracked(tracked);
-        return Registry.registerReference(Registries.ATTRIBUTE, id, attribute);
+        Attribute attribute = new RangedAttribute(id.toLanguageKey(), defaultValue, minValue, maxValue).setTracked(tracked);
+        return Registry.registerForHolder(Registries.ATTRIBUTE, id, attribute);
     }
 
     public static void register() {
         MiddleEarth.LOGGER.logDebugMsg("Registering Mod attributes");
         net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry.register(
                 net.minecraft.world.entity.EntityType.PLAYER,
-                addDefaults(net.minecraft.world.entity.player.Player.createPlayerAttributes()));
+                addDefaults(net.minecraft.world.entity.player.Player.createAttributes()));
     }
 
     public static net.minecraft.world.entity.ai.attributes.AttributeSupplier$Builder addDefaults(

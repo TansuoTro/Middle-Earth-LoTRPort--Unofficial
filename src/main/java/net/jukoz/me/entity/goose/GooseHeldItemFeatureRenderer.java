@@ -34,7 +34,7 @@ public class GooseHeldItemFeatureRenderer extends RenderLayer<GooseEntity, Goose
     public void render(PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, GooseEntity gooseEntity, float f, float g, float h, float j, float k, float l) {
         matrixStack.push();
 
-        matrixStack.translate((this.getContextModel()).head.pivotX / 16.0F + (this.getContextModel()).neck.pivotX / 16.0F, (this.getContextModel()).neck.pivotY / 16.0F, (this.getContextModel()).head.pivotZ / 16.0F + (this.getContextModel()).neck.pivotZ / 16.0F);
+        matrixStack.translate((this.getParentModel()).head.pivotX / 16.0F + (this.getParentModel()).neck.pivotX / 16.0F, (this.getParentModel()).neck.pivotY / 16.0F, (this.getParentModel()).head.pivotZ / 16.0F + (this.getParentModel()).neck.pivotZ / 16.0F);
         matrixStack.multiply(Axis.POSITIVE_Y.rotationDegrees(k));
         matrixStack.multiply(Axis.POSITIVE_X.rotationDegrees(l));
 
@@ -49,7 +49,7 @@ public class GooseHeldItemFeatureRenderer extends RenderLayer<GooseEntity, Goose
 
             matrixStack.multiply(Axis.POSITIVE_X.rotationDegrees(90.0F));
         }
-        if(gooseEntity.isAttacking()){
+        if(gooseEntity.isAggressive()){
 
         }
 

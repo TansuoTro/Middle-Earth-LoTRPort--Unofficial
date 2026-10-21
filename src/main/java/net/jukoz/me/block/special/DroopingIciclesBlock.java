@@ -1,6 +1,6 @@
 package net.jukoz.me.block.special;
 
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -22,13 +22,14 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class DroopingIciclesBlock extends Block {
-    protected static final VoxelShape SHAPE = Block.createCuboidShape(2.0, 10.0, 2.0, 14.0, 16.0, 14.0);
+    protected static final VoxelShape SHAPE = Block.box(2.0, 10.0, 2.0, 14.0, 16.0, 14.0);
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
 
-    public DroopingIciclesBlock(Settings settings) {
+    public DroopingIciclesBlock(BlockBehaviour.Properties settings) {
         super(settings);
         setDefaultState(getDefaultState().with(HALF, DoubleBlockHalf.UPPER));
     }
@@ -38,32 +39,32 @@ public class DroopingIciclesBlock extends Block {
     }
 
     public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
-        BlockPos blockPos = pos.up();
+        BlockPos blockPos = pos.above();
         BlockState blockState = world.getBlockState(blockPos);
-        return blockState.isSideSolidFullSquare(world, blockPos, Direction.DOWN) || blockState.isOf(this);
+        return blockState.isSideSolidFullSquare(world, blockPos, Direction.DOWN) || blockState.is(this);
     }
 
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         DoubleBlockHalf doubleBlockHalf = state.get(HALF);
-        BlockState upState = world.getBlockState(pos.up());
+        BlockState upState = world.getBlockState(pos.above());
 
-        if(!upState.isOf(this) && !upState.isSideSolidFullSquare(world, pos, Direction.DOWN)){
-            return Blocks.AIR.getDefaultState();
-        } else if (doubleBlockHalf == DoubleBlockHalf.UPPER && world.getBlockState(pos.down()).isAir()){
-            return state.with(HALF, DoubleBlockHalf.LOWER);
+        if(!upState.is(this) && !upState.isSideSolidFullSquare(world, pos, Direction.DOWN)){
+            return Blocks.AIR.defaultBlockState();
+        } else if (doubleBlockHalf == DoubleBlockHalf.UPPER && world.getBlockState(pos.below()).isAir()){
+            return state.setValue(HALF, DoubleBlockHalf.LOWER);
         } else {
             return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
         }
     }
 
     public void onPlaced(Level world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
-        BlockState upState = world.getBlockState(pos.up());
-        if (upState.isOf(this)){
-            world.setBlockState(pos.up(), upState.with(HALF, DoubleBlockHalf.UPPER));
-            world.setBlockState(pos, (BlockState)state.with(HALF, DoubleBlockHalf.LOWER), 3);
+        BlockState upState = world.getBlockState(pos.above());
+        if (upState.is(this)){
+            world.setBlock(pos.above(), upState.setValue(HALF, DoubleBlockHalf.UPPER));
+            world.setBlock(pos, (BlockState)state.setValue(HALF, DoubleBlockHalf.LOWER), 3);
         } else {
-            world.setBlockState(pos, (BlockState)state.with(HALF, DoubleBlockHalf.LOWER), 3);
+            world.setBlock(pos, (BlockState)state.setValue(HALF, DoubleBlockHalf.LOWER), 3);
         }
     }
 
@@ -76,7 +77,7 @@ public class DroopingIciclesBlock extends Block {
     }
 
     public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
-        if (!world.isClient) {
+        if (!world.isClientSide) {
             BlockPos blockPos = hit.getBlockPos();
             if (world instanceof ServerLevel) {
                 ServerLevel serverWorld = (ServerLevel)world;

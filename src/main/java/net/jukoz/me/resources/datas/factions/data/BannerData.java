@@ -10,10 +10,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.core.RegistryEntryLookup;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.core.RegistryWrapper;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
@@ -98,7 +98,7 @@ public class BannerData {
     public List<BannerPatternWithColor> getBannerPatternsWithColors(Level world){
         List<BannerPatternWithColor> patterns = new ArrayList<>();
         for(int i = 0; i < bannerPatternWithColors.size(); i++){
-            BannerPattern pattern = world.getRegistryManager().getOptional(Registries.BANNER_PATTERN).get().get(bannerPatternWithColors.get(i).id);
+            BannerPattern pattern = world.registryAccess().getOptional(Registries.BANNER_PATTERN).get().get(bannerPatternWithColors.get(i).id);
             if(pattern == null){
                 continue;
             }
@@ -117,12 +117,12 @@ public class BannerData {
             return Optional.empty();
 
         CompoundTag nbt = new CompoundTag();
-        nbt.putString("base_color",  getBaseDye().name().toLowerCase());
+        nbt.putString("base_color",  getBaseDye().name().lowercaseVariant());
         ListTag list = new ListTag();
         for(BannerPatternWithColor pattern : bannerPatternWithColors){
             CompoundTag compound = new CompoundTag();
             compound.putString("id", pattern.id.toString());
-            compound.putString("dye_color",  pattern.color.name().toLowerCase());
+            compound.putString("dye_color",  pattern.color.name().lowercaseVariant());
             list.add(compound);
         }
         nbt.put("patterns", list);
@@ -146,11 +146,11 @@ public class BannerData {
         return bannerPatternsComponentBuilder.build();
     }
 
-    public ItemStack getBannerItem(HolderLookup.WrapperLookup wrapperLookup, Component text) {
+    public ItemStack getBannerItem(HolderLookup.Provider wrapperLookup, Component text) {
         MEBannerPatterns.Builder builder = new MEBannerPatterns.Builder();
-        HolderLookup.Impl<BannerPattern> registry = wrapperLookup.getWrapperOrThrow(Registries.BANNER_PATTERN);
+        HolderLookup.RegistryLookup<BannerPattern> registry = wrapperLookup.lookupOrThrow(Registries.BANNER_PATTERN);
         for (BannerPatternWithColor bannerPatternWithColor : bannerPatternWithColors) {
-            ResourceKey<BannerPattern> key = ResourceKey.of(
+            ResourceKey<BannerPattern> key = ResourceKey.create(
                     Registries.BANNER_PATTERN,
                     bannerPatternWithColor.id
             );

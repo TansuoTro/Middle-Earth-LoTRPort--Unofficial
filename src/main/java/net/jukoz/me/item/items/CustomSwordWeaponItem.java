@@ -19,21 +19,21 @@ public class CustomSwordWeaponItem extends SwordItem {
     private final Tier material;
 
     public CustomSwordWeaponItem(Tier toolMaterial, int attackDamage, float attackSpeed, Settings settings) {
-        super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getDurability()));
+        super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getUses()));
         this.faction = null;
         this.subFaction = null;
         this.material = toolMaterial;
     }
 
     public CustomSwordWeaponItem(Tier toolMaterial, int attackDamage, float attackSpeed, MutableComponent faction, Settings settings) {
-        super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getDurability()));
+        super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getUses()));
         this.faction = faction;
         this.subFaction = null;
         this.material = toolMaterial;
     }
 
     public CustomSwordWeaponItem(Tier toolMaterial, int attackDamage, float attackSpeed, MutableComponent faction, MutableComponent subFaction, Settings settings) {
-        super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getDurability()));
+        super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getUses()));
         this.faction = faction;
         this.subFaction = subFaction;
         this.material = toolMaterial;

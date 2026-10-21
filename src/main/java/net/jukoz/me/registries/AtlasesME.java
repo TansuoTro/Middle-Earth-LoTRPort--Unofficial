@@ -27,7 +27,7 @@ public class AtlasesME {
     @OnlyIn(Dist.CLIENT)
     public static TextureAtlas getAtlasFromPath(ResourceLocation atlasPath){
         Minecraft client = Minecraft.getInstance();
-        return client.getBakedModelManager().getAtlas(atlasPath);
+        return client.getModelManager().getAtlas(atlasPath);
     }
 
 }

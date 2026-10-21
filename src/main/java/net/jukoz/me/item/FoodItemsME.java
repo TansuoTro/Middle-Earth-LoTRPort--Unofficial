@@ -123,9 +123,9 @@ public class FoodItemsME {
             Item::new,new MESettings().food(
                     new FoodProperties.Builder().hunger(7).saturationModifier(0.4f).build()));
 
-    private static Item registerItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerItem(String name, Function<Item.Properties, Item> factory, Item.Properties settings) {
         Item item = (Item)factory.apply(settings);
-        ModItemGroups.FOOD_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.FOOD_CONTENTS.add(item.getDefaultInstance());
         TranslationEntries.itemEntries.add(item);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ITEM, name));
         return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);

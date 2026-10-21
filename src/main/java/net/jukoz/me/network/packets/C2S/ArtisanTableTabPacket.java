@@ -31,7 +31,7 @@ public class ArtisanTableTabPacket extends ClientToServerPacket<ArtisanTableTabP
     }
 
     public ArtisanTableTabPacket(FriendlyByteBuf buf) {
-        this(buf.readString(), buf.readInt());
+        this(buf.readUtf(), buf.readInt());
     }
 
     @Override

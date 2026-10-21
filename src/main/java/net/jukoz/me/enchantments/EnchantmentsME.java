@@ -2,7 +2,7 @@ package net.jukoz.me.enchantments;
 
 import net.jukoz.me.MiddleEarth;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentTarget;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
@@ -63,7 +63,7 @@ public class EnchantmentsME {
 
     private static ResourceKey<Enchantment> of(String path) {
         ResourceLocation id = MiddleEarth.of(path);
-        return ResourceKey.of(Registries.ENCHANTMENT, id);
+        return ResourceKey.create(Registries.ENCHANTMENT, id);
     }
 
     private static UUID modifierId(String path) {
@@ -73,7 +73,7 @@ public class EnchantmentsME {
     /** The registered enchantment behind a key; {@code null} only when it is not registered yet. */
     @org.jetbrains.annotations.Nullable
     public static Enchantment get(ResourceKey<Enchantment> key) {
-        return Registries.ENCHANTMENT.get(key.getValue());
+        return Registries.ENCHANTMENT.get(key.location());
     }
 
     public static void register() {

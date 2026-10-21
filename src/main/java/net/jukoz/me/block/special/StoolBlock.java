@@ -12,9 +12,9 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
@@ -23,12 +23,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import com.mojang.math.Axis;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class StoolBlock extends Block implements SimpleWaterloggedBlock {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public StoolBlock(Settings settings) {
+    public StoolBlock(BlockBehaviour.Properties settings) {
         super(settings);
 
         setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(WATERLOGGED, false));
@@ -40,7 +41,7 @@ public class StoolBlock extends Block implements SimpleWaterloggedBlock {
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
+        return this.defaultBlockState().with(FACING, ctx.getHorizontalDirection().getOpposite()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
     }
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
@@ -59,15 +60,15 @@ public class StoolBlock extends Block implements SimpleWaterloggedBlock {
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return switch(state.get(FACING)) {
-            case WEST, EAST -> Block.createCuboidShape(3, 0, 0, 13, 10, 16);
-            case SOUTH, NORTH -> Block.createCuboidShape(0, 0, 3, 16, 10, 13);
-            default -> Shapes.cuboid(1,1,1,1,1,1);
+            case WEST, EAST -> Block.box(3, 0, 0, 13, 10, 16);
+            case SOUTH, NORTH -> Block.box(0, 0, 3, 16, 10, 13);
+            default -> Shapes.addBox(1,1,1,1,1,1);
         };
     }
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+        return state.setValue(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override

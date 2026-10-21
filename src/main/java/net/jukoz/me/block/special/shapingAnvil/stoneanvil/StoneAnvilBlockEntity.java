@@ -5,7 +5,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.armortrim.ArmorTrim;
-import net.minecraft.world.item.armortrim.ArmorTrimMaterial;
+import net.minecraft.world.item.armortrim.TrimMaterial;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
@@ -29,7 +29,7 @@ public class StoneAnvilBlockEntity extends ShapingAnvilBlockEntity {
 
     @Override
     public void bonk(ShapingAnvilBlockEntity entity, ServerLevel world, ItemStack tool) {
-        ItemStack input = entity.getStack(0);
+        ItemStack input = entity.getItem(0);
 
         ArmorTrim trim = MEArmorTrim.get(input);
         if (trim != null){

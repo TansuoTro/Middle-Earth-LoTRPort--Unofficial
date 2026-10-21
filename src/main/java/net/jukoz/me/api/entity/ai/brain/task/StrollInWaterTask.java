@@ -16,8 +16,8 @@ public class StrollInWaterTask {
         MutableLong mutableLong = new MutableLong(0L);
         return BehaviorBuilder.task(
                 context -> context.group(
-                                context.queryMemoryAbsent(MemoryModuleType.ATTACK_TARGET),
-                                context.queryMemoryAbsent(MemoryModuleType.WALK_TARGET),
+                                context.absent(MemoryModuleType.ATTACK_TARGET),
+                                context.absent(MemoryModuleType.WALK_TARGET),
                                 context.queryMemoryOptional(MemoryModuleType.LOOK_TARGET)
                         )
                         .apply(context, (attackTarget, walkTarget, lookTarget) -> (world, entity, time) -> {
@@ -25,13 +25,13 @@ public class StrollInWaterTask {
                                 mutableLong.setValue(time + 20L + 2L);
                             } else {
                                 BlockPos blockPos = null;
-                                BlockPos entityPos = entity.getBlockPos();
+                                BlockPos entityPos = entity.blockPosition();
 
                                 for (BlockPos destinationPos : BlockPos.iterateOutwards(entityPos, range, range, range)) {
                                     if (destinationPos.getX() != entityPos.getX() || destinationPos.getZ() != entityPos.getZ()) {
-                                        BlockState aboveBlock = entity.getWorld().getBlockState(destinationPos.up());
-                                        BlockState waterBlock = entity.getWorld().getBlockState(destinationPos);
-                                        if (waterBlock.isOf(Blocks.WATER)) {
+                                        BlockState aboveBlock = entity.level().getBlockState(destinationPos.above());
+                                        BlockState waterBlock = entity.level().getBlockState(destinationPos);
+                                        if (waterBlock.is(Blocks.WATER)) {
                                             if (aboveBlock.isAir() && entity.getRandom().nextDouble() < 0.1) {
                                                 blockPos = destinationPos.toImmutable();
                                                 break;

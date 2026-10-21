@@ -25,21 +25,21 @@ public class RohanHairHelmetModel extends RohanHelmetModel {
         MeshDefinition modelData = getModelData();
         PartDefinition modelPartData = modelData.getRoot();
 
-        PartDefinition head = modelPartData.addChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        head.addChild(PartNames.HAT, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition head = modelPartData.addOrReplaceChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        head.addOrReplaceChild(PartNames.HAT, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition hair_bone = head.addChild("hair_bone", CubeListBuilder.create(),
-                PartPose.of(0.0F, -9.5F, 5.5F, 0.48F, 0.0F, 0.0F));
-        hair_bone.addChild("hair", CubeListBuilder.create()
-                .uv(0, 27).cuboid(-1.0F, -2.25F, 0.0F, 2.0F, 3.0F, 18.0F, new CubeDeformation(0.0F)),
-                PartPose.of(0.0F, 1.0F, -1.0F, -2.0508F, 0.0F, 0.0F));
+        PartDefinition hair_bone = head.addOrReplaceChild("hair_bone", CubeListBuilder.create(),
+                PartPose.offsetAndRotation(0.0F, -9.5F, 5.5F, 0.48F, 0.0F, 0.0F));
+        hair_bone.addOrReplaceChild("hair", CubeListBuilder.create()
+                .texOffs(0, 27).addBox(-1.0F, -2.25F, 0.0F, 2.0F, 3.0F, 18.0F, new CubeDeformation(0.0F)),
+                PartPose.offsetAndRotation(0.0F, 1.0F, -1.0F, -2.0508F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.BODY, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.RIGHT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.BODY, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.RIGHT_ARM, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.LEFT_ARM, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.of(modelData, 64, 64);
     }
@@ -55,14 +55,14 @@ public class RohanHairHelmetModel extends RohanHelmetModel {
         degree = Math.max(2.5f, degree);
         degree = Math.min(MAX_ANGLE_HAIR, degree);
 
-        if(bipedEntityRenderState.pitch < -0.75){
+        if(bipedEntityRenderState.xRot < -0.75){
             degree -= 45;
-        }else if(bipedEntityRenderState.pitch < -1.4){
+        }else if(bipedEntityRenderState.xRot < -1.4){
             degree -= 5;
         }else {
             degree -= 90;
         }
 
-        this.hair.pitch = ToRad.ex(degree);*/
+        this.hair.xRot = ToRad.ex(degree);*/
     }
 }

@@ -16,17 +16,18 @@ import net.jukoz.me.particles.ModParticleTypes;
 import net.jukoz.me.utils.BlockTagsME;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class CustomPlantBlock extends BushBlock {
-    protected static final VoxelShape SHAPE = Block.createCuboidShape(2.0, 0.0, 2.0, 14.0, 13.0, 14.0);
+    protected static final VoxelShape SHAPE = Block.box(2.0, 0.0, 2.0, 14.0, 13.0, 14.0);
 
-    public CustomPlantBlock(Settings settings) {
+    public CustomPlantBlock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
     @Override
     protected boolean canPlantOnTop(BlockState floor, BlockGetter world, BlockPos pos) {
-        return (floor.isIn(BlockTags.DIRT) || floor.isIn(BlockTagsME.FARMLANDS)) && floor.isSideSolidFullSquare(world, pos, Direction.UP);
+        return (floor.is(BlockTags.DIRT) || floor.is(BlockTagsME.FARMLANDS)) && floor.isSideSolidFullSquare(world, pos, Direction.UP);
     }
 
     @Override

@@ -28,13 +28,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public abstract class AbstractShapingAnvilBlock extends BaseEntityBlock implements EntityBlock {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-    public AbstractShapingAnvilBlock(Settings settings) {
+    public AbstractShapingAnvilBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(((this.stateManager.getDefaultState()).with(FACING, Direction.NORTH)));
+        this.setDefaultState(((this.stateManager.defaultBlockState()).with(FACING, Direction.NORTH)));
     }
 
     @Override
@@ -53,7 +54,7 @@ public abstract class AbstractShapingAnvilBlock extends BaseEntityBlock implemen
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+        return state.setValue(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override
@@ -68,7 +69,7 @@ public abstract class AbstractShapingAnvilBlock extends BaseEntityBlock implemen
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+        return this.defaultBlockState().with(FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
     @Override
@@ -81,14 +82,14 @@ public abstract class AbstractShapingAnvilBlock extends BaseEntityBlock implemen
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         Inventory blockEntity = (Inventory) world.getBlockEntity(pos);
 
-        if (!world.isClient) {
-            if (player.getMainHandStack().isEmpty() && !blockEntity.getStack(0).isEmpty()) {
-                player.equipStack(EquipmentSlot.MAINHAND, blockEntity.getStack(0));
+        if (!world.isClientSide) {
+            if (player.getMainHandStack().isEmpty() && !blockEntity.getItem(0).isEmpty()) {
+                player.equipStack(EquipmentSlot.MAINHAND, blockEntity.getItem(0));
                 blockEntity.removeStack(0);
             } else {
-                MenuProvider screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+                MenuProvider screenHandlerFactory = state.getMenuProvider(world, pos);
                 if (screenHandlerFactory != null) {
-                    player.openHandledScreen(screenHandlerFactory);
+                    player.openMenu(screenHandlerFactory);
                 }
             }
         }
@@ -100,11 +101,11 @@ public abstract class AbstractShapingAnvilBlock extends BaseEntityBlock implemen
     public void onBlockBreakStart(BlockState state, Level world, BlockPos pos, Player player) {
         ItemStack stack = player.getEquippedStack(EquipmentSlot.MAINHAND);
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (!world.isClient) {
-            if (stack.getItem() instanceof SmithingHammerItem hammer && player.getAttackCooldownProgress(0.5f) > 0.9f) {
+        if (!world.isClientSide) {
+            if (stack.getItem() instanceof SmithingHammerItem hammer && player.getAttackStrengthScale(0.5f) > 0.9f) {
                 player.incrementStat(Stats.USED.getOrCreateStat(hammer));
-                stack.use(world, player, player.getActiveHand());
-                player.getStackInHand(player.getActiveHand()).damage(1, player, (p) -> p.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
+                stack.use(world, player, player.getUsedItemHand());
+                player.getItemInHand(player.getUsedItemHand()).damage(1, player, (p) -> p.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
                 if (blockEntity instanceof ShapingAnvilBlockEntity shapingAnvilBlockEntity) {
                     ServerLevel serverWorld = (ServerLevel) world;
                     shapingAnvilBlockEntity.bonk(shapingAnvilBlockEntity, serverWorld, stack);

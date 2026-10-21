@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 public class TintedParticleLeavesBlock extends LeavesBlock {
     private final float particleChance;
 
-    public TintedParticleLeavesBlock(float particleChance, net.minecraft.world.level.block.state.BlockBehaviour.Settings settings) {
+    public TintedParticleLeavesBlock(float particleChance, net.minecraft.world.level.block.state.BlockBehaviour.Properties settings) {
         super(settings);
         this.particleChance = particleChance;
     }
@@ -29,7 +29,7 @@ public class TintedParticleLeavesBlock extends LeavesBlock {
         if (random.nextFloat() >= this.particleChance) {
             return;
         }
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
         mutable.set(pos, Direction.DOWN);
         BlockState below = world.getBlockState(mutable);
         while (below.getBlock() instanceof TintedParticleLeavesBlock && mutable.getY() > world.getBottomY()) {

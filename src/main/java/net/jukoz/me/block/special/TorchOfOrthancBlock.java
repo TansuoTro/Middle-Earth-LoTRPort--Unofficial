@@ -27,25 +27,25 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 
 public class TorchOfOrthancBlock extends TorchBlock {
-    protected static final VoxelShape SHAPE = Block.createCuboidShape(5.0, 0.0, 5.0, 11.0, 18.0, 11.0);
+    protected static final VoxelShape SHAPE = Block.box(5.0, 0.0, 5.0, 11.0, 18.0, 11.0);
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-    public TorchOfOrthancBlock(BlockBehaviour.Settings settings, SimpleParticleType particleEffect) {
+    public TorchOfOrthancBlock(BlockBehaviour.Properties settings, SimpleParticleType particleEffect) {
         super(settings, particleEffect);
-        this.setDefaultState((((this.stateManager.getDefaultState().with(LIT, true)))));
+        this.setDefaultState((((this.stateManager.defaultBlockState().with(LIT, true)))));
     }
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if(world.isClient){
+        if(world.isClientSide){
             return InteractionResult.SUCCESS;
         } else {
-            if(player.getStackInHand(player.getActiveHand()).isOf(Items.FLINT_AND_STEEL) && !state.get(LIT)){
+            if(player.getItemInHand(player.getUsedItemHand()).is(Items.FLINT_AND_STEEL) && !state.get(LIT)){
                 world.playSound(null, pos, SoundEvents.ITEM_FIRECHARGE_USE, SoundSource.BLOCKS, 1.0F, 1.5F);
-                world.setBlockState(pos, state.cycle(LIT));
-            } else if (player.getStackInHand(player.getActiveHand()).isIn(ItemTags.SHOVELS) && state.get(LIT)) {
+                world.setBlock(pos, state.cycle(LIT));
+            } else if (player.getItemInHand(player.getUsedItemHand()).is(ItemTags.SHOVELS) && state.get(LIT)) {
                 world.playSound(null, pos, SoundEvents.BLOCK_CANDLE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, 1.0F);
-                world.setBlockState(pos, state.cycle(LIT));
+                world.setBlock(pos, state.cycle(LIT));
             }
         }
 

@@ -62,7 +62,7 @@ public class ForgeAlloyingScreen extends AbstractContainerScreen<ForgeAlloyingSc
     @Override
     protected void init() {
         super.init();
-        titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2;
+        titleX = (backgroundWidth - font.getWidth(title)) / 2;
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
         this.heatingMode = handler.heatingMode();
@@ -214,9 +214,9 @@ public class ForgeAlloyingScreen extends AbstractContainerScreen<ForgeAlloyingSc
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
 
-        context.drawTexture(TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight + 6, TEXTURE_SIZE, TEXTURE_SIZE);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight + 6, TEXTURE_SIZE, TEXTURE_SIZE);
 
-        context.drawTexture(TEXTURE, this.x + 26, this.y + 61, 209, 116, 4, 16, TEXTURE_SIZE, TEXTURE_SIZE);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, this.x + 26, this.y + 61, 209, 116, 4, 16, TEXTURE_SIZE, TEXTURE_SIZE);
 
         renderProgressArrow(context, x, y);
         renderLiquidStorage(context, x, y);
@@ -224,27 +224,27 @@ public class ForgeAlloyingScreen extends AbstractContainerScreen<ForgeAlloyingSc
 
     private void renderProgressArrow(GuiGraphics context, int x, int y) {
         if(heatingMode) {
-            context.drawTexture(TEXTURE, x + 36, y + 45, 202, 0, COOKING_FIRE_SIZE, COOKING_FIRE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, x + 36, y + 45, 202, 0, COOKING_FIRE_SIZE, COOKING_FIRE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
             if(handler.isCooking()) {
                 int cookingTime = (int) (handler.getScaledCooking() * COOKING_FIRE_SIZE);
-                context.drawTexture(TEXTURE, x + 36, y + COOKING_FIRE_SIZE + 46 - cookingTime, 202, 15 + COOKING_FIRE_SIZE - cookingTime, COOKING_FIRE_SIZE, cookingTime, TEXTURE_SIZE, TEXTURE_SIZE);
+                net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, x + 36, y + COOKING_FIRE_SIZE + 46 - cookingTime, 202, 15 + COOKING_FIRE_SIZE - cookingTime, COOKING_FIRE_SIZE, cookingTime, TEXTURE_SIZE, TEXTURE_SIZE);
             }
         } else {
-            context.drawTexture(TEXTURE, x + 33, y + 45, 218, 0, 20, 13, TEXTURE_SIZE, TEXTURE_SIZE);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, x + 33, y + 45, 218, 0, 20, 13, TEXTURE_SIZE, TEXTURE_SIZE);
             if(handler.isCooking()) {
                 int cookingTime = (int) (handler.getScaledCooking() * 15);
-                context.drawTexture(TEXTURE, x + 33, y + 59 - cookingTime, 218, 15 + 14 - cookingTime, 20, cookingTime, TEXTURE_SIZE, TEXTURE_SIZE);
+                net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, x + 33, y + 59 - cookingTime, 218, 15 + 14 - cookingTime, 20, cookingTime, TEXTURE_SIZE, TEXTURE_SIZE);
             }
         }
 
         if(handler.isCrafting()) {
-            context.drawTexture(TEXTURE, x + 90, y + 16, 212, 83, 7, (int) (handler.getScaledProgress() * PROGRESS_ARROW_SIZE), TEXTURE_SIZE, TEXTURE_SIZE);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, x + 90, y + 16, 212, 83, 7, (int) (handler.getScaledProgress() * PROGRESS_ARROW_SIZE), TEXTURE_SIZE, TEXTURE_SIZE);
         }
     }
 
     private void renderLiquidStorage(GuiGraphics context, int x, int y) {
         int storedLiquid = (int) (handler.getScaledStoredLiquid() * LIQUID_HEIGHT);
-        context.drawTexture(TEXTURE, x + 73, y + 77 - storedLiquid, 211, 76 - storedLiquid, 20, storedLiquid, TEXTURE_SIZE, TEXTURE_SIZE);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, x + 73, y + 77 - storedLiquid, 211, 76 - storedLiquid, 20, storedLiquid, TEXTURE_SIZE, TEXTURE_SIZE);
     }
 
     private void renderLiquidStorageTooltip(GuiGraphics context, int mouseX, int mouseY) {
@@ -254,8 +254,8 @@ public class ForgeAlloyingScreen extends AbstractContainerScreen<ForgeAlloyingSc
         if (mouseX >= x + 73 && mouseX <= x + 93 && mouseY >= y + 52 && mouseY <= y + 77){
             MetalTypes metal = MetalTypes.getValue(handler.getCurrentMetal());
             if(metal != MetalTypes.EMPTY){
-                context.drawOrderedTooltip(this.client.textRenderer, Lists.transform(
-                        List.of(METext.withColor( Component.translatable("tooltip." + MiddleEarth.MOD_ID +".liquid_" + metal.asString().toLowerCase()), metal.getColor()),
+                context.drawOrderedTooltip(this.client.font, Lists.transform(
+                        List.of(METext.withColor( Component.translatable("tooltip." + MiddleEarth.MOD_ID +".liquid_" + metal.asString().lowercaseVariant()), metal.getColor()),
                                 Component.literal(handler.getStoredLiquid() / 144  + " ").append(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".ingots_number")),
                                 Component.literal(handler.getStoredLiquid() % 144 / 16  + " ").append(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".nuggets_number"))
                         ), Component::asOrderedText), mouseX, mouseY);
@@ -265,8 +265,8 @@ public class ForgeAlloyingScreen extends AbstractContainerScreen<ForgeAlloyingSc
 
     @Override
     protected void drawForeground(GuiGraphics context, int mouseX, int mouseY) {
-        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, -12566464, false);
-        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY + 7, -12566464, false);
+        context.drawText(this.font, this.title, this.titleX, this.titleY, -12566464, false);
+        context.drawText(this.font, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY + 7, -12566464, false);
     }
 
     @Override
@@ -286,14 +286,14 @@ public class ForgeAlloyingScreen extends AbstractContainerScreen<ForgeAlloyingSc
             case 5 -> 59;
             default -> -1;
         };
-        if(v >= 0) context.drawTexture(TEXTURE, x + EXTRACT_BUTTON_ITEM_X, y + EXTRACT_BUTTON_ITEM_Y, EXTRACT_BUTTON_ITEM_U, v, 18, 24, TEXTURE_SIZE, TEXTURE_SIZE);
+        if(v >= 0) net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, x + EXTRACT_BUTTON_ITEM_X, y + EXTRACT_BUTTON_ITEM_Y, EXTRACT_BUTTON_ITEM_U, v, 18, 24, TEXTURE_SIZE, TEXTURE_SIZE);
         else {
             int u = 0;
             if (handler.checkMaxOutput() > 0) {
                 u = 16;
             }
-            context.drawTexture(TEXTURE, x + EXTRACT_BUTTON_ITEM_X + 2, y + EXTRACT_BUTTON_ITEM_Y + 4, 204 + u, 30, 14, 16, TEXTURE_SIZE, TEXTURE_SIZE);
-            context.drawTexture(TEXTURE, x + 102, y + 57, 178, 21, 22, 15, TEXTURE_SIZE, TEXTURE_SIZE);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, x + EXTRACT_BUTTON_ITEM_X + 2, y + EXTRACT_BUTTON_ITEM_Y + 4, 204 + u, 30, 14, 16, TEXTURE_SIZE, TEXTURE_SIZE);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, x + 102, y + 57, 178, 21, 22, 15, TEXTURE_SIZE, TEXTURE_SIZE);
         }
     }
 }

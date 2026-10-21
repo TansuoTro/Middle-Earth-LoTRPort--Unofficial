@@ -18,7 +18,7 @@ public class StructureSpawnNestPool {
             net.minecraft.core.registries.Registries.ENTITY_TYPE.getCodec().fieldOf("entity_type").forGetter(StructureSpawnNestPool::getEntityType),
             Codec.INT.fieldOf("weight").forGetter(StructureSpawnNestPool::getWeight),
             Codec.INT.fieldOf("amount").forGetter(StructureSpawnNestPool::getAmount),
-            ResourceKey.createCodec(DynamicRegistriesME.FACTION).optionalFieldOf("faction_key").forGetter(StructureSpawnNestPool::getFaction),
+            ResourceKey.codec(DynamicRegistriesME.FACTION).optionalFieldOf("faction_key").forGetter(StructureSpawnNestPool::getFaction),
             ResourceLocation.CODEC.optionalFieldOf("npc_identifier").forGetter(StructureSpawnNestPool::getNpcIdentifier),
             Codec.INT.optionalFieldOf("max_amount").forGetter(StructureSpawnNestPool::getMaxAmount)
         ).apply(instance, StructureSpawnNestPool::new));

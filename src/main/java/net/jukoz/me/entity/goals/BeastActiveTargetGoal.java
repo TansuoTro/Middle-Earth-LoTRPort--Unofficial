@@ -44,7 +44,7 @@ public class BeastActiveTargetGoal<T extends LivingEntity> extends TargetGoal {
         this.targetClass = targetClass;
         this.reciprocalChance = NearestAttackableTargetGoal.toGoalTicks(reciprocalChance);
         this.setControls(EnumSet.of(Control.TARGET));
-        this.targetPredicate = TargetingConditions.createAttackable().setBaseMaxDistance(this.getFollowRange()).setPredicate(targetPredicate);
+        this.targetPredicate = TargetingConditions.createAttackable().setBaseMaxDistance(this.getFollowDistance()).setPredicate(targetPredicate);
     }
 
     @Override
@@ -64,8 +64,8 @@ public class BeastActiveTargetGoal<T extends LivingEntity> extends TargetGoal {
     }
 
     protected void findClosestTarget() {
-        if(this.mob.getWorld() instanceof ServerLevel serverWorld) {
-            this.targetEntity = this.targetClass == Player.class || this.targetClass == ServerPlayer.class ? serverWorld.getClosestPlayer(this.targetPredicate, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ()) : serverWorld.getClosestEntity(this.mob.getWorld().getEntitiesByClass(this.targetClass, this.getSearchBox(this.getFollowRange()), livingEntity -> true), this.targetPredicate, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
+        if(this.mob.level() instanceof ServerLevel serverWorld) {
+            this.targetEntity = this.targetClass == Player.class || this.targetClass == ServerPlayer.class ? serverWorld.getClosestPlayer(this.targetPredicate, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ()) : serverWorld.getClosestEntity(this.mob.level().getEntitiesByClass(this.targetClass, this.getSearchBox(this.getFollowDistance()), livingEntity -> true), this.targetPredicate, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
         }
     }
 

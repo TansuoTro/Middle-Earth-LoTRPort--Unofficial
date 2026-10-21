@@ -16,7 +16,7 @@ public class RepairItemRecipeMixin {
 
     @Inject(at = @At("HEAD"), method = "canCombineStacks", cancellable = true)
     private static void canCombineStacks(ItemStack first, ItemStack second, CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(second.isOf(first.getItem())
+        cir.setReturnValue(second.is(first.getItem())
                 && first.getCount() == 1
                 && second.getCount() == 1
 
@@ -26,8 +26,8 @@ public class RepairItemRecipeMixin {
                 && first.isDamageable()
                 && second.isDamageable()
 
-                && !first.isIn(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "anvil_items")))
-                && !second.isIn(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "anvil_items")))
+                && !first.is(TagKey.create(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "anvil_items")))
+                && !second.is(TagKey.create(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "anvil_items")))
                 );
     }
 }

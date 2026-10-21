@@ -23,7 +23,7 @@ public final class MECrossbow {
 
     /** Marks {@code stack} charged and stores the loaded projectiles. */
     public static void setCharged(ItemStack stack, List<ItemStack> projectiles) {
-        CompoundTag nbt = stack.getOrCreateNbt();
+        CompoundTag nbt = stack.getOrCreateTag();
         nbt.putBoolean(CHARGED_KEY, true);
         ListTag list = new ListTag();
         for (ItemStack projectile : projectiles) {

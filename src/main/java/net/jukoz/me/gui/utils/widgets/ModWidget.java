@@ -30,7 +30,7 @@ public abstract class ModWidget {
                 && mouseY >= startY && mouseY <= startY + sizeY;
     }
 
-    public static boolean isMouseOver(ButtonWidget widget) {
+    public static boolean isMouseOver(Button widget) {
         return isMouseOver(widget.getWidth(), widget.getHeight(), widget.getX(), widget.getY());
     }
 

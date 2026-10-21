@@ -55,12 +55,12 @@ public class ReinforcedChestBlockEntity extends ChestBlockEntity {
     public ReinforcedChestBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.REINFORCED_CHEST, pos, state);
 
-        this.setInvStackList(NonNullList.ofSize(this.size(), ItemStack.EMPTY));
+        this.setInvStackList(NonNullList.withSize(this.size(), ItemStack.EMPTY));
     }
 
     @Override
     protected AbstractContainerMenu createScreenHandler(int syncId, Inventory playerInventory) {
-        return ChestMenu.createGeneric9x6(syncId, playerInventory, this);
+        return ChestMenu.sixRows(syncId, playerInventory, this);
     }
 
     static void playSound(Level world, BlockPos pos, BlockState state, SoundEvent soundEvent) {
@@ -79,14 +79,14 @@ public class ReinforcedChestBlockEntity extends ChestBlockEntity {
     @Override
     public void onOpen(Player player) {
         if (!this.removed && !player.isSpectator()) {
-            this.stateManager.openContainer(player, this.getWorld(), this.getPos(), this.getCachedState());
+            this.stateManager.openContainer(player, this.level(), this.getPos(), this.getBlockState());
         }
     }
 
     @Override
     public void onClose(Player player) {
         if (!this.removed && !player.isSpectator()) {
-            this.stateManager.closeContainer(player, this.getWorld(), this.getPos(), this.getCachedState());
+            this.stateManager.closeContainer(player, this.level(), this.getPos(), this.getBlockState());
         }
     }
 

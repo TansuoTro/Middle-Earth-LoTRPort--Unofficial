@@ -23,25 +23,25 @@ public class SearchBarWidget extends ModWidget {
     private static final List<Integer> KEYS_TO_IGNORE = List.of(260, 262, 264, 263, 265, 266, 267, 268, 269);
     private static final int MINIMAL_MARGIN = 4;
     public int desiredWidth;
-    public ButtonWidget searchBarToggleButton;
+    public Button searchBarToggleButton;
     private boolean searchResultToggle;
     private boolean searchBarToggle;
     private int currentSearchInputIndex;
     private String searchBarInput = "";
-    public ButtonWidget screenClick;
+    public Button screenClick;
     List<SearchBarResult> allPossibleResults;
     List<SearchBarResult> allCurrentResults;
-    List<ButtonWidget> resultButtons;
+    List<Button> resultButtons;
     private final int maximumShownLength;
     private int currentAmount;
     private int currentOffsetIndex = 0;
     private int currentSearchResultHeight;
     private Vector2d searchResultPanelStarts = new Vector2d();
-    Font textRenderer;
+    Font font;
 
     int endY = 0;
 
-    public SearchBarWidget(int maxAmountOnScreen, List<SearchBarResult> allPossibleResults, ButtonWidget.PressAction additionalScreenClickAction, int desiredWidth) {
+    public SearchBarWidget(int maxAmountOnScreen, List<SearchBarResult> allPossibleResults, Button.PressAction additionalScreenClickAction, int desiredWidth) {
         this.maximumShownLength = desiredWidth - 14 - MARGIN;
         searchBarToggle = false;
         searchResultToggle = false;
@@ -49,35 +49,35 @@ public class SearchBarWidget extends ModWidget {
         this.allPossibleResults = allPossibleResults;
         this.allCurrentResults = new ArrayList<>();
 
-        ButtonWidget.PressAction searchBarInputToggle = button -> {
+        Button.PressAction searchBarInputToggle = button -> {
             if (!searchBarToggle)
                 searchBarToggle = true;
         };
-        searchBarToggleButton = ButtonWidget.builder(Component.translatable("ui.%s.search.toggle_button".formatted(MiddleEarth.MOD_ID)), searchBarInputToggle).build();
+        searchBarToggleButton = Button.builder(Component.translatable("ui.%s.search.toggle_button".formatted(MiddleEarth.MOD_ID)), searchBarInputToggle).build();
         net.jukoz.me.compat.client.gui.MEGui.setSize(searchBarToggleButton, desiredWidth, searchBarToggleButton.getHeight());
 
         // Screen click
-        screenClick = ButtonWidget.builder(Component.translatable("ui.%s.search.screen_click_button".formatted(MiddleEarth.MOD_ID)), button -> clickOnScreen(button, additionalScreenClickAction)).build();
+        screenClick = Button.builder(Component.translatable("ui.%s.search.screen_click_button".formatted(MiddleEarth.MOD_ID)), button -> clickOnScreen(button, additionalScreenClickAction)).build();
         screenClick.setAlpha(0);
         screenClick.setMessage(Component.of(""));
 
         resultButtons = new ArrayList<>();
         for(int i = 0; i < maxAmountOnScreen; i++){
             final int index = i;
-            resultButtons.add(ButtonWidget.builder(Component.of("N/A"), x -> buttonPress(x, index)).build());
+            resultButtons.add(Button.builder(Component.of("N/A"), x -> buttonPress(x, index)).build());
             resultButtons.get(resultButtons.size()-1).active = false;
         }
-        textRenderer = Minecraft.getInstance().textRenderer;
+        font = Minecraft.getInstance().font;
     }
 
-    public void buttonPress(ButtonWidget button, int i){
+    public void buttonPress(Button button, int i){
         this.allCurrentResults.get(currentOffsetIndex + i).getAction().onPress(button);
     }
 
-    private void clickOnScreen(ButtonWidget button, ButtonWidget.PressAction additionalAction) {
+    private void clickOnScreen(Button button, Button.PressAction additionalAction) {
         toggleSearch(false);
         screenClick.active = false;
-        for (ButtonWidget resultButton : resultButtons)
+        for (Button resultButton : resultButtons)
             resultButton.active = false;
 
         additionalAction.onPress(button);
@@ -87,19 +87,19 @@ public class SearchBarWidget extends ModWidget {
         this.endY = endY;
     }
 
-    public int drawSearchBarCentered(GuiGraphics context, int centerX, int startY, Font textRenderer) {
+    public int drawSearchBarCentered(GuiGraphics context, int centerX, int startY, Font font) {
         int startX = centerX - (desiredWidth / 2);
-        return drawSearchBar(context, startX, startY, textRenderer);
+        return drawSearchBar(context, startX, startY, font);
     }
 
-    public int drawSearchBarAnchored(GuiGraphics context, int anchorX, int startY, boolean isLeftAnchor, Font textRenderer) {
+    public int drawSearchBarAnchored(GuiGraphics context, int anchorX, int startY, boolean isLeftAnchor, Font font) {
         int startX = anchorX;
         if (!isLeftAnchor)
             startX -= desiredWidth;
-        return drawSearchBar(context, startX, startY, textRenderer);
+        return drawSearchBar(context, startX, startY, font);
     }
 
-    public int drawSearchBar(GuiGraphics context, int startX, int startY, Font textRenderer) {
+    public int drawSearchBar(GuiGraphics context, int startX, int startY, Font font) {
         int panelSizeX = 102;
         int panelSizeY = 18;
         int sideMargins = MINIMAL_MARGIN / 2;
@@ -107,19 +107,19 @@ public class SearchBarWidget extends ModWidget {
         int magnifyingGlassSizeY = 14;
 
         // Search bar button
-        context.drawTexture(SEARCH_WIDGET, startX, startY, 0, searchBarToggleButton.isFocused() || isMouseOver(panelSizeX, panelSizeY, startX, startY) ? 19 : 0, panelSizeX, panelSizeY, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, SEARCH_WIDGET, startX, startY, 0, searchBarToggleButton.isFocused() || isMouseOver(panelSizeX, panelSizeY, startX, startY) ? 19 : 0, panelSizeX, panelSizeY, 256, 256);
 
         net.jukoz.me.compat.client.gui.MEGui.setBounds(searchBarToggleButton, desiredWidth, panelSizeY, startX, startY);
         drawSearchBarBackground(context, SEARCH_WIDGET, startX, startY);
 
         MutableComponent text = Component.translatable((!searchBarToggle && searchBarInput.isEmpty()) ? "ui.%s.search.label".formatted(MiddleEarth.MOD_ID) : searchBarInput);
-        context.drawText(textRenderer, text,
+        context.drawText(font, text,
                 startX + magnifyingGlassSizeX + MINIMAL_MARGIN - 1,
-                startY + (int) ((panelSizeY / 2f) - (textRenderer.fontHeight / 2f)) + 1,
+                startY + (int) ((panelSizeY / 2f) - (font.fontHeight / 2f)) + 1,
                 CommonColors.WHITE, false);
 
         // Search bar magnifying
-        context.drawTexture(SEARCH_WIDGET, startX + sideMargins, startY + 2, 102, 0, magnifyingGlassSizeX, magnifyingGlassSizeY, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, SEARCH_WIDGET, startX + sideMargins, startY + 2, 102, 0, magnifyingGlassSizeX, magnifyingGlassSizeY, 256, 256);
 
         return panelSizeY + MINIMAL_MARGIN;
     }
@@ -156,7 +156,7 @@ public class SearchBarWidget extends ModWidget {
             // Fill the search results
             allCurrentResults.clear();
             for(SearchBarResult possibleResult : allPossibleResults){
-                if(possibleResult.getText().getContent().toString().contains(searchBarInput.toLowerCase())){
+                if(possibleResult.getText().getContent().toString().contains(searchBarInput.lowercaseVariant())){
                     allCurrentResults.add(possibleResult);
                 }
             }
@@ -186,7 +186,7 @@ public class SearchBarWidget extends ModWidget {
             searchScrollbarButtonOffset = Math.min(currentSearchResultHeight, searchScrollbarButtonOffset - 1);
             searchScrollbarButtonOffset = Math.max(0, searchScrollbarButtonOffset);
 
-            context.drawTexture(SEARCH_WIDGET, startX + desiredWidth - 5, searchScrollbarButtonOffset + (startY + 1), 31, 39, 4, 9, 256, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, SEARCH_WIDGET, startX + desiredWidth - 5, searchScrollbarButtonOffset + (startY + 1), 31, 39, 4, 9, 256, 256);
 
             int valuePanelSizeX = SearchBarResultType.WIDTH;
             int valuePanelSizeY = SearchBarResultType.HEIGHT;
@@ -209,7 +209,7 @@ public class SearchBarWidget extends ModWidget {
                 if (!resultButtons.get(i).active)
                     resultButtons.get(i).active = true;
 
-                context.drawText(client.textRenderer, searchBarResult.getText(),
+                context.drawText(client.font, searchBarResult.getText(),
                         valuePanelStartX + 3, valuePanelStartY + - 11,
                         CommonColors.GRAY, false);
             }
@@ -225,66 +225,66 @@ public class SearchBarWidget extends ModWidget {
     private int drawSearchBarBackground(GuiGraphics context, ResourceLocation searchWidget, int startX, int startY) {
         int uvY = (getFocusEnabled() && searchBarToggleButton.isFocused()) ? 19 : 0;
 
-        context.drawTexture(searchWidget, startX, startY, 0, uvY, 10, 18, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, searchWidget, startX, startY, 0, uvY, 10, 18, 256, 256);
 
-        context.drawTexture(searchWidget, startX + 10, startY, 11, uvY, desiredWidth - 10 - 13, 18, 5, 18, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, searchWidget, startX + 10, startY, 11, uvY, desiredWidth - 10 - 13, 18, 5, 18, 256, 256);
 
-        context.drawTexture(searchWidget, startX + desiredWidth - 13, startY, 17, uvY, 13, 18, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, searchWidget, startX + desiredWidth - 13, startY, 17, uvY, 13, 18, 256, 256);
         return startY + 4;
     }
 
     private int drawTop(GuiGraphics context, ResourceLocation searchWidget, int startX, int startY) {
-        context.drawTexture(searchWidget, startX, startY, 0, 38, 10, 4, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, searchWidget, startX, startY, 0, 38, 10, 4, 256, 256);
 
-        context.drawTexture(searchWidget, startX + 10, startY, 11, 38, desiredWidth - 10 - 13, 4, 5, 4, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, searchWidget, startX + 10, startY, 11, 38, desiredWidth - 10 - 13, 4, 5, 4, 256, 256);
 
-        context.drawTexture(searchWidget, startX + desiredWidth - 13, startY, 17, 38, 13, 4, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, searchWidget, startX + desiredWidth - 13, startY, 17, 38, 13, 4, 256, 256);
         return startY + 4;
     }
 
     private int drawFooter(GuiGraphics context, ResourceLocation searchWidget, int startX, int startY) {
-        context.drawTexture(searchWidget, startX, startY, 0, 58, 10, 10, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, searchWidget, startX, startY, 0, 58, 10, 10, 256, 256);
 
-        context.drawTexture(searchWidget, startX + 10, startY, 11, 58, desiredWidth - 10 - 13, 10, 5, 10, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, searchWidget, startX + 10, startY, 11, 58, desiredWidth - 10 - 13, 10, 5, 10, 256, 256);
 
-        context.drawTexture(searchWidget, startX + desiredWidth - 13, startY, 17, 58, 13, 10, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, searchWidget, startX + desiredWidth - 13, startY, 17, 58, 13, 10, 256, 256);
         return startY + 10;
     }
 
     private int drawBottom(GuiGraphics context, ResourceLocation searchWidget, int startX, int startY) {
-        context.drawTexture(searchWidget, startX, startY, 0, 69, 10, 4, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, searchWidget, startX, startY, 0, 69, 10, 4, 256, 256);
 
-        context.drawTexture(searchWidget, startX + 10, startY, 11, 69, desiredWidth - 10 - 13, 4, 5, 4, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, searchWidget, startX + 10, startY, 11, 69, desiredWidth - 10 - 13, 4, 5, 4, 256, 256);
 
-        context.drawTexture(searchWidget, startX + desiredWidth - 13, startY, 17, 69, 13, 4, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, searchWidget, startX + desiredWidth - 13, startY, 17, 69, 13, 4, 256, 256);
         return startY + 4;
     }
 
     private int drawCenter(GuiGraphics context, ResourceLocation searchWidget, int startX, int startY, int currentAmount) {
-        context.drawTexture(searchWidget, startX, startY, 0, 43, 10, 14 * currentAmount, 10, 14, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, searchWidget, startX, startY, 0, 43, 10, 14 * currentAmount, 10, 14, 256, 256);
 
-        context.drawTexture(searchWidget, startX + 10, startY, 11, 43, desiredWidth - 10 - 13, 14 * currentAmount, 5, 14, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, searchWidget, startX + 10, startY, 11, 43, desiredWidth - 10 - 13, 14 * currentAmount, 5, 14, 256, 256);
 
-        context.drawTexture(searchWidget, startX + desiredWidth - 13, startY, 17, 43, 13, 14 * currentAmount, 13, 14, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, searchWidget, startX + desiredWidth - 13, startY, 17, 43, 13, 14 * currentAmount, 13, 14, 256, 256);
         return startY + (14 * currentAmount);
     }
 
     private int drawResultButtonBackground(GuiGraphics context, ResourceLocation searchWidget, int startX, int startY, int uvX, int uvY, int size) {
-        context.drawTexture(searchWidget, startX, startY, uvX, uvY, 9, 14, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, searchWidget, startX, startY, uvX, uvY, 9, 14, 256, 256);
         startX += 9;
 
-        context.drawTexture(searchWidget, startX, startY, uvX+10, uvY, size - 18, 14, 5, 14, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, searchWidget, startX, startY, uvX+10, uvY, size - 18, 14, 5, 14, 256, 256);
         startX += size - 18;
 
-        context.drawTexture(searchWidget, startX, startY, uvX+16, uvY, 9, 14, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, searchWidget, startX, startY, uvX+16, uvY, 9, 14, 256, 256);
         return startY + 14;
     }
 
-    public ButtonWidget getSearchBarToggleButton() {
+    public Button getSearchBarToggleButton() {
         return searchBarToggleButton;
     }
 
-    public ButtonWidget getScreenClickButton() {
+    public Button getScreenClickButton() {
         return screenClick;
     }
 
@@ -349,8 +349,8 @@ public class SearchBarWidget extends ModWidget {
 
     private void write(String newText) {
         newText = net.minecraft.SharedConstants.stripInvalidChars(newText);
-        if(textRenderer.getWidth(searchBarInput + newText) >= maximumShownLength){
-            newText = textRenderer.trimToWidth(newText, maximumShownLength);
+        if(font.getWidth(searchBarInput + newText) >= maximumShownLength){
+            newText = font.trimToWidth(newText, maximumShownLength);
         }
         searchBarInput = newText;
         currentSearchInputIndex++;
@@ -378,7 +378,7 @@ public class SearchBarWidget extends ModWidget {
         return searchResultToggle;
     }
 
-    public List<ButtonWidget> getAllButtons() {
+    public List<Button> getAllButtons() {
         return resultButtons;
     }
 

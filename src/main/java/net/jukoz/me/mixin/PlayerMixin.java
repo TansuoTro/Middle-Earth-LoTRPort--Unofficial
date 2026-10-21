@@ -38,7 +38,7 @@ public abstract class PlayerMixin {
 	 * after {@code resetLastAttackedTicks()}.
 	 */
 	@ModifyVariable(method = "attack(Lnet/minecraft/entity/Entity;)V",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/Player;resetLastAttackedTicks()V",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/Player;resetAttackStrengthTicker()V",
 					shift = At.Shift.AFTER), ordinal = 0)
 	private float me$modifyAttackDamage(float damage, Entity target) {
 		Player player = (Player) (Object) this;

@@ -3,7 +3,6 @@ package net.jukoz.me.compat.client.render.equipment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -12,6 +11,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
+import net.minecraft.client.renderer.RenderType;
 
 /**
  * 1.20.1 bridge for 1.21.x {@code net.minecraft.client.render.entity.equipment.EquipmentRenderer}.
@@ -28,7 +28,7 @@ public class EquipmentRenderer {
         ResourceLocation texture = new ResourceLocation(assetId.getNamespace(),
                 "textures/entity/equipment/" + layerType.getName() + "/" + assetId.getPath() + ".png");
         VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers,
-                RenderLayer.getArmorCutoutNoCull(texture), true, stack.hasGlint());
+                RenderType.armorCutoutNoCull(texture), true, stack.hasGlint());
         model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 

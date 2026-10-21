@@ -35,7 +35,7 @@ public class PlatedFoodFeature extends Feature<PlatedFoodFeatureConfig> {
         PlatedFoodFeatureConfig config = context.getConfig();
         ResourceLocation lootTableIdentifier = config.lootTable;
 
-        this.setBlockState(structureWorldAccess, blockPos, config.plate);
+        this.setBlock(structureWorldAccess, blockPos, config.plate);
 
         BlockEntity blockEntity = structureWorldAccess.getBlockEntity(blockPos);
         if(blockEntity != null) {

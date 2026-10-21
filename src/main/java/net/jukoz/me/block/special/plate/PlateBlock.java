@@ -1,6 +1,6 @@
 package net.jukoz.me.block.special.plate;
 
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.InteractionHand;
 import com.mojang.serialization.MapCodec;
 import net.jukoz.me.compat.MELootTable;
@@ -26,7 +26,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.ticks.TickPriority;
 import net.jukoz.me.block.registration.ModBlockEntities;
@@ -40,12 +40,13 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import com.mojang.math.Axis;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class PlateBlock extends BaseEntityBlock {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final BooleanProperty UTENSILS = BooleanProperty.of("utensils");
+    public static final BooleanProperty UTENSILS = BooleanProperty.create("utensils");
 
-    public PlateBlock(Settings settings) {
+    public PlateBlock(BlockBehaviour.Properties settings) {
         super(settings);
 
         setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(UTENSILS, false));
@@ -68,7 +69,7 @@ public class PlateBlock extends BaseEntityBlock {
         super.onBlockAdded(state, world, pos, oldState, notify);
         PlateBlockEntity plateBlockEntity = (PlateBlockEntity) world.getBlockEntity(pos);
         if(plateBlockEntity != null && world instanceof ServerLevel serverWorld) {
-            serverWorld.scheduleBlockTick(pos, this, 1, TickPriority.NORMAL);
+            serverWorld.scheduleRecheck(pos, this, 1, TickPriority.NORMAL);
         }
     }
 
@@ -94,7 +95,7 @@ public class PlateBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-        if (!world.isClient) {
+        if (!world.isClientSide) {
             return checkType(type, ModBlockEntities.PLATE, PlateBlockEntity::tick);
         }
         return super.getTicker(world, state, type);
@@ -102,32 +103,32 @@ public class PlateBlock extends BaseEntityBlock {
 
     @Override
     public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
-        return Block.sideCoversSmallSquare(world, pos.down(), Direction.UP);
+        return Block.sideCoversSmallSquare(world, pos.below(), Direction.UP);
     }
 
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         return !state.canPlaceAt(world, pos) ?
-                Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+                Blocks.AIR.defaultBlockState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        ItemStack stack = player.getStackInHand(hand);
+        ItemStack stack = player.getItemInHand(hand);
         if(!stack.isEmpty() && stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof PlateBlock) {
             return InteractionResult.PASS;
         }
         if(!stack.isEmpty() && stack.getItem().isFood()) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if(blockEntity instanceof PlateBlockEntity plateBlockEntity) {
-                ItemStack plateStack = plateBlockEntity.getStack();
+                ItemStack plateStack = plateBlockEntity.getItem();
                 if(plateStack == null || plateStack.isEmpty()) {
                     ItemStack insertedStack = stack.copy();
                     insertedStack.setCount(1);
                     plateBlockEntity.setStack(insertedStack);
                     if (!player.isCreative()) stack.decrement(1);
                     return InteractionResult.SUCCESS;
-                } else if (world.isClient) {
+                } else if (world.isClientSide) {
                     return onEat(world, pos, player);
                 }
             } else {
@@ -138,7 +139,7 @@ public class PlateBlock extends BaseEntityBlock {
         if(result == InteractionResult.PASS || result == InteractionResult.FAIL) {
             if(world instanceof ServerLevel serverWorld) {
                 boolean hasUtensils = state.get(UTENSILS);
-                serverWorld.setBlockState(pos, state.with(UTENSILS, !hasUtensils), 2);
+                serverWorld.setBlock(pos, state.setValue(UTENSILS, !hasUtensils), 2);
             }
         }
 
@@ -146,11 +147,11 @@ public class PlateBlock extends BaseEntityBlock {
     }
 
     protected static InteractionResult onEat(Level world, BlockPos pos, Player player) {
-        if (world.isClient) {
-            if (tryEat(world, pos, player).isAccepted()) {
+        if (world.isClientSide) {
+            if (tryEat(world, pos, player).getAccepted()) {
                 return InteractionResult.SUCCESS;
             }
-            if (player.getStackInHand(InteractionHand.MAIN_HAND).isEmpty()) {
+            if (player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
                 return InteractionResult.CONSUME;
             }
         }
@@ -165,20 +166,20 @@ public class PlateBlock extends BaseEntityBlock {
         PlateBlockEntity plateBlockEntity = (PlateBlockEntity) world.getBlockEntity(pos);
         if(plateBlockEntity == null) return InteractionResult.FAIL;
 
-        ItemStack food = plateBlockEntity.getStack();
+        ItemStack food = plateBlockEntity.getItem();
         if(food == null || food.isEmpty()) {
             return InteractionResult.PASS;
         }
 
-        FoodProperties foodComponent = food.getItem().getFoodComponent();
+        FoodProperties foodComponent = food.getItem().getFoodProperties();
 
         if(foodComponent != null) {
-            if(!world.isClient) {
-                player.getHungerManager().add((foodComponent.getHunger() / 2), foodComponent.getSaturationModifier() / 2);
+            if(!world.isClientSide) {
+                player.getFoodData().add((foodComponent.getNutrition() / 2), foodComponent.getSaturationModifier() / 2);
             }
             world.emitGameEvent(player, GameEvent.EAT, pos);
 
-            net.minecraft.world.item.Item remainderItem = food.getItem().getRecipeRemainder();
+            net.minecraft.world.item.Item remainderItem = food.getItem().getCraftingRemainingItem();
             plateBlockEntity.setStack(remainderItem == null ? ItemStack.EMPTY : new ItemStack(remainderItem));
         }
 
@@ -187,7 +188,7 @@ public class PlateBlock extends BaseEntityBlock {
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return Block.createCuboidShape(3.0, 0.0, 3.0, 13.0, 1.0, 13.0);
+        return Block.box(3.0, 0.0, 3.0, 13.0, 1.0, 13.0);
     }
 
     @Override
@@ -198,13 +199,13 @@ public class PlateBlock extends BaseEntityBlock {
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        Direction[] var3 = ctx.getPlacementDirections();
+        Direction[] var3 = ctx.getNearestLookingDirections();
         int var4 = var3.length;
 
         for(int var5 = 0; var5 < var4; ++var5) {
             Direction direction = var3[var5];
             if (direction.getAxis() == Direction.Axis.Y) {
-                BlockState blockState = this.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(UTENSILS, false);
+                BlockState blockState = this.defaultBlockState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalDirection().getOpposite()).with(UTENSILS, false);
                 if (blockState.canPlaceAt(ctx.getWorld(), ctx.getBlockPos())) {
                     return blockState;
                 }
@@ -221,7 +222,7 @@ public class PlateBlock extends BaseEntityBlock {
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+        return state.setValue(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override

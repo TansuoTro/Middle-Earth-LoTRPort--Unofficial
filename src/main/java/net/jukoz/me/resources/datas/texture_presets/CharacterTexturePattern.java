@@ -78,7 +78,7 @@ public class CharacterTexturePattern {
                 PacketCodecs.BOOLEAN,
                 CharacterTexturePattern::hasAddonRawValue,
                 CharacterTexturePattern::new);
-        ENTRY_CODEC = RegistryFileCodec.of(DynamicRegistriesME.SKIN_PATTERN, CODEC);
+        ENTRY_CODEC = RegistryFileCodec.create(DynamicRegistriesME.SKIN_PATTERN, CODEC);
         ENTRY_PACKET_CODEC = PacketCodecs.registryEntry(DynamicRegistriesME.SKIN_PATTERN, PACKET_CODEC);
     }
 }

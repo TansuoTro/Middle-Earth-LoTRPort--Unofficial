@@ -12,16 +12,17 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class ArkenstoneWallBlock extends HorizontalDirectionalBlock {
 
-    public ArkenstoneWallBlock(Settings settings) {
+    public ArkenstoneWallBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH));
+        this.setDefaultState(this.stateManager.defaultBlockState().with(FACING, Direction.NORTH));
     }
 
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return (BlockState)((BlockState)this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing()));
+        return (BlockState)((BlockState)this.defaultBlockState().with(FACING, ctx.getHorizontalDirection()));
     }
 
     protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
@@ -35,10 +36,10 @@ public class ArkenstoneWallBlock extends HorizontalDirectionalBlock {
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return switch (state.get(FACING)){
-            default -> Block.createCuboidShape(6, 6, 0, 10, 10, 4);
-            case SOUTH -> Block.createCuboidShape(6, 6, 12, 10, 10, 16);
-            case EAST -> Block.createCuboidShape(12, 6, 6, 16, 10, 10);
-            case WEST -> Block.createCuboidShape(0, 6, 6, 4, 10, 10);
+            default -> Block.box(6, 6, 0, 10, 10, 4);
+            case SOUTH -> Block.box(6, 6, 12, 10, 10, 16);
+            case EAST -> Block.box(12, 6, 6, 16, 10, 10);
+            case WEST -> Block.box(0, 6, 6, 4, 10, 10);
         };
     }
 

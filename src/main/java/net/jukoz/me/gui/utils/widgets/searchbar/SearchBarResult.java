@@ -8,9 +8,9 @@ public class SearchBarResult {
     private MutableComponent text;
     private SearchBarResultType type;
     private ResourceLocation targetIdentifier;
-    private ButtonWidget.PressAction action;
+    private Button.PressAction action;
 
-    public SearchBarResult(MutableComponent text, ResourceLocation targetIdentifier, SearchBarResultType type, ButtonWidget.PressAction action){
+    public SearchBarResult(MutableComponent text, ResourceLocation targetIdentifier, SearchBarResultType type, Button.PressAction action){
         this.text = text;
         this.targetIdentifier = targetIdentifier;
         this.type = type;
@@ -29,7 +29,7 @@ public class SearchBarResult {
         return type;
     }
 
-    public ButtonWidget.PressAction getAction(){
+    public Button.PressAction getAction(){
         return action;
     }
 }

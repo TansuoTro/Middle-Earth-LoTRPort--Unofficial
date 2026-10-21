@@ -52,8 +52,8 @@ public class DeerEntity extends Animal {
 
     public static AttributeSupplier.Builder createDeerAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MAX_HEALTH, 8.0)
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.3f);
+                .add(Attributes.MAX_HEALTH, 8.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.3f);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class DeerEntity extends Animal {
     @Override
     public void tick() {
         super.tick();
-        if(this.getWorld().isClient()) {
+        if(this.level().isClientSide()) {
             setupAnimationStates();
         }
     }

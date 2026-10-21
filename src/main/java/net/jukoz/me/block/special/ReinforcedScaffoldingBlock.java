@@ -17,8 +17,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccess;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.jukoz.me.item.DecorativeItemsME;
 import java.util.ArrayDeque;
 import java.util.HashMap;
@@ -27,11 +27,11 @@ import java.util.Map;
 public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
     public static final int MAX_SUPPORT_DISTANCE = 14;
     private static final int MAX_STORED_DISTANCE = 7;
-    public static final IntegerProperty SUPPORT_DISTANCE = IntegerProperty.of("support_distance", 0, MAX_SUPPORT_DISTANCE);
+    public static final IntegerProperty SUPPORT_DISTANCE = IntegerProperty.create("support_distance", 0, MAX_SUPPORT_DISTANCE);
 
-    public ReinforcedScaffoldingBlock(BlockBehaviour.Settings settings) {
+    public ReinforcedScaffoldingBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(SUPPORT_DISTANCE, 0));
+        this.setDefaultState(this.stateManager.defaultBlockState().with(SUPPORT_DISTANCE, 0));
     }
 
     @Override
@@ -39,7 +39,7 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
         BlockPos pos = ctx.getBlockPos();
         Level world = ctx.getWorld();
         int distance = calculateDistance(world, pos, this);
-        return this.getDefaultState()
+        return this.defaultBlockState()
                 .with(WATERLOGGED, world.getFluidState(pos).getFluid() == Fluids.WATER)
                 .with(DISTANCE, toStoredDistance(distance))
                 .with(SUPPORT_DISTANCE, distance)
@@ -48,7 +48,7 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
 
     @Override
     public ItemStack getPickStack(BlockGetter world, BlockPos pos, BlockState state) {
-        return DecorativeItemsME.REINFORCED_SCAFFOLDING.getDefaultStack();
+        return DecorativeItemsME.REINFORCED_SCAFFOLDING.getDefaultInstance();
     }
 
     @Override
@@ -57,8 +57,8 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
 
-        if (!world.isClient()) {
-            world.scheduleBlockTick(pos, this, 1);
+        if (!world.isClientSide()) {
+            world.scheduleRecheck(pos, this, 1);
         }
 
         return state;
@@ -67,7 +67,7 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
     @Override
     public void scheduledTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         int distance = calculateDistance(world, pos, this);
-        BlockState updatedState = state.with(DISTANCE, toStoredDistance(distance))
+        BlockState updatedState = state.setValue(DISTANCE, toStoredDistance(distance))
                 .with(SUPPORT_DISTANCE, distance)
                 .with(BOTTOM, shouldBeBottom(world, pos, distance, this));
         if (distance == MAX_SUPPORT_DISTANCE) {
@@ -77,7 +77,7 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
                 world.breakBlock(pos, true);
             }
         } else if (state != updatedState) {
-            world.setBlockState(pos, updatedState, 3);
+            world.setBlock(pos, updatedState, 3);
         }
     }
 
@@ -88,7 +88,7 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
 
     @Override
     public boolean canReplace(BlockState state, BlockPlaceContext context) {
-        return context.getStack().getItem() instanceof BlockItem blockItem
+        return context.getItem().getItem() instanceof BlockItem blockItem
                 && blockItem.getBlock() == this;
     }
 
@@ -99,7 +99,7 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
     }
 
     public static boolean shouldBeBottom(BlockGetter world, BlockPos pos, int distance, Block scaffoldingBlock) {
-        return distance > 0 && !world.getBlockState(pos.down()).isOf(scaffoldingBlock);
+        return distance > 0 && !world.getBlockState(pos.below()).is(scaffoldingBlock);
     }
 
     public static int calculateDistance(BlockGetter world, BlockPos pos, Block scaffoldingBlock) {
@@ -113,10 +113,10 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
         while (!positionsToCheck.isEmpty()) {
             BlockPos currentPos = positionsToCheck.removeFirst();
             int currentDistance = supportDistances.get(currentPos);
-            BlockPos belowPos = currentPos.down();
+            BlockPos belowPos = currentPos.below();
             BlockState belowState = world.getBlockState(belowPos);
 
-            if (belowState.isOf(scaffoldingBlock)) {
+            if (belowState.is(scaffoldingBlock)) {
                 addSupportPosition(positionsToCheck, supportDistances, belowPos, currentDistance, true);
             } else if (belowState.isSideSolidFullSquare(world, belowPos, Direction.UP)) {
                 return Math.min(currentDistance, MAX_SUPPORT_DISTANCE);
@@ -126,9 +126,9 @@ public class ReinforcedScaffoldingBlock extends ScaffoldingBlock {
                 continue;
             }
 
-            for (Direction direction : Direction.Type.HORIZONTAL) {
+            for (Direction direction : Direction.Axis.HORIZONTAL) {
                 BlockPos horizontalPos = currentPos.offset(direction);
-                if (world.getBlockState(horizontalPos).isOf(scaffoldingBlock)) {
+                if (world.getBlockState(horizontalPos).is(scaffoldingBlock)) {
                     addSupportPosition(positionsToCheck, supportDistances, horizontalPos, currentDistance + 1, false);
                 }
             }

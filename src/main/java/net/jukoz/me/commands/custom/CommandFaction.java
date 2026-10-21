@@ -101,13 +101,13 @@ public class CommandFaction {
     }
 
     private static int getBanner(CommandContext<CommandSourceStack> context) {
-        if(context.getSource().isExecutedByPlayer()) {
+        if(context.getSource().isPlayer()) {
             ServerPlayer source = context.getSource().getPlayer();
             ResourceLocation factionIdentifier = ResourceLocationArgument.getIdentifier(context, FACTION_ID);;
 
             try{
                 Faction faction = FactionLookup.getFactionById(source.getWorld(), factionIdentifier);
-                source.giveItemStack(faction.getBannerItem(source.getWorld().getRegistryManager()));
+                source.giveItemStack(faction.getBannerItem(source.getWorld().registryAccess()));
                 MutableComponent sourceText = Component.translatable("command.%s.faction.banner.success".formatted(MiddleEarth.MOD_ID), faction.getFullName().formatted(ChatFormatting.GOLD));
                 source.sendMessage(METext.withColor(sourceText, ModColors.SUCCESS.color));
             } catch (FactionIdentifierException e){
@@ -124,7 +124,7 @@ public class CommandFaction {
     }
 
     private static int getFaction(CommandContext<CommandSourceStack> context) {
-        if(context.getSource().isExecutedByPlayer()) {
+        if(context.getSource().isPlayer()) {
             ServerPlayer source = context.getSource().getPlayer();
             if(source != null){
                 Faction currentFaction = PlayerDataService.getPlayerFaction(source, source.getWorld());
@@ -142,7 +142,7 @@ public class CommandFaction {
 
     private static int getTargetFaction(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer targetedPlayer = EntityArgument.getPlayer(context, PLAYER);
-        if(targetedPlayer != null && context.getSource().isExecutedByPlayer()) {
+        if(targetedPlayer != null && context.getSource().isPlayer()) {
             ServerPlayer source = context.getSource().getPlayer();
             if(source != null){
                 Faction currentFaction = PlayerDataService.getPlayerFaction(source, source.getWorld());
@@ -159,7 +159,7 @@ public class CommandFaction {
     }
 
     private static int clearFaction(CommandContext<CommandSourceStack> context) {
-        if(context.getSource().isExecutedByPlayer()) {
+        if(context.getSource().isPlayer()) {
             ServerPlayer source = context.getSource().getPlayer();
             if(source != null) {
                 try {
@@ -182,7 +182,7 @@ public class CommandFaction {
 
     private static int clearTargetFaction(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer targetedPlayer = EntityArgument.getPlayer(context, PLAYER);
-        boolean isPlayerSource = context.getSource().isExecutedByPlayer();
+        boolean isPlayerSource = context.getSource().isPlayer();
 
         if(targetedPlayer != null){
             ServerPlayer playerSource = null;
@@ -238,7 +238,7 @@ public class CommandFaction {
         if(success){
             try{
                 Faction faction = FactionLookup.getFactionById(context.getSource().getWorld(), factionIdentifier);
-                if(context.getSource().isExecutedByPlayer()){
+                if(context.getSource().isPlayer()){
                     ServerPlayer source = context.getSource().getPlayer();
                     MutableComponent sourceText = Component.translatable("command.%s.join.faction.join.success".formatted(MiddleEarth.MOD_ID), targetedPlayer.getName(), faction.getFullName());
                     source.sendMessage(METext.withColor(sourceText, ModColors.SUCCESS.color));
@@ -254,7 +254,7 @@ public class CommandFaction {
 
     public static boolean updateFactionFromCommand(ServerPlayer target, CommandSourceStack source, ResourceLocation factionIdentifier, @Nullable ResourceLocation spawnId) {
         Faction foundFaction = null;
-        boolean commandOnSelf = source.isExecutedByPlayer() && source.getPlayer() == target;
+        boolean commandOnSelf = source.isPlayer() && source.getPlayer() == target;
         try {
             foundFaction = FactionLookup.getFactionById(source.getWorld(), factionIdentifier);
             FactionUtil.updateFaction(target, foundFaction, spawnId);

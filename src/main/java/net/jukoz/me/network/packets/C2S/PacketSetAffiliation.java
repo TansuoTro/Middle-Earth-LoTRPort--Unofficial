@@ -30,7 +30,7 @@ public class PacketSetAffiliation extends ClientToServerPacket<PacketSetAffiliat
     }
 
     public PacketSetAffiliation(FriendlyByteBuf buf) {
-        this(buf.readString(), buf.readString(), buf.readString());
+        this(buf.readUtf(), buf.readUtf(), buf.readUtf());
     }
 
     @Override
@@ -55,7 +55,7 @@ public class PacketSetAffiliation extends ClientToServerPacket<PacketSetAffiliat
                 ResourceLocation spawnId = new ResourceLocation(spawnName);
                 FactionUtil.updateFaction(context.player(), faction, spawnId);
                 if(!context.player().isCreative() && context.player().getMainHandStack().getItem() instanceof StarlightPhialItem)
-                    context.player().getStackInHand(InteractionHand.MAIN_HAND).decrement(1);
+                    context.player().getItemInHand(InteractionHand.MAIN_HAND).decrement(1);
             } catch (Exception e){
                 MiddleEarth.LOGGER.logError("AffiliationPacket::Tried getting affiliation packet and couldn't fetch any.", e);
             }

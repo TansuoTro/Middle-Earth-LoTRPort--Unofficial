@@ -25,37 +25,37 @@ public class CustomBootsModel extends MEBipedEntityModel<LivingEntity, BipedEnti
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
 
-        PartDefinition head = modelPartData.addChild(PartNames.HEAD, CubeListBuilder.create(),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
-        head.addChild(PartNames.HAT, CubeListBuilder.create(),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition head = modelPartData.addOrReplaceChild(PartNames.HEAD, CubeListBuilder.create(),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
+        head.addOrReplaceChild(PartNames.HAT, CubeListBuilder.create(),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.BODY, CubeListBuilder.create(),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.RIGHT_ARM, CubeListBuilder.create(),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_ARM, CubeListBuilder.create(),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.BODY, CubeListBuilder.create(),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.RIGHT_ARM, CubeListBuilder.create(),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.LEFT_ARM, CubeListBuilder.create(),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition rightLeg = modelPartData.addChild(PartNames.RIGHT_LEG, CubeListBuilder.create(),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition rightLeg = modelPartData.addOrReplaceChild(PartNames.RIGHT_LEG, CubeListBuilder.create(),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        rightLeg.addChild("rightBoot", CubeListBuilder.create()
-                        .uv(0, 48).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.9F)),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
-        rightLeg.addChild("rightInnerBoot", CubeListBuilder.create()
-                        .uv(0, 16).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.7F)),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        rightLeg.addOrReplaceChild("rightBoot", CubeListBuilder.create()
+                        .texOffs(0, 48).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.9F)),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
+        rightLeg.addOrReplaceChild("rightInnerBoot", CubeListBuilder.create()
+                        .texOffs(0, 16).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.7F)),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition leftLeg = modelPartData.addChild(PartNames.LEFT_LEG, CubeListBuilder.create(),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition leftLeg = modelPartData.addOrReplaceChild(PartNames.LEFT_LEG, CubeListBuilder.create(),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        leftLeg.addChild("leftBoot", CubeListBuilder.create()
-                        .uv(16, 48).mirrored().cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.9F)).mirrored(false),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
-        leftLeg.addChild("leftInnerBoot", CubeListBuilder.create()
-                        .uv(0, 32).mirrored().cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.7F)).mirrored(false),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        leftLeg.addOrReplaceChild("leftBoot", CubeListBuilder.create()
+                        .texOffs(16, 48).mirror().addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.9F)).mirror(false),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
+        leftLeg.addOrReplaceChild("leftInnerBoot", CubeListBuilder.create()
+                        .texOffs(0, 32).mirror().addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.7F)).mirror(false),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.of(modelData, 64, 64);
     }

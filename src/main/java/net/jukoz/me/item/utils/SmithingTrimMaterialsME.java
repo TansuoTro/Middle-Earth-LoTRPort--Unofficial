@@ -2,8 +2,8 @@ package net.jukoz.me.item.utils;
 
 import net.jukoz.me.compat.METext;
 import net.minecraft.world.item.ArmorMaterials;
-import net.minecraft.world.item.armortrim.ArmorTrimMaterial;
-import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.world.item.armortrim.TrimMaterial;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Style;
@@ -42,9 +42,9 @@ public class SmithingTrimMaterialsME {
     }    // 1.20.1 TrimMaterial carries the item model index + asset name directly
     // instead of the donor's ArmorTrimAssets(AssetId, overrides).
     private static void register(BootstrapContext<TrimMaterial> registry, ResourceKey<TrimMaterial> key, float itemModelIndex, String assetName, Style style) {
-        Component text = Component.translatable(Util.createTranslationKey("trim_material", key.getValue())).fillStyle(style);
+        Component text = Component.translatable(Util.createTranslationKey("trim_material", key.location())).fillStyle(style);
         registry.register(key, new TrimMaterial(assetName, Registries.ITEM.getEntry(Items.IRON_INGOT), itemModelIndex, Map.<ArmorMaterials, String>of(), text));
     }    private static ResourceKey<TrimMaterial> of(String id) {
-        return ResourceKey.of(Registries.TRIM_MATERIAL, new ResourceLocation(MiddleEarth.MOD_ID, id));
+        return ResourceKey.create(Registries.TRIM_MATERIAL, new ResourceLocation(MiddleEarth.MOD_ID, id));
     }
 }

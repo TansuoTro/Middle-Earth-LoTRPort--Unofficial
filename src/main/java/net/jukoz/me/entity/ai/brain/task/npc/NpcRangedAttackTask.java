@@ -21,7 +21,7 @@ public class NpcRangedAttackTask {
         return BehaviorBuilder.task((context) -> context.group(
                 context.queryMemoryOptional(MemoryModuleType.LOOK_TARGET),
                 context.queryMemoryValue(MemoryModuleType.ATTACK_TARGET),
-                context.queryMemoryAbsent(MemoryModuleType.ATTACK_COOLING_DOWN),
+                context.absent(MemoryModuleType.ATTACK_COOLING_DOWN),
                 context.queryMemoryValue(MemoryModuleType.VISIBLE_MOBS)).apply(context,
                 (lookTarget, attackTarget, attackCoolingDown, visibleMobs) -> (world, entity, time) -> {
             LivingEntity targetEntity = context.getValue(attackTarget);
@@ -39,7 +39,7 @@ public class NpcRangedAttackTask {
                 entity.aim();
                 if(entity.isReadyToShoot()){
                     entity.shootAt(targetEntity);
-                    entity.getBrain().forget(MemoryModuleType.ATTACK_TARGET);
+                    entity.getBrain().erase(MemoryModuleType.ATTACK_TARGET);
                     entity.stopAiming();
                 }
                 return true;
@@ -55,7 +55,7 @@ public class NpcRangedAttackTask {
                 }
 
                 if(canForget)
-                    entity.getBrain().forget(MemoryModuleType.ATTACK_TARGET);
+                    entity.getBrain().erase(MemoryModuleType.ATTACK_TARGET);
 
                 return false;
             }

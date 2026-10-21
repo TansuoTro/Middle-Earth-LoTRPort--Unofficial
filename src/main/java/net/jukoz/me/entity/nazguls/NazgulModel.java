@@ -47,49 +47,49 @@ public class NazgulModel<T extends Mob>
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition root = modelData.getRoot();
 
-        root.addChild(PartNames.BODY, CubeListBuilder.create().uv(8, 8)
-                        .cuboid(-1.0f, 0f, -1.0f, 2.0f, 2.0f, 2.0f, dilation),
-                PartPose.pivot(0.0f, 0.0f, 0.0f));
+        root.addOrReplaceChild(PartNames.BODY, CubeListBuilder.create().texOffs(8, 8)
+                        .addBox(-1.0f, 0f, -1.0f, 2.0f, 2.0f, 2.0f, dilation),
+                PartPose.offset(0.0f, 0.0f, 0.0f));
 
-        root.addChild(PartNames.HEAD, CubeListBuilder.create().uv(0, 0)
-                        .cuboid(-4.0f, -8.0f, -4.0f, 8.0f, 8.0f, 8.0f, dilation),
-                PartPose.pivot(0.0f, 0.0f, 0.0f));
+        root.addOrReplaceChild(PartNames.HEAD, CubeListBuilder.create().texOffs(0, 0)
+                        .addBox(-4.0f, -8.0f, -4.0f, 8.0f, 8.0f, 8.0f, dilation),
+                PartPose.offset(0.0f, 0.0f, 0.0f));
 
-        PartDefinition leftArm = root.addChild(PartNames.LEFT_ARM, CubeListBuilder.create().uv(32, 48)
-                        .cuboid(-1.0f, -2.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation),
-                PartPose.pivot(LEFT_ARM_PIVOT_X, 2.5f, 0.0f));
-        PartDefinition rightArm = root.addChild(PartNames.RIGHT_ARM, CubeListBuilder.create().uv(40, 16)
-                        .cuboid(-3f, -2.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation),
-                PartPose.pivot(RIGHT_ARM_PIVOT_X, 2.5f, 0.0f));
+        PartDefinition leftArm = root.addOrReplaceChild(PartNames.LEFT_ARM, CubeListBuilder.create().texOffs(32, 48)
+                        .addBox(-1.0f, -2.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation),
+                PartPose.offset(LEFT_ARM_PIVOT_X, 2.5f, 0.0f));
+        PartDefinition rightArm = root.addOrReplaceChild(PartNames.RIGHT_ARM, CubeListBuilder.create().texOffs(40, 16)
+                        .addBox(-3f, -2.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation),
+                PartPose.offset(RIGHT_ARM_PIVOT_X, 2.5f, 0.0f));
 
-        rightArm.addChild(RIGHT_SLEEVE, CubeListBuilder.create().uv(40, 32).cuboid(0f, 0f, 0f, 3.0f, 12.0f, 4.0f, dilation.add(0.25f)),
-                PartPose.pivot(-2f, -2f, -2f));
-        leftArm.addChild(LEFT_SLEEVE, CubeListBuilder.create().uv(48, 48).cuboid(0f, 0f, 0f, 3.0f, 12.0f, 4.0f, dilation.add(0.25f)),
-                PartPose.pivot(-1f, -2f, -2f));
+        rightArm.addOrReplaceChild(RIGHT_SLEEVE, CubeListBuilder.create().texOffs(40, 32).addBox(0f, 0f, 0f, 3.0f, 12.0f, 4.0f, dilation.add(0.25f)),
+                PartPose.offset(-2f, -2f, -2f));
+        leftArm.addOrReplaceChild(LEFT_SLEEVE, CubeListBuilder.create().texOffs(48, 48).addBox(0f, 0f, 0f, 3.0f, 12.0f, 4.0f, dilation.add(0.25f)),
+                PartPose.offset(-1f, -2f, -2f));
 
-        root.addChild(PartNames.BODY, CubeListBuilder.create().uv(16, 16)
-                        .cuboid(-4.0f, 0.0f, -2f, 8.0f, 12.0f, 4.0f, dilation),
-                PartPose.pivot(0.0f, 0f, 0.0f));
+        root.addOrReplaceChild(PartNames.BODY, CubeListBuilder.create().texOffs(16, 16)
+                        .addBox(-4.0f, 0.0f, -2f, 8.0f, 12.0f, 4.0f, dilation),
+                PartPose.offset(0.0f, 0f, 0.0f));
 
-        root.getChild(PartNames.BODY).addChild(PartNames.JACKET, CubeListBuilder.create().uv(16, 32)
-                .cuboid(-4.0f, 0.0f, 0f, 8.0f, 12.0f, 4.0f, dilation.add(0.25f)), PartPose.NONE);
+        root.getChild(PartNames.BODY).addOrReplaceChild(PartNames.JACKET, CubeListBuilder.create().texOffs(16, 32)
+                .addBox(-4.0f, 0.0f, 0f, 8.0f, 12.0f, 4.0f, dilation.add(0.25f)), PartPose.NONE);
 
-        root.addChild(PartNames.RIGHT_LEG, CubeListBuilder.create().uv(0, 16)
-                        .cuboid(-2.0f, 0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation),
-                PartPose.pivot(-LEG_PIVOT_X, 0.0f, 0.0f));
-        root.addChild(PartNames.LEFT_LEG, CubeListBuilder.create().uv(0, 16).mirrored()
-                        .cuboid(-2.0f, 0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation),
-                PartPose.pivot(LEG_PIVOT_X, 0.0f, 0.0f));
+        root.addOrReplaceChild(PartNames.RIGHT_LEG, CubeListBuilder.create().texOffs(0, 16)
+                        .addBox(-2.0f, 0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation),
+                PartPose.offset(-LEG_PIVOT_X, 0.0f, 0.0f));
+        root.addOrReplaceChild(PartNames.LEFT_LEG, CubeListBuilder.create().texOffs(0, 16).mirror()
+                        .addBox(-2.0f, 0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation),
+                PartPose.offset(LEG_PIVOT_X, 0.0f, 0.0f));
 
-        root.getChild(PartNames.LEFT_LEG).addChild(LEFT_PANTS, CubeListBuilder.create().uv(0, 48)
-                        .cuboid(-2.0f, 0.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation.add(0.25f)),
-                PartPose.pivot(0, 0.0f, 0.0f));
-        root.getChild(PartNames.RIGHT_LEG).addChild(RIGHT_PANTS, CubeListBuilder.create().uv(0, 32)
-                        .cuboid(-2.0f, 0.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation.add(0.25f)),
-                PartPose.pivot(0, 0.0f, 0.0f));
+        root.getChild(PartNames.LEFT_LEG).addOrReplaceChild(LEFT_PANTS, CubeListBuilder.create().texOffs(0, 48)
+                        .addBox(-2.0f, 0.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation.add(0.25f)),
+                PartPose.offset(0, 0.0f, 0.0f));
+        root.getChild(PartNames.RIGHT_LEG).addOrReplaceChild(RIGHT_PANTS, CubeListBuilder.create().texOffs(0, 32)
+                        .addBox(-2.0f, 0.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation.add(0.25f)),
+                PartPose.offset(0, 0.0f, 0.0f));
 
-        root.addChild(PartNames.HAT, CubeListBuilder.create().uv(32, 0).cuboid(-4.0f, -8.0f, -4.0f, 8.0f, 8.0f, 8.0f, dilation.add(0.5f)),
-                PartPose.pivot(0.0f, 0.0f, 0.0f));                // 54
+        root.addOrReplaceChild(PartNames.HAT, CubeListBuilder.create().texOffs(32, 0).addBox(-4.0f, -8.0f, -4.0f, 8.0f, 8.0f, 8.0f, dilation.add(0.5f)),
+                PartPose.offset(0.0f, 0.0f, 0.0f));                // 54
 
         return LayerDefinition.of(modelData, 64, 64);
     }
@@ -101,19 +101,19 @@ public class NazgulModel<T extends Mob>
         NazgulEntity.State state = ((NazgulEntity)mobEntity).getState();
 
         if(state == NazgulEntity.State.ATTACKING) {
-            this.leftArm.pitch = Mth.cos(limbAngle * 0.6662f) * 2.0f * limbDistance * 0.5f;
-            this.leftArm.yaw = 0.0f;
+            this.leftArm.xRot = Mth.cos(limbAngle * 0.6662f) * 2.0f * limbDistance * 0.5f;
+            this.leftArm.yRot = 0.0f;
             this.leftArm.roll = 0.0f;
 
-            this.rightArm.pitch = -0.9f + Mth.cos(limbAngle * 0.6662f + (float)Math.PI) * 2.0f * limbDistance * 0.5f;
-            this.rightArm.yaw = 0.0f;
+            this.rightArm.xRot = -0.9f + Mth.cos(limbAngle * 0.6662f + (float)Math.PI) * 2.0f * limbDistance * 0.5f;
+            this.rightArm.yRot = 0.0f;
             this.rightArm.roll = 0.0f;
         } else if(state == NazgulEntity.State.ON_FIRE || state == NazgulEntity.State.FADING) {
             float limbCosTime = (float) (1 + 0.25f * Math.cos(limbAngle));
-            this.rightArm.pitch = -3.1f + Mth.cos(ageInTicks * 0.4f + (float)Math.PI) * 0.3f * limbCosTime;
+            this.rightArm.xRot = -3.1f + Mth.cos(ageInTicks * 0.4f + (float)Math.PI) * 0.3f * limbCosTime;
             this.rightArm.roll = -0.6f + Mth.sin(ageInTicks * 0.666f + (float)Math.PI) * 0.2f;
 
-            this.leftArm.pitch = -3.1f + Mth.sin(ageInTicks * 0.4f + (float)Math.PI) * 0.3f * limbCosTime;
+            this.leftArm.xRot = -3.1f + Mth.sin(ageInTicks * 0.4f + (float)Math.PI) * 0.3f * limbCosTime;
             this.leftArm.roll = 0.6f + Mth.cos(ageInTicks * 0.666f + (float)Math.PI) * 0.2f;
         }
     }

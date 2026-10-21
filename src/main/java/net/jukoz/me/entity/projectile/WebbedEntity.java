@@ -38,9 +38,9 @@ public class WebbedEntity extends AbstractProjectileEntity {
         super(EntitiesME.WEB, owner, world, new ItemStack(Items.COBWEB));
         this.damage = dmg;
         if(feature == null) {
-            if(!this.getWorld().isClient) {
-                if(this.getWorld() instanceof ServerLevel serverWorld) {
-                    Optional<? extends Holder<ConfiguredFeature<?, ?>>> optional = serverWorld.getRegistryManager()
+            if(!this.level().isClientSide) {
+                if(this.level() instanceof ServerLevel serverWorld) {
+                    Optional<? extends Holder<ConfiguredFeature<?, ?>>> optional = serverWorld.registryAccess()
                             .get(Registries.CONFIGURED_FEATURE)
                             .getEntry(ModVegetationConfiguredFeatures.PATCH_WEBBING);
                     optional.ifPresent(configuredFeatureRegistryEntry -> feature = configuredFeatureRegistryEntry.value());
@@ -56,7 +56,7 @@ public class WebbedEntity extends AbstractProjectileEntity {
     @Override
     public void tick() {
         super.tick();
-        if (this.getWorld().isClient) {
+        if (this.level().isClientSide) {
             this.spawnParticles(2);
         }
     }
@@ -65,8 +65,8 @@ public class WebbedEntity extends AbstractProjectileEntity {
     public void onEntityHit(EntityHitResult entityHitResult) {
         super.onEntityHit(entityHitResult);
         Entity entity = entityHitResult.getEntity();
-        if(this.getWorld() instanceof ServerLevel serverWorld) {
-            entity.damage(this.getDamageSources().thrown(this, this.getOwner()), this.damage);
+        if(this.level() instanceof ServerLevel serverWorld) {
+            entity.damage(this.damageSources().thrown(this, this.getOwner()), this.damage);
             if(entity instanceof LivingEntity livingEntity) {
                 livingEntity.addStatusEffect(new MobEffectInstance(MobEffects.SLOWNESS, 200));
                 livingEntity.addStatusEffect(new MobEffectInstance(MobEffects.SLOWNESS, 200));
@@ -84,7 +84,7 @@ public class WebbedEntity extends AbstractProjectileEntity {
         if (type == HitResult.Type.ENTITY) {
             EntityHitResult entityHitResult = (EntityHitResult) hitResult;
             Entity entity = entityHitResult.getEntity();
-            if(entity.getType().isIn(EntityTypeTagsME.UNGOLIENI)) {
+            if(entity.getType().is(EntityTypeTagsME.UNGOLIENI)) {
                 return;
             }
         }
@@ -107,17 +107,17 @@ public class WebbedEntity extends AbstractProjectileEntity {
     private void spawnParticles(int amount) {
         if (amount > 0) {
             for (int j = 0; j < amount; j++) {
-                this.getWorld()
+                this.level()
                         .addParticle(
-                                new BlockParticleOption(ParticleTypes.BLOCK, ModNatureBlocks.WEBBING.getDefaultState()),
-                                this.getParticleX(0.5), this.getRandomBodyY(), this.getParticleZ(0.5), 0.0, 0.0, 0.0
+                                new BlockParticleOption(ParticleTypes.BLOCK, ModNatureBlocks.WEBBING.defaultBlockState()),
+                                this.getParticleX(0.5), this.getRandomY(), this.getParticleZ(0.5), 0.0, 0.0, 0.0
                         );
             }
         }
     }
 
     private void spawnWebbing() {
-        if(this.getWorld() instanceof ServerLevel serverWorld && feature != null) {
+        if(this.level() instanceof ServerLevel serverWorld && feature != null) {
             feature.generate(serverWorld, serverWorld.getChunkManager().getChunkGenerator(), random, this.getBlockPos());
         }
     }

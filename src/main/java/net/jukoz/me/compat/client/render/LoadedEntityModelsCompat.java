@@ -1,8 +1,8 @@
 package net.jukoz.me.compat.client.render;
 
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.EntityModelLayer;
-import net.minecraft.client.model.EntityModelLoader;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.EntityModelSet;
 
 /**
  * R1 shim for 1.21.8 {@code LoadedEntityModelsCompat}: 1.20.1 exposes the same model-part

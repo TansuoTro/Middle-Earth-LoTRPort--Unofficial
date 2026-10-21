@@ -35,11 +35,11 @@ public class PlayableNpcPreviewWidget extends ModWidget{
     private static final Quaternionf ENTITY_ROTATION;
     private static final Vector3f VECTOR;
     private float currentAngle = DEFAULT_ANGLE ; // 210f;
-    private final ButtonWidget leftButton;
-    private final ButtonWidget rightButton;
-    private final ButtonWidget resetButton;
+    private final Button leftButton;
+    private final Button rightButton;
+    private final Button resetButton;
 
-    private ButtonWidget currentButtonClicked;
+    private Button currentButtonClicked;
     private boolean isLeftButton = false;
     private float tickHoldingStart = 0;
     private boolean isEnterKeyPressed = false;
@@ -48,34 +48,34 @@ public class PlayableNpcPreviewWidget extends ModWidget{
     public boolean haveBeenInitialized;
 
     public PlayableNpcPreviewWidget(){
-        ButtonWidget.PressAction leftButtonAction = button -> {
+        Button.PressAction leftButtonAction = button -> {
             reduceAngle();
             setCurrentButton(true);
         };
         haveBeenInitialized = false;
-        ButtonWidget.PressAction resetButtonAction = button -> {
+        Button.PressAction resetButtonAction = button -> {
             currentAngle = DEFAULT_ANGLE;
         };
 
-        ButtonWidget.PressAction rightButtonAction = button -> {
+        Button.PressAction rightButtonAction = button -> {
             addAngle();
             setCurrentButton(false);
         };
 
-        leftButton = ButtonWidget.builder(Component.of("left_button"), leftButtonAction).build();
+        leftButton = Button.builder(Component.of("left_button"), leftButtonAction).build();
         net.jukoz.me.compat.client.gui.MEGui.setSize(leftButton, 14, 9);
 
-        resetButton = ButtonWidget.builder(Component.of("reset_button"), resetButtonAction).build();
+        resetButton = Button.builder(Component.of("reset_button"), resetButtonAction).build();
         net.jukoz.me.compat.client.gui.MEGui.setSize(resetButton, 6, 6);
 
-        rightButton = ButtonWidget.builder(Component.of("right_button"), rightButtonAction).build();
+        rightButton = Button.builder(Component.of("right_button"), rightButtonAction).build();
         net.jukoz.me.compat.client.gui.MEGui.setSize(rightButton, 14, 9);
     }
 
     private void addAngle(){
         if(!haveDoneStep){
             haveDoneStep = true;
-            currentAngle = this.entity.getBodyYaw() - STEP_SPEED;
+            currentAngle = this.entity.getVisualRotationYInDegrees() - STEP_SPEED;
         }
         if(canRotateSmoothly()){
             currentAngle -= SMOOTH_SPEED_MODIFIER;
@@ -85,15 +85,15 @@ public class PlayableNpcPreviewWidget extends ModWidget{
     private void reduceAngle(){
         if(!haveDoneStep){
             haveDoneStep =true;
-            currentAngle = this.entity.getBodyYaw() + STEP_SPEED;
+            currentAngle = this.entity.getVisualRotationYInDegrees() + STEP_SPEED;
         }
         if(canRotateSmoothly()){
             currentAngle += SMOOTH_SPEED_MODIFIER;
         }
     }
 
-    public List<ButtonWidget> getButtons(){
-        ArrayList<ButtonWidget> listOfButtons = new ArrayList<>();
+    public List<Button> getButtons(){
+        ArrayList<Button> listOfButtons = new ArrayList<>();
         listOfButtons.add(leftButton);
         listOfButtons.add(resetButton);
         listOfButtons.add(rightButton);
@@ -105,7 +105,7 @@ public class PlayableNpcPreviewWidget extends ModWidget{
         if(currentButtonClicked != null) return;
 
         if(tickHoldingStart == 0)
-            this.tickHoldingStart = Minecraft.getInstance().inGameHud.getTicks();
+            this.tickHoldingStart = Minecraft.getInstance().inGameHud.getTickCount();
 
         isLeftButton = isLeft;
         if(isLeft){
@@ -123,12 +123,12 @@ public class PlayableNpcPreviewWidget extends ModWidget{
                 .withNpcType(npcDataIdentifier)
                 .forceBuild();
         npcEntity.prepare();
-        npcEntity.setAiDisabled(deactivatedAI);
+        npcEntity.setNoAi(deactivatedAI);
 
         npcEntity.setBodyYaw(currentAngle);
         npcEntity.setPitch(0f);
-        npcEntity.prevHeadYaw = npcEntity.getBodyYaw();
-        npcEntity.headYaw = npcEntity.getBodyYaw();
+        npcEntity.prevHeadYaw = npcEntity.getVisualRotationYInDegrees();
+        npcEntity.headYaw = npcEntity.getVisualRotationYInDegrees();
 
         NpcEntityInitializerClient.initializeNpcEntity(world, npcEntity);
 
@@ -165,10 +165,10 @@ public class PlayableNpcPreviewWidget extends ModWidget{
             int height = leftButton.getHeight();
             boolean isMouseOver = isMouseOver(width, height, x - width - horizontalMargin, y - MINIMAL_MARGIN);
 
-            context.drawTexture(NPC_PREVIEW, x - width - horizontalMargin, y - MINIMAL_MARGIN, 0, (currentButtonClicked != null && isLeftButton) ? 18 : (leftButton.isFocused() || isMouseOver) ? 9 : 0, width, height, 256, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, NPC_PREVIEW, x - width - horizontalMargin, y - MINIMAL_MARGIN, 0, (currentButtonClicked != null && isLeftButton) ? 18 : (leftButton.isFocused() || isMouseOver) ? 9 : 0, width, height, 256, 256);
 
             if(leftButton.isFocused() && getFocusEnabled()){
-                context.drawTexture(NPC_PREVIEW, x - width - horizontalMargin, y - MINIMAL_MARGIN, 0, 27, width, height, 256, 256);
+                net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, NPC_PREVIEW, x - width - horizontalMargin, y - MINIMAL_MARGIN, 0, 27, width, height, 256, 256);
             }
 
             leftButton.setPosition(x - width - horizontalMargin, y - MINIMAL_MARGIN);
@@ -179,10 +179,10 @@ public class PlayableNpcPreviewWidget extends ModWidget{
             int height = resetButton.getHeight();
             boolean isMouseOver = isMouseOver(width, height, x - (width / 2), y - MINIMAL_MARGIN + 2);
 
-            context.drawTexture(NPC_PREVIEW, x - 3, y - MINIMAL_MARGIN + 2, 28, (resetButton.isFocused() || isMouseOver) ? 6 : 0, width, height, 256, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, NPC_PREVIEW, x - 3, y - MINIMAL_MARGIN + 2, 28, (resetButton.isFocused() || isMouseOver) ? 6 : 0, width, height, 256, 256);
 
             if(resetButton.isFocused() && getFocusEnabled()){
-                context.drawTexture(NPC_PREVIEW, x - 3, y - MINIMAL_MARGIN + 2, 28, 12, width, height, 256, 256);
+                net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, NPC_PREVIEW, x - 3, y - MINIMAL_MARGIN + 2, 28, 12, width, height, 256, 256);
             }
             resetButton.setPosition(x - (width / 2), y - 2);
         }
@@ -192,22 +192,22 @@ public class PlayableNpcPreviewWidget extends ModWidget{
             int height = rightButton.getHeight();
             boolean isMouseOver = isMouseOver(width, height, x + horizontalMargin, y - MINIMAL_MARGIN);
 
-            context.drawTexture(NPC_PREVIEW, x + horizontalMargin, y - MINIMAL_MARGIN, 14, (currentButtonClicked != null && !isLeftButton) ? 18 : (rightButton.isFocused() || isMouseOver) ? 9 : 0, width, height, 256, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, NPC_PREVIEW, x + horizontalMargin, y - MINIMAL_MARGIN, 14, (currentButtonClicked != null && !isLeftButton) ? 18 : (rightButton.isFocused() || isMouseOver) ? 9 : 0, width, height, 256, 256);
             if(rightButton.isFocused() && getFocusEnabled()){
-                context.drawTexture(NPC_PREVIEW, x + horizontalMargin, y - MINIMAL_MARGIN, 14, 27, width, height, 256, 256);
+                net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, NPC_PREVIEW, x + horizontalMargin, y - MINIMAL_MARGIN, 14, 27, width, height, 256, 256);
             }
             rightButton.setPosition(x + horizontalMargin, y - MINIMAL_MARGIN);
         }
 
         this.entity.setBodyYaw(currentAngle);
         this.entity.setPitch(0f);
-        this.entity.headYaw = this.entity.getBodyYaw();
-        this.entity.prevHeadYaw = this.entity.getBodyYaw();
+        this.entity.headYaw = this.entity.getVisualRotationYInDegrees();
+        this.entity.prevHeadYaw = this.entity.getVisualRotationYInDegrees();
     }
 
     private boolean canRotateSmoothly(){
         var minimumThreshold = tickHoldingStart + TICK_DELAY;
-        var currentHudTime = Minecraft.getInstance().inGameHud.getTicks();
+        var currentHudTime = Minecraft.getInstance().inGameHud.getTickCount();
         return currentHudTime > minimumThreshold;
     }
 

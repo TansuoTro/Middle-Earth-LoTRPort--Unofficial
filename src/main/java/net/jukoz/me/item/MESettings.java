@@ -11,17 +11,17 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.network.chat.Component;
 
 /**
- * {@link Item.Settings} that also carries data components, so the 1.21.8 donor's
+ * {@link Item.Properties} that also carries data components, so the 1.21.8 donor's
  * {@code new MESettings().maxCount(1).component(KEY, VALUE)} chains port verbatim.
  *
- * <p>1.20.1's {@code Item.Settings} has no component support, and a mixin-added method
+ * <p>1.20.1's {@code Item.Properties} has no component support, and a mixin-added method
  * would be invisible to javac, so the whole fluent surface is re-declared here with
  * covariant returns. Every vanilla method just delegates to super.
  *
  * <p>The collected components are handed to {@link MEComponents} when the {@link Item} is
  * constructed (see {@code ItemMixin}).
  */
-public class MESettings extends Item.Settings {
+public class MESettings extends Item.Properties {
     private final Map<MEComponent<?>, Object> components = new IdentityHashMap<>();
 
     public MESettings() {

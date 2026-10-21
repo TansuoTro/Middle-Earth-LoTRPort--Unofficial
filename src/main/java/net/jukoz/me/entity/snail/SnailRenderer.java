@@ -6,9 +6,9 @@ import net.jukoz.me.entity.crab.CrabModel;
 import net.jukoz.me.entity.crab.CrabVariant;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.model.EntityModelLayer;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
@@ -24,7 +24,7 @@ public class SnailRenderer extends MobRenderer<SnailEntity, SnailModel<SnailEnti
     }
 
     protected SnailRenderer(EntityRendererProvider.Context ctx, float shadowRadius, ModelLayerLocation layer) {
-        super(ctx, new SnailModel(ctx.getPart(layer)), shadowRadius);
+        super(ctx, new SnailModel(ctx.bakeLayer(layer)), shadowRadius);
     }
 
     public static final Map<SnailVariant, String> LOCATION_BY_VARIANT =

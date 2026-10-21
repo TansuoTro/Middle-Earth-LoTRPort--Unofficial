@@ -13,7 +13,7 @@ public class CaveTrollAttackablesSensor extends NearestVisibleLivingEntitySensor
     }
 
     private boolean isPassenger(LivingEntity troll, LivingEntity target) {
-        return ((CaveTrollEntity)troll).getPassengerList().contains(target);
+        return ((CaveTrollEntity)troll).getPassengers().contains(target);
     }
 
     @Override

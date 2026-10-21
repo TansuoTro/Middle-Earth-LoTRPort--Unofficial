@@ -30,15 +30,15 @@ public class RacePools {
         DWARF = new Race(MiddleEarth.of("dwarf"), RaceType.DWARF,
             new AttributePool()
                 .addElement(AttributePoolElement.create(EntityAttributesME.SCALE, 0.81))
-                .addElement(AttributePoolElement.create(Attributes.GENERIC_MAX_HEALTH, 22.0))
+                .addElement(AttributePoolElement.create(Attributes.MAX_HEALTH, 22.0))
                 .addElement(AttributePoolElement.create(EntityAttributesME.ENTITY_INTERACTION_RANGE, 2.75))
-                .addElement(AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.09))
+                .addElement(AttributePoolElement.create(Attributes.MOVEMENT_SPEED, 0.09))
                 .addElement(AttributePoolElement.create(EntityAttributesME.MINING_EFFICIENCY, 0.2)),
             new HashMap<>(){{
                 put(EntityCategories.SHARED, new AttributePool()
                     .addElement(AttributePoolElement.create(EntityAttributesME.SCALE, 0.81))
                     .addElement(AttributePoolElement.create(EntityAttributesME.ENTITY_INTERACTION_RANGE, 1.75))
-                    .addElement(AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.27)));
+                    .addElement(AttributePoolElement.create(Attributes.MOVEMENT_SPEED, 0.27)));
                 put(EntityCategories.MALE, new AttributePool()
                     .addElement(AttributePoolElement.create(EntityAttributesME.SCALE, 0.75, 0.81))
                     .addElement(AttributePoolElement.create(EntityAttributesME.WIDTH_SCALE, 1.05, 1.1)));
@@ -51,17 +51,17 @@ public class RacePools {
         ELF = new Race(MiddleEarth.of("elf"), RaceType.ELF,
             new AttributePool()
                 .addElement(AttributePoolElement.create(EntityAttributesME.SCALE, 1.06))
-                .addElement(AttributePoolElement.create(Attributes.GENERIC_MAX_HEALTH, 20.0))
+                .addElement(AttributePoolElement.create(Attributes.MAX_HEALTH, 20.0))
                 .addElement(AttributePoolElement.create(EntityAttributesME.ENTITY_INTERACTION_RANGE, 3.25))
-                .addElement(AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.1))
+                .addElement(AttributePoolElement.create(Attributes.MOVEMENT_SPEED, 0.1))
                 .addElement(AttributePoolElement.create(EntityAttributesME.POWDERED_SNOW_IMMUNITY, 1.0f))
                 .addElement(AttributePoolElement.create(EntityAttributesME.FALL_DAMAGE_MULTIPLIER, 0.75))
                 .addElement(AttributePoolElement.create(EntityAttributesME.MOVEMENT_EFFICIENCY, 0.3)),
             new HashMap<>(){{
                 put(EntityCategories.SHARED, new AttributePool()
-                    .addElement(AttributePoolElement.create(Attributes.GENERIC_MAX_HEALTH, 14.0))
+                    .addElement(AttributePoolElement.create(Attributes.MAX_HEALTH, 14.0))
                     .addElement(AttributePoolElement.create(EntityAttributesME.ENTITY_INTERACTION_RANGE, 1.75))
-                    .addElement(AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.3)));
+                    .addElement(AttributePoolElement.create(Attributes.MOVEMENT_SPEED, 0.3)));
                 put(EntityCategories.MALE, new AttributePool()
                     .addElement(AttributePoolElement.create(EntityAttributesME.SCALE, 1.02, 1.06))
                     .addElement(AttributePoolElement.create(EntityAttributesME.WIDTH_SCALE, 0.93, 0.97)));
@@ -73,10 +73,10 @@ public class RacePools {
 
         HOBBIT = new Race(MiddleEarth.of("hobbit"), RaceType.HOBBIT,
             new AttributePool()
-                .addElement(AttributePoolElement.create(Attributes.GENERIC_MAX_HEALTH, 14.0))
-                .addElement(AttributePoolElement.create(Attributes.GENERIC_ATTACK_DAMAGE, 1.0).withModifier(RaceAttributes.TOTAL_DAMAGE_MODIFIER, -0.2))
+                .addElement(AttributePoolElement.create(Attributes.MAX_HEALTH, 14.0))
+                .addElement(AttributePoolElement.create(Attributes.ATTACK_DAMAGE, 1.0).withModifier(RaceAttributes.TOTAL_DAMAGE_MODIFIER, -0.2))
                 .addElement(AttributePoolElement.create(EntityAttributesME.ENTITY_INTERACTION_RANGE, 2.5))
-                .addElement(AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.1))
+                .addElement(AttributePoolElement.create(Attributes.MOVEMENT_SPEED, 0.1))
                 .addElement(AttributePoolElement.create(EntityAttributesME.SNEAKING_SPEED, 0.435))
                 .addElement(AttributePoolElement.create(EntityAttributesME.FALL_DAMAGE_MULTIPLIER, 0.90))
                 .addElement(AttributePoolElement.create(EntityAttributesME.DETECTION_RANGE, 0.8))
@@ -84,7 +84,7 @@ public class RacePools {
             new HashMap<>(){{
                 put(EntityCategories.SHARED, new AttributePool()
                     .addElement(AttributePoolElement.create(EntityAttributesME.ENTITY_INTERACTION_RANGE, 1.75))
-                    .addElement(AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.3)));
+                    .addElement(AttributePoolElement.create(Attributes.MOVEMENT_SPEED, 0.3)));
                 put(EntityCategories.MALE, new AttributePool()
                     .addElement(AttributePoolElement.create(EntityAttributesME.SCALE, 0.63, 0.68))
                     .addElement(AttributePoolElement.create(EntityAttributesME.WIDTH_SCALE, 0.95, 1.02)));
@@ -98,7 +98,7 @@ public class RacePools {
             new AttributePool(),
             new HashMap<>(){{
                 put(EntityCategories.SHARED, new AttributePool()
-                    .addElement(AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.3))
+                    .addElement(AttributePoolElement.create(Attributes.MOVEMENT_SPEED, 0.3))
                     .addElement(AttributePoolElement.create(EntityAttributesME.ENTITY_INTERACTION_RANGE, 1.75)));
                 put(EntityCategories.FEMALE, new AttributePool()
                     .addElement(AttributePoolElement.create(EntityAttributesME.SCALE, 0.95, 1.0))
@@ -112,15 +112,15 @@ public class RacePools {
         ORC = new Race(MiddleEarth.of("orc"), RaceType.ORC,
             new AttributePool()
                 .addElement(AttributePoolElement.create(EntityAttributesME.SCALE, 0.79))
-                .addElement(AttributePoolElement.create(Attributes.GENERIC_MAX_HEALTH, 16.0))
+                .addElement(AttributePoolElement.create(Attributes.MAX_HEALTH, 16.0))
                 .addElement(AttributePoolElement.create(EntityAttributesME.ENTITY_INTERACTION_RANGE, 2.75))
-                .addElement(AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.1))
+                .addElement(AttributePoolElement.create(Attributes.MOVEMENT_SPEED, 0.1))
                 .addElement(AttributePoolElement.create(EntityAttributesME.SNEAKING_SPEED, 0.435)),
             new HashMap<>(){{
                 put(EntityCategories.SHARED, new AttributePool()
-                    .addElement(AttributePoolElement.create(Attributes.GENERIC_ATTACK_DAMAGE, 1.0))
+                    .addElement(AttributePoolElement.create(Attributes.ATTACK_DAMAGE, 1.0))
                     .addElement(AttributePoolElement.create(EntityAttributesME.ENTITY_INTERACTION_RANGE, 1.75))
-                    .addElement(AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.3)));
+                    .addElement(AttributePoolElement.create(Attributes.MOVEMENT_SPEED, 0.3)));
                 put(EntityCategories.MALE, new AttributePool()
                         .addElement(AttributePoolElement.create(EntityAttributesME.SCALE, 0.75, 0.8))
                         .addElement(AttributePoolElement.create(EntityAttributesME.WIDTH_SCALE, 0.95, 1.02)));
@@ -130,17 +130,17 @@ public class RacePools {
         URUK = new Race(MiddleEarth.of("uruk"), RaceType.URUK,
             new AttributePool()
                 .addElement(AttributePoolElement.create(EntityAttributesME.SCALE, 1.0))
-                .addElement(AttributePoolElement.create(Attributes.GENERIC_MAX_HEALTH, 18.0))
+                .addElement(AttributePoolElement.create(Attributes.MAX_HEALTH, 18.0))
                 .addElement(AttributePoolElement.create(EntityAttributesME.ENTITY_INTERACTION_RANGE, 3.0))
-                .addElement(AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.105))
+                .addElement(AttributePoolElement.create(Attributes.MOVEMENT_SPEED, 0.105))
                 .addElement(AttributePoolElement.create(EntityAttributesME.BURNING_TIME, 0.70)),
             new HashMap<>(){{
                 put(EntityCategories.SHARED, new AttributePool()
                     .addElement(AttributePoolElement.create(EntityAttributesME.SCALE, 1.0))
-                    .addElement(AttributePoolElement.create(Attributes.GENERIC_MAX_HEALTH, 22.0))
+                    .addElement(AttributePoolElement.create(Attributes.MAX_HEALTH, 22.0))
                     .addElement(AttributePoolElement.create(EntityAttributesME.ENTITY_INTERACTION_RANGE, 1.75))
-                    .addElement(AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.27))
-                    .addElement(AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.70)));
+                    .addElement(AttributePoolElement.create(Attributes.MOVEMENT_SPEED, 0.27))
+                    .addElement(AttributePoolElement.create(Attributes.MOVEMENT_SPEED, 0.70)));
                 put(EntityCategories.MALE, new AttributePool()
                         .addElement(AttributePoolElement.create(EntityAttributesME.WIDTH_SCALE, 0.95, 1.01)));
             }},
@@ -149,17 +149,17 @@ public class RacePools {
         GOBLIN = new Race(MiddleEarth.of("goblin"), RaceType.GOBLIN,
                 new AttributePool()
                         .addElement(AttributePoolElement.create(EntityAttributesME.SCALE, 0.75))
-                        .addElement(AttributePoolElement.create(Attributes.GENERIC_MAX_HEALTH, 14.0))
-                        .addElement(AttributePoolElement.create(Attributes.GENERIC_ATTACK_DAMAGE, 1.0).withModifier(RaceAttributes.TOTAL_DAMAGE_MODIFIER, -0.1))
+                        .addElement(AttributePoolElement.create(Attributes.MAX_HEALTH, 14.0))
+                        .addElement(AttributePoolElement.create(Attributes.ATTACK_DAMAGE, 1.0).withModifier(RaceAttributes.TOTAL_DAMAGE_MODIFIER, -0.1))
                         .addElement(AttributePoolElement.create(EntityAttributesME.ENTITY_INTERACTION_RANGE, 2.5))
-                        .addElement(AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.105))
+                        .addElement(AttributePoolElement.create(Attributes.MOVEMENT_SPEED, 0.105))
                         .addElement(AttributePoolElement.create(EntityAttributesME.MINING_EFFICIENCY, 0.2))
                         .addElement(AttributePoolElement.create(EntityAttributesME.CLIMBING_STRENGTH, 100)),
                 new HashMap<>(){{
                     put(EntityCategories.SHARED, new AttributePool()
-                            .addElement(AttributePoolElement.create(Attributes.GENERIC_ATTACK_DAMAGE, 0.9))
+                            .addElement(AttributePoolElement.create(Attributes.ATTACK_DAMAGE, 0.9))
                             .addElement(AttributePoolElement.create(EntityAttributesME.ENTITY_INTERACTION_RANGE, 1.5))
-                            .addElement(AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.315))
+                            .addElement(AttributePoolElement.create(Attributes.MOVEMENT_SPEED, 0.315))
                             .addElement(AttributePoolElement.create(EntityAttributesME.CLIMBING_STRENGTH, 80)));
                     put(EntityCategories.MALE, new AttributePool()
                             .addElement(AttributePoolElement.create(EntityAttributesME.SCALE, 0.72, 0.76))
@@ -170,15 +170,15 @@ public class RacePools {
         SNAGA = new Race(MiddleEarth.of("snaga"), RaceType.SNAGA,
                 new AttributePool()
                         .addElement(AttributePoolElement.create(EntityAttributesME.SCALE, 0.71))
-                        .addElement(AttributePoolElement.create(Attributes.GENERIC_MAX_HEALTH, 12.0))
-                        .addElement(AttributePoolElement.create(Attributes.GENERIC_ATTACK_DAMAGE, 1.0).withModifier(RaceAttributes.TOTAL_DAMAGE_MODIFIER, -0.2))
+                        .addElement(AttributePoolElement.create(Attributes.MAX_HEALTH, 12.0))
+                        .addElement(AttributePoolElement.create(Attributes.ATTACK_DAMAGE, 1.0).withModifier(RaceAttributes.TOTAL_DAMAGE_MODIFIER, -0.2))
                         .addElement(AttributePoolElement.create(EntityAttributesME.ENTITY_INTERACTION_RANGE, 2.5))
                         .addElement(AttributePoolElement.create(EntityAttributesME.BLOCK_INTERACTION_RANGE, 5.5))
-                        .addElement(AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.105)),
+                        .addElement(AttributePoolElement.create(Attributes.MOVEMENT_SPEED, 0.105)),
                 new HashMap<>(){{
                     put(EntityCategories.SHARED, new AttributePool()
                             .addElement(AttributePoolElement.create(EntityAttributesME.ENTITY_INTERACTION_RANGE, 1.5))
-                            .addElement(AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.315)));
+                            .addElement(AttributePoolElement.create(Attributes.MOVEMENT_SPEED, 0.315)));
                     put(EntityCategories.MALE, new AttributePool()
                             .addElement(AttributePoolElement.create(EntityAttributesME.SCALE, 0.68, 0.72))
                             .addElement(AttributePoolElement.create(EntityAttributesME.WIDTH_SCALE, 0.96, 1.01)));

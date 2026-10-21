@@ -28,8 +28,8 @@ public class BigBoulderFeature extends Feature<BigBoulderFeatureConfig> {
         WorldGenLevel structureWorldAccess = context.getWorld();
         RandomSource random = context.getRandom();
 
-        BlockState underBlock = structureWorldAccess.getBlockState(blockPos.down());
-        if(underBlock.isIn(BlockTags.LEAVES) || CANNOT_PLACE_ON_BLOCKS.contains(underBlock.getBlock())) {
+        BlockState underBlock = structureWorldAccess.getBlockState(blockPos.below());
+        if(underBlock.is(BlockTags.LEAVES) || CANNOT_PLACE_ON_BLOCKS.contains(underBlock.getBlock())) {
             return false;
         }
 
@@ -47,11 +47,11 @@ public class BigBoulderFeature extends Feature<BigBoulderFeatureConfig> {
                     BlockPos offsetBlockPos = blockPos.mutableCopy().add(x, y, z);
                     BlockState mutableBlockState = structureWorldAccess.getBlockState(offsetBlockPos);
                     if(!mutableBlockState.isAir() && !mutableBlockState.isSolidBlock(structureWorldAccess, offsetBlockPos.mutableCopy().add(0, 1, 0)) ||
-                            mutableBlockState.isIn(BlockTags.LOGS) || CANNOT_REPLACE_BLOCKS.contains(mutableBlockState.getBlock())) {
+                            mutableBlockState.is(BlockTags.LOGS) || CANNOT_REPLACE_BLOCKS.contains(mutableBlockState.getBlock())) {
                         continue;
                     } else if (this.isPointInside(x, y, z, length, width, baseHeight, angle, config.randomness, random)) {
                         BlockState blockState = config.blockStates.get(random.nextBetween(0, config.blockStates.size() - 1));
-                        this.setBlockState(structureWorldAccess, blockPos.mutableCopy().add(x, y, z), blockState);
+                        this.setBlock(structureWorldAccess, blockPos.mutableCopy().add(x, y, z), blockState);
                     }
                 }
             }

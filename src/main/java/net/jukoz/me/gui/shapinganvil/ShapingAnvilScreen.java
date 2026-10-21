@@ -34,7 +34,7 @@ public class ShapingAnvilScreen extends AbstractContainerScreen<ShapingAnvilScre
     @Override
     protected void init() {
         super.init();
-        titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2;
+        titleX = (backgroundWidth - font.getWidth(title)) / 2;
 
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
@@ -45,7 +45,7 @@ public class ShapingAnvilScreen extends AbstractContainerScreen<ShapingAnvilScre
     }
 
     public void addRecipe(int index, ItemStack output) {
-        boolean exists = outputs.stream().anyMatch(item -> output.getItem().equals(item.getItem()));
+        boolean exists = outputs.stream().contains(item -> output.getItem().equals(item.getItem()));
         if(exists) return;
 
         while (outputs.size() < index) {
@@ -92,13 +92,13 @@ public class ShapingAnvilScreen extends AbstractContainerScreen<ShapingAnvilScre
     protected void drawBackground(GuiGraphics context, float delta, int mouseX, int mouseY) {
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
-        context.drawTexture(TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight, 256, 256);
     }
 
     @Override
     protected void drawForeground(GuiGraphics context, int mouseX, int mouseY) {
-        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY - 1, -12566464, false);
-        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, -12566464, false);
+        context.drawText(this.font, this.title, this.titleX, this.titleY - 1, -12566464, false);
+        context.drawText(this.font, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, -12566464, false);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class ShapingAnvilScreen extends AbstractContainerScreen<ShapingAnvilScre
         int y = (height - backgroundHeight) / 2;
 
         int k = (int)(41.0F * this.scrollAmount);
-        context.drawTexture(TEXTURE, x + 87, y + 15 + k, 176 + (this.shouldScroll() ? 0 : 12), 20, 12, 15, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, x + 87, y + 15 + k, 176 + (this.shouldScroll() ? 0 : 12), 20, 12, 15, 256, 256);
 
         int l = this.x + 19;
         int m = this.y + 14;
@@ -124,7 +124,7 @@ public class ShapingAnvilScreen extends AbstractContainerScreen<ShapingAnvilScre
         int y = (height - backgroundHeight) / 2;
 
         if (mouseX >= x + 79 && mouseX <= x + 96 && mouseY >= y + 16 && mouseY <= y + 33){
-            context.drawTooltip(this.client.textRenderer, handler.getOutputStack().getItem().getName(), mouseX, mouseY);
+            context.drawTooltip(this.client.font, handler.getOutputStack().getItem().getName(), mouseX, mouseY);
         }
     }
 
@@ -133,7 +133,7 @@ public class ShapingAnvilScreen extends AbstractContainerScreen<ShapingAnvilScre
         int y = (height - backgroundHeight) / 2;
 
         if (mouseX >= x + 79 && mouseX <= x + 96 && mouseY >= y + 34 && mouseY <= y + 51){
-            context.drawOrderedTooltip(this.client.textRenderer,
+            context.drawOrderedTooltip(this.client.font,
                     Lists.transform(List.of(Component.translatable("tooltip." + MiddleEarth.MOD_ID +".anvil_hammer"),
                             Component.translatable("tooltip." + MiddleEarth.MOD_ID +".anvil_hammer_2")),
                             Component::asOrderedText), mouseX, mouseY);
@@ -153,7 +153,7 @@ public class ShapingAnvilScreen extends AbstractContainerScreen<ShapingAnvilScre
                 n += 32;
             }
 
-            context.drawTexture(TEXTURE, k, m - 1, 176 + n, 1, 16, 18, 256, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, k, m - 1, 176 + n, 1, 16, 18, 256, 256);
         }
     }
 

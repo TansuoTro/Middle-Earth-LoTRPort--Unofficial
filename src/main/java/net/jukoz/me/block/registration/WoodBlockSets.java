@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.MapColor;
 import net.jukoz.me.block.special.plants.TintedParticleLeavesBlock;
-import net.minecraft.world.level.block.NoteBlockInstrument;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.SoundType;
 import net.jukoz.me.MiddleEarth;
@@ -21,6 +21,7 @@ import net.jukoz.me.item.utils.ModItemGroups;
 import java.util.ArrayList;
 import java.util.List;
 import static net.jukoz.me.block.utils.BlockSetRegistration.getVanillaOrCreateNew;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class WoodBlockSets {
     public static final float WOOD_STRENGTH = 2.0f;
@@ -469,15 +470,15 @@ public class WoodBlockSets {
             switch (woodStoneTypes) {
                 case LOG_BLOCKS -> {
                     set.logBlocks = BlockSetRegistration.createWoodSet(woodStoneTypes.getPrefix() + set.setName + woodStoneTypes.getSuffix(), set.hardness, set.blastResistance, set.mapColor, set.instrument, set.soundGroup, itemGroup);
-                    ModItemGroups.NATURE_BLOCKS_CONTENTS.add(set.logBlocks.log().asItem().getDefaultStack());
+                    ModItemGroups.NATURE_BLOCKS_CONTENTS.add(set.logBlocks.log().asItem().getDefaultInstance());
                 }
                 case MUSHROOM_STEM_BLOCKS -> {
                     set.mushroomStemBlocks = BlockSetRegistration.createMushroomStemSet(woodStoneTypes.getPrefix() + set.setName + woodStoneTypes.getSuffix(), set.hardness, set.blastResistance, set.mapColor, set.instrument, set.soundGroup, itemGroup);
-                    ModItemGroups.NATURE_BLOCKS_CONTENTS.add(set.mushroomStemBlocks.stem().asItem().getDefaultStack());
+                    ModItemGroups.NATURE_BLOCKS_CONTENTS.add(set.mushroomStemBlocks.stem().asItem().getDefaultInstance());
                 }
                 case NETHER_STEM_BLOCKS -> {
                     set.logBlocks = BlockSetRegistration.createStemSet(woodStoneTypes.getPrefix() + set.setName + woodStoneTypes.getSuffix(), set.hardness, set.blastResistance, set.mapColor, set.instrument, set.soundGroup, itemGroup);
-                    ModItemGroups.NATURE_BLOCKS_CONTENTS.add(set.logBlocks.log().asItem().getDefaultStack());
+                    ModItemGroups.NATURE_BLOCKS_CONTENTS.add(set.logBlocks.log().asItem().getDefaultInstance());
                 }
                 case STRIPPED_LOG_BLOCKS -> {
                     set.strippedLogBlocks = BlockSetRegistration.createWoodSet(woodStoneTypes.getPrefix() + set.setName + woodStoneTypes.getSuffix(), set.hardness, set.blastResistance, set.mapColor, set.instrument, set.soundGroup, itemGroup);
@@ -497,11 +498,11 @@ public class WoodBlockSets {
                         set.redstoneBlocks = BlockSetRegistration.createWoodRedstoneSet(woodStoneTypes.getPrefix() + set.setName + woodStoneTypes.getSuffix(), set.hardness, set.blastResistance, set.mapColor, set.soundGroup, set.planksBlocks.base(), itemGroup);
                 case FURNITURE_BLOCKS -> {
                     set.furnitureBlocks = BlockSetRegistration.createWoodFurnitureSet(woodStoneTypes.getPrefix() + set.setName + woodStoneTypes.getSuffix(), set.hardness, set.blastResistance, set.mapColor, set.soundGroup, set.planksBlocks.base(), itemGroup);
-                    ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(set.furnitureBlocks.stool().asItem().getDefaultStack());
-                    ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(set.furnitureBlocks.bench().asItem().getDefaultStack());
-                    ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(set.furnitureBlocks.table().asItem().getDefaultStack());
-                    ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(set.furnitureBlocks.chair().asItem().getDefaultStack());
-                    ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(set.furnitureBlocks.ladder().asItem().getDefaultStack());
+                    ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(set.furnitureBlocks.stool().asItem().getDefaultInstance());
+                    ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(set.furnitureBlocks.bench().asItem().getDefaultInstance());
+                    ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(set.furnitureBlocks.table().asItem().getDefaultInstance());
+                    ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(set.furnitureBlocks.chair().asItem().getDefaultInstance());
+                    ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(set.furnitureBlocks.ladder().asItem().getDefaultInstance());
                 }
                 case ROOFING_BLOCKS ->
                         set.roofingBlocks = BlockSetRegistration.createRegularSet(woodStoneTypes.getPrefix() + set.setName + woodStoneTypes.getSuffix(), set.hardness, set.blastResistance, set.mapColor, set.instrument, set.soundGroup, false, itemGroup, false);
@@ -510,16 +511,16 @@ public class WoodBlockSets {
                 case LEAVES -> {
                     if(set.setName.equals("mallorn")){
                         set.leaves = getVanillaOrCreateNew(woodStoneTypes.getPrefix() + set.setName + woodStoneTypes.getSuffix(),
-                                (settings) -> new ModLeavesBlock(0.01F, settings, false), BlockBehaviour.Settings.copy(Blocks.OAK_LEAVES)
-                                        .strength(LEAVES_STRENGTH).mapColor(MapColor.YELLOW).sounds(SoundType.GRASS).burnable(), itemGroup);
+                                (settings) -> new ModLeavesBlock(0.01F, settings, false), BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)
+                                        .strength(LEAVES_STRENGTH).mapColor(MapColor.YELLOW).sound(SoundType.GRASS).ignitedByLava(), itemGroup);
                     } else if(set.setName.equals("holly")){
                         set.leaves = getVanillaOrCreateNew(woodStoneTypes.getPrefix() + set.setName + woodStoneTypes.getSuffix(),
-                                (settings) -> new BerryHollyLeavesBlock(0.01F, settings), BlockBehaviour.Settings.copy(Blocks.OAK_LEAVES)
-                                        .strength(LEAVES_STRENGTH).mapColor(MapColor.YELLOW).sounds(SoundType.GRASS).burnable(), itemGroup);
+                                (settings) -> new BerryHollyLeavesBlock(0.01F, settings), BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)
+                                        .strength(LEAVES_STRENGTH).mapColor(MapColor.YELLOW).sound(SoundType.GRASS).ignitedByLava(), itemGroup);
                     } else {
                         set.leaves = getVanillaOrCreateNew(woodStoneTypes.getPrefix() + set.setName + woodStoneTypes.getSuffix(),
-                                (settings) -> new TintedParticleLeavesBlock(0.01F, settings), BlockBehaviour.Settings.copy(Blocks.OAK_LEAVES)
-                                        .strength(LEAVES_STRENGTH).mapColor(set.leavesMapColor).sounds(SoundType.GRASS).burnable(), itemGroup);
+                                (settings) -> new TintedParticleLeavesBlock(0.01F, settings), BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)
+                                        .strength(LEAVES_STRENGTH).mapColor(set.leavesMapColor).sound(SoundType.GRASS).ignitedByLava(), itemGroup);
                     }
                     FlammableBlockRegistry.getDefaultInstance().add(set.leaves, 5, 60);
                 }

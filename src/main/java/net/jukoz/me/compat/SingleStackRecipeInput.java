@@ -13,7 +13,7 @@ import net.minecraft.core.NonNullList;
  * retained so recipe bodies keep their shape.
  */
 public class SingleStackRecipeInput implements Inventory {
-    private final NonNullList<ItemStack> stacks = NonNullList.ofSize(1, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> stacks = NonNullList.withSize(1, ItemStack.EMPTY);
 
     public SingleStackRecipeInput(ItemStack stack) {
         this.stacks.set(0, stack);

@@ -30,13 +30,14 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class StructureManagerBlock extends BaseEntityBlock implements EntityBlock {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-    public StructureManagerBlock(Settings settings) {
+    public StructureManagerBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(((this.stateManager.getDefaultState()).with(FACING, Direction.NORTH)));
+        this.setDefaultState(((this.stateManager.defaultBlockState()).with(FACING, Direction.NORTH)));
     }
 
     @Override
@@ -51,14 +52,14 @@ public class StructureManagerBlock extends BaseEntityBlock implements EntityBloc
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        Direction direction = ctx.getHorizontalPlayerFacing().getOpposite();
+        Direction direction = ctx.getHorizontalDirection().getOpposite();
 
-        return this.getDefaultState().with(FACING, direction);
+        return this.defaultBlockState().with(FACING, direction);
     }
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+        return state.setValue(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override
@@ -75,21 +76,21 @@ public class StructureManagerBlock extends BaseEntityBlock implements EntityBloc
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return switch (state.get(FACING)){
             case DOWN, UP -> null;
-            case NORTH -> Block.createCuboidShape(0, 0, 2, 16, 16, 16);
-            case WEST -> Block.createCuboidShape(2, 0, 0, 16, 16, 16);
-            case SOUTH -> Block.createCuboidShape(0, 0, 0, 16, 16, 14);
-            case EAST -> Block.createCuboidShape(0, 0, 0, 14, 16, 16);
+            case NORTH -> Block.box(0, 0, 2, 16, 16, 16);
+            case WEST -> Block.box(2, 0, 0, 16, 16, 16);
+            case SOUTH -> Block.box(0, 0, 0, 16, 16, 14);
+            case EAST -> Block.box(0, 0, 0, 14, 16, 16);
         };
     }
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (world.isClient) {
+        if (world.isClientSide) {
             return InteractionResult.SUCCESS;
-        } else if(player.isCreative() && player.isCreativeLevelTwoOp()) {
-            MenuProvider screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+        } else if(player.isCreative() && player.canUseGameMasterBlocks()) {
+            MenuProvider screenHandlerFactory = state.getMenuProvider(world, pos);
             if(screenHandlerFactory != null) {
-                player.openHandledScreen(screenHandlerFactory);
+                player.openMenu(screenHandlerFactory);
             }
             return InteractionResult.CONSUME;
         }
@@ -111,7 +112,7 @@ public class StructureManagerBlock extends BaseEntityBlock implements EntityBloc
     @Nullable
     protected static <T extends BlockEntity> BlockEntityTicker<T> checkType(Level world, BlockEntityType<T> givenType, BlockEntityType<StructureManagerBlockEntity> expectedType) {
         BlockEntityTicker ticker;
-        if (world.isClient) {
+        if (world.isClientSide) {
             return null;
         }
 

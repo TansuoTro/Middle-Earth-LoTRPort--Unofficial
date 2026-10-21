@@ -27,7 +27,7 @@ public class KeyInputHandler {
         };
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if(hoodStateToggleKey.isPressed()) {
+            if(hoodStateToggleKey.isDown()) {
                 if (ref.counter == 0) {
                     ref.counter = 1;
                     assert client.player != null;

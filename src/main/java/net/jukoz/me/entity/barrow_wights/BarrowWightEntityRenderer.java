@@ -3,7 +3,7 @@ package net.jukoz.me.entity.barrow_wights;
 import com.google.common.collect.Maps;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
@@ -14,7 +14,7 @@ public class BarrowWightEntityRenderer extends MobRenderer<BarrowWightEntity, Ba
     private static final String PATH = "textures/entities/barrow_wights/";
 
     public BarrowWightEntityRenderer(EntityRendererProvider.Context ctx) {
-        super(ctx, new BarrowWightModel(ctx.getPart(ModEntityModelLayers.BARROW_WIGHT)), 0.5f);
+        super(ctx, new BarrowWightModel(ctx.bakeLayer(ModEntityModelLayers.BARROW_WIGHT)), 0.5f);
     }
 
     @Override

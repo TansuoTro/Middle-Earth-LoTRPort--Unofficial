@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SweetBerryBushBlock;
-import net.minecraft.world.entity.EntityPose;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
@@ -31,9 +31,9 @@ public class EatBerriesTask extends Behavior<LivingEntity> {
     @Override
     protected boolean shouldRun(ServerLevel world, LivingEntity entity) {
         Vec3 rotationVector = entity.getRotationVector().normalize();
-        BlockState state = world.getBlockState(entity.getBlockPos().add((int)Math.round(rotationVector.getX()), 0, (int)Math.round(rotationVector.getZ())));
+        BlockState state = world.getBlockState(entity.blockPosition().add((int)Math.round(rotationVector.getX()), 0, (int)Math.round(rotationVector.getZ())));
 
-        return state.isOf(Blocks.SWEET_BERRY_BUSH) && state.get(SweetBerryBushBlock.AGE) >= 2;
+        return state.is(Blocks.SWEET_BERRY_BUSH) && state.get(SweetBerryBushBlock.AGE) >= 2;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class EatBerriesTask extends Behavior<LivingEntity> {
     @Override
     protected void keepRunning(ServerLevel world, LivingEntity entity, long time) {
         Vec3 rotationVector = entity.getRotationVector().normalize();
-        BlockPos pos = entity.getBlockPos().add((int)Math.round(rotationVector.getX()), 0, (int)Math.round(rotationVector.getZ()));
+        BlockPos pos = entity.blockPosition().add((int)Math.round(rotationVector.getX()), 0, (int)Math.round(rotationVector.getZ()));
 
         BlockParticleOption particles = new BlockParticleOption(ParticleTypes.BLOCK, world.getBlockState(pos));
         world.spawnParticles(particles, (entity.getX() + pos.getX()) / 2, entity.getY() + 0.5, (entity.getZ() + pos.getZ()) / 2, 10, 0.1, 0.4, 0.1, 1);
@@ -57,15 +57,15 @@ public class EatBerriesTask extends Behavior<LivingEntity> {
 
     @Override
     protected void finishRunning(ServerLevel world, LivingEntity entity, long time) {
-        world.playSound(entity, entity.getBlockPos(), SoundEvents.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0f, 1.0f);
+        world.playSound(entity, entity.blockPosition(), SoundEvents.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0f, 1.0f);
         entity.setPose(Pose.STANDING);
 
         Vec3 rotationVector = entity.getRotationVector().normalize();
-        BlockPos pos = entity.getBlockPos().add((int)Math.round(rotationVector.getX()), 0, (int)Math.round(rotationVector.getZ()));
+        BlockPos pos = entity.blockPosition().add((int)Math.round(rotationVector.getX()), 0, (int)Math.round(rotationVector.getZ()));
 
-        if(world.getBlockState(pos).isOf(Blocks.SWEET_BERRY_BUSH) && world.getBlockState(pos).get(SweetBerryBushBlock.AGE) >= 2) {
-            if(world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING)) {
-                world.setBlockState(pos, world.getBlockState(pos).with(SweetBerryBushBlock.AGE, 1));
+        if(world.getBlockState(pos).is(Blocks.SWEET_BERRY_BUSH) && world.getBlockState(pos).get(SweetBerryBushBlock.AGE) >= 2) {
+            if(world.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+                world.setBlock(pos, world.getBlockState(pos).with(SweetBerryBushBlock.AGE, 1));
             }
 
             ItemStack itemStack = new ItemStack(world.getBlockState(pos).getBlock().asItem());

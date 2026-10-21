@@ -18,14 +18,14 @@ import net.jukoz.me.resources.datas.factions.data.SpawnData;
 import net.jukoz.me.resources.datas.races.Race;
 import net.jukoz.me.resources.persistent_datas.PlayerData;
 import net.jukoz.me.resources.persistent_datas.PlayerDataService;
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.argument;
+import static net.minecraft.commands.Commands.literal;
 
 public class CommandInformation {
     private static final String INFO_BASE_COMMAND = "info";
     private static final String PLAYER = "player";
 
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandRegistryAccess, Commands.RegistrationEnvironment registrationEnvironment) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandRegistryAccess, Commands.CommandSelection registrationEnvironment) {
         // [INFO]
         dispatcher.register(literal(ModCommands.BASE_COMMAND)
                 .requires(source -> source.hasPermissionLevel(2)) // Require OP
@@ -36,7 +36,7 @@ public class CommandInformation {
     }
 
     private static int getInfo(CommandContext<CommandSourceStack> context) {
-        if(!context.getSource().isExecutedByPlayer() || context.getSource().getPlayer() == null)
+        if(!context.getSource().isPlayer() || context.getSource().getPlayer() == null)
             return 1;
 
         ServerPlayer source = context.getSource().getPlayer();
@@ -58,7 +58,7 @@ public class CommandInformation {
 
         PlayerDataService.OriginAggregate origin =  PlayerDataService.getOriginAggregate(source, source.getWorld());
         if(origin != null){
-            source.sendMessage(Component.literal("Origin : ").append(Component.translatable(origin.dimensionId().toTranslationKey())).append(" " + origin.origin().toShortString()));
+            source.sendMessage(Component.literal("Origin : ").append(Component.translatable(origin.dimension().toLanguageKey())).append(" " + origin.origin().toShortString()));
         }
         return 0;
     }
@@ -74,7 +74,7 @@ public class CommandInformation {
 
         Faction faction =  PlayerDataService.getPlayerFaction(targettedPlayer, targettedPlayer.getWorld());
         if(faction != null)
-            context.getSource().sendMessage(Component.literal("Faction : ").append(Component.translatable(faction.getId().toTranslationKey())));
+            context.getSource().sendMessage(Component.literal("Faction : ").append(Component.translatable(faction.getId().toLanguageKey())));
         return 0;
     }
 
@@ -83,7 +83,7 @@ public class CommandInformation {
             ServerPlayer targettedPlayer = EntityArgument.getPlayer(context, PLAYER);
 
             PlayerData data = StateSaverAndLoader.getPlayerState(targettedPlayer);
-            targettedPlayer.sendMessage(Component.of(data.toString()));
+            targettedPlayer.sendSystemMessage(Component.of(data.toString()));
 
             return 1;
         } catch (Exception e){

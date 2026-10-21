@@ -1,8 +1,8 @@
 package net.jukoz.me.world.features.misc;
 
 import net.jukoz.me.MiddleEarth;
-import net.minecraft.data.worldgen.BootstrapContext;
-import net.minecraft.core.RegistryEntryLookup;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -13,6 +13,7 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.CountOnEveryLayerPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 public class ModMiscPlacedFeatures {
 
@@ -28,7 +29,7 @@ public class ModMiscPlacedFeatures {
         HolderGetter<ConfiguredFeature<?, ?>> registryEntryLookup = featureRegisterable.getRegistryLookup(Registries.CONFIGURED_FEATURE);
 
         PlacedFeature.register(featureRegisterable, LAVA_MAGMA_POOL, registryEntryLookup.getOrThrow(ModMiscConfiguredFeatures.LAVA_MAGMA_POOL),
-                PlacedFeature.createCountExtraModifier(0, 0.05f, 1), InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                PlacedFeature.createCountExtraModifier(0, 0.05f, 1), InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
 
         PlacedFeature.register(featureRegisterable, SMALL_BASALT_COLUMNS, registryEntryLookup.getOrThrow(NetherFeatures.SMALL_BASALT_COLUMNS),
                 CountOnEveryLayerPlacement.of(1), PlacementModifier.of());
@@ -39,6 +40,6 @@ public class ModMiscPlacedFeatures {
     }
 
     public static ResourceKey<PlacedFeature> registerKey(String name) {
-        return ResourceKey.of(Registries.PLACED_FEATURE, new ResourceLocation(MiddleEarth.MOD_ID, name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(MiddleEarth.MOD_ID, name));
     }
 }

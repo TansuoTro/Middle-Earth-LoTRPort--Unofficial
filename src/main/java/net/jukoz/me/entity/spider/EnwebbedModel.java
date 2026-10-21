@@ -27,11 +27,11 @@ public class EnwebbedModel extends HierarchicalModel<LivingEntity> {
     public static LayerDefinition getTexturedModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition dataRoot = modelData.getRoot();
-        PartDefinition bigBody = dataRoot.addChild("big_body", CubeListBuilder.create().uv(0, 0)
-                .cuboid(-8.0F, -23.5F, -2.0F, 16.0F, 11.0F, 4.0F, new CubeDeformation(1.15F)), PartPose.pivot(0.0F, 24.0F, 0.0F));
+        PartDefinition bigBody = dataRoot.addOrReplaceChild("big_body", CubeListBuilder.create().texOffs(0, 0)
+                .addBox(-8.0F, -23.5F, -2.0F, 16.0F, 11.0F, 4.0F, new CubeDeformation(1.15F)), PartPose.offset(0.0F, 24.0F, 0.0F));
 
-        PartDefinition smallBody = dataRoot.addChild("small_body", CubeListBuilder.create().uv(0, 0)
-                .cuboid(-8.0F, -23.5F, -2.0F, 16.0F, 11.0F, 4.0F, new CubeDeformation(0.65F)), PartPose.pivot(0.0F, 24.0F, 0.0F));
+        PartDefinition smallBody = dataRoot.addOrReplaceChild("small_body", CubeListBuilder.create().texOffs(0, 0)
+                .addBox(-8.0F, -23.5F, -2.0F, 16.0F, 11.0F, 4.0F, new CubeDeformation(0.65F)), PartPose.offset(0.0F, 24.0F, 0.0F));
 
         return LayerDefinition.of(modelData, 64, 64);
     }

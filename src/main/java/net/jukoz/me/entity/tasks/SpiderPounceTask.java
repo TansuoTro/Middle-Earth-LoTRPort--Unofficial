@@ -68,9 +68,9 @@ public class SpiderPounceTask<E extends Mob> extends Behavior<E> {
 	@Override
 	protected boolean shouldRun(ServerLevel serverWorld, Mob mobEntity) {
 		boolean validTerrain = mobEntity.isOnGround();
-				//&& !mobEntity.isTouchingWater()
+				//&& !mobEntity.isInWater()
 				//&& !mobEntity.isInLava()
-				//&& !serverWorld.getBlockState(mobEntity.getBlockPos()).isOf(Blocks.HONEY_BLOCK);
+				//&& !serverWorld.getBlockState(mobEntity.getBlockPos()).is(Blocks.HONEY_BLOCK);
 		if (!validTerrain) {
 			mobEntity.getBrain().remember(MemoryModuleType.LONG_JUMP_COOLING_DOWN, 40);
 			System.out.println("Can't shouldRun, bad terrain, 40");
@@ -83,7 +83,7 @@ public class SpiderPounceTask<E extends Mob> extends Behavior<E> {
 	protected boolean shouldKeepRunning(ServerLevel serverWorld, Mob mobEntity, long l) {
 		boolean canJump = this.startPos.isPresent();
 		canJump = canJump && this.targetSearchTime > 0;
-		canJump = canJump && !mobEntity.isTouchingWater();
+		canJump = canJump && !mobEntity.isInWater();
 		canJump = canJump && (this.currentTarget != null || !this.potentialTargets.isEmpty());
 
 		//Optional<Integer> optionalMemory = mobEntity.getBrain().getOptionalMemory(MemoryModuleType.LONG_JUMP_COOLING_DOWN);
@@ -121,7 +121,7 @@ public class SpiderPounceTask<E extends Mob> extends Behavior<E> {
 				mobEntity.setYaw(mobEntity.bodyYaw);
 				mobEntity.setNoDrag(true);
 				double d = this.currentTarget.length();
-				double e = d + mobEntity.getJumpBoostVelocityModifier();
+				double e = d + mobEntity.getJumpBoostPower();
 				mobEntity.setVelocity(this.currentTarget.multiply(e / d));
 				mobEntity.getBrain().remember(MemoryModuleType.LONG_JUMP_COOLING_DOWN, cooldownRange.get(mobEntity.getRandom()));
 				serverWorld.playSoundFromEntity(null, mobEntity, (SoundEvent)this.entityToSound.apply(mobEntity), SoundSource.NEUTRAL, 1.0F, 1.0F);
@@ -138,7 +138,7 @@ public class SpiderPounceTask<E extends Mob> extends Behavior<E> {
 	@Override
 	protected void finishRunning(ServerLevel world, E entity, long time) {
 		super.finishRunning(world, entity, time);
-		entity.getBrain().forget(MemoryModuleType.ATTACK_TARGET);
+		entity.getBrain().erase(MemoryModuleType.ATTACK_TARGET);
 		entity.getBrain().remember(MemoryModuleType.LONG_JUMP_COOLING_DOWN, this.cooldownRange.get(world.getRandom()));
 		System.out.println("FINISH POUNCE");
 	}
@@ -156,7 +156,7 @@ public class SpiderPounceTask<E extends Mob> extends Behavior<E> {
 						entity.getBrain().remember(MemoryModuleType.LOOK_TARGET, new BlockPosTracker(pos));
 						PathNavigation entityNavigation = entity.getNavigation();
 						Path path = entityNavigation.findPathTo(pos, 0, 8);
-						if (path == null || !path.reachesTarget()) {
+						if (path == null || !path.canReach()) {
 							this.currentTarget = vec3d2;
 							this.targetPickedTime = time;
 							return;
@@ -183,7 +183,7 @@ public class SpiderPounceTask<E extends Mob> extends Behavior<E> {
 	}
 
 	private boolean canJumpTo(ServerLevel world, E entity, BlockPos pos) {
-		BlockPos blockPos = entity.getBlockPos();
+		BlockPos blockPos = entity.blockPosition();
 		int i = blockPos.getX();
 		int j = blockPos.getZ();
 		return i == pos.getX() && j == pos.getZ() ? false : this.jumpToPredicate.test(entity, pos);

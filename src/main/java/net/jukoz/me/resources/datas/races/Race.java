@@ -42,7 +42,7 @@ public class Race {
     public Race(String id, String raceTypeValue, CompoundTag baseAttributes, CompoundTag categoryBasedAttributes, Optional<List<String>> joinCommands, Optional<List<String>> leaveCommands){
         // Create id
         this.id = MiddleEarth.fetchId(id);
-        this.translatableKey = "race.".concat(this.id.toTranslationKey());
+        this.translatableKey = "race.".concat(this.id.toLanguageKey());
         // Create model
         this.raceType = RaceType.valueOf(raceTypeValue.toUpperCase());
         // Attribute Datas
@@ -66,7 +66,7 @@ public class Race {
     public Race(ResourceLocation id, RaceType raceType, AttributePool baseAttributePool, HashMap<EntityCategories, AttributePool> categoryBasedAttributePool, List<String> joinCommands, List<String> leaveCommands) {
         this.id = id;
         this.raceType = raceType;
-        this.translatableKey = "race.".concat(this.id.toTranslationKey());
+        this.translatableKey = "race.".concat(this.id.toLanguageKey());
         this.baseAttributePool = baseAttributePool;
         this.categoryBasedAttributePool = categoryBasedAttributePool;
         this.joinCommands = joinCommands;

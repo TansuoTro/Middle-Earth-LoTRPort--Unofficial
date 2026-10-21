@@ -18,19 +18,20 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelEvents;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.jukoz.me.particles.ModParticleTypes;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.level.block.LevelEvent;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class MistweedPlantBlock extends CustomPlantBlock implements BonemealableBlock {
-    public static final BooleanProperty ACTIVE = BooleanProperty.of("active");
+    public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 
-    public MistweedPlantBlock(Settings settings) {
+    public MistweedPlantBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(this.getDefaultState().with(ACTIVE, true));
+        this.setDefaultState(this.defaultBlockState().with(ACTIVE, true));
     }
 
     @Override
@@ -51,11 +52,11 @@ public class MistweedPlantBlock extends CustomPlantBlock implements Bonemealable
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (!world.isClient && player.getAbilities().allowModifyWorld) {
-            ItemStack itemStack = player.getStackInHand(hand);
-            if (!state.get(ACTIVE) && itemStack.isIn(ItemTags.AXES)) {
+        if (!world.isClientSide && player.getAbilities().allowModifyWorld) {
+            ItemStack itemStack = player.getItemInHand(hand);
+            if (!state.get(ACTIVE) && itemStack.is(ItemTags.AXES)) {
                 activateState(null, state, world, pos);
-            } else if (state.get(ACTIVE) && itemStack.isOf(Items.HONEYCOMB)) {
+            } else if (state.get(ACTIVE) && itemStack.is(Items.HONEYCOMB)) {
                 deactivateState(null, state, world, pos);
             }
         }
@@ -63,17 +64,17 @@ public class MistweedPlantBlock extends CustomPlantBlock implements Bonemealable
     }
 
     protected static void activateState(@Nullable Player player, BlockState state, Level world, BlockPos pos) {
-        world.setBlockState(pos, state.with(ACTIVE, true), 11);
+        world.setBlock(pos, state.setValue(ACTIVE, true), 11);
         world.playSound(null, pos, SoundEvents.ITEM_AXE_WAX_OFF, SoundSource.BLOCKS, 1.0F, 1.0F);
         world.emitGameEvent(player, GameEvent.BLOCK_CHANGE, pos);
-        world.syncWorldEvent(LevelEvent.WAX_REMOVED, pos, 0);
+        world.levelEvent(LevelEvent.WAX_REMOVED, pos, 0);
     }
 
     protected static void deactivateState(@Nullable Player player, BlockState state, Level world, BlockPos pos) {
-        world.setBlockState(pos, state.with(ACTIVE, false), 11);
+        world.setBlock(pos, state.setValue(ACTIVE, false), 11);
         world.playSound(null, pos, SoundEvents.ITEM_HONEYCOMB_WAX_ON, SoundSource.BLOCKS, 1.0F, 1.0F);
         world.emitGameEvent(player, GameEvent.BLOCK_CHANGE, pos);
-        world.syncWorldEvent(LevelEvent.BLOCK_WAXED, pos, 0);
+        world.levelEvent(LevelEvent.BLOCK_WAXED, pos, 0);
     }
 
     public boolean isFertilizable(LevelReader world, BlockPos pos, BlockState state, boolean isClient) {
@@ -91,9 +92,9 @@ public class MistweedPlantBlock extends CustomPlantBlock implements Bonemealable
             int dz = random.nextInt(5) - 2;
             if (dx == 0 && dz == 0) continue;
             BlockPos spreadPos = pos.add(dx, 0, dz);
-            BlockState spreadFloor = world.getBlockState(spreadPos.down());
-            if (world.isAir(spreadPos) && this.canPlantOnTop(spreadFloor, world, spreadPos.down())) {
-                world.setBlockState(spreadPos, this.getDefaultState());
+            BlockState spreadFloor = world.getBlockState(spreadPos.below());
+            if (world.isAir(spreadPos) && this.canPlantOnTop(spreadFloor, world, spreadPos.below())) {
+                world.setBlock(spreadPos, this.defaultBlockState());
                 return;
             }
         }

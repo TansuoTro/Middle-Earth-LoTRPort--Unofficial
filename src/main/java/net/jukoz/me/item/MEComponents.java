@@ -94,7 +94,7 @@ public final class MEComponents {
             register("max_damage", Codec.INT);
 
     /**
-     * Components declared on the item itself (1.21's {@code Item.Settings#component}).
+     * Components declared on the item itself (1.21's {@code Item.Properties#component}).
      * Keyed by identity because {@link Item} has no equals() worth using.
      */
     private static final Map<Item, Map<MEComponent<?>, Object>> ITEM_DEFAULTS = new IdentityHashMap<>();
@@ -212,7 +212,7 @@ public final class MEComponents {
         }
         boolean hot = value instanceof TemperatureDataComponent temperature && temperature.temperature() > 0;
         if (hot) {
-            stack.getOrCreateNbt().putInt("CustomModelData", 1);
+            stack.getOrCreateTag().putInt("CustomModelData", 1);
         } else if (stack.hasNbt()) {
             stack.getNbt().remove("CustomModelData");
         }

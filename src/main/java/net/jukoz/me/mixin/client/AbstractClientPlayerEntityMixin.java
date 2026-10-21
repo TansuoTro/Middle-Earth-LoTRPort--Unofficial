@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class AbstractClientPlayerEntityMixin {
 
     @Shadow @Final public ClientLevel clientWorld;
-    @Inject(method = "getFovMultiplier()F", at =@At("TAIL"), cancellable = true)
+    @Inject(method = "getFieldOfViewModifier()F", at =@At("TAIL"), cancellable = true)
     private void injected(CallbackInfoReturnable<Float> cir) {
     Player player = Minecraft.getInstance().player;
         assert player != null;
@@ -35,7 +35,7 @@ public abstract class AbstractClientPlayerEntityMixin {
         }
     }
 
-    @Redirect(method = "getFovMultiplier", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"))
+    @Redirect(method = "getFovMultiplier", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;is(Lnet/minecraft/item/Item;)Z"))
     private boolean init(ItemStack itemStack, Item item) {
         return itemStack.getItem() instanceof BowItem;
     }

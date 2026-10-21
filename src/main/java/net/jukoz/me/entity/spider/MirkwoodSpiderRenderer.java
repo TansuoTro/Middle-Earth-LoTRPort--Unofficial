@@ -4,9 +4,9 @@ import com.google.common.collect.Maps;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.model.EntityModelLayer;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
@@ -21,7 +21,7 @@ public class MirkwoodSpiderRenderer extends MobRenderer<MirkwoodSpiderEntity, Mi
     }
 
     protected MirkwoodSpiderRenderer(EntityRendererProvider.Context ctx, float shadowRadius, ModelLayerLocation layer) {
-        super(ctx, new MirkwoodSpiderModel(ctx.getPart(layer)), shadowRadius);
+        super(ctx, new MirkwoodSpiderModel(ctx.bakeLayer(layer)), shadowRadius);
     }
 
     @Override

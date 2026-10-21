@@ -8,57 +8,57 @@ import java.util.Optional;
 import net.minecraft.client.model.Model;
 
 public class MEModels {
-    public static final Model VERTICAL_SLAB;
-    public static final Model VERTICAL_SLAB_INNER;
-    public static final Model VERTICAL_SLAB_OUTER;
-    public static final Model VERTICAL_COLUMN_SLAB;
-    public static final Model VERTICAL_COLUMN_SLAB_INNER;
-    public static final Model VERTICAL_COLUMN_SLAB_OUTER;
+    public static final ModelTemplate VERTICAL_SLAB;
+    public static final ModelTemplate VERTICAL_SLAB_INNER;
+    public static final ModelTemplate VERTICAL_SLAB_OUTER;
+    public static final ModelTemplate VERTICAL_COLUMN_SLAB;
+    public static final ModelTemplate VERTICAL_COLUMN_SLAB_INNER;
+    public static final ModelTemplate VERTICAL_COLUMN_SLAB_OUTER;
 
-    public static final Model COLUMN_WALL_POST;
-    public static final Model COLUMN_WALL_SIDE;
-    public static final Model COLUMN_WALL_SIDE_TALL;
-    public static final Model COLUMN_WALL_INVENTORY;
+    public static final ModelTemplate COLUMN_WALL_POST;
+    public static final ModelTemplate COLUMN_WALL_SIDE;
+    public static final ModelTemplate COLUMN_WALL_SIDE_TALL;
+    public static final ModelTemplate COLUMN_WALL_INVENTORY;
 
-    public static final Model WOOD_STOOL;
-    public static final Model WOOD_BENCH;
-    public static final Model WOOD_TABLE;
-    public static final Model WOOD_CHAIR;
+    public static final ModelTemplate WOOD_STOOL;
+    public static final ModelTemplate WOOD_BENCH;
+    public static final ModelTemplate WOOD_TABLE;
+    public static final ModelTemplate WOOD_CHAIR;
 
-    public static final Model STONE_STOOL;
-    public static final Model STONE_TABLE;
-    public static final Model STONE_CHAIR;
+    public static final ModelTemplate STONE_STOOL;
+    public static final ModelTemplate STONE_TABLE;
+    public static final ModelTemplate STONE_CHAIR;
 
-    public static final Model ROCKS_STAGE_0;
-    public static final Model ROCKS_STAGE_1;
-    public static final Model ROCKS_STAGE_2;
-    public static final Model ROCKS_STAGE_3;
+    public static final ModelTemplate ROCKS_STAGE_0;
+    public static final ModelTemplate ROCKS_STAGE_1;
+    public static final ModelTemplate ROCKS_STAGE_2;
+    public static final ModelTemplate ROCKS_STAGE_3;
 
-    public static final Model LARGE_DOOR_LEFT;
-    public static final Model LARGE_DOOR_LEFT_OPEN;
-    public static final Model LARGE_DOOR_RIGHT;
-    public static final Model LARGE_DOOR_RIGHT_OPEN;
+    public static final ModelTemplate LARGE_DOOR_LEFT;
+    public static final ModelTemplate LARGE_DOOR_LEFT_OPEN;
+    public static final ModelTemplate LARGE_DOOR_RIGHT;
+    public static final ModelTemplate LARGE_DOOR_RIGHT_OPEN;
 
-    public static final Model LARGE_THICK_DOOR_LEFT;
-    public static final Model LARGE_THICK_DOOR_LEFT_OPEN;
-    public static final Model LARGE_THICK_DOOR_RIGHT;
-    public static final Model LARGE_THICK_DOOR_RIGHT_OPEN;
+    public static final ModelTemplate LARGE_THICK_DOOR_LEFT;
+    public static final ModelTemplate LARGE_THICK_DOOR_LEFT_OPEN;
+    public static final ModelTemplate LARGE_THICK_DOOR_RIGHT;
+    public static final ModelTemplate LARGE_THICK_DOOR_RIGHT_OPEN;
 
-    public static final Model THICK_LADDER;
+    public static final ModelTemplate THICK_LADDER;
 
-    public static final Model LARGE_PLANT;
-    public static final Model TINTED_LARGE_PLANT;
+    public static final ModelTemplate LARGE_PLANT;
+    public static final ModelTemplate TINTED_LARGE_PLANT;
 
-    public static final Model CROP_VINE;
+    public static final ModelTemplate CROP_VINE;
 
-    public static final Model PATH_BLOCK;
+    public static final ModelTemplate PATH_BLOCK;
 
-    private static Model block(String parent, TextureSlot... requiredTextureKeys) {
-        return new Model(Optional.of(new ResourceLocation(MiddleEarth.MOD_ID, "block/" + parent)), Optional.empty(), requiredTextureKeys);
+    private static ModelTemplate block(String parent, TextureSlot... requiredTextureKeys) {
+        return new ModelTemplate(Optional.of(new ResourceLocation(MiddleEarth.MOD_ID, "block/" + parent)), Optional.empty(), requiredTextureKeys);
     }
 
-    private static Model block(String parent, String variant, TextureSlot... requiredTextureKeys) {
-        return new Model(Optional.of(new ResourceLocation(MiddleEarth.MOD_ID, "block/" + parent)), Optional.of(variant), requiredTextureKeys);
+    private static ModelTemplate block(String parent, String variant, TextureSlot... requiredTextureKeys) {
+        return new ModelTemplate(Optional.of(new ResourceLocation(MiddleEarth.MOD_ID, "block/" + parent)), Optional.of(variant), requiredTextureKeys);
     }
 
     static {

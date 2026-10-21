@@ -24,7 +24,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.jukoz.me.block.registration.WoodBlockSets;
 import net.jukoz.me.item.FoodItemsME;
@@ -34,16 +34,17 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class TapperBlock extends HorizontalDirectionalBlock {
     public static final int FULL_TAP_LEVEL = 5;
-    public static final IntegerProperty TAP_LEVEL = IntegerProperty.of("tap_level", 0, FULL_TAP_LEVEL);
+    public static final IntegerProperty TAP_LEVEL = IntegerProperty.create("tap_level", 0, FULL_TAP_LEVEL);
     public static final int RANDOM_TICK_CHANCE = 7;
 
-    public TapperBlock(Settings settings) {
+    public TapperBlock(BlockBehaviour.Properties settings) {
         super(settings.ticksRandomly());
 
-        this.setDefaultState(((this.stateManager.getDefaultState())
+        this.setDefaultState(((this.stateManager.defaultBlockState())
                 .with(TAP_LEVEL, 0))
                 .with(FACING, Direction.NORTH));
     }
@@ -54,27 +55,27 @@ public class TapperBlock extends HorizontalDirectionalBlock {
 
     @Override
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+        return this.defaultBlockState().with(FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
     public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
         BlockState behindBlock = world.getBlockState(pos.offset(state.get(FACING).getOpposite()));
-        return behindBlock.isIn(BlockTags.LOGS);
+        return behindBlock.is(BlockTags.LOGS);
     }
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return switch (state.get(FACING)) {
-            case SOUTH -> Block.createCuboidShape(4.0, 0.0, 0.0, 12.0, 10.0, 8.0);
-            default -> Block.createCuboidShape(4.0, 0.0, 8.0, 12.0, 10.0, 16.0);
-            case WEST -> Block.createCuboidShape(8.0, 0.0, 4.0, 16.0, 10.0, 12.0);
-            case EAST -> Block.createCuboidShape(0.0, 0.0, 4.0, 8.0, 10.0, 12.0);
+            case SOUTH -> Block.box(4.0, 0.0, 0.0, 12.0, 10.0, 8.0);
+            default -> Block.box(4.0, 0.0, 8.0, 12.0, 10.0, 16.0);
+            case WEST -> Block.box(8.0, 0.0, 4.0, 16.0, 10.0, 12.0);
+            case EAST -> Block.box(0.0, 0.0, 4.0, 8.0, 10.0, 12.0);
         };
     }
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        ItemStack stack = player.getStackInHand(hand);
+        ItemStack stack = player.getItemInHand(hand);
         int i = state.get(TAP_LEVEL);
         boolean bl = false;
         if (i >= FULL_TAP_LEVEL) {
@@ -97,7 +98,7 @@ public class TapperBlock extends HorizontalDirectionalBlock {
                 world.emitGameEvent(player, GameEvent.FLUID_PICKUP, pos);
                 emptyBucket(state, world, pos);
             }
-            else if (stack.isOf(Items.GLASS_BOTTLE)) {
+            else if (stack.is(Items.GLASS_BOTTLE)) {
                 if(result != Items.SLIME_BALL) stack.decrement(1);
                 world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.1F);
 
@@ -112,7 +113,7 @@ public class TapperBlock extends HorizontalDirectionalBlock {
                 emptyBucket(state, world, pos);
             }
 
-            if (!world.isClient() && bl) {
+            if (!world.isClientSide() && bl) {
                 player.incrementStat(Stats.USED.getOrCreateStat(item));
             }
         }
@@ -126,7 +127,7 @@ public class TapperBlock extends HorizontalDirectionalBlock {
 
     private void emptyBucket(BlockState state, Level world, BlockPos pos) {
         if(world instanceof ServerLevel serverWorld) {
-            serverWorld.setBlockState(pos, state.with(TAP_LEVEL, 0), 2);
+            serverWorld.setBlock(pos, state.setValue(TAP_LEVEL, 0), 2);
         }
     }
 
@@ -135,7 +136,7 @@ public class TapperBlock extends HorizontalDirectionalBlock {
         if (rand == 0) {
             int i = state.get(TAP_LEVEL);
             if (i < FULL_TAP_LEVEL) {
-                world.setBlockState(pos, state.with(TAP_LEVEL, i + 1), 2);
+                world.setBlock(pos, state.setValue(TAP_LEVEL, i + 1), 2);
             }
         }
     }
@@ -146,7 +147,7 @@ public class TapperBlock extends HorizontalDirectionalBlock {
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+        return state.setValue(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override

@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import java.util.Iterator;
@@ -34,8 +34,8 @@ public class SmallPointedStoneFeature extends Feature<SmallPointedStoneFeatureCo
     }
 
     private static Optional<Direction> getDirection(LevelAccessor world, BlockPos pos, RandomSource random) {
-        boolean bl = ClusterFeature.canReplace(world.getBlockState(pos.up()));
-        boolean bl2 = ClusterFeature.canReplace(world.getBlockState(pos.down()));
+        boolean bl = ClusterFeature.canReplace(world.getBlockState(pos.above()));
+        boolean bl2 = ClusterFeature.canReplace(world.getBlockState(pos.below()));
         if (bl && bl2) {
             return Optional.of(random.nextBoolean() ? Direction.DOWN : Direction.UP);
         } else if (bl) {
@@ -47,7 +47,7 @@ public class SmallPointedStoneFeature extends Feature<SmallPointedStoneFeatureCo
 
     private static void generateDripstoneBlocks(LevelAccessor world, RandomSource random, BlockPos pos, SmallPointedStoneFeatureConfig config) {
         ClusterFeature.generateBlock(world, pos, config.blockState);
-        Iterator var4 = Direction.Type.HORIZONTAL.iterator();
+        Iterator var4 = Direction.Axis.HORIZONTAL.iterator();
 
         while(var4.hasNext()) {
             Direction direction = (Direction)var4.next();

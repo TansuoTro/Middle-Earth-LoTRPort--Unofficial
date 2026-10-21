@@ -104,11 +104,11 @@ public class SpawnOfShelobEntity extends Monster implements Pouncer, Shielder, C
     }
 
     public static AttributeSupplier.Builder setAttributes() {
-        return Monster.createHostileAttributes()
-                .add(Attributes.GENERIC_MAX_HEALTH, 36.0)
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.3)
-                .add(Attributes.GENERIC_ATTACK_DAMAGE, 7)
-                .add(Attributes.GENERIC_ARMOR, 3)
+        return Monster.createMonsterAttributes()
+                .add(Attributes.MAX_HEALTH, 36.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.3)
+                .add(Attributes.ATTACK_DAMAGE, 7)
+                .add(Attributes.ARMOR, 3)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 48.0);
     }
 
@@ -136,7 +136,7 @@ public class SpawnOfShelobEntity extends Monster implements Pouncer, Shielder, C
             this.setVariant(spiderData.variant);
         } else {
             Optional<Holder<SpiderVariant>> optional = VariantsME.select(world,
-                    VariantsME.registry(world.toServerWorld().getRegistryManager(), DynamicRegistriesME.SPIDER_VARIANTS));
+                    VariantsME.registry(world.toServerWorld().registryAccess(), DynamicRegistriesME.SPIDER_VARIANTS));
             if (optional.isPresent()) {
                 this.setVariant(optional.get());
                 entityData = new ShelobiteScuttlerEntity.SpiderData(optional.get());
@@ -156,12 +156,12 @@ public class SpawnOfShelobEntity extends Monster implements Pouncer, Shielder, C
 
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(SPIDER_FLAGS, (byte)0);
-        this.dataTracker.startTracking(BITE_FLAG, 0);
-        this.dataTracker.startTracking(POUNCE_FLAG, 0);
-        this.dataTracker.startTracking(BLOCK_FLAG, 0);
-        Holder<SpiderVariant> spiderVariantRegistryEntry = VariantsME.getOrDefaultOrThrow(this.getWorld().getRegistryManager(), SpiderVariantRegistry.DEFAULT);
-        this.dataTracker.startTracking(VARIANT, spiderVariantRegistryEntry);
+        this.entityData.define(SPIDER_FLAGS, (byte)0);
+        this.entityData.define(BITE_FLAG, 0);
+        this.entityData.define(POUNCE_FLAG, 0);
+        this.entityData.define(BLOCK_FLAG, 0);
+        Holder<SpiderVariant> spiderVariantRegistryEntry = VariantsME.getOrDefaultOrThrow(this.level().registryAccess(), SpiderVariantRegistry.DEFAULT);
+        this.entityData.define(VARIANT, spiderVariantRegistryEntry);
     }
 
     protected void setupAnimationStates() {
@@ -174,41 +174,41 @@ public class SpawnOfShelobEntity extends Monster implements Pouncer, Shielder, C
     }
 
     protected void setTrackerState(EntityDataAccessor<Integer> trackedData, AnimationState animationState) {
-        int state = this.dataTracker.get(trackedData);
+        int state = this.entityData.get(trackedData);
         if(state == 1) {
             animationState.start(this.age);
         } else if (state == -1) {
             animationState.stop();
         }
-        this.dataTracker.set(trackedData, 0);
+        this.entityData.set(trackedData, 0);
     }
 
     public void startPounceAnimation() {
-        this.dataTracker.set(POUNCE_FLAG, 1);
+        this.entityData.set(POUNCE_FLAG, 1);
     }
     public void stopPounceAnimation() {
-        this.dataTracker.set(POUNCE_FLAG, -1);
+        this.entityData.set(POUNCE_FLAG, -1);
     }
 
     @Override
     public void blockShield() {
-        this.dataTracker.set(BLOCK_FLAG, 1);
+        this.entityData.set(BLOCK_FLAG, 1);
     }
     @Override
     public void unblockShield() {
-        this.dataTracker.set(BLOCK_FLAG, -1);
+        this.entityData.set(BLOCK_FLAG, -1);
     }
 
     @Override
     public boolean tryAttack(Entity target) {
         boolean result = super.tryAttack(target);
-        this.dataTracker.set(BITE_FLAG, 1);
+        this.entityData.set(BITE_FLAG, 1);
         if(biteAnimationCooldown == 0) biteAnimationCooldown = 40;
         if (target instanceof LivingEntity) {
             int i = 0;
-            if (this.getWorld().getDifficulty() == Difficulty.NORMAL) {
+            if (this.level().getDifficulty() == Difficulty.NORMAL) {
                 i = 7;
-            } else if (this.getWorld().getDifficulty() == Difficulty.HARD) {
+            } else if (this.level().getDifficulty() == Difficulty.HARD) {
                 i = 15;
             }
 
@@ -221,10 +221,10 @@ public class SpawnOfShelobEntity extends Monster implements Pouncer, Shielder, C
 
     @Override
     public void onLanding() {
-        if (this.getWorld() instanceof ServerLevel serverWorld) {
+        if (this.level() instanceof ServerLevel serverWorld) {
             if (this.isOnGround() && this.fallDistance > 1.5) {
                 Vec3 vec3d = getPos().add(0.0, 0.5, 0.0);
-                BlockState blockState = this.getSteppingBlockState();
+                BlockState blockState = this.getBlockStateOn();
                 int count = (int) Mth.clamp(25.0 * this.fallDistance - 1, 0.0, 150.0);
                 serverWorld.spawnParticles(new BlockParticleOption(ParticleTypes.BLOCK, blockState), vec3d.x, vec3d.y, vec3d.z,
                         count, this.random.nextDouble() - 0.5, 0.15, this.random.nextDouble() - 0.5, 0.2f);
@@ -235,11 +235,11 @@ public class SpawnOfShelobEntity extends Monster implements Pouncer, Shielder, C
 
     public void tick() {
         super.tick();
-        if (!this.getWorld().isClient) {
+        if (!this.level().isClientSide) {
             this.setClimbingWall(this.horizontalCollision);
 
             if(biteAnimationCooldown <= 1) {
-                this.dataTracker.set(BITE_FLAG, -1);
+                this.entityData.set(BITE_FLAG, -1);
             }
             biteAnimationCooldown = Math.max(biteAnimationCooldown - 1, 0);
 
@@ -286,11 +286,11 @@ public class SpawnOfShelobEntity extends Monster implements Pouncer, Shielder, C
     }
 
     private Holder<SpiderVariant> getRegistryVariant() {
-        return this.dataTracker.get(VARIANT);
+        return this.entityData.get(VARIANT);
     }
 
     private void setVariant(Holder<SpiderVariant> variant) {
-        this.dataTracker.set(VARIANT, variant);
+        this.entityData.set(VARIANT, variant);
     }
 
     @Override
@@ -303,9 +303,9 @@ public class SpawnOfShelobEntity extends Monster implements Pouncer, Shielder, C
         double e = target.getEyeY() - 1.1F;
         double dZ = target.getZ() - this.getZ();
         double g = Math.sqrt(dX * dX + dZ * dZ) * 0.2F;
-        if (this.getWorld() instanceof ServerLevel serverWorld) {
+        if (this.level() instanceof ServerLevel serverWorld) {
             WebbedEntity web = new WebbedEntity(serverWorld, this, WEB_PROJECTILE_DAMAGE * pullProgress);
-            web.setVelocity(dX, e + g - web.getY(), dZ, 1.6F, 8 - this.getWorld().getDifficulty().getId() * 4);
+            web.setVelocity(dX, e + g - web.getY(), dZ, 1.6F, 8 - this.level().getDifficulty().getId() * 4);
             serverWorld.spawnEntity(web);
         }
 
@@ -343,7 +343,7 @@ public class SpawnOfShelobEntity extends Monster implements Pouncer, Shielder, C
     }
 
     public void slowMovement(BlockState state, Vec3 multiplier) {
-        if (!state.isIn(TagKey.of(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "cobwebs")))) {
+        if (!state.is(TagKey.create(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "cobwebs")))) {
             super.slowMovement(state, multiplier);
         }
     }
@@ -354,7 +354,7 @@ public class SpawnOfShelobEntity extends Monster implements Pouncer, Shielder, C
     }
 
     public boolean isClimbingWall() {
-        return (this.dataTracker.get(SPIDER_FLAGS) & 1) != 0;
+        return (this.entityData.get(SPIDER_FLAGS) & 1) != 0;
     }
 
     public boolean isCollidingWall() {
@@ -362,14 +362,14 @@ public class SpawnOfShelobEntity extends Monster implements Pouncer, Shielder, C
     }
 
     public void setClimbingWall(boolean climbing) {
-        byte b = (Byte)this.dataTracker.get(SPIDER_FLAGS);
+        byte b = (Byte)this.entityData.get(SPIDER_FLAGS);
         if (climbing) {
             b = (byte)(b | 1);
         } else {
             b &= -2;
         }
 
-        this.dataTracker.set(SPIDER_FLAGS, b);
+        this.entityData.set(SPIDER_FLAGS, b);
     }
 
     public int getTimelineTicks() {
@@ -395,7 +395,7 @@ public class SpawnOfShelobEntity extends Monster implements Pouncer, Shielder, C
     public void readCustomDataFromNbt(CompoundTag nbt) {
         super.readCustomDataFromNbt(nbt);
         ReadView view = new ReadView(nbt);
-        VariantsME.readVariantFromNbt(view, this.getWorld().getRegistryManager(), DynamicRegistriesME.SPIDER_VARIANTS).ifPresent(this::setVariant);
+        VariantsME.readVariantFromNbt(view, this.level().registryAccess(), DynamicRegistriesME.SPIDER_VARIANTS).ifPresent(this::setVariant);
     }
 
     static {
@@ -408,7 +408,7 @@ public class SpawnOfShelobEntity extends Monster implements Pouncer, Shielder, C
 
     public static boolean canSpawn(EntityType<SpawnOfShelobEntity> type, ServerLevelAccessor serverWorldAccess, MobSpawnType spawnReason, BlockPos blockPos, RandomSource random) {
         if(spawnReason != MobSpawnType.NATURAL)
-            return SpawnOfShelobEntity.canSpawnInDark(type, serverWorldAccess, spawnReason, blockPos, random);
+            return SpawnOfShelobEntity.checkMonsterSpawnRules(type, serverWorldAccess, spawnReason, blockPos, random);
         return SpawnUtil.canSpawn(blockPos, serverWorldAccess, spawnReason);
     }
 

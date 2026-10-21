@@ -37,11 +37,11 @@ public class MiddleEarthMapUtils {
     }
 
     public List<ServerPlayer> getPlayers() {
-        return server.getPlayerManager().getPlayerList();
+        return server.getPlayerList().getPlayerList();
     }
     public int getTick() {
         if(server == null) return 1;
-        return server.getTicks();
+        return server.getTickCount();
     }
 
     public Vector2i getWorldCoordinateFromInitialMap(int x, int z){

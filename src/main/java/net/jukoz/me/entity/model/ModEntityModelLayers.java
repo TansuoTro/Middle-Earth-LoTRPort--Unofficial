@@ -22,7 +22,7 @@ import net.jukoz.me.entity.beasts.trolls.cave.CaveTrollModel;
 import net.jukoz.me.entity.beasts.trolls.snow.SnowTrollModel;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.EntityModelLayer;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.util.profiling.jfr.Environment;

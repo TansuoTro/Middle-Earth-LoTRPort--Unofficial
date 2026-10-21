@@ -61,35 +61,35 @@ public class GaladhrimElfEntity extends NpcEntity{
 
     public static AttributeSupplier.Builder setSoldierAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25f)
-                .add(Attributes.GENERIC_MAX_HEALTH, 25.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.25f)
+                .add(Attributes.MAX_HEALTH, 25.0)
                 .add(Attributes.GENERIC_ATTACK_SPEED, 2.0)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 48.0)
-                .add(Attributes.GENERIC_ATTACK_DAMAGE, 2.0);
+                .add(Attributes.ATTACK_DAMAGE, 2.0);
     }
     public static AttributeSupplier.Builder setKnightAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25f)
-                .add(Attributes.GENERIC_MAX_HEALTH, 27.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.25f)
+                .add(Attributes.MAX_HEALTH, 27.0)
                 .add(Attributes.GENERIC_ATTACK_SPEED, 2.0)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 48.0)
-                .add(Attributes.GENERIC_ATTACK_DAMAGE, 2.5);
+                .add(Attributes.ATTACK_DAMAGE, 2.5);
     }
     public static AttributeSupplier.Builder setVeteranAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25f)
-                .add(Attributes.GENERIC_MAX_HEALTH, 29.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.25f)
+                .add(Attributes.MAX_HEALTH, 29.0)
                 .add(Attributes.GENERIC_ATTACK_SPEED, 2.0)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 48.0)
-                .add(Attributes.GENERIC_ATTACK_DAMAGE, 3.0);
+                .add(Attributes.ATTACK_DAMAGE, 3.0);
     }
     public static AttributeSupplier.Builder setLeaderAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25f)
-                .add(Attributes.GENERIC_MAX_HEALTH, 31.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.25f)
+                .add(Attributes.MAX_HEALTH, 31.0)
                 .add(Attributes.GENERIC_ATTACK_SPEED, 2.0)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 48.0)
-                .add(Attributes.GENERIC_ATTACK_DAMAGE, 3.5);
+                .add(Attributes.ATTACK_DAMAGE, 3.5);
     }
 
     @Override

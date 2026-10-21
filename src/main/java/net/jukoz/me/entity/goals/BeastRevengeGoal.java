@@ -17,7 +17,7 @@ import java.util.List;
 import net.minecraft.world.entity.ai.control.Control;
 
 public class BeastRevengeGoal extends TargetGoal {
-    private static final TargetingConditions VALID_AVOIDABLES_PREDICATE = TargetingConditions.createAttackable().ignoreVisibility().ignoreDistanceScalingFactor();
+    private static final TargetingConditions VALID_AVOIDABLES_PREDICATE = TargetingConditions.createAttackable().ignoreLineOfSight().ignoreInvisibilityTesting();
     private static final int BOX_VERTICAL_EXPANSION = 10;
     private boolean groupRevenge;
     private int lastAttackedTime;
@@ -33,12 +33,12 @@ public class BeastRevengeGoal extends TargetGoal {
 
     @Override
     public boolean canStart() {
-        int i = this.mob.getLastAttackedTime();
+        int i = this.mob.getLastHurtByMobTimestamp();
         LivingEntity livingEntity = this.mob.getAttacker();
         if (i == this.lastAttackedTime || livingEntity == null) {
             return false;
         }
-        if (this.mob.getWorld() instanceof ServerLevel serverWorld && livingEntity.getType() == EntityType.PLAYER && serverWorld.getGameRules().getBoolean(GameRules.UNIVERSAL_ANGER)) {
+        if (this.mob.level() instanceof ServerLevel serverWorld && livingEntity.getType() == EntityType.PLAYER && serverWorld.getGameRules().getBoolean(GameRules.RULE_UNIVERSAL_ANGER)) {
             return false;
         }
         if (((AbstractBeastEntity)this.mob).isTame()) {
@@ -61,7 +61,7 @@ public class BeastRevengeGoal extends TargetGoal {
     public void start() {
         this.mob.setTarget(this.mob.getAttacker());
         this.target = this.mob.getTarget();
-        this.lastAttackedTime = this.mob.getLastAttackedTime();
+        this.lastAttackedTime = this.mob.getLastHurtByMobTimestamp();
         this.maxTimeWithoutVisibility = 300;
         if (this.groupRevenge) {
             this.callSameTypeForRevenge();
@@ -70,9 +70,9 @@ public class BeastRevengeGoal extends TargetGoal {
     }
 
     protected void callSameTypeForRevenge() {
-        double d = this.getFollowRange();
+        double d = this.getFollowDistance();
         AABB box = AABB.from(this.mob.getPos()).expand(d, 10.0, d);
-        List<Mob> list = (List<Mob>)this.mob.getWorld().getEntitiesByClass(this.mob.getClass(), box, EntitySelector.EXCEPT_SPECTATOR);
+        List<Mob> list = (List<Mob>)this.mob.level().getEntitiesByClass(this.mob.getClass(), box, EntitySelector.EXCEPT_SPECTATOR);
         for (Mob mobEntity : list) {
             if (this.mob == mobEntity || mobEntity.getTarget() != null || this.mob instanceof TamableAnimal && ((TamableAnimal)this.mob).getOwner() != ((TamableAnimal)mobEntity).getOwner() || mobEntity.isTeammate(this.mob.getAttacker())) continue;
             if (this.noHelpTypes != null) {

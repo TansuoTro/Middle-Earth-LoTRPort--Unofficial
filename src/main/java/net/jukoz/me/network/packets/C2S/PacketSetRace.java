@@ -24,7 +24,7 @@ public class PacketSetRace extends ClientToServerPacket<PacketSetRace>
     }
 
     public PacketSetRace(FriendlyByteBuf buf) {
-        this(buf.readString());
+        this(buf.readUtf());
     }
 
     @Override

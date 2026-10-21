@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.LootTables;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -40,7 +40,7 @@ public class CaveTrollDigForFoodTask extends Behavior<CaveTrollEntity> {
     @Override
     protected void run(ServerLevel world, CaveTrollEntity entity, long time) {
         entity.setScavenging(true);
-        entity.getBrain().forget(MemoryModuleType.WALK_TARGET);
+        entity.getBrain().erase(MemoryModuleType.WALK_TARGET);
     }
 
     @Override

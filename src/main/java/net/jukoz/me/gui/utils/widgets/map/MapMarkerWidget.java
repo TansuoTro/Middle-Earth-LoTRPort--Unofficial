@@ -24,7 +24,7 @@ public class MapMarkerWidget extends ModWidget {
     private static final ResourceLocation MAP_MARKERS = new ResourceLocation(MiddleEarth.MOD_ID,"textures/gui/widget/map_markers.png");
     private static final ResourceLocation MAP_ARROWS = new ResourceLocation(MiddleEarth.MOD_ID,"textures/gui/widget/map_arrows.png");
 
-    private ButtonWidget markerButton;
+    private Button markerButton;
     private MapMarkerType type;
     private MapArrowType arrowType;
     private UiDirections arrowDirection;
@@ -35,9 +35,9 @@ public class MapMarkerWidget extends ModWidget {
     private List<Component> content;
     private List<MapMarkerWidget> childs = new ArrayList<>();
     private Rectangle2D borders;
-    public MapMarkerWidget(String name, ButtonWidget.PressAction onPress, Rectangle2D borders) {
+    public MapMarkerWidget(String name, Button.PressAction onPress, Rectangle2D borders) {
         super();
-        markerButton = ButtonWidget.builder(Component.of(name), onPress).build();
+        markerButton = Button.builder(Component.of(name), onPress).build();
         type = MapMarkerType.NONE;
         arrowType = MapArrowType.NORMAL;
         isArrow = false;
@@ -49,7 +49,7 @@ public class MapMarkerWidget extends ModWidget {
         this.type = type;
     }
 
-    public ButtonWidget getButton() {
+    public Button getButton() {
         return markerButton;
     }
 
@@ -172,16 +172,16 @@ public class MapMarkerWidget extends ModWidget {
                     texts.add(Component.translatable("widget.%s.marker.more".formatted(MiddleEarth.MOD_ID)).formatted(ChatFormatting.BLUE));
                 }
             }
-            context.drawTooltip(client.textRenderer, texts, Optional.empty(), drawStart.x + (drawSize.x / 2), drawStart.y + (drawSize.y / 2));
+            context.drawTooltip(client.font, texts, Optional.empty(), drawStart.x + (drawSize.x / 2), drawStart.y + (drawSize.y / 2));
         }
 
         // draw marker or arrow
 
-        context.drawTexture((isArrow) ? MAP_ARROWS : MAP_MARKERS, drawStart.x, drawStart.y, drawUvs.x, drawUvs.y, drawSize.x, drawSize.y, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, (isArrow) ? MAP_ARROWS : MAP_MARKERS, drawStart.x, drawStart.y, drawUvs.x, drawUvs.y, drawSize.x, drawSize.y, 256, 256);
 
         // draw marker or arrow (FOCUSED)
         if(isFocused || ((isSelected || forceSelectedVisual) && getFocusEnabled())){
-            context.drawTexture((isArrow) ? MAP_ARROWS : MAP_MARKERS, focusedStart.x, focusedStart.y, focusedUvs.x, focusedUvs.y, focusedSize.x, focusedSize.y, 256, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, (isArrow) ? MAP_ARROWS : MAP_MARKERS, focusedStart.x, focusedStart.y, focusedUvs.x, focusedUvs.y, focusedSize.x, focusedSize.y, 256, 256);
         }
     }
 

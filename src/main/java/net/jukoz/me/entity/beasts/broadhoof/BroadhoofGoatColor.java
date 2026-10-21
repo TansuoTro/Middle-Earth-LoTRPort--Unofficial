@@ -21,9 +21,9 @@ public enum BroadhoofGoatColor implements StringRepresentable {
     GRAY(5, "gray"),
     BLACK(6, "black");
 
-    public static final Codec<BroadhoofGoatColor> CODEC = StringRepresentable.createCodec(BroadhoofGoatColor::values);
-    private static final IntFunction<BroadhoofGoatColor> INDEX_MAPPER = ByIdMap.createIdToValueFunction(
-            BroadhoofGoatColor::getIndex, values(), ByIdMap.OutOfBoundsHandling.WRAP
+    public static final Codec<BroadhoofGoatColor> CODEC = StringRepresentable.fromEnum(BroadhoofGoatColor::values);
+    private static final IntFunction<BroadhoofGoatColor> INDEX_MAPPER = ByIdMap.continuous(
+            BroadhoofGoatColor::getIndex, values(), ByIdMap.OutOfBoundsStrategy.WRAP
     );
     public static final PacketCodec<net.minecraft.network.FriendlyByteBuf, BroadhoofGoatColor> PACKET_CODEC = PacketCodecs.indexed(INDEX_MAPPER, BroadhoofGoatColor::getIndex);
     private final int index;

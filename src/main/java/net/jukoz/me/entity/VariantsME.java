@@ -5,7 +5,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.compat.nbt.ReadView;
 import net.jukoz.me.compat.nbt.WriteView;
@@ -41,15 +41,15 @@ public final class VariantsME {
         if (entry != null) {
             return entry;
         }
-        // A tracked data must never be initialised with null: SynchedEntityData.Entry.isUnchanged()
+        // A tracked data must never be initialised with null: SynchedEntityData.DataItem.isSetToDefault()
         // dereferences the initial value the first time the entity is tracked, which takes the
         // whole server tick down. Fall back to whatever the registry does hold.
         Optional<Holder.Reference<T>> any = registry.getRandom(net.minecraft.util.RandomSource.create());
         if (any.isEmpty()) {
             throw new IllegalStateException("Empty variant registry " + key.getRegistry()
-                    + ": cannot initialize tracked variant " + key.getValue());
+                    + ": cannot initialize tracked variant " + key.location());
         }
-        MiddleEarth.LOGGER.logError("VariantsME: " + key.getValue() + " is missing from " + key.getRegistry()
+        MiddleEarth.LOGGER.logError("VariantsME: " + key.location() + " is missing from " + key.getRegistry()
                 + ", falling back to " + any.get().getKey().map(k -> k.getValue().toString()).orElse("?"));
         return any.get();
     }
@@ -66,7 +66,7 @@ public final class VariantsME {
         if (entry == null) {
             return;
         }
-        entry.getKey().ifPresent(key -> view.put(VARIANT_KEY, ResourceLocation.CODEC, key.getValue()));
+        entry.getKey().ifPresent(key -> view.put(VARIANT_KEY, ResourceLocation.CODEC, key.location()));
     }
 
     public static <T> Optional<Holder<T>> readVariantFromNbt(ReadView view, RegistryAccess manager,
@@ -79,7 +79,7 @@ public final class VariantsME {
         if (registry == null) {
             return Optional.empty();
         }
-        return registry.getEntry(ResourceKey.of(registryKey, id.get())).map(entry -> (Holder<T>) entry);
+        return registry.getEntry(ResourceKey.create(registryKey, id.get())).map(entry -> (Holder<T>) entry);
     }
 
     public static <T> Optional<Holder<T>> select(LevelAccessor world, Registry<T> registry) {

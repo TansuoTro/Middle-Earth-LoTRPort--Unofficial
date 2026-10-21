@@ -15,18 +15,19 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelAccess;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import org.jetbrains.annotations.Nullable;
 import java.util.stream.Stream;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class WoodTableBlock extends Block implements SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public WoodTableBlock(Settings settings) {
+    public WoodTableBlock(BlockBehaviour.Properties settings) {
         super(settings);
 
         setDefaultState(getDefaultState().with(WATERLOGGED, false));
@@ -38,7 +39,7 @@ public class WoodTableBlock extends Block implements SimpleWaterloggedBlock {
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return this.getDefaultState().with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
+        return this.defaultBlockState().with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
     }
 
     @Override
@@ -58,11 +59,11 @@ public class WoodTableBlock extends Block implements SimpleWaterloggedBlock {
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return Stream.of(
-                Block.createCuboidShape(13, 0, 0, 16, 13, 3),
-                Block.createCuboidShape(0, 0, 0, 3, 13, 3),
-                Block.createCuboidShape(0, 0, 13, 3, 13, 16),
-                Block.createCuboidShape(13, 0, 13, 16, 13, 16),
-                Block.createCuboidShape(0, 13, 0, 16, 16, 16)
+                Block.box(13, 0, 0, 16, 13, 3),
+                Block.box(0, 0, 0, 3, 13, 3),
+                Block.box(0, 0, 13, 3, 13, 16),
+                Block.box(13, 0, 13, 16, 13, 16),
+                Block.box(0, 13, 0, 16, 16, 16)
         ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
     }
 }

@@ -15,7 +15,7 @@ public class CustomSwordWeaponItem extends SwordItem {
 
     private final Tier material;
 
-    public CustomSwordWeaponItem(Tier toolMaterial, Item.Settings settings) {
+    public CustomSwordWeaponItem(Tier toolMaterial, Item.Properties settings) {
         super(toolMaterial, (int) WeaponTypesME.SWORD.attack, WeaponTypesME.SWORD.attackSpeed,
                 ((net.jukoz.me.item.MESettings) settings).component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(WeaponTypesME.SWORD.name)));
         this.material = toolMaterial;

@@ -18,7 +18,7 @@ public class ModBannerPatterns {
     public static final ResourceKey<BannerPattern> MISTY_ORCS_PEAKS_BANNER_PATTERN = key("misty_orcs_peaks");
 
     private static ResourceKey<BannerPattern> key(String id) {
-        return ResourceKey.of(Registries.BANNER_PATTERN, new ResourceLocation(id));
+        return ResourceKey.create(Registries.BANNER_PATTERN, new ResourceLocation(id));
     }
 
     public static void register(Registry<BannerPattern> registry) {

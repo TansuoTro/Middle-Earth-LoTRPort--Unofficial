@@ -1,9 +1,9 @@
 package net.jukoz.me.registries;
 
-import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.core.RegistryWrapper;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
@@ -235,21 +235,21 @@ public class CharacterPatternsRegistryME {
     }
 
     private static void register(BootstrapContext<CharacterTexturePattern> registry, ResourceKey<CharacterTexturePattern> key, CharacterPatternTypes type) {
-        CharacterTexturePattern pattern = new CharacterTexturePattern(key.getValue(), type, false);
+        CharacterTexturePattern pattern = new CharacterTexturePattern(key.location(), type, false);
         register(registry, key, pattern,  getKey(type));
     }
     private static void register(BootstrapContext<CharacterTexturePattern> registry, ResourceKey<CharacterTexturePattern> key, CharacterPatternTypes type, boolean hasAddon) {
-        CharacterTexturePattern pattern = new CharacterTexturePattern(key.getValue(), type, hasAddon);
+        CharacterTexturePattern pattern = new CharacterTexturePattern(key.location(), type, hasAddon);
         register(registry, key, pattern,  getKey(type));
     }
 
     private static ResourceKey<CharacterTexturePattern> of(String idPath, CharacterPatternTypes type) {
-        return ResourceKey.of(getKey(type), MiddleEarth.of(idPath));
+        return ResourceKey.create(getKey(type), MiddleEarth.of(idPath));
     }
 
     private static void register(BootstrapContext<CharacterTexturePattern> registerable, ResourceKey<CharacterTexturePattern> registryKey, CharacterTexturePattern content, ResourceKey<Registry<CharacterTexturePattern>> registryRegistryKey) {
-        String name = registryKey.getValue().getPath();
-        ResourceKey<CharacterTexturePattern> key = ResourceKey.of(registryRegistryKey,new ResourceLocation(MiddleEarth.MOD_ID,name));
+        String name = registryKey.location().getPath();
+        ResourceKey<CharacterTexturePattern> key = ResourceKey.create(registryRegistryKey,new ResourceLocation(MiddleEarth.MOD_ID,name));
         registerable.register(key, content);
     }
 
@@ -261,8 +261,8 @@ public class CharacterPatternsRegistryME {
         };
     }
 
-    public static Optional<Holder.Reference<CharacterTexturePattern>> get(HolderLookup.WrapperLookup registries, CharacterPatternTypes type, ResourceLocation id) {
-        return registries.getWrapperOrThrow(getKey(type)).streamEntries().filter((pattern) ->
+    public static Optional<Holder.Reference<CharacterTexturePattern>> get(HolderLookup.Provider registries, CharacterPatternTypes type, ResourceLocation id) {
+        return registries.lookupOrThrow(getKey(type)).streamEntries().filter((pattern) ->
                 pattern.value().getPatternType() == type && pattern.matchesId(id)).findFirst();
     }
 

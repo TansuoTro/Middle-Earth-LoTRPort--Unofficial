@@ -20,12 +20,12 @@ public class PetrifiedTrollEntity extends Mob {
 
     public PetrifiedTrollEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
-        this.setAiDisabled(true);
+        this.setNoAi(true);
     }
 
     public static AttributeSupplier.Builder setAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MAX_HEALTH, 30.0);
+                .add(Attributes.MAX_HEALTH, 30.0);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class PetrifiedTrollEntity extends Mob {
 
     @Override
     public boolean damage(DamageSource source, float amount) {
-        if (this.getWorld().isClient) return false;
+        if (this.level().isClientSide) return false;
         Entity entity = source.getAttacker();
         if(entity instanceof Player playerEntity) {
             if(playerEntity.isCreative()) {

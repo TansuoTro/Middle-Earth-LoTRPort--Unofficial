@@ -37,7 +37,7 @@ public class BottledDrinkItem extends Item {
     @Override
     public ItemStack finishUsing(ItemStack stack, Level world, LivingEntity user) {
         ItemStack result = super.finishUsing(stack, world, user);
-        if (!world.isClient && this.curePoison) {
+        if (!world.isClientSide && this.curePoison) {
             user.removeStatusEffect(MobEffects.POISON);
         }
         // donor useRemainder(Items.GLASS_BOTTLE)

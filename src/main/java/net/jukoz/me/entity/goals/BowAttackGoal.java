@@ -28,7 +28,7 @@ public class BowAttackGoal<T extends LivingEntity>
         this.speed = speed;
         this.attackInterval = attackInterval;
         this.squaredRange = range * range;
-        this.setControls(EnumSet.of(Goal.Control.MOVE, Goal.Control.LOOK));
+        this.setControls(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
     public void setAttackInterval(int attackInterval) {
@@ -55,16 +55,16 @@ public class BowAttackGoal<T extends LivingEntity>
     @Override
     public void start() {
         super.start();
-        ((Mob)this.actor).setAttacking(true);
+        ((Mob)this.actor).setAggressive(true);
     }
 
     @Override
     public void stop() {
         super.stop();
-        ((Mob)this.actor).setAttacking(false);
+        ((Mob)this.actor).setAggressive(false);
         this.targetSeeingTicker = 0;
         this.cooldown = -1;
-        ((LivingEntity)this.actor).clearActiveItem();
+        ((LivingEntity)this.actor).stopUsingItem();
     }
 
     @Override
@@ -79,8 +79,8 @@ public class BowAttackGoal<T extends LivingEntity>
         if (livingEntity == null) {
             return;
         }
-        double d = ((Entity)this.actor).squaredDistanceTo(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ());
-        boolean bl = ((Mob)this.actor).getVisibilityCache().canSee(livingEntity);
+        double d = ((Entity)this.actor).distanceTo(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ());
+        boolean bl = ((Mob)this.actor).getSensing().canSee(livingEntity);
         boolean bl3 = bl2 = this.targetSeeingTicker > 0;
         if (bl != bl2) {
             this.targetSeeingTicker = 0;
@@ -116,9 +116,9 @@ public class BowAttackGoal<T extends LivingEntity>
         if (((LivingEntity)this.actor).isUsingItem()) {
             int i;
             if (!bl && this.targetSeeingTicker < -60) {
-                ((LivingEntity)this.actor).clearActiveItem();
-            } else if (bl && (i = ((LivingEntity)this.actor).getItemUseTime()) >= 20) {
-                ((LivingEntity)this.actor).clearActiveItem();
+                ((LivingEntity)this.actor).stopUsingItem();
+            } else if (bl && (i = ((LivingEntity)this.actor).getTicksUsingItem()) >= 20) {
+                ((LivingEntity)this.actor).stopUsingItem();
                 ((RangedAttackMob)this.actor).attack(livingEntity, BowItem.getPullProgress(i));
                 this.cooldown = this.attackInterval;
             }

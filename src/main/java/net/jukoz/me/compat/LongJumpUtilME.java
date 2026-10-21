@@ -1,7 +1,7 @@
 package net.jukoz.me.compat;
 
 import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityPose;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
@@ -16,7 +16,7 @@ public final class LongJumpUtilME {
     }
 
     public static Optional<Vec3> getJumpingVelocity(Mob entity, Vec3 targetPos, float power, int angleDegrees, boolean checkClear) {
-        Vec3 pos = entity.getPos();
+        Vec3 pos = entity.position();
         Vec3 approach = new Vec3(targetPos.x - pos.x, 0.0, targetPos.z - pos.z).normalize().multiply(0.5);
         Vec3 target = targetPos.subtract(approach);
         Vec3 delta = target.subtract(pos);
@@ -74,7 +74,7 @@ public final class LongJumpUtilME {
 
         for (int i = 0; i < steps; i++) {
             current = i == steps - 1 ? to : current.add(unit.multiply(step * 0.9F));
-            if (!entity.getWorld().isSpaceEmpty(entity, dimensions.getBoxAt(current))) {
+            if (!entity.level().isSpaceEmpty(entity, dimensions.getBoxAt(current))) {
                 return false;
             }
         }

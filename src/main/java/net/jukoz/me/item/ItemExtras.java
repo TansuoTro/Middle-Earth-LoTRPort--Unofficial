@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Per-item defaults that 1.20.1 cannot express in {@code Item.Settings}.
+ * Per-item defaults that 1.20.1 cannot express in {@code Item.Properties}.
  *
  * <p>1.21 declares these as data components on the settings ({@code LORE},
  * {@code PROVIDES_BANNER_PATTERNS}); 1.20.1 has neither, so the values are captured from

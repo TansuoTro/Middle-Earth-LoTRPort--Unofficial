@@ -27,11 +27,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccess;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
@@ -46,6 +46,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import com.mojang.math.Axis;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class CandleHolderBlock extends Block {
     public static final EnumProperty<Direction> HORIZONTAL_FACING = HorizontalDirectionalBlock.FACING;
@@ -54,9 +55,9 @@ public class CandleHolderBlock extends Block {
     public static final ToIntFunction<BlockState> STATE_TO_LUMINANCE;
     private static final VoxelShape SHAPE;
 
-    public CandleHolderBlock(Settings settings) {
+    public CandleHolderBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(this.getDefaultState().with(LIT, false).with(HORIZONTAL_FACING, Direction.NORTH));
+        this.setDefaultState(this.defaultBlockState().with(LIT, false).with(HORIZONTAL_FACING, Direction.NORTH));
     }
 
     @Override
@@ -66,13 +67,13 @@ public class CandleHolderBlock extends Block {
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        Direction[] var3 = ctx.getPlacementDirections();
+        Direction[] var3 = ctx.getNearestLookingDirections();
         int var4 = var3.length;
 
         for(int var5 = 0; var5 < var4; ++var5) {
             Direction direction = var3[var5];
             if (direction.getAxis() == Direction.Axis.Y) {
-                BlockState blockState = this.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+                BlockState blockState = this.defaultBlockState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalDirection().getOpposite());
                 if (blockState.canPlaceAt(ctx.getWorld(), ctx.getBlockPos())) {
                     return blockState;
                 }
@@ -84,7 +85,7 @@ public class CandleHolderBlock extends Block {
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         return !state.canPlaceAt(world, pos) ?
-                Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+                Blocks.AIR.defaultBlockState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
     @Override
@@ -94,15 +95,15 @@ public class CandleHolderBlock extends Block {
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (!world.isClient && player.getAbilities().allowModifyWorld) {
-            ItemStack itemStack = player.getStackInHand(hand);
+        if (!world.isClientSide && player.getAbilities().allowModifyWorld) {
+            ItemStack itemStack = player.getItemInHand(hand);
             if(player.isCreative() && itemStack == ItemStack.EMPTY){
-                world.setBlockState(pos, state.cycle(LIT));
+                world.setBlock(pos, state.cycle(LIT));
                 return InteractionResult.SUCCESS;
             }
-            if (state.get(LIT) && itemStack.isIn(ItemTags.SHOVELS)) {
+            if (state.get(LIT) && itemStack.is(ItemTags.SHOVELS)) {
                 extinguish(null, state, world, pos);
-            } else if (!state.get(LIT) && itemStack.isOf(Items.FLINT_AND_STEEL) || itemStack.isOf(Items.TORCH)) {
+            } else if (!state.get(LIT) && itemStack.is(Items.FLINT_AND_STEEL) || itemStack.is(Items.TORCH)) {
                 setLit(world, state, pos, true);
             }
         }
@@ -127,7 +128,7 @@ public class CandleHolderBlock extends Block {
     }
 
     protected static void setLit(LevelAccessor world, BlockState state, BlockPos pos, boolean lit) {
-        world.setBlockState(pos, state.with(LIT, lit), 2 | 3);
+        world.setBlock(pos, state.setValue(LIT, lit), 2 | 3);
         if(lit){
             world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.5F, 1.0F);
         }
@@ -142,17 +143,17 @@ public class CandleHolderBlock extends Block {
 
     @Override
     public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
-        return Block.sideCoversSmallSquare(world, pos.down(), Direction.UP);
+        return Block.sideCoversSmallSquare(world, pos.below(), Direction.UP);
     }
 
     @Override
     public FluidState getFluidState(BlockState state) {
-        return Fluids.EMPTY.getDefaultState();
+        return Fluids.EMPTY.defaultBlockState();
     }
 
     public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
-        if (!world.isClient && projectile.isOnFire() && !state.get(LIT)) {
-            world.setBlockState(hit.getBlockPos(), state.with(LIT, true), STATE_TO_LUMINANCE.applyAsInt(state));
+        if (!world.isClientSide && projectile.isOnFire() && !state.get(LIT)) {
+            world.setBlock(hit.getBlockPos(), state.setValue(LIT, true), STATE_TO_LUMINANCE.applyAsInt(state));
         }
     }
 
@@ -163,7 +164,7 @@ public class CandleHolderBlock extends Block {
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(HORIZONTAL_FACING, rotation.rotate(state.get(HORIZONTAL_FACING)));
+        return state.setValue(HORIZONTAL_FACING, rotation.rotate(state.get(HORIZONTAL_FACING)));
     }
 
     @Override
@@ -185,6 +186,6 @@ public class CandleHolderBlock extends Block {
     static {
         LIT = BlockStateProperties.LIT;
         STATE_TO_LUMINANCE = (state) -> state.get(LIT) ? 6 : 0;
-        SHAPE = Shapes.union(Block.createCuboidShape(8.0 - (2.0), 2.0, 8.0 - (2.0), 8.0 + (2.0), 10.0, 8.0 + (2.0)),Block.createCuboidShape(5, 0, 5, 11, 2.0, 11));
+        SHAPE = Shapes.union(Block.box(8.0 - (2.0), 2.0, 8.0 - (2.0), 8.0 + (2.0), 10.0, 8.0 + (2.0)),Block.box(5, 0, 5, 11, 2.0, 11));
     }
 }

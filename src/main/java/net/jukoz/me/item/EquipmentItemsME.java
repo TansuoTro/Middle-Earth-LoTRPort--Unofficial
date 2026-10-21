@@ -2064,48 +2064,48 @@ public class EquipmentItemsME {
                     .component(MEComponents.FACTION_DATA, new FactionDataComponent(FactionRegistry.ROHAN))
                     .lore(ArtefactUtils.getArtefactLore("helmet_of_helm_hammerhand")));
 
-    private static Item registerHelmetAttachment(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerHelmetAttachment(String name, Function<Item.Properties, Item> factory, Item.Properties settings) {
         Item item = (Item)factory.apply(settings);
-        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultInstance());
         SimpleItemModel.items.add(item);
         helmetAttachments.add(item);
         return registerItem(item, name);
     }
 
-    private static Item registerDyeableHelmetAttachment(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerDyeableHelmetAttachment(String name, Function<Item.Properties, Item> factory, Item.Properties settings) {
         Item item = (Item)factory.apply(settings);
-        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultInstance());
         SimpleDyeableItemModel.items.add(item);
         helmetAttachments.add(item);
         return registerItem(item, name);
     }
 
-    private static Item registerBackAttachment(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerBackAttachment(String name, Function<Item.Properties, Item> factory, Item.Properties settings) {
         Item item = (Item)factory.apply(settings);
-        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultInstance());
         SimpleItemModel.items.add(item);
         backAttachments.add(item);
         return registerItem(item, name);
     }
 
-    private static Item registerDyeableBackAttachment(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerDyeableBackAttachment(String name, Function<Item.Properties, Item> factory, Item.Properties settings) {
         Item item = (Item)factory.apply(settings);
-        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultInstance());
         SimpleDyeableItemModel.items.add(item);
         backAttachments.add(item);
         return registerItem(item, name);
     }
 
-    private static Item registerGeneratedItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerGeneratedItem(String name, Function<Item.Properties, Item> factory, Item.Properties settings) {
         Item item = (Item)factory.apply(settings);
-        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultInstance());
         SimpleItemModel.items.add(item);
         return registerItem(item, name);
     }
 
-    private static Item registerDyeableArmorPiece(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerDyeableArmorPiece(String name, Function<Item.Properties, Item> factory, Item.Properties settings) {
         Item item = (Item)factory.apply(settings);
-        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultInstance());
         SimpleDyeableItemModel.items.add(item);
         // Pattern switch is Java 21; this mod targets 17.
         if (item instanceof CustomHelmetItem helmetItem) {
@@ -2120,9 +2120,9 @@ public class EquipmentItemsME {
         return registerItem(item, name);
     }
 
-    private static Item registerArmorPiece(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerArmorPiece(String name, Function<Item.Properties, Item> factory, Item.Properties settings) {
         Item item = (Item)factory.apply(settings);
-        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultInstance());
         SimpleItemModel.items.add(item);
         if (item instanceof CustomHelmetItem helmetItem) {
             armorPiecesListHelmets.add(helmetItem);
@@ -2138,16 +2138,16 @@ public class EquipmentItemsME {
         return registerItem(item, name);
     }
 
-    private static Item registerCustomModelArmorPiece(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerCustomModelArmorPiece(String name, Function<Item.Properties, Item> factory, Item.Properties settings) {
         Item item = (Item)factory.apply(settings);
-        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultInstance());
         SimpleItemModel.items.add(item);
         return registerItem(item, name);
     }
 
-    private static Item registerDyeableCustomModelArmorPiece(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerDyeableCustomModelArmorPiece(String name, Function<Item.Properties, Item> factory, Item.Properties settings) {
         Item item = (Item)factory.apply(settings);
-        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultInstance());
         SimpleDyeableItemModel.items.add(item);
         return registerItem(item, name);
     }

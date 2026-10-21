@@ -22,7 +22,7 @@ public class WeightedSaplingBlock extends SaplingBlock {
     @Override
     public void generate(ServerLevel world, BlockPos pos, BlockState state, RandomSource random) {
         if (state.get(STAGE) == 0) {
-            world.setBlockState(pos, (BlockState)state.cycle(STAGE), Block.NO_REDRAW);
+            world.setBlock(pos, (BlockState)state.cycle(STAGE), Block.NO_REDRAW);
         } else {
             int totalWeight = trees.stream().mapToInt(obj -> obj.weight).sum();
             int randomWeight = random.nextInt(totalWeight);

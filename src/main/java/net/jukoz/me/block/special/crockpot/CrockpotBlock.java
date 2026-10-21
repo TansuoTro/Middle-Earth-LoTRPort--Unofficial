@@ -3,7 +3,7 @@ package net.jukoz.me.block.special.crockpot;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.BlockWithEntity;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUsage;
+import net.minecraft.world.item.ItemUtils;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.sounds.SoundSource;
@@ -37,25 +37,26 @@ import net.jukoz.me.block.special.bellows.BellowsBlock;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class CrockpotBlock extends BaseEntityBlock {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final BooleanProperty HANGING = BooleanProperty.of("hanging");
+    public static final BooleanProperty HANGING = BooleanProperty.create("hanging");
 
-    public CrockpotBlock(Settings settings) {
+    public CrockpotBlock(BlockBehaviour.Properties settings) {
         super(settings);
         setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(HANGING, false));
     }
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        ItemStack stack = player.getStackInHand(hand);
-        BlockEntity blockEntity = player.getWorld().getBlockEntity(pos);
+        ItemStack stack = player.getItemInHand(hand);
+        BlockEntity blockEntity = player.level().getBlockEntity(pos);
 
         if(blockEntity instanceof CrockpotBlockEntity crockpotBlockEntity) {
             boolean filled = crockpotBlockEntity.fill(stack);
             if(filled) {
-                ItemStack remainder = stack.getRecipeRemainder();
+                ItemStack remainder = stack.getCraftingRemainingItem();
                 player.setStackInHand(hand, ItemUtils.exchangeStack(stack, player, remainder).copy());
                 player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
                 world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.1F);
@@ -63,9 +64,9 @@ public class CrockpotBlock extends BaseEntityBlock {
                 return InteractionResult.SUCCESS;
             } else {
                 if(stack.isEmpty()) {
-                    MenuProvider screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+                    MenuProvider screenHandlerFactory = state.getMenuProvider(world, pos);
                     if(screenHandlerFactory != null) {
-                        player.openHandledScreen(screenHandlerFactory);
+                        player.openMenu(screenHandlerFactory);
                     }
                     return InteractionResult.CONSUME;
                 } else {
@@ -74,7 +75,7 @@ public class CrockpotBlock extends BaseEntityBlock {
                         stack.decrement(1);
                         world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 0.9F);
 
-                        if(world.isClient) {
+                        if(world.isClientSide) {
                             if (stack.isEmpty()) {
                                 player.setStackInHand(hand, stackResult);
                             } else if (!player.getInventory().insertStack(stackResult)) {
@@ -93,7 +94,7 @@ public class CrockpotBlock extends BaseEntityBlock {
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return Block.createCuboidShape(4.0, 0.0, 4.0, 12, 7.0, 12.0);
+        return Block.box(4.0, 0.0, 4.0, 12, 7.0, 12.0);
     }
 
     @Override
@@ -106,12 +107,12 @@ public class CrockpotBlock extends BaseEntityBlock {
     public BlockState getPlacementState(BlockPlaceContext ctx) {
         BlockGetter blockView = ctx.getWorld();
         BlockPos blockPos = ctx.getBlockPos();
-        BlockPos bottomBlockPos = blockPos.down();
+        BlockPos bottomBlockPos = blockPos.below();
         BlockState blockState = blockView.getBlockState(bottomBlockPos);
-        if(blockState.isIn(BlockTags.CAMPFIRES) || blockState.isOf(ModDecorativeBlocks.BONFIRE)) {
-            return this.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(HANGING, true);
+        if(blockState.is(BlockTags.CAMPFIRES) || blockState.is(ModDecorativeBlocks.BONFIRE)) {
+            return this.defaultBlockState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalDirection().getOpposite()).with(HANGING, true);
         }
-        return this.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+        return this.defaultBlockState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
     @Nullable
@@ -128,7 +129,7 @@ public class CrockpotBlock extends BaseEntityBlock {
 
     @Nullable
     protected static <T extends BlockEntity> BlockEntityTicker<T> validateTicker(Level world, BlockEntityType<T> givenType, BlockEntityType<CrockpotBlockEntity> expectedType) {
-        return world.isClient
+        return world.isClientSide
                 ? checkType(givenType, expectedType, CrockpotBlockEntity::clientTick)
                 : checkType(givenType, expectedType, CrockpotBlockEntity::serverTick);
     }

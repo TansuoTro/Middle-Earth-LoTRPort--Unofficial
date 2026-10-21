@@ -14,7 +14,7 @@ import java.util.function.Predicate;
 public class CustomBowWeaponItem extends BowItem {
     public RangedWeaponTypesME type;
 
-    public CustomBowWeaponItem(RangedWeaponTypesME type, Item.Settings settings) {
+    public CustomBowWeaponItem(RangedWeaponTypesME type, Item.Properties settings) {
         super(((net.jukoz.me.item.MESettings) settings).maxDamage(type.durability)
                 .component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(type.name)));
         this.type = type;

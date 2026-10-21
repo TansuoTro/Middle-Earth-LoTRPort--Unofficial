@@ -23,7 +23,7 @@ public class InscriptionWordUpdatePacket extends ClientToServerPacket<Inscriptio
     }
 
     public InscriptionWordUpdatePacket(FriendlyByteBuf buf) {
-        this(buf.readBoolean(), buf.readString());
+        this(buf.readBoolean(), buf.readUtf());
     }
 
     @Override

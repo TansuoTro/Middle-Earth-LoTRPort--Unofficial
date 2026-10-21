@@ -14,7 +14,7 @@ import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemConvertible;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.data.recipes.RecipeCategory;

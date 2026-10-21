@@ -28,11 +28,11 @@ public abstract class GameRendererMixin {
         client.targetedEntity = null;
         // Long weapons stop at walls even when the wall is outside block-use reach.
         var obstruction = camera.raycast(entityReach, tickDelta, false);
-        double limit = Math.min(entityReach * entityReach, eye.squaredDistanceTo(obstruction.getPos()));
+        double limit = Math.min(entityReach * entityReach, eye.distanceTo(obstruction.getPos()));
         var hit = ProjectileUtil.raycast(camera, eye, eye.add(direction.multiply(entityReach)),
-                camera.getBoundingBox().stretch(direction.multiply(entityReach)).expand(1.0),
-                target -> !target.isSpectator() && target.canHit(), limit);
-        if (hit != null && eye.squaredDistanceTo(hit.getPos()) <= limit) {
+                camera.getBoundingBox().getMovementArea(direction.multiply(entityReach)).expand(1.0),
+                target -> !target.isSpectator() && target.isPickable(), limit);
+        if (hit != null && eye.distanceTo(hit.getPos()) <= limit) {
             client.crosshairTarget = hit;
             if (hit.getEntity() instanceof LivingEntity || hit.getEntity() instanceof ItemFrame) client.targetedEntity = hit.getEntity();
         }

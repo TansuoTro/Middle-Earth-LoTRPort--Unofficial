@@ -9,7 +9,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelSimulatedReader;
-import net.minecraft.world.level.levelgen.feature.TreeFeatureConfig;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
 
@@ -49,7 +49,7 @@ public class PalmFoliagePlacer extends FoliagePlacer {
 
     @Override
     protected void generate(LevelSimulatedReader world, BlockPlacer placer, RandomSource random, TreeConfiguration config, int trunkHeight, TreeNode treeNode, int foliageHeight, int radius, int offset) {
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
         int count = 6 + (int) (Math.random() * 2);
         double angle = (float) (360 / count);
@@ -69,7 +69,7 @@ public class PalmFoliagePlacer extends FoliagePlacer {
         }
     }
 
-    protected void createArcBranch(LevelSimulatedReader world, BlockPlacer placer, RandomSource random, BlockPos.Mutable mutable,
+    protected void createArcBranch(LevelSimulatedReader world, BlockPlacer placer, RandomSource random, BlockPos.MutableBlockPos mutable,
                                                            TreeConfiguration config, BlockPos startPos, int height, double angle, float acceleration, float velocity) {
         if(height < 0) {
             height *= -1;

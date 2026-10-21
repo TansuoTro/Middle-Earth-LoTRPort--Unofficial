@@ -30,8 +30,8 @@ public class GaladhrimElfModel<T extends Mob>
     public void animateModel(T mobEntity, float f, float g, float h) {
         this.rightArmPose = HumanoidModel.ArmPose.EMPTY;
         this.leftArmPose = HumanoidModel.ArmPose.EMPTY;
-        ItemStack itemStack = ((LivingEntity)mobEntity).getStackInHand(InteractionHand.MAIN_HAND);
-        if (itemStack.getItem() instanceof BowItem && ((Mob)mobEntity).isAttacking()) {
+        ItemStack itemStack = ((LivingEntity)mobEntity).getItemInHand(InteractionHand.MAIN_HAND);
+        if (itemStack.getItem() instanceof BowItem && ((Mob)mobEntity).isAggressive()) {
             if (((Mob)mobEntity).getMainArm() == HumanoidArm.RIGHT) {
                 this.rightArmPose = HumanoidModel.ArmPose.BOW_AND_ARROW;
             } else {
@@ -45,17 +45,17 @@ public class GaladhrimElfModel<T extends Mob>
     public void setAngles(T mobEntity, float f, float g, float h, float i, float j) {
         super.setAngles(mobEntity, f, g, h, i, j);
         ItemStack itemStack = ((LivingEntity)mobEntity).getMainHandStack();
-        if (((Mob)mobEntity).isAttacking() && (itemStack.isOf(Items.BOW))) {
+        if (((Mob)mobEntity).isAggressive() && (itemStack.is(Items.BOW))) {
             float k = Mth.sin(this.handSwingProgress * (float)Math.PI);
             float l = Mth.sin((1.0f - (1.0f - this.handSwingProgress) * (1.0f - this.handSwingProgress)) * (float)Math.PI);
             this.rightArm.roll = 0.0f;
             this.leftArm.roll = 0.0f;
-            this.rightArm.yaw = -(0.1f - k * 0.6f);
-            this.leftArm.yaw = 0.1f - k * 0.6f;
-            this.rightArm.pitch = -1.5707964f;
-            this.leftArm.pitch = -1.5707964f;
-            this.rightArm.pitch -= k * 1.2f - l * 0.4f;
-            this.leftArm.pitch -= k * 1.2f - l * 0.4f;
+            this.rightArm.yRot = -(0.1f - k * 0.6f);
+            this.leftArm.yRot = 0.1f - k * 0.6f;
+            this.rightArm.xRot = -1.5707964f;
+            this.leftArm.xRot = -1.5707964f;
+            this.rightArm.xRot -= k * 1.2f - l * 0.4f;
+            this.leftArm.xRot -= k * 1.2f - l * 0.4f;
             AnimationUtils.swingArms(this.rightArm, this.leftArm, h);
         }
     }

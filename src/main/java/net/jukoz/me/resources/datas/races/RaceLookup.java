@@ -10,11 +10,11 @@ import java.util.Optional;
 
 public class RaceLookup {
     public static List<Race> getAllRaces(Level world) {
-        return world.getRegistryManager().get(DynamicRegistriesME.RACE).stream().toList();
+        return world.registryAccess().get(DynamicRegistriesME.RACE).stream().toList();
     }
 
     public static List<Race> getAllRaces(Level world, List<ResourceLocation> ids) {
-        Registry<Race> registry = world.getRegistryManager().get(DynamicRegistriesME.RACE);
+        Registry<Race> registry = world.registryAccess().get(DynamicRegistriesME.RACE);
         List<Race> list = new ArrayList<>();
         for(ResourceLocation id : ids){
             Race race = registry.get(id);
@@ -25,7 +25,7 @@ public class RaceLookup {
     }
 
     public static Race getRace(Level world, ResourceLocation identifier) {
-        Optional<Race> race = world.getRegistryManager().get(DynamicRegistriesME.RACE).getOrEmpty(identifier);
+        Optional<Race> race = world.registryAccess().get(DynamicRegistriesME.RACE).getOrEmpty(identifier);
         return race.orElse(null);
     }
 }

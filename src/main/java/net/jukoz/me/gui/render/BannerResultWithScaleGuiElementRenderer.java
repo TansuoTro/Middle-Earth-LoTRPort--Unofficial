@@ -33,7 +33,7 @@ public final class BannerResultWithScaleGuiElementRenderer {
             matrices.scale(scale, scale, 1.0F);
             matrices.translate(0.5F, -0.5F, 0.5F);
             matrices.scale(0.6666667F, 0.6666667F, -0.6666667F);
-            flag.pitch = 0.0F;
+            flag.xRot = 0.0F;
             flag.pivotY = -32.0F;
             BannerRenderer.renderCanvas(matrices, context.getVertexConsumers(), 15728880,
                     OverlayTexture.DEFAULT_UV, flag, ModelBakery.BANNER_BASE, true, layers);

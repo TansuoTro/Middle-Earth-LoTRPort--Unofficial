@@ -132,7 +132,7 @@ public class NpcType {
     }
 
     public String getName(){
-        return id.toTranslationKey("npc_data");
+        return id.toLanguageKey("npc_data");
     }
 
     public WeightedGearData getGear() {
@@ -155,7 +155,7 @@ public class NpcType {
         return npcTextureKey;
     }
     public TexturePresetDataPool getNpcTextureData(Level world) {
-        return world.getRegistryManager().get(DynamicRegistriesME.TEXTURE_PRESETS).get(npcTextureKey);
+        return world.registryAccess().get(DynamicRegistriesME.TEXTURE_PRESETS).get(npcTextureKey);
     }
 
     public void applyAttributes(NpcEntity npcEntity) {

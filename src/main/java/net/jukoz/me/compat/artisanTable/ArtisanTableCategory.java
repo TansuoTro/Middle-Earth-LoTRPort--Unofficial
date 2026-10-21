@@ -32,7 +32,7 @@ public class ArtisanTableCategory implements DisplayCategory<BasicDisplay> {
 
     @Override
     public Renderer getIcon() {
-        return EntryStacks.of(ModDecorativeBlocks.ARTISAN_TABLE.asItem().getDefaultStack());
+        return EntryStacks.of(ModDecorativeBlocks.ARTISAN_TABLE.asItem().getDefaultInstance());
     }
 
     @Override

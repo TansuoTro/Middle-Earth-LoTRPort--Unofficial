@@ -39,8 +39,8 @@ public class BiomeFogParticle extends TextureSheetParticle {
     }
 
     public void tick() {
-        if (this.spawnPos.getY() > world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, this.spawnPos.getX(), this.spawnPos.getZ()) + 1){
-            this.markDead();
+        if (this.spawnPos.getY() > world.getTopY(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, this.spawnPos.getX(), this.spawnPos.getZ()) + 1){
+            this.remove();
         }
 
         this.prevPosX = this.x;
@@ -57,7 +57,7 @@ public class BiomeFogParticle extends TextureSheetParticle {
             this.velocityZ += this.random.nextFloat() / 5000.0F * (float)(this.random.nextBoolean() ? 1 : -1);
             this.move(this.velocityX, this.velocityY, this.velocityZ);
         } else {
-            this.markDead();
+            this.remove();
         }
     }
 

@@ -16,12 +16,12 @@ import java.util.function.Predicate;
 
 public class StrollAroundHomeTask {
     public static BehaviorControl<PathfinderMob> create(float speed, int radius, boolean strollInWater) {
-        return create(speed, entity -> findTargetPos(entity, radius), strollInWater ? entity -> true : entity -> !entity.isTouchingWater());
+        return create(speed, entity -> findTargetPos(entity, radius), strollInWater ? entity -> true : entity -> !entity.isInWater());
     }
 
     private static OneShot<PathfinderMob> create(float speed, Function<PathfinderMob, Vec3> targetGetter, Predicate<PathfinderMob> shouldRun) {
         return BehaviorBuilder.task(
-                context -> context.group(context.queryMemoryAbsent(MemoryModuleType.WALK_TARGET)).apply(context, walkTarget -> (world, entity, time) -> {
+                context -> context.group(context.absent(MemoryModuleType.WALK_TARGET)).apply(context, walkTarget -> (world, entity, time) -> {
                     if (!shouldRun.test(entity)) {
                         return false;
                     } else {
@@ -37,10 +37,10 @@ public class StrollAroundHomeTask {
     private static Vec3 findTargetPos(PathfinderMob entity, int radius) {
         Optional<GlobalPos> optional = entity.getBrain().getOptionalMemory(MemoryModuleType.HOME);
         Vec3 homePos;
-        Vec3 entityPos = entity.getPos();
+        Vec3 entityPos = entity.position();
 
         if(optional != null && optional.isPresent()) {
-            homePos = Vec3.ofBottomCenter(optional.get().getPos());
+            homePos = Vec3.atBottomCenterOf(optional.get().getPos());
         }
         else {
             return null;

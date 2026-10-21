@@ -20,7 +20,7 @@ public record RaceDataComponent(ResourceLocation raceId) implements net.jukoz.me
                               java.util.List<net.minecraft.network.chat.Component> tooltip) {
         tooltip.add(net.minecraft.network.chat.Component.translatable("tooltip.me.race")
                 .formatted(net.minecraft.util.ChatFormatting.DARK_RED)
-                .append(net.minecraft.network.chat.Component.translatable(raceId.toTranslationKey("race"))
+                .append(net.minecraft.network.chat.Component.translatable(raceId.toLanguageKey("race"))
                         .formatted(net.minecraft.util.ChatFormatting.WHITE)));
     }
 }

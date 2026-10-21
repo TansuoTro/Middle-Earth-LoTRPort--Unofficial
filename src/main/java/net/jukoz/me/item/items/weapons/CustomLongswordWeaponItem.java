@@ -9,7 +9,7 @@ import net.minecraft.world.item.Tier;
 import net.minecraft.world.entity.EquipmentSlot;
 
 public class CustomLongswordWeaponItem extends ReachWeaponItem {
-    public CustomLongswordWeaponItem(Tier toolMaterial, Item.Settings settings) {
+    public CustomLongswordWeaponItem(Tier toolMaterial, Item.Properties settings) {
         super(toolMaterial, WeaponTypesME.LONGSWORD, settings);
         // Keep in case of pvp re-balancing feedbacks
         /*.component(DataComponentTypes.BLOCKS_ATTACKS,

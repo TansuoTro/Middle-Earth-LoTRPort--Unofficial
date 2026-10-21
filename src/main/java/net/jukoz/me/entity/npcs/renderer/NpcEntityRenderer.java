@@ -8,17 +8,16 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.ElytraLayer;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.layers.CustomHeadLayer;
 import net.minecraft.client.model.HumanoidArmorModel;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.EntityModelLayers;
+import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.world.entity.EntityPose;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
@@ -51,6 +50,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.client.renderer.RenderType;
 
 public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntityRenderState, NpcEntityModel> {
     private final TextureAtlas characterTextureAtlas;
@@ -67,12 +67,12 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
         this.features.removeIf(x -> x.getClass() == ElytraLayer.class);
         this.features.removeIf(x -> x.getClass() == CustomHeadLayer.class);
 
-        this.addFeature(new HumanoidArmorLayer<NpcEntity, NpcEntityModel, HumanoidArmorModel<NpcEntity>>(this, new HumanoidArmorModel<>(context.getPart(ModelLayers.PLAYER_INNER_ARMOR)), new HumanoidArmorModel<>(context.getPart(ModelLayers.PLAYER_OUTER_ARMOR)), net.minecraft.client.Minecraft.getInstance().getBakedModelManager()));
-        this.addFeature(new HairFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader())));
-        this.addFeature(new EarFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader())));
-        this.addFeature(new NoseFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader())));
-        this.addFeature(new FeetFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader())));
-        this.addFeature(new net.jukoz.me.entity.spider.EnwebbedFeatureRenderer<NpcEntity, NpcEntityModel>(this, new LoadedEntityModelsCompat(context.getModelLoader()), net.jukoz.me.compat.client.render.equipment.EquipmentRenderer.INSTANCE));
+        this.addFeature(new HumanoidArmorLayer<NpcEntity, NpcEntityModel, HumanoidArmorModel<NpcEntity>>(this, new HumanoidArmorModel<>(context.getPart(ModelLayers.PLAYER_INNER_ARMOR)), new HumanoidArmorModel<>(context.getPart(ModelLayers.PLAYER_OUTER_ARMOR)), net.minecraft.client.Minecraft.getInstance().getModelManager()));
+        this.addFeature(new HairFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelSet())));
+        this.addFeature(new EarFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelSet())));
+        this.addFeature(new NoseFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelSet())));
+        this.addFeature(new FeetFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelSet())));
+        this.addFeature(new net.jukoz.me.entity.spider.EnwebbedFeatureRenderer<NpcEntity, NpcEntityModel>(this, new LoadedEntityModelsCompat(context.getModelSet()), net.jukoz.me.compat.client.render.equipment.EquipmentRenderer.INSTANCE));
 
         characterTextureAtlas = AtlasesME.getAtlasFromPath(ModTexturedRenderLayers.CHARACTER_ATLAS_TEXTURES);
 
@@ -98,7 +98,7 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
     @Override
     @OnlyIn(Dist.CLIENT)
     public void updateRenderState(NpcEntity npcEntity, NpcEntityRenderState npcEntityRenderState, float tickDelta) {
-        if(!npcEntity.getWorld().isClient)
+        if(!npcEntity.getWorld().isClientSide)
             return;
 
         npcEntityRenderState.aimingState = npcEntity.aimingState;
@@ -109,8 +109,8 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
 
         npcEntityRenderState.pose = npcEntity.getPose();
 
-        npcEntityRenderState.leftArmPose = getArmPose(npcEntity, npcEntity.getStackInHand(InteractionHand.OFF_HAND), InteractionHand.OFF_HAND);
-        npcEntityRenderState.rightArmPose = getArmPose(npcEntity, npcEntity.getStackInHand(InteractionHand.MAIN_HAND), InteractionHand.MAIN_HAND);
+        npcEntityRenderState.leftArmPose = getArmPose(npcEntity, npcEntity.getItemInHand(InteractionHand.OFF_HAND), InteractionHand.OFF_HAND);
+        npcEntityRenderState.rightArmPose = getArmPose(npcEntity, npcEntity.getItemInHand(InteractionHand.MAIN_HAND), InteractionHand.MAIN_HAND);
 
         npcEntityRenderState.widthScale = npcEntity.getWidthScale();
 
@@ -150,11 +150,11 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
             npcEntityRenderState.canShowEars = true;
         } else {
             var hasAttachment = MEComponents.get(currentHelmet, MEComponents.HELMET_ATTACHMENT_DATA);
-            boolean hasHoodDown = hasAttachment == null || hasAttachment.down();
+            boolean hasHoodDown = hasAttachment == null || hasAttachment.below();
 
-            npcEntityRenderState.canShowEars = currentHelmet.isIn(ItemTagsME.CHARACTER_HELMET_SHOW_EARS) && hasHoodDown;
-            npcEntityRenderState.canShowBeard = !currentHelmet.isIn(ItemTagsME.CHARACTER_HELMET_HIDE_BEARD);
-            npcEntityRenderState.canShowHair = !currentHelmet.isIn(ItemTagsME.CHARACTER_HELMET_HIDE_HAIR) && hasHoodDown;
+            npcEntityRenderState.canShowEars = currentHelmet.is(ItemTagsME.CHARACTER_HELMET_SHOW_EARS) && hasHoodDown;
+            npcEntityRenderState.canShowBeard = !currentHelmet.is(ItemTagsME.CHARACTER_HELMET_HIDE_BEARD);
+            npcEntityRenderState.canShowHair = !currentHelmet.is(ItemTagsME.CHARACTER_HELMET_HIDE_HAIR) && hasHoodDown;
         }
         ItemStack currentShoes = npcEntity.getEquippedStack(EquipmentSlot.FEET);
         npcEntityRenderState.canShowFeet = currentShoes == null || currentShoes.isEmpty();
@@ -164,14 +164,14 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
 
     // region [Layered Texture Renderer]
     @Nullable
-    protected RenderLayer getRenderLayer(NpcEntityRenderState state, boolean showBody, boolean translucent, boolean showOutline) {
+    protected RenderType getRenderLayer(NpcEntityRenderState state, boolean showBody, boolean translucent, boolean showOutline) {
         ResourceLocation identifier = this.getTexture(state);
         if (translucent) {
-            return RenderLayer.getEntityTranslucent(identifier);
+            return RenderType.getEntityTranslucent(identifier);
         } else if (showBody) {
             return this.model.getLayer(identifier);
         } else {
-            return showOutline ? RenderLayer.getOutline(identifier) : null;
+            return showOutline ? RenderType.getOutline(identifier) : null;
         }
     }
 
@@ -215,7 +215,7 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
 
         if (!state.invisible && state.LOD < ModClientConfigs.LOD_NPC_ARMOR_DISTANCE) {
             NpcEntity featureEntity = (NpcEntity) state.entity;
-            for (RenderLayer<NpcEntity, NpcEntityModel> feature : this.features) {
+            for (RenderType<NpcEntity, NpcEntityModel> feature : this.features) {
                 if (feature instanceof EarFeatureRenderer)
                     if ((state.simplifiedEarId == null && state.earId == null) || state.LOD > ModClientConfigs.LOD_NPC_FEATURES_DISTANCE)
                         continue;
@@ -303,7 +303,7 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
         if (stack.isEmpty()) {
             return HumanoidModel.ArmPose.EMPTY;
         }
-        if (!npc.handSwinging && (stack.isOf(Items.CROSSBOW) || stack.isIn(ItemTagsME.CROSSBOW))) {
+        if (!npc.handSwinging && (stack.is(Items.CROSSBOW) || stack.is(ItemTagsME.CROSSBOW))) {
             if(CrossbowItem.isCharged(stack)) {
                 return HumanoidModel.ArmPose.CROSSBOW_HOLD;
             }
@@ -311,7 +311,7 @@ public class NpcEntityRenderer extends MEBipedEntityRenderer<NpcEntity, NpcEntit
                 return HumanoidModel.ArmPose.CROSSBOW_CHARGE;
             }
         }
-        if (npc.getActiveHand() == hand && npc.getItemUseTimeLeft() > 0) {
+        if (npc.getUsedItemHand() == hand && npc.getUseItemRemainingTicks() > 0) {
             UseAnim useAction = stack.getUseAction();
             if (useAction == UseAnim.BLOCK || npc.isBlocking()) {
                 return HumanoidModel.ArmPose.BLOCK;

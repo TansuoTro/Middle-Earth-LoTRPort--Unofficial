@@ -15,7 +15,7 @@ import net.jukoz.me.item.items.weapons.CustomLongswordWeaponItem;
 
 public class ArtefactCustomLongswordWeaponItem extends CustomLongswordWeaponItem {
 
-    public ArtefactCustomLongswordWeaponItem(Tier toolMaterial, Item.Settings settings) {
+    public ArtefactCustomLongswordWeaponItem(Tier toolMaterial, Item.Properties settings) {
         super(toolMaterial, settings);
     }
 
@@ -44,7 +44,7 @@ public class ArtefactCustomLongswordWeaponItem extends CustomLongswordWeaponItem
 
     @Override
     public boolean postMine(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity miner) {
-        if (!world.isClient && state.getHardness(world, pos) != 0.0F) {
+        if (!world.isClientSide && state.defaultDestroyTime(world, pos) != 0.0F) {
             if (stack.getDamage() == stack.getMaxDamage() - 1) {
                 BluntWeapon.blunt(stack);
             }

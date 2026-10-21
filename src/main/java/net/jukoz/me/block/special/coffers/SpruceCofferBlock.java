@@ -13,10 +13,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.jukoz.me.block.registration.ModBlockEntities;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class SpruceCofferBlock extends ChestBlock {
 
-    public SpruceCofferBlock(Settings settings) {
+    public SpruceCofferBlock(BlockBehaviour.Properties settings) {
         super(settings, () -> ModBlockEntities.SPRUCE_COFFER);
     }
 
@@ -27,13 +28,13 @@ public class SpruceCofferBlock extends ChestBlock {
 
     @Override
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        Direction direction = ctx.getHorizontalPlayerFacing();
+        Direction direction = ctx.getHorizontalDirection();
         FluidState fluidstate = ctx.getWorld().getFluidState(ctx.getBlockPos());
-        return this.getDefaultState().with(FACING, direction).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
+        return this.defaultBlockState().with(FACING, direction).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
     }
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 11.0, 16.0);
+        return Block.box(0.0, 0.0, 0.0, 16.0, 11.0, 16.0);
     }
 }

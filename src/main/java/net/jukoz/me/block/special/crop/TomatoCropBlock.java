@@ -5,7 +5,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.item.ItemConvertible;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -14,13 +14,14 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class TomatoCropBlock extends CropBlock {
     public static final int MAX_AGE = 3;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
-    protected static final VoxelShape SHAPE = Block.createCuboidShape(2.0, 0.0, 2.0, 14.0, 30.0, 14.0);
+    protected static final VoxelShape SHAPE = Block.box(2.0, 0.0, 2.0, 14.0, 30.0, 14.0);
 
-    public TomatoCropBlock(Settings settings) {
+    public TomatoCropBlock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 

@@ -14,22 +14,23 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.jukoz.me.MiddleEarth;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class CrateBlock extends BarrelBlock {
-    public CrateBlock(Settings settings) {
+    public CrateBlock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
     @Override
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return this.getDefaultState().with(BlockStateProperties.FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+        return this.defaultBlockState().with(BlockStateProperties.FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return switch (state.get(FACING)) {
-            case DOWN, UP, NORTH, SOUTH -> Block.createCuboidShape(0, 0, 3, 16, 7, 13);
-            case WEST,EAST -> Block.createCuboidShape(3, 0, 0, 13, 7, 16);
+            case DOWN, UP, NORTH, SOUTH -> Block.box(0, 0, 3, 16, 7, 13);
+            case WEST,EAST -> Block.box(3, 0, 0, 13, 7, 16);
         };
     }
 

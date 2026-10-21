@@ -5,7 +5,7 @@ import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.jukoz.me.compat.client.render.MEMobEntityRenderer;
 import com.google.common.collect.Maps;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.jukoz.me.compat.client.render.equipment.EquipmentModel;
 import net.minecraft.client.renderer.entity.layers.HorseMarkingLayer;
@@ -41,7 +41,7 @@ public class BroadhoofGoatRenderer extends MEMobEntityRenderer<BroadhoofGoatEnti
 
                 )
         );
-        this.addFeature(new BroadhoofGoatSaddleFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelLoader()), EquipmentRenderer.INSTANCE));
+        this.addFeature(new BroadhoofGoatSaddleFeatureRenderer(this, new LoadedEntityModelsCompat(context.getModelSet()), EquipmentRenderer.INSTANCE));
     }
 
     @Override

@@ -52,10 +52,10 @@ public final class MEArmorTrim {
         CompoundTag tag = new CompoundTag();
         putEntryId(tag, MATERIAL_KEY, trim.getMaterial());
         putEntryId(tag, PATTERN_KEY, trim.getPattern());
-        stack.setSubNbt(ArmorTrim.NBT_KEY, tag);
+        stack.addTagElement(ArmorTrim.NBT_KEY, tag);
     }
 
     private static void putEntryId(CompoundTag tag, String key, Holder<?> entry) {
-        entry.getKey().ifPresent(registryKey -> tag.putString(key, registryKey.getValue().toString()));
+        entry.getKey().ifPresent(registryKey -> tag.putString(key, registryKey.location().toString()));
     }
 }

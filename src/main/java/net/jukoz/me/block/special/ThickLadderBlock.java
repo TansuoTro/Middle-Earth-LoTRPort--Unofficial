@@ -16,8 +16,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelAccess;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import java.util.Objects;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock;
@@ -26,20 +26,21 @@ import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import com.mojang.math.Axis;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class ThickLadderBlock extends FaceAttachedHorizontalDirectionalBlock implements SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    protected static final VoxelShape EAST_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 3.0, 16.0, 16.0);
-    protected static final VoxelShape WEST_SHAPE = Block.createCuboidShape(13.0, 0.0, 0.0, 16.0, 16.0, 16.0);
-    protected static final VoxelShape SOUTH_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 3.0);
-    protected static final VoxelShape NORTH_SHAPE = Block.createCuboidShape(0.0, 0.0, 13.0, 16.0, 16.0, 16.0);
-    protected static final VoxelShape BOTTOM_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 3.0, 16.0);
-    protected static final VoxelShape TOP_SHAPE = Block.createCuboidShape(0.0, 13.0, 0.0, 16.0, 16.0, 16.0);
+    protected static final VoxelShape EAST_SHAPE = Block.box(0.0, 0.0, 0.0, 3.0, 16.0, 16.0);
+    protected static final VoxelShape WEST_SHAPE = Block.box(13.0, 0.0, 0.0, 16.0, 16.0, 16.0);
+    protected static final VoxelShape SOUTH_SHAPE = Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 3.0);
+    protected static final VoxelShape NORTH_SHAPE = Block.box(0.0, 0.0, 13.0, 16.0, 16.0, 16.0);
+    protected static final VoxelShape BOTTOM_SHAPE = Block.box(0.0, 0.0, 0.0, 16.0, 3.0, 16.0);
+    protected static final VoxelShape TOP_SHAPE = Block.box(0.0, 13.0, 0.0, 16.0, 16.0, 16.0);
 
-    public ThickLadderBlock(Settings settings) {
-        super(settings.nonOpaque());
-        this.setDefaultState((BlockState)((BlockState)((BlockState)this.stateManager.getDefaultState()).with(FACING, Direction.NORTH)).with(FACE, AttachFace.WALL).with(WATERLOGGED, false));
+    public ThickLadderBlock(BlockBehaviour.Properties settings) {
+        super(settings.noOcclusion());
+        this.setDefaultState((BlockState)((BlockState)((BlockState)this.stateManager.defaultBlockState()).with(FACING, Direction.NORTH)).with(FACE, AttachFace.WALL).with(WATERLOGGED, false));
     }
 
     public RenderShape getRenderType(BlockState state) {
@@ -55,7 +56,7 @@ public class ThickLadderBlock extends FaceAttachedHorizontalDirectionalBlock imp
     }
 
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return (BlockState)state.with(FACING, rotation.rotate((Direction)state.get(FACING)));
+        return (BlockState)state.setValue(FACING, rotation.rotate((Direction)state.get(FACING)));
     }
 
     public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
@@ -68,21 +69,21 @@ public class ThickLadderBlock extends FaceAttachedHorizontalDirectionalBlock imp
 
     @Override
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        Direction[] var2 = ctx.getPlacementDirections();
+        Direction[] var2 = ctx.getNearestLookingDirections();
 
         for (Direction direction : var2) {
             BlockState blockState;
             if (direction.getAxis() == Direction.Axis.Y) {
-                if(!Objects.requireNonNull(ctx.getPlayer()).isSneaking()){
-                    blockState = (BlockState) ((BlockState) this.getDefaultState().with(FACE, AttachFace.WALL)).with(FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);;
+                if(!Objects.requireNonNull(ctx.getPlayer()).isShiftKeyDown()){
+                    blockState = (BlockState) ((BlockState) this.defaultBlockState().with(FACE, AttachFace.WALL)).with(FACING, ctx.getHorizontalDirection().getOpposite()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);;
                 } else {
-                    blockState = (BlockState) ((BlockState) this.getDefaultState().with(FACE, direction == Direction.UP ? AttachFace.CEILING : AttachFace.FLOOR)).with(FACING, ctx.getHorizontalPlayerFacing()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);;
+                    blockState = (BlockState) ((BlockState) this.defaultBlockState().with(FACE, direction == Direction.UP ? AttachFace.CEILING : AttachFace.FLOOR)).with(FACING, ctx.getHorizontalDirection()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);;
                 }
             } else {
-                if(!Objects.requireNonNull(ctx.getPlayer()).isSneaking()) {
-                    blockState = (BlockState) ((BlockState) this.getDefaultState().with(FACE, AttachFace.WALL)).with(FACING, direction.getOpposite()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);;
+                if(!Objects.requireNonNull(ctx.getPlayer()).isShiftKeyDown()) {
+                    blockState = (BlockState) ((BlockState) this.defaultBlockState().with(FACE, AttachFace.WALL)).with(FACING, direction.getOpposite()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);;
                 } else {
-                    blockState = (BlockState) ((BlockState) this.getDefaultState().with(FACE, (ctx.getHitPos().y - (double)ctx.getBlockPos().getY() > 0.5) ? AttachFace.CEILING : AttachFace.FLOOR)).with(FACING, direction.getOpposite()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);;
+                    blockState = (BlockState) ((BlockState) this.defaultBlockState().with(FACE, (ctx.getClickLocation().y - (double)ctx.getBlockPos().getY() > 0.5) ? AttachFace.CEILING : AttachFace.FLOOR)).with(FACING, direction.getOpposite()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);;
                 }
             }
             if (blockState.canPlaceAt(ctx.getWorld(), ctx.getBlockPos())) {

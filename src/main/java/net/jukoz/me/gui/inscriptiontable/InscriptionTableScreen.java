@@ -148,23 +148,23 @@ public class InscriptionTableScreen extends AbstractContainerScreen<InscriptionT
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
 
-        context.drawTexture(TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight, 512, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight, 512, 256);
 
         if (this.selectedWords.isEmpty()){
-            context.drawTexture(TEXTURE, i + 104, j + 7, 347, 1, 164, 16, 512, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, i + 104, j + 7, 347, 1, 164, 16, 512, 256);
         } else {
-            context.drawTexture(TEXTURE, i + 104, j + 7, 347, 19, 164, 16, 512, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, i + 104, j + 7, 347, 19, 164, 16, 512, 256);
         }
 
         if (!(enchant == null || enchant.isEmpty())){
             int m = 19;
             if (this.maxLevel == 1) m = 21;
-            context.drawTexture(TEXTURE, i + 188 - m * this.maxLevel /2, j + 81, 282, 33 * (this.maxLevel - 1) + 1, m * this.maxLevel, 12, 512, 256);
-            context.drawTexture(TEXTURE, i + 188 - m * this.maxLevel /2, j + 81, 282, 33 * (this.maxLevel - 1) + 21, m * this.level, 12, 512, 256);
-            context.drawTexture(TEXTURE, i + 188 + (m * (this.level - 1)) - m * this.maxLevel /2, j + 81, 282 + (m * (this.level  - 1)), 33 * (this.maxLevel - 1) + 14, m, 6, 512, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, i + 188 - m * this.maxLevel /2, j + 81, 282, 33 * (this.maxLevel - 1) + 1, m * this.maxLevel, 12, 512, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, i + 188 - m * this.maxLevel /2, j + 81, 282, 33 * (this.maxLevel - 1) + 21, m * this.level, 12, 512, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, i + 188 + (m * (this.level - 1)) - m * this.maxLevel /2, j + 81, 282 + (m * (this.level  - 1)), 33 * (this.maxLevel - 1) + 14, m, 6, 512, 256);
 
-            context.drawTexture(TEXTURE, i + 123, j + 25, 347, 39, 130, 16, 512, 256);
-            context.drawText(this.textRenderer, enchant, i + 188 - textRenderer.getWidth(enchant) / 2, j + 29, net.jukoz.me.compat.MEColors.fullAlpha(0xad6b3f), false);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, i + 123, j + 25, 347, 39, 130, 16, 512, 256);
+            context.drawText(this.font, enchant, i + 188 - font.getWidth(enchant) / 2, j + 29, net.jukoz.me.compat.MEColors.fullAlpha(0xad6b3f), false);
 
             int k = this.handler.getLevelCost();
             int l = this.handler.getPlayerLevels();
@@ -183,18 +183,18 @@ public class InscriptionTableScreen extends AbstractContainerScreen<InscriptionT
 
             context.fill(i + 156, j + 71, i + 221, j + 79, 1325400064);
 
-            context.drawText(this.textRenderer, text, i + 188 - textRenderer.getWidth(text) / 2, j + 71, color, true);
+            context.drawText(this.font, text, i + 188 - font.getWidth(text) / 2, j + 71, color, true);
         } else {
             this.confirmationButton.active = false;
             if(!this.selectedWords.isEmpty()){
-                context.drawTexture(TEXTURE, i + 123, j + 25, 347, 39, 130, 16, 512, 256);
-                FormattedText stringVisitable = textRenderer.getTextHandler().trimToWidth(this.enchantText, 159, Style.EMPTY);
-                context.drawTextWrapped(this.textRenderer, stringVisitable, i + 188 - textRenderer.getWidth(stringVisitable.getString()) / 2, j + 29, 159, net.jukoz.me.compat.MEColors.fullAlpha(0xad6b3f));
+                net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, i + 123, j + 25, 347, 39, 130, 16, 512, 256);
+                FormattedText stringVisitable = font.getTextHandler().trimToWidth(this.enchantText, 159, Style.EMPTY);
+                context.drawTextWrapped(this.font, stringVisitable, i + 188 - font.getWidth(stringVisitable.getString()) / 2, j + 29, 159, net.jukoz.me.compat.MEColors.fullAlpha(0xad6b3f));
             }
         }
 
         if (this.handler.hasGem()){
-            context.drawTexture(TEXTURE, i + 130, j + 43, 282, 166, 26, 26, 512, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, i + 130, j + 43, 282, 166, 26, 26, 512, 256);
         }
 
         this.catalystSlotIcon.render(this.handler, context, delta, this.x, this.y);
@@ -209,8 +209,8 @@ public class InscriptionTableScreen extends AbstractContainerScreen<InscriptionT
             stringBuilder.append(Component.translatable("inscription." + MiddleEarth.MOD_ID + "." + word).getString());
             m++;
         }
-        FormattedText stringVisitable = textRenderer.getTextHandler().trimToWidth(Component.literal(stringBuilder.toString()), 159, Style.EMPTY);
-        context.drawCenteredTextWithShadow(this.textRenderer, stringVisitable.getString(), i + 186, j + 11, CommonColors.WHITE);
+        FormattedText stringVisitable = font.getTextHandler().trimToWidth(Component.literal(stringBuilder.toString()), 159, Style.EMPTY);
+        context.drawCenteredTextWithShadow(this.font, stringVisitable.getString(), i + 186, j + 11, CommonColors.WHITE);
     }
 
     @Override
@@ -244,12 +244,12 @@ public class InscriptionTableScreen extends AbstractContainerScreen<InscriptionT
                     if(widgetButtonPage.hidden) {
 //                        Component text = Component.literal(StringUtils.capitalize(word)).setStyle(Style.EMPTY.withStrikethrough(widgetButtonPage.hidden));
                         Component text = Component.translatable("inscription." + MiddleEarth.MOD_ID + "." + word).setStyle(Style.EMPTY.withStrikethrough(widgetButtonPage.hidden));
-                        context.drawText(this.textRenderer, text, i + 11, n, CommonColors.GRAY, false);
+                        context.drawText(this.font, text, i + 11, n, CommonColors.GRAY, false);
                     } else {
-                        context.drawText(this.textRenderer, Component.translatable("inscription." + MiddleEarth.MOD_ID + "." + word), i + 11, n, CommonColors.WHITE, false);
+                        context.drawText(this.font, Component.translatable("inscription." + MiddleEarth.MOD_ID + "." + word), i + 11, n, CommonColors.WHITE, false);
                     }
                 } else {
-                    context.drawText(this.textRenderer, Component.translatable("inscription." + MiddleEarth.MOD_ID + "." + word), i + 11, n, CommonColors.WHITE, false);
+                    context.drawText(this.font, Component.translatable("inscription." + MiddleEarth.MOD_ID + "." + word), i + 11, n, CommonColors.WHITE, false);
                 }
                 n += 14;
             }
@@ -273,9 +273,9 @@ public class InscriptionTableScreen extends AbstractContainerScreen<InscriptionT
             if (this.indexStartOffset == i - 1) {
                 m = 127;
             }
-            context.drawTexture(SCROLLER_TEXTURE, x + 94, y + 22 + m, 0, 0, 6, 27);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, SCROLLER_TEXTURE, x + 94, y + 22 + m, 0, 0, 6, 27);
         } else {
-            context.drawTexture(SCROLLER_DISABLED_TEXTURE, x + 94, y + 22, 0, 0, 6, 27);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, SCROLLER_DISABLED_TEXTURE, x + 94, y + 22, 0, 0, 6, 27);
         }
     }
 
@@ -317,7 +317,7 @@ public class InscriptionTableScreen extends AbstractContainerScreen<InscriptionT
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    static class WidgetInscriptionButtonPage extends ButtonWidget {
+    static class WidgetInscriptionButtonPage extends Button {
         final int index;
         boolean selected;
         int selectedIndex = -1;
@@ -329,7 +329,7 @@ public class InscriptionTableScreen extends AbstractContainerScreen<InscriptionT
         private static final ResourceLocation HIGHLIGHTED_BUTTON_TEXTURE = MiddleEarth.of("word_button_highlighted");
         private static final ResourceLocation BUTTON_MARKERS = MiddleEarth.of("inscription_table_markers");
 
-        public WidgetInscriptionButtonPage(final int x, final int y, final int index, final ButtonWidget.PressAction onPress) {
+        public WidgetInscriptionButtonPage(final int x, final int y, final int index, final Button.PressAction onPress) {
             super(x, y, 86, 14, CommonComponents.EMPTY, onPress, DEFAULT_NARRATION_SUPPLIER);
             this.index = index;
             this.visible = false;
@@ -359,21 +359,21 @@ public class InscriptionTableScreen extends AbstractContainerScreen<InscriptionT
             final int width = getWidth();
             final int height = getHeight();
             if (this.hidden){
-                context.drawTexture(DISABLED_BUTTON_TEXTURE, x, y, 0, 0, width, height);
+                net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, DISABLED_BUTTON_TEXTURE, x, y, 0, 0, width, height);
             } else if (this.selected){
-                context.drawTexture(SELECTED_BUTTON_TEXTURE, x, y, 0, 0, width, height);
+                net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, SELECTED_BUTTON_TEXTURE, x, y, 0, 0, width, height);
             } else if (this.isHovered()) {
-                context.drawTexture(HIGHLIGHTED_BUTTON_TEXTURE, x, y, 0, 0, width, height);
+                net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, HIGHLIGHTED_BUTTON_TEXTURE, x, y, 0, 0, width, height);
             } else {
-                context.drawTexture(BUTTON_TEXTURE, x, y, 0, 0, width, height);
+                net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, BUTTON_TEXTURE, x, y, 0, 0, width, height);
             }
 
             if(selectedIndex >= 0 && selectedIndex < 3) {
-                context.drawTexture(BUTTON_MARKERS, x + width - 8, y + 5, 16 + 4 * selectedIndex, 4, 4, 4);
+                net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, BUTTON_MARKERS, x + width - 8, y + 5, 16 + 4 * selectedIndex, 4, 4, 4);
             }
 
             int i = net.jukoz.me.compat.MEColors.withAlpha(this.alpha, this.active ? -1 : -6250336);
-            this.drawMessage(context, minecraftClient.textRenderer, i);
+            this.drawMessage(context, minecraftClient.font, i);
         }
 
         @Override
@@ -382,13 +382,13 @@ public class InscriptionTableScreen extends AbstractContainerScreen<InscriptionT
         }
     }
 
-    static class WidgetArrowButtonPage extends ButtonWidget {
+    static class WidgetArrowButtonPage extends Button {
 
         private static final ResourceLocation BUTTON_TEXTURE = MiddleEarth.of("arrow_button");
         private static final ResourceLocation BUTTON_UNAVAILABLE = MiddleEarth.of("arrow_button_unavailable");
         private static final ResourceLocation HIGHLIGHTED_BUTTON_TEXTURE = MiddleEarth.of("arrow_button_highlighted");
 
-        public WidgetArrowButtonPage(final int x, final int y, final ButtonWidget.PressAction onPress) {
+        public WidgetArrowButtonPage(final int x, final int y, final Button.PressAction onPress) {
             super(x, y, 16, 11, CommonComponents.EMPTY, onPress, DEFAULT_NARRATION_SUPPLIER);
         }
 
@@ -396,14 +396,14 @@ public class InscriptionTableScreen extends AbstractContainerScreen<InscriptionT
         protected void renderButton(GuiGraphics context, int mouseX, int mouseY, float deltaTicks) {
             Minecraft minecraftClient = Minecraft.getInstance();
             if (this.isHovered() && this.active){
-                context.drawTexture(HIGHLIGHTED_BUTTON_TEXTURE, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight());
+                net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, HIGHLIGHTED_BUTTON_TEXTURE, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight());
             } else if (this.active) {
-                context.drawTexture(BUTTON_TEXTURE, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight());
+                net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, BUTTON_TEXTURE, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight());
             } else {
-                context.drawTexture(BUTTON_UNAVAILABLE, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight());
+                net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, BUTTON_UNAVAILABLE, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight());
             }
             int i = net.jukoz.me.compat.MEColors.withAlpha(this.alpha, this.active ? -1 : -6250336);
-            this.drawMessage(context, minecraftClient.textRenderer, i);
+            this.drawMessage(context, minecraftClient.font, i);
         }
     }
 }

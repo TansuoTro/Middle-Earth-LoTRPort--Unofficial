@@ -237,9 +237,9 @@ public class DecorativeItemsME {
             (settings) -> new StandingAndWallBlockItem(ModDecorativeBlocks.ARKENSTONE, ModDecorativeBlocks.WALL_ARKENSTONE, settings, Direction.DOWN), new MESettings().rarity(Rarity.EPIC).fireproof()
                     .lore(ArtefactUtils.getArtefactLore("arkenstone")));
 
-    private static Item registerItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerItem(String name, Function<Item.Properties, Item> factory, Item.Properties settings) {
         Item item = (Item)factory.apply(settings);
-        ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(item.getDefaultStack());
+        ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(item.getDefaultInstance());
         TranslationEntries.itemEntries.add(item);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ITEM, name));
         return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);

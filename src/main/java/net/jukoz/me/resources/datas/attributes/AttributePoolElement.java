@@ -138,7 +138,7 @@ public class AttributePoolElement {
 
     public static CompoundTag createAttributeNbtListFromPlayer(Player player) {
         ListTag attributeList = new ListTag();
-        var registry = player.getWorld().getRegistryManager().getOptional(Registries.ATTRIBUTE).get();
+        var registry = player.level().registryAccess().getOptional(Registries.ATTRIBUTE).get();
         Collection<AttributeInstance> attributes = new ArrayList<>();
         var entries = registry.streamEntries().toList();
         for(var entry : entries){

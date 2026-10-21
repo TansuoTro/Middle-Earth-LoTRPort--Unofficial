@@ -15,24 +15,25 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 /** The subset of 1.21 trial states used by the donor's configured dungeons. */
 public class TrialSpawnerBlock extends BaseEntityBlock {
     public enum Phase implements StringRepresentable {
         INACTIVE, WAITING_FOR_PLAYERS, ACTIVE, WAITING_FOR_REWARD_EJECTION, EJECTING_REWARD, COOLDOWN;
-        public String asString() { return name().toLowerCase(java.util.Locale.ROOT); }
+        public String asString() { return name().lowercaseVariant(java.util.Locale.ROOT); }
     }
-    public static final EnumProperty<Phase> PHASE = EnumProperty.of("trial_spawner_state", Phase.class);
-    public static final BooleanProperty OMINOUS = BooleanProperty.of("ominous");
+    public static final EnumProperty<Phase> PHASE = EnumProperty.create("trial_spawner_state", Phase.class);
+    public static final BooleanProperty OMINOUS = BooleanProperty.create("ominous");
 
-    public TrialSpawnerBlock(Settings settings) {
+    public TrialSpawnerBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        setDefaultState(stateManager.getDefaultState().with(PHASE, Phase.WAITING_FOR_PLAYERS).with(OMINOUS, false));
+        setDefaultState(stateManager.defaultBlockState().with(PHASE, Phase.WAITING_FOR_PLAYERS).with(OMINOUS, false));
     }
     @Override protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) { builder.add(PHASE, OMINOUS); }
     @Override public RenderShape getRenderType(BlockState state) { return RenderShape.MODEL; }
     @Override public BlockEntity createBlockEntity(BlockPos pos, BlockState state) { return new TrialSpawnerBlockEntity(pos, state); }
     @Override @Nullable public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-        return world.isClient ? null : checkType(type, ModBlockEntities.TRIAL_SPAWNER, TrialSpawnerBlockEntity::tick);
+        return world.isClientSide ? null : checkType(type, ModBlockEntities.TRIAL_SPAWNER, TrialSpawnerBlockEntity::tick);
     }
 }

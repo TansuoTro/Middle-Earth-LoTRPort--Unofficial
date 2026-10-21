@@ -9,34 +9,35 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.LevelAccess;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class LayersAltBlock extends SnowLayerBlock implements SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public LayersAltBlock(Settings settings) {
+    public LayersAltBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState((BlockState)((BlockState)this.stateManager.getDefaultState()).with(LAYERS, 1).with(WATERLOGGED, false));
+        this.setDefaultState((BlockState)((BlockState)this.stateManager.defaultBlockState()).with(LAYERS, 1).with(WATERLOGGED, false));
     }
 
     @Override
     public BlockState getPlacementState(BlockPlaceContext ctx) {
         BlockState blockState = ctx.getWorld().getBlockState(ctx.getBlockPos());
-        if (blockState.isOf(this)) {
+        if (blockState.is(this)) {
             int i = (Integer)blockState.get(LAYERS);
             if (blockState.get(WATERLOGGED)){
-                return (BlockState)blockState.with(LAYERS, Math.min(8, i + 1)).with(WATERLOGGED, true);
+                return (BlockState)blockState.setValue(LAYERS, Math.min(8, i + 1)).with(WATERLOGGED, true);
             } else {
-                return (BlockState)blockState.with(LAYERS, Math.min(8, i + 1));
+                return (BlockState)blockState.setValue(LAYERS, Math.min(8, i + 1));
             }
         } else {
-            if(blockState.isOf(Blocks.WATER)){
+            if(blockState.is(Blocks.WATER)){
                 return super.getPlacementState(ctx).with(WATERLOGGED, true);
             } else {
                 return super.getPlacementState(ctx);
@@ -66,8 +67,8 @@ public class LayersAltBlock extends SnowLayerBlock implements SimpleWaterloggedB
     @Override
     public boolean canReplace(BlockState state, BlockPlaceContext context) {
         int i = state.get(LAYERS);
-        if (context.getStack().isOf(this.asItem()) && i < 8) {
-            if (context.canReplaceExisting()) {
+        if (context.getItem().is(this.asItem()) && i < 8) {
+            if (context.replacingClickedOnBlock()) {
                 return context.getSide() == Direction.UP;
             } else {
                 return true;

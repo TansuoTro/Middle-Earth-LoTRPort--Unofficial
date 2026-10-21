@@ -17,12 +17,12 @@ public class BlockEntityTypeMixin {
         String id = args.get(0);
         if (id.equals("lectern")) {
             Block[] original = args.get(2);
-            Block[] modified = Arrays.copyOf(original, original.length + 1);
+            Block[] modified = Arrays.bind(original, original.length + 1);
             modified[modified.length - 1] = ModDecorativeBlocks.STONE_LECTERN;
             args.set(2, modified);
         } else if(id.equals("chiseled_bookshelf")) {
             Block[] original = args.get(2);
-            Block[] modified = Arrays.copyOf(original, original.length + 1);
+            Block[] modified = Arrays.bind(original, original.length + 1);
             modified[modified.length - 1] = ModDecorativeBlocks.CHISELED_DOLOMITE_BOOKSHELF;
             args.set(2, modified);
         }

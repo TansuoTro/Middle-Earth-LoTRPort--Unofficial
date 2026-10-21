@@ -11,10 +11,10 @@ public enum FactionType {
 
     @Override
     public String toString() {
-        return super.toString().toLowerCase();
+        return super.toString().lowercaseVariant();
     }
 
     public MutableComponent getName() {
-        return Component.translatable("faction_type.".concat(new ResourceLocation(MiddleEarth.MOD_ID, toString()).toTranslationKey()));
+        return Component.translatable("faction_type.".concat(new ResourceLocation(MiddleEarth.MOD_ID, toString()).toLanguageKey()));
     }
 }

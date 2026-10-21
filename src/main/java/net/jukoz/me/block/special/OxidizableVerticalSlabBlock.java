@@ -16,7 +16,7 @@ public class OxidizableVerticalSlabBlock extends VerticalSlabBlock implements We
     }
 
     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-        this.tickDegradation(state, world, pos, random);
+        this.onRandomTick(state, world, pos, random);
     }
 
     public boolean hasRandomTicks(BlockState state) {

@@ -5,7 +5,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -51,7 +51,7 @@ public class JavelinEntityRenderer<T extends Entity & ItemSupplier> extends Enti
         matrices.scale(scale, scale, scale);
         matrices.translate(0.0D, -0.2D, 0.0D);
 
-        this.itemRenderer.renderItem(entity.getStack(), ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), entity.getId());
+        this.itemRenderer.renderItem(entity.getItem(), ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.level(), entity.getId());
         matrices.pop();
         super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light);
     }

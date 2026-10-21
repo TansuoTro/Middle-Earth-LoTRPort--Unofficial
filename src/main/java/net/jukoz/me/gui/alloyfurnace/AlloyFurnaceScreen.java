@@ -20,7 +20,7 @@ public class AlloyFurnaceScreen extends AbstractContainerScreen<AlloyFurnaceScre
     @Override
     protected void init() {
         super.init();
-        titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2;
+        titleX = (backgroundWidth - font.getWidth(title)) / 2;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class AlloyFurnaceScreen extends AbstractContainerScreen<AlloyFurnaceScre
         RenderSystem.setShaderTexture(0, TEXTURE);
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
-        context.drawTexture(TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
 
         renderProgressArrow(context, x, y);
     }
@@ -38,10 +38,10 @@ public class AlloyFurnaceScreen extends AbstractContainerScreen<AlloyFurnaceScre
     private void renderProgressArrow(GuiGraphics context, int x, int y) {
         if(handler.isCooking()) {
             int cookingTime = (int) (handler.getScaledCooking() * COOKING_FIRE_SIZE);
-            context.drawTexture(TEXTURE, x + 53, y + 50 - cookingTime, 176, COOKING_FIRE_SIZE - cookingTime, COOKING_FIRE_SIZE, cookingTime);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, x + 53, y + 50 - cookingTime, 176, COOKING_FIRE_SIZE - cookingTime, COOKING_FIRE_SIZE, cookingTime);
         }
         if(handler.isCrafting()) {
-            context.drawTexture(TEXTURE, x + 94, y + 34, 176, 14, (int) (handler.getScaledProgress() * PROGRESS_ARROW_SIZE), 17);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, x + 94, y + 34, 176, 14, (int) (handler.getScaledProgress() * PROGRESS_ARROW_SIZE), 17);
         }
     }
 

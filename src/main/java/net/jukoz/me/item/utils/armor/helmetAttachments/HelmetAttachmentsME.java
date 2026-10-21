@@ -29,13 +29,13 @@ public enum HelmetAttachmentsME implements StringRepresentable {
     SKULL(11,"skull", HelmetAttachmentsStatesME.UP),
     ;
 
-    private static final IntFunction<HelmetAttachmentsME> BY_ID = ByIdMap.createIdToValueFunction(HelmetAttachmentsME::getId, HelmetAttachmentsME.values(), ByIdMap.OutOfBoundsHandling.ZERO);;
+    private static final IntFunction<HelmetAttachmentsME> BY_ID = ByIdMap.continuous(HelmetAttachmentsME::getId, HelmetAttachmentsME.values(), ByIdMap.OutOfBoundsStrategy.ZERO);;
 
     private final String name;
     private final int id;
     private final HelmetAttachmentsStatesME constantState;
 
-    public static final Codec<HelmetAttachmentsME> CODEC = StringRepresentable.createCodec(HelmetAttachmentsME::values);
+    public static final Codec<HelmetAttachmentsME> CODEC = StringRepresentable.fromEnum(HelmetAttachmentsME::values);
     public static final PacketCodec<net.minecraft.network.FriendlyByteBuf, HelmetAttachmentsME> PACKET_CODEC = PacketCodecs.indexed(BY_ID, HelmetAttachmentsME::getId);;
 
     HelmetAttachmentsME(int id, String name){

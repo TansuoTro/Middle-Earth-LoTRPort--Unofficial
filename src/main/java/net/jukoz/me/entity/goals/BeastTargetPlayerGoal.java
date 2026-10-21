@@ -29,13 +29,13 @@ public class BeastTargetPlayerGoal extends NearestAttackableTargetGoal<Player> {
     }
 
     private boolean canTargetMob(){
-        if(this.mob.getWorld() instanceof ServerLevel serverWorld) {
+        if(this.mob.level() instanceof ServerLevel serverWorld) {
             Player player = serverWorld.getClosestPlayer(this.targetPredicate, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());;
-            if(player == null || mob.getWorld().getDifficulty() == Difficulty.PEACEFUL || mob.isTame() || player == mob.getOwner()){
+            if(player == null || mob.level().getDifficulty() == Difficulty.PEACEFUL || mob.isTame() || player == mob.getOwner()){
                 return false;
             }
             if(beastDispositionType != null){
-                return PlayerDataService.getPlayerDisposition(player, player.getWorld()) != beastDispositionType;
+                return PlayerDataService.getPlayerDisposition(player, player.level()) != beastDispositionType;
             }
             return true;
         }

@@ -67,15 +67,15 @@ public class PlayerBookScreen extends Screen {
         int startX = 5 + centerX - (WIDTH / 2);
         int startY = (context.getScaledWindowHeight() / 2) - (HEIGHT / 2);
 
-        context.drawTexture(TEXTURE, startX, startY, 0, 0, WIDTH, HEIGHT, 384, 384);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, startX, startY, 0, 0, WIDTH, HEIGHT, 384, 384);
 
         if(currentPage == 0) {
-            drawScaledText(textRenderer, context, Component.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.title").formatted(ChatFormatting.UNDERLINE).formatted(ChatFormatting.BOLD),
+            drawScaledText(font, context, Component.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.title").formatted(ChatFormatting.UNDERLINE).formatted(ChatFormatting.BOLD),
                     startX + (int)(WIDTH * 0.325), startY + (int)(HEIGHT * 0.11f), 1.5f, CommonColors.BLACK, true);
 
-            context.drawTextWrapped(textRenderer, Component.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.description"), startX + 38, startY + (int)(HEIGHT * 0.22f), 116, CommonColors.BLACK);
+            context.drawTextWrapped(font, Component.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.description"), startX + 38, startY + (int)(HEIGHT * 0.22f), 116, CommonColors.BLACK);
 
-            drawScaledText(textRenderer, context, Component.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.chapters").formatted(ChatFormatting.UNDERLINE).formatted(ChatFormatting.BOLD),
+            drawScaledText(font, context, Component.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.chapters").formatted(ChatFormatting.UNDERLINE).formatted(ChatFormatting.BOLD),
                     startX + (int)(WIDTH * 0.75), startY + (int)(HEIGHT * 0.11f), 1.5f, CommonColors.BLACK, true);
             int index = 0;
             for(Chapter chapter : chapters) {
@@ -83,29 +83,29 @@ public class PlayerBookScreen extends Screen {
                 int startTooltipX = centerX + 30;
                 int startTooltipY = (context.getScaledWindowHeight() / 2) - (int)(HEIGHT * 0.295f) + (index * 18);
                 if (mouseX >= startTooltipX && mouseX <= startTooltipX + (chapter.name.length() * 4.75) + 5 && mouseY >= startTooltipY && mouseY <= startTooltipY + 9) {
-                    context.drawOrderedTooltip(this.client.textRenderer, Lists.transform(
+                    context.drawOrderedTooltip(this.client.font, Lists.transform(
                             List.of(Component.translatable("screen." + MiddleEarth.MOD_ID + ".playerbook.navigate_to")
                             ), Component::asOrderedText), mouseX, mouseY);
                     text.formatted(ChatFormatting.UNDERLINE);
                 }
 
-                context.drawItem(chapter.icon.getDefaultStack(), startX + (int)(WIDTH * 0.5f) + 12, startY + (int)(HEIGHT * 0.22f) - 4 + (index * 18));
-                context.drawText(textRenderer, text, startX + (int)(WIDTH * 0.5f) + 32, startY + (int)(HEIGHT * 0.22f) + (index * 18), CommonColors.BLACK, false);
+                context.drawItem(chapter.icon.getDefaultInstance(), startX + (int)(WIDTH * 0.5f) + 12, startY + (int)(HEIGHT * 0.22f) - 4 + (index * 18));
+                context.drawText(font, text, startX + (int)(WIDTH * 0.5f) + 32, startY + (int)(HEIGHT * 0.22f) + (index * 18), CommonColors.BLACK, false);
                 index++;
             }
         } else {
             PlayerBookPageData pageData = chaptersPages.get(currentChapter).get(currentPage - 1);
             if(pageData != null) {
-                drawScaledText(textRenderer, context, Component.translatable("screen." + MiddleEarth.MOD_ID + "." + pageData.leftPageTitle).formatted(ChatFormatting.UNDERLINE),
+                drawScaledText(font, context, Component.translatable("screen." + MiddleEarth.MOD_ID + "." + pageData.leftPageTitle).formatted(ChatFormatting.UNDERLINE),
                         startX + (int)(WIDTH * 0.3), startY + (int)(HEIGHT * 0.11f), 1.25f, CommonColors.BLACK, true);
 
                 if(pageData.image != null) {
-                    context.drawTexture(pageData.image, startX, startY, 0, 0, WIDTH, HEIGHT, 320, 320);
+                    net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, pageData.image, startX, startY, 0, 0, WIDTH, HEIGHT, 320, 320);
                 }
 
-                context.drawTextWrapped(textRenderer, Component.translatable("screen." + MiddleEarth.MOD_ID + "." + pageData.leftPageDescription),
+                context.drawTextWrapped(font, Component.translatable("screen." + MiddleEarth.MOD_ID + "." + pageData.leftPageDescription),
                         startX + 38, startY + (int)(HEIGHT * 0.2f), 116, CommonColors.BLACK);
-                context.drawTextWrapped(textRenderer, Component.translatable("screen." + MiddleEarth.MOD_ID + "." + pageData.rightPageDescription),
+                context.drawTextWrapped(font, Component.translatable("screen." + MiddleEarth.MOD_ID + "." + pageData.rightPageDescription),
                         startX + (int)(WIDTH * 0.5f) + 16, startY + (int)(HEIGHT * 0.16f), 114, CommonColors.BLACK);
             }
         }
@@ -123,7 +123,7 @@ public class PlayerBookScreen extends Screen {
                 for (Chapter chapter : chapters) {
                     int startTooltipX = centerX + 30;
                     int startTooltipY = (this.height / 2) - (int)(HEIGHT * 0.28f) + (index * 18);
-                    int textWidth = this.client.textRenderer.getWidth(chapter.name);
+                    int textWidth = this.client.font.getWidth(chapter.name);
 
                     if (mouseX >= startTooltipX && mouseX <= startTooltipX + textWidth + 5 &&
                             mouseY >= startTooltipY && mouseY <= startTooltipY + 9) {
@@ -144,16 +144,16 @@ public class PlayerBookScreen extends Screen {
         int centerX = context.getScaledWindowWidth() / 2;
     }
 
-    public static void drawScaledText(Font textRenderer, GuiGraphics context, Component text, int x, int y, float scale, int color, boolean centered) {
+    public static void drawScaledText(Font font, GuiGraphics context, Component text, int x, int y, float scale, int color, boolean centered) {
         com.mojang.blaze3d.vertex.PoseStack matrices = context.getMatrices();
         matrices.push();
         matrices.scale(scale, scale, 1.0f);
 
         if (centered) {
-            context.drawText(textRenderer, text, (int)(x / scale) - (int)((textRenderer.getWidth(text) * Math.pow(scale, 0.5f)) / 2),
+            context.drawText(font, text, (int)(x / scale) - (int)((font.getWidth(text) * Math.pow(scale, 0.5f)) / 2),
                     (int)(y / scale), color, false);
         } else {
-            context.drawText(textRenderer, text, x, y, color, false);
+            context.drawText(font, text, x, y, color, false);
         }
 
         matrices.pop();

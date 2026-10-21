@@ -21,34 +21,34 @@ public class GoblinTownTunnelerHelmetModel extends FlapHelmetModel {
         MeshDefinition modelData = getModelData();
         PartDefinition modelPartData = modelData.getRoot();
 
-        PartDefinition head = modelPartData.addChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        head.addChild(PartNames.HAT, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition head = modelPartData.addOrReplaceChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        head.addOrReplaceChild(PartNames.HAT, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition Candle = head.addChild("candle", CubeListBuilder.create()
-                .uv(0, 22).mirrored().cuboid(-2.6F, -13.05F, -1.6F, 2.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)).mirrored(false)
-                .uv(0, 22).mirrored().cuboid(0.4F, -12.05F, 0.5F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)).mirrored(false),
-                PartPose.pivot(0.0F, 0.3F, 0.0F));
+        PartDefinition Candle = head.addOrReplaceChild("candle", CubeListBuilder.create()
+                .texOffs(0, 22).mirror().addBox(-2.6F, -13.05F, -1.6F, 2.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false)
+                .texOffs(0, 22).mirror().addBox(0.4F, -12.05F, 0.5F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false),
+                PartPose.offset(0.0F, 0.3F, 0.0F));
 
-        Candle.addChild("flame_0", CubeListBuilder.create()
-                        .uv(0, 21).mirrored().cuboid(0.0F, 0.75F, -0.5F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirrored(false),
-                PartPose.of(1.4F, -13.8F, 1.5F, 0.0F, 0.7854F, 0.0F));
-        Candle.addChild("flame_1", CubeListBuilder.create()
-                        .uv(0, 21).mirrored().cuboid(0.0F, 0.75F, -0.5F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirrored(false),
-                PartPose.of(1.4F, -13.8F, 1.5F, 0.0F, -0.7854F, 0.0F));
-        Candle.addChild("flame_2", CubeListBuilder.create()
-                        .uv(0, 21).mirrored().cuboid(0.0F, 0.75F, -0.5F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirrored(false),
-                PartPose.of(-1.6F, -14.8F, -0.6F, 0.0F, -0.7854F, 0.0F));
-        Candle.addChild("flame_3", CubeListBuilder.create()
-                        .uv(0, 21).mirrored().cuboid(0.0F, 0.75F, -0.5F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirrored(false),
-                PartPose.of(-1.6F, -14.8F, -0.6F, 0.0F, 0.7854F, 0.0F));
+        Candle.addOrReplaceChild("flame_0", CubeListBuilder.create()
+                        .texOffs(0, 21).mirror().addBox(0.0F, 0.75F, -0.5F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false),
+                PartPose.offsetAndRotation(1.4F, -13.8F, 1.5F, 0.0F, 0.7854F, 0.0F));
+        Candle.addOrReplaceChild("flame_1", CubeListBuilder.create()
+                        .texOffs(0, 21).mirror().addBox(0.0F, 0.75F, -0.5F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false),
+                PartPose.offsetAndRotation(1.4F, -13.8F, 1.5F, 0.0F, -0.7854F, 0.0F));
+        Candle.addOrReplaceChild("flame_2", CubeListBuilder.create()
+                        .texOffs(0, 21).mirror().addBox(0.0F, 0.75F, -0.5F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false),
+                PartPose.offsetAndRotation(-1.6F, -14.8F, -0.6F, 0.0F, -0.7854F, 0.0F));
+        Candle.addOrReplaceChild("flame_3", CubeListBuilder.create()
+                        .texOffs(0, 21).mirror().addBox(0.0F, 0.75F, -0.5F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false),
+                PartPose.offsetAndRotation(-1.6F, -14.8F, -0.6F, 0.0F, 0.7854F, 0.0F));
 
-        modelPartData.addChild(PartNames.BODY, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.BODY, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.RIGHT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.RIGHT_ARM, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.LEFT_ARM, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.of(modelData, 64, 64);
     }

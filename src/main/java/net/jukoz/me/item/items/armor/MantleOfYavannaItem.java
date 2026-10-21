@@ -37,7 +37,7 @@ public class MantleOfYavannaItem extends BackAttachmentItem {
 
         int targetColor = 4624722;
         int currentColor = dyedColorComponent.rgb();
-        Holder<Biome> biomeEntry = world.getBiome(entity.getBlockPos());
+        Holder<Biome> biomeEntry = world.getBiome(entity.blockPosition());
 
         if(biomeEntry.getKey().isPresent()) {
             int color = biomeEntry.value().getFoliageColor();
@@ -58,7 +58,7 @@ public class MantleOfYavannaItem extends BackAttachmentItem {
     public static ItemStack applyBackAttachmentColor(ItemStack stack, ServerLevel world, Entity entity, BackAttachmentDataComponent backAttachmentDataComponent) {
         int targetColor;
         int currentColor = backAttachmentDataComponent.backAttachmentColor();
-        Holder<Biome> biomeEntry = world.getBiome(entity.getBlockPos());
+        Holder<Biome> biomeEntry = world.getBiome(entity.blockPosition());
 
         if(biomeEntry.getKey().isPresent()) {
             int color = biomeEntry.value().getFoliageColor();

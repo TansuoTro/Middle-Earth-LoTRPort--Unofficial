@@ -4,7 +4,7 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.plugins.REIServerPlugin;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.compat.artisanTable.ArtisanTableDisplay;
-import net.jukoz.me.compat.forge.AlloyingDisplay;
+import net.jukoz.me.compat.mcforge.AlloyingDisplay;
 
 /**
  * Retained for the ported donor wiring. REI 12.0 registers displays through the client

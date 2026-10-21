@@ -12,11 +12,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class CustomBowWeaponItem extends BowItem {
     private final MutableComponent faction;
     private final MutableComponent subFaction;
-    public CustomBowWeaponItem(Settings settings) {
+    public CustomBowWeaponItem(BlockBehaviour.Properties settings) {
         super(settings);
         this.faction = null;
         this.subFaction = null;

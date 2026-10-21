@@ -32,7 +32,7 @@ public class ArtisanRecipePacket extends ServerToClientPacket<ArtisanRecipePacke
         Minecraft client = Minecraft.getInstance();
         ArtisanTableScreen screen = (ArtisanTableScreen)client.currentScreen;
         if (screen != null) {
-            ArtisanTableScreenHandler screenHandler = screen.getScreenHandler();
+            ArtisanTableScreenHandler screenHandler = screen.getMenu();
             if(screenHandler != null) {
                 screenHandler.addRecipeOutput(this.index, this.output);
             }
@@ -40,7 +40,7 @@ public class ArtisanRecipePacket extends ServerToClientPacket<ArtisanRecipePacke
     }
 
     public ArtisanRecipePacket(FriendlyByteBuf buf) {
-        this(buf.readInt(), buf.readItemStack());
+        this(buf.readInt(), buf.readItem());
     }
 
     @Override

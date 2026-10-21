@@ -23,7 +23,7 @@ public class WeightedIdentifier extends WeightedItem<ResourceLocation> {
         return new WeightedIdentifier(id, 1);
     }
     public static WeightedIdentifier fromKey(ResourceKey key){
-        return new WeightedIdentifier(key.getValue(), 1);
+        return new WeightedIdentifier(key.location(), 1);
     }
 
     @Override

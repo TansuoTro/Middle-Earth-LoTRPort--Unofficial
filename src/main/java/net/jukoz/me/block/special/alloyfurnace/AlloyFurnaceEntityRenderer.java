@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererFactory;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.world.item.ItemDisplayContext;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -32,24 +32,24 @@ public class AlloyFurnaceEntityRenderer implements BlockEntityRenderer<AlloyFurn
         matrices.scale(0.5f, 0.5f, 0.5f);
 
         matrices.multiply(Axis.POSITIVE_X.rotation((float) Math.toRadians(-90)));
-        switch (entity.getCachedState().get(AlloyFurnace.FACING)) {
+        switch (entity.getBlockState().get(AlloyFurnace.FACING)) {
             case NORTH -> matrices.multiply(Axis.POSITIVE_Z.rotation((float) Math.toRadians(180)));
             case EAST -> matrices.multiply(Axis.POSITIVE_Z.rotation((float) Math.toRadians(90)));
             case SOUTH -> matrices.multiply(Axis.POSITIVE_Z.rotation((float) Math.toRadians(0)));
             case WEST -> matrices.multiply(Axis.POSITIVE_Z.rotation((float) Math.toRadians(270)));
         }
 
-        int currentLight = getLightLevel(entity.getWorld(), entity.getPos());
+        int currentLight = getLightLevel(entity.level(), entity.position());
 
         //if(entity.isCooking()) { // Keep for later
-        //    BlockState lavaState = Blocks.LAVA.getDefaultState().with(LiquidBlock.LEVEL, 0);
+        //    BlockState lavaState = Blocks.LAVA.defaultBlockState().with(LiquidBlock.LEVEL, 0);
         //    BakedModel bakedModel = Minecraft.getInstance().getBlockRenderManager().getModel(lavaState);
-        //    blockRenderer.render(matrices.peek(), vertexConsumers.getBuffer(Sheets.getEntitySolid()), null, bakedModel,
+        //    blockRenderer.render(matrices.peek(), vertexConsumers.getBuffer(Sheets.solidBlockSheet()), null, bakedModel,
         //            1.0f, 1.0f, 1.0f, currentLight, OverlayTexture.DEFAULT_UV);
         //}
         if(!output.isEmpty()) {
             itemRenderer.renderItem(output, ItemDisplayContext.GUI, currentLight, OverlayTexture.DEFAULT_UV,
-                    matrices, vertexConsumers, entity.getWorld(), 1);
+                    matrices, vertexConsumers, entity.level(), 1);
         }
 
         matrices.pop();

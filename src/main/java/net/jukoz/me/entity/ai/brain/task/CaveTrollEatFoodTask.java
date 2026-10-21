@@ -19,7 +19,7 @@ import java.util.Optional;
 
 public class CaveTrollEatFoodTask extends Behavior<CaveTrollEntity> {
     private long startTime;
-    public static TagKey<Item> TROLL_FOOD = TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "troll_food"));
+    public static TagKey<Item> TROLL_FOOD = TagKey.create(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "troll_food"));
 
     public CaveTrollEatFoodTask() {
         super(
@@ -37,7 +37,7 @@ public class CaveTrollEatFoodTask extends Behavior<CaveTrollEntity> {
 
     @Override
     protected boolean shouldRun(ServerLevel world, CaveTrollEntity entity) {
-        return !entity.getMainHandStack().isEmpty() && entity.getMainHandStack().isIn(TROLL_FOOD);
+        return !entity.getMainHandStack().isEmpty() && entity.getMainHandStack().is(TROLL_FOOD);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class CaveTrollEatFoodTask extends Behavior<CaveTrollEntity> {
     protected void keepRunning(ServerLevel world, CaveTrollEntity entity, long time) {
         if((time - startTime) > 60 && !entity.getMainHandStack().isEmpty()) {
             ItemParticleOption particles = new ItemParticleOption(ParticleTypes.ITEM, entity.getMainHandStack());
-            Vec3 position = new Vec3(entity.getX() - Math.sin(Math.toRadians(entity.getBodyYaw())), entity.getEyeY(), entity.getZ() + Math.cos(Math.toRadians(entity.getBodyYaw())));
+            Vec3 position = new Vec3(entity.getX() - Math.sin(Math.toRadians(entity.getVisualRotationYInDegrees())), entity.getEyeY(), entity.getZ() + Math.cos(Math.toRadians(entity.getVisualRotationYInDegrees())));
             world.spawnParticles(particles, position.getX(), position.getY() - 1.0, position.getZ(),7, 0.0, 0.0, 0.0, 0.1);
         }
     }

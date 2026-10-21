@@ -25,18 +25,18 @@ public class EreborCommanderHelmetArmorModel<T extends LivingEntity> extends Cus
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
 
-        modelPartData.addChild(PartNames.HAT, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.HAT, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition head = modelPartData.addChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        head.addChild("wing_right", CubeListBuilder.create().uv(32, 0).mirrored().cuboid(-0.2F, -10.8F, 0.0F, 15.0F, 7.0F, 1.0F, new CubeDeformation(0.0F)).mirrored(false), PartPose.of(5.0F, 2.0F, 5.0F, 1.2955F, -0.7926F, -1.1932F));
-        head.addChild("wing_left", CubeListBuilder.create().uv(32, 0).cuboid(-14.8F, -10.8F, 0.0F, 15.0F, 7.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.of(-5.0F, 2.0F, 5.0F, 1.2955F, 0.7926F, 1.1932F));
+        PartDefinition head = modelPartData.addOrReplaceChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        head.addOrReplaceChild("wing_right", CubeListBuilder.create().texOffs(32, 0).mirror().addBox(-0.2F, -10.8F, 0.0F, 15.0F, 7.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(5.0F, 2.0F, 5.0F, 1.2955F, -0.7926F, -1.1932F));
+        head.addOrReplaceChild("wing_left", CubeListBuilder.create().texOffs(32, 0).addBox(-14.8F, -10.8F, 0.0F, 15.0F, 7.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-5.0F, 2.0F, 5.0F, 1.2955F, 0.7926F, 1.1932F));
 
-        modelPartData.addChild(PartNames.BODY, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.RIGHT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.BODY, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.RIGHT_ARM, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.LEFT_ARM, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.of(modelData, 64, 32);
     }

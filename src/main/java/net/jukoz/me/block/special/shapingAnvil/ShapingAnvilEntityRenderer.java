@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererFactory;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -43,14 +43,14 @@ public class ShapingAnvilEntityRenderer implements BlockEntityRenderer<ShapingAn
         matrices.multiply(Axis.POSITIVE_X.rotation((float) Math.toRadians(90)));
 
         if (stack.getItem() instanceof BlockItem){
-            switch (entity.getCachedState().get(AbstractShapingAnvilBlock.FACING)) {
+            switch (entity.getBlockState().get(AbstractShapingAnvilBlock.FACING)) {
                 case NORTH -> matrices.multiply(Axis.POSITIVE_Z.rotation((float) Math.toRadians(270)));
                 case EAST -> matrices.multiply(Axis.POSITIVE_Z.rotation((float) Math.toRadians(180)));
                 case SOUTH -> matrices.multiply(Axis.POSITIVE_Z.rotation((float) Math.toRadians(90)));
                 case WEST -> matrices.multiply(Axis.POSITIVE_Z.rotation((float) Math.toRadians(0)));
             }
         } else {
-            switch (entity.getCachedState().get(AbstractShapingAnvilBlock.FACING)) {
+            switch (entity.getBlockState().get(AbstractShapingAnvilBlock.FACING)) {
                 case NORTH -> matrices.multiply(Axis.POSITIVE_Z.rotation((float) Math.toRadians(225)));
                 case EAST -> matrices.multiply(Axis.POSITIVE_Z.rotation((float) Math.toRadians(135)));
                 case SOUTH -> matrices.multiply(Axis.POSITIVE_Z.rotation((float) Math.toRadians(45)));
@@ -58,10 +58,10 @@ public class ShapingAnvilEntityRenderer implements BlockEntityRenderer<ShapingAn
             }
         }
 
-        int currentLight = getLightLevel(entity.getWorld(), entity.getPos());
+        int currentLight = getLightLevel(entity.level(), entity.position());
 
         this.context.getItemRenderer().renderItem(stack, ItemDisplayContext.FIXED, currentLight, OverlayTexture.DEFAULT_UV,
-                matrices, vertexConsumers, entity.getWorld(), 1);
+                matrices, vertexConsumers, entity.level(), 1);
 
         matrices.pop();
     }

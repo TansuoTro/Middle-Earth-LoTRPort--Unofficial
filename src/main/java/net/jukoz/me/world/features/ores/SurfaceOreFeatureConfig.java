@@ -21,7 +21,7 @@ public class SurfaceOreFeatureConfig extends OreConfiguration {
                     Codec.FLOAT.fieldOf("discardOnAirChance").forGetter(config -> config.discardOnAirChance)
             ).apply(instance, SurfaceOreFeatureConfig::new));
 
-    public SurfaceOreFeatureConfig(List<OreConfiguration.Target> targets, int size, float discardOnAirChance) {
+    public SurfaceOreFeatureConfig(List<OreConfiguration.TargetBlockState> targets, int size, float discardOnAirChance) {
         super(targets, size, discardOnAirChance);
     }
 

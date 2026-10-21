@@ -49,10 +49,10 @@ public class PacketSetSpawnData extends ClientToServerPacket<PacketSetSpawnData>
             context.player().getServer().execute(() -> {
 
                 MinecraftServer server = context.player().getServer();
-                ServerPlayer player = server.getPlayerManager().getPlayer(context.player().getUuid());
+                ServerPlayer player = server.getPlayerList().getPlayer(context.player().getUuid());
 
                 BlockPos overworldSpawnBlockpos = new BlockPos(overworldX, overworldY, overworldZ);
-                PlayerDataService.setOrigin(player, player.getWorld(), DimensionTypes.OVERWORLD_ID, overworldSpawnBlockpos);
+                PlayerDataService.setOrigin(player, player.level(), BuiltinDimensionTypes.OVERWORLD_ID, overworldSpawnBlockpos);
             });
         } catch (Exception e){
             MiddleEarth.LOGGER.logError("SpawnDataPacket::Apply - Tried applying the spawn data packet",e);

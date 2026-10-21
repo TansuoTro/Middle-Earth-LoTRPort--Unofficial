@@ -27,7 +27,7 @@ public final class EnchantmentAttributeEffects {
     public static void apply(LivingEntity entity) {
         ItemStack hand = entity.getMainHandStack();
         int grounded = 0, stalwart = 0;
-        for (ItemStack armor : entity.getArmorItems()) {
+        for (ItemStack armor : entity.getArmorSlots()) {
             grounded += level(EnchantmentsME.GROUNDED, armor);
             stalwart += level(EnchantmentsME.STALWART, armor);
         }
@@ -35,14 +35,14 @@ public final class EnchantmentAttributeEffects {
                 "me:enchantment.celerity", level(EnchantmentsME.CELERITY, hand) * 0.2);
         setBonus(entity, EntityAttributesME.ENTITY_INTERACTION_RANGE.value(), EnchantmentsME.VANTAGE_MODIFIER_ID,
                 "me:enchantment.vantage", level(EnchantmentsME.VANTAGE, hand) * 0.5);
-        setBonus(entity, Attributes.GENERIC_KNOCKBACK_RESISTANCE, EnchantmentsME.GROUNDED_MODIFIER_ID,
+        setBonus(entity, Attributes.KNOCKBACK_RESISTANCE, EnchantmentsME.GROUNDED_MODIFIER_ID,
                 "me:enchantment.grounded", grounded * 0.025);
-        setBonus(entity, Attributes.GENERIC_ARMOR, EnchantmentsME.STALWART_MODIFIER_ID,
+        setBonus(entity, Attributes.ARMOR, EnchantmentsME.STALWART_MODIFIER_ID,
                 "me:enchantment.stalwart", stalwart);
         int miner = level(EnchantmentsME.MINER_REACH, entity.getEquippedStack(EquipmentSlot.CHEST));
         setBonus(entity, EntityAttributesME.BLOCK_INTERACTION_RANGE.value(), MINER_REACH,
                 "me:enchantment.miner_reach", miner == 0 ? 0 : 1.0 + (miner - 1) * 0.5);
-        setBonus(entity, Attributes.GENERIC_MOVEMENT_SPEED, STRIDE,
+        setBonus(entity, Attributes.MOVEMENT_SPEED, STRIDE,
                 "me:enchantment.stride", level(EnchantmentsME.STRIDE, entity.getEquippedStack(EquipmentSlot.LEGS)) * 0.005);
     }
 

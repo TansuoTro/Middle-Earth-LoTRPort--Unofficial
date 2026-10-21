@@ -65,7 +65,7 @@ public class NpcEntityInitializer {
     private static BiomeEventData.ContextualizedBiomeData findContextualizedNpcData(ServerLevel world, NpcEntity npcEntity)  {
         BlockPos blockPos = npcEntity.getBlockPos();
         Holder<Biome> biome = world.getBiome(blockPos);
-        Registry<Structure> structureRegistry = world.getRegistryManager().get(Registries.STRUCTURE);
+        Registry<Structure> structureRegistry = world.registryAccess().get(Registries.STRUCTURE);
         List<StructureStart> structureStarts = world.getStructureAccessor().getStructureStarts(world.getChunk(blockPos).getPos(), s -> true);
 
         for (StructureStart structureStart : structureStarts) {
@@ -85,8 +85,8 @@ public class NpcEntityInitializer {
         if(currentNpcDataId == null)
             return true;
 
-        RegistryAccess registryManager = serverWorld.getRegistryManager();
-        Optional<Holder.Reference<NpcType>> optionalEntry = registryManager.getOptional(DynamicRegistriesME.NPC_TYPE).get().getEntry(net.minecraft.resources.ResourceKey.of(DynamicRegistriesME.NPC_TYPE, currentNpcDataId));
+        RegistryAccess registryManager = serverWorld.registryAccess();
+        Optional<Holder.Reference<NpcType>> optionalEntry = registryManager.getOptional(DynamicRegistriesME.NPC_TYPE).get().getEntry(net.minecraft.resources.ResourceKey.create(DynamicRegistriesME.NPC_TYPE, currentNpcDataId));
 
         if(!npcEntity.hasTextureData())
             return true;

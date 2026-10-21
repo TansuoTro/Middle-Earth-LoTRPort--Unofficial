@@ -55,7 +55,7 @@ public class PipeItem extends Item {
 
     @Override
     public net.minecraft.world.InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
-        ItemStack pipe = user.getStackInHand(hand);
+        ItemStack pipe = user.getItemInHand(hand);
 
         if (DamageableItemUtils.isFullyDamaged(pipe)) {
             boolean refilled = tryRefillPipe(pipe, user, world);
@@ -81,7 +81,7 @@ public class PipeItem extends Item {
 
         if (remainingUseTicks % frequency != 0) return;
 
-        if (!world.isClient && world instanceof ServerLevel serverWorld) {
+        if (!world.isClientSide && world instanceof ServerLevel serverWorld) {
             spawnPassiveSmokePuff(serverWorld, user);
         }
     }
@@ -129,11 +129,11 @@ public class PipeItem extends Item {
     }
 
     private void applyCooldown(Player user, ItemStack pipe) {
-        user.getItemCooldownManager().set(pipe.getItem(), USE_COOLDOWN_TICKS);
+        user.getCooldowns().set(pipe.getItem(), USE_COOLDOWN_TICKS);
     }
 
     private boolean isSmoking(LivingEntity user) {
-        return user.isUsingItem() && user.getActiveItem().isOf(this);
+        return user.isUsingItem() && user.getUseItem().is(this);
     }
 
     private void spawnPassiveSmokePuff(ServerLevel world, LivingEntity user) {
@@ -151,7 +151,7 @@ public class PipeItem extends Item {
     }
 
     private void spawnSmokeRingEntity(LivingEntity user, Level world, boolean failed, double speed) {
-        if (world.isClient()) return;
+        if (world.isClientSide()) return;
 
         SmokeRingProjectileEntity smoke = new SmokeRingProjectileEntity(EntitiesME.SMOKE_RING_PROJECTILE,
                 world);
@@ -172,7 +172,7 @@ public class PipeItem extends Item {
 
 //    private void startCoughing(LivingEntity user) {
 //        if (user instanceof Player player) {
-//            SoundUtils.playSoundAtEntity(player.getWorld(),
+//            SoundUtils.playSoundAtEntity(player.level(),
 //                    player,
 //                    SoundsME.PIPE_COUGH,
 //                    SoundSource.PLAYERS);
@@ -208,12 +208,12 @@ public class PipeItem extends Item {
         }
 
         boolean mainHandRight = player.getMainArm() == HumanoidArm.RIGHT;
-        boolean usingMainHand = user.getActiveHand() == InteractionHand.MAIN_HAND;
+        boolean usingMainHand = user.getUsedItemHand() == InteractionHand.MAIN_HAND;
         return usingMainHand == mainHandRight ? -1.0 : 1.0;
     }
 
     private void finishSmoking(ItemStack pipe, Level world, LivingEntity user, int elapsedTicks, boolean timedOut) {
-        if (world.isClient()) return;
+        if (world.isClientSide()) return;
 
         if (!timedOut && smokedLongEnoughForSmokeRing(elapsedTicks)) {
             spawnSmokeRing(user, world);

@@ -9,22 +9,22 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 
 public class OxidizableWallBlock  extends WallBlock implements WeatheringCopper {
-    private final WeatheringCopper.OxidationLevel oxidationLevel;
+    private final WeatheringCopper.WeatherState oxidationLevel;
 
-    public OxidizableWallBlock(WeatheringCopper.OxidationLevel oxidationLevel, Settings settings) {
+    public OxidizableWallBlock(WeatheringCopper.WeatherState oxidationLevel, Settings settings) {
         super(settings);
         this.oxidationLevel = oxidationLevel;
     }
 
     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-        this.tickDegradation(state, world, pos, random);
+        this.onRandomTick(state, world, pos, random);
     }
 
     public boolean hasRandomTicks(BlockState state) {
         return WeatheringCopper.getIncreasedOxidationBlock(state.getBlock()).isPresent();
     }
 
-    public WeatheringCopper.OxidationLevel getDegradationLevel() {
+    public WeatheringCopper.WeatherState getDegradationLevel() {
         return this.oxidationLevel;
     }
 }

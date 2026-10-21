@@ -13,10 +13,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.jukoz.me.block.registration.ModBlockEntities;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class BeechCofferBlock extends ChestBlock {
 
-    public BeechCofferBlock(Settings settings) {
+    public BeechCofferBlock(BlockBehaviour.Properties settings) {
         super(settings, () -> ModBlockEntities.BEECH_COFFER);
     }
 
@@ -27,21 +28,21 @@ public class BeechCofferBlock extends ChestBlock {
 
     @Override
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        Direction direction = ctx.getHorizontalPlayerFacing();
+        Direction direction = ctx.getHorizontalDirection();
         FluidState fluidstate = ctx.getWorld().getFluidState(ctx.getBlockPos());
-        return this.getDefaultState().with(FACING, direction).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
+        return this.defaultBlockState().with(FACING, direction).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
     }
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         if(state.get(FACING) == Direction.NORTH) {
-            return Block.createCuboidShape(2.0, 0.0, 2.0, 14.0, 8.0, 10.0);
+            return Block.box(2.0, 0.0, 2.0, 14.0, 8.0, 10.0);
         } else if(state.get(FACING) == Direction.SOUTH) {
-            return Block.createCuboidShape(2.0, 0.0, 6.0, 14.0, 8.0, 14.0);
+            return Block.box(2.0, 0.0, 6.0, 14.0, 8.0, 14.0);
         } else if(state.get(FACING) == Direction.EAST) {
-            return Block.createCuboidShape(6.0, 0.0, 2.0, 14.0, 8.0, 14.0);
+            return Block.box(6.0, 0.0, 2.0, 14.0, 8.0, 14.0);
         } else {
-            return Block.createCuboidShape(2.0, 0.0, 2.0, 10.0, 8.0, 14.0);
+            return Block.box(2.0, 0.0, 2.0, 10.0, 8.0, 14.0);
         }
     }
 

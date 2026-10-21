@@ -28,7 +28,7 @@ public class MapScreenController {
     public boolean open(boolean canTeleport) {
         Minecraft mc = Minecraft.getInstance();
 
-        if(world.isClient) {
+        if(world.isClientSide) {
             if (mc.currentScreen == null) {
                 screen = new MapScreen();
                 isInDimension = ModDimensions.isInMiddleEarth(world);
@@ -38,7 +38,7 @@ public class MapScreenController {
                 screen.hasTeleportPermission = hasTeleportPermission;
                 screen.isFullscreen = false;
 
-                screen.playerBlockPos = player.getBlockPos();
+                screen.playerBlockPos = player.blockPosition();
                 screen.controller  = this;
                 mc.setScreen(screen);
                 return true;

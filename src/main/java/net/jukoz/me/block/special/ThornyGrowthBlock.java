@@ -10,9 +10,10 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.MiddleEarthClient;
 import net.jukoz.me.utils.DamageablePlantsUtil;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class ThornyGrowthBlock extends GlowLichenBlock {
-    public ThornyGrowthBlock(Settings settings) {
+    public ThornyGrowthBlock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
@@ -24,7 +25,7 @@ public class ThornyGrowthBlock extends GlowLichenBlock {
                 double d = Math.abs(movement.getX());
                 double e = Math.abs(movement.getZ());
                 if (d >= 0.003000000026077032 || e >= 0.003000000026077032) {
-                    DamageablePlantsUtil.tryDamageEntity(livingEntity, serverWorld, serverWorld.getDamageSources().sweetBerryBush());
+                    DamageablePlantsUtil.tryDamageEntity(livingEntity, serverWorld, serverWorld.damageSources().sweetBerryBush());
                 }
             }
         }

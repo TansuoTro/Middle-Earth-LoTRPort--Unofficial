@@ -26,8 +26,8 @@ public class NpcRangedApproachTask {
                 .apply(context, (walkTarget, lookTarget, attackTarget, visibleMobs) -> (world, entity, time) -> {
                     LivingEntity livingEntity = context.getValue(attackTarget);
                     Optional<NearestVisibleLivingEntities> optionalVisibleAttackTargets = context.getOptionalValue(visibleMobs);
-                    if (optionalVisibleAttackTargets.isPresent() && (optionalVisibleAttackTargets.get()).contains(livingEntity) && entity.squaredDistanceTo(livingEntity) <= 1.0) {
-                        walkTarget.forget();
+                    if (optionalVisibleAttackTargets.isPresent() && (optionalVisibleAttackTargets.get()).contains(livingEntity) && entity.distanceTo(livingEntity) <= 1.0) {
+                        walkTarget.erase();
                     } else {
                         lookTarget.remember(new EntityTracker(livingEntity, true));
                         walkTarget.remember(new WalkTarget(new EntityTracker(livingEntity, false), speed.apply(entity), distance.apply(entity)));

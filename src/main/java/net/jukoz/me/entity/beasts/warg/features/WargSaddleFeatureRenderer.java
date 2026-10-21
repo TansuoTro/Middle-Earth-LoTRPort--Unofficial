@@ -3,7 +3,6 @@ package net.jukoz.me.entity.beasts.warg.features;
 import net.jukoz.me.entity.beasts.warg.WargEntity;
 import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.jukoz.me.compat.client.render.equipment.EquipmentRenderer;
 import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
@@ -17,6 +16,7 @@ import net.jukoz.me.entity.EntityModelLayersME;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.RenderType;
 
 public class WargSaddleFeatureRenderer extends MEFeatureRenderer<WargEntity, WargEntityRenderState, WargModel> {
     private final WargSaddleModel model;
@@ -31,7 +31,7 @@ public class WargSaddleFeatureRenderer extends MEFeatureRenderer<WargEntity, War
         ItemStack itemStack = state.saddle;
         boolean hasArmor = !state.armor.isEmpty();
         if(!itemStack.isEmpty()) {
-            VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(new ResourceLocation(MiddleEarth.MOD_ID, "textures/entities/warg/feature/warg_saddle.png")), true, itemStack.hasGlint());
+            VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderType.armorCutoutNoCull(new ResourceLocation(MiddleEarth.MOD_ID, "textures/entities/warg/feature/warg_saddle.png")), true, itemStack.hasGlint());
 
             model.setAngles(state);
             model.renderSaddle(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV);

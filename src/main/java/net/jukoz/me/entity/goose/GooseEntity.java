@@ -80,7 +80,7 @@ public class GooseEntity extends Animal {
         this.setCanPickUpLoot(true);
     }
 /*
-    protected Brain.Profile<GooseEntity> createBrainProfile() {
+    protected Brain.Provider<GooseEntity> createBrainProfile() {
         return Brain.createProfile(MEMORY_MODULES, SENSORS);
     }
 
@@ -93,12 +93,12 @@ public class GooseEntity extends Animal {
     }
 
     protected void mobTick() {
-        this.getWorld().getProfiler().push("gooseBrain");
-        this.getBrain().tick((ServerLevel)this.getWorld(), this);
-        this.getWorld().getProfiler().pop();
-        this.getWorld().getProfiler().push("gooseActivityUpdate");
+        this.level().getProfiler().push("gooseBrain");
+        this.getBrain().tick((ServerLevel)this.level(), this);
+        this.level().getProfiler().pop();
+        this.level().getProfiler().push("gooseActivityUpdate");
         GooseBrain.updateActivities(this);
-        this.getWorld().getProfiler().pop();
+        this.level().getProfiler().pop();
         super.mobTick();
     }*/
 
@@ -126,9 +126,9 @@ public class GooseEntity extends Animal {
 
     public static AttributeSupplier.Builder createGooseAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MAX_HEALTH, 8.0)
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.4)
-                .add(Attributes.GENERIC_ATTACK_DAMAGE, 0.75)
+                .add(Attributes.MAX_HEALTH, 8.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.4)
+                .add(Attributes.ATTACK_DAMAGE, 0.75)
                 .add(Attributes.GENERIC_ATTACK_SPEED, 1.0)
                 .add(Attributes.GENERIC_FLYING_SPEED, 0.4000000059604645);
     }
@@ -139,7 +139,7 @@ public class GooseEntity extends Animal {
             if (!itemStack.isEmpty()) {
                 for(int i = 0; i < 8; ++i) {
                     Vec3 vec3d = (new Vec3(((double)this.random.nextFloat() - 0.5) * 0.1, Math.random() * 0.1 + 0.1, 0.0)).rotateX(-this.getPitch() * 0.017453292F).rotateY(-this.getYaw() * 0.017453292F);
-                    this.getWorld().addParticle(new ItemParticleOption(ParticleTypes.ITEM, itemStack), this.getX() + this.getRotationVector().x / 2.0, this.getY(), this.getZ() + this.getRotationVector().z / 2.0, vec3d.x, vec3d.y + 0.05, vec3d.z);
+                    this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, itemStack), this.getX() + this.getRotationVector().x / 2.0, this.getY(), this.getZ() + this.getRotationVector().z / 2.0, vec3d.x, vec3d.y + 0.05, vec3d.z);
                 }
             }
         } else {
@@ -167,12 +167,12 @@ public class GooseEntity extends Animal {
     }
 
     private void dropItem(ItemStack stack) {
-        ItemEntity itemEntity = new ItemEntity(this.getWorld(), this.getX(), this.getY(), this.getZ(), stack);
-        this.getWorld().spawnEntity(itemEntity);
+        ItemEntity itemEntity = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), stack);
+        this.level().spawnEntity(itemEntity);
     }
 
     protected void loot(ItemEntity item) {
-        ItemStack itemStack = item.getStack();
+        ItemStack itemStack = item.getItem();
         if (this.canPickupItem(itemStack)) {
             int i = itemStack.getCount();
             if (i > 1) {
@@ -201,8 +201,8 @@ public class GooseEntity extends Animal {
     protected PathNavigation createNavigation(Level world) {
         FlyingPathNavigation birdNavigation = new FlyingPathNavigation(this, world);
         birdNavigation.setCanPathThroughDoors(true);
-        birdNavigation.setCanSwim(true);
-        birdNavigation.setCanEnterOpenDoors(true);
+        birdNavigation.setCanFloat(true);
+        birdNavigation.setCanPassDoors(true);
         return birdNavigation;
     }
 
@@ -215,7 +215,7 @@ public class GooseEntity extends Animal {
     private void flapWings() {
         this.prevFlapProgress = this.flapProgress;
         this.prevMaxWingDeviation = this.maxWingDeviation;
-        this.maxWingDeviation += (float)(!this.isOnGround() && !this.hasVehicle() ? 4 : -1) * 0.3F;
+        this.maxWingDeviation += (float)(!this.isOnGround() && !this.isPassenger() ? 4 : -1) * 0.3F;
         this.maxWingDeviation = Mth.clamp(this.maxWingDeviation, 0.0F, 1.0F);
         if (!this.isOnGround() && this.flapSpeed < 1.0F) {
             this.flapSpeed = 1.0F;
@@ -296,7 +296,7 @@ public class GooseEntity extends Animal {
                 if (GooseEntity.this.getRandom().nextInt(toGoalTicks(10)) != 0) {
                     return false;
                 } else {
-                    List<ItemEntity> list = GooseEntity.this.getWorld().getEntitiesByClass(ItemEntity.class, GooseEntity.this.getBoundingBox().expand(8.0, 8.0, 8.0), GooseEntity.PICKABLE_DROP_FILTER);
+                    List<ItemEntity> list = GooseEntity.this.level().getEntitiesByClass(ItemEntity.class, GooseEntity.this.getBoundingBox().expand(8.0, 8.0, 8.0), GooseEntity.PICKABLE_DROP_FILTER);
                     return !list.isEmpty() && GooseEntity.this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty();
                 }
             } else {
@@ -305,7 +305,7 @@ public class GooseEntity extends Animal {
         }
 
         public void tick() {
-            List<ItemEntity> list = GooseEntity.this.getWorld().getEntitiesByClass(ItemEntity.class, GooseEntity.this.getBoundingBox().expand(8.0, 8.0, 8.0), GooseEntity.PICKABLE_DROP_FILTER);
+            List<ItemEntity> list = GooseEntity.this.level().getEntitiesByClass(ItemEntity.class, GooseEntity.this.getBoundingBox().expand(8.0, 8.0, 8.0), GooseEntity.PICKABLE_DROP_FILTER);
             ItemStack itemStack = GooseEntity.this.getEquippedStack(EquipmentSlot.MAINHAND);
             if (itemStack.isEmpty() && !list.isEmpty()) {
                 GooseEntity.this.getNavigation().startMovingTo((Entity)list.get(0), 1.2000000476837158);
@@ -314,7 +314,7 @@ public class GooseEntity extends Animal {
         }
 
         public void start() {
-            List<ItemEntity> list = GooseEntity.this.getWorld().getEntitiesByClass(ItemEntity.class, GooseEntity.this.getBoundingBox().expand(8.0, 8.0, 8.0), GooseEntity.PICKABLE_DROP_FILTER);
+            List<ItemEntity> list = GooseEntity.this.level().getEntitiesByClass(ItemEntity.class, GooseEntity.this.getBoundingBox().expand(8.0, 8.0, 8.0), GooseEntity.PICKABLE_DROP_FILTER);
             if (!list.isEmpty()) {
                 GooseEntity.this.getNavigation().startMovingTo((Entity)list.get(0), 1.2000000476837158);
             }
@@ -324,7 +324,7 @@ public class GooseEntity extends Animal {
 
     static {
         PICKABLE_DROP_FILTER = (item) -> {
-            return !item.cannotPickup() && item.isAlive();
+            return !item.hasPickUpDelay() && item.isAlive();
         };
     /*
         SENSORS = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES,

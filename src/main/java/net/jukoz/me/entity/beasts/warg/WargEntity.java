@@ -86,19 +86,19 @@ public class WargEntity extends AbstractBeastEntity {
 
     public static AttributeSupplier.Builder setAttributes() {
         return net.minecraft.world.entity.Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.4)
-                .add(Attributes.GENERIC_MAX_HEALTH, 24.0d)
-                .add(Attributes.GENERIC_KNOCKBACK_RESISTANCE, 0.2d)
+                .add(Attributes.MOVEMENT_SPEED, 0.4)
+                .add(Attributes.MAX_HEALTH, 24.0d)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.2d)
                 .add(Attributes.GENERIC_ATTACK_SPEED, 1.0d)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 38.0d)
-                .add(Attributes.GENERIC_ATTACK_DAMAGE, 4.0d)
+                .add(Attributes.ATTACK_DAMAGE, 4.0d)
                 .add(EntityAttributesME.SAFE_FALL_DISTANCE.value(), 6.0d);
     }
 
     protected void initAttributes(RandomSource random) {
-        this.getAttributeInstance(Attributes.GENERIC_MAX_HEALTH).setBaseValue(this.getChildHealthBonus(random::nextInt));
-        this.getAttributeInstance(Attributes.GENERIC_MOVEMENT_SPEED).setBaseValue(this.getChildMovementSpeedBonus(random::nextDouble));
-        this.getAttributeInstance(Attributes.GENERIC_ATTACK_DAMAGE).setBaseValue(this.getChildAttackDamageBonus(random::nextDouble));
+        this.getAttributeInstance(Attributes.MAX_HEALTH).setBaseValue(this.getChildHealthBonus(random::nextInt));
+        this.getAttributeInstance(Attributes.MOVEMENT_SPEED).setBaseValue(this.getChildMovementSpeedBonus(random::nextDouble));
+        this.getAttributeInstance(Attributes.ATTACK_DAMAGE).setBaseValue(this.getChildAttackDamageBonus(random::nextDouble));
     }
 
     @Override
@@ -107,7 +107,7 @@ public class WargEntity extends AbstractBeastEntity {
         this.goalSelector.add(3, new MeleeAttackGoal(this, 2, false));
         this.goalSelector.add(4, new ChargeAttackGoal(this, this.getDisposition(), maxChargeCooldown()));
         this.goalSelector.add(5, new BreedGoal(this, 1.5));
-        this.goalSelector.add(6, new TemptGoal(this, 0.9, net.minecraft.world.item.crafting.Ingredient.fromTag(TagKey.of(Registries.ITEM, ResourceLocation.of(MiddleEarth.MOD_ID, "warg_food"))), false));
+        this.goalSelector.add(6, new TemptGoal(this, 0.9, net.minecraft.world.item.crafting.Ingredient.fromTag(TagKey.create(Registries.ITEM, ResourceLocation.of(MiddleEarth.MOD_ID, "warg_food"))), false));
         this.goalSelector.add(7, new WaterAvoidingRandomStrollGoal(this, 0.5));
         this.goalSelector.add(8, new LookAtPlayerGoal(this, Player.class, 6.0f));
         this.goalSelector.add(9, new RandomLookAroundGoal(this));
@@ -122,8 +122,8 @@ public class WargEntity extends AbstractBeastEntity {
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(VARIANT, 0);
-        this.dataTracker.startTracking(EYE_VARIANT, 0);
+        this.entityData.define(VARIANT, 0);
+        this.entityData.define(EYE_VARIANT, 0);
     }
 
     @Override
@@ -136,8 +136,8 @@ public class WargEntity extends AbstractBeastEntity {
     @Override
     public void readCustomDataFromNbt(net.minecraft.nbt.CompoundTag nbt) {
         super.readCustomDataFromNbt(nbt);
-        this.dataTracker.set(VARIANT, nbt.getInt("Variant"));
-        this.dataTracker.set(EYE_VARIANT, nbt.getInt("EyeVariant"));
+        this.entityData.set(VARIANT, nbt.getInt("Variant"));
+        this.entityData.set(EYE_VARIANT, nbt.getInt("EyeVariant"));
     }
 
     protected static float getChildHealthBonus(IntUnaryOperator randomIntGetter) {
@@ -170,9 +170,9 @@ public class WargEntity extends AbstractBeastEntity {
 
     @Override
     public InteractionResult interactMob(Player player, InteractionHand hand) {
-        ItemStack itemStack = player.getStackInHand(hand);
+        ItemStack itemStack = player.getItemInHand(hand);
 
-        if(!this.getWorld().isClient() && !player.isCreative()) {
+        if(!this.level().isClientSide() && !player.isCreative()) {
             RaceType playerRace = RaceUtil.getRaceType(player);
 
             if(playerRace == RaceType.NONE || (this.getCompatibleRaces() != null && !this.getCompatibleRaces().contains(playerRace))) {
@@ -184,14 +184,14 @@ public class WargEntity extends AbstractBeastEntity {
             if (this.isBreedingItem(itemStack)) {
                 if(this.getHealth() < this.getMaxHealth()) {
                     if (!player.isCreative()) itemStack.decrement(1);
-                    net.minecraft.world.food.FoodProperties foodComponent = itemStack.getItem().getFoodComponent();
-                    float f = foodComponent != null ? (float)foodComponent.getHunger() : 1.0f;
+                    net.minecraft.world.food.FoodProperties foodComponent = itemStack.getItem().getFoodProperties();
+                    float f = foodComponent != null ? (float)foodComponent.getNutrition() : 1.0f;
                     this.heal(2.0f * f);
                     return InteractionResult.SUCCESS;
                 }
-                else if (!this.getWorld().isClient && this.getBreedingAge() == 0 && this.canEat()) {
+                else if (!this.level().isClientSide && this.getAge() == 0 && this.canEat()) {
                     this.eat(player, hand, itemStack);
-                    this.lovePlayer(player);
+                    this.setInLove(player);
                     return InteractionResult.SUCCESS;
                 }
             }
@@ -219,9 +219,9 @@ public class WargEntity extends AbstractBeastEntity {
 
     @Override
     protected void setChildAttributes(AgeableMob other, AbstractHorse child) {
-        this.setChildAttribute(other, child, Attributes.GENERIC_MAX_HEALTH, MIN_HEALTH_BONUS, MAX_HEALTH_BONUS);
-        this.setChildAttribute(other, child, Attributes.GENERIC_ATTACK_DAMAGE, MIN_ATTACK_DAMAGE_BONUS, MAX_ATTACK_DAMAGE_BONUS);
-        this.setChildAttribute(other, child, Attributes.GENERIC_MOVEMENT_SPEED, MIN_MOVEMENT_SPEED_BONUS, MAX_MOVEMENT_SPEED_BONUS);
+        this.setChildAttribute(other, child, Attributes.MAX_HEALTH, MIN_HEALTH_BONUS, MAX_HEALTH_BONUS);
+        this.setChildAttribute(other, child, Attributes.ATTACK_DAMAGE, MIN_ATTACK_DAMAGE_BONUS, MAX_ATTACK_DAMAGE_BONUS);
+        this.setChildAttribute(other, child, Attributes.MOVEMENT_SPEED, MIN_MOVEMENT_SPEED_BONUS, MAX_MOVEMENT_SPEED_BONUS);
     }
 
     @Override
@@ -251,13 +251,13 @@ public class WargEntity extends AbstractBeastEntity {
 
     @Override
     public boolean isBreedingItem(ItemStack stack) {
-        return stack.isIn(TagKey.of(Registries.ITEM, ResourceLocation.of(MiddleEarth.MOD_ID, "warg_food")));
+        return stack.is(TagKey.create(Registries.ITEM, ResourceLocation.of(MiddleEarth.MOD_ID, "warg_food")));
     }
 
     @Override
     protected float getSaddledSpeed(Player controllingPlayer) {
         if(!this.isSitting()) {
-            return controllingPlayer.isSprinting() ? ((float)this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED)) : ((float)this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED) * 0.25f);
+            return controllingPlayer.isSprinting() ? ((float)this.getAttributeValue(Attributes.MOVEMENT_SPEED)) : ((float)this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 0.25f);
         }
 
         return super.getSaddledSpeed(controllingPlayer);
@@ -266,7 +266,7 @@ public class WargEntity extends AbstractBeastEntity {
     @Override
     protected float getNpcSaddledSpeed(NpcEntity controllingNpc) {
         if(!this.isSitting()) {
-            return controllingNpc.isSprinting() ? ((float)this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED)) : ((float)this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED) * 0.25f);
+            return controllingNpc.isSprinting() ? ((float)this.getAttributeValue(Attributes.MOVEMENT_SPEED)) : ((float)this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 0.25f);
         }
 
         return super.getNpcSaddledSpeed(controllingNpc);
@@ -281,7 +281,7 @@ public class WargEntity extends AbstractBeastEntity {
     public void tickMovement() {
         super.tickMovement();
 
-        if(this.isAttacking() || this.getAttacker() != null) {
+        if(this.isAggressive() || this.getAttacker() != null) {
             if(!this.isTame() || this.isTame() && this.getAttacker() != null) {
                 this.setSitting(false);
             }
@@ -293,7 +293,7 @@ public class WargEntity extends AbstractBeastEntity {
             //this.idleAnimationTimeout = this.random.nextInt(600) + 1700;
         }
 
-        if(!this.isAttacking() && this.getAttacker() == null) {
+        if(!this.isAggressive() && this.getAttacker() == null) {
             this.setRunning(false);
         }
 
@@ -325,7 +325,7 @@ public class WargEntity extends AbstractBeastEntity {
     }
     @Override
     public boolean isCommandItem(ItemStack stack) {
-        return stack.isIn(TagKey.of(Registries.ITEM, ResourceLocation.of(MiddleEarth.MOD_ID, "bones")));
+        return stack.is(TagKey.create(Registries.ITEM, ResourceLocation.of(MiddleEarth.MOD_ID, "bones")));
     }
 
     @Override
@@ -338,7 +338,7 @@ public class WargEntity extends AbstractBeastEntity {
         boolean result = super.tryAttack(target);
         if(result) {
             this.setRunning(true);
-            this.getWorld().sendEntityStatus(this, EntityEvent.PLAY_ATTACK_SOUND);
+            this.level().sendEntityStatus(this, EntityEvent.PLAY_ATTACK_SOUND);
         }
         return result;
     }
@@ -347,7 +347,7 @@ public class WargEntity extends AbstractBeastEntity {
     public void chargeAttack() {
         if(!this.hasCharged()) {
             this.setHasCharged(true);
-            if(!this.isTame() && !this.getWorld().isClient) {
+            if(!this.isTame() && !this.level().isClientSide) {
                 if(targetDir == Vec3.ZERO && this.getTarget() != null) {
                     targetDir = new Vec3( this.getTarget().getBlockPos().getX() - this.getBlockPos().getX(),
                             this.getTarget().getBlockPos().getY() - this.getBlockPos().getY(),
@@ -355,29 +355,29 @@ public class WargEntity extends AbstractBeastEntity {
                 }
                 this.setVelocity(targetDir.multiply(1,0,1).normalize().add(0,0.6,0).multiply(0.7f));
             }
-            else if (this.getWorld().isClient) {
+            else if (this.level().isClientSide) {
                 this.setHasCharged(true);
                 this.setVelocity(this.getRotationVector().multiply(1,0,1).normalize().add(0,0.35,0).multiply(1.3f));
             }
         }
-        if(!this.isTame() && !this.getWorld().isClient) {
+        if(!this.isTame() && !this.level().isClientSide) {
             this.setYaw((float) Math.toDegrees(Math.atan2(-targetDir.x, targetDir.z)));
         }
 
-        List<Entity> entities = this.getWorld().getOtherEntities(this, this.getBoundingBox().expand(0.2f, 0.0, 0.2f));
+        List<Entity> entities = this.level().getEntities(this, this.getBoundingBox().expand(0.2f, 0.0, 0.2f));
 
         Entity owner = this.getOwner();
         for(Entity entity : entities) {
-            if((owner == null || entity.getUuid() != owner.getUuid()) && entity != this && !this.getPassengerList().contains(entity) && !((entity instanceof WargEntity) && !this.isTame())) {
+            if((owner == null || entity.getUuid() != owner.getUuid()) && entity != this && !this.getPassengers().contains(entity) && !((entity instanceof WargEntity) && !this.isTame())) {
                 if(getWorld() instanceof ServerLevel serverWorld)
-                    entity.damage(entity.getDamageSources().mobAttack(this), this.getAttackDamage());
+                    entity.damage(entity.damageSources().mobAttack(this), this.getAttackDamage());
 
                 if(entity instanceof ServerPlayer) {
                     entity.stopRiding();
                 }
-                else if(!this.getWorld().isClient) {
+                else if(!this.level().isClientSide) {
                     entity.dismountVehicle();
-                    entity.removeAllPassengers();
+                    entity.ejectPassengers();
                 }
 
                 this.setCharging(false);
@@ -401,9 +401,9 @@ public class WargEntity extends AbstractBeastEntity {
             return false;
         }
         this.damage(damageSource, i);
-        if (this.hasPassengers()) {
+        if (this.isVehicle()) {
             if(getWorld() instanceof ServerLevel serverWorld){
-                for (Entity entity : this.getPassengersDeep()) {
+                for (Entity entity : this.getIndirectPassengers()) {
                     entity.damage(damageSource, i);
                 }
             }
@@ -413,7 +413,7 @@ public class WargEntity extends AbstractBeastEntity {
 
     //@Override
     public boolean isHorseArmor(ItemStack stack) {
-        return stack.isIn(TagKey.of(Registries.ITEM, ResourceLocation.of(MiddleEarth.MOD_ID, "warg_armor")));
+        return stack.is(TagKey.create(Registries.ITEM, ResourceLocation.of(MiddleEarth.MOD_ID, "warg_armor")));
     }
 
     public boolean hasCharged() {
@@ -426,7 +426,7 @@ public class WargEntity extends AbstractBeastEntity {
 
     @Override
     public boolean isBondingItem(ItemStack itemStack) {
-        return itemStack.isIn(TagKey.of(Registries.ITEM, ResourceLocation.of(MiddleEarth.MOD_ID, "warg_food")));
+        return itemStack.is(TagKey.create(Registries.ITEM, ResourceLocation.of(MiddleEarth.MOD_ID, "warg_food")));
     }
 
     @Override
@@ -462,18 +462,18 @@ public class WargEntity extends AbstractBeastEntity {
         return WargEyeVariant.byId(this.getEyeTypeVariant() & 255);
     }
     private int getTypeVariant() {
-        return this.dataTracker.get(VARIANT);
+        return this.entityData.get(VARIANT);
     }
 
     private int getEyeTypeVariant() {
-        return this.dataTracker.get(EYE_VARIANT);
+        return this.entityData.get(EYE_VARIANT);
     }
     private void setVariant(WargVariant variant) {
-        this.dataTracker.set(VARIANT, variant.getId() & 255);
+        this.entityData.set(VARIANT, variant.getId() & 255);
     }
 
     private void setEyeVariant(WargEyeVariant variant) {
-        this.dataTracker.set(EYE_VARIANT, variant.getId() & 255);
+        this.entityData.set(EYE_VARIANT, variant.getId() & 255);
     }
     @Nullable
     @Override

@@ -1,6 +1,6 @@
 package net.jukoz.me.world.features.platedfood;
 
-import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -16,12 +16,12 @@ public class PlatedFoodConfiguredFeatures {
     //public static final ResourceKey<ConfiguredFeature<?, ?>> CERAMIC_PLATE = registerKey("ceramic_plate");
 
     public static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {
-        return ResourceKey.of(Registries.CONFIGURED_FEATURE, new ResourceLocation(MiddleEarth.MOD_ID, name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(MiddleEarth.MOD_ID, name));
     }
 
     public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> featureRegisterable) {
         //ConfiguredFeature.register(featureRegisterable, CERAMIC_PLATE, ModFeatures.PLATED_FOOD,
-        //        new PlatedFoodFeatureConfig(ModDecorativeBlocks.CERAMIC_PLATE.getDefaultState(), MiddleEarth.of("structures/shire/food")));
+        //        new PlatedFoodFeatureConfig(ModDecorativeBlocks.CERAMIC_PLATE.defaultBlockState(), MiddleEarth.of("structures/shire/food")));
 
     }
 }

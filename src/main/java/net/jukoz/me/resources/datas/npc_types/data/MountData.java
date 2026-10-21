@@ -74,7 +74,7 @@ public class MountData {
     }
 
     public MountData withArmor(Item armorItem){
-        this.armor = armorItem.getDefaultStack();
+        this.armor = armorItem.getDefaultInstance();
         return this;
     }
 
@@ -107,7 +107,7 @@ public class MountData {
     }
 
     public void createEntity(ServerLevel world, LivingEntity owner) {
-        if(this.entityType == null || owner.hasVehicle() || owner.hasPassengers())
+        if(this.entityType == null || owner.isPassenger() || owner.isVehicle())
             return;
         EntityType<?> type = Registries.ENTITY_TYPE.get(this.entityType);
         var notLiving = type.create(world);
@@ -115,14 +115,14 @@ public class MountData {
             return;
         if(notLiving instanceof LivingEntity entity){
             entity.setPosition(owner.getPos());
-            entity.equipStack(EquipmentSlot.CHEST, Items.SADDLE.asItem().getDefaultStack());
+            entity.equipStack(EquipmentSlot.CHEST, Items.SADDLE.asItem().getDefaultInstance());
             if(armor != null)
                 entity.equipStack(EquipmentSlot.CHEST, this.armor);
 
             if (entity instanceof Mob mob) {
                 mob.initialize(
                         world,
-                        world.getLocalDifficulty(owner.getBlockPos()),
+                        world.getEffectiveDifficulty(owner.getBlockPos()),
                         MobSpawnType.EVENT,
                         null,
                         null

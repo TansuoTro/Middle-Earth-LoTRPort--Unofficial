@@ -1,8 +1,8 @@
 package net.jukoz.me.world.features.chain;
 
 import net.jukoz.me.MiddleEarth;
-import net.minecraft.data.worldgen.BootstrapContext;
-import net.minecraft.core.RegistryEntryLookup;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -19,7 +19,7 @@ public class ChainPlacedFeatures {
     public static final ResourceKey<PlacedFeature> ROPE_LADDER_DOWN = registerKey("rope_ladder_down");
 
     public static ResourceKey<PlacedFeature> registerKey(String name) {
-        return ResourceKey.of(Registries.PLACED_FEATURE, MiddleEarth.of(name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, MiddleEarth.of(name));
     }
 
     public static void bootstrap(BootstrapContext<PlacedFeature> featureRegisterable) {

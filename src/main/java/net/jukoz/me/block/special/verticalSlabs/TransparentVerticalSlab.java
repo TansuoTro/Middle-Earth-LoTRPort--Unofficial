@@ -7,13 +7,14 @@ import net.minecraft.world.level.block.HalfTransparentBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class TransparentVerticalSlab extends VerticalSlabBlock{
 
-    public TransparentVerticalSlab(Settings settings) {
+    public TransparentVerticalSlab(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
@@ -22,7 +23,7 @@ public class TransparentVerticalSlab extends VerticalSlabBlock{
     }
 
     public boolean isSideInvisible(BlockState state, BlockState stateFrom, Direction direction) {
-        return stateFrom.isOf(this) ? true : super.isSideInvisible(state, stateFrom, direction);
+        return stateFrom.is(this) ? true : super.isSideInvisible(state, stateFrom, direction);
     }
 
     public VoxelShape getCameraCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {

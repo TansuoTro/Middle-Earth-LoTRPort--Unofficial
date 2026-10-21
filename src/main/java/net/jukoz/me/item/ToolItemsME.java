@@ -79,58 +79,58 @@ public class ToolItemsME {
             Item::new, new MESettings().maxCount(1));
 
     public static final Item BRONZE_PICKAXE = registerItemHandheld("bronze_pickaxe",
-            (settings) -> new CustomPickaxeItem(ToolMaterialsME.BRONZE, 0.5f, -2.8f, settings), new MESettings().maxDamage(ToolMaterialsME.BRONZE.getDurability()));
+            (settings) -> new CustomPickaxeItem(ToolMaterialsME.BRONZE, 0.5f, -2.8f, settings), new MESettings().maxDamage(ToolMaterialsME.BRONZE.getUses()));
     public static final Item BRONZE_AXE = registerItemHandheld("bronze_axe",
-            (settings) -> new CustomAxeWeaponItem(ToolMaterialsME.BRONZE, settings), new MESettings().maxDamage(ToolMaterialsME.BRONZE.getDurability()));
+            (settings) -> new CustomAxeWeaponItem(ToolMaterialsME.BRONZE, settings), new MESettings().maxDamage(ToolMaterialsME.BRONZE.getUses()));
     public static final Item BRONZE_SHOVEL = registerItemHandheld("bronze_shovel",
-            (settings) -> new CustomShovelItem(ToolMaterialsME.BRONZE, 1.5f, -3.0f, settings), new MESettings().maxDamage(ToolMaterialsME.BRONZE.getDurability()));
+            (settings) -> new CustomShovelItem(ToolMaterialsME.BRONZE, 1.5f, -3.0f, settings), new MESettings().maxDamage(ToolMaterialsME.BRONZE.getUses()));
     public static final Item BRONZE_HOE = registerItemHandheld("bronze_hoe",
-            (settings) -> new CustomHoeItem(ToolMaterialsME.BRONZE, -2, -1.0f, settings), new MESettings().maxDamage(ToolMaterialsME.BRONZE.getDurability()));
+            (settings) -> new CustomHoeItem(ToolMaterialsME.BRONZE, -2, -1.0f, settings), new MESettings().maxDamage(ToolMaterialsME.BRONZE.getUses()));
 
     public static final Item CRUDE_PICKAXE = registerItemHandheld("crude_pickaxe",
-            (settings) -> new CustomPickaxeItem(ToolMaterialsME.CRUDE, 0.5f, -2.8f, settings), new MESettings().maxDamage(ToolMaterialsME.CRUDE.getDurability()));
+            (settings) -> new CustomPickaxeItem(ToolMaterialsME.CRUDE, 0.5f, -2.8f, settings), new MESettings().maxDamage(ToolMaterialsME.CRUDE.getUses()));
     public static final Item CRUDE_AXE = registerItemDualModel("crude_axe",
-            (settings) -> new CustomAxeWeaponItem(ToolMaterialsME.CRUDE, settings), new MESettings().maxDamage(ToolMaterialsME.CRUDE.getDurability()));
+            (settings) -> new CustomAxeWeaponItem(ToolMaterialsME.CRUDE, settings), new MESettings().maxDamage(ToolMaterialsME.CRUDE.getUses()));
     public static final Item CRUDE_SHOVEL = registerItemHandheld("crude_shovel",
-            (settings) -> new CustomShovelItem(ToolMaterialsME.CRUDE, 1.5f, -3.0f, settings), new MESettings().maxDamage(ToolMaterialsME.CRUDE.getDurability()));
+            (settings) -> new CustomShovelItem(ToolMaterialsME.CRUDE, 1.5f, -3.0f, settings), new MESettings().maxDamage(ToolMaterialsME.CRUDE.getUses()));
     public static final Item CRUDE_HOE = registerItemHandheld("crude_hoe",
-            (settings) -> new CustomHoeItem(ToolMaterialsME.CRUDE, -2, -1.0f, settings), new MESettings().maxDamage(ToolMaterialsME.CRUDE.getDurability()));
+            (settings) -> new CustomHoeItem(ToolMaterialsME.CRUDE, -2, -1.0f, settings), new MESettings().maxDamage(ToolMaterialsME.CRUDE.getUses()));
 
     public static final Item STEEL_PICKAXE = registerItemHandheld("steel_pickaxe",
-            (settings) -> new CustomPickaxeItem(ToolMaterialsME.STEEL, 1, -2.8f, settings), new MESettings().maxDamage(ToolMaterialsME.STEEL.getDurability()));
+            (settings) -> new CustomPickaxeItem(ToolMaterialsME.STEEL, 1, -2.8f, settings), new MESettings().maxDamage(ToolMaterialsME.STEEL.getUses()));
     public static final Item STEEL_AXE = registerItemDualModel("steel_axe",
-            (settings) -> new CustomAxeWeaponItem(ToolMaterialsME.STEEL, settings), new MESettings().maxDamage(ToolMaterialsME.STEEL.getDurability()));
+            (settings) -> new CustomAxeWeaponItem(ToolMaterialsME.STEEL, settings), new MESettings().maxDamage(ToolMaterialsME.STEEL.getUses()));
     public static final Item STEEL_SHOVEL = registerItemHandheld("steel_shovel",
-            (settings) -> new CustomShovelItem(ToolMaterialsME.STEEL, 1.5f, -3.0f, settings), new MESettings().maxDamage(ToolMaterialsME.STEEL.getDurability()));
+            (settings) -> new CustomShovelItem(ToolMaterialsME.STEEL, 1.5f, -3.0f, settings), new MESettings().maxDamage(ToolMaterialsME.STEEL.getUses()));
     public static final Item STEEL_HOE = registerItemHandheld("steel_hoe",
-            (settings) -> new CustomHoeItem(ToolMaterialsME.STEEL, -2, -1.0f, settings), new MESettings().maxDamage(ToolMaterialsME.STEEL.getDurability()));
+            (settings) -> new CustomHoeItem(ToolMaterialsME.STEEL, -2, -1.0f, settings), new MESettings().maxDamage(ToolMaterialsME.STEEL.getUses()));
 
     public static final Item BURZUM_STEEL_PICKAXE = registerItemHandheld("burzum_steel_pickaxe",
-            (settings) -> new CustomPickaxeItem(ToolMaterialsME.BURZUM_STEEL, 1, -2.8f, settings), new MESettings().maxDamage(ToolMaterialsME.BURZUM_STEEL.getDurability()));
+            (settings) -> new CustomPickaxeItem(ToolMaterialsME.BURZUM_STEEL, 1, -2.8f, settings), new MESettings().maxDamage(ToolMaterialsME.BURZUM_STEEL.getUses()));
     public static final Item BURZUM_STEEL_AXE = registerItemDualModel("burzum_steel_axe",
-            (settings) -> new CustomAxeWeaponItem(ToolMaterialsME.BURZUM_STEEL, settings), new MESettings().maxDamage(ToolMaterialsME.BURZUM_STEEL.getDurability()));
+            (settings) -> new CustomAxeWeaponItem(ToolMaterialsME.BURZUM_STEEL, settings), new MESettings().maxDamage(ToolMaterialsME.BURZUM_STEEL.getUses()));
     public static final Item BURZUM_STEEL_SHOVEL = registerItemHandheld("burzum_steel_shovel",
-            (settings) -> new CustomShovelItem(ToolMaterialsME.BURZUM_STEEL, 1.5f, -3.0f, settings), new MESettings().maxDamage(ToolMaterialsME.BURZUM_STEEL.getDurability()));
+            (settings) -> new CustomShovelItem(ToolMaterialsME.BURZUM_STEEL, 1.5f, -3.0f, settings), new MESettings().maxDamage(ToolMaterialsME.BURZUM_STEEL.getUses()));
     public static final Item BURZUM_STEEL_HOE = registerItemHandheld("burzum_steel_hoe",
-            (settings) -> new CustomHoeItem(ToolMaterialsME.BURZUM_STEEL, -2, -1.0f, settings), new MESettings().maxDamage(ToolMaterialsME.BURZUM_STEEL.getDurability()));
+            (settings) -> new CustomHoeItem(ToolMaterialsME.BURZUM_STEEL, -2, -1.0f, settings), new MESettings().maxDamage(ToolMaterialsME.BURZUM_STEEL.getUses()));
 
     public static final Item EDHEL_STEEL_PICKAXE = registerItemHandheld("edhel_steel_pickaxe",
-            (settings) -> new CustomPickaxeItem(ToolMaterialsME.EDHEL_STEEL, 1, -2.8f, settings), new MESettings().maxDamage(ToolMaterialsME.EDHEL_STEEL.getDurability()));
+            (settings) -> new CustomPickaxeItem(ToolMaterialsME.EDHEL_STEEL, 1, -2.8f, settings), new MESettings().maxDamage(ToolMaterialsME.EDHEL_STEEL.getUses()));
     public static final Item EDHEL_STEEL_AXE = registerItemDualModel("edhel_steel_axe",
-            (settings) -> new CustomAxeWeaponItem(ToolMaterialsME.EDHEL_STEEL, settings), new MESettings().maxDamage(ToolMaterialsME.EDHEL_STEEL.getDurability()));
+            (settings) -> new CustomAxeWeaponItem(ToolMaterialsME.EDHEL_STEEL, settings), new MESettings().maxDamage(ToolMaterialsME.EDHEL_STEEL.getUses()));
     public static final Item EDHEL_STEEL_SHOVEL = registerItemHandheld("edhel_steel_shovel",
-            (settings) -> new CustomShovelItem(ToolMaterialsME.EDHEL_STEEL, 1.5f, -3.0f, settings), new MESettings().maxDamage(ToolMaterialsME.EDHEL_STEEL.getDurability()));
+            (settings) -> new CustomShovelItem(ToolMaterialsME.EDHEL_STEEL, 1.5f, -3.0f, settings), new MESettings().maxDamage(ToolMaterialsME.EDHEL_STEEL.getUses()));
     public static final Item EDHEL_STEEL_HOE = registerItemHandheld("edhel_steel_hoe",
-            (settings) -> new CustomHoeItem(ToolMaterialsME.EDHEL_STEEL, -2, -1.0f, settings), new MESettings().maxDamage(ToolMaterialsME.EDHEL_STEEL.getDurability()));
+            (settings) -> new CustomHoeItem(ToolMaterialsME.EDHEL_STEEL, -2, -1.0f, settings), new MESettings().maxDamage(ToolMaterialsME.EDHEL_STEEL.getUses()));
     
     public static final Item KHAZAD_STEEL_PICKAXE = registerItemHandheld("khazad_steel_pickaxe",
-            (settings) -> new CustomPickaxeItem(ToolMaterialsME.KHAZAD_STEEL, 1, -2.8f, settings), new MESettings().maxDamage(ToolMaterialsME.KHAZAD_STEEL.getDurability()));
+            (settings) -> new CustomPickaxeItem(ToolMaterialsME.KHAZAD_STEEL, 1, -2.8f, settings), new MESettings().maxDamage(ToolMaterialsME.KHAZAD_STEEL.getUses()));
     public static final Item KHAZAD_STEEL_AXE = registerItemHandheld("khazad_steel_axe",
-            (settings) -> new CustomAxeWeaponItem(ToolMaterialsME.KHAZAD_STEEL, settings), new MESettings().maxDamage(ToolMaterialsME.KHAZAD_STEEL.getDurability()));
+            (settings) -> new CustomAxeWeaponItem(ToolMaterialsME.KHAZAD_STEEL, settings), new MESettings().maxDamage(ToolMaterialsME.KHAZAD_STEEL.getUses()));
     public static final Item KHAZAD_STEEL_SHOVEL = registerItemHandheld("khazad_steel_shovel",
-            (settings) -> new CustomShovelItem(ToolMaterialsME.KHAZAD_STEEL, 1.5f, -3.0f, settings), new MESettings().maxDamage(ToolMaterialsME.KHAZAD_STEEL.getDurability()));
+            (settings) -> new CustomShovelItem(ToolMaterialsME.KHAZAD_STEEL, 1.5f, -3.0f, settings), new MESettings().maxDamage(ToolMaterialsME.KHAZAD_STEEL.getUses()));
     public static final Item KHAZAD_STEEL_HOE = registerItemHandheld("khazad_steel_hoe",
-            (settings) -> new CustomHoeItem(ToolMaterialsME.KHAZAD_STEEL, -2, -1.0f, settings), new MESettings().maxDamage(ToolMaterialsME.KHAZAD_STEEL.getDurability()));
+            (settings) -> new CustomHoeItem(ToolMaterialsME.KHAZAD_STEEL, -2, -1.0f, settings), new MESettings().maxDamage(ToolMaterialsME.KHAZAD_STEEL.getUses()));
 
     public static final Item MITHRIL_PICKAXE = registerItemHandheld("mithril_pickaxe",
             (settings) -> new CustomPickaxeItem(ToolMaterialsME.MITHRIL, 1, -2.7f, settings), new MESettings().fireproof()
@@ -156,30 +156,30 @@ public class ToolItemsME {
     public static final Item LONGBOTTOM_PIPE = registerItem2dGUI3dPerson("longbottom_pipe",
             (settings) -> new PipeItem(settings, 5), new MESettings().maxCount(1));
     
-    private static Item registerItemHandheld(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerItemHandheld(String name, Function<Item.Properties, Item> factory, Item.Properties settings) {
         Item item = (Item)factory.apply(settings);
-        ModItemGroups.TOOLS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.TOOLS_CONTENTS.add(item.getDefaultInstance());
         SimpleHandheldItemModel.items.add(item);
         return registerItem(item, name);
     }
 
-    private static Item registerSmithingHammerItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerSmithingHammerItem(String name, Function<Item.Properties, Item> factory, Item.Properties settings) {
         Item item = registerItemHandheld(name, factory, settings);
         smithingHammers.add(item);
         return item;
     }
 
-    private static Item registerItemDualModel(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerItemDualModel(String name, Function<Item.Properties, Item> factory, Item.Properties settings) {
         Item item = (Item)factory.apply(settings);
-        ModItemGroups.TOOLS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.TOOLS_CONTENTS.add(item.getDefaultInstance());
         SimpleBigItemModel.items.add(item);
         return registerItem(item, name);
     }
     
-    public static Item registerItem2dGUI3dPerson(String name, Function<Item.Settings, Item> factory, Item.Settings settings){
+    public static Item registerItem2dGUI3dPerson(String name, Function<Item.Properties, Item> factory, Item.Properties settings){
         Item item = (Item)factory.apply(settings);
         SimpleBigItemModel.genericItems.add(item);
-        ModItemGroups.TOOLS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.TOOLS_CONTENTS.add(item.getDefaultInstance());
         return registerItem(item, name);
     }
 

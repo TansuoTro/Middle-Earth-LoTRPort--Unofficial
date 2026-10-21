@@ -82,9 +82,9 @@ public class SwanEntity extends Animal {
 
     public static AttributeSupplier.Builder createSwanAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MAX_HEALTH, 10.0)
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.35)
-                .add(Attributes.GENERIC_ATTACK_DAMAGE, 1.0)
+                .add(Attributes.MAX_HEALTH, 10.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.35)
+                .add(Attributes.ATTACK_DAMAGE, 1.0)
                 .add(Attributes.GENERIC_ATTACK_SPEED, 1.0)
                 .add(Attributes.GENERIC_FLYING_SPEED, 0.4000000059604645);
     }
@@ -92,8 +92,8 @@ public class SwanEntity extends Animal {
     protected PathNavigation createNavigation(Level world) {
         FlyingPathNavigation birdNavigation = new FlyingPathNavigation(this, world);
         birdNavigation.setCanPathThroughDoors(true);
-        birdNavigation.setCanSwim(true);
-        birdNavigation.setCanEnterOpenDoors(true);
+        birdNavigation.setCanFloat(true);
+        birdNavigation.setCanPassDoors(true);
         return birdNavigation;
     }
 
@@ -106,7 +106,7 @@ public class SwanEntity extends Animal {
     private void flapWings() {
         this.prevFlapProgress = this.flapProgress;
         this.prevMaxWingDeviation = this.maxWingDeviation;
-        this.maxWingDeviation += (float)(!this.isOnGround() && !this.hasVehicle() ? 4 : -1) * 0.3F;
+        this.maxWingDeviation += (float)(!this.isOnGround() && !this.isPassenger() ? 4 : -1) * 0.3F;
         this.maxWingDeviation = Mth.clamp(this.maxWingDeviation, 0.0F, 1.0F);
         if (!this.isOnGround() && this.flapSpeed < 1.0F) {
             this.flapSpeed = 1.0F;

@@ -1,8 +1,8 @@
 package net.jukoz.me.registries.content.factions;
 
-import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryEntryLookup;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
@@ -57,7 +57,7 @@ public class FactionRegistry {
     private static void register(BootstrapContext<Faction> context, HolderGetter<Faction> registryEntryLookup, ResourceKey<Faction> registryKey, Faction element){
         DynamicRegistriesME.register(context, registryEntryLookup, registryKey, element);
         // [LANG datagen]
-        TranslationEntries.factionEntries.add(registryKey.getValue().getPath());
+        TranslationEntries.factionEntries.add(registryKey.location().getPath());
         SpawnDataHandler spawnDataHandler = element.getSpawnData();
         if(spawnDataHandler != null && spawnDataHandler.getAllSpawnIdentifiers() != null)
             for(ResourceLocation spawnId : spawnDataHandler.getAllSpawnIdentifiers())

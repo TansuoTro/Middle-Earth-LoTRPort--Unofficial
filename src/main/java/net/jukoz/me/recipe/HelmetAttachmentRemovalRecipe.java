@@ -13,7 +13,7 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.core.RegistryWrapper;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.level.Level;
@@ -26,12 +26,12 @@ public class HelmetAttachmentRemovalRecipe extends CustomRecipe {
 
     @Override
     public NonNullList<ItemStack> getRemainder(CraftingContainer input) {
-        NonNullList<ItemStack> defaultedList = NonNullList.ofSize(input.size(), ItemStack.EMPTY);
+        NonNullList<ItemStack> defaultedList = NonNullList.withSize(input.size(), ItemStack.EMPTY);
 
         for(int i = 0; i < defaultedList.size(); ++i) {
-            ItemStack itemStack = input.getStack(i);
-            if (!itemStack.getRecipeRemainder().isEmpty()) {
-                defaultedList.set(i, new ItemStack(itemStack.getRecipeRemainder().getItem()));
+            ItemStack itemStack = input.getItem(i);
+            if (!itemStack.getCraftingRemainingItem().isEmpty()) {
+                defaultedList.set(i, new ItemStack(itemStack.getCraftingRemainingItem().getItem()));
             } else if (itemStack.getItem() instanceof ShearsItem) {
                 defaultedList.set(i, itemStack.copyWithCount(1));
             }else if (MEComponents.get(itemStack, MEComponents.HELMET_ATTACHMENT_DATA) != null){
@@ -51,7 +51,7 @@ public class HelmetAttachmentRemovalRecipe extends CustomRecipe {
         ItemStack itemStackHood = ItemStack.EMPTY;
 
         for(int i = 0; i < input.size(); ++i) {
-            ItemStack itemStack2 = input.getStack(i);
+            ItemStack itemStack2 = input.getItem(i);
             if (!itemStack2.isEmpty()) {
                 if (itemStack2.getItem() instanceof CustomHelmetItem && MEComponents.get(itemStack2, MEComponents.HELMET_ATTACHMENT_DATA) != null) {
                     if (!itemStackHelmet.isEmpty()) {
@@ -59,7 +59,7 @@ public class HelmetAttachmentRemovalRecipe extends CustomRecipe {
                     }
                     itemStackHelmet = itemStack2;
                 } else {
-                    if (!itemStack2.isOf(Items.SHEARS)) {
+                    if (!itemStack2.is(Items.SHEARS)) {
                         return false;
                     }
                     itemStackHood = itemStack2;
@@ -74,7 +74,7 @@ public class HelmetAttachmentRemovalRecipe extends CustomRecipe {
         ItemStack itemStack = ItemStack.EMPTY;
 
         for(int i = 0; i < input.size(); ++i) {
-            ItemStack itemStack2 = input.getStack(i);
+            ItemStack itemStack2 = input.getItem(i);
             if (!itemStack2.isEmpty()) {
                 if (itemStack2.getItem() instanceof CustomHelmetItem && MEComponents.get(itemStack2, MEComponents.HELMET_ATTACHMENT_DATA) != null) {
                     if (!itemStack.isEmpty()) {
@@ -83,7 +83,7 @@ public class HelmetAttachmentRemovalRecipe extends CustomRecipe {
 
                     itemStack = itemStack2.copy();
                 } else {
-                    if (!itemStack2.isOf(Items.SHEARS)) {
+                    if (!itemStack2.is(Items.SHEARS)) {
                         return ItemStack.EMPTY;
                     }
                 }

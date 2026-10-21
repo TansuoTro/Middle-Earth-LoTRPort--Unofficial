@@ -3,7 +3,7 @@ package net.jukoz.me.entity.beasts.trolls.snow;
 import com.google.common.collect.Maps;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
@@ -14,7 +14,7 @@ public class SnowTrollRenderer extends MobRenderer<SnowTrollEntity, SnowTrollMod
     private static final String PATH = "textures/entities/trolls/snow/";
 
     public SnowTrollRenderer(EntityRendererProvider.Context ctx) {
-        super(ctx, new SnowTrollModel(ctx.getPart(ModEntityModelLayers.SNOW_TROLL)), 1.1f);
+        super(ctx, new SnowTrollModel(ctx.bakeLayer(ModEntityModelLayers.SNOW_TROLL)), 1.1f);
     }
 
     @Override

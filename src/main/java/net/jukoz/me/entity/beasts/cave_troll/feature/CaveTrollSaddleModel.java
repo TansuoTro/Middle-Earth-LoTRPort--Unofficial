@@ -24,32 +24,32 @@ public class CaveTrollSaddleModel extends CaveTrollEntityModel {
         MeshDefinition modelData = getModelData();
         PartDefinition modelPartData = modelData.getRoot().getChild("root").getChild("body_no_legs").getChild("body_no_limbs");
 
-        PartDefinition body = modelPartData.addChild("body", CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition body = modelPartData.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition armor = body.addChild("armor", CubeListBuilder.create().uv(91, 51)
-                .cuboid(-16.0F, -40.0F, -9.0F, 33.0F, 40.0F, 17.0F, new CubeDeformation(0.2F)), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition armor = body.addOrReplaceChild("armor", CubeListBuilder.create().texOffs(91, 51)
+                .addBox(-16.0F, -40.0F, -9.0F, 33.0F, 40.0F, 17.0F, new CubeDeformation(0.2F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition saddle_platform = modelPartData.addChild("saddle_platform", CubeListBuilder.create().uv(0, 0).cuboid(-7.5F, 1.0F, -7.5F, 15.0F, 2.0F, 16.0F, new CubeDeformation(0.0F))
-                .uv(0, 77).cuboid(-7.5F, -17.0F, -7.5F, 15.0F, 18.0F, 16.0F,
-                        new CubeDeformation(0.0F)), PartPose.pivot(0.5F, -47.0F, 6.5F));
+        PartDefinition saddle_platform = modelPartData.addOrReplaceChild("saddle_platform", CubeListBuilder.create().texOffs(0, 0).addBox(-7.5F, 1.0F, -7.5F, 15.0F, 2.0F, 16.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 77).addBox(-7.5F, -17.0F, -7.5F, 15.0F, 18.0F, 16.0F,
+                        new CubeDeformation(0.0F)), PartPose.offset(0.5F, -47.0F, 6.5F));
 
-        PartDefinition log2_r1 = saddle_platform.addChild("log2_r1", CubeListBuilder.create().uv(67, 25).cuboid(-1.5F, -1.5F, 3.0F, 4.0F, 4.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.of(0.4F, 4.5F, 9.0F, 3.1416F, 0.0F, 3.1416F));
+        PartDefinition log2_r1 = saddle_platform.addOrReplaceChild("log2_r1", CubeListBuilder.create().texOffs(67, 25).addBox(-1.5F, -1.5F, 3.0F, 4.0F, 4.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.4F, 4.5F, 9.0F, 3.1416F, 0.0F, 3.1416F));
 
-        PartDefinition log1_r1 = saddle_platform.addChild("log1_r1", CubeListBuilder.create().uv(53, 0).cuboid(-1.5F, -1.5F, -10.0F, 4.0F, 4.0F, 20.0F, new CubeDeformation(0.0F)), PartPose.of(0.0F, 4.5F, -2.5F, 0.0F, -1.5708F, 0.0F));
+        PartDefinition log1_r1 = saddle_platform.addOrReplaceChild("log1_r1", CubeListBuilder.create().texOffs(53, 0).addBox(-1.5F, -1.5F, -10.0F, 4.0F, 4.0F, 20.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 4.5F, -2.5F, 0.0F, -1.5708F, 0.0F));
 
-        PartDefinition platform = modelPartData.addChild("platform", CubeListBuilder.create().uv(106, 15).cuboid(-15.5F, 12.0F, 1.5F, 31.0F, 4.0F, 4.0F, new CubeDeformation(0.0F))
-                .uv(89, 28).cuboid(-19.0F, 10.0F, 1.6F, 38.0F, 2.0F, 16.0F, new CubeDeformation(0.0F))
-                .uv(77, 114).cuboid(-19.0F, 1.0F, 1.6F, 38.0F, 9.0F, 16.0F, new CubeDeformation(0.0F)), PartPose.pivot(0.5F, -48.0F, 6.5F));
+        PartDefinition platform = modelPartData.addOrReplaceChild("platform", CubeListBuilder.create().texOffs(106, 15).addBox(-15.5F, 12.0F, 1.5F, 31.0F, 4.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(89, 28).addBox(-19.0F, 10.0F, 1.6F, 38.0F, 2.0F, 16.0F, new CubeDeformation(0.0F))
+                .texOffs(77, 114).addBox(-19.0F, 1.0F, 1.6F, 38.0F, 9.0F, 16.0F, new CubeDeformation(0.0F)), PartPose.offset(0.5F, -48.0F, 6.5F));
 
-        PartDefinition log2_r2 = platform.addChild("log2_r2", CubeListBuilder.create().uv(111, 0).cuboid(-1.5F, -1.5F, -1.0F, 4.0F, 4.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.of(-7.5F, 13.5F, 14.5F, 3.1416F, 0.0F, 3.1416F));
+        PartDefinition log2_r2 = platform.addOrReplaceChild("log2_r2", CubeListBuilder.create().texOffs(111, 0).addBox(-1.5F, -1.5F, -1.0F, 4.0F, 4.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-7.5F, 13.5F, 14.5F, 3.1416F, 0.0F, 3.1416F));
 
-        PartDefinition log1_r2 = platform.addChild("log1_r2", CubeListBuilder.create().uv(142, 0).cuboid(-1.5F, -1.5F, -1.0F, 4.0F, 4.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.of(8.5F, 13.5F, 14.5F, 3.1416F, 0.0F, 3.1416F));
+        PartDefinition log1_r2 = platform.addOrReplaceChild("log1_r2", CubeListBuilder.create().texOffs(142, 0).addBox(-1.5F, -1.5F, -1.0F, 4.0F, 4.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(8.5F, 13.5F, 14.5F, 3.1416F, 0.0F, 3.1416F));
 
-        PartDefinition Head = modelPartData.addChild("Head", CubeListBuilder.create(), PartPose.pivot(0.5F, -34.5F, -8.5F));
+        PartDefinition Head = modelPartData.addOrReplaceChild("Head", CubeListBuilder.create(), PartPose.offset(0.5F, -34.5F, -8.5F));
 
-        PartDefinition Saddle_Reigns = Head.addChild("Saddle_Reigns", CubeListBuilder.create(), PartPose.of(0.0F, 0.0F, 0.0F, -0.0873F, 0.0F, 0.0F));
+        PartDefinition Saddle_Reigns = Head.addOrReplaceChild("Saddle_Reigns", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.0873F, 0.0F, 0.0F));
 
-        PartDefinition cube_r1 = Saddle_Reigns.addChild("cube_r1", CubeListBuilder.create().uv(0, 43).cuboid(-5.0F, -22.0F, -2.0F, 10.0F, 22.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.of(0.0F, -5.0F, -4.0F, -0.6981F, 0.0F, 0.0F));
+        PartDefinition cube_r1 = Saddle_Reigns.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(0, 43).addBox(-5.0F, -22.0F, -2.0F, 10.0F, 22.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -5.0F, -4.0F, -0.6981F, 0.0F, 0.0F));
 
         return LayerDefinition.of(modelData, 256, 256);
     }

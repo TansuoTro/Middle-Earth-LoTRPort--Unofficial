@@ -23,7 +23,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -48,10 +48,10 @@ public class SnailEntity extends Animal {
 
     public static AttributeSupplier.Builder createSnailAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MAX_HEALTH, 2)
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.05f)
-                .add(Attributes.GENERIC_KNOCKBACK_RESISTANCE, 1)
-                .add(Attributes.GENERIC_ARMOR, 0.5f);
+                .add(Attributes.MAX_HEALTH, 2)
+                .add(Attributes.MOVEMENT_SPEED, 0.05f)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1)
+                .add(Attributes.ARMOR, 0.5f);
     }
 
     public SnailVariant getVariant() {
@@ -77,7 +77,7 @@ public class SnailEntity extends Animal {
         @Override
         public boolean canStart() {
             if (this.cooldown <= 0) {
-                if (!this.snail.getWorld().getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING)) {
+                if (!this.snail.getWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
                     return false;
                 }
                 this.hasTarget = false;
@@ -94,14 +94,14 @@ public class SnailEntity extends Animal {
         @Override
         public void tick() {
             super.tick();
-            this.snail.getLookControl().lookAt((double)this.targetPos.getX() + 0.5, this.targetPos.getY() + 1, (double)this.targetPos.getZ() + 0.5, 10.0f, this.snail.getMaxLookPitchChange());
-            if (this.hasReached()) {
+            this.snail.getLookControl().lookAt((double)this.targetPos.getX() + 0.5, this.targetPos.getY() + 1, (double)this.targetPos.getZ() + 0.5, 10.0f, this.snail.getMaxHeadXRot());
+            if (this.isReachedTarget()) {
                 Level world = this.snail.getWorld();
-                BlockPos blockPos = this.targetPos.up();
+                BlockPos blockPos = this.targetPos.above();
                 BlockState blockState = world.getBlockState(blockPos);
                 Block block = blockState.getBlock();
-                if (this.hasTarget && block.getDefaultState().isIn(BlockTags.CROPS)) {
-                    world.setBlockState(blockPos, Blocks.AIR.getDefaultState(), Block.NOTIFY_LISTENERS);
+                if (this.hasTarget && block.defaultBlockState().is(BlockTags.CROPS)) {
+                    world.setBlock(blockPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
                     world.breakBlock(blockPos, true, this.snail);
                     this.snail.onEatingGrass();
                     this.snail.moreCropsTicks = 1200;
@@ -114,7 +114,7 @@ public class SnailEntity extends Animal {
         @Override
         protected boolean isTargetPos(LevelReader world, BlockPos pos) {
             BlockState blockState = world.getBlockState(pos);
-            if (blockState.isOf(Blocks.FARMLAND) && this.wantsCrops && !this.hasTarget && (blockState = world.getBlockState(pos.up())).isIn(BlockTags.CROPS)) {
+            if (blockState.is(Blocks.FARMLAND) && this.wantsCrops && !this.hasTarget && (blockState = world.getBlockState(pos.above())).is(BlockTags.CROPS)) {
                 this.hasTarget = true;
                 return true;
             }
@@ -161,17 +161,17 @@ public class SnailEntity extends Animal {
 
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(SNAIL_FLAGS, (byte)0);
+        this.entityData.define(SNAIL_FLAGS, (byte)0);
     }
 
     @Override
     public void onEatingGrass() {
         super.onEatingGrass();
         if (this.isBaby()) {
-            this.growUp(60);
+            this.ageUp(60);
         }
         if(random.nextDouble() <= 0.15D) {
-            Level world = this.getWorld();
+            Level world = this.level();
             SnailEntity snailSpawn = ((EntityType<SnailEntity>) EntityType.get(MiddleEarth.MOD_ID + ":snail").get()).create(world);
             snailSpawn.updatePosition(this.getX(), this.getY(), this.getZ());
             world.spawnEntity(snailSpawn);
@@ -180,7 +180,7 @@ public class SnailEntity extends Animal {
 
     public void tick() {
         super.tick();
-        if (!this.getWorld().isClient) {
+        if (!this.level().isClientSide) {
             this.setClimbingWall(this.horizontalCollision);
         }
         if(isClimbing()) {
@@ -204,7 +204,7 @@ public class SnailEntity extends Animal {
     }
 
     public boolean isClimbingWall() {
-        return (this.dataTracker.get(SNAIL_FLAGS) & 1) != 0;
+        return (this.entityData.get(SNAIL_FLAGS) & 1) != 0;
     }
 
     public boolean isCollidingWall() {
@@ -212,14 +212,14 @@ public class SnailEntity extends Animal {
     }
 
     public void setClimbingWall(boolean climbing) {
-        byte b = (Byte)this.dataTracker.get(SNAIL_FLAGS);
+        byte b = (Byte)this.entityData.get(SNAIL_FLAGS);
         if (climbing) {
             b = (byte)(b | 1);
         } else {
             b &= -2;
         }
 
-        this.dataTracker.set(SNAIL_FLAGS, b);
+        this.entityData.set(SNAIL_FLAGS, b);
     }
 
     public int getClimbingTicks() {

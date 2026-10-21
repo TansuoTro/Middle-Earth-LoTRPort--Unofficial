@@ -22,9 +22,9 @@ public class SpawnUtil {
     }
 
     public static boolean canSpawn(BlockPos blockPos, ServerLevelAccessor serverWorldAccess, MobSpawnType spawnReason) {
-        BlockPos below = blockPos.down();
+        BlockPos below = blockPos.below();
         boolean isOnSolidGround = serverWorldAccess.getBlockState(below).isSolidBlock(serverWorldAccess, below);
-        boolean isNotOnTopOfLogs = !serverWorldAccess.getBlockState(below).isIn(BlockTags.LOGS);
+        boolean isNotOnTopOfLogs = !serverWorldAccess.getBlockState(below).is(BlockTags.LOGS);
         return isOnSolidGround && isNotOnTopOfLogs;
     }
 }

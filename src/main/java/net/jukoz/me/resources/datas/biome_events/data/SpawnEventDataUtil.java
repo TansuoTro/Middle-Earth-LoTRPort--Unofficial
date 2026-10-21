@@ -50,9 +50,9 @@ public class SpawnEventDataUtil {
         AABB npcSearchBox = hasNpcTypeLimit ? AABB.of(pos.toCenterPos(), sameNpcTypeDistance, sameNpcTypeDistance, sameNpcTypeDistance) : null;
 
         int[] counts = new int[2]; // [0] = entity count, [1] = npc type count
-        world.getOtherEntities(null, searchBox, entity -> {
+        world.getEntities(null, searchBox, entity -> {
             // Same entity type limit
-            boolean isSurface = isSurface(world, entity.getBlockPos());
+            boolean isSurface = isSurface(world, entity.blockPosition());
             if (entity.getType() == targetEntityType) {
                 if(sameEntitySurfaceOnly && !isSurface)
                     return false;
@@ -61,7 +61,7 @@ public class SpawnEventDataUtil {
                     return true;
             }
             // Same NPC type limit
-            if (hasNpcTypeLimit && entity instanceof NpcEntity npc && npcSearchBox.contains(entity.getPos()) && SpawnEventDataUtil.compareId(npc, data.getNpcType(null))) {
+            if (hasNpcTypeLimit && entity instanceof NpcEntity npc && npcSearchBox.contains(entity.position()) && SpawnEventDataUtil.compareId(npc, data.getNpcType(null))) {
                 if(sameNpcTypeSurfaceOnly && !isSurface)
                     return false;
 
@@ -118,7 +118,7 @@ public class SpawnEventDataUtil {
 
     public static boolean isSurface(Level world, BlockPos pos) {
         int surfaceY = world.getTopY(
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 pos.getX(),
                 pos.getZ()
         );
@@ -126,7 +126,7 @@ public class SpawnEventDataUtil {
     }
     public static boolean isUnderground(Level world, BlockPos pos) {
         int surfaceY = world.getTopY(
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 pos.getX(),
                 pos.getZ()
         );

@@ -1,8 +1,8 @@
 package net.jukoz.me.api.registries;
 
-import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryEntryLookup;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
@@ -17,6 +17,6 @@ public class DynamicRegistries {
         return element;
     }
     public static <T> ResourceKey<T> of(ResourceKey<Registry<T>> key, ResourceLocation id) {
-        return ResourceKey.of(key, id);
+        return ResourceKey.create(key, id);
     }
 }

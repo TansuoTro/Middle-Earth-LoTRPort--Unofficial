@@ -26,7 +26,7 @@ public class FireOfOrthancEntity extends Entity implements TraceableEntity {
     private static final EntityDataAccessor<BlockState> BLOCK_STATE;
     private static final int DEFAULT_FUSE = 16;
     public static final float EXPLOSION_FORCE = 12.31f;
-    public static final BlockState DEFAULT_BLOCK_STATE = ModDecorativeBlocks.FIRE_OF_ORTHANC.getDefaultState();
+    public static final BlockState DEFAULT_BLOCK_STATE = ModDecorativeBlocks.FIRE_OF_ORTHANC.defaultBlockState();
     protected boolean chainReaction = false;
     @Nullable
     private LivingEntity causingEntity;
@@ -55,18 +55,18 @@ public class FireOfOrthancEntity extends Entity implements TraceableEntity {
 
     @Override
     protected void initDataTracker() {
-        this.dataTracker.startTracking(FUSE, DEFAULT_FUSE);
-        this.dataTracker.startTracking(BLOCK_STATE, ModDecorativeBlocks.FIRE_OF_ORTHANC.getDefaultState());
+        this.entityData.define(FUSE, DEFAULT_FUSE);
+        this.entityData.define(BLOCK_STATE, ModDecorativeBlocks.FIRE_OF_ORTHANC.defaultBlockState());
     }
 
     public void explode() {
-        this.getWorld().createExplosion(this, this.getX(), this.getBodyY(0.0625), this.getZ(), EXPLOSION_FORCE, Level.ExplosionSourceType.TNT);
+        this.level().createExplosion(this, this.getX(), this.getBodyY(0.0625), this.getZ(), EXPLOSION_FORCE, Level.ExplosionInteraction.TNT);
         tryKillOwner();
     }
 
     private void tryKillOwner() {
         Entity owner = this.getOwner();
-        Level world = this.getWorld();
+        Level world = this.level();
         if(owner instanceof LivingEntity ownerEntity && world instanceof ServerLevel serverWorld) {
             if(ownerEntity instanceof Player playerEntity){
                 if(!playerEntity.isCreative()){
@@ -82,7 +82,7 @@ public class FireOfOrthancEntity extends Entity implements TraceableEntity {
     protected void readCustomDataFromNbt(CompoundTag nbt) {
         ReadView view = new ReadView(nbt);
         this.setFuse(view.getShort("fuse", (short) 0));
-        this.setBlockState((BlockState)view.read("block_state", BlockState.CODEC).orElse(DEFAULT_BLOCK_STATE));
+        this.setBlock((BlockState)view.read("block_state", BlockState.CODEC).orElse(DEFAULT_BLOCK_STATE));
 
     }
 
@@ -114,14 +114,14 @@ public class FireOfOrthancEntity extends Entity implements TraceableEntity {
         this.setFuse(i);
         if (i <= 0) {
             this.discard();
-            if (!this.getWorld().isClient) {
+            if (!this.level().isClientSide) {
                 this.explode();
             }
         } else {
-            this.updateWaterState();
-            if (this.getWorld().isClient && !chainReaction) {
+            this.updateInWaterStateAndDoFluidPushing();
+            if (this.level().isClientSide && !chainReaction) {
                 for(int j = 0; j < 4; j++) {
-                    this.getWorld().addParticle(ParticleTypes.SMOKE, this.getX(), this.getY() + 0.8f, this.getZ(),
+                    this.level().addParticle(ParticleTypes.SMOKE, this.getX(), this.getY() + 0.8f, this.getZ(),
                             (Math.random() - 0.5f) * 0.3f, 0.4f, (Math.random() - 0.5f) * 0.5f);
                 }
             }
@@ -135,19 +135,19 @@ public class FireOfOrthancEntity extends Entity implements TraceableEntity {
     }
 
     public void setFuse(int fuse) {
-        this.dataTracker.set(FUSE, fuse);
+        this.entityData.set(FUSE, fuse);
     }
 
     public int getFuse() {
-        return this.dataTracker.get(FUSE);
+        return this.entityData.get(FUSE);
     }
 
-    public void setBlockState(BlockState state) {
-        this.dataTracker.set(BLOCK_STATE, state);
+    public void setBlock(BlockState state) {
+        this.entityData.set(BLOCK_STATE, state);
     }
 
     public BlockState getBlockState() {
-        return this.dataTracker.get(BLOCK_STATE);
+        return this.entityData.get(BLOCK_STATE);
     }
 
     static {

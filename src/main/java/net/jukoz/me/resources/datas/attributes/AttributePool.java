@@ -56,7 +56,7 @@ public class AttributePool {
         boolean couldResolveOneAttribute = false;
 
         for(var element : pool){
-            var optAttributeEntry = Registries.ATTRIBUTE.getEntry(net.minecraft.resources.ResourceKey.of(net.minecraft.core.registries.Registries.ATTRIBUTE, element.getIdentifier()));
+            var optAttributeEntry = Registries.ATTRIBUTE.getEntry(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.ATTRIBUTE, element.getIdentifier()));
             if(optAttributeEntry.isPresent()){
                 var attributeEntry = optAttributeEntry.get();
 
@@ -78,7 +78,7 @@ public class AttributePool {
 
     public static boolean reverse(LivingEntity entity){
         for (var identifier : Registries.ATTRIBUTE.getIds()) {
-            var attributeInstance = entity.getAttributeInstance(Registries.ATTRIBUTE.getEntry(net.minecraft.resources.ResourceKey.of(net.minecraft.core.registries.Registries.ATTRIBUTE, identifier)).get().value());
+            var attributeInstance = entity.getAttributeInstance(Registries.ATTRIBUTE.getEntry(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.ATTRIBUTE, identifier)).get().value());
             if (attributeInstance == null) {
                 continue;
             }
@@ -99,7 +99,7 @@ public class AttributePool {
             return -99;
         }
 
-        var defaultAttributeEntry = Registries.ATTRIBUTE.getEntry(net.minecraft.resources.ResourceKey.of(net.minecraft.core.registries.Registries.ATTRIBUTE, identifier));
+        var defaultAttributeEntry = Registries.ATTRIBUTE.getEntry(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.ATTRIBUTE, identifier));
         if (defaultAttributeEntry.isEmpty()) {
             return -99;
         }
@@ -113,7 +113,7 @@ public class AttributePool {
             return -99;
         }
 
-        var defaultAttributeEntry = Registries.ATTRIBUTE.getEntry(net.minecraft.resources.ResourceKey.of(net.minecraft.core.registries.Registries.ATTRIBUTE, identifier));
+        var defaultAttributeEntry = Registries.ATTRIBUTE.getEntry(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.ATTRIBUTE, identifier));
         if (defaultAttributeEntry.isEmpty()) {
             return -99;
         }

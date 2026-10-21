@@ -11,9 +11,9 @@ import net.minecraft.world.level.block.NetherVines;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class GlowWormBottomBlock extends GrowingPlantHeadBlock {
-    protected static final VoxelShape SHAPE = Block.createCuboidShape(4.0, 9.0, 4.0, 12.0, 16.0, 12.0);
+    protected static final VoxelShape SHAPE = Block.box(4.0, 9.0, 4.0, 12.0, 16.0, 12.0);
 
-    public GlowWormBottomBlock(BlockBehaviour.Settings settings) {
+    public GlowWormBottomBlock(BlockBehaviour.Properties settings) {
         super(settings, Direction.DOWN, SHAPE, false, 0.05);
     }
 

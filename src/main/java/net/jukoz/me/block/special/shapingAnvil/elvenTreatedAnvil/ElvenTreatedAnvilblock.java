@@ -6,7 +6,7 @@ import net.jukoz.me.block.special.shapingAnvil.AbstractShapingAnvilBlock;
 import net.jukoz.me.block.special.shapingAnvil.ShapingAnvilBlockEntity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.BlockWithEntity;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -14,15 +14,16 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import java.util.stream.Stream;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class ElvenTreatedAnvilblock extends AbstractShapingAnvilBlock {
-    public ElvenTreatedAnvilblock(Settings settings) {
+    public ElvenTreatedAnvilblock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
@@ -31,42 +32,42 @@ public class ElvenTreatedAnvilblock extends AbstractShapingAnvilBlock {
         switch (state.get(FACING)){
             case NORTH -> {
                 return Stream.of(
-                        Block.createCuboidShape(2, 0, 2, 14, 5, 14),
-                        Block.createCuboidShape(12, 12, 6, 16, 16, 10),
-                        Block.createCuboidShape(4, 13, 6, 12, 16, 10),
-                        Block.createCuboidShape(0, 14, 7, 4, 16, 9),
-                        Block.createCuboidShape(5, 5, 6, 11, 13, 10)
+                        Block.box(2, 0, 2, 14, 5, 14),
+                        Block.box(12, 12, 6, 16, 16, 10),
+                        Block.box(4, 13, 6, 12, 16, 10),
+                        Block.box(0, 14, 7, 4, 16, 9),
+                        Block.box(5, 5, 6, 11, 13, 10)
                 ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
             }
             case SOUTH -> {
                 return Stream.of(
-                        Block.createCuboidShape(2, 0, 2, 14, 5, 14),
-                        Block.createCuboidShape(0, 12, 6, 4, 16, 10),
-                        Block.createCuboidShape(4, 13, 6, 12, 16, 10),
-                        Block.createCuboidShape(12, 14, 7, 16, 16, 9),
-                        Block.createCuboidShape(5, 5, 6, 11, 13, 10)
+                        Block.box(2, 0, 2, 14, 5, 14),
+                        Block.box(0, 12, 6, 4, 16, 10),
+                        Block.box(4, 13, 6, 12, 16, 10),
+                        Block.box(12, 14, 7, 16, 16, 9),
+                        Block.box(5, 5, 6, 11, 13, 10)
                 ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
             }
             case EAST -> {
                 return Stream.of(
-                        Block.createCuboidShape(2, 0, 2, 14, 5, 14),
-                        Block.createCuboidShape(6, 12, 12, 10, 16, 16),
-                        Block.createCuboidShape(6, 13, 4, 10, 16, 12),
-                        Block.createCuboidShape(7, 14, 0, 9, 16, 4),
-                        Block.createCuboidShape(6, 5, 5, 10, 13, 11)
+                        Block.box(2, 0, 2, 14, 5, 14),
+                        Block.box(6, 12, 12, 10, 16, 16),
+                        Block.box(6, 13, 4, 10, 16, 12),
+                        Block.box(7, 14, 0, 9, 16, 4),
+                        Block.box(6, 5, 5, 10, 13, 11)
                 ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
             }
             case WEST -> {
                 return Stream.of(
-                        Block.createCuboidShape(2, 0, 2, 14, 5, 14),
-                        Block.createCuboidShape(6, 12, 0, 10, 16, 4),
-                        Block.createCuboidShape(6, 13, 4, 10, 16, 12),
-                        Block.createCuboidShape(7, 14, 12, 9, 16, 16),
-                        Block.createCuboidShape(6, 5, 5, 10, 13, 11)
+                        Block.box(2, 0, 2, 14, 5, 14),
+                        Block.box(6, 12, 0, 10, 16, 4),
+                        Block.box(6, 13, 4, 10, 16, 12),
+                        Block.box(7, 14, 12, 9, 16, 16),
+                        Block.box(6, 5, 5, 10, 13, 11)
                 ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
             }
             default -> {
-                return Block.createCuboidShape(1, 0, 1, 15, 16, 15);
+                return Block.box(1, 0, 1, 15, 16, 15);
             }
         }
     }
@@ -85,6 +86,6 @@ public class ElvenTreatedAnvilblock extends AbstractShapingAnvilBlock {
 
     @Nullable
     protected static <T extends BlockEntity> BlockEntityTicker<T> validateTicker(Level world, BlockEntityType<T> givenType, BlockEntityType<ShapingAnvilBlockEntity> expectedType) {
-        return world.isClient ? null : ElvenTreatedAnvilblock.checkType(givenType, expectedType, ShapingAnvilBlockEntity::tick);
+        return world.isClientSide ? null : ElvenTreatedAnvilblock.checkType(givenType, expectedType, ShapingAnvilBlockEntity::tick);
     }
 }

@@ -65,7 +65,7 @@ public class BroadcastData {
                 playerNearby.add(player);
         }
         for(ServerPlayer player : playerNearby){
-            player.sendMessage(Component.translatable(broadcastLangKey.toTranslationKey("biome_event")) ,true);
+            player.sendSystemMessage(Component.translatable(broadcastLangKey.toLanguageKey("biome_event")) ,true);
         }
     }
 }

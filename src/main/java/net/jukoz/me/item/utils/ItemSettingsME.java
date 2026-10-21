@@ -36,17 +36,17 @@ public interface ItemSettingsME {
 
     String ENTITY_INTERACTION_RANGE_MODIFIER_ID = "me.entity_interaction_range";
 
-    static MESettings createWeaponSettings(Tier material, Item.Settings settings, WeaponTypesME type) {
+    static MESettings createWeaponSettings(Tier material, Item.Properties settings, WeaponTypesME type) {
         // Donor: maxDamage + repairable + enchantable + attributeModifiers + TOOL/WEAPON components.
-        // 1.20.1's Item.Settings only holds maxDamage; the rest is served from the weapon classes
+        // 1.20.1's Item.Properties only holds maxDamage; the rest is served from the weapon classes
         // (see the interface javadoc).
-        return settings instanceof MESettings meSettings ? meSettings.maxDamage(material.getDurability()) : new MESettings().maxDamage(material.getDurability());
+        return settings instanceof MESettings meSettings ? meSettings.maxDamage(material.getUses()) : new MESettings().maxDamage(material.getUses());
     }
 
     static Multimap<Attribute, AttributeModifier> createWeaponAttibutes(
             Tier material, float attackDamage, float attackSpeed, float attackRange) {
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.GENERIC_ATTACK_DAMAGE, new AttributeModifier(
+        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(
                 "me.weapon_damage", attackDamage + material.getAttackDamage(), AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.GENERIC_ATTACK_SPEED, new AttributeModifier(
                 "me.weapon_speed", attackSpeed, AttributeModifier.Operation.ADDITION));
@@ -63,7 +63,7 @@ public interface ItemSettingsME {
      */
     static Multimap<Attribute, AttributeModifier> createBluntedWeaponAttibutes() {
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.GENERIC_ATTACK_DAMAGE, new AttributeModifier(
+        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(
                 "me.weapon_damage", 0.0F, AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.GENERIC_ATTACK_SPEED, new AttributeModifier(
                 "me.weapon_speed", -3.0F, AttributeModifier.Operation.ADDITION));

@@ -189,12 +189,12 @@ public interface ArmorMaterialsME {
         HEAVY(5, "tier_heavy",11141120),
         ;
 
-        private static final IntFunction<Tiers> BY_ID = ByIdMap.createIdToValueFunction(Tiers::getId, Tiers.values(), ByIdMap.OutOfBoundsHandling.ZERO);;
+        private static final IntFunction<Tiers> BY_ID = ByIdMap.continuous(Tiers::getId, Tiers.values(), ByIdMap.OutOfBoundsStrategy.ZERO);;
         private final String name;
         private final int id;
         private final int color;
 
-        public static final Codec<Tiers> CODEC = StringRepresentable.createCodec(Tiers::values);
+        public static final Codec<Tiers> CODEC = StringRepresentable.fromEnum(Tiers::values);
         public static final net.jukoz.me.compat.net.PacketCodec<net.minecraft.network.FriendlyByteBuf, Tiers> PACKET_CODEC =
                 net.jukoz.me.compat.net.PacketCodecs.indexed(Tiers::byId, Tiers::getId);
 

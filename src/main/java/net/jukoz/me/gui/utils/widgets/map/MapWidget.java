@@ -143,13 +143,13 @@ public class MapWidget extends ModWidget {
     protected void drawMapTexture(GuiGraphics context, int startX, int startY) {
         int size = Math.max(getCurrentWidth(), getCurrentHeight());
 
-        context.drawTexture(getMapTexture(), startX, startY, uvX.floatValue(), uvY.floatValue(), getWidth(), getHeight(), size, size);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, getMapTexture(), startX, startY, uvX.floatValue(), uvY.floatValue(), getWidth(), getHeight(), size, size);
     }
 
     protected void drawOverlayMapTexture(GuiGraphics context, int startX, int startY) {
         int size = Math.max(getCurrentWidth(), getCurrentHeight());
 
-        context.drawTexture(getOverlayMapTexture(), startX, startY, uvX.floatValue(), uvY.floatValue(), getWidth(), getHeight(), size, size);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, getOverlayMapTexture(), startX, startY, uvX.floatValue(), uvY.floatValue(), getWidth(), getHeight(), size, size);
     }
 
     protected int getCurrentWidth() {

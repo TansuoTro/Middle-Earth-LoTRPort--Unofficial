@@ -97,7 +97,7 @@ public class LanguageProvider extends FabricLanguageProvider {
         }
 
         for (DispositionType dispositionType : DispositionType.values()){
-            createTranslation(translationBuilder, "disposition", dispositionType.name().toLowerCase());
+            createTranslation(translationBuilder, "disposition", dispositionType.name().lowercaseVariant());
         }
 
         TranslationEntries.factionEntries.forEach(faction -> {

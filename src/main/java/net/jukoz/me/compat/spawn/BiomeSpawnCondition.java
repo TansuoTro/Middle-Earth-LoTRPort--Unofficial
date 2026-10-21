@@ -1,6 +1,6 @@
 package net.jukoz.me.compat.spawn;
 
-import net.minecraft.core.HolderList;
+import net.minecraft.core.HolderSet;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.core.HolderSet;
 

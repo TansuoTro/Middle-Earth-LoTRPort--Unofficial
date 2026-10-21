@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.Sheets;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererFactory;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.ChestRenderer;
 import net.minecraft.client.resources.model.Material;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -52,9 +52,9 @@ public class ReinforcedChestEntityRenderer<T extends ChestBlockEntity> extends C
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
 
-        modelPartData.addChild(BASE, CubeListBuilder.create().uv(0, 18).cuboid(-8.0F, 0.0F, -6.0F, 16.0F, 10.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(LID, CubeListBuilder.create().uv(0, 1).cuboid(-2.0F, -3.0F, -13.0F, 4.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.pivot(0.0F, 10.0F, 6.0F));
-        modelPartData.addChild(LATCH, CubeListBuilder.create().uv(0, 0).cuboid(-8.0F, 0.0F, -12.0F, 16.0F, 6.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.pivot(0.0F, 10.0F, 6.0F));
+        modelPartData.addOrReplaceChild(BASE, CubeListBuilder.create().texOffs(0, 18).addBox(-8.0F, 0.0F, -6.0F, 16.0F, 10.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(LID, CubeListBuilder.create().texOffs(0, 1).addBox(-2.0F, -3.0F, -13.0F, 4.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 10.0F, 6.0F));
+        modelPartData.addOrReplaceChild(LATCH, CubeListBuilder.create().texOffs(0, 0).addBox(-8.0F, 0.0F, -12.0F, 16.0F, 6.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 10.0F, 6.0F));
         return LayerDefinition.of(modelData, 64, 64);
     }
 
@@ -64,24 +64,24 @@ public class ReinforcedChestEntityRenderer<T extends ChestBlockEntity> extends C
                 new ResourceLocation(MiddleEarth.MOD_ID, "model/reinforced_chest"));
         VertexConsumer vertexConsumer = spriteIdentifier.getVertexConsumer(vertexConsumers, RenderLayer::getEntityCutout);
 
-        Level world = entity.getWorld();
-        BlockState blockState = world != null ? entity.getCachedState() : Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.SOUTH);
+        Level world = entity.level();
+        BlockState blockState = world != null ? entity.getBlockState() : Blocks.CHEST.defaultBlockState().with(ChestBlock.FACING, Direction.SOUTH);
         Block block = blockState.getBlock();
 
         ReinforcedChestBlock chest = (ReinforcedChestBlock)block;
 
-        DoubleBlockCombiner.PropertySource<? extends ChestBlockEntity> properties;
-        properties = chest.getBlockEntitySource(blockState, world, entity.getPos(), true);
+        DoubleBlockCombiner.NeighborCombineResult<? extends ChestBlockEntity> properties;
+        properties = chest.getBlockEntitySource(blockState, world, entity.position(), true);
         float g = properties.apply(ReinforcedChestBlock.getAnimationProgressRetriever(entity)).get(tickProgress);
         g = 1.0F - g;
         g = 1.0F - g * g * g;
 
         matrices.push();
-        float rotation = blockState.get(ChestBlock.FACING).asRotation();
+        float rotation = blockState.get(ChestBlock.FACING).toYRot();
         matrices.translate(0.5D, 0.0D, 0.5D);
         matrices.multiply(Axis.POSITIVE_Y.rotationDegrees(-rotation));
 
-        chestLatch.pitch = chestLid.pitch = +(g * 1.5707964f);
+        chestLatch.xRot = chestLid.xRot = +(g * 1.5707964f);
         chestLid.render(matrices, vertexConsumer, light, overlay);
         chestLatch.render(matrices, vertexConsumer, light, overlay);
         chestBase.render(matrices, vertexConsumer, light, overlay);

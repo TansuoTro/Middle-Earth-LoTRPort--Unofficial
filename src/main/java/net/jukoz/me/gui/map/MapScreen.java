@@ -45,11 +45,11 @@ public class MapScreen extends Screen {
     private static int endY = 0;
 
     public FullscreenToggeableMapWidget mapWidget;
-    public ButtonWidget fullscreenButton;
-    public ButtonWidget overlayToggleButton;
-    public ButtonWidget zoomInButton;
-    public ButtonWidget zoomOutButton;
-    public ButtonWidget recenterButton;
+    public Button fullscreenButton;
+    public Button overlayToggleButton;
+    public Button zoomInButton;
+    public Button zoomOutButton;
+    public Button recenterButton;
     private int mouseX, mouseY;
     public MapScreenController controller = null;
     public boolean isFullscreen = false;
@@ -67,14 +67,14 @@ public class MapScreen extends Screen {
         mapWidget = new FullscreenToggeableMapWidget(WIDTH - (MARGIN * 2), HEIGHT - (MARGIN * 2));
 
         // Fullscreen toggle button register
-        fullscreenButton = ButtonWidget.builder(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.button.fullscreen_toggle"), x -> {
+        fullscreenButton = Button.builder(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.button.fullscreen_toggle"), x -> {
             isFullscreen = !isFullscreen;
         }).build();
         net.jukoz.me.compat.client.gui.MEGui.setSize(fullscreenButton, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y);
         addDrawableChild(fullscreenButton);
 
         // Overlay toggle
-        overlayToggleButton = ButtonWidget.builder(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.button.map_overlay_toggle"), x -> {
+        overlayToggleButton = Button.builder(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.button.map_overlay_toggle"), x -> {
             mapWidget.setOverlayState(!mapWidget.isOverlayEnabled());
         }).build();
         overlayToggleButton.active = ModClientConfigs.ENABLE_MAP_OVERLAY;
@@ -82,7 +82,7 @@ public class MapScreen extends Screen {
         addDrawableChild(overlayToggleButton);
 
         // Recenter on player
-        recenterButton = ButtonWidget.builder(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.button.recenter_on_player"), x -> {
+        recenterButton = Button.builder(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.button.recenter_on_player"), x -> {
             Vector2d playerCoords = new Vector2d(playerBlockPos.getX(), playerBlockPos.getZ());
             playerCoords.x /= MiddleEarthMapConfigs.FULL_MAP_SIZE;
             playerCoords.y /= MiddleEarthMapConfigs.FULL_MAP_SIZE;
@@ -92,14 +92,14 @@ public class MapScreen extends Screen {
         addDrawableChild(recenterButton);
 
         // Zoom in button register
-        zoomInButton = ButtonWidget.builder(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.button.zoom_in"), x -> {
+        zoomInButton = Button.builder(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.button.zoom_in"), x -> {
             mapWidget.zoomClick();
         }).build();
         net.jukoz.me.compat.client.gui.MEGui.setSize(zoomInButton, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y);
         addDrawableChild(zoomInButton);
 
         // Zoom out button register
-        zoomOutButton = ButtonWidget.builder(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.button.zoom_out"), x -> {
+        zoomOutButton = Button.builder(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.button.zoom_out"), x -> {
             mapWidget.dezoomClick();
         }).build();
         net.jukoz.me.compat.client.gui.MEGui.setSize(zoomOutButton, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y);
@@ -132,11 +132,11 @@ public class MapScreen extends Screen {
 
             MapBasedCustomBiome biome = mapWidget.getBiomeAt((int) (mapRatio.x * MiddleEarthMapConfigs.REGION_SIZE), (int) (mapRatio.y * MiddleEarthMapConfigs.REGION_SIZE));
             texts.add(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.tooltip.biome_label").formatted(ChatFormatting.GRAY)
-                    .append(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.tooltip.biome_content", Component.translatable(biome.getBiome().getBiomeRegistryKey().getValue().toTranslationKey("biome"))).formatted(ChatFormatting.WHITE)));
+                    .append(Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.tooltip.biome_content", Component.translatable(biome.getBiome().getBiomeRegistryKey().getValue().toLanguageKey("biome"))).formatted(ChatFormatting.WHITE)));
             if(hasTeleportPermission){
-                texts.add(METext.withColor( Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.tooltip.teleport_keybind", KeyInputHandler.mapTeleportKey.getBoundKeyLocalizedText().getString()).formatted(ChatFormatting.ITALIC), ModColors.PENDING.color));
+                texts.add(METext.withColor( Component.translatable("ui." + MiddleEarth.MOD_ID + ".map_screen.tooltip.teleport_keybind", KeyInputHandler.mapTeleportKey.getTranslatedKeyMessage().getString()).formatted(ChatFormatting.ITALIC), ModColors.PENDING.color));
             }
-            context.drawTooltip(textRenderer, texts, mouseX, mouseY);
+            context.drawTooltip(font, texts, mouseX, mouseY);
         }
 
     }
@@ -147,7 +147,7 @@ public class MapScreen extends Screen {
         startY = MARGIN;
         endY = context.getScaledWindowHeight() - MARGIN;
 
-        // TODO : Draw dynamic background : context.drawTexture(BACKGROUND_TEXTURE, startX, startY, 0, 0,  WIDTH, HEIGHT);
+        // TODO : Draw dynamic background : net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, BACKGROUND_TEXTURE, startX, startY, 0, 0,  WIDTH, HEIGHT);
         backgroundContainerWidget.draw(context, 0, 0, context.getScaledWindowWidth(), context.getScaledWindowHeight());
 
         mapWidget.drawFullscreen(context, MARGIN);
@@ -165,7 +165,7 @@ public class MapScreen extends Screen {
         startY = (context.getScaledWindowHeight() / 2) - (HEIGHT / 2);
         endY = startY + HEIGHT;
 
-        context.drawTexture(BACKGROUND_TEXTURE, startX, startY, 0, 0, WIDTH, HEIGHT, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, BACKGROUND_TEXTURE, startX, startY, 0, 0, WIDTH, HEIGHT, 256, 256);
 
         mapWidget.drawCentered(context, centerX, startY + MARGIN);
         drawFullscreenToggleButton(context);
@@ -184,9 +184,9 @@ public class MapScreen extends Screen {
 
         // TODO (?) : show the head?
         //PlayerFaceRenderer.draw(context, player.getSkinTextures(), (int)x, (int)y, 4);
-        //PlayerFaceRenderer.draw(context, minecraft.getSkinProvider().getSkinTexturesSupplier(new GameProfile(UUID.fromString(this.uuid),this.name)).get(),x,y);
+        //PlayerFaceRenderer.draw(context, minecraft.getSkinManager().getSkinTexturesSupplier(new GameProfile(UUID.fromString(this.uuid),this.name)).get(),x,y);
 
-        context.drawTexture(MAP_UI_TEXTURE, (int)x- 4, (int) y- 4, 154, 1, 8, 8, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, MAP_UI_TEXTURE, (int)x- 4, (int) y- 4, 154, 1, 8, 8, 256, 256);
     }
 
     private void drawFullscreenToggleButton(GuiGraphics context){
@@ -197,11 +197,11 @@ public class MapScreen extends Screen {
             int x = context.getScaledWindowWidth() - MARGIN - NORMAL_BUTTON_SIZE.x;
             int y = MARGIN;
             fullscreenButton.setPosition(x, y);
-            context.drawTexture(MAP_UI_TEXTURE, x, y, 35, fullscreenToggleButtonUvY, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y, 256, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, MAP_UI_TEXTURE, x, y, 35, fullscreenToggleButtonUvY, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y, 256, 256);
 
         } else {
             fullscreenButton.setPosition(endX, startY);
-            context.drawTexture(MAP_UI_TEXTURE, fullscreenButton.getX(), fullscreenButton.getY(), 35, fullscreenToggleButtonUvY, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y, 256, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, MAP_UI_TEXTURE, fullscreenButton.getX(), fullscreenButton.getY(), 35, fullscreenToggleButtonUvY, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y, 256, 256);
         }
     }
 
@@ -214,7 +214,7 @@ public class MapScreen extends Screen {
         int y = fullscreenButton.getY() + NORMAL_BUTTON_SIZE.y;
         overlayToggleButton.setPosition(x, y);
 
-        context.drawTexture(MAP_UI_TEXTURE, x, y, 1, overlayToggleButtonUvY, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, MAP_UI_TEXTURE, x, y, 1, overlayToggleButtonUvY, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y, 256, 256);
     }
 
     private void drawRecenterButton(GuiGraphics context){
@@ -227,7 +227,7 @@ public class MapScreen extends Screen {
         int x = fullscreenButton.getX();
         int y = zoomInButton.getY() - NORMAL_BUTTON_SIZE.y;
         recenterButton.setPosition(x, y);
-        context.drawTexture(MAP_UI_TEXTURE, x, x, y, 52, recenterButtonUvY, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y, 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, MAP_UI_TEXTURE, x, x, y, 52, recenterButtonUvY, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y, 256, 256);
     }
 
     private void drawZoomButtons(GuiGraphics context){
@@ -247,20 +247,20 @@ public class MapScreen extends Screen {
             int x = context.getScaledWindowWidth() - MARGIN - NORMAL_BUTTON_SIZE.x;
             int y = context.getScaledWindowHeight() - MARGIN - NORMAL_BUTTON_SIZE.y;
             zoomOutButton.setPosition(x, y);
-            context.drawTexture(MAP_UI_TEXTURE, x, y, zoomOutButtonUvX, zoomOutButtonUvY, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y, 256, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, MAP_UI_TEXTURE, x, y, zoomOutButtonUvX, zoomOutButtonUvY, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y, 256, 256);
             // Zoom in
             y -= NORMAL_BUTTON_SIZE.y;
             zoomInButton.setPosition(x, y);
-            context.drawTexture(MAP_UI_TEXTURE, x, y, zoomInButtonUvX, zoomInButtonUvY, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y, 256, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, MAP_UI_TEXTURE, x, y, zoomInButtonUvX, zoomInButtonUvY, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y, 256, 256);
         } else {
             // Zoom out
             int y = endY - NORMAL_BUTTON_SIZE.y;
             zoomOutButton.setPosition(endX, y);
-            context.drawTexture(MAP_UI_TEXTURE, endX, y, zoomOutButtonUvX, zoomOutButtonUvY, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y, 256, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, MAP_UI_TEXTURE, endX, y, zoomOutButtonUvX, zoomOutButtonUvY, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y, 256, 256);
             // Zoom in
             y -= NORMAL_BUTTON_SIZE.y;
             zoomInButton.setPosition(endX, y);
-            context.drawTexture(MAP_UI_TEXTURE, endX, y, zoomInButtonUvX, zoomInButtonUvY, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y, 256, 256);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, MAP_UI_TEXTURE, endX, y, zoomInButtonUvX, zoomInButtonUvY, NORMAL_BUTTON_SIZE.x, NORMAL_BUTTON_SIZE.y, 256, 256);
         }
     }
 

@@ -16,11 +16,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import com.mojang.math.Axis;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class RotatableTallFlowerBlock extends TallFlowerBlock {
     public static final EnumProperty<Direction> HORIZONTAL_FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-    public RotatableTallFlowerBlock(Settings settings) {
+    public RotatableTallFlowerBlock(BlockBehaviour.Properties settings) {
         super(settings);
         setDefaultState(getDefaultState().with(HORIZONTAL_FACING, Direction.NORTH));
     }
@@ -33,8 +34,8 @@ public class RotatableTallFlowerBlock extends TallFlowerBlock {
     public BlockState getPlacementState(BlockPlaceContext ctx) {
         BlockPos blockPos = ctx.getBlockPos();
         Level world = ctx.getWorld();
-        if(blockPos.getY() < world.getTopY() - 1 && world.getBlockState(blockPos.up()).canReplace(ctx)){
-            return this.getDefaultState().with(HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(HALF, DoubleBlockHalf.LOWER);
+        if(blockPos.getY() < world.getTopY() - 1 && world.getBlockState(blockPos.above()).canReplace(ctx)){
+            return this.defaultBlockState().with(HORIZONTAL_FACING, ctx.getHorizontalDirection().getOpposite()).with(HALF, DoubleBlockHalf.LOWER);
         } else {
             return null;
         }
@@ -42,12 +43,12 @@ public class RotatableTallFlowerBlock extends TallFlowerBlock {
 
     @Override
     public void onPlaced(Level world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
-        world.setBlockState(pos.up(), (BlockState)state.with(HALF, DoubleBlockHalf.UPPER), 3);
+        world.setBlock(pos.above(), (BlockState)state.setValue(HALF, DoubleBlockHalf.UPPER), 3);
     }
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(HORIZONTAL_FACING, rotation.rotate(state.get(HORIZONTAL_FACING)));
+        return state.setValue(HORIZONTAL_FACING, rotation.rotate(state.get(HORIZONTAL_FACING)));
     }
 
     @Override

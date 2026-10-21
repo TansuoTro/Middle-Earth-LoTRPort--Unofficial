@@ -19,15 +19,16 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import java.util.function.ToIntFunction;
 import com.mojang.math.Axis;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class CrystalLampBlock extends AbstractToggeableLightBlock {
     public static final BooleanProperty HANGING;
     public static final ToIntFunction<BlockState> STATE_TO_LUMINANCE;
     private static final VoxelShape SHAPE;
 
-    public CrystalLampBlock(Settings settings) {
+    public CrystalLampBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(this.getDefaultState().with(LIT, false).with(HANGING, false).with(WATERLOGGED, false).with(LEVEL_15, 15));
+        this.setDefaultState(this.defaultBlockState().with(LIT, false).with(HANGING, false).with(WATERLOGGED, false).with(LEVEL_15, 15));
     }
     @Override
     protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
@@ -38,14 +39,14 @@ public class CrystalLampBlock extends AbstractToggeableLightBlock {
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
         FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
-        Direction[] var3 = ctx.getPlacementDirections();
+        Direction[] var3 = ctx.getNearestLookingDirections();
         int var4 = var3.length;
 
         for (Direction direction : var3) {
             if (direction.getAxis() == Direction.Axis.Y) {
-                BlockState blockState = this.getDefaultState().with(HANGING, direction == Direction.UP);
+                BlockState blockState = this.defaultBlockState().with(HANGING, direction == Direction.UP);
                 if (blockState.canPlaceAt(ctx.getWorld(), ctx.getBlockPos())) {
-                    return blockState.with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
+                    return blockState.setValue(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
                 }
             }
         }
@@ -54,8 +55,8 @@ public class CrystalLampBlock extends AbstractToggeableLightBlock {
     }
 
     public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
-        if (!world.isClient && projectile.isOnFire() && !state.get(LIT)) {
-            world.setBlockState(hit.getBlockPos(), state.with(LIT, true), STATE_TO_LUMINANCE.applyAsInt(state));
+        if (!world.isClientSide && projectile.isOnFire() && !state.get(LIT)) {
+            world.setBlock(hit.getBlockPos(), state.setValue(LIT, true), STATE_TO_LUMINANCE.applyAsInt(state));
         }
     }
 
@@ -73,6 +74,6 @@ public class CrystalLampBlock extends AbstractToggeableLightBlock {
         HANGING = BlockStateProperties.HANGING;
         STATE_TO_LUMINANCE = (state) -> { return state.get(LIT) ? state.get(LEVEL_15) : 0; };
 
-        SHAPE = Block.createCuboidShape(4, 0, 4, 12, 11, 12);
+        SHAPE = Block.box(4, 0, 4, 12, 11, 12);
     }
 }

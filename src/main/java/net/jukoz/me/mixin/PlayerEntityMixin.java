@@ -12,7 +12,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderList;
+import net.minecraft.core.HolderSet;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.util.Mth;
@@ -37,12 +37,12 @@ public class PlayerEntityMixin {
     @Inject(at = @At(value = "HEAD"), method = "damageShield(F)V", locals = LocalCapture.CAPTURE_FAILHARD)
     private void damageShield(float amount, CallbackInfo callBackInfo) {
         Player player = (Player) (Object) this;
-        ItemStack activeItem = player.getActiveItem();
+        ItemStack activeItem = player.getUseItem();
 
         if (activeItem.getItem() instanceof ShieldItem) {
             if (amount >= 3.0F) {
                 int i = 1 + Mth.floor(amount);
-                InteractionHand hand = player.getActiveHand();
+                InteractionHand hand = player.getUsedItemHand();
 
                 activeItem.damage(i, (LivingEntity) player, ((playerEntity) -> player.sendToolBreakStatus(hand)));
 
@@ -53,7 +53,7 @@ public class PlayerEntityMixin {
                         player.equipStack(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
                     }
                     activeItem = ItemStack.EMPTY;
-                    player.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + player.getWorld().random.nextFloat() * 0.4F);
+                    player.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + player.level().random.nextFloat() * 0.4F);
                 }
             }
         }
@@ -66,7 +66,7 @@ public class PlayerEntityMixin {
     @Inject(at = @At(value = "HEAD"), method = "disableShield(Z)V", locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
     private void disableShieldHead(boolean sprinting, CallbackInfo callbackInfo) {
         Player player = (Player) (Object) this;
-        ItemStack activeItemStack = player.getActiveItem();
+        ItemStack activeItemStack = player.getUseItem();
         Item activeItem = activeItemStack.getItem();
 
         if (activeItem instanceof ShieldItem shield) {
@@ -75,9 +75,9 @@ public class PlayerEntityMixin {
                 f += 0.75F;
             }
             if (player.getRandom().nextFloat() < f) {
-                player.getItemCooldownManager().set(shield, 100);
-                player.clearActiveItem();
-                player.getWorld().sendEntityStatus(player, (byte) 30);
+                player.getCooldowns().set(shield, 100);
+                player.stopUsingItem();
+                player.level().sendEntityStatus(player, (byte) 30);
                 callbackInfo.cancel();
             }
         }
@@ -93,10 +93,10 @@ public class PlayerEntityMixin {
         for (int amountOfShields = list.size(); amountOfShields > 0; amountOfShields--) {
 
             if (list.get(amountOfShields - 1) instanceof ShieldItem) {
-                player.getItemCooldownManager().set(Items.SHIELD, 100);
+                player.getCooldowns().set(Items.SHIELD, 100);
             }
-            player.clearActiveItem();
-            player.getWorld().sendEntityStatus(player, (byte) 30);
+            player.stopUsingItem();
+            player.level().sendEntityStatus(player, (byte) 30);
         }
     }
 }

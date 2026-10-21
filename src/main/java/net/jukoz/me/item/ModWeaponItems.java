@@ -70,7 +70,7 @@ public class ModWeaponItems {
             new CustomBowWeaponItem(Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".dale"), new FabricItemSettings().maxDamage(640)));
 
     public static final Item DUNLAND_CLUB = registerItemWithModel("dunland_club",
-            new CustomSwordWeaponItem(ToolMaterials.WOOD, SWORD_DAMAGE, SWORD_ATTACKS_SPEED, Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".dunland"), new FabricItemSettings()), false);
+            new CustomSwordWeaponItem(Tiers.WOOD, SWORD_DAMAGE, SWORD_ATTACKS_SPEED, Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".dunland"), new FabricItemSettings()), false);
     public static final Item DUNLAND_DAGGER = registerItemWithModel("dunland_dagger",
             new ReachWeaponItem(ModToolMaterials.STEEL, DAGGER_DAMAGE, DAGGER_ATTACKS_SPEED, DAGGER_REACH, Component.translatable("tooltip." + MiddleEarth.MOD_ID + ".dunland"), new FabricItemSettings()), false);
     public static final Item DUNLAND_SPEAR = registerItemWithModel("dunland_spear",
@@ -166,7 +166,7 @@ public class ModWeaponItems {
     public static final Item WOODEN_DAGGER = WeaponItemsME.WOODEN_DAGGER;
 
     private static Item registerItemWithModel(String name, Item item, boolean isDualModel) {
-        ModItemGroups.WEAPONS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.WEAPONS_CONTENTS.add(item.getDefaultInstance());
         if(isDualModel) {
             SimpleBigItemModel.items.add(item);
         } else {
@@ -176,7 +176,7 @@ public class ModWeaponItems {
     }
 
     private static Item registerBowItem(String name, Item item) {
-        ModItemGroups.WEAPONS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.WEAPONS_CONTENTS.add(item.getDefaultInstance());
         SimpleBowItemModel.items.add(item);
         return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);
     }

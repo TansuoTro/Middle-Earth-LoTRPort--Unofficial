@@ -11,7 +11,7 @@ public class BeastSitGoal extends Goal {
 
     public BeastSitGoal(BeastEntity mob) {
         this.mob = mob;
-        this.setControls(EnumSet.of(Goal.Control.JUMP, Goal.Control.MOVE));
+        this.setControls(EnumSet.of(Goal.Flag.JUMP, Goal.Flag.MOVE));
     }
 
     @Override
@@ -24,7 +24,7 @@ public class BeastSitGoal extends Goal {
         if (!this.mob.isTame()) {
             return false;
         }
-        if (this.mob.isInsideWaterOrBubbleColumn()) {
+        if (this.mob.isInWaterOrBubble()) {
             return false;
         }
         if (!this.mob.isOnGround()) {

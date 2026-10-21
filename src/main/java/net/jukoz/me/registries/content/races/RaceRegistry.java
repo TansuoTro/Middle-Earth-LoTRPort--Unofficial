@@ -1,8 +1,8 @@
 package net.jukoz.me.registries.content.races;
 
-import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryEntryLookup;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.datageneration.content.TranslationEntries;
@@ -38,6 +38,6 @@ public class RaceRegistry {
     private static void register(BootstrapContext<Race> context, HolderGetter<Race> registryEntryLookup, ResourceKey<Race> registryKey, Race element){
         DynamicRegistriesME.register(context, registryEntryLookup, registryKey, element);
         // [LANG datagen]
-        TranslationEntries.raceEntries.add(registryKey.getValue().getPath());
+        TranslationEntries.raceEntries.add(registryKey.location().getPath());
     }
 }

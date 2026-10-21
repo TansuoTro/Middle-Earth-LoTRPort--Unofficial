@@ -5,7 +5,7 @@ import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.jukoz.me.compat.client.render.MEAnimationStates;
 import net.jukoz.me.compat.client.render.MEMAgeableMobEntityRenderer;
 import com.google.common.collect.Maps;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
@@ -24,9 +24,9 @@ public class GreatHornRenderer extends MEMAgeableMobEntityRenderer<GreatHornEnti
     public GreatHornRenderer(EntityRendererProvider.Context context) {
         super(context, new GreatHornModel(context.getPart(EntityModelLayersME.GREAT_HORN)),
                 new GreatHornModel(context.getPart(EntityModelLayersME.GREAT_HORN_BABY)), 0.95f);
-        this.addFeature(new GreatHornSaddleFeatureRenderer(this,  new LoadedEntityModelsCompat(context.getModelLoader()), EquipmentRenderer.INSTANCE));
-        this.addFeature(new GreatHornArmorFeatureRenderer(this,  new LoadedEntityModelsCompat(context.getModelLoader()), EquipmentRenderer.INSTANCE));
-        this.addFeature(new GreatHornNoseFeatureRenderer(this,  new LoadedEntityModelsCompat(context.getModelLoader())));
+        this.addFeature(new GreatHornSaddleFeatureRenderer(this,  new LoadedEntityModelsCompat(context.getModelSet()), EquipmentRenderer.INSTANCE));
+        this.addFeature(new GreatHornArmorFeatureRenderer(this,  new LoadedEntityModelsCompat(context.getModelSet()), EquipmentRenderer.INSTANCE));
+        this.addFeature(new GreatHornNoseFeatureRenderer(this,  new LoadedEntityModelsCompat(context.getModelSet())));
     }
 
     protected float getShadowRadius(GreatHornEntityRenderState greatHornEntityRenderState) {
@@ -71,7 +71,7 @@ public class GreatHornRenderer extends MEMAgeableMobEntityRenderer<GreatHornEnti
         state.saddle = greatHornEntity.getEquippedStack(EquipmentSlot.CHEST);
         state.armor = greatHornEntity.getEquippedStack(EquipmentSlot.CHEST);
         state.blueSaddle = greatHornEntity.hasBlueSaddle();
-        state.hasRider = greatHornEntity.hasPlayerRider();
+        state.hasRider = greatHornEntity.hasExactlyOnePlayerPassenger();
         state.greatHornVariant = greatHornEntity.getVariant();
     }
 }

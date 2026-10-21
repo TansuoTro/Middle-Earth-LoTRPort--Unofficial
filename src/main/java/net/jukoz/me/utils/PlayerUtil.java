@@ -25,18 +25,18 @@ import java.util.List;
 public class PlayerUtil {
     public static boolean isAgainstWall(Player entity) {
         AABB boundingBox = entity.getBoundingBox();
-        Level world = entity.getWorld();
+        Level world = entity.level();
         double testMovementAmount = 0.0001;
 
         Vec3 testMovement = new Vec3(testMovementAmount, 0.0, testMovementAmount);
-        List<VoxelShape> collisions = world.getEntityCollisions(entity, boundingBox.stretch(testMovement));
+        List<VoxelShape> collisions = world.getEntityCollisions(entity, boundingBox.getMovementArea(testMovement));
         Vec3 result = Entity.adjustMovementForCollisions(entity, testMovement, boundingBox, world, collisions);
         if (!result.equals(testMovement)) {
             return checkIfBlockIsAllowed(world, entity);
         }
 
         testMovement = new Vec3(-testMovementAmount, 0.0, -testMovementAmount);
-        collisions = world.getEntityCollisions(entity, boundingBox.stretch(testMovement));
+        collisions = world.getEntityCollisions(entity, boundingBox.getMovementArea(testMovement));
         result = Entity.adjustMovementForCollisions(entity, testMovement, boundingBox, world, collisions);
         if (!result.equals(testMovement)) {
             return checkIfBlockIsAllowed(world, entity);
@@ -46,16 +46,16 @@ public class PlayerUtil {
     }
 
     private static boolean checkIfBlockIsAllowed(Level world, Player player) {
-        BlockState blockstate = world.getBlockState(player.getBlockPos().offset(player.getHorizontalFacing()));
-        boolean isSolid = blockstate.isSolidBlock(world, player.getBlockPos());
-        boolean isAllowed = !blockstate.isIn(TagKey.of(Registries.BLOCK, MiddleEarth.of("climbing_attribute_unallowed_blocks")));
+        BlockState blockstate = world.getBlockState(player.blockPosition().offset(player.getDirection()));
+        boolean isSolid = blockstate.isSolidBlock(world, player.blockPosition());
+        boolean isAllowed = !blockstate.is(TagKey.create(Registries.BLOCK, MiddleEarth.of("climbing_attribute_unallowed_blocks")));
         return isSolid && isAllowed;
     }
 
     public static boolean isOfRace(@NotNull Player entity, @NotNull RaceType type){
         PlayerData data = StateSaverAndLoader.getPlayerState(entity);
         if(data != null && data.getRace() != null){
-            Race race = RaceLookup.getRace(entity.getWorld(), data.getRace());
+            Race race = RaceLookup.getRace(entity.level(), data.getRace());
             if(race != null){
                 RaceType raceType = race.getRaceType();
                 return raceType == type;
@@ -67,7 +67,7 @@ public class PlayerUtil {
     public static boolean isOfRace(@NotNull Player entity, @NotNull List<RaceType> types){
         PlayerData data = StateSaverAndLoader.getPlayerState(entity);
         if(data != null && data.getRace() != null){
-            Race race = RaceLookup.getRace(entity.getWorld(), data.getRace());
+            Race race = RaceLookup.getRace(entity.level(), data.getRace());
             if(race != null){
                 RaceType raceType = race.getRaceType();
                 return types.contains(raceType);
@@ -80,7 +80,7 @@ public class PlayerUtil {
         PlayerData data = StateSaverAndLoader.getPlayerState(entity);
         if(data != null && data.getFaction() != null){
             try {
-                return FactionLookup.getFactionById(entity.getWorld(), data.getFaction());
+                return FactionLookup.getFactionById(entity.level(), data.getFaction());
             } catch (FactionIdentifierException e) {
                 return null;
             }
@@ -91,7 +91,7 @@ public class PlayerUtil {
         PlayerData data = StateSaverAndLoader.getPlayerState(entity);
         if(data != null && data.getFaction() != null && data.getSpawn() != null){
             try {
-                Faction faction = FactionLookup.getFactionById(entity.getWorld(), data.getFaction());
+                Faction faction = FactionLookup.getFactionById(entity.level(), data.getFaction());
                 return faction.getSpawnData().findSpawn(data.getSpawn());
             } catch (FactionIdentifierException e) {
                 return null;

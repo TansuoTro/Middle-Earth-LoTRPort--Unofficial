@@ -115,7 +115,7 @@ public class MEBiomesData {
 
     public static MEBiome getBiomeByKey(ResourceKey<Biome> key) {
         MEBiome biome = byKey.get(key);
-        if (biome == null) throw new IllegalArgumentException("No terrain metadata for " + key.getValue());
+        if (biome == null) throw new IllegalArgumentException("No terrain metadata for " + key.location());
         return biome;
     }
 }

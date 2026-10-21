@@ -8,10 +8,9 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererFactory;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.DecoratedPotRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.entity.layers.RenderLayers;
 import net.minecraft.util.Mth;
 import com.mojang.math.Axis;
 import net.minecraft.world.phys.Vec3;
@@ -26,12 +25,12 @@ public class LootablePotBlockEntityRenderer implements BlockEntityRenderer<Decor
 
     public LootablePotBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
         this.vanillaRenderer = new DecoratedPotRenderer(context);
-        this.blockRenderManager = context.getRenderManager();
+        this.blockRenderManager = context.getBlockRenderDispatcher();
     }
 
     @Override
     public void render(DecoratedPotBlockEntity entity, float tickProgress, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
-        BlockState state = entity.getCachedState();
+        BlockState state = entity.getBlockState();
         if (!(state.getBlock() instanceof LootablePotBlock)) {
             vanillaRenderer.render(entity, tickProgress, matrices, vertexConsumers, light, overlay);
             return;

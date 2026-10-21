@@ -37,7 +37,7 @@ public class ShapingAnvilRecipePacket extends ServerToClientPacket<ShapingAnvilR
     }
 
     public ShapingAnvilRecipePacket(FriendlyByteBuf buf) {
-        this(buf.readInt(), buf.readItemStack());
+        this(buf.readInt(), buf.readItem());
     }
 
     @Override

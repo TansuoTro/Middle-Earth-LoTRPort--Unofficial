@@ -3,7 +3,6 @@ package net.jukoz.me.entity.beasts.cave_troll.feature;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntity;
 import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.jukoz.me.compat.client.render.equipment.EquipmentRenderer;
@@ -17,6 +16,7 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.EntityModelLayersME;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntityModel;
 import net.jukoz.me.entity.beasts.cave_troll.CaveTrollEntityRenderState;
+import net.minecraft.client.renderer.RenderType;
 
 public class CaveTrollSaddleFeatureRenderer extends MEFeatureRenderer<CaveTrollEntity, CaveTrollEntityRenderState, CaveTrollEntityModel> {
     private final CaveTrollSaddleModel model;
@@ -31,7 +31,7 @@ public class CaveTrollSaddleFeatureRenderer extends MEFeatureRenderer<CaveTrollE
     public void render(PoseStack matrices, MultiBufferSource vertexConsumers, int light, CaveTrollEntityRenderState state, float limbAngle, float limbDistance) {
         ItemStack itemStack = state.saddle;
         if(!itemStack.isEmpty()) {
-            VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(new ResourceLocation(MiddleEarth.MOD_ID, "textures/entities/trolls/cave/cave_troll_platform.png")), true, itemStack.hasGlint());
+            VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderType.armorCutoutNoCull(new ResourceLocation(MiddleEarth.MOD_ID, "textures/entities/trolls/cave/cave_troll_platform.png")), true, itemStack.hasGlint());
 
             model.setAngles(state);
             model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);

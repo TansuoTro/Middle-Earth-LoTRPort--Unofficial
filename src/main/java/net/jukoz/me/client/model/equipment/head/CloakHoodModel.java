@@ -28,31 +28,31 @@ public class CloakHoodModel<T extends LivingEntity> extends HumanoidModel<T> {
         PartDefinition modelPartData = modelData.getRoot();
         CubeDeformation dilation = new CubeDeformation(0.0F);
 
-        PartDefinition hat = modelPartData.addChild(PartNames.HAT, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition hat = modelPartData.addOrReplaceChild(PartNames.HAT, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        hat.addChild("hood", CubeListBuilder.create()
-                .uv(0, 0).cuboid(-4.0F, -7.5F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(1.6F))
-                .uv(32, 0).cuboid(-4.0F, -7.5F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(2.0F)),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        hat.addOrReplaceChild("hood", CubeListBuilder.create()
+                .texOffs(0, 0).addBox(-4.0F, -7.5F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(1.6F))
+                .texOffs(32, 0).addBox(-4.0F, -7.5F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(2.0F)),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.BODY, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.BODY, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.RIGHT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.RIGHT_ARM, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.LEFT_ARM, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         /*modelPartData
-                .addChild("hood", CubeListBuilder.create()
-                                .uv(32, 0)
-                                .cuboid(-3, -12, 2, 6, 6, 1.0F, dilation)
-                , PartPose.of(0, 0, 0, 0, 0.0F, 0F))
-                .addChild("back_hood", CubeListBuilder.create().uv(32, 7)
-                        .cuboid(-3, -13.435f, 2.08f, 6,6,2, dilation)
-                , PartPose.of(0, 1, -1, -ToRad.ex(7.5), 0.0F, 0F));*/
+                .addOrReplaceChild("hood", CubeListBuilder.create()
+                                .texOffs(32, 0)
+                                .addBox(-3, -12, 2, 6, 6, 1.0F, dilation)
+                , PartPose.offsetAndRotation(0, 0, 0, 0, 0.0F, 0F))
+                .addOrReplaceChild("back_hood", CubeListBuilder.create().texOffs(32, 7)
+                        .addBox(-3, -13.435f, 2.08f, 6,6,2, dilation)
+                , PartPose.offsetAndRotation(0, 1, -1, -ToRad.ex(7.5), 0.0F, 0F));*/
         return LayerDefinition.of(modelData, 64, 64);
     }
 

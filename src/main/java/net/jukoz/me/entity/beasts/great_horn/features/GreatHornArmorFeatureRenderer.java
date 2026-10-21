@@ -4,7 +4,6 @@ import net.jukoz.me.entity.beasts.great_horn.GreatHornEntity;
 import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.jukoz.me.compat.client.render.equipment.EquipmentRenderer;
@@ -22,6 +21,7 @@ import net.jukoz.me.entity.EntityModelLayersME;
 import net.jukoz.me.entity.beasts.great_horn.GreatHornEntityRenderState;
 import net.jukoz.me.entity.beasts.great_horn.GreatHornModel;
 import net.jukoz.me.item.utils.armor.DyeablePiecesME;
+import net.minecraft.client.renderer.RenderType;
 
 public class GreatHornArmorFeatureRenderer extends MEFeatureRenderer<GreatHornEntity, GreatHornEntityRenderState, GreatHornModel> {
     private final GreatHornArmorModel model;
@@ -44,7 +44,7 @@ public class GreatHornArmorFeatureRenderer extends MEFeatureRenderer<GreatHornEn
             if (itemStack.getItem() instanceof net.minecraft.world.item.DyeableLeatherItem) {
                 dyeable = true;
             }
-            VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(new ResourceLocation(MiddleEarth.MOD_ID, path)), true, itemStack.hasGlint());
+            VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderType.armorCutoutNoCull(new ResourceLocation(MiddleEarth.MOD_ID, path)), true, itemStack.hasGlint());
 
             if(dyeable){
                 int color = itemStack.getItem() instanceof net.minecraft.world.item.DyeableLeatherItem dyeableItem

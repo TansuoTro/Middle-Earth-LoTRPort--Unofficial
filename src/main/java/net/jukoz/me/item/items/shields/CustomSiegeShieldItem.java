@@ -5,7 +5,7 @@ import net.jukoz.me.item.utils.ShieldTypesME;
 
 public class CustomSiegeShieldItem extends CustomShieldItem {
 
-    public CustomSiegeShieldItem(ShieldTypesME type, Item.Settings settings) {
+    public CustomSiegeShieldItem(ShieldTypesME type, Item.Properties settings) {
         super(type, settings);
     }
 }

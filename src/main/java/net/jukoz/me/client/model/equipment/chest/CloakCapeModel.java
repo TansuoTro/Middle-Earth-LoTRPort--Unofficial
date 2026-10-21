@@ -38,34 +38,34 @@ public class CloakCapeModel<T extends LivingEntity> extends HumanoidModel<T> {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
 
-        modelPartData.addChild(PartNames.HAT, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.HAT, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition body = modelPartData.addChild(PartNames.BODY, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        PartDefinition cape =  body.addChild("cape", CubeListBuilder.create()
-                        .uv(0, 22).mirrored().cuboid(-9.0F, 0.0F, 3.0F, 18.0F, 13.0F, 0.0F, new CubeDeformation(0.0F)).mirrored(false),
-                PartPose.of(0, 0.5f, 0, 0.0F, 0.0F, 0F));
-        cape.addChild("cape_low", CubeListBuilder.create()
-                .uv(0, 35).mirrored().cuboid(-9.0F, 1.0F, -2.0F, 18.0F, 13.0F, 0.0F, new CubeDeformation(0.0F)).mirrored(false),
-                PartPose.of(0.0F, 12F, 5.0F, 0.0F, 0.0F, 0.0F));
-        body.addChild("cape_shoulder", CubeListBuilder.create()
-                .uv(0, 0).cuboid(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(1.1F)),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition body = modelPartData.addOrReplaceChild(PartNames.BODY, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition cape =  body.addOrReplaceChild("cape", CubeListBuilder.create()
+                        .texOffs(0, 22).mirror().addBox(-9.0F, 0.0F, 3.0F, 18.0F, 13.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false),
+                PartPose.offsetAndRotation(0, 0.5f, 0, 0.0F, 0.0F, 0F));
+        cape.addOrReplaceChild("cape_low", CubeListBuilder.create()
+                .texOffs(0, 35).mirror().addBox(-9.0F, 1.0F, -2.0F, 18.0F, 13.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false),
+                PartPose.offsetAndRotation(0.0F, 12F, 5.0F, 0.0F, 0.0F, 0.0F));
+        body.addOrReplaceChild("cape_shoulder", CubeListBuilder.create()
+                .texOffs(0, 0).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(1.1F)),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition right_arm = modelPartData.addChild(PartNames.RIGHT_ARM, CubeListBuilder.create(),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
-        right_arm.addChild("right_arm_shoulder_cape", CubeListBuilder.create()
-                        .uv(24, 0).cuboid(-3.5F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(1.1F)),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition right_arm = modelPartData.addOrReplaceChild(PartNames.RIGHT_ARM, CubeListBuilder.create(),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
+        right_arm.addOrReplaceChild("right_arm_shoulder_cape", CubeListBuilder.create()
+                        .texOffs(24, 0).addBox(-3.5F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(1.1F)),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition left_arm = modelPartData.addChild(PartNames.LEFT_ARM, CubeListBuilder.create(),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
-        left_arm.addChild("left_arm_shoulder_cape", CubeListBuilder.create()
-                        .uv(24, 0).mirrored().cuboid(-0.5F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(1.1F)).mirrored(false),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition left_arm = modelPartData.addOrReplaceChild(PartNames.LEFT_ARM, CubeListBuilder.create(),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
+        left_arm.addOrReplaceChild("left_arm_shoulder_cape", CubeListBuilder.create()
+                        .texOffs(24, 0).mirror().addBox(-0.5F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(1.1F)).mirror(false),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.of(modelData, 64, 64);
     }
@@ -77,7 +77,7 @@ public class CloakCapeModel<T extends LivingEntity> extends HumanoidModel<T> {
         double speed = (sqrVel * 0.35f) + Math.sqrt(Math.abs(limbDistance)) * 0.4f;
         double degree;
 
-        if (entity.isInSneakingPose()) {
+        if (entity.isCrouching()) {
             this.cape.pivotZ = 0.15f;
             this.cape.pivotY = 0.15f;
             degree = 5f + (speed * (MAX_ANGLE_CLOAK / 2));
@@ -89,6 +89,6 @@ public class CloakCapeModel<T extends LivingEntity> extends HumanoidModel<T> {
         degree = Math.max(7.5f, degree);
         degree = Math.min(MAX_ANGLE_CLOAK, degree);
 
-        this.cape.pitch = ToRad.ex(degree);
+        this.cape.xRot = ToRad.ex(degree);
     }
 }

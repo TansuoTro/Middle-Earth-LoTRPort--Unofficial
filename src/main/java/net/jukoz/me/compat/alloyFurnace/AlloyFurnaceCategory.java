@@ -33,7 +33,7 @@ public class AlloyFurnaceCategory implements DisplayCategory<BasicDisplay> {
 
     @Override
     public Renderer getIcon() {
-        return EntryStacks.of(net.jukoz.me.compat.MEBlocksLegacy.ALLOY_FURNACE.asItem().getDefaultStack());
+        return EntryStacks.of(net.jukoz.me.compat.MEBlocksLegacy.ALLOY_FURNACE.asItem().getDefaultInstance());
     }
 
     @Override

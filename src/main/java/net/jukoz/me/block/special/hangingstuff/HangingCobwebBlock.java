@@ -12,12 +12,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class HangingCobwebBlock extends CustomHangingBlock {
-    public HangingCobwebBlock(Settings settings) {
+    public HangingCobwebBlock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
@@ -34,9 +35,9 @@ public class HangingCobwebBlock extends CustomHangingBlock {
 
     @Override
     public void neighborUpdate(BlockState state, Level world, BlockPos pos, Block sourceBlock, BlockPos fromPos, boolean notify) {
-        if (!world.isClient) {
+        if (!world.isClientSide) {
             for (Direction direction : Direction.values()) {
-                if (world.getFluidState(pos.offset(direction)).isIn(net.minecraft.tags.FluidTags.WATER)) {
+                if (world.getFluidState(pos.offset(direction)).is(net.minecraft.tags.FluidTags.WATER)) {
                     world.breakBlock(pos, true);
                     return;
                 }

@@ -1,6 +1,6 @@
 package net.jukoz.me.block.special.plants;
 
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.jukoz.me.block.special.CustomWaterloggableTallPlantBlock;
 import net.minecraft.world.level.material.FluidState;
@@ -14,19 +14,20 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class WaterloggablePlant extends CustomPlantBlock implements BonemealableBlock, SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public WaterloggablePlant(Settings settings) {
+    public WaterloggablePlant(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState((BlockState)((BlockState)this.stateManager.getDefaultState()).with(WATERLOGGED, false));
+        this.setDefaultState((BlockState)((BlockState)this.stateManager.defaultBlockState()).with(WATERLOGGED, false));
     }
 
     @Override
@@ -52,10 +53,10 @@ public class WaterloggablePlant extends CustomPlantBlock implements Bonemealable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
         BlockState blockState = ctx.getWorld().getBlockState(ctx.getBlockPos());
 
-        if(blockState.isOf(Blocks.WATER)){
-            return this.getDefaultState().with(WATERLOGGED, true);
+        if(blockState.is(Blocks.WATER)){
+            return this.defaultBlockState().with(WATERLOGGED, true);
         } else{
-            return this.getDefaultState();
+            return this.defaultBlockState();
         }
     }
 
@@ -71,8 +72,8 @@ public class WaterloggablePlant extends CustomPlantBlock implements Bonemealable
 
     @Override
     public void grow(ServerLevel world, RandomSource random, BlockPos pos, BlockState state) {
-        CustomWaterloggableTallPlantBlock tallPlantBlock = (CustomWaterloggableTallPlantBlock)(state.isOf(ModNatureBlocks.SHORT_BULRUSH) ? ModNatureBlocks.TALL_BULRUSH : ModNatureBlocks.TALL_CATTAILS);
-        if (tallPlantBlock.getDefaultState().canPlaceAt(world, pos) && world.isAir(pos.up())) {
+        CustomWaterloggableTallPlantBlock tallPlantBlock = (CustomWaterloggableTallPlantBlock)(state.is(ModNatureBlocks.SHORT_BULRUSH) ? ModNatureBlocks.TALL_BULRUSH : ModNatureBlocks.TALL_CATTAILS);
+        if (tallPlantBlock.defaultBlockState().canPlaceAt(world, pos) && world.isAir(pos.above())) {
             tallPlantBlock.placeAt(world, pos, state.get(WATERLOGGED), 2);
         }
     }

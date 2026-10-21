@@ -19,12 +19,12 @@ public class IsenUrukSapperHelmetModel extends IsenUrukHelmetModel {
     public static LayerDefinition getTexturedModelData() {
         MeshDefinition modelData = getModelData();
 
-        PartDefinition head = modelData.getRoot().addChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition head = modelData.getRoot().addOrReplaceChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        head.addChild("sapper_addons", CubeListBuilder.create()
-                .uv(-6, 42).cuboid(-6.5F, -3.025F, -6.5F, 13.0F, 0.0F, 6.0F, new CubeDeformation(0.0F))
-                .uv(3, -9).cuboid(0.0F, -12.25F, -6.0F, 0.0F, 10.0F, 9.0F, new CubeDeformation(0.0F)),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        head.addOrReplaceChild("sapper_addons", CubeListBuilder.create()
+                .texOffs(-6, 42).addBox(-6.5F, -3.025F, -6.5F, 13.0F, 0.0F, 6.0F, new CubeDeformation(0.0F))
+                .texOffs(3, -9).addBox(0.0F, -12.25F, -6.0F, 0.0F, 10.0F, 9.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.of(modelData, 64, 64);
     }

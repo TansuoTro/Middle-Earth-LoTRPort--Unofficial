@@ -264,7 +264,7 @@ public class WoodlandRealmNpcTypePool {
                                 .add(WeightedItemData.create(WeaponItemsME.WOODLAND_REALM_HEAVY_BLUE_SHIELD))
                                 .add(WeightedItemData.create(WeaponItemsME.WOODLAND_REALM_HEAVY_GREEN_SHIELD))
                         )
-        ), NpcRegistry.COMMON_NPC_ATTRIBUTES , CombatArchetypePool.DEFAULT, new MountData(EntitiesME.GREAT_HORN).withArmor(EquipmentItemsME.GREAT_HORN_PLATE_ARMOR.getDefaultStack()), NpcLoot.FROM_6_TO_10);
+        ), NpcRegistry.COMMON_NPC_ATTRIBUTES , CombatArchetypePool.DEFAULT, new MountData(EntitiesME.GREAT_HORN).withArmor(EquipmentItemsME.GREAT_HORN_PLATE_ARMOR.getDefaultInstance()), NpcLoot.FROM_6_TO_10);
 
         NIGHTSHADE = new NpcType(NpcRegistry.WOODLAND_REALM_NIGHTSHADE.getValue(), RaceRegistry.ELF, FACTION, TexturePresetsRegistry.WOODLAND_REALM_NIGHTSHADE, List.of(
                 WeightedGearData.create()
@@ -405,10 +405,10 @@ public class WoodlandRealmNpcTypePool {
                         )
         ), new HashMap<>(){{
             put(EntityCategories.SHARED, new AttributePool().addElements(List.of(
-                    AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.25, 0.30),
-                    AttributePoolElement.create(Attributes.GENERIC_MAX_HEALTH, 28),
-                    AttributePoolElement.create(Attributes.GENERIC_ARMOR, 10, 20),
-                    AttributePoolElement.create(Attributes.GENERIC_ATTACK_DAMAGE, 1, 2)
+                    AttributePoolElement.create(Attributes.MOVEMENT_SPEED, 0.25, 0.30),
+                    AttributePoolElement.create(Attributes.MAX_HEALTH, 28),
+                    AttributePoolElement.create(Attributes.ARMOR, 10, 20),
+                    AttributePoolElement.create(Attributes.ATTACK_DAMAGE, 1, 2)
                             .withModifier(TOTAL_DAMAGE_MODIFIER, 1.5, AttributeModifier.Operation.MULTIPLY_TOTAL) // Does 1.5x damage, with 1 -> 2 base damage (strong)
             )));
         }}, CombatArchetypePool.DEFAULT, NpcLoot.FROM_15_TO_25);

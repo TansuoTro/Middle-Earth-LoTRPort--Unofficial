@@ -88,11 +88,11 @@ public enum BackAttachmentsME implements StringRepresentable {
     MANTLE_OF_YAVANNA(61,"mantle_of_yavanna")
     ;
 
-    private static final IntFunction<BackAttachmentsME> BY_ID = ByIdMap.createIdToValueFunction(BackAttachmentsME::getId, BackAttachmentsME.values(), ByIdMap.OutOfBoundsHandling.ZERO);;
+    private static final IntFunction<BackAttachmentsME> BY_ID = ByIdMap.continuous(BackAttachmentsME::getId, BackAttachmentsME.values(), ByIdMap.OutOfBoundsStrategy.ZERO);;
     private final String name;
     private final int id;
 
-    public static final Codec<BackAttachmentsME> CODEC = StringRepresentable.createCodec(BackAttachmentsME::values);
+    public static final Codec<BackAttachmentsME> CODEC = StringRepresentable.fromEnum(BackAttachmentsME::values);
     public static final PacketCodec<net.minecraft.network.FriendlyByteBuf, BackAttachmentsME> PACKET_CODEC = PacketCodecs.indexed(BY_ID, BackAttachmentsME::getId);
 
     BackAttachmentsME(int id, String name){

@@ -1,6 +1,6 @@
 package net.jukoz.me.block.special.structureManager.nest;
 
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.InteractionHand;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -22,7 +22,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
 import net.jukoz.me.block.registration.ModBlockEntities;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -31,24 +31,25 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class StructureNestBlock extends BaseEntityBlock implements EntityBlock, SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    public static final BooleanProperty ENABLED = BooleanProperty.of("enabled");
+    public static final BooleanProperty ENABLED = BooleanProperty.create("enabled");
 
-    public StructureNestBlock(Settings settings) {
+    public StructureNestBlock(BlockBehaviour.Properties settings) {
         super(settings);
         setDefaultState(getDefaultState().with(ENABLED, false));
     }
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (world.isClient) {
+        if (world.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
-            MenuProvider screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+            MenuProvider screenHandlerFactory = state.getMenuProvider(world, pos);
             if(screenHandlerFactory != null) {
-                player.openHandledScreen(screenHandlerFactory);
+                player.openMenu(screenHandlerFactory);
             }
             return InteractionResult.CONSUME;
         }
@@ -86,7 +87,7 @@ public class StructureNestBlock extends BaseEntityBlock implements EntityBlock, 
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return (BlockState)this.getDefaultState().with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
+        return (BlockState)this.defaultBlockState().with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
     }
 
     protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
@@ -102,7 +103,7 @@ public class StructureNestBlock extends BaseEntityBlock implements EntityBlock, 
     @Nullable
     protected static <T extends BlockEntity> BlockEntityTicker<T> checkType(Level world, BlockEntityType<T> givenType, BlockEntityType<StructureNestBlockEntity> expectedType) {
         BlockEntityTicker ticker;
-        if (world.isClient) {
+        if (world.isClientSide) {
             return null;
         }
 

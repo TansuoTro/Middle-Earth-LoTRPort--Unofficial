@@ -72,7 +72,7 @@ public class TrialSpawnerBlockEntity extends BlockEntity {
     private int total() { return number("total_mobs", 6, 128) + Math.max(0, participants.size()-1) * number("total_mobs_added_per_player", 2, 32); }
     private int simultaneous() { return number("simultaneous_mobs", 2, 32) + Math.max(0, participants.size()-1) * (config().contains("simultaneous_mobs_added_per_player") ? number("simultaneous_mobs_added_per_player", 1, 8) : 1); }
     private void phase(TrialSpawnerBlock.Phase phase) {
-        if (getCachedState().get(TrialSpawnerBlock.PHASE) != phase) world.setBlockState(pos, getCachedState().with(TrialSpawnerBlock.PHASE, phase), Block.NOTIFY_ALL);
+        if (getBlockState().get(TrialSpawnerBlock.PHASE) != phase) world.setBlock(pos, getBlockState().with(TrialSpawnerBlock.PHASE, phase), (Block.UPDATE_NEIGHBORS | Block.UPDATE_CLIENTS));
     }
 
     public static void tick(Level world, BlockPos pos, BlockState state, TrialSpawnerBlockEntity trial) {
@@ -83,14 +83,14 @@ public class TrialSpawnerBlockEntity extends BlockEntity {
         long time = server.getTime();
         if (time < cooldownUntil) { phase(TrialSpawnerBlock.Phase.COOLDOWN); return; }
         int range = configuration.contains("required_player_range") ? Mth.clamp(configuration.getInt("required_player_range"), 1, 64) : 14;
-        var nearby = server.getPlayers(player -> !player.isSpectator() && !player.isCreative() && player.squaredDistanceTo(Vec3.ofCenter(pos)) <= range*range);
+        var nearby = server.getPlayers(player -> !player.isSpectator() && !player.isCreative() && player.distanceTo(Vec3.ofCenter(pos)) <= range*range);
         if (participants.isEmpty() && nearby.isEmpty()) { phase(TrialSpawnerBlock.Phase.WAITING_FOR_PLAYERS); return; }
         for (ServerPlayer player : nearby) if (participants.add(player.getUuid())) markDirty();
         // Missing entities in unloaded chunks remain in the encounter ledger. A short
         // grace period also prevents entity-load ordering from completing a trial.
         for (var iterator = alive.entrySet().iterator(); iterator.hasNext();) {
             var entry = iterator.next(); Entity mob = server.getEntity(entry.getKey());
-            if (mob != null && mob.isAlive()) { entry.setValue(mob.getBlockPos()); absentTicks.remove(entry.getKey()); }
+            if (mob != null && mob.isAlive()) { entry.setValue(mob.blockPosition()); absentTicks.remove(entry.getKey()); }
             else if (mob != null || (server.isChunkLoaded(entry.getValue()) && absentTicks.merge(entry.getKey(), 1, Integer::sum) >= 100)) {
                 iterator.remove(); absentTicks.remove(entry.getKey()); markDirty();
             }
@@ -111,11 +111,11 @@ public class TrialSpawnerBlockEntity extends BlockEntity {
             if (!server.isSpaceEmpty(entity)) continue;
             if (entity instanceof Mob mob) {
                 // InitializationData is consumed by NPC readNbt. Unconfigured mobs need vanilla initialization.
-                if (entityData.getSize() == 1) mob.initialize(server, server.getLocalDifficulty(mob.getBlockPos()), MobSpawnType.TRIGGERED, null, null);
-                mob.setPersistent();
+                if (entityData.getSize() == 1) mob.initialize(server, server.getEffectiveDifficulty(mob.blockPosition()), MobSpawnType.TRIGGERED, null, null);
+                mob.setPersistenceRequired();
             }
             if (!server.spawnNewEntityAndPassengers(entity)) continue;
-            alive.put(entity.getUuid(), entity.getBlockPos()); spawned++; markDirty();
+            alive.put(entity.getUuid(), entity.blockPosition()); spawned++; markDirty();
             server.spawnParticles(ParticleTypes.FLAME,x,y+0.5,z,15,0.3,0.5,0.3,0.01);
             break;
         }
@@ -146,9 +146,9 @@ public class TrialSpawnerBlockEntity extends BlockEntity {
             ResourceLocation table = ResourceLocation.tryParse(tableName);
             if (table != null) {
                 var builder = new LootParams.Builder(server).add(LootContextParams.ORIGIN, Vec3.ofCenter(pos));
-                ServerPlayer player = server.getServer().getPlayerManager().getPlayer(playerId);
+                ServerPlayer player = server.getServer().getPlayerList().getPlayer(playerId);
                 if (player != null) builder.add(LootContextParams.THIS_ENTITY, player).luck(player.getLuck());
-                for (var stack : server.getServer().getLootManager().getLootTable(table).generateLoot(builder.build(LootContextParamSets.CHEST))) Block.dropStack(server,pos.up(),stack);
+                for (var stack : server.getServer().getLootData().getLootTable(table).generateLoot(builder.build(LootContextParamSets.CHEST))) Block.dropStack(server,pos.above(),stack);
             }
         }
         int delay = configuration.contains("target_cooldown_length") ? Math.max(1,configuration.getInt("target_cooldown_length")) : 36000;

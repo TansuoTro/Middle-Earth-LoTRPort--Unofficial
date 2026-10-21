@@ -13,11 +13,11 @@ public class FirCofferBlockEntity extends ChestBlockEntity {
     public FirCofferBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.FIR_COFFER, pos, state);
 
-        this.setInvStackList(NonNullList.ofSize(this.size(), ItemStack.EMPTY));
+        this.setInvStackList(NonNullList.withSize(this.size(), ItemStack.EMPTY));
     }
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable(MiddleEarth.of("fir_coffer").toTranslationKey("screen"));
+        return Component.translatable(MiddleEarth.of("fir_coffer").toLanguageKey("screen"));
     }
 }

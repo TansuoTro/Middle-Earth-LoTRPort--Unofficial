@@ -19,15 +19,15 @@ import net.jukoz.me.config.ModServerConfigs;
 import net.jukoz.me.network.packets.S2C.PacketForceOnboardingScreen;
 import net.jukoz.me.resources.persistent_datas.PlayerDataService;
 import net.jukoz.me.utils.ModColors;
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.argument;
+import static net.minecraft.commands.Commands.literal;
 
 public class CommandOnboarding {
     public static String ONBOARDING_BASE_COMMAND = "onboarding";
     private static final String OPEN = "open";
     private static final String TRY = "try";
     private static final String PLAYER = "player";
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandRegistryAccess, Commands.RegistrationEnvironment registrationEnvironment) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandRegistryAccess, Commands.CommandSelection registrationEnvironment) {
         // [TRY OPEN]
         dispatcher.register(literal(ModCommands.BASE_COMMAND)
                 .requires(source -> source.hasPermissionLevel(2)) // Require OP
@@ -48,7 +48,7 @@ public class CommandOnboarding {
     }
 
     private static int open(CommandContext<CommandSourceStack> context) {
-        if(context.getSource().isExecutedByPlayer()) {
+        if(context.getSource().isPlayer()) {
             ServerPlayer source = context.getSource().getPlayer();
             if(source != null){
                 ServerPlayNetworking.send(source, new PacketForceOnboardingScreen(ModServerConfigs.DELAY_ON_TELEPORT_CONFIRMATION, source));
@@ -67,7 +67,7 @@ public class CommandOnboarding {
     }
 
     private static int tryOpen(CommandContext<CommandSourceStack> context) {
-        if(context.getSource().isExecutedByPlayer()) {
+        if(context.getSource().isPlayer()) {
             ServerPlayer playerSource = context.getSource().getPlayer();
             if(playerSource != null){
                 boolean playerPassedOnboarding = PlayerDataService.playerPassedOnboarding(playerSource);
@@ -75,7 +75,7 @@ public class CommandOnboarding {
                     ServerPlayNetworking.send(playerSource, new PacketForceOnboardingScreen(ModServerConfigs.DELAY_ON_TELEPORT_CONFIRMATION, playerSource));
                 } else {
                     MutableComponent sourceText = Component.translatable("command.%s.open.onboarding.error".formatted(MiddleEarth.MOD_ID));
-                    playerSource.sendMessage(METext.withColor(sourceText, ModColors.WARNING.color));
+                    playerSource.sendSystemMessage(METext.withColor(sourceText, ModColors.WARNING.color));
                 }
             }
         }

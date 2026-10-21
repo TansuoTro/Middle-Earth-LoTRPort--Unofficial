@@ -32,27 +32,27 @@ public class ArtisanTableSlot extends Slot {
         if(!isEnabled()) return false;
         if(inputType == InputType.ANY) return super.canInsert(stack);
 
-        else if(inputType == InputType.HANDLE && !(stack.isOf(Items.STICK) || stack.isOf(ResourceItemsME.ROD)
-                || stack.isOf(Items.BONE) || stack.isOf(ResourceItemsME.DIRTY_BONE))) {
+        else if(inputType == InputType.HANDLE && !(stack.is(Items.STICK) || stack.is(ResourceItemsME.ROD)
+                || stack.is(Items.BONE) || stack.is(ResourceItemsME.DIRTY_BONE))) {
             return false;
         }
-        else if(inputType == InputType.HILT && !(stack.isOf(ResourceItemsME.SWORD_HILT))) {
+        else if(inputType == InputType.HILT && !(stack.is(ResourceItemsME.SWORD_HILT))) {
             return false;
         }
-        else if(inputType == InputType.BLADE && !(stack.isOf(ResourceItemsME.SHORT_BLADE) ||
-                stack.isOf(ResourceItemsME.BLADE) || stack.isOf(ResourceItemsME.LONG_BLADE))) {
+        else if(inputType == InputType.BLADE && !(stack.is(ResourceItemsME.SHORT_BLADE) ||
+                stack.is(ResourceItemsME.BLADE) || stack.is(ResourceItemsME.LONG_BLADE))) {
             return false;
         }
-        else if(inputType == InputType.AXE && !(stack.isOf(ResourceItemsME.AXE_HEAD))) {
+        else if(inputType == InputType.AXE && !(stack.is(ResourceItemsME.AXE_HEAD))) {
             return false;
         }
-        else if(inputType == InputType.PICKAXE && !(stack.isOf(ResourceItemsME.PICKAXE_HEAD))) {
+        else if(inputType == InputType.PICKAXE && !(stack.is(ResourceItemsME.PICKAXE_HEAD))) {
             return false;
         }
-        else if(inputType == InputType.SHOVEL && !(stack.isOf(ResourceItemsME.SHOVEL_HEAD))) {
+        else if(inputType == InputType.SHOVEL && !(stack.is(ResourceItemsME.SHOVEL_HEAD))) {
             return false;
         }
-        else if(inputType == InputType.HOE && !(stack.isOf(ResourceItemsME.HOE_HEAD))) {
+        else if(inputType == InputType.HOE && !(stack.is(ResourceItemsME.HOE_HEAD))) {
             return false;
         }
 

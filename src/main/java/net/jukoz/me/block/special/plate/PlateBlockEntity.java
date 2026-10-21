@@ -95,7 +95,7 @@ public class PlateBlockEntity extends BlockEntity implements ContainerSingleItem
 
     @Override
     public CompoundTag toInitialChunkDataNbt() {
-        return createNbt();
+        return saveWithoutMetadata();
     }
 
     @Override
@@ -105,7 +105,7 @@ public class PlateBlockEntity extends BlockEntity implements ContainerSingleItem
 
     @Override
     public ItemStack getStack(int slot) {
-        return this.getStack();
+        return this.getItem();
     }
 
     @Override
@@ -131,7 +131,7 @@ public class PlateBlockEntity extends BlockEntity implements ContainerSingleItem
 
     public void generateItem(ServerLevel world) {
         if (this.lootTable != null && blockPlaced) {
-            LootTable lootTable = world.getServer().getLootManager().getLootTable(this.lootTable);
+            LootTable lootTable = world.getServer().getLootData().getLootTable(this.lootTable);
             LootParams lootContext = new LootParams.Builder(world).build(LootContextParamSets.EMPTY);
             ObjectArrayList<ItemStack> lootList = lootTable.generateLoot(lootContext, this.lootTableSeed);
             ItemStack itemLoot = ItemStack.EMPTY;
@@ -147,7 +147,7 @@ public class PlateBlockEntity extends BlockEntity implements ContainerSingleItem
     public void update() {
         markDirty();
         if (world != null) {
-            world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
+            world.sendBlockUpdated(pos, getBlockState(), getBlockState(), (Block.UPDATE_NEIGHBORS | Block.UPDATE_CLIENTS));
         }
     }
 }

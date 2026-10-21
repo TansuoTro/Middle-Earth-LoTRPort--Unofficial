@@ -36,15 +36,16 @@ import net.jukoz.me.recipe.RecipesME;
 import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import net.jukoz.me.compat.mcforge.MatchGetter;
 
 public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory, WorldlyContainer {
     private static final String ID = "crockpot";
     public static final int OUTPUT_SLOT = 4;
     public static final int COOK_TIME = 60;
     private final NonNullList<ItemStack> inventory =
-            NonNullList.ofSize(5, ItemStack.EMPTY);
+            NonNullList.withSize(5, ItemStack.EMPTY);
     protected final ContainerData propertyDelegate;
-    private final RecipeManager.MatchGetter<MultipleStackRecipeInput, ? extends CrockpotRecipe> matchGetter;
+    private final net.jukoz.me.compat.mcforge.MatchGetter<MultipleStackRecipeInput, ? extends CrockpotRecipe> matchGetter;
     private int progress = 0;
     private RandomSource random;
     private float liquidTopLevel;
@@ -76,7 +77,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
                 return 1;
             }
         };
-        this.matchGetter = RecipeManager.createCachedMatchGetter(RecipesME.CROCKPOT);
+        this.matchGetter = net.jukoz.me.compat.mcforge.MatchGetter.createCachedMatchGetter(RecipesME.CROCKPOT);
         this.liquidTopLevel = liquidTopLevel;
         random = RandomSource.create();
     }
@@ -90,7 +91,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
             }
         }
         boolean markDirty = false;
-        if (blockEntity.isBoiling() && !world.isClient) {
+        if (blockEntity.isBoiling() && !world.isClientSide) {
             blockEntity.randomBubbles();
             ServerLevel serverWorld = (ServerLevel) world;
             MultipleStackRecipeInput recipeInput = new MultipleStackRecipeInput(ingredients);
@@ -105,7 +106,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
             ++blockEntity.progress;
             if (blockEntity.progress >= COOK_TIME) {
                 blockEntity.progress = 0;
-                craftRecipe(world.getRegistryManager(), recipeEntry, recipeInput, blockEntity.inventory);
+                craftRecipe(world.registryAccess(), recipeEntry, recipeInput, blockEntity.inventory);
                 blockEntity.recipeCraftedSound();
             }
         }
@@ -213,7 +214,7 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
     public ItemStack fillBowl(Item remainder) {
         if(hasOutput()) {
             ItemStack outputStack = getStack(OUTPUT_SLOT);
-            ItemStack remainderComponent = outputStack.getRecipeRemainder();
+            ItemStack remainderComponent = outputStack.getCraftingRemainingItem();
             if(remainderComponent != null) {
                 ItemStack recipeRemainder = remainderComponent;
                 if (recipeRemainder.getItem() == remainder) {
@@ -293,8 +294,8 @@ public class CrockpotBlockEntity extends BlockEntity implements ExtendedScreenHa
     @Override
     public void setStack(int slot, ItemStack stack) {
         this.inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
     }
 

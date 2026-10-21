@@ -1,6 +1,6 @@
 package net.jukoz.me.block.special.statues;
 
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -20,20 +20,21 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import com.mojang.math.Axis;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class StatueBlock extends Block implements SimpleWaterloggedBlock {
     public static final EnumProperty<Direction> HORIZONTAL_FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public StatueBlock(Settings settings) {
+    public StatueBlock(BlockBehaviour.Properties settings) {
         super(settings);
         setDefaultState(getDefaultState().with(HORIZONTAL_FACING, Direction.NORTH).with(HALF, DoubleBlockHalf.LOWER).with(WATERLOGGED, false));
     }
@@ -46,11 +47,11 @@ public class StatueBlock extends Block implements SimpleWaterloggedBlock {
         BlockPos blockPos = ctx.getBlockPos();
         BlockState blockState = ctx.getWorld().getBlockState(ctx.getBlockPos());
         Level world = ctx.getWorld();
-        if(blockPos.getY() < world.getTopY() - 1 && world.getBlockState(blockPos.up()).canReplace(ctx)){
-            if(blockState.isOf(Blocks.WATER)){
-                return (BlockState)((BlockState)this.getDefaultState().with(HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(HALF, DoubleBlockHalf.LOWER).with(WATERLOGGED, true));
+        if(blockPos.getY() < world.getTopY() - 1 && world.getBlockState(blockPos.above()).canReplace(ctx)){
+            if(blockState.is(Blocks.WATER)){
+                return (BlockState)((BlockState)this.defaultBlockState().with(HORIZONTAL_FACING, ctx.getHorizontalDirection().getOpposite()).with(HALF, DoubleBlockHalf.LOWER).with(WATERLOGGED, true));
             } else{
-                return (BlockState)((BlockState)this.getDefaultState().with(HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(HALF, DoubleBlockHalf.LOWER).with(WATERLOGGED, false));
+                return (BlockState)((BlockState)this.defaultBlockState().with(HORIZONTAL_FACING, ctx.getHorizontalDirection().getOpposite()).with(HALF, DoubleBlockHalf.LOWER).with(WATERLOGGED, false));
             }
         } else {
             return null;
@@ -69,16 +70,16 @@ public class StatueBlock extends Block implements SimpleWaterloggedBlock {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
         DoubleBlockHalf doubleBlockHalf = (DoubleBlockHalf) state.get(HALF);
-        if (direction.getAxis() == Direction.Axis.Y && doubleBlockHalf == DoubleBlockHalf.LOWER == (direction == Direction.UP) && (!neighborState.isOf(this) || neighborState.get(HALF) == doubleBlockHalf)) {
-            return Blocks.AIR.getDefaultState();
+        if (direction.getAxis() == Direction.Axis.Y && doubleBlockHalf == DoubleBlockHalf.LOWER == (direction == Direction.UP) && (!neighborState.is(this) || neighborState.get(HALF) == doubleBlockHalf)) {
+            return Blocks.AIR.defaultBlockState();
         } else {
-            return doubleBlockHalf == DoubleBlockHalf.LOWER && direction == Direction.DOWN && !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+            return doubleBlockHalf == DoubleBlockHalf.LOWER && direction == Direction.DOWN && !state.canPlaceAt(world, pos) ? Blocks.AIR.defaultBlockState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
         }
     }
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(HORIZONTAL_FACING, rotation.rotate(state.get(HORIZONTAL_FACING)));
+        return state.setValue(HORIZONTAL_FACING, rotation.rotate(state.get(HORIZONTAL_FACING)));
     }
 
     @Override
@@ -98,23 +99,23 @@ public class StatueBlock extends Block implements SimpleWaterloggedBlock {
     }
 
     public void onBreak(Level world, BlockPos pos, BlockState state, Player player) {
-        if (!world.isClient && (player.isCreative() || !player.canHarvest(state))) {
+        if (!world.isClientSide && (player.isCreative() || !player.hasCorrectToolForDrops(state))) {
             DoubleBlockHalf doubleBlockHalf = (DoubleBlockHalf)state.get(HALF);
             if (doubleBlockHalf == DoubleBlockHalf.UPPER) {
-                BlockPos blockPos = pos.down();
+                BlockPos blockPos = pos.below();
                 BlockState blockState = world.getBlockState(blockPos);
-                if (blockState.isOf(state.getBlock()) && blockState.get(HALF) == DoubleBlockHalf.LOWER) {
-                    BlockState blockState2 = blockState.getFluidState().isOf(Fluids.WATER) ? Blocks.WATER.getDefaultState() : Blocks.AIR.getDefaultState();
-                    world.setBlockState(blockPos, blockState2, 35);
-                    world.syncWorldEvent(player, 2001, blockPos, Block.getRawIdFromState(blockState));
+                if (blockState.is(state.getBlock()) && blockState.get(HALF) == DoubleBlockHalf.LOWER) {
+                    BlockState blockState2 = blockState.getFluidState().is(Fluids.WATER) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState();
+                    world.setBlock(blockPos, blockState2, 35);
+                    world.levelEvent(player, 2001, blockPos, Block.getRawIdFromState(blockState));
                 }
             } else{
-                BlockPos blockPos = pos.up();
+                BlockPos blockPos = pos.above();
                 BlockState blockState = world.getBlockState(blockPos);
-                if (blockState.isOf(state.getBlock()) && blockState.get(HALF) == DoubleBlockHalf.UPPER) {
-                    BlockState blockState2 = blockState.getFluidState().isOf(Fluids.WATER) ? Blocks.WATER.getDefaultState() : Blocks.AIR.getDefaultState();
-                    world.setBlockState(blockPos, blockState2, 35);
-                    world.syncWorldEvent(player, 2001, blockPos, Block.getRawIdFromState(blockState));
+                if (blockState.is(state.getBlock()) && blockState.get(HALF) == DoubleBlockHalf.UPPER) {
+                    BlockState blockState2 = blockState.getFluidState().is(Fluids.WATER) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState();
+                    world.setBlock(blockPos, blockState2, 35);
+                    world.levelEvent(player, 2001, blockPos, Block.getRawIdFromState(blockState));
                 }
             }
         }
@@ -123,16 +124,16 @@ public class StatueBlock extends Block implements SimpleWaterloggedBlock {
     }
 
     public void onPlaced(Level world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
-        if (world.getBlockState(pos.up()).isOf(Blocks.WATER)){
-            world.setBlockState(pos.up(), (BlockState)state.with(HALF, DoubleBlockHalf.UPPER).with(WATERLOGGED, true), 3);
+        if (world.getBlockState(pos.above()).is(Blocks.WATER)){
+            world.setBlock(pos.above(), (BlockState)state.setValue(HALF, DoubleBlockHalf.UPPER).with(WATERLOGGED, true), 3);
         } else {
-            world.setBlockState(pos.up(), (BlockState)state.with(HALF, DoubleBlockHalf.UPPER).with(WATERLOGGED, false), 3);
+            world.setBlock(pos.above(), (BlockState)state.setValue(HALF, DoubleBlockHalf.UPPER).with(WATERLOGGED, false), 3);
         }
 
     }
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return Block.createCuboidShape(3, 0, 3, 13, 16, 13);
+        return Block.box(3, 0, 3, 13, 16, 13);
     }
 }

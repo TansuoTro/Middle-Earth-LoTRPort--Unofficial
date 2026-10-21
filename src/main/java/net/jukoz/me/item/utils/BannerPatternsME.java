@@ -2,7 +2,7 @@ package net.jukoz.me.item.utils;
 
 import net.jukoz.me.MiddleEarth;
 import net.minecraft.world.level.block.entity.BannerPattern;
-import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -72,14 +72,14 @@ public class BannerPatternsME {
 
     private static ResourceKey<BannerPattern> key(String id) {
         TranslationEntries.bannerPatternEntries.add(id);
-        ResourceKey<BannerPattern> key = ResourceKey.of(Registries.BANNER_PATTERN, new ResourceLocation(MiddleEarth.MOD_ID, id));
+        ResourceKey<BannerPattern> key = ResourceKey.create(Registries.BANNER_PATTERN, new ResourceLocation(MiddleEarth.MOD_ID, id));
         ALL.add(key);
         return key;
     }
 
     public static void registerRuntime(net.minecraft.core.Registry<BannerPattern> registry) {
         for (ResourceKey<BannerPattern> key : ALL) {
-            net.minecraft.core.Registry.register(registry, key, new BannerPattern(key.getValue().toString()));
+            net.minecraft.core.Registry.register(registry, key, new BannerPattern(key.location().toString()));
         }
     }
 
@@ -145,6 +145,6 @@ public class BannerPatternsME {
     }
 
     public static void register(BootstrapContext<BannerPattern> registry, ResourceKey<BannerPattern> key) {
-        registry.register(key, new BannerPattern(key.getValue().toString()));
+        registry.register(key, new BannerPattern(key.location().toString()));
     }
 }

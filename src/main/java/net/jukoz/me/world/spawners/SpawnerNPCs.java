@@ -3,7 +3,7 @@ package net.jukoz.me.world.spawners;
 import net.jukoz.me.entity.NpcEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.entity.EntityData;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.PathfinderMob;
@@ -49,7 +49,7 @@ public class SpawnerNPCs implements CustomSpawner {
             if (playerEntity.isSpectator()) continue;
             BlockPos blockPos = playerEntity.getBlockPos();
             BlockPos targetBlockPos = new BlockPos(blockPos);
-            DifficultyInstance localDifficulty = world.getLocalDifficulty(blockPos);
+            DifficultyInstance localDifficulty = world.getEffectiveDifficulty(blockPos);
 
             Vec3 offset = new Vec3(MAX_SPAWN_RAD, 0, MAX_SPAWN_RAD);
             Vec3 pos1 = blockPos.toCenterPos().add(offset).add(0, 321 - playerEntity.getPos().y, 0);
@@ -100,7 +100,7 @@ public class SpawnerNPCs implements CustomSpawner {
                     if (entity == null) continue;
                     entity.refreshPositionAndAngles(targetBlockPos, 0.0f, 0.0f);
                     entityData = entity.initialize(world, localDifficulty, MobSpawnType.NATURAL, entityData, null);
-                    world.spawnEntityAndPassengers(entity);
+                    world.addFreshEntityWithPassengers(entity);
                     ++i;
                 }
             }
@@ -109,11 +109,11 @@ public class SpawnerNPCs implements CustomSpawner {
     }
 
     public static int getHighestYAtXZ(Level world, int x, int z) {
-        return world.getChunk(new BlockPos(x, 0, z)).sampleHeightmap(Heightmap.Type.MOTION_BLOCKING, x, z);
+        return world.getChunk(new BlockPos(x, 0, z)).sampleHeightmap(Heightmap.Types.MOTION_BLOCKING, x, z);
     }
 
     private static boolean canSpawnAt(BlockGetter world, BlockPos pos, EntityType type, BlockState blockState) {
         if(!blockState.allowsSpawning(world, pos, type)) return false;
-        return (!blockState.isOf(Blocks.WATER) && !blockState.isOf(Blocks.LAVA) && !blockState.isIn(BlockTags.LOGS));
+        return (!blockState.is(Blocks.WATER) && !blockState.is(Blocks.LAVA) && !blockState.is(BlockTags.LOGS));
     }
 }

@@ -21,7 +21,7 @@ public class TrollWeaponItem extends SwordItem {
 
     public TrollWeaponItem(Tier toolMaterial, Settings settings) {
         super(toolMaterial, (int) WeaponTypesME.TROLL_WEAPON.attack, WeaponTypesME.TROLL_WEAPON.attackSpeed,
-                ((net.jukoz.me.item.MESettings) settings).maxDamage(toolMaterial.getDurability()).component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(WeaponTypesME.TROLL_WEAPON.name)));
+                ((net.jukoz.me.item.MESettings) settings).maxDamage(toolMaterial.getUses()).component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(WeaponTypesME.TROLL_WEAPON.name)));
         this.material = toolMaterial;
     }
 

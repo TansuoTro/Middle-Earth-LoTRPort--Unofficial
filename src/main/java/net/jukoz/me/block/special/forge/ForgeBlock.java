@@ -39,15 +39,16 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import com.mojang.math.Axis;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class ForgeBlock extends BaseEntityBlock implements EntityBlock {
-    public static final EnumProperty<ForgePart> PART = EnumProperty.of("part", ForgePart.class);
+    public static final EnumProperty<ForgePart> PART = EnumProperty.create("part", ForgePart.class);
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-    public ForgeBlock(Settings settings) {
+    public ForgeBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(((this.stateManager.getDefaultState()).with(FACING, Direction.NORTH)).with(LIT, false).with(PART, ForgePart.BOTTOM));
+        this.setDefaultState(((this.stateManager.defaultBlockState()).with(FACING, Direction.NORTH)).with(LIT, false).with(PART, ForgePart.BOTTOM));
     }
 
     @Override
@@ -81,24 +82,24 @@ public class ForgeBlock extends BaseEntityBlock implements EntityBlock {
     public BlockState getPlacementState(BlockPlaceContext ctx) {
         BlockPos pos = ctx.getBlockPos().add(0,1,0);
         Level world = ctx.getWorld();
-        Direction direction = ctx.getHorizontalPlayerFacing().getOpposite();
+        Direction direction = ctx.getHorizontalDirection().getOpposite();
 
-        return world.getBlockState(pos).canReplace(ctx) && world.getWorldBorder().contains(pos) ? (BlockState)this.getDefaultState().with(FACING, direction).with(PART, ForgePart.BOTTOM) : null;
+        return world.getBlockState(pos).canReplace(ctx) && world.getWorldBorder().contains(pos) ? (BlockState)this.defaultBlockState().with(FACING, direction).with(PART, ForgePart.BOTTOM) : null;
     }
 
     public void onPlaced(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
         super.onPlaced(world, pos, state, placer, itemStack);
-        if (!world.isClient) {
+        if (!world.isClientSide) {
             BlockPos blockPos = pos.add(0,1,0);
-            world.setBlockState(blockPos, (BlockState)state.with(PART, ForgePart.TOP), 3);
-            world.updateNeighbors(pos, Blocks.AIR);
-            state.updateNeighbors(world, pos, 3);
+            world.setBlock(blockPos, (BlockState)state.setValue(PART, ForgePart.TOP), 3);
+            world.updateNeighbours(pos, Blocks.AIR);
+            state.updateNeighbours(world, pos, 3);
         }
     }
 
     @Override
     public void onBreak(Level world, BlockPos pos, BlockState state, Player player) {
-        if (!world.isClient) {
+        if (!world.isClientSide) {
             ForgePart forgePart = (ForgePart)state.get(PART);
             ForgePart forgePartOpposite = (ForgePart)state.get(PART).getOpposite(state.get(PART));
             BlockPos blockPos;
@@ -108,9 +109,9 @@ public class ForgeBlock extends BaseEntityBlock implements EntityBlock {
                 blockPos = pos.add(0,-1,0);
             }
             BlockState blockState = world.getBlockState(blockPos);
-            if (blockState.isOf(this) && blockState.get(PART) == forgePartOpposite) {
-                world.setBlockState(blockPos, Blocks.AIR.getDefaultState(), 35);
-                world.syncWorldEvent(player, 2001, blockPos, Block.getRawIdFromState(blockState));
+            if (blockState.is(this) && blockState.get(PART) == forgePartOpposite) {
+                world.setBlock(blockPos, Blocks.AIR.defaultBlockState(), 35);
+                world.levelEvent(player, 2001, blockPos, Block.getRawIdFromState(blockState));
             }
         }
         super.onBreak(world, pos, state, player);
@@ -118,7 +119,7 @@ public class ForgeBlock extends BaseEntityBlock implements EntityBlock {
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+        return state.setValue(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override
@@ -135,13 +136,13 @@ public class ForgeBlock extends BaseEntityBlock implements EntityBlock {
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (world.isClient) {
+        if (world.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
             if(state.get(PART) == ForgePart.BOTTOM){
-                MenuProvider screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+                MenuProvider screenHandlerFactory = state.getMenuProvider(world, pos);
                 if(screenHandlerFactory != null) {
-                    player.openHandledScreen(screenHandlerFactory);
+                    player.openMenu(screenHandlerFactory);
                 }
             }
             return InteractionResult.CONSUME;

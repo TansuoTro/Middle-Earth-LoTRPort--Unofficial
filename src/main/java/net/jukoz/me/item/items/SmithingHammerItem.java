@@ -20,7 +20,7 @@ public class SmithingHammerItem extends Item {
     private final float attackSpeed;
 
     public SmithingHammerItem(Settings settings, Tier material, float speed) {
-        super(settings.maxCount(1).maxDamage(material.getDurability()));
+        super(settings.maxCount(1).maxDamage(material.getUses()));
         this.attackSpeed = speed;
     }
 

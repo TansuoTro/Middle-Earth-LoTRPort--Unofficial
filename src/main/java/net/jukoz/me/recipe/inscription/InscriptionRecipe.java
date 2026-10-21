@@ -45,12 +45,12 @@ public class InscriptionRecipe implements Recipe<SingleStackRecipeInput> {
 
     @Override
     public boolean matches(SingleStackRecipeInput input, Level world) {
-        return this.inputChisel.test(input.getStack(0));
+        return this.inputChisel.test(input.getItem(0));
     }
 
     @Override
     public ItemStack craft(SingleStackRecipeInput input, RegistryAccess registries) {
-        ItemStack result = input.getStack(0).copy();
+        ItemStack result = input.getItem(0).copy();
         int currentLevel = EnchantmentHelper.getLevel(this.enchant.value(), result);
         if(currentLevel == this.level - 1) {
             result.addEnchantment(this.enchant.value(), this.level);
@@ -103,7 +103,7 @@ public class InscriptionRecipe implements Recipe<SingleStackRecipeInput> {
             ResourceLocation enchantmentId = new ResourceLocation(GsonHelper.getString(json, "enchantment"));
             Holder<Enchantment> enchant = Holder.of(Registries.ENCHANTMENT.get(enchantmentId));
             int level = GsonHelper.getInt(json, "level");
-            JsonArray words = GsonHelper.getArray(json, "words");
+            JsonArray words = GsonHelper.getAsJsonArray(json, "words");
             List<String> inputWords = new ArrayList<>(words.size());
             for (int i = 0; i < words.size(); i++) {
                 inputWords.add(words.get(i).getAsString());
@@ -116,13 +116,13 @@ public class InscriptionRecipe implements Recipe<SingleStackRecipeInput> {
 
         @Override
         public InscriptionRecipe read(ResourceLocation id, FriendlyByteBuf buf) {
-            ResourceLocation enchantmentId = buf.readIdentifier();
+            ResourceLocation enchantmentId = buf.readResourceLocation();
             Holder<Enchantment> enchant = Holder.of(Registries.ENCHANTMENT.get(enchantmentId));
             int level = buf.readVarInt();
             int wordCount = buf.readVarInt();
             List<String> inputWords = new ArrayList<>(wordCount);
             for (int i = 0; i < wordCount; i++) {
-                inputWords.add(buf.readString());
+                inputWords.add(buf.readUtf());
             }
             Ingredient chisel = Ingredient.fromPacket(buf);
             int levelCost = buf.readVarInt();

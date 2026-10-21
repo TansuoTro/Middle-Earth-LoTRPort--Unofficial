@@ -11,7 +11,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 import java.util.function.ToIntFunction;
@@ -22,15 +22,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import com.mojang.math.Axis;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class SilverLanternBlock extends AbstractToggeableLightBlock {
     public static final BooleanProperty HANGING;
     public static final ToIntFunction<BlockState> STATE_TO_LUMINANCE;
     private static final VoxelShape STANDING_SHAPE, HANGING_SHAPE;
 
-    public SilverLanternBlock(Settings settings) {
+    public SilverLanternBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(this.getDefaultState().with(LIT, false).with(HANGING, false).with(WATERLOGGED, false).with(LEVEL_15, 15));
+        this.setDefaultState(this.defaultBlockState().with(LIT, false).with(HANGING, false).with(WATERLOGGED, false).with(LEVEL_15, 15));
     }
     @Override
     protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
@@ -41,15 +42,15 @@ public class SilverLanternBlock extends AbstractToggeableLightBlock {
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
         FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
-        Direction[] var3 = ctx.getPlacementDirections();
+        Direction[] var3 = ctx.getNearestLookingDirections();
         int var4 = var3.length;
 
         for(int var5 = 0; var5 < var4; ++var5) {
             Direction direction = var3[var5];
             if (direction.getAxis() == Direction.Axis.Y) {
-                BlockState blockState = this.getDefaultState().with(HANGING, direction == Direction.UP);
+                BlockState blockState = this.defaultBlockState().with(HANGING, direction == Direction.UP);
                 if (blockState.canPlaceAt(ctx.getWorld(), ctx.getBlockPos())) {
-                    return blockState.with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
+                    return blockState.setValue(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
                 }
             }
         }
@@ -58,8 +59,8 @@ public class SilverLanternBlock extends AbstractToggeableLightBlock {
     }
 
     public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
-        if (!world.isClient && projectile.isOnFire() && !state.get(LIT)) {
-            world.setBlockState(hit.getBlockPos(), state.with(LIT, true), STATE_TO_LUMINANCE.applyAsInt(state));
+        if (!world.isClientSide && projectile.isOnFire() && !state.get(LIT)) {
+            world.setBlock(hit.getBlockPos(), state.setValue(LIT, true), STATE_TO_LUMINANCE.applyAsInt(state));
         }
     }
 
@@ -78,10 +79,10 @@ public class SilverLanternBlock extends AbstractToggeableLightBlock {
         STATE_TO_LUMINANCE = (state) -> { return state.get(LIT) ? state.get(LEVEL_15) : 0; };
 
         STANDING_SHAPE = Shapes.union(
-                Block.createCuboidShape(5.0, 0.0, 5.0, 11.0, 7.0, 11.0),
-                Block.createCuboidShape(6.0, 7.0, 6.0, 10.0, 9.0, 10.0));
+                Block.box(5.0, 0.0, 5.0, 11.0, 7.0, 11.0),
+                Block.box(6.0, 7.0, 6.0, 10.0, 9.0, 10.0));
         HANGING_SHAPE = Shapes.union(
-                Block.createCuboidShape(5.0, 1.0, 5.0, 11.0, 8.0, 11.0),
-                Block.createCuboidShape(6.0, 8.0, 6.0, 10.0, 10.0, 10.0));
+                Block.box(5.0, 1.0, 5.0, 11.0, 8.0, 11.0),
+                Block.box(6.0, 8.0, 6.0, 10.0, 10.0, 10.0));
     }
 }

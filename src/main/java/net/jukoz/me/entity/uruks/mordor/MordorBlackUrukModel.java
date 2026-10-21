@@ -24,8 +24,8 @@ public class MordorBlackUrukModel<T extends Mob>
     public void animateModel(T mobEntity, float f, float g, float h) {
         this.rightArmPose = ArmPose.EMPTY;
         this.leftArmPose = ArmPose.EMPTY;
-        ItemStack itemStack = ((LivingEntity)mobEntity).getStackInHand(InteractionHand.MAIN_HAND);
-        if (itemStack.isOf(Items.BOW) && ((Mob)mobEntity).isAttacking()) {
+        ItemStack itemStack = ((LivingEntity)mobEntity).getItemInHand(InteractionHand.MAIN_HAND);
+        if (itemStack.is(Items.BOW) && ((Mob)mobEntity).isAggressive()) {
             if (((Mob)mobEntity).getMainArm() == HumanoidArm.RIGHT) {
                 this.rightArmPose = ArmPose.BOW_AND_ARROW;
             } else {
@@ -43,12 +43,12 @@ public class MordorBlackUrukModel<T extends Mob>
 
         if(state == MordorUrukEntity.State.ATTACKING) {
             // Walk added
-            this.leftArm.pitch = Mth.cos(f * 0.6662f) * 2.0f * g * 0.5f;
-            this.leftArm.yaw = 0.0f;
+            this.leftArm.xRot = Mth.cos(f * 0.6662f) * 2.0f * g * 0.5f;
+            this.leftArm.yRot = 0.0f;
             this.leftArm.roll = 0.0f;
 
-            this.rightArm.pitch = -0.9f + Mth.cos(f * 0.6662f + (float)Math.PI) * 2.0f * g * 0.5f;
-            this.rightArm.yaw = 0.0f;
+            this.rightArm.xRot = -0.9f + Mth.cos(f * 0.6662f + (float)Math.PI) * 2.0f * g * 0.5f;
+            this.rightArm.yRot = 0.0f;
             this.rightArm.roll = 0.0f;
         }
     }

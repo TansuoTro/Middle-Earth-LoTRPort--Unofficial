@@ -19,6 +19,6 @@ public class EntitySpawnMixin {
     private static List<CustomSpawner> ServerLevel(List<CustomSpawner> spawners) {
         List<CustomSpawner> newSpawners = new ArrayList<>(spawners);
         newSpawners.add(new SpawnerNPCs());
-        return ImmutableList.copyOf(newSpawners);
+        return ImmutableList.bind(newSpawners);
     }
 }

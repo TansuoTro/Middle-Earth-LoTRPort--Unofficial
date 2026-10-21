@@ -814,20 +814,20 @@ public class ModelProvider extends FabricModelProvider {
 
         for(Block block : TintableCrossModel.notTintedBlocks) {
             try {
-            if(block != null) blockStateModelGenerator.registerTintableCross(block, BlockModelGenerators.TintType.NOT_TINTED);
+            if(block != null) blockStateModelGenerator.registerTintableCross(block, BlockModelGenerators.TintState.NOT_TINTED);
 
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
         for(Block block : TintableCrossModel.tintedBlocks) {
             try {
-            blockStateModelGenerator.registerTintableCross(block, BlockModelGenerators.TintType.TINTED);
+            blockStateModelGenerator.registerTintableCross(block, BlockModelGenerators.TintState.TINTED);
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
         for(Block block : TintableCrossModel.grassLikeBlocks) {
             try {
-            blockStateModelGenerator.registerTintableCross(block, BlockModelGenerators.TintType.NOT_TINTED);
+            blockStateModelGenerator.registerTintableCross(block, BlockModelGenerators.TintState.NOT_TINTED);
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
@@ -839,13 +839,13 @@ public class ModelProvider extends FabricModelProvider {
 
         for(Block block : SimpleDoubleBlockModel.doubleBlocks){
             try {
-            blockStateModelGenerator.registerDoubleBlock(block, BlockModelGenerators.TintType.NOT_TINTED);
+            blockStateModelGenerator.registerDoubleBlock(block, BlockModelGenerators.TintState.NOT_TINTED);
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
         for(Block block : SimpleDoubleBlockModel.doubleBlocksItems){
             try {
-            registerDoubleBlock(blockStateModelGenerator, block, BlockModelGenerators.TintType.NOT_TINTED);
+            registerDoubleBlock(blockStateModelGenerator, block, BlockModelGenerators.TintState.NOT_TINTED);
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
@@ -927,7 +927,7 @@ public class ModelProvider extends FabricModelProvider {
         for (SimpleFlowerPotModel.FlowerPot flowerPot : SimpleFlowerPotModel.pots) {
             try {
                 if (flowerPot.plant() == null || flowerPot.pottedPlant() == null) { continue; }
-                blockStateModelGenerator.registerFlowerPotPlant(flowerPot.plant(), flowerPot.pottedPlant(), BlockModelGenerators.TintType.NOT_TINTED);
+                blockStateModelGenerator.registerFlowerPotPlant(flowerPot.plant(), flowerPot.pottedPlant(), BlockModelGenerators.TintState.NOT_TINTED);
             } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
@@ -1035,7 +1035,7 @@ public class ModelProvider extends FabricModelProvider {
 
         try {
             blockStateModelGenerator.registerPlantPart(ModNatureBlocks.GLOWWORM_WEBBING, ModNatureBlocks.GLOWWORM_MAIN,
-                    BlockModelGenerators.TintType.NOT_TINTED);
+                    BlockModelGenerators.TintState.NOT_TINTED);
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
 
         try {
@@ -1577,7 +1577,7 @@ public class ModelProvider extends FabricModelProvider {
         ModelTemplates.GENERATED.upload(ModelLocationUtils.getItemModelId(pointedBlock.asItem()),
                 TextureMapping.layer0(pointedBlock.asItem()), blockStateModelGenerator.modelCollector);
 
-        PropertyDispatch.DoubleProperty<Direction, DripstoneThickness> variants =
+        PropertyDispatch.C2<Direction, DripstoneThickness> variants =
                 PropertyDispatch.create(BlockStateProperties.VERTICAL_DIRECTION, BlockStateProperties.THICKNESS);
         for (DripstoneThickness thickness : DripstoneThickness.values()) {
             for (Direction direction : new Direction[]{Direction.UP, Direction.DOWN}) {
@@ -1594,7 +1594,7 @@ public class ModelProvider extends FabricModelProvider {
                 MultiVariantGenerator.create(pointedBlock).coordinate(variants));
     }
 
-    /** 1.20.1 stand-in for 1.21's BlockModelGenerators#registerMultifaceBlock(Model):
+    /** 1.20.1 stand-in for 1.21's BlockModelGenerators#registerMultifaceBlock(ModelTemplate):
      *  emits the vanilla glow_lichen multipart blockstate against the block's own
      *  (hand-written) flat multiface model. */
     public void registerMultifaceBlock(BlockModelGenerators blockStateModelGenerator, Block block) {
@@ -1677,7 +1677,7 @@ public class ModelProvider extends FabricModelProvider {
     }
 
     public final void registerLargeDoor(BlockModelGenerators blockStateModelGenerator, LargeDoorBlock largeDoor, IntegerProperty part) {
-        PropertyDispatch.QuadrupleProperty<Direction, Boolean, DoorHingeSide, Integer> statesMap =
+        PropertyDispatch.C4<Direction, Boolean, DoorHingeSide, Integer> statesMap =
                 PropertyDispatch.create(BlockStateProperties.HORIZONTAL_FACING, BlockStateProperties.OPEN, BlockStateProperties.DOOR_HINGE, part);
         for (int i = 0; i < largeDoor.getDoorWidth() * largeDoor.getDoorHeight(); i++) {
             for (int k = 2; k < 6; k++) {
@@ -1713,7 +1713,7 @@ public class ModelProvider extends FabricModelProvider {
     }
 
     public final void registerThickLargeDoor(BlockModelGenerators blockStateModelGenerator, LargeDoorBlock largeDoor, IntegerProperty part) {
-        PropertyDispatch.QuadrupleProperty<Direction, Boolean, DoorHingeSide, Integer> statesMap =
+        PropertyDispatch.C4<Direction, Boolean, DoorHingeSide, Integer> statesMap =
                 PropertyDispatch.create(BlockStateProperties.HORIZONTAL_FACING, BlockStateProperties.OPEN, BlockStateProperties.DOOR_HINGE, part);
         for (int i = 0; i < largeDoor.getDoorWidth() * largeDoor.getDoorHeight(); i++) {
             for (int k = 2; k < 6; k++) {
@@ -1870,10 +1870,10 @@ public class ModelProvider extends FabricModelProvider {
         blockStateModelGenerator.registerParentedItemModel(block, inventory);
     }
 
-    public final void registerDoubleBlock(BlockModelGenerators blockStateModelGenerator, Block doubleBlock, BlockModelGenerators.TintType tintType) {
+    public final void registerDoubleBlock(BlockModelGenerators blockStateModelGenerator, Block doubleBlock, BlockModelGenerators.TintState tintType) {
         blockStateModelGenerator.registerItemModel(doubleBlock.asItem());
-        ResourceLocation identifier = blockStateModelGenerator.createSubModel(doubleBlock, "_top", tintType.getCrossModel(), TextureMapping::cross);
-        ResourceLocation identifier2 = blockStateModelGenerator.createSubModel(doubleBlock, "_bottom", tintType.getCrossModel(), TextureMapping::cross);
+        ResourceLocation identifier = blockStateModelGenerator.createSubModel(doubleBlock, "_top", tintType.getCross(), TextureMapping::cross);
+        ResourceLocation identifier2 = blockStateModelGenerator.createSubModel(doubleBlock, "_bottom", tintType.getCross(), TextureMapping::cross);
         blockStateModelGenerator.registerDoubleBlock(doubleBlock, identifier, identifier2);
     }
 
@@ -1910,7 +1910,7 @@ public class ModelProvider extends FabricModelProvider {
     }
 
     @Override
-    public void generateItemModels(ItemModelGenerator itemModelGenerator) {
+    public void generateItemModels(ItemModelGenerators itemModelGenerator) {
         try {
             generateItemModelsUnchecked(itemModelGenerator);
         } catch (RuntimeException e) {
@@ -1918,7 +1918,7 @@ public class ModelProvider extends FabricModelProvider {
         }
     }
 
-    private void generateItemModelsUnchecked(ItemModelGenerator itemModelGenerator) {
+    private void generateItemModelsUnchecked(ItemModelGenerators itemModelGenerator) {
         DedupingModelCollector.install(itemModelGenerator);
         // Hot metals have to be registered before the generic loops: the writer rejects a second
         // registration of the same id, and the override-bearing base model has to win.
@@ -1927,7 +1927,7 @@ public class ModelProvider extends FabricModelProvider {
             try {
             if (wall.wall() == null) { continue; }
             ResourceLocation id = Registries.BLOCK.getId(wall.wall());
-            itemModelGenerator.register(wall.wall().asItem(), new Model(Optional.of(id.withPath("block/" + id.getPath() + "_inventory")), Optional.empty()));
+            itemModelGenerator.register(wall.wall().asItem(), new ModelTemplate(Optional.of(id.withPath("block/" + id.getPath() + "_inventory")), Optional.empty()));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
@@ -1935,7 +1935,7 @@ public class ModelProvider extends FabricModelProvider {
             try {
             if (wall.wall() == null) { continue; }
             ResourceLocation id = Registries.BLOCK.getId(wall.wall());
-            itemModelGenerator.register(wall.wall().asItem(), new Model(Optional.of(id.withPath("block/" + id.getPath() + "_inventory")), Optional.empty()));
+            itemModelGenerator.register(wall.wall().asItem(), new ModelTemplate(Optional.of(id.withPath("block/" + id.getPath() + "_inventory")), Optional.empty()));
         } catch (RuntimeException __modelError) { logSkipped(__modelError); }
         }
 
@@ -2011,7 +2011,7 @@ public class ModelProvider extends FabricModelProvider {
                 // own inventory model, otherwise the icon references a model nobody uploaded.
                 ResourceLocation parent = itemIconParent(block, blockId);
                 if (parent != null) {
-                    itemModelGenerator.register(blockItem, new Model(java.util.Optional.of(parent), java.util.Optional.empty()));
+                    itemModelGenerator.register(blockItem, new ModelTemplate(java.util.Optional.of(parent), java.util.Optional.empty()));
                     continue;
                 }
                 // Nothing to parent to: a flat icon over the block's own texture, which for a
@@ -2041,7 +2041,7 @@ public class ModelProvider extends FabricModelProvider {
      * the same effect is done with a {@code custom_model_data} override: MEComponents.set mirrors
      * the temperature into that tag, and the base model switches to the {@code _hot} variant.
      */
-    private void registerHotMetalModels(ItemModelGenerator itemModelGenerator) {
+    private void registerHotMetalModels(ItemModelGenerators itemModelGenerator) {
         for (Item item : HotMetalsModel.ingots) {
             registerHotModel(itemModelGenerator, item, hotIngotTexture(item));
         }
@@ -2063,7 +2063,7 @@ public class ModelProvider extends FabricModelProvider {
         return "ingot_hot";
     }
 
-    private void registerHotModel(ItemModelGenerator itemModelGenerator, Item item, String hotTexture) {
+    private void registerHotModel(ItemModelGenerators itemModelGenerator, Item item, String hotTexture) {
         ResourceLocation base = ModelLocationUtils.getItemModelId(item);
         ResourceLocation hot = base.withSuffixedPath("_hot");
         try {
@@ -2090,7 +2090,7 @@ public class ModelProvider extends FabricModelProvider {
      * 1.21's item-model API; here the overrides have to be written by hand, and each stage needs
      * its own *_pulling_N texture rather than the undrawn one.
      */
-    private static void registerBowModels(ItemModelGenerator itemModelGenerator, Item item) {
+    private static void registerBowModels(ItemModelGenerators itemModelGenerator, Item item) {
         ResourceLocation base = ModelLocationUtils.getItemModelId(item);
         float[] pull = {0.0F, 0.65F, 0.9F};
         JsonArray overrides = new JsonArray();
@@ -2117,7 +2117,7 @@ public class ModelProvider extends FabricModelProvider {
         itemModelGenerator.writer.accept(base, () -> json);
     }
 
-    public final void registerDyeableArmor(ArmorItem armor, ItemModelGenerator itemModelGenerator) {
+    public final void registerDyeableArmor(ArmorItem armor, ItemModelGenerators itemModelGenerator) {
         ResourceLocation identifier = ModelLocationUtils.getItemModelId(armor);
         ResourceLocation identifier2 = TextureMapping.getId(armor);
         ResourceLocation identifier3 = TextureMapping.getSubId(armor, "_overlay");

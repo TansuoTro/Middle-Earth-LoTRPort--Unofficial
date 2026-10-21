@@ -45,7 +45,7 @@ public class InscriptionRecipeProvider extends FabricRecipeProvider {
     }
 
     private Holder<Enchantment> getEnchantment(ResourceKey<Enchantment> key) {
-        return Holder.of(Registries.ENCHANTMENT.get(key.getValue()));
+        return Holder.of(Registries.ENCHANTMENT.get(key.location()));
     }
 
     public InscriptionRecipeProvider(FabricDataOutput output) {

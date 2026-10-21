@@ -22,33 +22,33 @@ public class OrcModel {
         MeshDefinition modelData = HumanoidModel.getModelData(dilation, 0.0f);
         PartDefinition modelPartData = modelData.getRoot();
 
-        PartDefinition rightEar = modelPartData.getChild(PartNames.HEAD).addChild(RIGHT_EAR, CubeListBuilder.create().uv(1, 1).cuboid(0, -0, -1f, 1.0f, 3.0f, 2.0f, dilation),
-                PartPose.of(-5f, -5f, 0.25f,-0.7f, 0, -0.35f));
-        PartDefinition leftEar = modelPartData.getChild(PartNames.HEAD).addChild(LEFT_EAR, CubeListBuilder.create().uv(1, 1).cuboid(0, -0, -1f, 1.0f, 3.0f, 2.0f, dilation),
-                PartPose.of(4f, -5f, 0.25f,-0.7f, 0, 0.35f));
+        PartDefinition rightEar = modelPartData.getChild(PartNames.HEAD).addOrReplaceChild(RIGHT_EAR, CubeListBuilder.create().texOffs(1, 1).addBox(0, -0, -1f, 1.0f, 3.0f, 2.0f, dilation),
+                PartPose.offsetAndRotation(-5f, -5f, 0.25f,-0.7f, 0, -0.35f));
+        PartDefinition leftEar = modelPartData.getChild(PartNames.HEAD).addOrReplaceChild(LEFT_EAR, CubeListBuilder.create().texOffs(1, 1).addBox(0, -0, -1f, 1.0f, 3.0f, 2.0f, dilation),
+                PartPose.offsetAndRotation(4f, -5f, 0.25f,-0.7f, 0, 0.35f));
 
-        PartDefinition leftArm = modelPartData.addChild(PartNames.LEFT_ARM, CubeListBuilder.create()
-                        .uv(32, 48).cuboid(-1.0f, -2.0f, -2.0f, 3.0f, 12.0f, 4.0f, dilation),
-                PartPose.pivot(5.0f, 2.5f, 0.0f));
-        PartDefinition rightArm = modelPartData.addChild(PartNames.RIGHT_ARM, CubeListBuilder.create()
-                        .uv(40, 16).cuboid(-2.5f, -2.0f, -2.0f, 3.0f, 12.0f, 4.0f, dilation),
-                PartPose.pivot(-5.0f, 2.5f, 0.0f));
+        PartDefinition leftArm = modelPartData.addOrReplaceChild(PartNames.LEFT_ARM, CubeListBuilder.create()
+                        .texOffs(32, 48).addBox(-1.0f, -2.0f, -2.0f, 3.0f, 12.0f, 4.0f, dilation),
+                PartPose.offset(5.0f, 2.5f, 0.0f));
+        PartDefinition rightArm = modelPartData.addOrReplaceChild(PartNames.RIGHT_ARM, CubeListBuilder.create()
+                        .texOffs(40, 16).addBox(-2.5f, -2.0f, -2.0f, 3.0f, 12.0f, 4.0f, dilation),
+                PartPose.offset(-5.0f, 2.5f, 0.0f));
 
-        rightArm.addChild(RIGHT_SLEEVE, CubeListBuilder.create()
-                        .uv(40, 32).cuboid(0f, 0f, 0f, 3.0f, 12.0f, 4.0f, dilation.add(0.25f)),
-                PartPose.pivot(-2f, -2f, -2f));
-        leftArm.addChild(LEFT_SLEEVE, CubeListBuilder.create()
-                        .uv(48, 48).cuboid(0f, 0f, 0f, 3.0f, 12.0f, 4.0f, dilation.add(0.25f)),
-                PartPose.pivot(-1f, -2f, -2f));
+        rightArm.addOrReplaceChild(RIGHT_SLEEVE, CubeListBuilder.create()
+                        .texOffs(40, 32).addBox(0f, 0f, 0f, 3.0f, 12.0f, 4.0f, dilation.add(0.25f)),
+                PartPose.offset(-2f, -2f, -2f));
+        leftArm.addOrReplaceChild(LEFT_SLEEVE, CubeListBuilder.create()
+                        .texOffs(48, 48).addBox(0f, 0f, 0f, 3.0f, 12.0f, 4.0f, dilation.add(0.25f)),
+                PartPose.offset(-1f, -2f, -2f));
 
-        modelPartData.getChild(PartNames.BODY).addChild(PartNames.JACKET, CubeListBuilder.create().uv(16, 32).cuboid(-4.0f, 0.0f, -2.0f, 8.0f, 12.0f, 4.0f, dilation.add(0.25f)), PartPose.NONE);
-        modelPartData.getChild(PartNames.LEFT_LEG).addChild(LEFT_PANTS, CubeListBuilder.create().uv(0, 48).cuboid(-2.0f, 0.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation.add(0.25f)),
-                PartPose.pivot(0, 0.0f, 0.0f));
-        modelPartData.getChild(PartNames.RIGHT_LEG).addChild(RIGHT_PANTS, CubeListBuilder.create().uv(0, 32).cuboid(-2.0f, 0.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation.add(0.25f)),
-                PartPose.pivot(0, 0.0f, 0.0f));
+        modelPartData.getChild(PartNames.BODY).addOrReplaceChild(PartNames.JACKET, CubeListBuilder.create().texOffs(16, 32).addBox(-4.0f, 0.0f, -2.0f, 8.0f, 12.0f, 4.0f, dilation.add(0.25f)), PartPose.NONE);
+        modelPartData.getChild(PartNames.LEFT_LEG).addOrReplaceChild(LEFT_PANTS, CubeListBuilder.create().texOffs(0, 48).addBox(-2.0f, 0.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation.add(0.25f)),
+                PartPose.offset(0, 0.0f, 0.0f));
+        modelPartData.getChild(PartNames.RIGHT_LEG).addOrReplaceChild(RIGHT_PANTS, CubeListBuilder.create().texOffs(0, 32).addBox(-2.0f, 0.0f, -2.0f, 4.0f, 12.0f, 4.0f, dilation.add(0.25f)),
+                PartPose.offset(0, 0.0f, 0.0f));
 
-        modelPartData.addChild(PartNames.HAT, CubeListBuilder.create().uv(32, 0).cuboid(-4.0f, -8.0f, -4.0f, 8.0f, 8.0f, 8.0f, dilation.add(0.5f)),
-                PartPose.pivot(0.0f, 0.0f, 0.0f));                // 54
+        modelPartData.addOrReplaceChild(PartNames.HAT, CubeListBuilder.create().texOffs(32, 0).addBox(-4.0f, -8.0f, -4.0f, 8.0f, 8.0f, 8.0f, dilation.add(0.5f)),
+                PartPose.offset(0.0f, 0.0f, 0.0f));                // 54
 
         return LayerDefinition.of(modelData, 64, 64);
     }

@@ -15,21 +15,22 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.LevelAccess;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class DecorativeRodBlock extends RodBlock implements SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public DecorativeRodBlock(Settings settings) {
+    public DecorativeRodBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState((BlockState)((BlockState)this.stateManager.getDefaultState()).with(FACING, Direction.UP).with(WATERLOGGED, false));
+        this.setDefaultState((BlockState)((BlockState)this.stateManager.defaultBlockState()).with(FACING, Direction.UP).with(WATERLOGGED, false));
     }
 
     public BlockState getPlacementState(BlockPlaceContext ctx) {
         FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
         boolean bl = fluidState.getFluid() == Fluids.WATER;
-        return (BlockState)((BlockState)this.getDefaultState().with(FACING, ctx.getSide())).with(WATERLOGGED, bl);
+        return (BlockState)((BlockState)this.defaultBlockState().with(FACING, ctx.getSide())).with(WATERLOGGED, bl);
     }
 
     @Override

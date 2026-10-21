@@ -6,15 +6,16 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class AmphoraBlock extends LootablePotBlock {
 
-    public AmphoraBlock(Settings settings) {
+    public AmphoraBlock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return Block.createCuboidShape(5, 0, 5, 11, 16, 11);
+        return Block.box(5, 0, 5, 11, 16, 11);
     }
 }

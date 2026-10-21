@@ -48,14 +48,14 @@ public class ArtisanRecipe implements Recipe<Inventory> {
     public boolean matches(Inventory inventory, Level world) {
         int i = 0;
         for (int j = 0; j < inventory.size(); ++j) {
-            ItemStack itemStack = inventory.getStack(j);
+            ItemStack itemStack = inventory.getItem(j);
             if (itemStack.isEmpty()) continue;
             ++i;
         }
         if(i != this.inputs.size()) return false;
 
         for (int j = 0; j < inputs.size(); j++) {
-            if(!inputs.get(j).test(inventory.getStack(j))) return false;
+            if(!inputs.get(j).test(inventory.getItem(j))) return false;
         }
         return true;
     }
@@ -126,8 +126,8 @@ public class ArtisanRecipe implements Recipe<Inventory> {
         @Override
         public ArtisanRecipe read(ResourceLocation id, JsonObject json) {
             ItemStack output = ShapedRecipe.outputFromJson(GsonHelper.getObject(json, "output"));
-            JsonArray ingredients = GsonHelper.getArray(json, "ingredients");
-            NonNullList<Ingredient> inputs = NonNullList.ofSize(ingredients.size(), Ingredient.EMPTY);
+            JsonArray ingredients = GsonHelper.getAsJsonArray(json, "ingredients");
+            NonNullList<Ingredient> inputs = NonNullList.withSize(ingredients.size(), Ingredient.EMPTY);
             for (int i = 0; i < ingredients.size(); i++) {
                 Ingredient ingredient = Ingredient.fromJson(ingredients.get(i), true);
                 if (ingredient.isEmpty()) continue;
@@ -143,8 +143,8 @@ public class ArtisanRecipe implements Recipe<Inventory> {
         @Override
         public ArtisanRecipe read(ResourceLocation id, FriendlyByteBuf buf) {
             String category = readNullableString(buf);
-            ItemStack output = buf.readItemStack();
-            NonNullList<Ingredient> inputs = NonNullList.ofSize(buf.readInt(), Ingredient.EMPTY);
+            ItemStack output = buf.readItem();
+            NonNullList<Ingredient> inputs = NonNullList.withSize(buf.readInt(), Ingredient.EMPTY);
             for (int i = 0; i < inputs.size(); i++) {
                 inputs.set(i, Ingredient.fromPacket(buf));
             }
@@ -166,7 +166,7 @@ public class ArtisanRecipe implements Recipe<Inventory> {
         }
 
         private static String readNullableString(FriendlyByteBuf buf) {
-            String value = buf.readString();
+            String value = buf.readUtf();
             return value.isEmpty() ? null : value;
         }
 

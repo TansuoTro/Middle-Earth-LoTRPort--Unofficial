@@ -3,7 +3,7 @@ package net.jukoz.me.entity.npcs;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.EntityGroup;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -124,13 +124,13 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
         @Override
         public void stop() {
             super.stop();
-            NpcEntity.this.setAttacking(false);
+            NpcEntity.this.setAggressive(false);
         }
 
         @Override
         public void start() {
             super.start();
-            NpcEntity.this.setAttacking(true);
+            NpcEntity.this.setAggressive(true);
         }
     };
 
@@ -153,24 +153,24 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
 
     // [IsFighting]
     public void setFighting(boolean state){
-        this.dataTracker.set(IS_FIGHTING, state);
+        this.entityData.set(IS_FIGHTING, state);
     }
     public boolean getFighting(){
-        return this.dataTracker.get(IS_FIGHTING);
+        return this.entityData.get(IS_FIGHTING);
     }
     // [IsBlocking] // TODO
     public void setBlocking(boolean state){
-        //this.dataTracker.set(IS_FIGHTING, state);
+        //this.entityData.set(IS_FIGHTING, state);
     }
     public boolean getBlocking(){
-        return false; //this.dataTracker.get(IS_FIGHTING);
+        return false; //this.entityData.get(IS_FIGHTING);
     }
     // [NpcTextureData]
     public void saveNpcTextureData(NpcTextureData npcTextureData) {
-        this.dataTracker.set(NPC_TEXTURE_DATA, npcTextureData);
+        this.entityData.set(NPC_TEXTURE_DATA, npcTextureData);
     }
     public NpcTextureData retrieveNpcTextureData() {
-        return this.dataTracker.get(NPC_TEXTURE_DATA);
+        return this.entityData.get(NPC_TEXTURE_DATA);
     }
     public boolean hasTextureData(){
         return retrieveNpcTextureData().get(NpcRenderedPart.BODY) != null;
@@ -180,10 +180,10 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
     }
     // [NpcInitializationData]
     public void saveNpcInitializationData(NpcInitializationData npcInitializationData) {
-        this.dataTracker.set(NPC_INITIALIZATION_DATA, npcInitializationData);
+        this.entityData.set(NPC_INITIALIZATION_DATA, npcInitializationData);
     }
     public NpcInitializationData retrieveNpcInitializationData() {
-        return this.dataTracker.get(NPC_INITIALIZATION_DATA);
+        return this.entityData.get(NPC_INITIALIZATION_DATA);
     }
     public void prepare() {
         NpcInitializationData npcInitializationData = retrieveNpcInitializationData();
@@ -193,7 +193,7 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
     }
 
     public void resetInitializationData() {
-        this.dataTracker.set(NPC_INITIALIZATION_DATA, new NpcInitializationData());
+        this.entityData.set(NPC_INITIALIZATION_DATA, new NpcInitializationData());
     }
     // [NpcTypeIdentifier]
     public void prepareNpcIdentifier(ResourceLocation npcTypeIdentifier){
@@ -202,10 +202,10 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
     }
     // [NpcData]
     public void saveNpcData(NpcData npcData) {
-        this.dataTracker.set(NPC_DATA, npcData);
+        this.entityData.set(NPC_DATA, npcData);
     }
     public NpcData retrieveNpcData() {
-        return this.dataTracker.get(NPC_DATA);
+        return this.entityData.get(NPC_DATA);
     }
     // [NpcType]
     public NpcType getNpcType(){
@@ -248,7 +248,7 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
         return EntityAttributesME.addDefaults(Mob.createMobAttributes())
                 .add(Attributes.GENERIC_ATTACK_SPEED, 4.0)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 32.0)
-                .add(Attributes.GENERIC_ATTACK_DAMAGE, 1.0);
+                .add(Attributes.ATTACK_DAMAGE, 1.0);
     }
 
     protected void initGoals() {
@@ -270,18 +270,18 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(NPC_INITIALIZATION_DATA, new NpcInitializationData());
-        this.dataTracker.startTracking(NPC_DATA, new NpcData());
-        this.dataTracker.startTracking(NPC_TEXTURE_DATA, new NpcTextureData());
-        this.dataTracker.startTracking(IS_FIGHTING, false);
-        this.dataTracker.startTracking(CROSSBOW_CHARGING, false);
-        this.dataTracker.startTracking(USING_ITEM, 0);
+        this.entityData.define(NPC_INITIALIZATION_DATA, new NpcInitializationData());
+        this.entityData.define(NPC_DATA, new NpcData());
+        this.entityData.define(NPC_TEXTURE_DATA, new NpcTextureData());
+        this.entityData.define(IS_FIGHTING, false);
+        this.entityData.define(CROSSBOW_CHARGING, false);
+        this.entityData.define(USING_ITEM, 0);
     }
 
     @Override
     public void writeCustomDataToNbt(CompoundTag nbt) {
         super.writeCustomDataToNbt(nbt);
-        WriteView view = new WriteView(nbt, this.getWorld().getRegistryManager());
+        WriteView view = new WriteView(nbt, this.level().registryAccess());
         view.put(KeyStrings.DATA, NpcData.CODEC, this.retrieveNpcData());
         view.put(KeyStrings.INITIALIZATION_DATA, NpcInitializationData.CODEC, this.retrieveNpcInitializationData());
         view.put(KeyStrings.TEXTURE_DATA, NpcTextureData.CODEC, this.retrieveNpcTextureData());
@@ -291,7 +291,7 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
     @Override
     public void readCustomDataFromNbt(CompoundTag nbt) {
         super.readCustomDataFromNbt(nbt);
-        ReadView view = new ReadView(nbt, this.getWorld().getRegistryManager());
+        ReadView view = new ReadView(nbt, this.level().registryAccess());
         NpcData foundNpcData = view.read(KeyStrings.DATA, NpcData.CODEC).orElse(new NpcData());
         NpcInitializationData foundNpcInitializationData = view.read(KeyStrings.INITIALIZATION_DATA, NpcInitializationData.CODEC).orElse(new NpcInitializationData());
         NpcTextureData foundNpcTextureData = view.read(KeyStrings.TEXTURE_DATA, NpcTextureData.CODEC).orElse(new NpcTextureData());
@@ -305,10 +305,10 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
             isFighting = false;
         }
 
-        this.dataTracker.set(NPC_DATA, foundNpcData);
-        this.dataTracker.set(NPC_INITIALIZATION_DATA, foundNpcInitializationData);
-        this.dataTracker.set(NPC_TEXTURE_DATA, foundNpcTextureData);
-        this.dataTracker.set(IS_FIGHTING, isFighting);
+        this.entityData.set(NPC_DATA, foundNpcData);
+        this.entityData.set(NPC_INITIALIZATION_DATA, foundNpcInitializationData);
+        this.entityData.set(NPC_TEXTURE_DATA, foundNpcTextureData);
+        this.entityData.set(IS_FIGHTING, isFighting);
 
         foundNpcInitializationData.tryToInitialize(this);
 
@@ -327,18 +327,18 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
         return NpcSpawnEggHelper.getSpawnEgg(getWorld(), getNpcType().getId());
     }
     public void updateAttackType() {
-        if (this.getWorld() != null && !this.getWorld().isClient) {
+        if (this.level() != null && !this.level().isClientSide) {
             this.goalSelector.remove(this.meleeAttackGoal);
             this.goalSelector.remove(this.bowAttackGoal);
             ItemStack itemStack = this.getMainHandStack();
-            if (itemStack.isOf(Items.BOW) || itemStack.isIn(ItemTagsME.BOW)) {
+            if (itemStack.is(Items.BOW) || itemStack.is(ItemTagsME.BOW)) {
                 int i = 30;
-                if (this.getWorld().getDifficulty() != Difficulty.HARD) {
+                if (this.level().getDifficulty() != Difficulty.HARD) {
                     i = 20;
                 }
                 this.bowAttackGoal.setAttackInterval(i);
                 this.goalSelector.add(4, this.bowAttackGoal);
-            } if (itemStack.isOf(Items.CROSSBOW) || itemStack.isIn(ItemTagsME.CROSSBOW)) {
+            } if (itemStack.is(Items.CROSSBOW) || itemStack.is(ItemTagsME.CROSSBOW)) {
                 this.goalSelector.add(4, this.crossBowAttackGoal);
             } else {
                 this.goalSelector.add(4, this.meleeAttackGoal);
@@ -347,7 +347,7 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
     }
 
     public void updateTargetGoals() {
-        //if (this.getWorld() != null && !this.getWorld().isClient) {
+        //if (this.level() != null && !this.level().isClientSide) {
         //    if(getFaction().getDisposition() == DispositionType.EVIL) {
         //        this.targetSelector.add(10, new NearestAttackableTargetGoal<>(this, BroadhoofGoatEntity.class, true));
         //        this.targetSelector.add(10, new NearestAttackableTargetGoal<>(this, GreatHornEntity.class, true));
@@ -381,7 +381,7 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
         this.prepare();
 
         Level world = getWorld();
-        if(world.isClient)
+        if(world.isClientSide)
             return;
 
         if(world instanceof ServerLevel serverWorld){
@@ -393,7 +393,7 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
 
     @Override
     public boolean isInvulnerableTo(DamageSource source) {
-        if (source.isOf(DamageTypes.IN_WALL) && this.hasVehicle()) {
+        if (source.is(DamageTypes.IN_WALL) && this.isPassenger()) {
             return true;
         }
         return super.isInvulnerableTo(source);
@@ -415,14 +415,14 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
         profiler.pop();*/
         super.mobTick();
 
-        if(hasVehicle()){
+        if(isPassenger()){
             setYaw(getVehicle().getYaw());
             setPitch(getVehicle().getPitch());
         }
     }
 
     @Override
-    protected void updatePassengerPosition(Entity passenger, Entity.PositionUpdater positionUpdater) {
+    protected void updatePassengerPosition(Entity passenger, Entity.MoveFunction positionUpdater) {
         super.updatePassengerPosition(passenger, positionUpdater);
 
         Vec3 offset = new Vec3(
@@ -443,7 +443,7 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
     public boolean isUsingItem() {
         boolean value = super.isUsingItem();
         if(!value) {
-            return this.dataTracker.get(USING_ITEM) > 0;
+            return this.entityData.get(USING_ITEM) > 0;
         }
         return value;
     }
@@ -452,10 +452,10 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
         setLivingFlag(mask, value);
 
         if(value) {
-            int i = this.dataTracker.get(USING_ITEM) + 1;
-            this.dataTracker.set(USING_ITEM, i);
+            int i = this.entityData.get(USING_ITEM) + 1;
+            this.entityData.set(USING_ITEM, i);
         } else {
-            this.dataTracker.set(USING_ITEM, 0);
+            this.entityData.set(USING_ITEM, 0);
         }
     }
 
@@ -471,7 +471,7 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
     }
 
     public float getFightingMovementSpeed(){
-        double currentSpeed = this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED);
+        double currentSpeed = this.getAttributeValue(Attributes.MOVEMENT_SPEED);
         return (float) (currentSpeed);
     }
 
@@ -479,7 +479,7 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
         boolean isFighting = getFighting();
 
         this.setSprinting(isFighting);
-        if(this.hasVehicle() && getVehicle() instanceof AbstractHorse abstractHorseEntity){
+        if(this.isPassenger() && getVehicle() instanceof AbstractHorse abstractHorseEntity){
             abstractHorseEntity.setSprinting(isFighting);
         }
         return isFighting;
@@ -489,7 +489,7 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
     public void tickMovement() {
         super.tickMovement();
 
-        if(!this.getWorld().isClient) {
+        if(!this.level().isClientSide) {
 
         } else {
             setupAnimationStates();
@@ -504,7 +504,7 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
             this.idleState.startIfNotRunning(this.age);
         }
 
-        int bowPullProgress = this.getItemUseTime();
+        int bowPullProgress = this.getTicksUsingItem();
         if(bowPullProgress > 0) {
             this.aimingState.startIfNotRunning(this.age);
         }
@@ -513,7 +513,7 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
 
     @Override
     protected boolean couldAcceptPassenger() {
-        return !this.hasVehicle();
+        return !this.isPassenger();
     }
 
     @Override
@@ -524,10 +524,10 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
     @Override
     public void onDeath(DamageSource source) {
         if(getVehicle() != null && getVehicle() instanceof LivingEntity vehicleEntity && vehicleEntity.getControllingPassenger() == this){
-            vehicleEntity.removeAllPassengers();
+            vehicleEntity.ejectPassengers();
             if(vehicleEntity instanceof AbstractHorse abstractHorseEntity){
                 abstractHorseEntity.setTame(false);
-                abstractHorseEntity.resetLoveTicks();
+                abstractHorseEntity.resetLove();
                 abstractHorseEntity.setSprinting(false);
                 abstractHorseEntity.setOwnerUuid(null);
             }
@@ -579,15 +579,15 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
         LootData lootData = retrieveLootData();
         if(lootData == null)
             return 1;
-        return lootData.getExperience((ServerLevel) this.getWorld());
+        return lootData.getExperience((ServerLevel) this.level());
     }
 
     @Override
     protected void dropLoot(DamageSource damageSource, boolean causedByPlayer) {
-        if (!(this.getWorld() instanceof ServerLevel serverWorld) || getNpcType() == null)
+        if (!(this.level() instanceof ServerLevel serverWorld) || getNpcType() == null)
             return;
 
-        LootTable lootTable = serverWorld.getServer().getLootManager().getLootTable(getNpcType().getId().withPrefixedPath("entities/"));
+        LootTable lootTable = serverWorld.getServer().getLootData().getLootTable(getNpcType().getId().withPrefixedPath("entities/"));
 
         if (lootTable != null) {
             LootParams.Builder builder = (new LootParams.Builder(serverWorld)).add(LootContextParams.THIS_ENTITY, this)
@@ -650,20 +650,20 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
 
     @Override
     public boolean tryAttack(Entity target) {
-        this.getWorld().sendEntityStatus(this, EntityEvent.PLAY_ATTACK_SOUND);
+        this.level().sendEntityStatus(this, EntityEvent.PLAY_ATTACK_SOUND);
         boolean targetDamaged;
         float damage = 1.0f;
         try{
-            damage = (float) this.getAttributeValue(Attributes.GENERIC_ATTACK_DAMAGE);
+            damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
         } catch (Exception ignored){}
         ItemStack itemStack = this.getMainHandStack();
-        DamageSource damageSource = this.getDamageSources().mobAttack(this);
+        DamageSource damageSource = this.damageSources().mobAttack(this);
 
         MobType group = target instanceof LivingEntity livingTarget ? livingTarget.getGroup() : MobType.DEFAULT;
         float enchantmentDamage = EnchantmentHelper.getAttackDamage(itemStack, group);
         float finalDamage = damage + enchantmentDamage;
 
-        if(hasVehicle() && getVehicle() instanceof AbstractBeastEntity mountEntity){
+        if(isPassenger() && getVehicle() instanceof AbstractBeastEntity mountEntity){
             mountEntity.tryAttack(target);
         }
 
@@ -690,7 +690,7 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
     @Override
     public void tickRiding() {
         super.tickRiding();
-        Entity entity = this.getControllingVehicle();
+        Entity entity = this.getControlledVehicle();
         if (entity instanceof PathfinderMob pathAwareEntity) {
             this.bodyYaw = pathAwareEntity.bodyYaw;
         }
@@ -701,7 +701,7 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
         if(this.getNpcTypeIdentifier() == null) {
             return Component.translatable("npc_type."+ MiddleEarth.MOD_ID +".npc");
         }
-        return Component.translatable(this.getNpcTypeIdentifier().toTranslationKey("npc_type"));
+        return Component.translatable(this.getNpcTypeIdentifier().toLanguageKey("npc_type"));
     }
 
     @Override
@@ -753,38 +753,38 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
         CombatArchetypeRuntimeData runtimeData = getCombatRuntimeData();
         if(runtimeData == null)
             return false;
-        return runtimeData.getCombatArchetypeData().isInOptimalRange(this, entity.getBlockPos());
+        return runtimeData.getCombatArchetypeData().isInOptimalRange(this, entity.blockPosition());
     }*/
 
     protected AbstractArrow createArrowProjectile(ItemStack arrow, float damageModifier, @Nullable ItemStack shotFrom) {
-        return ProjectileUtil.createArrowProjectile(this, arrow, damageModifier);
+        return ProjectileUtil.getMobArrow(this, arrow, damageModifier);
     }
 
     public boolean isAiming() {
-        int i = this.getItemUseTime();
+        int i = this.getTicksUsingItem();
         return i > 0;
     }
 
     public void aim() {
-        var currentItem = getActiveItem();
+        var currentItem = getUseItem();
         if(currentItem.isEmpty()){
-            clearActiveItem();
+            stopUsingItem();
             setCurrentHand(InteractionHand.MAIN_HAND);
         }
     }
 
     public void stopAiming() {
-        var currentItem = getActiveItem();
+        var currentItem = getUseItem();
         if(currentItem.isEmpty()){
-            this.clearActiveItem();
+            this.stopUsingItem();
             return;
         }
-        this.clearActiveItem();
+        this.stopUsingItem();
     }
 
     public boolean isReadyToShoot() {
         return getMainHandStack() != null;
-        //int i = this.getItemUseTime();
+        //int i = this.getTicksUsingItem();
         //if (i >= 20) {
         //    return true;
         //}
@@ -813,7 +813,7 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
         // Reduce the vanilla arc compensation for larger entities and faster arrows.
         double arcCompensation = horizontalDistance * (0.2F / (scale * powerModifier));
 
-        if (this.getWorld() instanceof ServerLevel serverWorld) {
+        if (this.level() instanceof ServerLevel serverWorld) {
             projectile.setVelocity(
                     distanceX,
                     distanceY + arcCompensation,
@@ -849,9 +849,9 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
 
     public void shootAt(LivingEntity livingEntity) {
         try{
-            this.shootAt(livingEntity, BowItem.getPullProgress(getItemUseTime()), 2f);
+            this.shootAt(livingEntity, BowItem.getPullProgress(getTicksUsingItem()), 2f);
         } catch (IllegalArgumentException e){
-            this.shootAt(livingEntity, CustomLongbowWeaponItem.getPullProgressLongbow(getItemUseTime()), 3f);
+            this.shootAt(livingEntity, CustomLongbowWeaponItem.getPullProgressLongbow(getTicksUsingItem()), 3f);
         }
     }
     public void shootCrossbowAt(LivingEntity target) {
@@ -859,17 +859,17 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
     }
 
     public boolean isCharging() {
-        return this.dataTracker.get(CROSSBOW_CHARGING);
+        return this.entityData.get(CROSSBOW_CHARGING);
     }
 
     @Override
     public void setCharging(boolean charging) {
-        this.dataTracker.set(CROSSBOW_CHARGING, charging);
+        this.entityData.set(CROSSBOW_CHARGING, charging);
     }
 
     @Override
     public void postShoot() {
-        this.dataTracker.set(CROSSBOW_CHARGING, false);
+        this.entityData.set(CROSSBOW_CHARGING, false);
     }
 
     @Override
@@ -884,7 +884,7 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
     }
 
     private boolean isHostileTowardPlayer(Player player) {
-        if(player.getWorld().isClient || !player.canTakeDamage())
+        if(player.level().isClientSide || !player.canBeSeenAsEnemy())
             return false;
         PlayerData playerData = StateSaverAndLoader.getPlayerState(player);
         if(playerData == null || playerData.getFaction() == null)
@@ -901,7 +901,7 @@ public class NpcEntity extends PathfinderMob implements CrossbowAttackMob {
         if(other instanceof SnailEntity || other instanceof Monster || other instanceof TrollEntity || other instanceof Pouncer)
             return true;
 
-        if(!other.hasPassengers())
+        if(!other.isVehicle())
             return false;
 
         if(other.getControllingPassenger() instanceof NpcEntity npc && isHostileToward(npc)) {

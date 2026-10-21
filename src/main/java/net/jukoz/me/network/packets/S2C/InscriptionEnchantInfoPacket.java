@@ -48,7 +48,7 @@ public class InscriptionEnchantInfoPacket extends ServerToClientPacket<Inscripti
     }
 
     public InscriptionEnchantInfoPacket(FriendlyByteBuf buf) {
-        this(buf.readString(), buf.readInt(), buf.readInt(), buf.readByteArray());
+        this(buf.readUtf(), buf.readInt(), buf.readInt(), buf.readByteArray());
     }
 
     @Override

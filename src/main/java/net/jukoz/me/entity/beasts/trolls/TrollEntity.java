@@ -69,12 +69,12 @@ public class TrollEntity extends BeastEntity {
 
     public static AttributeSupplier.Builder setAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.35f)
-                .add(Attributes.GENERIC_MAX_HEALTH, 120.0)
-                .add(Attributes.GENERIC_KNOCKBACK_RESISTANCE, 0.6)
+                .add(Attributes.MOVEMENT_SPEED, 0.35f)
+                .add(Attributes.MAX_HEALTH, 120.0)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.6)
                 .add(Attributes.GENERIC_ATTACK_SPEED, 0.9)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 28.0)
-                .add(Attributes.GENERIC_ATTACK_DAMAGE, 10.0)
+                .add(Attributes.ATTACK_DAMAGE, 10.0)
                 .add(Attributes.HORSE_JUMP_STRENGTH, 0.0);
     }
 
@@ -101,7 +101,7 @@ public class TrollEntity extends BeastEntity {
 
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(THROWING, false);
+        this.entityData.define(THROWING, false);
     }
 
     @Override
@@ -123,7 +123,7 @@ public class TrollEntity extends BeastEntity {
             --this.throwingAnimationTimeout;
         }
         if(isThrowing()) {
-            this.setMovementSpeed(0);
+            this.setSpeed(0);
         }
 
         if(!this.isThrowing()) {
@@ -147,7 +147,7 @@ public class TrollEntity extends BeastEntity {
         }
 
         if(throwCooldown == 0 && this.getTarget() != null && !isCharging()) {
-            if(this.squaredDistanceTo(this.getTarget()) >= 25 && !this.hasPassengers() && canThrow()) {
+            if(this.distanceTo(this.getTarget()) >= 25 && !this.isVehicle() && canThrow()) {
                 this.setThrowing(true);
                 throwCooldown = 200;
             }
@@ -162,19 +162,19 @@ public class TrollEntity extends BeastEntity {
             --this.throwCooldown;
         }
 
-        if (!this.getWorld().isClient) {
+        if (!this.level().isClientSide) {
             if(this.bondingTimeout > 0) {
                 this.bondingTimeout--;
             }
         }
 
-        if (this.getWorld().isClient) {
+        if (this.level().isClientSide) {
             setupAnimationStates();
         }
     }
 
     public boolean isCommandItem(ItemStack stack) {
-        return stack.isIn(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "bones")));
+        return stack.is(TagKey.create(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "bones")));
     }
 
     @Override
@@ -184,7 +184,7 @@ public class TrollEntity extends BeastEntity {
         if (this.hasChest()) {
             ListTag nbtList = new ListTag();
             for(int i = 2; i < this.items.size(); ++i) {
-                ItemStack itemStack = this.items.getStack(i);
+                ItemStack itemStack = this.items.getItem(i);
                 if (!itemStack.isEmpty()) {
                     CompoundTag nbtCompound = new CompoundTag();
                     nbtCompound.putByte("Slot", (byte)i);
@@ -194,8 +194,8 @@ public class TrollEntity extends BeastEntity {
             }
             nbt.put("Items", nbtList);
         }
-        if (!this.items.getStack(1).isEmpty()) {
-            nbt.put("ArmorItem", this.items.getStack(1).writeNbt(new CompoundTag()));
+        if (!this.items.getItem(1).isEmpty()) {
+            nbt.put("ArmorItem", this.items.getItem(1).writeNbt(new CompoundTag()));
         }
     }
 
@@ -203,7 +203,7 @@ public class TrollEntity extends BeastEntity {
     public void readCustomDataFromNbt(CompoundTag nbt) {
         super.readCustomDataFromNbt(nbt);
         this.setHasChest(nbt.getBoolean("ChestedTroll"));
-        this.onChestedStatusChanged();
+        this.createInventory();
         if (this.hasChest()) {
             ListTag nbtList = nbt.getList("Items", 10);
 
@@ -224,7 +224,7 @@ public class TrollEntity extends BeastEntity {
 
         if (nbt.contains("SaddleItem", 10)) {
             ItemStack itemStack = ItemStack.fromNbt(nbt.getCompound("SaddleItem"));
-            if (itemStack.isOf(Items.SADDLE)) {
+            if (itemStack.is(Items.SADDLE)) {
                 this.items.setStack(0, itemStack);
             }
         }
@@ -237,11 +237,11 @@ public class TrollEntity extends BeastEntity {
     }
 
     public void setThrowing(boolean throwing) {
-        this.dataTracker.set(THROWING, throwing);
+        this.entityData.set(THROWING, throwing);
     }
 
     public boolean isThrowing() {
-        return this.dataTracker.get(THROWING);
+        return this.entityData.get(THROWING);
     }
 
     @Override
@@ -270,12 +270,12 @@ public class TrollEntity extends BeastEntity {
                         this.setTarget(null);
                         CriteriaTriggers.TAME_ANIMAL.trigger((ServerPlayer)player, this);
                     }
-                    this.getWorld().sendEntityStatus(this, EntityEvent.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
+                    this.level().sendEntityStatus(this, EntityEvent.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
 
                     this.chargeTimeout = 0;
                 }
             }
-            player.getStackInHand(player.getActiveHand()).decrement(1);
+            player.getItemInHand(player.getUsedItemHand()).decrement(1);
             this.bondingTimeout = 40;
         }
 
@@ -288,29 +288,29 @@ public class TrollEntity extends BeastEntity {
 
     public void throwAttack() {
         Entity target = this.getTarget();
-        if(target != null && !this.getWorld().isClient) {
+        if(target != null && !this.level().isClientSide) {
             this.setThrowing(false);
 
             Vec3 rotationVec = this.getRotationVec(1.0f);
-            BoulderEntity boulder = new BoulderEntity(ModEntities.BOULDER, this, this.getWorld());
+            BoulderEntity boulder = new BoulderEntity(ModEntities.BOULDER, this, this.level());
             double x = target.getX() - this.getX();
             double y = target.getBodyY(0.3333333333333333) - boulder.getY();
             double z = target.getZ() - this.getZ();
             double c = Math.sqrt(x * x + z * z);
 
             boulder.setPosition(this.getX() + rotationVec.x * 2.0f, this.getBodyY(0.75f), boulder.getZ() + rotationVec.z * 2.0f);
-            boulder.setVelocity(x * 0.8d, y + c * 0.3d , z * 0.8d, 1.0f, 8 - this.getWorld().getDifficulty().getId() * 4);
+            boulder.setVelocity(x * 0.8d, y + c * 0.3d , z * 0.8d, 1.0f, 8 - this.level().getDifficulty().getId() * 4);
             if(boulder != null) {
-                this.getWorld().spawnEntity(boulder);
+                this.level().spawnEntity(boulder);
             }
         }
     }
 
     @Override
     public void chargeAttack() {
-        List<Entity> entities = this.getWorld().getOtherEntities(this, this.getBoundingBox().expand(0.2f, 0.0, 0.2f));
+        List<Entity> entities = this.level().getEntities(this, this.getBoundingBox().expand(0.2f, 0.0, 0.2f));
 
-        if(!this.isTame() && !this.getWorld().isClient) {
+        if(!this.isTame() && !this.level().isClientSide) {
             if(targetDir == Vec3.ZERO && this.getTarget() != null) {
                 targetDir = new Vec3( this.getTarget().getBlockPos().getX() - this.getBlockPos().getX(),
                         this.getTarget().getBlockPos().getY() - this.getBlockPos().getY(),
@@ -319,16 +319,16 @@ public class TrollEntity extends BeastEntity {
             this.setYaw((float) Math.toDegrees(Math.atan2(-targetDir.x, targetDir.z)));
             this.setVelocity(targetDir.multiply(1,0,1).normalize().multiply(1.0d - ((double)(this.chargeTimeout - (maxChargeCooldown() - chargeDuration())) / chargeDuration())).add(0, this.getVelocity().y, 0));
         }
-        else if (this.getWorld().isClient) {
+        else if (this.level().isClientSide) {
             this.setVelocity(this.getRotationVector().multiply(1,0,1).normalize().multiply(1.0d - ((double)(this.chargeTimeout - (maxChargeCooldown() - chargeDuration())) / chargeDuration())).add(0, this.getVelocity().y, 0));
         }
 
         for(Entity entity : entities) {
-            if(entity.getUuid() != this.getOwnerUuid() && entity != this && !this.getPassengerList().contains(entity)) {
-                entity.damage(entity.getDamageSources().mobAttack(this), 16.0f);
+            if(entity.getUuid() != this.getOwnerUuid() && entity != this && !this.getPassengers().contains(entity)) {
+                entity.damage(entity.damageSources().mobAttack(this), 16.0f);
             }
         }
-        this.getWorld().addParticle(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+        this.level().addParticle(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
         this.chargeAnimationState.startIfNotRunning(this.age);
     }
 }

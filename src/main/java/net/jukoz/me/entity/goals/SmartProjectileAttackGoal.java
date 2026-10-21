@@ -87,8 +87,8 @@ public class SmartProjectileAttackGoal extends Goal {
 
 	@Override
 	public void tick() {
-		double d = this.mob.squaredDistanceTo(this.target.getX(), this.target.getY(), this.target.getZ());
-		boolean bl = this.mob.getVisibilityCache().canSee(this.target);
+		double d = this.mob.distanceTo(this.target.getX(), this.target.getY(), this.target.getZ());
+		boolean bl = this.mob.getSensing().canSee(this.target);
 		if (bl) {
 			this.seenTargetTicks++;
 		} else {

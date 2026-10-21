@@ -1,6 +1,6 @@
 package net.jukoz.me.block.special.toggeable_lights;
 
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
@@ -17,18 +17,19 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
 import org.jetbrains.annotations.Nullable;
 import com.mojang.math.Axis;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class WallLeadLanternBlock extends DwarvenLanternBlock {
     private static final EnumProperty<Direction> FACING;
 
-    public WallLeadLanternBlock(Settings settings) {
+    public WallLeadLanternBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(this.getDefaultState().with(FACING, Direction.EAST));
+        this.setDefaultState(this.defaultBlockState().with(FACING, Direction.EAST));
     }
 
     @Override
@@ -39,7 +40,7 @@ public class WallLeadLanternBlock extends DwarvenLanternBlock {
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+        return state.setValue(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override
@@ -62,16 +63,16 @@ public class WallLeadLanternBlock extends DwarvenLanternBlock {
     @Override
     public BlockState getPlacementState(BlockPlaceContext ctx) {
         FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
-        Direction[] var3 = ctx.getPlacementDirections();
+        Direction[] var3 = ctx.getNearestLookingDirections();
         int var4 = var3.length;
 
         for(int var5 = 0; var5 < var4; ++var5) {
             Direction direction = var3[var5];
-            BlockState blockState = this.getDefaultState()
+            BlockState blockState = this.defaultBlockState()
                     .with(HANGING, false)
                     .with(FACING, direction.getOpposite());
             if (blockState.canPlaceAt(ctx.getWorld(), ctx.getBlockPos())) {
-                return blockState.with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
+                return blockState.setValue(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
             }
         }
 
@@ -80,7 +81,7 @@ public class WallLeadLanternBlock extends DwarvenLanternBlock {
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return Block.createCuboidShape(3, 0, 3, 13, 14, 13);
+        return Block.box(3, 0, 3, 13, 14, 13);
     }
 
     @Override
@@ -95,7 +96,7 @@ public class WallLeadLanternBlock extends DwarvenLanternBlock {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
 
-        return attachedDirection(state).getOpposite() == direction && !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+        return attachedDirection(state).getOpposite() == direction && !state.canPlaceAt(world, pos) ? Blocks.AIR.defaultBlockState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 
     }
 

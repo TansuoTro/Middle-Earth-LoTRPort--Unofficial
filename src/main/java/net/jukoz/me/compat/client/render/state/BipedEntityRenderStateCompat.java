@@ -2,7 +2,7 @@ package net.jukoz.me.compat.client.render.state;
 
 import java.util.UUID;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.world.entity.EntityPose;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;

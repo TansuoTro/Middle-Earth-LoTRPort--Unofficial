@@ -20,7 +20,7 @@ public class VariantSaplingBlock extends SaplingBlock {
     @Override
     public void generate(ServerLevel world, BlockPos pos, BlockState state, RandomSource random) {
         if (state.get(STAGE) == 0) {
-            world.setBlockState(pos, (BlockState)state.cycle(STAGE), Block.NO_REDRAW);
+            world.setBlock(pos, (BlockState)state.cycle(STAGE), Block.NO_REDRAW);
         } else {
             AbstractTreeGrower saplingGenerator = trees.get(random.nextInt(trees.size()));
             saplingGenerator.generate(world, world.getChunkManager().getChunkGenerator(), pos, state, random);

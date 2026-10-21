@@ -12,8 +12,8 @@ public class NpcDoorInteractGoal extends OpenDoorGoal {
 
     @Override
     protected void setDoorOpen(boolean open) {
-        BlockState blockState = this.mob.getWorld().getBlockState(this.doorPos);
-        if(blockState.isOf(ModBlocks.TREATED_STEEL_DOOR))
+        BlockState blockState = this.mob.level().getBlockState(this.doorPos);
+        if(blockState.is(ModBlocks.TREATED_STEEL_DOOR))
             return;
         super.setDoorOpen(open);
     }

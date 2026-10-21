@@ -6,15 +6,16 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class FatPotBlock extends LootablePotBlock {
 
-    public FatPotBlock(Settings settings) {
+    public FatPotBlock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return Block.createCuboidShape(1.5, 0, 1.5, 14.5, 12, 14.5);
+        return Block.box(1.5, 0, 1.5, 14.5, 12, 14.5);
     }
 }

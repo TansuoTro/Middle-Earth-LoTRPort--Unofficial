@@ -1,6 +1,6 @@
 package net.jukoz.me.item.utils;
 
-import net.minecraft.world.item.armortrim.ArmorTrimPattern;
+import net.minecraft.world.item.armortrim.TrimPattern;
 import net.jukoz.me.MiddleEarth;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -20,11 +20,11 @@ public class SmithingTrimPatternsME {
     }
 
     public static void register(BootstapContext<TrimPattern> registry, ResourceKey<TrimPattern> key) {
-        TrimPattern armorTrimPattern = new TrimPattern(key.getValue(), net.minecraft.core.registries.Registries.ITEM.getEntry(Items.IRON_INGOT), Component.translatable(Util.createTranslationKey("trim_pattern", key.getValue())));
+        TrimPattern armorTrimPattern = new TrimPattern(key.location(), net.minecraft.core.registries.BuiltInRegistries.ITEM.getEntry(Items.IRON_INGOT), Component.translatable(Util.createTranslationKey("trim_pattern", key.location())));
         registry.register(key, armorTrimPattern);
     }
 
     private static ResourceKey<TrimPattern> of(String id) {
-        return ResourceKey.of(Registries.TRIM_PATTERN, new ResourceLocation(MiddleEarth.MOD_ID, id));
+        return ResourceKey.create(BuiltInRegistries.TRIM_PATTERN, new ResourceLocation(MiddleEarth.MOD_ID, id));
     }
 }

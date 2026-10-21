@@ -18,14 +18,14 @@ public class PebbleItem extends Item{
     private static final float BASE_STRENGTH = 0.6f;
     private static final float CHARGE_STRENGTH = 0.9f;
     private static final int STRENGTH_CHARGE_TIME = 20; // 1s charge for full strength
-    public PebbleItem(Item.Settings settings) {
+    public PebbleItem(Item.Properties settings) {
         super(settings);
     }
 
     public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
-        ItemStack itemStack = user.getStackInHand(hand);
+        ItemStack itemStack = user.getItemInHand(hand);
         user.setCurrentHand(hand);
-        return InteractionResultHolder.success(itemStack, world.isClient());
+        return InteractionResultHolder.success(itemStack, world.isClientSide());
     }
 
     @Override
@@ -51,7 +51,7 @@ public class PebbleItem extends Item{
         if(i > STRENGTH_CHARGE_TIME) i = STRENGTH_CHARGE_TIME;
         float percentage = (float) i / STRENGTH_CHARGE_TIME;
 
-        if (!world.isClient) {
+        if (!world.isClientSide) {
             PebbleEntity pebbleEntity = new PebbleEntity(world, user, DAMAGE * percentage);
             pebbleEntity.setVelocity(playerEntity, playerEntity.getPitch(), playerEntity.getYaw(), 0.0f, BASE_STRENGTH + (CHARGE_STRENGTH * percentage), 1.0f);
 

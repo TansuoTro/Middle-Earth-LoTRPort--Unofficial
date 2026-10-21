@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
@@ -16,7 +16,7 @@ public class CaveTrollRenderer extends MobRenderer<CaveTrollEntity, CaveTrollMod
     private static final String PATH = "textures/entities/trolls/cave/";
 
     public CaveTrollRenderer(EntityRendererProvider.Context ctx) {
-        super(ctx, new CaveTrollModel(ctx.getPart(ModEntityModelLayers.CAVE_TROLL)), 1.1f);
+        super(ctx, new CaveTrollModel(ctx.bakeLayer(ModEntityModelLayers.CAVE_TROLL)), 1.1f);
     }
 
     @Override

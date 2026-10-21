@@ -1,7 +1,7 @@
 package net.jukoz.me.block.utils.setBuilders;
 
 import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.block.NoteBlockInstrument;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.SoundType;
 import net.jukoz.me.block.utils.BlockRecordTypes;

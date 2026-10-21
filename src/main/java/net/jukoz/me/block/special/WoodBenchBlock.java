@@ -6,22 +6,23 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class WoodBenchBlock extends SeatBlock implements SimpleWaterloggedBlock {
 
-    public WoodBenchBlock(Settings settings) {
+    public WoodBenchBlock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return switch(state.get(FACING)) {
-            case WEST, EAST -> Block.createCuboidShape(2, 0, 0, 14, 9, 16);
-            case SOUTH, NORTH -> Block.createCuboidShape(0, 0, 2, 16, 9, 14);
-            default -> Shapes.cuboid(1,1,1,1,1,1);
+            case WEST, EAST -> Block.box(2, 0, 0, 14, 9, 16);
+            case SOUTH, NORTH -> Block.box(0, 0, 2, 16, 9, 14);
+            default -> Shapes.addBox(1,1,1,1,1,1);
         };
     }
 }

@@ -11,7 +11,7 @@ import net.jukoz.me.item.ModEquipmentItems;
 import net.jukoz.me.item.ModWeaponItems;
 import net.jukoz.me.sound.ModSounds;
 import net.jukoz.me.utils.ParticleManager;
-import net.minecraft.world.level.pathfinder.PathNodeType;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageSource;
@@ -67,11 +67,11 @@ public class NazgulEntity extends Monster {
 
     public static AttributeSupplier.Builder setAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.3f)
-                .add(Attributes.GENERIC_MAX_HEALTH, 30.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.3f)
+                .add(Attributes.MAX_HEALTH, 30.0)
                 .add(Attributes.GENERIC_ATTACK_SPEED, 2.0)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 40.0)
-                .add(Attributes.GENERIC_ATTACK_DAMAGE, 3.5);
+                .add(Attributes.ATTACK_DAMAGE, 3.5);
     }
 
     @Override
@@ -120,7 +120,7 @@ public class NazgulEntity extends Monster {
         if(this.isFading()) {
             return State.FADING;
         }
-        else if (this.isAttacking()) {
+        else if (this.isAggressive()) {
             return State.ATTACKING;
         }
         return State.NEUTRAL;
@@ -128,7 +128,7 @@ public class NazgulEntity extends Monster {
 
     @Override
     public boolean damage(DamageSource source, float amount) {
-        if(!source.isOf(DamageTypes.IN_FIRE) && !source.isOf(DamageTypes.ON_FIRE) && !source.isOf(DamageTypes.LAVA)) {
+        if(!source.is(DamageTypes.IN_FIRE) && !source.is(DamageTypes.ON_FIRE) && !source.is(DamageTypes.LAVA)) {
             amount *= DAMAGE_MULTIPLIER;
         }
         return super.damage(source, amount);
@@ -153,7 +153,7 @@ public class NazgulEntity extends Monster {
     protected void updatePostDeath() {
         ++this.ticksSinceDeath;
         ParticleManager.createParticles(getWorld(), getPos(), ParticleTypes.SMOKE, (int) Math.pow((float)ticksSinceDeath / 9, 1.5f));
-        if (this.ticksSinceDeath >= FADING_TIME && this.getWorld() instanceof ServerLevel) {
+        if (this.ticksSinceDeath >= FADING_TIME && this.level() instanceof ServerLevel) {
             this.remove(Entity.RemovalReason.KILLED);
             this.emitGameEvent(GameEvent.ENTITY_DIE);
         }

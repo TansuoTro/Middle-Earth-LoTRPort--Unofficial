@@ -3,12 +3,12 @@ package net.jukoz.me.item.utils;
 import net.minecraft.client.Minecraft;
 import net.jukoz.me.item.MEComponents;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemGroup;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.armortrim.ArmorTrim;
-import net.minecraft.world.item.armortrim.ArmorTrimMaterial;
-import net.minecraft.world.item.armortrim.ArmorTrimMaterials;
-import net.minecraft.world.item.armortrim.ArmorTrimPattern;
+import net.minecraft.world.item.armortrim.TrimMaterial;
+import net.minecraft.world.item.armortrim.TrimMaterials;
+import net.minecraft.world.item.armortrim.TrimPattern;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.NbtOps;
@@ -42,7 +42,7 @@ import net.minecraft.world.item.armortrim.TrimPattern;
 public class ItemGroupsUtil {
     private static final Comparator<Holder<NpcType>> NPC_DATA_COMPARATOR = Comparator.comparing(Holder::value, Comparator.comparing(NpcType::getId));
 
-    public static void addNpcEggs(CreativeModeTab.Entries entries, HolderLookup.Impl<NpcType> registryWrapper, Predicate<Holder<NpcType>> filter, HolderLookup.WrapperLookup lookup, CreativeModeTab.StackVisibility stackVisibility) {
+    public static void addNpcEggs(CreativeModeTab.Output entries, HolderLookup.RegistryLookup<NpcType> registryWrapper, Predicate<Holder<NpcType>> filter, HolderLookup.Provider lookup, CreativeModeTab.TabVisibility stackVisibility) {
         ResourceLocation randomSpawnEggId = MiddleEarth.of("npc_random_spawn_egg");
 
         ItemStack randomNpcSpawnEgg = new ItemStack(EggItemsME.NPC_SPAWN_EGG);
@@ -52,7 +52,7 @@ public class ItemGroupsUtil {
 
         NpcInitializationData npcInitializationData = new NpcInitializationData(null, true);
 
-        RegistryOps<Tag> ops = RegistryOps.of(
+        RegistryOps<Tag> ops = RegistryOps.create(
                 NbtOps.INSTANCE,
                 lookup
         );
@@ -62,7 +62,7 @@ public class ItemGroupsUtil {
                 .result().orElse(new CompoundTag());
         compoundData.put(NpcEntity.KeyStrings.INITIALIZATION_DATA, element);
 
-        randomNpcSpawnEgg.setCustomName(Component.translatable(randomSpawnEggId.toTranslationKey("item")));
+        randomNpcSpawnEgg.setCustomName(Component.translatable(randomSpawnEggId.toLanguageKey("item")));
         MEComponents.set(randomNpcSpawnEgg, MEComponents.ITEM_MODEL, new ResourceLocation(MiddleEarth.MOD_ID, randomSpawnEggId.getPath().replaceAll("\\.", "_")));
 
         entries.add(randomNpcSpawnEgg);
@@ -73,23 +73,23 @@ public class ItemGroupsUtil {
         });
     }
 
-    private static ItemStack addTrim(Item partItem, HolderLookup.WrapperLookup wrapper, ResourceKey<TrimMaterial> reference) {
-        ItemStack item = partItem.getDefaultStack();
+    private static ItemStack addTrim(Item partItem, HolderLookup.Provider wrapper, ResourceKey<TrimMaterial> reference) {
+        ItemStack item = partItem.getDefaultInstance();
         Holder.Reference<TrimMaterial> material = wrapper.getOptionalWrapper(Registries.TRIM_MATERIAL).orElseThrow().getOrThrow(reference);
-        Holder.Reference<TrimPattern> pattern = wrapper.getOptionalWrapper(Registries.TRIM_PATTERN).orElseThrow().getOptional(ResourceKey.of(Registries.TRIM_PATTERN, MiddleEarth.of( "smithing_part"))).orElse(null);
+        Holder.Reference<TrimPattern> pattern = wrapper.getOptionalWrapper(Registries.TRIM_PATTERN).orElseThrow().getOptional(ResourceKey.create(Registries.TRIM_PATTERN, MiddleEarth.of( "smithing_part"))).orElse(null);
         MEArmorTrim.set(item, new ArmorTrim(material , pattern));
         return item;
     }
 
-    public static Collection<ItemStack> processResourceItem(ItemStack itemStack, CreativeModeTab.DisplayContext displayContext) {
+    public static Collection<ItemStack> processResourceItem(ItemStack itemStack, CreativeModeTab.ItemDisplayParameters displayContext) {
         if(PART_LIST.contains(itemStack.getItem())) {
             return processSmithingMaterial(itemStack.getItem(), displayContext);
         }
         return List.of(itemStack);
     }
 
-    private static Collection<ItemStack> processSmithingMaterial(Item item, CreativeModeTab.DisplayContext displayContext) {
-        HolderLookup.WrapperLookup wrapper = displayContext.lookup();
+    private static Collection<ItemStack> processSmithingMaterial(Item item, CreativeModeTab.ItemDisplayParameters displayContext) {
+        HolderLookup.Provider wrapper = displayContext.lookup();
         List<ItemStack> trimSet = new ArrayList<>();
         for(ResourceKey<TrimMaterial> trimKey : METAL_LIST){
             trimSet.add(addTrim(item, wrapper, trimKey));
@@ -134,9 +134,9 @@ public class ItemGroupsUtil {
             SmithingTrimMaterialsME.MITHRIL
     );
 
-    public static Collection<ItemStack> addFactionBanners(HolderLookup.WrapperLookup lookup) {
+    public static Collection<ItemStack> addFactionBanners(HolderLookup.Provider lookup) {
         List<ItemStack> bannerList = new ArrayList<>();
-        List<Holder.Reference<Faction>> factions = lookup.getWrapperOrThrow(DynamicRegistriesME.FACTION).streamEntries().toList();
+        List<Holder.Reference<Faction>> factions = lookup.lookupOrThrow(DynamicRegistriesME.FACTION).streamEntries().toList();
         for(Holder.Reference<Faction> factionReference : factions){
             ItemStack bannerItem = factionReference.value().getBannerItem(lookup);
             if(!bannerItem.isEmpty())

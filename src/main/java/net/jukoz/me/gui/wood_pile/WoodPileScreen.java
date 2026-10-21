@@ -19,7 +19,7 @@ public class WoodPileScreen extends AbstractContainerScreen<WoodPileScreenHandle
     @Override
     protected void init() {
         super.init();
-        titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2;
+        titleX = (backgroundWidth - font.getWidth(title)) / 2;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class WoodPileScreen extends AbstractContainerScreen<WoodPileScreenHandle
         RenderSystem.setShaderTexture(0, TEXTURE);
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
-        context.drawTexture(TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
     }
 
     @Override

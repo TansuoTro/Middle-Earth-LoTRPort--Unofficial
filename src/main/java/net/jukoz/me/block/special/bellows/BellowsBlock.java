@@ -29,13 +29,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class BellowsBlock extends BaseEntityBlock {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-    public BellowsBlock(Settings settings) {
+    public BellowsBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(((this.stateManager.getDefaultState()).with(FACING, Direction.NORTH)));
+        this.setDefaultState(((this.stateManager.defaultBlockState()).with(FACING, Direction.NORTH)));
     }
 
     @Override
@@ -51,14 +52,14 @@ public class BellowsBlock extends BaseEntityBlock {
 
     @Nullable
     protected static <T extends BlockEntity> BlockEntityTicker<T> checkType(Level world, BlockEntityType<T> givenType, BlockEntityType<BellowsBlockEntity> expectedType) {
-        return world.isClient
+        return world.isClientSide
                 ? BellowsBlock.checkType(givenType, expectedType, BellowsBlockEntity::clientTick)
                 : BellowsBlock.checkType(givenType, expectedType, BellowsBlockEntity::serverTick);
     }
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return Block.createCuboidShape(3, 0, 3, 13, 7, 13);
+        return Block.box(3, 0, 3, 13, 7, 13);
     }
 
     @Override
@@ -68,13 +69,13 @@ public class BellowsBlock extends BaseEntityBlock {
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        player.swingHand(player.getActiveHand());
+        player.swingHand(player.getUsedItemHand());
         return this.pump(world, pos, state, player) ? InteractionResult.SUCCESS : InteractionResult.CONSUME;
     }
 
     @Override
     public void onEntityCollision(BlockState state, Level world, BlockPos pos, Entity entity) {
-        if(!world.isClient){
+        if(!world.isClientSide){
             if (entity.getVelocity().y < -0.1f && entity instanceof LivingEntity) {
                 this.pump(world, pos, state, entity);
             }
@@ -83,7 +84,7 @@ public class BellowsBlock extends BaseEntityBlock {
     }
 
     public void onEntityLand(BlockGetter world, Entity entity) {
-        if (entity.bypassesLandingEffects()) {
+        if (entity.isSuppressingBounce()) {
             super.onEntityLand(world, entity);
         } else {
             this.bounceEntity(entity);
@@ -99,7 +100,7 @@ public class BellowsBlock extends BaseEntityBlock {
     }
 
     public boolean pump(Level world, BlockPos pos, BlockState state, Entity entity) {
-        if (world.isClient) return false;
+        if (world.isClientSide) return false;
 
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if(blockEntity instanceof BellowsBlockEntity bellowsBlockEntity){
@@ -110,7 +111,7 @@ public class BellowsBlock extends BaseEntityBlock {
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+        return state.setValue(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override
@@ -125,6 +126,6 @@ public class BellowsBlock extends BaseEntityBlock {
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing());
+        return this.defaultBlockState().with(FACING, ctx.getHorizontalDirection());
     }
 }

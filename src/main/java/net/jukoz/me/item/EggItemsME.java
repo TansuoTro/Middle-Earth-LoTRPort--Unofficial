@@ -51,21 +51,21 @@ public class EggItemsME {
             (settings) -> egg(EntitiesME.NPC, settings), new MESettings());
 
     /** 1.20.1 spawn eggs still take two colour ints; keep one shared Middle-earth palette. */
-    private static SpawnEggItem egg(EntityType<? extends Mob> type, Item.Settings settings) {
+    private static SpawnEggItem egg(EntityType<? extends Mob> type, Item.Properties settings) {
         return new SpawnEggItem(type, 0x5B4A32, 0xD9C7A3, settings);
     }
 
-    private static Item registerItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerItem(String name, Function<Item.Properties, Item> factory, Item.Properties settings) {
         Item item = (Item)factory.apply(settings);
-        ModItemGroups.SPAWN_EGGS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.SPAWN_EGGS_CONTENTS.add(item.getDefaultInstance());
         SimpleItemModel.items.add(item);
         TranslationEntries.itemEntries.add(item);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ITEM, name));
         return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);
     }
-    private static Item registerSpecialEgg(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerSpecialEgg(String name, Function<Item.Properties, Item> factory, Item.Properties settings) {
         Item item = (Item)factory.apply(settings);
-        ModItemGroups.SPAWN_EGGS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.SPAWN_EGGS_CONTENTS.add(item.getDefaultInstance());
         TranslationEntries.itemEntries.add(item);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ITEM, name));
         return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);

@@ -13,10 +13,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.jukoz.me.block.registration.ModBlockEntities;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class LarchCofferBlock extends ChestBlock {
 
-    public LarchCofferBlock(Settings settings) {
+    public LarchCofferBlock(BlockBehaviour.Properties settings) {
         super(settings, () -> ModBlockEntities.LARCH_COFFER);
     }
 
@@ -27,17 +28,17 @@ public class LarchCofferBlock extends ChestBlock {
 
     @Override
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        Direction direction = ctx.getHorizontalPlayerFacing();
+        Direction direction = ctx.getHorizontalDirection();
         FluidState fluidstate = ctx.getWorld().getFluidState(ctx.getBlockPos());
-        return this.getDefaultState().with(FACING, direction).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
+        return this.defaultBlockState().with(FACING, direction).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
     }
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         if(state.get(FACING) == Direction.NORTH || state.get(FACING) == Direction.SOUTH) {
-            return Block.createCuboidShape(1.0, 0.0, 3.0, 15.0, 12.0, 13.0);
+            return Block.box(1.0, 0.0, 3.0, 15.0, 12.0, 13.0);
         } else {
-            return Block.createCuboidShape(3.0, 0.0, 1.0, 13.0, 12.0, 15.0);
+            return Block.box(3.0, 0.0, 1.0, 13.0, 12.0, 15.0);
         }
     }
 }

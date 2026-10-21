@@ -298,12 +298,12 @@ public class ModEquipmentItems {
             new TrollArmorItem(10, "steel", new FabricItemSettings().maxCount(1)));*/
 
     private static Item registerItem(String name, Item item) {
-        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultInstance());
         return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);
     }
 
     private static Item registerGeneratedItem(String name, Item item) {
-        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.EQUIPMENT_CONTENTS.add(item.getDefaultInstance());
         SimpleItemModel.items.add(item);
         return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);
     }

@@ -16,21 +16,22 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelAccess;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import org.jetbrains.annotations.Nullable;
 import com.mojang.math.Axis;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class WallElvenLanternBlock extends CrystalLampBlock {
     private static final EnumProperty<Direction> FACING;
     private static final VoxelShape WALL_SHAPE;
 
-    public WallElvenLanternBlock(Settings settings) {
+    public WallElvenLanternBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(this.getDefaultState().with(FACING, Direction.EAST));
+        this.setDefaultState(this.defaultBlockState().with(FACING, Direction.EAST));
     }
 
     @Override
@@ -41,7 +42,7 @@ public class WallElvenLanternBlock extends CrystalLampBlock {
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+        return state.setValue(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override
@@ -64,16 +65,16 @@ public class WallElvenLanternBlock extends CrystalLampBlock {
     @Override
     public BlockState getPlacementState(BlockPlaceContext ctx) {
         FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
-        Direction[] var3 = ctx.getPlacementDirections();
+        Direction[] var3 = ctx.getNearestLookingDirections();
         int var4 = var3.length;
 
         for(int var5 = 0; var5 < var4; ++var5) {
             Direction direction = var3[var5];
-            BlockState blockState = this.getDefaultState()
+            BlockState blockState = this.defaultBlockState()
                     .with(HANGING, false)
                     .with(FACING, direction.getOpposite());
             if (blockState.canPlaceAt(ctx.getWorld(), ctx.getBlockPos())) {
-                return blockState.with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
+                return blockState.setValue(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
             }
         }
 
@@ -84,16 +85,16 @@ public class WallElvenLanternBlock extends CrystalLampBlock {
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         switch (state.get(FACING)){
             case SOUTH -> {
-                return Block.createCuboidShape(5, 0, 8, 11, 11, 14);
+                return Block.box(5, 0, 8, 11, 11, 14);
             }
             case EAST -> {
-                return Block.createCuboidShape(8, 0, 5, 14, 11, 11);
+                return Block.box(8, 0, 5, 14, 11, 11);
             }
             case WEST -> {
-                return Block.createCuboidShape(2, 0, 5, 8, 11, 11);
+                return Block.box(2, 0, 5, 8, 11, 11);
             }
             default -> {
-                return Block.createCuboidShape(5, 0, 2, 11, 11, 8);
+                return Block.box(5, 0, 2, 11, 11, 8);
             }
         }
     }
@@ -110,7 +111,7 @@ public class WallElvenLanternBlock extends CrystalLampBlock {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
 
-        return attachedDirection(state).getOpposite() == direction && !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+        return attachedDirection(state).getOpposite() == direction && !state.canPlaceAt(world, pos) ? Blocks.AIR.defaultBlockState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 
     }
 
@@ -122,7 +123,7 @@ public class WallElvenLanternBlock extends CrystalLampBlock {
         FACING = BlockStateProperties.FACING;
 
         WALL_SHAPE  = Shapes.union(
-                Block.createCuboidShape(5.0, 3.0, 5.0, 11.0, 9.0, 11.0),
-                Block.createCuboidShape(6.0, 9.0, 6.0, 10.0, 10.0, 10.0));
+                Block.box(5.0, 3.0, 5.0, 11.0, 9.0, 11.0),
+                Block.box(6.0, 9.0, 6.0, 10.0, 10.0, 10.0));
     }
 }

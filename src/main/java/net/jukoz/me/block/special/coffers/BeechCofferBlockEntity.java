@@ -13,11 +13,11 @@ public class BeechCofferBlockEntity extends ChestBlockEntity {
     public BeechCofferBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.BEECH_COFFER, pos, state);
 
-        this.setInvStackList(NonNullList.ofSize(this.size(), ItemStack.EMPTY));
+        this.setInvStackList(NonNullList.withSize(this.size(), ItemStack.EMPTY));
     }
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable(MiddleEarth.of("beech_coffer").toTranslationKey("screen"));
+        return Component.translatable(MiddleEarth.of("beech_coffer").toLanguageKey("screen"));
     }
 }

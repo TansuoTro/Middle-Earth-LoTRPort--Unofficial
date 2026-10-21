@@ -7,9 +7,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class StarlightPhialItem extends Item {
-    public StarlightPhialItem(Settings settings) {
+    public StarlightPhialItem(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
@@ -20,9 +21,9 @@ public class StarlightPhialItem extends Item {
      */
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
-        if (!ModDimensions.isInMiddleEarth(world) && !world.isClient) {
+        if (!ModDimensions.isInMiddleEarth(world) && !world.isClientSide) {
             ModDimensions.teleportPlayerToME(user);
         }
-        return InteractionResultHolder.success(user.getStackInHand(hand));
+        return InteractionResultHolder.success(user.getItemInHand(hand));
     }
 }

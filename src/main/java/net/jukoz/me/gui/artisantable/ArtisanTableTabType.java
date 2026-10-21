@@ -36,7 +36,7 @@ enum ArtisanTableTabType {
         Textures textures;
         Textures textures2 = textures = selected ? this.selectedTextures : this.unselectedTextures;
         ResourceLocation identifier = index == 0 ? textures.first() : (index == this.tabCount - 1 ? textures.last() : textures.middle());
-        context.drawTexture(identifier, x + this.getTabX(index), y + this.getTabY(index), 0, 0, this.width, this.height);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, identifier, x + this.getTabX(index), y + this.getTabY(index), 0, 0, this.width, this.height);
     }
 
     public void drawIcon(GuiGraphics context, int x, int y, int index, ItemStack stack) {

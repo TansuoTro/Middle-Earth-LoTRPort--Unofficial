@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.core.RegistryWrapper;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.tags.TagKey;
 import net.minecraft.resources.ResourceLocation;
 import java.util.concurrent.CompletableFuture;
@@ -22,39 +22,39 @@ import net.minecraft.core.HolderLookup;
 
 public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
-    public ItemTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.WrapperLookup> registriesFuture) {
+    public ItemTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 
     @Override
-    protected void configure(HolderLookup.WrapperLookup arg) {
+    protected void configure(HolderLookup.Provider arg) {
         populatePortedTags();
-        var bones = getOrCreateTagBuilder(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "bones")));
-        var feathers = getOrCreateTagBuilder(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "feathers")));
-        var cloaks = getOrCreateTagBuilder(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "cloaks")));
+        var bones = tag(TagKey.create(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "bones")));
+        var feathers = tag(TagKey.create(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "feathers")));
+        var cloaks = tag(TagKey.create(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "cloaks")));
 
-        TagKey<Item> iron_ores = TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "iron_ores"));
-        TagKey<Item> gold_ores = TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "gold_ores"));
-        TagKey<Item> copper_ores = TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "copper_ores"));
-        TagKey<Item> coal_ores = TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "coal_ores"));
+        TagKey<Item> iron_ores = TagKey.create(Registries.ITEM, new ResourceLocation("minecraft", "iron_ores"));
+        TagKey<Item> gold_ores = TagKey.create(Registries.ITEM, new ResourceLocation("minecraft", "gold_ores"));
+        TagKey<Item> copper_ores = TagKey.create(Registries.ITEM, new ResourceLocation("minecraft", "copper_ores"));
+        TagKey<Item> coal_ores = TagKey.create(Registries.ITEM, new ResourceLocation("minecraft", "coal_ores"));
 
-        TagKey<Item> saplings = TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "saplings"));
-        TagKey<Item> wooden_slabs = TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "wooden_slabs"));
-        TagKey<Item> logs_that_burn = TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "logs_that_burn"));
-        TagKey<Item> stone_crafting_materials = TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "stone_crafting_materials"));
-        TagKey<Item> stone_tool_materials = TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "stone_tool_materials"));
+        TagKey<Item> saplings = TagKey.create(Registries.ITEM, new ResourceLocation("minecraft", "saplings"));
+        TagKey<Item> wooden_slabs = TagKey.create(Registries.ITEM, new ResourceLocation("minecraft", "wooden_slabs"));
+        TagKey<Item> logs_that_burn = TagKey.create(Registries.ITEM, new ResourceLocation("minecraft", "logs_that_burn"));
+        TagKey<Item> stone_crafting_materials = TagKey.create(Registries.ITEM, new ResourceLocation("minecraft", "stone_crafting_materials"));
+        TagKey<Item> stone_tool_materials = TagKey.create(Registries.ITEM, new ResourceLocation("minecraft", "stone_tool_materials"));
 
-        TagKey<Item> tin_ores = TagKey.of(Registries.ITEM, new ResourceLocation("me", "tin_ores"));
-        TagKey<Item> lead_ores = TagKey.of(Registries.ITEM, new ResourceLocation("me", "lead_ores"));
-        TagKey<Item> silver_ores = TagKey.of(Registries.ITEM, new ResourceLocation("me", "silver_ores"));
-        TagKey<Item> mithril_ores = TagKey.of(Registries.ITEM, new ResourceLocation("me", "mithril_ores"));
-        TagKey<Item> shingles = TagKey.of(Registries.ITEM, new ResourceLocation("me", "shingles"));
+        TagKey<Item> tin_ores = TagKey.create(Registries.ITEM, new ResourceLocation("me", "tin_ores"));
+        TagKey<Item> lead_ores = TagKey.create(Registries.ITEM, new ResourceLocation("me", "lead_ores"));
+        TagKey<Item> silver_ores = TagKey.create(Registries.ITEM, new ResourceLocation("me", "silver_ores"));
+        TagKey<Item> mithril_ores = TagKey.create(Registries.ITEM, new ResourceLocation("me", "mithril_ores"));
+        TagKey<Item> shingles = TagKey.create(Registries.ITEM, new ResourceLocation("me", "shingles"));
 
-        TagKey<Item> mod_stripped_logs = TagKey.of(Registries.ITEM, new ResourceLocation("me", "mod_stripped_logs"));
-        getOrCreateTagBuilder(TagKey.of(Registries.ITEM, new ResourceLocation("me", "mod_planks"))).add(notNullItems(Planks.getItemPlanks()));
+        TagKey<Item> mod_stripped_logs = TagKey.create(Registries.ITEM, new ResourceLocation("me", "mod_stripped_logs"));
+        tag(TagKey.create(Registries.ITEM, new ResourceLocation("me", "mod_planks"))).add(notNullItems(Planks.getItemPlanks()));
 
-        getOrCreateTagBuilder(TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "planks"))).add(notNullItems(Planks.getItemPlanks()));
-        getOrCreateTagBuilder(TagKey.of(Registries.ITEM, new ResourceLocation("minecraft", "logs"))).add(notNullItems(Logs.getItemLogs()));
+        tag(TagKey.create(Registries.ITEM, new ResourceLocation("minecraft", "planks"))).add(notNullItems(Planks.getItemPlanks()));
+        tag(TagKey.create(Registries.ITEM, new ResourceLocation("minecraft", "logs"))).add(notNullItems(Logs.getItemLogs()));
 
         bones.add(Items.BONE);
         bones.add(ModResourceItems.ORC_BONE);
@@ -75,69 +75,69 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
         for (OreRockSets.OreRockSet set : OreRockSets.sets) {
             if(set.coal_ore() != null) {
-                getOrCreateTagBuilder(coal_ores)
+                tag(coal_ores)
                         .add(set.coal_ore().asItem());
             }
             if(set.copper_ore() != null) {
-                getOrCreateTagBuilder(copper_ores)
+                tag(copper_ores)
                         .add(set.copper_ore().asItem());
             }
             if(set.tin_ore() != null) {
-                getOrCreateTagBuilder(tin_ores)
+                tag(tin_ores)
                         .add(set.tin_ore().asItem());
             }
             if(set.lead_ore() != null) {
-                getOrCreateTagBuilder(lead_ores)
+                tag(lead_ores)
                         .add(set.lead_ore().asItem());
             }
             if(set.silver_ore() != null) {
-                getOrCreateTagBuilder(silver_ores)
+                tag(silver_ores)
                         .add(set.silver_ore().asItem());
             }
             if(set.gold_ore() != null) {
-                getOrCreateTagBuilder(gold_ores)
+                tag(gold_ores)
                         .add(set.gold_ore().asItem());
             }
             if(set.iron_ore() != null) {
-                getOrCreateTagBuilder(iron_ores)
+                tag(iron_ores)
                         .add(set.iron_ore().asItem());
             }
             if(set.mithril_ore() != null) {
-                getOrCreateTagBuilder(mithril_ores)
+                tag(mithril_ores)
                         .add(set.mithril_ore().asItem());
             }
         }
 
         WoodenSlabs.woodenSlabs.forEach(block -> {
             if (block == null) { return; }
-            getOrCreateTagBuilder(wooden_slabs).add(block.asItem());
+            tag(wooden_slabs).add(block.asItem());
         });
 
         ModdedStrippedLogs.strippedLogs.forEach(block -> {
             if (block == null) { return; }
-            getOrCreateTagBuilder(mod_stripped_logs).add(block.asItem());
+            tag(mod_stripped_logs).add(block.asItem());
         });
 
         Shingles.shingles.forEach(block -> {
             if (block == null) { return; }
-            getOrCreateTagBuilder(shingles).add(block.asItem());
+            tag(shingles).add(block.asItem());
         });
 
         Saplings.saplings.forEach(sapling -> {
             if (sapling == null) { return; }
-            getOrCreateTagBuilder(saplings).add(sapling.asItem());
+            tag(saplings).add(sapling.asItem());
         });
 
         LogsThatBurn.logsThatBurn.forEach(log -> {
             if (log == null) { return; }
-            getOrCreateTagBuilder(logs_that_burn).add(log.asItem());
+            tag(logs_that_burn).add(log.asItem());
         });
 
         Stones.stones.forEach(stone -> {
             if (stone == null) { return; }
-            getOrCreateTagBuilder(stone_crafting_materials).add(stone.asItem());
+            tag(stone_crafting_materials).add(stone.asItem());
             if(!stone.asItem().toString().contains("jadeite")){
-                getOrCreateTagBuilder(stone_tool_materials).add(stone.asItem());
+                tag(stone_tool_materials).add(stone.asItem());
             }
         });
     }
@@ -311,7 +311,7 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
     }
 
     private void addToTag(String id, Item... items) {
-        getOrCreateTagBuilder(TagKey.of(Registries.ITEM, new ResourceLocation(id))).add(items);
+        tag(TagKey.create(Registries.ITEM, new ResourceLocation(id))).add(items);
     }
 
     private static Item[] notNullItems(java.util.List<Item> values) {

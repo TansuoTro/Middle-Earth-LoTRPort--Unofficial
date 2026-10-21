@@ -25,45 +25,45 @@ public class MistyHobgoblinCommanderChestplateArmorModel<T extends LivingEntity>
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
 
-        modelPartData.addChild(PartNames.HAT, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.HAT, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition body = modelPartData.addChild(PartNames.BODY, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition body = modelPartData.addOrReplaceChild(PartNames.BODY, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition rightskullspear = body.addChild("rightskullspear", CubeListBuilder.create(), PartPose.of(-3.0F, 8.0F, 0.0F, 0.2986F, 0.0651F, -0.5138F));
-        rightskullspear.addChild("cube_r4", CubeListBuilder.create().uv(0, 0).mirrored().cuboid(-2.5671F, -3.0474F, 2.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(-1.2F)).mirrored(false), PartPose.of(8.0F, -28.0F, 7.0F, -0.3491F, 0.0F, 0.3054F));
-        rightskullspear.addChild("cube_r5", CubeListBuilder.create().uv(0, 0).mirrored().cuboid(-4.0F, -4.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(-1.0F)).mirrored(false), PartPose.of(6.332F, -18.3648F, 10.1039F, -0.4181F, 0.5692F, 0.0704F));
+        PartDefinition rightskullspear = body.addOrReplaceChild("rightskullspear", CubeListBuilder.create(), PartPose.offsetAndRotation(-3.0F, 8.0F, 0.0F, 0.2986F, 0.0651F, -0.5138F));
+        rightskullspear.addOrReplaceChild("cube_r4", CubeListBuilder.create().texOffs(0, 0).mirror().addBox(-2.5671F, -3.0474F, 2.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(-1.2F)).mirror(false), PartPose.offsetAndRotation(8.0F, -28.0F, 7.0F, -0.3491F, 0.0F, 0.3054F));
+        rightskullspear.addOrReplaceChild("cube_r5", CubeListBuilder.create().texOffs(0, 0).mirror().addBox(-4.0F, -4.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(-1.0F)).mirror(false), PartPose.offsetAndRotation(6.332F, -18.3648F, 10.1039F, -0.4181F, 0.5692F, 0.0704F));
 
-        PartDefinition cloth2 = rightskullspear.addChild("cloth2", CubeListBuilder.create(), PartPose.of(-6.0F, 0.0F, 0.0F, 0.3011F, 0.0522F, 0.1388F));
-        cloth2.addChild("cube_r6", CubeListBuilder.create().uv(0, 16).mirrored().cuboid(0.1819F, 2.4589F, 5.1122F, 2.0F, 9.0F, 0.0F, new CubeDeformation(0.0F)).mirrored(false), PartPose.of(8.0F, -18.5F, 12.0F, -0.6114F, 0.1727F, 0.3707F));
+        PartDefinition cloth2 = rightskullspear.addOrReplaceChild("cloth2", CubeListBuilder.create(), PartPose.offsetAndRotation(-6.0F, 0.0F, 0.0F, 0.3011F, 0.0522F, 0.1388F));
+        cloth2.addOrReplaceChild("cube_r6", CubeListBuilder.create().texOffs(0, 16).mirror().addBox(0.1819F, 2.4589F, 5.1122F, 2.0F, 9.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(8.0F, -18.5F, 12.0F, -0.6114F, 0.1727F, 0.3707F));
 
-        PartDefinition spears2 = rightskullspear.addChild("spears2", CubeListBuilder.create(), PartPose.of(0.0F, -0.5F, 3.0F, 0.0F, 0.0F, 0.1309F));
-        spears2.addChild("cube_r7", CubeListBuilder.create().uv(32, 0).mirrored().cuboid(1.4329F, -23.6652F, 2.6678F, 2.0F, 35.0F, 2.0F, new CubeDeformation(0.0F)).mirrored(false), PartPose.of(0.0F, -10.0F, 0.0F, -0.3491F, 0.0F, 0.1745F));
+        PartDefinition spears2 = rightskullspear.addOrReplaceChild("spears2", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, -0.5F, 3.0F, 0.0F, 0.0F, 0.1309F));
+        spears2.addOrReplaceChild("cube_r7", CubeListBuilder.create().texOffs(32, 0).mirror().addBox(1.4329F, -23.6652F, 2.6678F, 2.0F, 35.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, -10.0F, 0.0F, -0.3491F, 0.0F, 0.1745F));
 
-        PartDefinition leftskullspear = body.addChild("leftskullspear", CubeListBuilder.create(), PartPose.of(3.0F, 8.0F, 0.0F, 0.2986F, -0.0651F, 0.5138F));
-        leftskullspear.addChild("ribcage_r1", CubeListBuilder.create().uv(4, 25).cuboid(-6.0F, 6.0F, 6.3F, 10.0F, 12.0F, 4.0F, new CubeDeformation(-0.8F)), PartPose.of(-8.5498F, -28.3041F, 4.7181F, -0.3491F, 0.0F, -0.3054F));
-        leftskullspear.addChild("cube_r8", CubeListBuilder.create().uv(0, 0).cuboid(-5.4329F, -0.0474F, 2.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(-0.8F)), PartPose.of(-8.0F, -28.0F, 7.0F, -0.3491F, 0.0F, -0.3054F));
-        leftskullspear.addChild("cube_r9", CubeListBuilder.create().uv(0, 0).cuboid(-4.0F, -14.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(-1.8F)), PartPose.of(-6.332F, -18.3648F, 10.1039F, -0.4181F, -0.5692F, -0.0704F));
+        PartDefinition leftskullspear = body.addOrReplaceChild("leftskullspear", CubeListBuilder.create(), PartPose.offsetAndRotation(3.0F, 8.0F, 0.0F, 0.2986F, -0.0651F, 0.5138F));
+        leftskullspear.addOrReplaceChild("ribcage_r1", CubeListBuilder.create().texOffs(4, 25).addBox(-6.0F, 6.0F, 6.3F, 10.0F, 12.0F, 4.0F, new CubeDeformation(-0.8F)), PartPose.offsetAndRotation(-8.5498F, -28.3041F, 4.7181F, -0.3491F, 0.0F, -0.3054F));
+        leftskullspear.addOrReplaceChild("cube_r8", CubeListBuilder.create().texOffs(0, 0).addBox(-5.4329F, -0.0474F, 2.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(-0.8F)), PartPose.offsetAndRotation(-8.0F, -28.0F, 7.0F, -0.3491F, 0.0F, -0.3054F));
+        leftskullspear.addOrReplaceChild("cube_r9", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -14.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(-1.8F)), PartPose.offsetAndRotation(-6.332F, -18.3648F, 10.1039F, -0.4181F, -0.5692F, -0.0704F));
 
-        PartDefinition cloth = leftskullspear.addChild("cloth", CubeListBuilder.create(), PartPose.of(6.0F, 0.0F, 0.0F, 0.3011F, -0.0522F, -0.1388F));
-        cloth.addChild("cube_r10", CubeListBuilder.create().uv(0, 16).cuboid(-2.1819F, 1.4589F, 5.1122F, 2.0F, 9.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.of(-8.0F, -18.5F, 12.0F, -0.6114F, -0.1727F, -0.3707F));
+        PartDefinition cloth = leftskullspear.addOrReplaceChild("cloth", CubeListBuilder.create(), PartPose.offsetAndRotation(6.0F, 0.0F, 0.0F, 0.3011F, -0.0522F, -0.1388F));
+        cloth.addOrReplaceChild("cube_r10", CubeListBuilder.create().texOffs(0, 16).addBox(-2.1819F, 1.4589F, 5.1122F, 2.0F, 9.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-8.0F, -18.5F, 12.0F, -0.6114F, -0.1727F, -0.3707F));
 
-        PartDefinition spears3 = leftskullspear.addChild("spears3", CubeListBuilder.create(), PartPose.of(0.0F, -0.5F, 3.0F, 0.0F, 0.0F, -0.1309F));
-        spears3.addChild("cube_r11", CubeListBuilder.create().uv(32, 0).cuboid(-3.4329F, -23.6652F, 2.6678F, 2.0F, 35.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.of(0.0F, -10.0F, 0.0F, -0.3491F, 0.0F, -0.1745F));
+        PartDefinition spears3 = leftskullspear.addOrReplaceChild("spears3", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, -0.5F, 3.0F, 0.0F, 0.0F, -0.1309F));
+        spears3.addOrReplaceChild("cube_r11", CubeListBuilder.create().texOffs(32, 0).addBox(-3.4329F, -23.6652F, 2.6678F, 2.0F, 35.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -10.0F, 0.0F, -0.3491F, 0.0F, -0.1745F));
 
-        PartDefinition right_arm = modelPartData.addChild(PartNames.RIGHT_ARM, CubeListBuilder.create(),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
-        right_arm.addChild("glove_addon", CubeListBuilder.create()
-                .uv(40, 0).cuboid(-7.0F, 4.0F, 0.0F, 3.0F, 5.0F, 0.0F, new CubeDeformation(0.0F)),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition right_arm = modelPartData.addOrReplaceChild(PartNames.RIGHT_ARM, CubeListBuilder.create(),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
+        right_arm.addOrReplaceChild("glove_addon", CubeListBuilder.create()
+                .texOffs(40, 0).addBox(-7.0F, 4.0F, 0.0F, 3.0F, 5.0F, 0.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition left_arm =modelPartData.addChild(PartNames.LEFT_ARM, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        left_arm.addChild("shoulder_addon", CubeListBuilder.create()
-                .uv(40, 0).mirrored().cuboid(3.0F, -6.0F, 0.0F, 3.0F, 5.0F, 0.0F, new CubeDeformation(0.0F)).mirrored(false),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));;
+        PartDefinition left_arm =modelPartData.addOrReplaceChild(PartNames.LEFT_ARM, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        left_arm.addOrReplaceChild("shoulder_addon", CubeListBuilder.create()
+                .texOffs(40, 0).mirror().addBox(3.0F, -6.0F, 0.0F, 3.0F, 5.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false),
+                PartPose.offset(0.0F, 0.0F, 0.0F));;
 
-        modelPartData.addChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.RIGHT_LEG, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.LEFT_LEG, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.of(modelData, 64, 64);
     }

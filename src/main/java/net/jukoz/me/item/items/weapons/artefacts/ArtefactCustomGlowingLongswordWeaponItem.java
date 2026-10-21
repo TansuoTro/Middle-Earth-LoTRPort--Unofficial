@@ -25,7 +25,7 @@ public class ArtefactCustomGlowingLongswordWeaponItem extends CustomLongswordWea
     public boolean glowing;
     public int counter = 0;
 
-    public ArtefactCustomGlowingLongswordWeaponItem(Tier toolMaterial, Item.Settings settings) {
+    public ArtefactCustomGlowingLongswordWeaponItem(Tier toolMaterial, Item.Properties settings) {
         super(toolMaterial,  settings);
     }
 
@@ -69,7 +69,7 @@ public class ArtefactCustomGlowingLongswordWeaponItem extends CustomLongswordWea
 
     @Override
     public boolean postMine(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity miner) {
-        if (!world.isClient && state.getHardness(world, pos) != 0.0F) {
+        if (!world.isClientSide && state.defaultDestroyTime(world, pos) != 0.0F) {
             if (stack.getDamage() == stack.getMaxDamage() - 1) {
                 BluntWeapon.blunt(stack);
             }

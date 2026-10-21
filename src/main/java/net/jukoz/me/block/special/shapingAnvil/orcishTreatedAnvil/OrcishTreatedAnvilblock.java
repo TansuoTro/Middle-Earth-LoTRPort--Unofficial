@@ -6,7 +6,7 @@ import net.jukoz.me.block.special.shapingAnvil.AbstractShapingAnvilBlock;
 import net.jukoz.me.block.special.shapingAnvil.ShapingAnvilBlockEntity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.BlockWithEntity;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -14,15 +14,16 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import java.util.stream.Stream;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class OrcishTreatedAnvilblock extends AbstractShapingAnvilBlock {
-    public OrcishTreatedAnvilblock(Settings settings) {
+    public OrcishTreatedAnvilblock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
@@ -31,24 +32,24 @@ public class OrcishTreatedAnvilblock extends AbstractShapingAnvilBlock {
         switch (state.get(FACING)){
             case NORTH, SOUTH -> {
                 return Stream.of(
-                        Block.createCuboidShape(3, 0, 3, 13, 10, 13),
-                        Block.createCuboidShape(1, 14, 7, 4, 16, 9),
-                        Block.createCuboidShape(4, 13, 5, 12, 16, 11),
-                        Block.createCuboidShape(12, 14, 7, 15, 16, 9),
-                        Block.createCuboidShape(5, 7, 5, 11, 13, 11)
+                        Block.box(3, 0, 3, 13, 10, 13),
+                        Block.box(1, 14, 7, 4, 16, 9),
+                        Block.box(4, 13, 5, 12, 16, 11),
+                        Block.box(12, 14, 7, 15, 16, 9),
+                        Block.box(5, 7, 5, 11, 13, 11)
                 ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
             }
             case EAST, WEST -> {
                 return Stream.of(
-                        Block.createCuboidShape(3, 0, 3, 13, 10, 13),
-                        Block.createCuboidShape(7, 14, 12, 9, 16, 15),
-                        Block.createCuboidShape(5, 13, 4, 11, 16, 12),
-                        Block.createCuboidShape(7, 14, 1, 9, 16, 4),
-                        Block.createCuboidShape(5, 7, 5, 11, 13, 11)
+                        Block.box(3, 0, 3, 13, 10, 13),
+                        Block.box(7, 14, 12, 9, 16, 15),
+                        Block.box(5, 13, 4, 11, 16, 12),
+                        Block.box(7, 14, 1, 9, 16, 4),
+                        Block.box(5, 7, 5, 11, 13, 11)
                 ).reduce((v1, v2) -> Shapes.combineAndSimplify(v1, v2, BooleanOp.OR)).get();
             }
             default -> {
-                return Block.createCuboidShape(1, 0, 1, 15, 16, 15);
+                return Block.box(1, 0, 1, 15, 16, 15);
             }
         }
     }
@@ -67,6 +68,6 @@ public class OrcishTreatedAnvilblock extends AbstractShapingAnvilBlock {
 
     @Nullable
     protected static <T extends BlockEntity> BlockEntityTicker<T> validateTicker(Level world, BlockEntityType<T> givenType, BlockEntityType<ShapingAnvilBlockEntity> expectedType) {
-        return world.isClient ? null : OrcishTreatedAnvilblock.checkType(givenType, expectedType, ShapingAnvilBlockEntity::tick);
+        return world.isClientSide ? null : OrcishTreatedAnvilblock.checkType(givenType, expectedType, ShapingAnvilBlockEntity::tick);
     }
 }

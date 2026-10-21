@@ -34,7 +34,7 @@ public class WoodlandRealmCrownItem extends CustomHelmetItem {
     @Override
     public void inventoryTick(ItemStack stack, net.minecraft.world.level.Level world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, world, entity, slot, selected);
-        Holder<Biome> biomeEntry = world.getBiome(entity.getBlockPos());
+        Holder<Biome> biomeEntry = world.getBiome(entity.blockPosition());
 
         int cooldown = 5;
         if(MEComponents.get(stack, MEComponents.COOLDOWN) != null) {
@@ -45,13 +45,13 @@ public class WoodlandRealmCrownItem extends CustomHelmetItem {
 
         if(cooldown <= 0 && biomeEntry.getKey().isPresent()) {
             SeasonDataComponent.Season newSeason = SeasonDataComponent.Season.SUMMER;
-            if(biomeEntry.isIn(BiomeTagsME.SPRING)) {
+            if(biomeEntry.is(BiomeTagsME.SPRING)) {
                 newSeason = SeasonDataComponent.Season.SPRING;
-            } else if(biomeEntry.isIn(BiomeTagsME.AUTUMN)) {
+            } else if(biomeEntry.is(BiomeTagsME.AUTUMN)) {
                 newSeason = SeasonDataComponent.Season.AUTUMN;
-            } else if(biomeEntry.isIn(BiomeTagsME.WINTER)) {
+            } else if(biomeEntry.is(BiomeTagsME.WINTER)) {
                 newSeason = SeasonDataComponent.Season.WINTER;
-            } else if(biomeEntry.isIn(BiomeTagsME.DEAD)) {
+            } else if(biomeEntry.is(BiomeTagsME.DEAD)) {
                 newSeason = SeasonDataComponent.Season.DEAD;
             }
 
@@ -60,14 +60,14 @@ public class WoodlandRealmCrownItem extends CustomHelmetItem {
                 LivingEntity livingEntity = (LivingEntity) entity;
                 MEComponents.set(stack, MEComponents.COOLDOWN, new CooldownDataComponent(35));
                 double scale = 1.8f * livingEntity.getAttributeValue(EntityAttributesME.SCALE);
-                Vec3 pos = entity.getPos().add(0, 1.8f * scale, 0).add(0, -1.1f, 0);
+                Vec3 pos = entity.position().add(0, 1.8f * scale, 0).add(0, -1.1f, 0);
 
                 if(season.equals(SeasonDataComponent.Season.DEAD) && !newSeason.equals(SeasonDataComponent.Season.WINTER)) {
                     ((net.minecraft.server.level.ServerLevel) world).spawnParticles(ParticleTypes.COMPOSTER, pos.getX(), pos.getY(), pos.getZ(), 9, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 1);
                 } else if(season.equals(SeasonDataComponent.Season.SPRING)) {
                     ((net.minecraft.server.level.ServerLevel) world).spawnParticles(ParticleTypes.CHERRY_LEAVES, pos.getX(), pos.getY(), pos.getZ(), 9, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 1);
                 } else if(season.equals(SeasonDataComponent.Season.SUMMER)) {
-                    int leavesColor = world.getBiome(entity.getBlockPos()).value().getFoliageColor();
+                    int leavesColor = world.getBiome(entity.blockPosition()).value().getFoliageColor();
                     ((net.minecraft.server.level.ServerLevel) world).spawnParticles(ParticleTypes.CHERRY_LEAVES, pos.getX(), pos.getY(), pos.getZ(), 9, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 1);
                 } else if(season.equals(SeasonDataComponent.Season.AUTUMN)) {
                     ((net.minecraft.server.level.ServerLevel) world).spawnParticles(ParticleTypes.CHERRY_LEAVES, pos.getX(), pos.getY(), pos.getZ(), 9, OFFSET_XZ, OFFSET_Y, OFFSET_XZ, 1);
@@ -79,7 +79,7 @@ public class WoodlandRealmCrownItem extends CustomHelmetItem {
                 if(newSeason != SeasonDataComponent.Season.DEAD) {
                     itemModelName += "_" + newSeason;
                 }
-                ResourceLocation newItemModel = new ResourceLocation(MiddleEarth.MOD_ID, itemModelName.toLowerCase());
+                ResourceLocation newItemModel = new ResourceLocation(MiddleEarth.MOD_ID, itemModelName.lowercaseVariant());
                 MEComponents.set(stack, MEComponents.ITEM_MODEL, newItemModel);
                 MEComponents.set(stack, MEComponents.SEASON_DATA, new SeasonDataComponent(newSeason));
             }

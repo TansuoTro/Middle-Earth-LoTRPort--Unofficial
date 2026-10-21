@@ -17,7 +17,7 @@ public class CustomSpearWeaponItem extends ReachWeaponItem {
     public float pullProgress = 0;
     public WeaponTypesME type;
 
-    public CustomSpearWeaponItem(Tier toolMaterial, Item.Settings settings) {
+    public CustomSpearWeaponItem(Tier toolMaterial, Item.Properties settings) {
         super(toolMaterial, WeaponTypesME.SPEAR, settings);
         this.type = WeaponTypesME.SPEAR;
     }
@@ -34,9 +34,9 @@ public class CustomSpearWeaponItem extends ReachWeaponItem {
     }
 
     /*public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
-        ItemStack itemStack = user.getStackInHand(hand);
+        ItemStack itemStack = user.getItemInHand(hand);
         user.setCurrentHand(hand);
-        return InteractionResultHolder.success(itemStack, world.isClient());
+        return InteractionResultHolder.success(itemStack, world.isClientSide());
     }
 
     @Override
@@ -62,7 +62,7 @@ public class CustomSpearWeaponItem extends ReachWeaponItem {
         if(i > STRENGTH_CHARGE_TIME) i = STRENGTH_CHARGE_TIME;
         pullProgress = (float) i / STRENGTH_CHARGE_TIME;
 
-        if (!world.isClient) {
+        if (!world.isClientSide) {
             float damage = getAttackDamage() * pullProgress;
             if(getAttackDamage() >= 2.0) {
                 damage += 10.0f;

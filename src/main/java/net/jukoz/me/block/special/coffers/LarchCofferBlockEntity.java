@@ -13,11 +13,11 @@ public class LarchCofferBlockEntity extends ChestBlockEntity {
     public LarchCofferBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.LARCH_COFFER, pos, state);
 
-        this.setInvStackList(NonNullList.ofSize(this.size(), ItemStack.EMPTY));
+        this.setInvStackList(NonNullList.withSize(this.size(), ItemStack.EMPTY));
     }
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable(MiddleEarth.of("larch_coffer").toTranslationKey("screen"));
+        return Component.translatable(MiddleEarth.of("larch_coffer").toLanguageKey("screen"));
     }
 }

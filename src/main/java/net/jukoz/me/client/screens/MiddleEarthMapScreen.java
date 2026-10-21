@@ -97,21 +97,21 @@ public class MiddleEarthMapScreen extends Screen {
         int optionsOffsetX = x + windowWidth + 2;
         int optionsOffsetY = y + windowHeight - MARGIN;
 
-        ButtonWidget debugButton = ButtonWidget.builder(Component.literal("VisibleForDebug"), button -> {
+        Button debugButton = Button.builder(Component.literal("VisibleForDebug"), button -> {
                     debug = !debug;
                 })
                 .dimensions(optionsOffsetX, y + MARGIN, 18, 18).build();
 
-        ButtonWidget centerOnPlayer = ButtonWidget.builder(Component.literal("Center on Player"), button -> {
+        Button centerOnPlayer = Button.builder(Component.literal("Center on Player"), button -> {
                     centerOnPlayer();
                 })
                 .dimensions(optionsOffsetX, optionsOffsetY - (offset * 3) - (buttonMargin * 2), 18, 18).build();
 
-        ButtonWidget zoomButton = ButtonWidget.builder(Component.literal("Zoom"), button -> {
+        Button zoomButton = Button.builder(Component.literal("Zoom"), button -> {
                     zoom(1, false);
                 })
                 .dimensions(optionsOffsetX, optionsOffsetY - (offset * 2)  - buttonMargin, 18, 18).build();
-        ButtonWidget dezoomButton = ButtonWidget.builder(Component.literal("Dezoom"), button -> {
+        Button dezoomButton = Button.builder(Component.literal("Dezoom"), button -> {
                     zoom(-1, false);
                 })
                 .dimensions(optionsOffsetX, optionsOffsetY - offset, 18, 18).build();
@@ -148,9 +148,9 @@ public class MiddleEarthMapScreen extends Screen {
         RenderSystem.enableBlend();
 
         drawMaintTextures(context, x, y, mouseX, mouseY);
-        Vec2 mapPlayerPos = getCoordinateOnMap((float)player.getBlockPos().getX(), (float)player.getBlockPos().getZ(), 4,4);
-        if(ModDimensions.isInMiddleEarth(player.getWorld())){
-            context.drawTexture(this.player.getSkinTexture(),
+        Vec2 mapPlayerPos = getCoordinateOnMap((float)player.blockPosition().getX(), (float)player.blockPosition().getZ(), 4,4);
+        if(ModDimensions.isInMiddleEarth(player.level())){
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, this.player.getSkinTexture(),
                     x + MARGIN + (int)mapPlayerPos.x - 4,
                     y + MARGIN + (int)mapPlayerPos.y - 4,
                     8, 8, 8, 8, 64, 64);
@@ -160,8 +160,8 @@ public class MiddleEarthMapScreen extends Screen {
 
             // VisibleForDebug panel
             if(debug){
-                Level world = this.player.getWorld();
-                Optional<ResourceKey<Biome>> biomeRegistry = world.getBiome(this.player.getBlockPos()).getKey();
+                Level world = this.player.level();
+                Optional<ResourceKey<Biome>> biomeRegistry = world.getBiome(this.player.blockPosition()).getKey();
                 MutableComponent text = MutableComponent.of(new LiteralContents("N/A"));
                 if(biomeRegistry.isPresent()) {
                     String currentBiomeId = biomeRegistry.get().getValue().toString().replace(':', '.');
@@ -169,17 +169,17 @@ public class MiddleEarthMapScreen extends Screen {
                     text.append(Component.translatable("biome." + currentBiomeId));
 
                 }
-                context.drawTextWithShadow(textRenderer, Component.literal("Player information"), 0, 5, 0xffffff);
-                BlockPos playerPos = this.player.getBlockPos();
-                context.drawTextWithShadow(textRenderer, Component.literal("Coordinates : " + (int)playerPos.getX() + ", " + (int)playerPos.getY() + ", " + (int)playerPos.getZ()), 5, 15, 0xffffff);
-                context.drawTextWithShadow(textRenderer, text, 5, 25, 0xffffff);
+                context.drawTextWithShadow(font, Component.literal("Player information"), 0, 5, 0xffffff);
+                BlockPos playerPos = this.player.blockPosition();
+                context.drawTextWithShadow(font, Component.literal("Coordinates : " + (int)playerPos.getX() + ", " + (int)playerPos.getY() + ", " + (int)playerPos.getZ()), 5, 15, 0xffffff);
+                context.drawTextWithShadow(font, text, 5, 25, 0xffffff);
 
-                context.drawTextWithShadow(textRenderer, Component.literal("Cursor information"), 0, 45, 0xffffff);
-                context.drawTextWithShadow(textRenderer, Component.literal("Coordinates : " + ((outsideBound) ? "N/A" : (int)cursorWorldCoordinate.x + ", "+ (int)cursorWorldCoordinate.y)), 5, 55, 0xffffff);
+                context.drawTextWithShadow(font, Component.literal("Cursor information"), 0, 45, 0xffffff);
+                context.drawTextWithShadow(font, Component.literal("Coordinates : " + ((outsideBound) ? "N/A" : (int)cursorWorldCoordinate.x + ", "+ (int)cursorWorldCoordinate.y)), 5, 55, 0xffffff);
 
                 /*
                 if(!oustideBound && this.player.isCreative()){
-                    context.drawTextWithShadow(textRenderer, Component.literal("Right Click to teleport"), mouseX + 10, mouseY, 0xcccccc);
+                    context.drawTextWithShadow(font, Component.literal("Right Click to teleport"), mouseX + 10, mouseY, 0xcccccc);
                 }
                  */
             }
@@ -202,7 +202,7 @@ public class MiddleEarthMapScreen extends Screen {
     }
 
     private void getTeleport(Vector2i coord){
-        if(ModDimensions.isInMiddleEarth(this.player.getWorld())){
+        if(ModDimensions.isInMiddleEarth(this.player.level())){
             String tpString = "/tp %s ~ %s".formatted(coord.x, coord.y);
             new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, tpString);
 
@@ -220,10 +220,10 @@ public class MiddleEarthMapScreen extends Screen {
 
     private void drawMaintTextures(GuiGraphics context, int x, int y, double mouseX, double mouseY) {
         // Border
-        context.drawTexture(WINDOW_TEXTURE, x, y, 0, 0,  windowWidth, windowHeight,
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, WINDOW_TEXTURE, x, y, 0, 0,  windowWidth, windowHeight,
                  windowWidth, windowHeight);
         // Map
-        context.drawTexture(MAP_TEXTURE, x + MARGIN, y + MARGIN,
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, MAP_TEXTURE, x + MARGIN, y + MARGIN,
                 // UV (x,y)
                 mapDisplacementX, mapDisplacementY,
                 mapWindowWidth,
@@ -235,12 +235,12 @@ public class MiddleEarthMapScreen extends Screen {
 
         // VisibleForDebug Button
         int debugButtonTextureOffset = children().get(debugButtonIndex).isMouseOver(mouseX, mouseY) ? 18 : 0;
-        if(!ModDimensions.isInMiddleEarth(player.getWorld())){
+        if(!ModDimensions.isInMiddleEarth(player.level())){
             debugButtonTextureOffset = 36;
         }
-        context.drawTexture(MAP_UI_TEXTURE,
-                ((ButtonWidget)children().get(debugButtonIndex)).getX(),
-                ((ButtonWidget)children().get(debugButtonIndex)).getY(),
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, MAP_UI_TEXTURE,
+                ((Button)children().get(debugButtonIndex)).getX(),
+                ((Button)children().get(debugButtonIndex)).getY(),
                 debugButtonTextureOffset, 54, 18, 18, 256, 256);
 
         // Center on player
@@ -248,9 +248,9 @@ public class MiddleEarthMapScreen extends Screen {
         if(!canCenterOnPlayer()){
             centerOnPlayerTextureOffset = 36;
         }
-        context.drawTexture(MAP_UI_TEXTURE,
-                ((ButtonWidget)children().get(centerOnPlayerButtonIndex)).getX(),
-                ((ButtonWidget)children().get(centerOnPlayerButtonIndex)).getY(),
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, MAP_UI_TEXTURE,
+                ((Button)children().get(centerOnPlayerButtonIndex)).getX(),
+                ((Button)children().get(centerOnPlayerButtonIndex)).getY(),
                 centerOnPlayerTextureOffset, 36, 18, 18, 256, 256);
 
         // Zoom +
@@ -258,9 +258,9 @@ public class MiddleEarthMapScreen extends Screen {
         if(zoomLevel ==  MAX_ZOOM_LEVEL - 1){
             zoomTextureOffset = 36;
         }
-        context.drawTexture(MAP_UI_TEXTURE,
-                ((ButtonWidget)children().get(zoomButtonIndex)).getX(),
-                ((ButtonWidget)children().get(zoomButtonIndex)).getY(),
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, MAP_UI_TEXTURE,
+                ((Button)children().get(zoomButtonIndex)).getX(),
+                ((Button)children().get(zoomButtonIndex)).getY(),
                 zoomTextureOffset, 0, 18, 18, 256, 256);
 
         // Zoom -
@@ -268,24 +268,24 @@ public class MiddleEarthMapScreen extends Screen {
         if(zoomLevel == 1){
             dezoomTextureOffset = 36;
         }
-        context.drawTexture(MAP_UI_TEXTURE,
-                ((ButtonWidget)children().get(dezoomButtonIndex)).getX(),
-                ((ButtonWidget)children().get(dezoomButtonIndex)).getY(),
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, MAP_UI_TEXTURE,
+                ((Button)children().get(dezoomButtonIndex)).getX(),
+                ((Button)children().get(dezoomButtonIndex)).getY(),
                 dezoomTextureOffset, 18, 18, 18, 256, 256);
 
-        ((ButtonWidget)children().get(debugButtonIndex)).active = ModDimensions.isInMiddleEarth(player.getWorld());
-        ((ButtonWidget)children().get(centerOnPlayerButtonIndex)).active = canCenterOnPlayer();
-        ((ButtonWidget)children().get(zoomButtonIndex)).active = (zoomLevel < MAX_ZOOM_LEVEL - 1);
-        ((ButtonWidget)children().get(dezoomButtonIndex)).active = (zoomLevel > 1);
+        ((Button)children().get(debugButtonIndex)).active = ModDimensions.isInMiddleEarth(player.level());
+        ((Button)children().get(centerOnPlayerButtonIndex)).active = canCenterOnPlayer();
+        ((Button)children().get(zoomButtonIndex)).active = (zoomLevel < MAX_ZOOM_LEVEL - 1);
+        ((Button)children().get(dezoomButtonIndex)).active = (zoomLevel > 1);
 
         // BREE (TEST)
         /*
         Vec2 breeOnMap = getCoordinateOnMap(4100.0f, 2550.0f, 2,2);
-        context.drawTexture(MAP_UI_TEXTURE,
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, MAP_UI_TEXTURE,
                 x + MARGIN + (int)breeOnMap.x,
                 y + MARGIN + (int)breeOnMap.y,
                 54, 0, 4, 4, 256, 256);
-        context.drawText(textRenderer,"BREE",
+        context.drawText(font,"BREE",
                 x + MARGIN + (int)breeOnMap.x + 5,
                 y + MARGIN + (int)breeOnMap.y - 2,
                 0x000000,
@@ -372,7 +372,7 @@ public class MiddleEarthMapScreen extends Screen {
     }
 
     private boolean canCenterOnPlayer(){
-        return zoomLevel > 1 && this.player != null && ModDimensions.isInMiddleEarth(player.getWorld());
+        return zoomLevel > 1 && this.player != null && ModDimensions.isInMiddleEarth(player.level());
     }
 
     private void centerOnCoordinates(double x, double y){

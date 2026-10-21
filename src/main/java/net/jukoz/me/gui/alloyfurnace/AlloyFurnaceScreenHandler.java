@@ -45,7 +45,7 @@ public class AlloyFurnaceScreenHandler extends AbstractContainerMenu{
         Slot invSlot = this.slots.get(slot);
 
         if(invSlot.hasStack()) {
-            ItemStack originalStack = invSlot.getStack();
+            ItemStack originalStack = invSlot.getItem();
             if(slot < this.inventory.size()) {
                 if(!this.insertItem(originalStack, this.inventory.size(), this.slots.size(), true)) {
                     return ItemStack.EMPTY;

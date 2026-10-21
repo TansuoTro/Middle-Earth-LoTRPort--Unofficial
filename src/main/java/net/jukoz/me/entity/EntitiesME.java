@@ -103,7 +103,7 @@ public class EntitiesME {
     private static <T extends Entity> EntityType<T> register(ResourceKey<EntityType<?>> key, EntityType<T> type) {
         EntityType<T> entityType = Registry.register(Registries.ENTITY_TYPE, key, type);
         TranslationEntries.entityEntries.add(entityType);
-        RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ENTITY_TYPE, entityType.getUntranslatedName()));
+        RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ENTITY_TYPE, entityType.toShortString()));
         return entityType;
     }
 
@@ -116,7 +116,7 @@ public class EntitiesME {
     }
 
     private static ResourceKey<EntityType<?>> keyOf(String id) {
-        return ResourceKey.of(Registries.ENTITY_TYPE, new ResourceLocation(MiddleEarth.MOD_ID, id));
+        return ResourceKey.create(Registries.ENTITY_TYPE, new ResourceLocation(MiddleEarth.MOD_ID, id));
     }
 
     public static void registerModEntities() {
@@ -140,8 +140,8 @@ public class EntitiesME {
     }
 
     private static void registerSpawnRestrictions(){
-        SpawnPlacements.Location onGroundLocation = SpawnPlacements.Location.ON_GROUND;
-        Heightmap.Type heightmapType = Heightmap.Type.MOTION_BLOCKING_NO_LEAVES;
+        SpawnPlacements.Type onGroundLocation = SpawnPlacements.Type.ON_GROUND;
+        Heightmap.Types heightmapType = Heightmap.Types.MOTION_BLOCKING_NO_LEAVES;
 
         registerSpawnRestriction(SHELOBITE_LARVA, onGroundLocation, heightmapType, ShelobiteLarvaEntity::canSpawn);
         registerSpawnRestriction(SHELOBITE_SCUTTLER, onGroundLocation, heightmapType, ShelobiteScuttlerEntity::canSpawn);
@@ -152,11 +152,11 @@ public class EntitiesME {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static <T extends Mob> void registerSpawnRestriction(EntityType<T> type, SpawnPlacements.Location location, Heightmap.Type heightmap,
+    private static <T extends Mob> void registerSpawnRestriction(EntityType<T> type, SpawnPlacements.Type location, Heightmap.Types heightmap,
                                                                        SpawnPlacements.SpawnPredicate<T> predicate) {
         try {
             Method method = SpawnPlacements.class.getDeclaredMethod("register", EntityType.class,
-                    SpawnPlacements.Location.class, Heightmap.Type.class, SpawnPlacements.SpawnPredicate.class);
+                    SpawnPlacements.Type.class, Heightmap.Types.class, SpawnPlacements.SpawnPredicate.class);
             method.setAccessible(true);
             method.invoke(null, type, location, heightmap, predicate);
         } catch (ReflectiveOperationException e) {

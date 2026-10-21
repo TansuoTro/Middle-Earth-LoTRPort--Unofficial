@@ -51,11 +51,11 @@ public class MistyGoblinEntity extends NpcEntity {
 
     public static AttributeSupplier.Builder setSoldierAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25f)
-                .add(Attributes.GENERIC_MAX_HEALTH, 20.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.25f)
+                .add(Attributes.MAX_HEALTH, 20.0)
                 .add(Attributes.GENERIC_ATTACK_SPEED, 2.0)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 32.0)
-                .add(Attributes.GENERIC_ATTACK_DAMAGE, 2.0);
+                .add(Attributes.ATTACK_DAMAGE, 2.0);
     }
 
     @Override

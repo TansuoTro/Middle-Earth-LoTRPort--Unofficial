@@ -91,57 +91,57 @@ public class CrabModel extends EntityModel<CrabEntity> {
         PartDefinition modelPartData = modelData.getRoot();
 
         PartDefinition armRight = modelPartData
-                .addChild(ARM_RIGHT, CubeListBuilder.create().uv(20, 13).cuboid(-2.0F, -0.5F, -0.5F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.pivot(-3.5F, 20.4F, -3.0F));
+                .addOrReplaceChild(ARM_RIGHT, CubeListBuilder.create().texOffs(20, 13).addBox(-2.0F, -0.5F, -0.5F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.5F, 20.4F, -3.0F));
 
         PartDefinition clawTopRight = modelPartData.getChild(ARM_RIGHT)
-                .addChild(CLAW_TOP_RIGHT, CubeListBuilder.create().uv(16, 11).cuboid(-3F, 0.5F, -0.5F, 3.0F, 1.0F, 1.0F,  new CubeDeformation(0.0F)),
-                PartPose.of(-1.5F, -0.5F, 0,0, 0, 0));
+                .addOrReplaceChild(CLAW_TOP_RIGHT, CubeListBuilder.create().texOffs(16, 11).addBox(-3F, 0.5F, -0.5F, 3.0F, 1.0F, 1.0F,  new CubeDeformation(0.0F)),
+                PartPose.offsetAndRotation(-1.5F, -0.5F, 0,0, 0, 0));
 
         PartDefinition clawBotRight = modelPartData.getChild(ARM_RIGHT)
-                .addChild(CLAW_BOT_RIGHT, CubeListBuilder.create().uv(0, 16).cuboid(-3F, -1.5F, -0.5F, 3.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)),
-                        PartPose.of(-1.5F, 0.5F, 0,0, 0, 0));
+                .addOrReplaceChild(CLAW_BOT_RIGHT, CubeListBuilder.create().texOffs(0, 16).addBox(-3F, -1.5F, -0.5F, 3.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)),
+                        PartPose.offsetAndRotation(-1.5F, 0.5F, 0,0, 0, 0));
 
         PartDefinition armLeft = modelPartData
-                .addChild(ARM_LEFT, CubeListBuilder.create().uv(20, 16).cuboid(.0F, -0.5F, -0.5F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.pivot(3.5F, 20.4F, -3.0F));
+                .addOrReplaceChild(ARM_LEFT, CubeListBuilder.create().texOffs(20, 16).addBox(.0F, -0.5F, -0.5F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(3.5F, 20.4F, -3.0F));
 
         PartDefinition clawTopLeft = modelPartData.getChild(ARM_LEFT)
-                .addChild(CLAW_TOP_LEFT, CubeListBuilder.create().uv(16, 9).cuboid(.5F, 0.5F, -0.5F, 3.0F, 1.0F, 1.0F,  new CubeDeformation(0.0F)),
-                        PartPose.of(1.5F, -0.5F, 0,0, 0, 0));
+                .addOrReplaceChild(CLAW_TOP_LEFT, CubeListBuilder.create().texOffs(16, 9).addBox(.5F, 0.5F, -0.5F, 3.0F, 1.0F, 1.0F,  new CubeDeformation(0.0F)),
+                        PartPose.offsetAndRotation(1.5F, -0.5F, 0,0, 0, 0));
 
         PartDefinition clawBotLeft = modelPartData.getChild(ARM_LEFT)
-                .addChild(CLAW_BOT_LEFT, CubeListBuilder.create().uv(8, 16).cuboid(.5F, -1.5F, -0.5F, 3.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)),
-                        PartPose.of(1.5F, 0.5F, 0,0, 0, 0));
+                .addOrReplaceChild(CLAW_BOT_LEFT, CubeListBuilder.create().texOffs(8, 16).addBox(.5F, -1.5F, -0.5F, 3.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)),
+                        PartPose.offsetAndRotation(1.5F, 0.5F, 0,0, 0, 0));
 
-        PartDefinition bone_leg_swimmer_left = modelPartData.addChild(LEG_SWIMMER_LEFT, CubeListBuilder.create().uv(0, 3).cuboid(-0.5F, -0.5f, 0.5F, 1, 1, 1, new CubeDeformation(0.0F)), PartPose.pivot(2F, 21.8F, 2.8F));
+        PartDefinition bone_leg_swimmer_left = modelPartData.addOrReplaceChild(LEG_SWIMMER_LEFT, CubeListBuilder.create().texOffs(0, 3).addBox(-0.5F, -0.5f, 0.5F, 1, 1, 1, new CubeDeformation(0.0F)), PartPose.offset(2F, 21.8F, 2.8F));
 
         PartDefinition swimmerLeft = modelPartData.getChild(LEG_SWIMMER_LEFT)
-                .addChild(SWIMMER_LEFT, CubeListBuilder.create().uv(8, 16).cuboid(0, -0.5f, 1.5F, 0, 1, 1,  new CubeDeformation(0.0F)),
-                PartPose.of(0, 0, 0,0, 0, 0));
+                .addOrReplaceChild(SWIMMER_LEFT, CubeListBuilder.create().texOffs(8, 16).addBox(0, -0.5f, 1.5F, 0, 1, 1,  new CubeDeformation(0.0F)),
+                PartPose.offsetAndRotation(0, 0, 0,0, 0, 0));
 
-        PartDefinition bone_leg_swimmer_right = modelPartData.addChild(LEG_SWIMMER_RIGHT, CubeListBuilder.create().uv(16, 11).cuboid(-0.5F,  -0.5f, 0.5F, 1, 1, 1, new CubeDeformation(0.0F)), PartPose.pivot(-2F, 21.8F, 2.8F));
+        PartDefinition bone_leg_swimmer_right = modelPartData.addOrReplaceChild(LEG_SWIMMER_RIGHT, CubeListBuilder.create().texOffs(16, 11).addBox(-0.5F,  -0.5f, 0.5F, 1, 1, 1, new CubeDeformation(0.0F)), PartPose.offset(-2F, 21.8F, 2.8F));
 
         PartDefinition swimmerRight = modelPartData.getChild(LEG_SWIMMER_RIGHT)
-                .addChild(SWIMMER_RIGHT, CubeListBuilder.create().uv(8, 16).cuboid(0, -0.5f, 1.5F, 0, 1, 1,  new CubeDeformation(0.0F)),
-                PartPose.of(0, 0, 0,0, 0, 0));
+                .addOrReplaceChild(SWIMMER_RIGHT, CubeListBuilder.create().texOffs(8, 16).addBox(0, -0.5f, 1.5F, 0, 1, 1,  new CubeDeformation(0.0F)),
+                PartPose.offsetAndRotation(0, 0, 0,0, 0, 0));
 
-        PartDefinition bone_leg_right_first = modelPartData.addChild(LEG_RIGHT_FIRST, CubeListBuilder.create().uv(12, 18).cuboid(-1.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.pivot(-2.5F, 22.4F, -2.0F));
+        PartDefinition bone_leg_right_first = modelPartData.addOrReplaceChild(LEG_RIGHT_FIRST, CubeListBuilder.create().texOffs(12, 18).addBox(-1.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.5F, 22.4F, -2.0F));
 
-        PartDefinition bone_leg_right_second = modelPartData.addChild(LEG_RIGHT_SECOND, CubeListBuilder.create().uv(8, 18).cuboid(-1.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.pivot(-2.5F, 22.4F, 0.0F));
+        PartDefinition bone_leg_right_second = modelPartData.addOrReplaceChild(LEG_RIGHT_SECOND, CubeListBuilder.create().texOffs(8, 18).addBox(-1.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.5F, 22.4F, 0.0F));
 
-        PartDefinition bone_leg_right_third = modelPartData.addChild(LEG_RIGHT_THIRD, CubeListBuilder.create().uv(4, 18).cuboid(-1.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.pivot(-2.5F, 22.4F, 2.0F));
+        PartDefinition bone_leg_right_third = modelPartData.addOrReplaceChild(LEG_RIGHT_THIRD, CubeListBuilder.create().texOffs(4, 18).addBox(-1.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.5F, 22.4F, 2.0F));
 
-        PartDefinition bone_leg_left_first = modelPartData.addChild(LEG_LEFT_FIRST, CubeListBuilder.create().uv(0, 9).cuboid(0.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.pivot(2.5F, 22.4F, -2.0F));
+        PartDefinition bone_leg_left_first = modelPartData.addOrReplaceChild(LEG_LEFT_FIRST, CubeListBuilder.create().texOffs(0, 9).addBox(0.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(2.5F, 22.4F, -2.0F));
 
-        PartDefinition bone_leg_left_second = modelPartData.addChild(LEG_LEFT_SECOND, CubeListBuilder.create().uv(16, 16).cuboid(0.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.pivot(2.5F, 22.4F, 0.0F));
+        PartDefinition bone_leg_left_second = modelPartData.addOrReplaceChild(LEG_LEFT_SECOND, CubeListBuilder.create().texOffs(16, 16).addBox(0.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(2.5F, 22.4F, 0.0F));
 
-        PartDefinition bone_leg_left_third = modelPartData.addChild(LEG_LEFT_THIRD, CubeListBuilder.create().uv(0, 18).cuboid(0.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.pivot(2.5F, 22.4F, 2.0F));
+        PartDefinition bone_leg_left_third = modelPartData.addOrReplaceChild(LEG_LEFT_THIRD, CubeListBuilder.create().texOffs(0, 18).addBox(0.0F, -0.1F, -0.5F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(2.5F, 22.4F, 2.0F));
 
-        PartDefinition bone_eye_right = modelPartData.addChild(EYE_RIGHT, CubeListBuilder.create().uv(21, 0).cuboid(-0.5F, -2.0F, -0.5F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.pivot(-1.5F, 19.3F, -2.0F));
+        PartDefinition bone_eye_right = modelPartData.addOrReplaceChild(EYE_RIGHT, CubeListBuilder.create().texOffs(21, 0).addBox(-0.5F, -2.0F, -0.5F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.5F, 19.3F, -2.0F));
 
-        PartDefinition bone_eye_left = modelPartData.addChild(EYE_LEFT, CubeListBuilder.create().uv(20, 18).cuboid(-0.5F, -2.0F, -0.5F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.pivot(2.0F, 19.3F, -2.0F));
+        PartDefinition bone_eye_left = modelPartData.addOrReplaceChild(EYE_LEFT, CubeListBuilder.create().texOffs(20, 18).addBox(-0.5F, -2.0F, -0.5F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, 19.3F, -2.0F));
 
-        PartDefinition bb_main = modelPartData.addChild(BODY, CubeListBuilder.create().uv(0, 0).cuboid(-3.5F, -4.7F, -3.5F, 7.0F, 2.0F, 7.0F, new CubeDeformation(0.0F))
-                .uv(0, 9).cuboid(-2.5F, -2.7F, -2.7F, 5.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.pivot(0.0F, 24.0F, 0.0F));
+        PartDefinition bb_main = modelPartData.addOrReplaceChild(BODY, CubeListBuilder.create().texOffs(0, 0).addBox(-3.5F, -4.7F, -3.5F, 7.0F, 2.0F, 7.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 9).addBox(-2.5F, -2.7F, -2.7F, 5.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
         return LayerDefinition.of(modelData, 32, 32);
     }
     @Override
@@ -159,13 +159,13 @@ public class CrabModel extends EntityModel<CrabEntity> {
         legLeftSecond.roll = -legAngle;
         legLeftThird.roll = -legAngle;
 
-        legRightFirst.pitch = -cosVal;
-        legRightSecond.pitch = -cosVal * 0.25f;
-        legRightThird.pitch = cosVal;
+        legRightFirst.xRot = -cosVal;
+        legRightSecond.xRot = -cosVal * 0.25f;
+        legRightThird.xRot = cosVal;
 
-        legLeftFirst.pitch = cosVal;
-        legLeftSecond.pitch = cosVal * 0.25f;
-        legLeftThird.pitch = -cosVal;
+        legLeftFirst.xRot = cosVal;
+        legLeftSecond.xRot = cosVal * 0.25f;
+        legLeftThird.xRot = -cosVal;
 
         float armRollMovementModifier = 0.5F;
         armRight.roll = armAngle ;
@@ -178,11 +178,11 @@ public class CrabModel extends EntityModel<CrabEntity> {
         clawTopLeft.roll = clawPitchMovement;
         clawBotLeft.roll = -clawPitchMovement;
 
-        legSwimmerLeft.yaw = clawPitchMovement;
-        legSwimmerRight.yaw = -clawPitchMovement;
+        legSwimmerLeft.yRot = clawPitchMovement;
+        legSwimmerRight.yRot = -clawPitchMovement;
 
-        swimmerLeft.yaw = clawPitchMovement * 2;
-        swimmerRight.yaw = -clawPitchMovement * 2;
+        swimmerLeft.yRot = clawPitchMovement * 2;
+        swimmerRight.yRot = -clawPitchMovement * 2;
     }
 
     @Override

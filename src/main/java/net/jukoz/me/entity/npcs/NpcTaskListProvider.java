@@ -35,7 +35,7 @@ public class NpcTaskListProvider {
                                 Tuple.of(new JumpOnBed(speed), 1),
                                 Tuple.of(new DoNothing(30, 60), 1)))),
                 Tuple.of(3, SetLookAndInteract.create(EntityType.PLAYER, 4)),
-                Tuple.of(3, new GateBehavior(ImmutableMap.of(), ImmutableSet.of(MemoryModuleType.INTERACTION_TARGET), GateBehavior.Order.ORDERED, GateBehavior.RunMode.RUN_ONE,
+                Tuple.of(3, new GateBehavior(ImmutableMap.of(), ImmutableSet.of(MemoryModuleType.INTERACTION_TARGET), GateBehavior.OrderPolicy.ORDERED, GateBehavior.RunningPolicy.RUN_ONE,
                         ImmutableList.of(Tuple.of(new TradeWithVillager(), 1)))),
                 Tuple.of(99, UpdateActivityFromSchedule.create()));
     }

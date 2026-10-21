@@ -25,6 +25,6 @@ public final class BluntWeapon {
     }
 
     public static void blunt(ItemStack stack) {
-        stack.getOrCreateNbt().putBoolean(KEY, true);
+        stack.getOrCreateTag().putBoolean(KEY, true);
     }
 }

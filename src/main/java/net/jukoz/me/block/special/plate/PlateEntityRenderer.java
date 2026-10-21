@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererFactory;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.item.Item;
@@ -36,7 +36,7 @@ public class PlateEntityRenderer implements BlockEntityRenderer<PlateBlockEntity
 
     @Override
     public void render(PlateBlockEntity entity, float tickProgress, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
-        ItemStack stack = entity.getStack();
+        ItemStack stack = entity.getItem();
 
         if(stack.isEmpty()) return;
 
@@ -48,9 +48,9 @@ public class PlateEntityRenderer implements BlockEntityRenderer<PlateBlockEntity
         boolean is3D = oldId != modelId;
 
         matrices.push();
-        Direction direction = entity.getCachedState().get(ForgeBlock.FACING);
+        Direction direction = entity.getBlockState().get(ForgeBlock.FACING);
 
-        long seed = Mth.hashCode(entity.getPos().getX(), 0, entity.getPos().getZ());
+        long seed = Mth.hashCode(entity.position().getX(), 0, entity.position().getZ());
         double xOffset = ((seed & 15L) / 15.0 - 0.5) * 0.15;
         double zOffset = (((seed >> 4 & 15L) / 15.0) - 0.5) * 0.15;
         double rotOffset = (((seed >> 5 & 15L) / 15.0) - 0.5) * 35;
@@ -78,17 +78,17 @@ public class PlateEntityRenderer implements BlockEntityRenderer<PlateBlockEntity
             matrices.multiply(Axis.POSITIVE_Y.rotation((float) Math.toRadians(rotOffset)));
         }
 
-        int currentLight = getLightLevel(entity.getWorld(), entity.getPos(), direction);
+        int currentLight = getLightLevel(entity.level(), entity.position(), direction);
 
         this.itemRenderer.renderItem(copyStack, ItemDisplayContext.FIXED, currentLight, OverlayTexture.DEFAULT_UV,
-                matrices, vertexConsumers, entity.getWorld(), 1);
+                matrices, vertexConsumers, entity.level(), 1);
 
         matrices.pop();
     }
 
     private int getLightLevel(Level world, BlockPos pos, Direction direction) {
-        int bLight = world.getLightLevel(LightLayer.BLOCK, pos.offset(direction).up());
-        int sLight = world.getLightLevel(LightLayer.SKY, pos.offset(direction).up());
+        int bLight = world.getLightLevel(LightLayer.BLOCK, pos.offset(direction).above());
+        int sLight = world.getLightLevel(LightLayer.SKY, pos.offset(direction).above());
         return LightTexture.pack(bLight, sLight);
     }
 }

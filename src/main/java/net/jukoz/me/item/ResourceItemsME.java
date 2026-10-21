@@ -29,6 +29,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class ResourceItemsME {
 
@@ -146,13 +147,13 @@ public class ResourceItemsME {
     public static final Item STRAW = registerItem("straw",
             Item::new, new MESettings());
     public static final Block REEDS = ModBlocks.registerBlock("reeds",
-            (settings) -> new CustomWaterloggableTallPlantBlock(settings, false), BlockBehaviour.Settings.copy(Blocks.TALL_GRASS).breakInstantly(), false, ModItemGroups.RESOURCES_CONTENTS);
+            (settings) -> new CustomWaterloggableTallPlantBlock(settings, false), BlockBehaviour.Properties.copy(Blocks.TALL_GRASS).breakInstantly(), false, ModItemGroups.RESOURCES_CONTENTS);
     public static final Item SWAN_FEATHER = registerItem("swan_feather",
             Item::new, new MESettings());
 
     public static final Item GLOWWORM_BOTTLE = registerItem("glowworm_bottle",
             GlowwormBottle::new, new MESettings().maxCount(1)
-                    .food(new FoodProperties.Builder().hunger(2).saturationModifier(0.3f).alwaysEdible().build()).recipeRemainder(Items.GLASS_BOTTLE));
+                    .food(new FoodProperties.Builder().hunger(2).saturationModifier(0.3f).alwaysEat().build()).recipeRemainder(Items.GLASS_BOTTLE));
 
     public static final Item COPPER_COIN = registerItem("copper_coin", Item::new, new MESettings());
     public static final Item SILVER_COIN = registerItem("silver_coin", Item::new, new MESettings());
@@ -304,18 +305,18 @@ public class ResourceItemsME {
     public static final Item SAUROPOD_NUGGET = registerHiddenItem("sauropod_nugget",
             HotChickenFoodItem::new, new MESettings().maxCount(16).food(new FoodProperties.Builder().hunger(14).saturationModifier(0.85f).build()));
 
-    private static Item registerItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerItem(String name, Function<Item.Properties, Item> factory, Item.Properties settings) {
         Item item = settings instanceof MESettings meSettings && meSettings.bannerPatternTag() != null
-                ? new net.minecraft.world.item.BannerPatternItem(net.minecraft.tags.TagKey.of(
+                ? new net.minecraft.world.item.BannerPatternItem(net.minecraft.tags.TagKey.create(
                         net.minecraft.core.registries.Registries.BANNER_PATTERN,
                         new ResourceLocation(meSettings.bannerPatternTag())), settings)
                 : factory.apply(settings);
-        ModItemGroups.RESOURCES_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.RESOURCES_CONTENTS.add(item.getDefaultInstance());
         TranslationEntries.itemEntries.add(item);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ITEM, name));
         return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);
     }
-    private static Item registerHiddenItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerHiddenItem(String name, Function<Item.Properties, Item> factory, Item.Properties settings) {
         Item item = factory.apply(settings);
         TranslationEntries.itemEntries.add(item);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ITEM, name));

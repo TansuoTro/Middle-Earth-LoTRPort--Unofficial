@@ -47,7 +47,7 @@ public class ModEvents {
                 return;
             if(data != null && data.getRace() != null){
                 RaceUtil.reset(player);
-                boolean isInMiddleEarth = ModDimensions.isInMiddleEarth(player.getWorld());
+                boolean isInMiddleEarth = ModDimensions.isInMiddleEarth(player.level());
                 if(isInMiddleEarth){
                     RaceUtil.initializeRace(player);
                 } else if(ModServerConfigs.ENABLE_KEEP_RACE_ON_DIMENSION_SWAP){
@@ -55,7 +55,7 @@ public class ModEvents {
                 }
             }
 
-            if(!player.getCommandTags().contains(GOT_STARTER_ITEM)) {
+            if(!player.getTags().contains(GOT_STARTER_ITEM)) {
                 ItemStack starterItem = new ItemStack(ResourceItemsME.PLAYER_BOOK);
                 player.getInventory().offerOrDrop(starterItem);
                 player.addCommandTag(GOT_STARTER_ITEM);
@@ -64,8 +64,8 @@ public class ModEvents {
 
         ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register((world, entity, killedEntity) -> {
             if(entity instanceof Player playerEntity) {
-                ItemStack stack = Objects.requireNonNull(playerEntity.getStackInHand(playerEntity.getActiveHand()));
-                Holder<Enchantment> enchantmentRegistryEntry = world.getRegistryManager()
+                ItemStack stack = Objects.requireNonNull(playerEntity.getItemInHand(playerEntity.getUsedItemHand()));
+                Holder<Enchantment> enchantmentRegistryEntry = world.registryAccess()
                         .get(Registries.ENCHANTMENT).getEntry(EnchantmentsME.BEHEADING).orElseThrow();
                 boolean hasEnchant = MEEnchants.has(stack, enchantmentRegistryEntry);
 
@@ -83,15 +83,15 @@ public class ModEvents {
         });
 
         PlayerBlockBreakEvents.AFTER.register((world, playerEntity, blockPos, blockState, blockEntity) -> {
-            ItemStack stack = Objects.requireNonNull(playerEntity.getStackInHand(playerEntity.getActiveHand()));
+            ItemStack stack = Objects.requireNonNull(playerEntity.getItemInHand(playerEntity.getUsedItemHand()));
             
-            Holder<Enchantment> enchantmentRegistryEntry = world.getRegistryManager().get(Registries.ENCHANTMENT).getEntry(EnchantmentsME.HEWING).orElseThrow();
+            Holder<Enchantment> enchantmentRegistryEntry = world.registryAccess().get(Registries.ENCHANTMENT).getEntry(EnchantmentsME.HEWING).orElseThrow();
             boolean hasEnchant = MEEnchants.has(stack, enchantmentRegistryEntry);
             int level = EnchantmentHelper.getLevel(enchantmentRegistryEntry.value(), stack);
-            float hardness = blockState.getBlock().getHardness();
+            float hardness = blockState.getBlock().defaultDestroyTime();
 
             if (hasEnchant) {
-                if (!playerEntity.isCreative() && !playerEntity.isSneaking()) {
+                if (!playerEntity.isCreative() && !playerEntity.isShiftKeyDown()) {
                     
                     if (stack.isSuitableFor(blockState)){
                         if (MEDirection.facing(playerEntity) == Direction.DOWN || MEDirection.facing(playerEntity) == Direction.UP){
@@ -117,16 +117,16 @@ public class ModEvents {
         });
 
         PlayerBlockBreakEvents.AFTER.register((world, playerEntity, blockPos, blockState, blockEntity) -> {
-            ItemStack stack = Objects.requireNonNull(playerEntity.getStackInHand(playerEntity.getActiveHand()));
+            ItemStack stack = Objects.requireNonNull(playerEntity.getItemInHand(playerEntity.getUsedItemHand()));
             
-            Holder<Enchantment> enchantmentRegistryEntry = world.getRegistryManager()
+            Holder<Enchantment> enchantmentRegistryEntry = world.registryAccess()
                     .get(Registries.ENCHANTMENT).getEntry(EnchantmentsME.TREE_FELLER).orElseThrow();
             boolean hasEnchant = MEEnchants.has(stack, enchantmentRegistryEntry);
             int level = EnchantmentHelper.getLevel(enchantmentRegistryEntry.value(), stack);
-            float hardness = blockState.getBlock().getHardness();
+            float hardness = blockState.getBlock().defaultDestroyTime();
 
             if (hasEnchant) {
-                if (!playerEntity.isCreative() && !playerEntity.isSneaking()) {
+                if (!playerEntity.isCreative() && !playerEntity.isShiftKeyDown()) {
                     
                     if (stack.isSuitableFor(blockState)){
                         int[] blockCount = new int[]{16};
@@ -145,7 +145,7 @@ public class ModEvents {
             BlockPos offsetZ = offsetY.offset(Direction.Axis.Z, z);
             for(int x = -2; x < 2; x++) {
                 BlockPos offset = offsetZ.offset(Direction.Axis.X, x);
-                if(world.getBlockState(offset).isIn(BlockTags.LOGS)) {
+                if(world.getBlockState(offset).is(BlockTags.LOGS)) {
                     if(attempts[0]-- <= 0) return;
                     breakTopLogs(world, player, new BlockPos(offset), stack, hardness, attempts);
                 }
@@ -190,39 +190,39 @@ public class ModEvents {
     }
 
     private static void level1Break(Level world, Player player, BlockPos blockPos, ItemStack stack, float hardness){
-        BlockPos blockPosUp = blockPos.up();
-        BlockPos blockPosDown = blockPos.down();
+        BlockPos blockPosUp = blockPos.above();
+        BlockPos blockPosDown = blockPos.below();
 
         breakAndDamage(world, player, blockPosUp, stack, hardness);
         breakAndDamage(world, player, blockPosDown, stack, hardness);
     }
 
     private static void level2Break(Level world, Player player, BlockPos blockPos, ItemStack stack, float hardness){
-        BlockPos blockPosUp = blockPos.up();
-        BlockPos blockPosDown = blockPos.down();
+        BlockPos blockPosUp = blockPos.above();
+        BlockPos blockPosDown = blockPos.below();
 
         breakAndDamage(world, player, blockPosUp, stack, hardness);
 
-        breakAndDamage(world, player, blockPos.offset(MEDirection.facing(player).rotateYClockwise()), stack, hardness);
-        breakAndDamage(world, player, blockPos.offset(MEDirection.facing(player).rotateYCounterclockwise()), stack, hardness);
+        breakAndDamage(world, player, blockPos.offset(MEDirection.facing(player).getClockWise()), stack, hardness);
+        breakAndDamage(world, player, blockPos.offset(MEDirection.facing(player).getCounterClockWise()), stack, hardness);
 
         breakAndDamage(world, player, blockPosDown, stack, hardness);
     }
 
     private static void level3Break(Level world, Player player, BlockPos blockPos, ItemStack stack, float hardness){
-        BlockPos blockPosUp = blockPos.up();
-        BlockPos blockPosDown = blockPos.down();
+        BlockPos blockPosUp = blockPos.above();
+        BlockPos blockPosDown = blockPos.below();
 
         breakAndDamage(world, player, blockPosUp, stack, hardness);
-        breakAndDamage(world, player, blockPosUp.offset(MEDirection.facing(player).rotateYClockwise()), stack, hardness);
-        breakAndDamage(world, player, blockPosUp.offset(MEDirection.facing(player).rotateYCounterclockwise()), stack, hardness);
+        breakAndDamage(world, player, blockPosUp.offset(MEDirection.facing(player).getClockWise()), stack, hardness);
+        breakAndDamage(world, player, blockPosUp.offset(MEDirection.facing(player).getCounterClockWise()), stack, hardness);
 
-        breakAndDamage(world, player, blockPos.offset(MEDirection.facing(player).rotateYClockwise()), stack, hardness);
-        breakAndDamage(world, player, blockPos.offset(MEDirection.facing(player).rotateYCounterclockwise()), stack, hardness);
+        breakAndDamage(world, player, blockPos.offset(MEDirection.facing(player).getClockWise()), stack, hardness);
+        breakAndDamage(world, player, blockPos.offset(MEDirection.facing(player).getCounterClockWise()), stack, hardness);
 
         breakAndDamage(world, player, blockPosDown, stack, hardness);
-        breakAndDamage(world, player, blockPosDown.offset(MEDirection.facing(player).rotateYClockwise()), stack, hardness);
-        breakAndDamage(world, player, blockPosDown.offset(MEDirection.facing(player).rotateYCounterclockwise()), stack, hardness);
+        breakAndDamage(world, player, blockPosDown.offset(MEDirection.facing(player).getClockWise()), stack, hardness);
+        breakAndDamage(world, player, blockPosDown.offset(MEDirection.facing(player).getCounterClockWise()), stack, hardness);
     }
 
     private static void breakAndDamage(Level world, Player player, BlockPos blockpos, ItemStack stack, float hardness){
@@ -231,7 +231,7 @@ public class ModEvents {
 
         if (!blockState.isAir()) {
             if (stack.isSuitableFor(blockState)) {
-                if (blockState.getBlock().getHardness() <= hardness) {
+                if (blockState.getBlock().defaultDestroyTime() <= hardness) {
                     BlockEntity blockEntity = blockState.hasBlockEntity()
                             ? world.getBlockEntity(blockpos)
                             : null;

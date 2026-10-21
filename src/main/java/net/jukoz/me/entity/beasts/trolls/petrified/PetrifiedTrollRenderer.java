@@ -4,7 +4,7 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.beasts.trolls.stone.StoneTrollEntity;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -15,7 +15,7 @@ public class PetrifiedTrollRenderer extends MobRenderer<PetrifiedTrollEntity, Pe
     private static final String PATH = "textures/entities/trolls/stone/";
 
     public PetrifiedTrollRenderer(EntityRendererProvider.Context ctx) {
-        super(ctx, new PetrifiedTrollModel(ctx.getPart(ModEntityModelLayers.PETRIFIED_TROLL)), 0.0f);
+        super(ctx, new PetrifiedTrollModel(ctx.bakeLayer(ModEntityModelLayers.PETRIFIED_TROLL)), 0.0f);
     }
 
     @Override

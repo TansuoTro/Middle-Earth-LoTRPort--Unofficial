@@ -13,11 +13,11 @@ public class SpruceCofferBlockEntity extends ChestBlockEntity {
     public SpruceCofferBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.SPRUCE_COFFER, pos, state);
 
-        this.setInvStackList(NonNullList.ofSize(this.size(), ItemStack.EMPTY));
+        this.setInvStackList(NonNullList.withSize(this.size(), ItemStack.EMPTY));
     }
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable(MiddleEarth.of("spruce_coffer").toTranslationKey("screen"));
+        return Component.translatable(MiddleEarth.of("spruce_coffer").toLanguageKey("screen"));
     }
 }

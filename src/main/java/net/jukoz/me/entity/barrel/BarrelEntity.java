@@ -17,7 +17,7 @@ public class BarrelEntity extends ChestBoat {
 
     @Override
     protected boolean canAddPassenger(Entity passenger) {
-        return this.getPassengerList().size() < this.getMaxPassengers();
+        return this.getPassengers().size() < this.getMaxPassengers();
     }
 
 }

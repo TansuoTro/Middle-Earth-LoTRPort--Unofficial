@@ -49,7 +49,7 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
 
-    @Shadow public abstract ItemStack getStackInHand(InteractionHand hand);
+    @Shadow public abstract ItemStack getItemInHand(InteractionHand hand);
 
     @Shadow public abstract boolean hasStatusEffect(MobEffect effect);
 
@@ -67,7 +67,7 @@ public abstract class LivingEntityMixin extends Entity {
         if (entity != null) {
             ItemStack chestplate = this.getEquippedStack(EquipmentSlot.CHEST);
             if(!chestplate.isEmpty()) {
-                Holder<Enchantment> enchantmentRegistryEntry = entity.getWorld().getRegistryManager()
+                Holder<Enchantment> enchantmentRegistryEntry = entity.level().registryAccess()
                         .get(Registries.ENCHANTMENT).getEntry(EnchantmentsME.STEALTHY_TRAIL).orElseThrow();
                 boolean hasEnchant = MEEnchants.has(chestplate, enchantmentRegistryEntry);
                 int level = EnchantmentHelper.getLevel(enchantmentRegistryEntry.value(), chestplate);
@@ -85,8 +85,8 @@ public abstract class LivingEntityMixin extends Entity {
         if(stackTraceLock) return;
         stackTraceLock = true;
         boolean twoHanded = false;
-        ItemStack stackMainHand = this.getStackInHand(InteractionHand.MAIN_HAND);
-        ItemStack stackOffHand = this.getStackInHand(InteractionHand.OFF_HAND);
+        ItemStack stackMainHand = this.getItemInHand(InteractionHand.MAIN_HAND);
+        ItemStack stackOffHand = this.getItemInHand(InteractionHand.OFF_HAND);
 
         if(stackMainHand != null){
             if ((stackMainHand.getItem() instanceof ReachWeaponItem && (((ReachWeaponItem) stackMainHand.getItem()).type.twoHanded))
@@ -117,7 +117,7 @@ public abstract class LivingEntityMixin extends Entity {
     public final MobEffectInstance addStatusEffect(MobEffectInstance effect) {
         if(effect.getEffectType().getCategory().equals(MobEffectCategory.HARMFUL)) {
             float ailmentLevel = 0;
-            Level world = this.getWorld();
+            Level world = this.level();
             ailmentLevel += getAilmentProtectionLevel(this.getEquippedStack(EquipmentSlot.HEAD), world);
             ailmentLevel += getAilmentProtectionLevel(this.getEquippedStack(EquipmentSlot.CHEST), world);
             ailmentLevel += getAilmentProtectionLevel(this.getEquippedStack(EquipmentSlot.LEGS), world);
@@ -135,8 +135,8 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Inject(method = "addStatusEffect(Lnet/minecraft/entity/effect/MobEffectInstance;Lnet/minecraft/entity/Entity;)Z", at = @At("TAIL"))
     public final void addStatusEffect(MobEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {
-        if(!this.getWorld().isClient) {
-            for (ServerPlayer player : ((ServerLevel) this.getWorld()).getPlayers()) {
+        if(!this.level().isClientSide) {
+            for (ServerPlayer player : ((ServerLevel) this.level()).getPlayers()) {
                 ServerPlayNetworking.send(player, new PacketLivingEntityData(this.getId(), effect));
             }
         }
@@ -144,7 +144,7 @@ public abstract class LivingEntityMixin extends Entity {
 
     private static int getAilmentProtectionLevel(ItemStack itemStack, Level world) {
         int level = 0;
-        Holder<Enchantment> enchantmentRegistryEntry = world.getRegistryManager().get(Registries.ENCHANTMENT)
+        Holder<Enchantment> enchantmentRegistryEntry = world.registryAccess().get(Registries.ENCHANTMENT)
                 .getEntry(EnchantmentsME.AILMENT_PROTECTION).orElseThrow();
         boolean hasEnchant = MEEnchants.has(itemStack, enchantmentRegistryEntry);
         if(hasEnchant) {
@@ -178,10 +178,10 @@ public abstract class LivingEntityMixin extends Entity {
             cir.setReturnValue(Math.max(currentValue * modifier, 0.25f));
         }
     }
-    @WrapOperation(method = "applyClimbingSpeed", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z", ordinal = 0))
+    @WrapOperation(method = "applyClimbingSpeed", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;is(Lnet/minecraft/block/Block;)Z", ordinal = 0))
     private boolean ScaffoldingDescendLogic(BlockState state, Block block, Operation<Boolean> original) {
         return original.call(state, block)
-                || block == Blocks.SCAFFOLDING && state.isOf(ModDecorativeBlocks.REINFORCED_SCAFFOLDING);
+                || block == Blocks.SCAFFOLDING && state.is(ModDecorativeBlocks.REINFORCED_SCAFFOLDING);
     }
 
     @Inject(method = "remove", at = @At("TAIL"))

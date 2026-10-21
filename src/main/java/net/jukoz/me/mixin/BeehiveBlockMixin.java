@@ -20,7 +20,7 @@ public class BeehiveBlockMixin {
     @ModifyExpressionValue(method = "onUseWithItem",at = @At(value = "INVOKE",
             target = "Lnet/minecraft/block/CampfireBlock;isLitCampfireInRange(Lnet/minecraft/world/Level;Lnet/minecraft/util/math/BlockPos;)Z"))
     private boolean preventBeeAnger(boolean original, ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        return original || player.getEquippedStack(EquipmentSlot.HEAD).isOf(EquipmentItemsME.BEEKEEPER_MASK);
+        return original || player.getEquippedStack(EquipmentSlot.HEAD).is(EquipmentItemsME.BEEKEEPER_MASK);
 
     }
 }

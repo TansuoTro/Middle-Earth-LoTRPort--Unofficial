@@ -20,14 +20,14 @@ public class CitadelGuardHelmetModel extends EggHelmetModel {
     public static LayerDefinition getTexturedModelData() {
         MeshDefinition modelData = getModelData();
         //+0.75
-        PartDefinition head = modelData.getRoot().addChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition head = modelData.getRoot().addOrReplaceChild(PartNames.HEAD, CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        head.addChild("side_left", CubeListBuilder.create()
-                .uv(40, 32).cuboid(-0.5F, -9.75F, 0.284F, 6.0F, 15.0F, 0.0F, new CubeDeformation(0.0F)),
-                PartPose.of(5.0F, -6.0F, -2.5F, 0.0F, -1.3963F, 0.0F));
-        head.addChild("side_right", CubeListBuilder.create()
-                .uv(52, 32).cuboid(-5.25F, -9.75F, 0.252F, 6.0F, 15.0F, 0.0F, new CubeDeformation(0.0F)),
-                PartPose.of(-5.0F, -6.0F, -2.5F, 0.0F, 1.3963F, 0.0F));
+        head.addOrReplaceChild("side_left", CubeListBuilder.create()
+                .texOffs(40, 32).addBox(-0.5F, -9.75F, 0.284F, 6.0F, 15.0F, 0.0F, new CubeDeformation(0.0F)),
+                PartPose.offsetAndRotation(5.0F, -6.0F, -2.5F, 0.0F, -1.3963F, 0.0F));
+        head.addOrReplaceChild("side_right", CubeListBuilder.create()
+                .texOffs(52, 32).addBox(-5.25F, -9.75F, 0.252F, 6.0F, 15.0F, 0.0F, new CubeDeformation(0.0F)),
+                PartPose.offsetAndRotation(-5.0F, -6.0F, -2.5F, 0.0F, 1.3963F, 0.0F));
 
         return LayerDefinition.of(modelData, 64, 64);
     }

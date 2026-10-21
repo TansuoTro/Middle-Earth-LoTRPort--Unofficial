@@ -10,7 +10,7 @@ import java.util.Set;
  *
  * <p>1.21 expresses this with the {@code UNBREAKABLE} data component declared on the item.
  * 1.20.1 only has the per-stack {@code Unbreakable} NBT flag, which cannot be set from
- * {@code Item.Settings}, so the item itself is recorded here and
+ * {@code Item.Properties}, so the item itself is recorded here and
  * {@code ItemStackUnbreakableMixin} reports it.
  */
 public final class UnbreakableItems {

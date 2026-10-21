@@ -3,7 +3,7 @@ package net.jukoz.me.compat.client;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
-import net.minecraft.client.model.EntityModelLayer;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import java.util.HashSet;
 import java.util.Set;
 

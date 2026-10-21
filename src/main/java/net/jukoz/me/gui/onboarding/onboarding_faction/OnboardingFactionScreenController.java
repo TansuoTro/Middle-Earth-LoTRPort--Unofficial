@@ -370,7 +370,7 @@ public class OnboardingFactionScreenController {
         var idList = currentFaction.getAllNpcDatas().values().stream().flatMap(List::stream).toList();
 
         // filter list by race
-        var optionalNpcRegistry = world.getRegistryManager().getOptional(DynamicRegistriesME.NPC_TYPE);
+        var optionalNpcRegistry = world.registryAccess().getOptional(DynamicRegistriesME.NPC_TYPE);
         if(optionalNpcRegistry.isEmpty())
             return;
 
@@ -499,7 +499,7 @@ public class OnboardingFactionScreenController {
         ClientPlayNetworking.send(new PacketSetAffiliation(selectedDispositionType.name(), faction.getId().toString(), selectedSpawn.getIdentifier().toString()));
         LocalPlayer player = Minecraft.getInstance().player;
         if(player != null){
-            BlockPos overworldBlockPos = player.getBlockPos();
+            BlockPos overworldBlockPos = player.blockPosition();
             ClientPlayNetworking.send(new PacketSetSpawnData(overworldBlockPos.getX(), overworldBlockPos.getY(), overworldBlockPos.getZ()));
         }
         screen.close();
@@ -596,10 +596,10 @@ public class OnboardingFactionScreenController {
         return selectedFaction.getFullName();
     }
 
-    public void drawRaceTooltip(AbstractClientPlayer player, GuiGraphics context, Font textRenderer, int x, int y) {
+    public void drawRaceTooltip(AbstractClientPlayer player, GuiGraphics context, Font font, int x, int y) {
         if(selectedRace == null)
             return;
-        RaceStatTooltip.draw(selectedRace, player, context, textRenderer, x, y, playerAttributes, shouldBeDetailed);
+        RaceStatTooltip.draw(selectedRace, player, context, font, x, y, playerAttributes, shouldBeDetailed);
     }
 
     public void modifyStateDetailed(boolean b) {

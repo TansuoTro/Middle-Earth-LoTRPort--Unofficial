@@ -18,11 +18,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccess;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.Block;
@@ -38,9 +38,9 @@ public class LayeredCakeBlock extends Block {
     public static final int DEFAULT_COMPARATOR_OUTPUT;
     private static final VoxelShape[] SHAPES_BY_BITES;
 
-    public LayeredCakeBlock(BlockBehaviour.Settings settings) {
+    public LayeredCakeBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState((this.stateManager.getDefaultState()));
+        this.setDefaultState((this.stateManager.defaultBlockState()));
     }
 
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
@@ -48,27 +48,27 @@ public class LayeredCakeBlock extends Block {
     }
 
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        ItemStack stack = player.getStackInHand(hand);
+        ItemStack stack = player.getItemInHand(hand);
         Item item = stack.getItem();
-        if (stack.isIn(ItemTags.CANDLES) && (Integer)state.get(BITES) == 0) {
+        if (stack.is(ItemTags.CANDLES) && (Integer)state.get(BITES) == 0) {
             Block var10 = Block.getBlockFromItem(item);
             if (var10 instanceof CandleBlock) {
                 CandleBlock candleBlock = (CandleBlock)var10;
                 if (!player.isCreative()) stack.decrement(1);
                 world.playSound(null, pos, SoundEvents.BLOCK_CAKE_ADD_CANDLE, SoundSource.BLOCKS, 1.0F, 1.0F);
-                world.setBlockState(pos, CandleLayeredCakeBlock.getCandleCakeFromCandle(candleBlock));
+                world.setBlock(pos, CandleLayeredCakeBlock.getCandleCakeFromCandle(candleBlock));
                 world.emitGameEvent(player, GameEvent.BLOCK_CHANGE, pos);
                 player.incrementStat(Stats.USED.getOrCreateStat(item));
                 return InteractionResult.SUCCESS;
             }
         }
 
-        if (world.isClient) {
-            if (tryEat(world, pos, state, player).isAccepted()) {
+        if (world.isClientSide) {
+            if (tryEat(world, pos, state, player).getAccepted()) {
                 return InteractionResult.SUCCESS;
             }
 
-            if (player.getStackInHand(InteractionHand.MAIN_HAND).isEmpty()) {
+            if (player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
                 return InteractionResult.CONSUME;
             }
         }
@@ -81,11 +81,11 @@ public class LayeredCakeBlock extends Block {
             return InteractionResult.PASS;
         } else {
             player.incrementStat(Stats.EAT_CAKE_SLICE);
-            player.getHungerManager().add(3, 0.15F);
+            player.getFoodData().add(3, 0.15F);
             int i = state.get(BITES);
             world.emitGameEvent(player, GameEvent.EAT, pos);
             if (i < MAX_BITES) {
-                world.setBlockState(pos, state.with(BITES, i + 1), 3);
+                world.setBlock(pos, state.setValue(BITES, i + 1), 3);
             } else {
                 world.removeBlock(pos, false);
                 world.emitGameEvent(player, GameEvent.BLOCK_DESTROY, pos);
@@ -96,11 +96,11 @@ public class LayeredCakeBlock extends Block {
     }
 
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
-        return direction == Direction.DOWN && !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+        return direction == Direction.DOWN && !state.canPlaceAt(world, pos) ? Blocks.AIR.defaultBlockState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
     public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
-        return world.getBlockState(pos.down()).isSolid();
+        return world.getBlockState(pos.below()).isSolid();
     }
 
     protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
@@ -124,11 +124,11 @@ public class LayeredCakeBlock extends Block {
     }
 
     static {
-        BITES = IntegerProperty.of("bites", 0, MAX_BITES);;
+        BITES = IntegerProperty.create("bites", 0, MAX_BITES);;
         DEFAULT_COMPARATOR_OUTPUT = getComparatorOutput(0);
         SHAPES_BY_BITES = MEBlockShapes.createShapeArray(MAX_BITES, (bites) -> {
-            return Shapes.union(Block.createCuboidShape(0, 0.0, 0, 16.0, 8.0, 16.0 - (Math.max(0, Math.min(4, bites - 4)) * 4) + Math.max(0, Math.min(1, bites - 4)) * 2),
-                    Block.createCuboidShape(2, 8, 2, 14, 16, 14 - (Math.max(0, Math.min(4, bites)) * 3)));
+            return Shapes.union(Block.box(0, 0.0, 0, 16.0, 8.0, 16.0 - (Math.max(0, Math.min(4, bites - 4)) * 4) + Math.max(0, Math.min(1, bites - 4)) * 2),
+                    Block.box(2, 8, 2, 14, 16, 14 - (Math.max(0, Math.min(4, bites)) * 3)));
         });
     }
 }

@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.Sheets;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererFactory;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.ChestRenderer;
 import net.minecraft.client.resources.model.Material;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -48,17 +48,17 @@ public class FirCofferEntityRenderer<T extends ChestBlockEntity> extends ChestRe
     public static LayerDefinition getTexturedModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
-        modelPartData.addChild(LID, CubeListBuilder.create()
-                        .uv(0, 24).cuboid(-5.0F, -2.0F, -8.0F, 10.0F, 2.0F, 8.0F, new CubeDeformation(0.0F)),
-                PartPose.pivot(0.0F, 18.0F, 4.0F));
+        modelPartData.addOrReplaceChild(LID, CubeListBuilder.create()
+                        .texOffs(0, 24).addBox(-5.0F, -2.0F, -8.0F, 10.0F, 2.0F, 8.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(0.0F, 18.0F, 4.0F));
 
-        modelPartData.addChild(BASE, CubeListBuilder.create()
-                        .uv(0, 36).cuboid(-1.0F, -4.0F, -7.0F, 10.0F, 4.0F, 8.0F, new CubeDeformation(0.0F))
-                        .uv(40, 34).cuboid(-1.0F, 0.0F, -7.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-                        .uv(40, 29).cuboid(-1.0F, 0.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-                        .uv(40, 44).cuboid(7.0F, 0.0F, -7.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-                        .uv(40, 39).cuboid(7.0F, 0.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)),
-                PartPose.pivot(-4.0F, 22.0F, 3.0F));
+        modelPartData.addOrReplaceChild(BASE, CubeListBuilder.create()
+                        .texOffs(0, 36).addBox(-1.0F, -4.0F, -7.0F, 10.0F, 4.0F, 8.0F, new CubeDeformation(0.0F))
+                        .texOffs(40, 34).addBox(-1.0F, 0.0F, -7.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+                        .texOffs(40, 29).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+                        .texOffs(40, 44).addBox(7.0F, 0.0F, -7.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+                        .texOffs(40, 39).addBox(7.0F, 0.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(-4.0F, 22.0F, 3.0F));
 
         return LayerDefinition.of(modelData, 48, 48);
     }
@@ -68,25 +68,25 @@ public class FirCofferEntityRenderer<T extends ChestBlockEntity> extends ChestRe
         Material spriteIdentifier = new Material(Sheets.CHEST_ATLAS_TEXTURE, MiddleEarth.ofPath( "model", "fir_coffer"));
         VertexConsumer vertexConsumer = spriteIdentifier.getVertexConsumer(vertexConsumers, RenderLayer::getEntityCutout);
 
-        Level world = entity.getWorld();
-        BlockState blockState = world != null ? entity.getCachedState() : Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.SOUTH);
+        Level world = entity.level();
+        BlockState blockState = world != null ? entity.getBlockState() : Blocks.CHEST.defaultBlockState().with(ChestBlock.FACING, Direction.SOUTH);
         Block block = blockState.getBlock();
 
         FirCofferBlock chest = (FirCofferBlock)block;
 
-        DoubleBlockCombiner.PropertySource<? extends ChestBlockEntity> properties;
-        properties = chest.getBlockEntitySource(blockState, world, entity.getPos(), true);
+        DoubleBlockCombiner.NeighborCombineResult<? extends ChestBlockEntity> properties;
+        properties = chest.getBlockEntitySource(blockState, world, entity.position(), true);
         float g = properties.apply(ReinforcedChestBlock.getAnimationProgressRetriever(entity)).get(tickProgress);
         g = 1.0F - g;
         g = 1.0F - g * g * g;
 
         matrices.push();
-        float rotation = blockState.get(ChestBlock.FACING).asRotation();
+        float rotation = blockState.get(ChestBlock.FACING).toYRot();
         matrices.translate(0.5D, 1.5D, 0.5D);
         matrices.multiply(Axis.POSITIVE_X.rotationDegrees(180));
         matrices.multiply(Axis.POSITIVE_Y.rotationDegrees(rotation - 180));
 
-        lid.pitch = g * -1.5707964f;
+        lid.xRot = g * -1.5707964f;
         lid.render(matrices, vertexConsumer, light, overlay);
         bottom.render(matrices, vertexConsumer, light, overlay);
 

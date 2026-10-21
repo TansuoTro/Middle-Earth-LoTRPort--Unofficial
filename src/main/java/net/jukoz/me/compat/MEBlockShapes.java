@@ -4,7 +4,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -48,7 +48,7 @@ public final class MEBlockShapes {
     public static VoxelShape createCuboidZShape(double sizeX, double minY, double maxY, double minZ, double maxZ) {
         double minX = (16.0 - sizeX) / 2.0;
         double maxX = (16.0 + sizeX) / 2.0;
-        return Shapes.cuboid(minX / 16.0, minY / 16.0, minZ / 16.0, maxX / 16.0, maxY / 16.0, maxZ / 16.0);
+        return Shapes.addBox(minX / 16.0, minY / 16.0, minZ / 16.0, maxX / 16.0, maxY / 16.0, maxZ / 16.0);
     }
 
     public static Map<Direction, VoxelShape> createHorizontalFacingShapeMap(VoxelShape shape) {
@@ -83,7 +83,7 @@ public final class MEBlockShapes {
             return shape;
         }
         List<VoxelShape> parts = new ArrayList<>();
-        for (AABB box : shape.getBoundingBoxes()) {
+        for (AABB box : shape.toAabbs()) {
             double[] xs = {box.minX * 16.0, box.maxX * 16.0};
             double[] zs = {box.minZ * 16.0, box.maxZ * 16.0};
             double minX = Double.POSITIVE_INFINITY;
@@ -106,7 +106,7 @@ public final class MEBlockShapes {
                     maxZ = Math.max(maxZ, rz);
                 }
             }
-            parts.add(Shapes.cuboid(minX / 16.0, box.minY, minZ / 16.0, maxX / 16.0, box.maxY, maxZ / 16.0));
+            parts.add(Shapes.addBox(minX / 16.0, box.minY, minZ / 16.0, maxX / 16.0, box.maxY, maxZ / 16.0));
         }
         VoxelShape result = Shapes.empty();
         for (VoxelShape part : parts) {

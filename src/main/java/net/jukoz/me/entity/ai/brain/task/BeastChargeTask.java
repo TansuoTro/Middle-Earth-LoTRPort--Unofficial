@@ -27,7 +27,7 @@ public class BeastChargeTask extends Behavior<AbstractBeastEntity> {
                 entity.getChargeTimeout() == 0  &&
                 entity.canSee(entity.getTarget()) &&
                 entity.canCharge() &&
-                entity.squaredDistanceTo(entity.getTarget()) > 20;
+                entity.distanceTo(entity.getTarget()) > 20;
     }
 
     @Override

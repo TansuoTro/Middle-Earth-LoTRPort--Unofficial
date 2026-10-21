@@ -103,7 +103,7 @@ public class PlayerDataService {
             PlayerData data = getPlayerData(player);
             data.assignNewFactionInformation(faction.getId(), spawnId);
 
-            if(ModDimensions.isInMiddleEarth(player.getWorld())){
+            if(ModDimensions.isInMiddleEarth(player.level())){
                 player.setSpawnPoint(ModDimensions.ME_WORLD_KEY, getPlayerSpawnData(player, world).getBlockPos(), 0, true, false);
                 return true;
             }
@@ -129,7 +129,7 @@ public class PlayerDataService {
             return getDefaultOriginAggregate(world);
         }
         if(dimensionId == null){
-            dimensionId = DimensionTypes.OVERWORLD.getValue();
+            dimensionId = BuiltinDimensionTypes.OVERWORLD.getValue();
         }
         return new OriginAggregate(dimensionId, originPos);
     }
@@ -142,12 +142,12 @@ public class PlayerDataService {
             return null;
         }
         if(dimensionId == null){
-            dimensionId = DimensionTypes.OVERWORLD.getValue();
+            dimensionId = BuiltinDimensionTypes.OVERWORLD.getValue();
         }
         return new OriginAggregate(dimensionId, originPos);
     }
     public static boolean setOrigin(ServerPlayer player, Level world, ResourceLocation dimensionId, BlockPos originPos) {
-        Registry<DimensionType> registry = world.getRegistryManager().getOptional(Registries.DIMENSION_TYPE).orElse(null);
+        Registry<DimensionType> registry = world.registryAccess().getOptional(Registries.DIMENSION_TYPE).orElse(null);
         if(registry != null){
             if(registry.get(dimensionId) == null){
                 PlayerData data = getPlayerData(player);
@@ -165,8 +165,8 @@ public class PlayerDataService {
     }
     private static OriginAggregate getDefaultOriginAggregate(Level world){
         return new OriginAggregate(
-                DimensionTypes.OVERWORLD.getValue(),
-                world.getServer().getOverworld().getSpawnPos()
+                BuiltinDimensionTypes.OVERWORLD.getValue(),
+                world.getServer().overworld().getSharedSpawnPos()
         );
     }
 

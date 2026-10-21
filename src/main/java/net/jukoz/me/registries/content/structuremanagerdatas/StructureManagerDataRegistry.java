@@ -1,8 +1,8 @@
 package net.jukoz.me.registries.content.structuremanagerdatas;
 
-import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryEntryLookup;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.datageneration.content.TranslationEntries;

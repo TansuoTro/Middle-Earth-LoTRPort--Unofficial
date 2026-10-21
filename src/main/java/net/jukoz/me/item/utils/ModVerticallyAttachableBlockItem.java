@@ -9,7 +9,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
 import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 
@@ -33,7 +33,7 @@ public class ModVerticallyAttachableBlockItem extends BlockItem {
         BlockState blockState2 = null;
         LevelReader worldView = context.getWorld();
         BlockPos blockPos = context.getBlockPos();
-        Direction[] var6 = context.getPlacementDirections();
+        Direction[] var6 = context.getNearestLookingDirections();
         int var7 = var6.length;
 
         for(int var8 = 0; var8 < var7; ++var8) {

@@ -30,7 +30,7 @@ public class CustomLongbowWeaponItem extends BowItem {
 
     public static final int RANGE = 25;
 
-    public CustomLongbowWeaponItem(RangedWeaponTypesME type, Item.Settings settings) {
+    public CustomLongbowWeaponItem(RangedWeaponTypesME type, Item.Properties settings) {
         super(((net.jukoz.me.item.MESettings) settings).maxDamage(type.durability)
                 .component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(type.name)));
         this.type = type;
@@ -54,8 +54,8 @@ public class CustomLongbowWeaponItem extends BowItem {
                 int i = this.getMaxUseTime(stack) - remainingUseTicks;
                 float f = getPullProgressLongbow(i);
                 if (!((double) f < 0.1)) {
-                    boolean bl2 = bl && itemStack.isOf(Items.ARROW);
-                    if (!world.isClient) {
+                    boolean bl2 = bl && itemStack.is(Items.ARROW);
+                    if (!world.isClientSide) {
                         ArrowItem arrowItem = (ArrowItem) (itemStack.getItem() instanceof ArrowItem ? itemStack.getItem() : Items.ARROW);
                         AbstractArrow persistentProjectileEntity = arrowItem.createArrow(world, itemStack, playerEntity);
                         persistentProjectileEntity.setVelocity(playerEntity, playerEntity.getPitch(), playerEntity.getYaw(), 0.0F, f * 5.0F, 1.0F);
@@ -78,10 +78,10 @@ public class CustomLongbowWeaponItem extends BowItem {
                         }
 
                         stack.damage(1, playerEntity, p -> p.sendEquipmentBreakStatus(
-                                playerEntity.getActiveHand() == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND));
+                                playerEntity.getUsedItemHand() == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND));
 
-                        if (bl2 || playerEntity.getAbilities().creativeMode && (itemStack.isOf(Items.SPECTRAL_ARROW) || itemStack.isOf(Items.TIPPED_ARROW))) {
-                            persistentProjectileEntity.pickupType = AbstractArrow.PickupPermission.CREATIVE_ONLY;
+                        if (bl2 || playerEntity.getAbilities().creativeMode && (itemStack.is(Items.SPECTRAL_ARROW) || itemStack.is(Items.TIPPED_ARROW))) {
+                            persistentProjectileEntity.pickupType = AbstractArrow.Pickup.CREATIVE_ONLY;
                         }
 
                         world.spawnEntity(persistentProjectileEntity);

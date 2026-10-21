@@ -22,7 +22,7 @@ public class CaveTrollSmashTask extends Behavior<CaveTrollEntity> {
 
     @Override
     protected boolean shouldRun(ServerLevel world, CaveTrollEntity entity) {
-        return entity.getTarget() != null && entity.squaredDistanceTo(entity.getTarget()) < 16;
+        return entity.getTarget() != null && entity.distanceTo(entity.getTarget()) < 16;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class CaveTrollSmashTask extends Behavior<CaveTrollEntity> {
     @Override
     protected void run(ServerLevel world, CaveTrollEntity entity, long time) {
         entity.setSmashing(true);
-        entity.getBrain().forget(MemoryModuleType.WALK_TARGET);
+        entity.getBrain().erase(MemoryModuleType.WALK_TARGET);
     }
 
     @Override

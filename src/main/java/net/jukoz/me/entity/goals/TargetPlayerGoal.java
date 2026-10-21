@@ -15,7 +15,7 @@ public class TargetPlayerGoal extends NearestAttackableTargetGoal<Player> {
 
     @Override
     public boolean canStart() {
-        if (mob.getWorld().getDifficulty() == Difficulty.PEACEFUL || mob.isTame()) {
+        if (mob.level().getDifficulty() == Difficulty.PEACEFUL || mob.isTame()) {
             if(mob.getTarget() instanceof Player) {
                 mob.setTarget(null);
             }

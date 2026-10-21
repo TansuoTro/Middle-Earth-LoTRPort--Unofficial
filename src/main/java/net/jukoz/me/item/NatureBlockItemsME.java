@@ -38,9 +38,9 @@ public class NatureBlockItemsME {
     public static final Item FLOATING_ICE = registerItem("floating_ice",
             (settings) -> new PlaceOnWaterBlockItem(ModNatureBlocks.FLOATING_ICE, settings), new MESettings());
 
-    private static Item registerItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
+    private static Item registerItem(String name, Function<Item.Properties, Item> factory, Item.Properties settings) {
         Item item = (Item)factory.apply(settings);
-        ModItemGroups.NATURE_BLOCKS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.NATURE_BLOCKS_CONTENTS.add(item.getDefaultInstance());
         TranslationEntries.itemEntries.add(item);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ITEM, name));
         return Registry.register(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, name), item);

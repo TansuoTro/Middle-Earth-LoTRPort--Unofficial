@@ -17,11 +17,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccess;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.jukoz.me.block.registration.ModBlocks;
 import java.util.List;
 import java.util.Map;
@@ -42,9 +42,9 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
     private static final Iterable<Vec3> PARTICLE_OFFSETS;
     private final CandleBlock candle;
 
-    public CandleLayeredCakeBlock(Block candle, BlockBehaviour.Settings settings) {
+    public CandleLayeredCakeBlock(Block candle, BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState((BlockState)((BlockState)this.stateManager.getDefaultState()).with(LIT, false));
+        this.setDefaultState((BlockState)((BlockState)this.stateManager.defaultBlockState()).with(LIT, false));
         if (candle instanceof CandleBlock candleBlock) {
             CANDLES_TO_CANDLE_CAKES.put(candleBlock, this);
             this.candle = candleBlock;
@@ -63,8 +63,8 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
     }
 
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        ItemStack stack = player.getStackInHand(hand);
-        if (stack.isOf(Items.FLINT_AND_STEEL) || stack.isOf(Items.FIRE_CHARGE)) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (stack.is(Items.FLINT_AND_STEEL) || stack.is(Items.FIRE_CHARGE)) {
             if(canBeLit(state)) {
                 setLit(world, state, pos, true);
                 return InteractionResult.CONSUME;
@@ -75,8 +75,8 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
                 extinguish(player, state, world, pos);
                 return InteractionResult.SUCCESS;
             } else {
-                InteractionResult actionResult = LayeredCakeBlock.tryEat(world, pos, ModBlocks.LAYERED_CAKE.getDefaultState(), player);
-                if (actionResult.isAccepted()) {
+                InteractionResult actionResult = LayeredCakeBlock.tryEat(world, pos, ModBlocks.LAYERED_CAKE.defaultBlockState(), player);
+                if (actionResult.getAccepted()) {
                     dropStacks(state, world, pos);
                 }
                 return actionResult;
@@ -85,7 +85,7 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
     }
 
     private static void setLit(LevelAccessor world, BlockState state, BlockPos pos, boolean lit) {
-        world.setBlockState(pos, state.with(LIT, lit), 11);
+        world.setBlock(pos, state.setValue(LIT, lit), 11);
     }
 
     private static boolean isHittingCandle(BlockHitResult hitResult) {
@@ -101,11 +101,11 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
     }
 
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
-        return direction == Direction.DOWN && !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+        return direction == Direction.DOWN && !state.canPlaceAt(world, pos) ? Blocks.AIR.defaultBlockState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
     public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
-        return world.getBlockState(pos.down()).isSolid();
+        return world.getBlockState(pos.below()).isSolid();
     }
 
     public int getComparatorOutput(BlockState state, Level world, BlockPos pos) {
@@ -121,7 +121,7 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
     }
 
     public static BlockState getCandleCakeFromCandle(CandleBlock candle) {
-        return ((CandleLayeredCakeBlock)CANDLES_TO_CANDLE_CAKES.get(candle)).getDefaultState();
+        return ((CandleLayeredCakeBlock)CANDLES_TO_CANDLE_CAKES.get(candle)).defaultBlockState();
     }
 
     public static boolean canBeLit(BlockState state) {
@@ -130,8 +130,8 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
 
     static {
         LIT = AbstractCandleBlock.LIT;
-        SHAPE = Shapes.union(Block.createCuboidShape(0, 0.0, 0, 16.0, 8.0, 16.0),
-                Block.createCuboidShape(2, 8, 2, 14, 16, 14));
+        SHAPE = Shapes.union(Block.box(0, 0.0, 0, 16.0, 8.0, 16.0),
+                Block.box(2, 8, 2, 14, 16, 14));
         CANDLES_TO_CANDLE_CAKES = Maps.newHashMap();
         PARTICLE_OFFSETS = List.of((new Vec3(5.0, 23, 5.0)).multiply(0.0625),
                 (new Vec3(5.0, 23, 11.0)).multiply(0.0625),

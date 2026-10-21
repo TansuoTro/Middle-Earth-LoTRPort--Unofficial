@@ -13,11 +13,11 @@ public class ChestnutCofferBlockEntity extends ChestBlockEntity {
     public ChestnutCofferBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CHESTNUT_COFFER, pos, state);
 
-        this.setInvStackList(NonNullList.ofSize(this.size(), ItemStack.EMPTY));
+        this.setInvStackList(NonNullList.withSize(this.size(), ItemStack.EMPTY));
     }
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable(MiddleEarth.of("chestnut_coffer").toTranslationKey("screen"));
+        return Component.translatable(MiddleEarth.of("chestnut_coffer").toLanguageKey("screen"));
     }
 }

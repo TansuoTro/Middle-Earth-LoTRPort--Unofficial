@@ -13,12 +13,12 @@ import java.util.stream.Stream;
 
 public class FactionLookup {
     public static List<Faction> getAllFactions(Level world) {
-        return world.getRegistryManager().get(DynamicRegistriesME.FACTION).stream().toList();
+        return world.registryAccess().get(DynamicRegistriesME.FACTION).stream().toList();
     }
     public static Faction getFactionById(Level world, ResourceLocation id) throws FactionIdentifierException {
         if(id == null)
             return null;
-        Faction faction = world.getRegistryManager().get(DynamicRegistriesME.FACTION).get(id);
+        Faction faction = world.registryAccess().get(DynamicRegistriesME.FACTION).get(id);
         if(faction == null)
             throw new FactionIdentifierException();
         return faction;

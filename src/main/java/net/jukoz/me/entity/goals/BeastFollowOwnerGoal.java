@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
 import java.util.EnumSet;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
@@ -34,13 +34,13 @@ public class BeastFollowOwnerGoal extends Goal {
 
     public BeastFollowOwnerGoal(BeastEntity mob, double speed, float minDistance, float maxDistance, boolean leavesAllowed) {
         this.mob = mob;
-        this.world = mob.getWorld();
+        this.world = mob.level();
         this.speed = speed;
         this.navigation = mob.getNavigation();
         this.minDistance = minDistance;
         this.maxDistance = maxDistance;
         this.leavesAllowed = leavesAllowed;
-        this.setControls(EnumSet.of(Goal.Control.MOVE, Goal.Control.LOOK));
+        this.setControls(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         if (!(mob.getNavigation() instanceof GroundPathNavigation) && !(mob.getNavigation() instanceof FlyingPathNavigation)) {
             throw new IllegalArgumentException("Unsupported mob type for BeastFollowOwnerGoal");
         }
@@ -58,7 +58,7 @@ public class BeastFollowOwnerGoal extends Goal {
         if (this.cannotFollow()) {
             return false;
         }
-        if (this.mob.squaredDistanceTo(livingEntity) < (double)(this.minDistance * this.minDistance)) {
+        if (this.mob.distanceTo(livingEntity) < (double)(this.minDistance * this.minDistance)) {
             return false;
         }
         this.owner = livingEntity;
@@ -73,11 +73,11 @@ public class BeastFollowOwnerGoal extends Goal {
         if (this.cannotFollow()) {
             return false;
         }
-        return !(this.mob.squaredDistanceTo(this.owner) <= (double)(this.maxDistance * this.maxDistance));
+        return !(this.mob.distanceTo(this.owner) <= (double)(this.maxDistance * this.maxDistance));
     }
 
     private boolean cannotFollow() {
-        return this.mob.isSitting() || this.mob.hasVehicle() || this.mob.isLeashed();
+        return this.mob.isSitting() || this.mob.isPassenger() || this.mob.isLeashed();
     }
 
     @Override
@@ -96,12 +96,12 @@ public class BeastFollowOwnerGoal extends Goal {
 
     @Override
     public void tick() {
-        this.mob.getLookControl().lookAt(this.owner, 10.0f, this.mob.getMaxLookPitchChange());
+        this.mob.getLookControl().lookAt(this.owner, 10.0f, this.mob.getMaxHeadXRot());
         if (--this.updateCountdownTicks > 0) {
             return;
         }
         this.updateCountdownTicks = this.getTickCount(10);
-        if (this.mob.squaredDistanceTo(this.owner) >= 144.0) {
+        if (this.mob.distanceTo(this.owner) >= 144.0) {
             this.tryTeleport();
         } else {
             this.navigation.startMovingTo(this.owner, this.speed);
@@ -137,11 +137,11 @@ public class BeastFollowOwnerGoal extends Goal {
         if (pathNodeType != BlockPathTypes.WALKABLE) {
             return false;
         }
-        BlockState blockState = this.world.getBlockState(pos.down());
+        BlockState blockState = this.world.getBlockState(pos.below());
         if (!this.leavesAllowed && blockState.getBlock() instanceof LeavesBlock) {
             return false;
         }
-        BlockPos blockPos = pos.subtract(this.mob.getBlockPos());
+        BlockPos blockPos = pos.subtract(this.mob.blockPosition());
         return this.world.isSpaceEmpty(this.mob, this.mob.getBoundingBox().offset(blockPos));
     }
 

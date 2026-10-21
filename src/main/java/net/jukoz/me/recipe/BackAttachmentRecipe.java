@@ -11,7 +11,7 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.RegistryWrapper;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.level.Level;
 
 public class BackAttachmentRecipe extends CustomRecipe {
@@ -26,7 +26,7 @@ public class BackAttachmentRecipe extends CustomRecipe {
         ItemStack itemStackBackAttachment = ItemStack.EMPTY;
 
         for(int i = 0; i < input.size(); ++i) {
-            ItemStack itemStack2 = input.getStack(i);
+            ItemStack itemStack2 = input.getItem(i);
             if (!itemStack2.isEmpty()) {
                 if (itemStack2.getItem() instanceof CustomChestplateItem) {
                     if (!itemStackChest.isEmpty()) {
@@ -53,7 +53,7 @@ public class BackAttachmentRecipe extends CustomRecipe {
         ItemStack backAttachment = ItemStack.EMPTY;
 
         for(int i = 0; i < input.size(); ++i) {
-            ItemStack itemStack2 = input.getStack(i);
+            ItemStack itemStack2 = input.getItem(i);
             if (!itemStack2.isEmpty()) {
                 if (itemStack2.getItem() instanceof CustomChestplateItem) {
                     if (!itemStack.isEmpty()) {

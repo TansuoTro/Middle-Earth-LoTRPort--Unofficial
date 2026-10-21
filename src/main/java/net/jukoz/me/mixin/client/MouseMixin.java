@@ -25,11 +25,11 @@ public class MouseMixin {
         Player player = Minecraft.getInstance().player;
         if ( player != null && player.hasStatusEffect(ModStatusEffects.HALLUCINATION)) {
             if (lookAt != null && !lookAt.isDead() && id != -1) {
-                lookAt = (LivingEntity) player.getWorld().getEntityById(id);
+                lookAt = (LivingEntity) player.level().getEntityById(id);
 
                 if(lookAt == null){
-                    ((Hallucination)player.getActiveStatusEffects().get(ModStatusEffects.HALLUCINATION).getEffectType()).stop(player);
-                    player.sendMessage(Component.literal("is dead _ " + player.getActiveStatusEffects().get(ModStatusEffects.HALLUCINATION).getDuration()));
+                    ((Hallucination)player.getActiveEffectsMap().get(ModStatusEffects.HALLUCINATION).getEffectType()).stop(player);
+                    player.sendSystemMessage(Component.literal("is dead _ " + player.getActiveEffectsMap().get(ModStatusEffects.HALLUCINATION).getDuration()));
                     id = -1;
                     return;
                 }
@@ -59,7 +59,7 @@ public class MouseMixin {
                 player.prevYaw = player.getYaw();
             } else if(id == -1){
 
-                this.lookAt = player.getWorld().getClosestEntity(BarrowWightEntity.class, TargetingConditions.createNonAttackable(), null, player.getX(), player.getY(), player.getZ(), player.getBoundingBox().expand(28));
+                this.lookAt = player.level().getClosestEntity(BarrowWightEntity.class, TargetingConditions.forNonCombat(), null, player.getX(), player.getY(), player.getZ(), player.getBoundingBox().expand(28));
                 if(lookAt != null)
                     this.id = lookAt.getId();
                 cir.cancel();

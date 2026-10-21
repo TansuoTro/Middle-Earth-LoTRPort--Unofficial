@@ -1,7 +1,7 @@
 package net.jukoz.me.mixin.client;
 
 import net.minecraft.client.color.block.BlockColors;
-import net.minecraft.client.resources.model.BakedModelManager;
+import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;

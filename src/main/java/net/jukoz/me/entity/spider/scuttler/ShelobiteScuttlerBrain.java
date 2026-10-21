@@ -156,7 +156,7 @@ public class ShelobiteScuttlerBrain {
 		List<BehaviorControl<? super MirkwoodSpiderEntity>> runningTasks = brain.getRunningTasks();
 		brain.resetPossibleActivities(ImmutableList.of(Activity.LONG_JUMP, Activity.FIGHT, Activity.IDLE));
 		System.out.println(shelobiteScuttler.getBrain().getOptionalRegisteredMemory(MemoryModuleType.LONG_JUMP_COOLING_DOWN));
-		shelobiteScuttler.setAttacking(brain.hasMemoryModule(MemoryModuleType.ATTACK_TARGET));
+		shelobiteScuttler.setAggressive(brain.hasMemoryModule(MemoryModuleType.ATTACK_TARGET));
 	}
 
 	protected static void updateActivities(MirkwoodSpiderEntity shelobiteScuttler) {
@@ -170,7 +170,7 @@ public class ShelobiteScuttlerBrain {
 				int cooldown =  canJump.get();
 				if(cooldown == 0) {
 					System.out.println("JUMP!!");
-					brain.forget(MemoryModuleType.LONG_JUMP_COOLING_DOWN);
+					brain.erase(MemoryModuleType.LONG_JUMP_COOLING_DOWN);
 					brain.doExclusively(Activity.LONG_JUMP);
 				} else {
 					brain.doExclusively(Activity.FIGHT);
@@ -197,7 +197,7 @@ public class ShelobiteScuttlerBrain {
 				int cooldown =  canJump.get();
 				if(cooldown == 0) {
 					System.out.println("JUMP!!");
-					brain.forget(MemoryModuleType.LONG_JUMP_COOLING_DOWN);
+					brain.erase(MemoryModuleType.LONG_JUMP_COOLING_DOWN);
 				}
 				else {
 					brain.resetPossibleActivities(ImmutableList.of(Activity.IDLE, Activity.FIGHT));
@@ -234,7 +234,7 @@ public class ShelobiteScuttlerBrain {
 
 	private static Optional<? extends LivingEntity> getTarget(ShelobiteScuttlerEntity shelobiteScuttler) {
 		Optional<LivingEntity> optional = net.minecraft.entity.ai.brain.task.BehaviorUtils.getEntity(shelobiteScuttler, MemoryModuleType.ANGRY_AT);
-		if (optional.isPresent() && Sensor.testAttackableTargetPredicateIgnoreVisibility(shelobiteScuttler, (LivingEntity)optional.get())) {
+		if (optional.isPresent() && Sensor.isEntityAttackableIgnoringLineOfSight(shelobiteScuttler, (LivingEntity)optional.get())) {
 			return optional;
 		} else {
 			Optional<? extends LivingEntity> optional2 = shelobiteScuttler.getBrain().getOptionalRegisteredMemory(MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER);
@@ -249,7 +249,7 @@ public class ShelobiteScuttlerBrain {
 	}
 
 	protected static void setTarget(ShelobiteScuttlerEntity shelobiteScuttler, LivingEntity target) {
-		shelobiteScuttler.getBrain().forget(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
+		shelobiteScuttler.getBrain().erase(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
 		shelobiteScuttler.getBrain().remember(MemoryModuleType.ANGRY_AT, target.getUuid(), 600L);
 	}
 

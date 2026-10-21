@@ -30,14 +30,14 @@ public abstract class AbstractHorseEntityMixin {
     @Shadow
     protected abstract void dropInventory(ServerLevel world);
 
-    @WrapOperation(method = "receiveFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z", ordinal = 3))
+    @WrapOperation(method = "receiveFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;is(Lnet/minecraft/item/Item;)Z", ordinal = 3))
     private boolean receiveFoodLettuce(ItemStack instance, Item item, Operation<Boolean> original) {
-        return original.call(instance, item) || instance.isOf(FoodItemsME.LETTUCE);
+        return original.call(instance, item) || instance.is(FoodItemsME.LETTUCE);
     }
 
-    @WrapOperation(method = "receiveFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z", ordinal = 5))
+    @WrapOperation(method = "receiveFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;is(Lnet/minecraft/item/Item;)Z", ordinal = 5))
     private boolean receiveFoodHorseFeed(ItemStack instance, Item item, Operation<Boolean> original) {
-        return original.call(instance, item) || instance.isOf(FoodItemsME.SACK_OF_HORSEFEED);
+        return original.call(instance, item) || instance.is(FoodItemsME.SACK_OF_HORSEFEED);
     }
 
     @Inject(at = @At("HEAD"), method = "dropInventory", cancellable = true)

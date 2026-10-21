@@ -22,6 +22,6 @@ public record TemperatureDataComponent(int temperature) implements net.jukoz.me.
                 net.jukoz.me.utils.ModColors.TEMP_2, net.jukoz.me.utils.ModColors.TEMP_3,
                 net.jukoz.me.utils.ModColors.TEMP_4, net.jukoz.me.utils.ModColors.TEMP_5};
         tooltip.add(net.minecraft.network.chat.Component.translatable("tooltip.me.temp_" + (tier + 1))
-                .styled(style -> style.withColor(colors[tier].color)));
+                .codepoint(style -> style.withColor(colors[tier].color)));
     }
 }

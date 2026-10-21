@@ -12,7 +12,7 @@ import java.util.List;
 public class OnboardingFactionScreenService {
     private List<Faction> factions = new ArrayList<>();
     public OnboardingFactionScreenService(Level world){
-        RegistryAccess registryManager = world.getRegistryManager();
+        RegistryAccess registryManager = world.registryAccess();
         this.factions = registryManager.get(DynamicRegistriesME.FACTION).stream().toList();
     }
 

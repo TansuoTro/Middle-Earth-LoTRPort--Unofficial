@@ -1,7 +1,6 @@
 package net.jukoz.me.client;
 
 import net.minecraft.world.level.block.entity.BannerPattern;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Holder;
@@ -10,6 +9,7 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.registries.AtlasesME;
 import java.util.HashMap;
 import java.util.Map;
+import net.minecraft.client.renderer.RenderType;
 
 public class ModTexturedRenderLayers extends Sheets {
     public static final Material HEATER_SHIELD_BASE;
@@ -21,12 +21,12 @@ public class ModTexturedRenderLayers extends Sheets {
     private static final Map<ResourceLocation, Material> ROUND_SHIELD_PATTERN_TEXTURES;
 
     public static final ResourceLocation CHARACTER_ATLAS_TEXTURES = AtlasesME.getAtlasPath(AtlasesME.CHARACTER_TEXTURES);
-    public static final RenderLayer CHARACTER_TEXTURES_RENDER_LAYER;
-    public static final RenderLayer CHARACTER_TEXTURES_EMISSIVE_RENDER_LAYER;
+    public static final RenderType CHARACTER_TEXTURES_RENDER_LAYER;
+    public static final RenderType CHARACTER_TEXTURES_EMISSIVE_RENDER_LAYER;
 
     static {
-        CHARACTER_TEXTURES_RENDER_LAYER = RenderLayer.getEntityCutoutNoCull(CHARACTER_ATLAS_TEXTURES);
-        CHARACTER_TEXTURES_EMISSIVE_RENDER_LAYER = RenderLayer.getEntityTranslucentEmissive(CHARACTER_ATLAS_TEXTURES);
+        CHARACTER_TEXTURES_RENDER_LAYER = RenderType.entityCutoutNoCull(CHARACTER_ATLAS_TEXTURES);
+        CHARACTER_TEXTURES_EMISSIVE_RENDER_LAYER = RenderType.getEntityTranslucentEmissive(CHARACTER_ATLAS_TEXTURES);
 
         HEATER_SHIELD_BASE = new Material(SHIELD_PATTERNS_ATLAS_TEXTURE, MiddleEarth.ofVanillaPath("entity", "heater_shield", "base" ));
         KITE_SHIELD_BASE = new Material(SHIELD_PATTERNS_ATLAS_TEXTURE, MiddleEarth.ofVanillaPath("entity", "kite_shield", "base" ));
@@ -37,11 +37,11 @@ public class ModTexturedRenderLayers extends Sheets {
         ROUND_SHIELD_PATTERN_TEXTURES = new HashMap<>();
     }
 
-    public static RenderLayer getCharacterTexturesRenderLayer() {
+    public static RenderType getCharacterTexturesRenderLayer() {
         return CHARACTER_TEXTURES_RENDER_LAYER;
     }
 
-    public static RenderLayer getCharacterTexturesEmissiveRenderLayer() {
+    public static RenderType getCharacterTexturesEmissiveRenderLayer() {
         return CHARACTER_TEXTURES_EMISSIVE_RENDER_LAYER;
     }
 

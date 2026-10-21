@@ -32,7 +32,7 @@ public class FactionUtil {
         if(!assertUpdateFactionValues(player, faction, spawnId))
             return false;
 
-        Faction previousFaction = PlayerDataService.getPlayerFaction(player, player.getWorld());
+        Faction previousFaction = PlayerDataService.getPlayerFaction(player, player.level());
 
         // [CLEAR] If the next faction is null
         if(faction == null){
@@ -44,18 +44,18 @@ public class FactionUtil {
             sendOnLeaveCommand(player, previousFaction);
             // Send leaving message to affected player
             MutableComponent targetText = Component.translatable("event.%s.leave.faction.success".formatted(MiddleEarth.MOD_ID), previousFaction.getFullName());
-            player.sendMessage(METext.withColor(targetText, ModColors.WARNING.color));
+            player.sendSystemMessage(METext.withColor(targetText, ModColors.WARNING.color));
         }
 
         // [JOIN] Add new affiliation data
         if(spawnId == null)
             spawnId = faction.getSpawnData().getDefaultSpawn();
-        PlayerDataService.setNewFactionInformation(player, player.getWorld(), faction.getId(), spawnId);
+        PlayerDataService.setNewFactionInformation(player, player.level(), faction.getId(), spawnId);
         sendOnJoinCommand(player, faction);
 
         // Send join message to affected player
         MutableComponent targetText = Component.translatable("event.%s.join.faction.success".formatted(MiddleEarth.MOD_ID), faction.getFullName());
-        player.sendMessage(METext.withColor(targetText, ModColors.SUCCESS.color));
+        player.sendSystemMessage(METext.withColor(targetText, ModColors.SUCCESS.color));
 
         sendOnFactionJoinMessage(player);
         return true;
@@ -67,14 +67,14 @@ public class FactionUtil {
 
         // Verify faction
         // Fetch player datas
-        Faction previousFaction = PlayerDataService.getPlayerFaction(player, player.getWorld());
+        Faction previousFaction = PlayerDataService.getPlayerFaction(player, player.level());
 
         if(previousFaction == null)
             return true;
 
         // If there is no faction update, return true
         if(previousFaction.getId() == faction.getId()) {
-            SpawnData spawnData = PlayerDataService.getPlayerSpawnData(player, player.getWorld());
+            SpawnData spawnData = PlayerDataService.getPlayerSpawnData(player, player.level());
             if(spawnData != null && spawnId != spawnData.getIdentifier())
                 throw new IdenticalFactionException();
         };
@@ -126,7 +126,7 @@ public class FactionUtil {
     }
 
     public static void sendOnFactionJoinMessage(Player player) {
-        Faction faction = PlayerDataService.getPlayerFaction(player, player.getWorld());
+        Faction faction = PlayerDataService.getPlayerFaction(player, player.level());
         if(faction == null){
             MiddleEarth.LOGGER.logError("Couldn't find faction");
             return;
@@ -143,13 +143,13 @@ public class FactionUtil {
     }
 
     public static boolean clearFaction(ServerPlayer player) throws FactionIdentifierException, NoFactionException {
-        Faction faction = PlayerDataService.getPlayerFaction(player, player.getWorld());
+        Faction faction = PlayerDataService.getPlayerFaction(player, player.level());
         if(faction == null)
             throw new NoFactionException();
         if(PlayerDataService.clearPlayerData(player)){
             sendOnLeaveCommand(player, faction);
             MutableComponent targetText = Component.translatable("event.%s.leave.faction.success".formatted(MiddleEarth.MOD_ID), faction.getFullName());
-            player.sendMessage(METext.withColor(targetText, ModColors.WARNING.color));
+            player.sendSystemMessage(METext.withColor(targetText, ModColors.WARNING.color));
             return true;
         }
         return false;

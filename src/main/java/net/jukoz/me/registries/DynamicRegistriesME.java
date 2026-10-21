@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
 import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryBuilder;
+import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.RegistryFixedCodec;

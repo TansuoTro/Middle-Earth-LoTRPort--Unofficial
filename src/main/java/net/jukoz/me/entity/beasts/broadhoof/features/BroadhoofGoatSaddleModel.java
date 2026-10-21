@@ -24,17 +24,17 @@ public class BroadhoofGoatSaddleModel extends BroadhoofGoatModel {
         PartDefinition root = modelData.getRoot().getChild("broadhoof_goat").getChild(PartNames.BODY);
         PartDefinition head = root.getChild(PartNames.HEAD);
 
-        PartDefinition saddle = root.addChild("saddle", CubeListBuilder.create().uv(74, 19).cuboid(-7.0F, -23.0F, 13.0F, 14.0F, 14.0F, 13.0F, new CubeDeformation(0.3F))
-                .uv(92, 72).cuboid(-7.0F, -25.0F, 25.0F, 14.0F, 4.0F, 4.0F, new CubeDeformation(0.5F)), PartPose.pivot(0.0F, 12.0F, -21.0F));
+        PartDefinition saddle = root.addOrReplaceChild("saddle", CubeListBuilder.create().texOffs(74, 19).addBox(-7.0F, -23.0F, 13.0F, 14.0F, 14.0F, 13.0F, new CubeDeformation(0.3F))
+                .texOffs(92, 72).addBox(-7.0F, -25.0F, 25.0F, 14.0F, 4.0F, 4.0F, new CubeDeformation(0.5F)), PartPose.offset(0.0F, 12.0F, -21.0F));
 
-        PartDefinition saddle_things = head.addChild("saddle_things", CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition saddle_things = head.addOrReplaceChild("saddle_things", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition reins = saddle_things.addChild("reins", CubeListBuilder.create().uv(81, -3).mirrored().cuboid(-4.1F, -7.0F, -8.0F, 0.0F, 3.0F, 15.0F, new CubeDeformation(0.0F)).mirrored(false)
-                .uv(81, -3).cuboid(4.1F, -7.0F, -8.0F, 0.0F, 3.0F, 15.0F, new CubeDeformation(0.0F)), PartPose.of(0.0F, -2.0F, 1.0F, 0.48F, 0.0F, 0.0F));
+        PartDefinition reins = saddle_things.addOrReplaceChild("reins", CubeListBuilder.create().texOffs(81, -3).mirror().addBox(-4.1F, -7.0F, -8.0F, 0.0F, 3.0F, 15.0F, new CubeDeformation(0.0F)).mirror(false)
+                .texOffs(81, -3).addBox(4.1F, -7.0F, -8.0F, 0.0F, 3.0F, 15.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -2.0F, 1.0F, 0.48F, 0.0F, 0.0F));
 
-        PartDefinition mouth_things = saddle_things.addChild("mouth_things", CubeListBuilder.create().uv(62, 50).mirrored().cuboid(-2.0F, -3.0F, 1.0F, 1.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)).mirrored(false)
-                .uv(62, 50).cuboid(5.0F, -3.0F, 1.0F, 1.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-                .uv(66, 47).cuboid(-1.0F, -7.0F, -1.0F, 6.0F, 7.0F, 11.0F, new CubeDeformation(0.2F)), PartPose.of(-2.0F, 0.0F, -8.0F, 0.7854F, 0.0F, 0.0F));
+        PartDefinition mouth_things = saddle_things.addOrReplaceChild("mouth_things", CubeListBuilder.create().texOffs(62, 50).mirror().addBox(-2.0F, -3.0F, 1.0F, 1.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false)
+                .texOffs(62, 50).addBox(5.0F, -3.0F, 1.0F, 1.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(66, 47).addBox(-1.0F, -7.0F, -1.0F, 6.0F, 7.0F, 11.0F, new CubeDeformation(0.2F)), PartPose.offsetAndRotation(-2.0F, 0.0F, -8.0F, 0.7854F, 0.0F, 0.0F));
         return LayerDefinition.of(modelData, 128, 128);
     }
 

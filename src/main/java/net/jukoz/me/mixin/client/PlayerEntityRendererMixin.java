@@ -4,7 +4,7 @@ import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
 import net.jukoz.me.compat.client.render.equipment.EquipmentRenderer;
 import net.jukoz.me.entity.spider.EnwebbedFeatureRenderer;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.model.PlayerModel;
@@ -30,7 +30,7 @@ public abstract class PlayerEntityRendererMixin
     @Inject(method = "<init>(Lnet/minecraft/client/render/entity/EntityRendererProvider$Context;Z)V", at = @At("TAIL"))
     private void me$addEnwebbedFeature(EntityRendererProvider.Context ctx, boolean slim, CallbackInfo ci) {
         this.addFeature(new EnwebbedFeatureRenderer<>(this,
-                new LoadedEntityModelsCompat(ctx.getModelLoader()), EquipmentRenderer.INSTANCE));
+                new LoadedEntityModelsCompat(ctx.getModelSet()), EquipmentRenderer.INSTANCE));
     }
 
     @Inject(method = "scale(Lnet/minecraft/client/network/AbstractClientPlayer;Lnet/minecraft/client/util/math/PoseStack;F)V", at = @At("HEAD"))

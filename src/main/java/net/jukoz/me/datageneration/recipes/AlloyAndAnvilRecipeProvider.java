@@ -43,7 +43,7 @@ public class AlloyAndAnvilRecipeProvider extends FabricRecipeProvider {
     }
 
     private static TagKey<Item> modTag(String path) {
-        return TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, path));
+        return TagKey.create(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, path));
     }
 
     @Override
@@ -252,7 +252,7 @@ public class AlloyAndAnvilRecipeProvider extends FabricRecipeProvider {
                 .pattern("LLL")
                 .input('I', inputIngot)
                 .input('B', inputBlock)
-                .input('L', TagKey.of(Registries.ITEM, new ResourceLocation("logs")))
+                .input('L', TagKey.create(Registries.ITEM, new ResourceLocation("logs")))
                 .criterion(hasItem(inputIngot),
                         conditionsFromItem(inputIngot))
                 .offerTo(exporter);

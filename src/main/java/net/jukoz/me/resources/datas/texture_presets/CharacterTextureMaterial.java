@@ -50,7 +50,7 @@ public class CharacterTextureMaterial {
         PACKET_CODEC = PacketCodec.tuple(
                 PacketCodecs.IDENTIFIER, CharacterTextureMaterial::getIdentifier,
                 PacketCodecs.STRING, CharacterTextureMaterial::getTypeValue, CharacterTextureMaterial::new);
-        ENTRY_CODEC = RegistryFileCodec.of(DynamicRegistriesME.SKIN_MATERIAL, CODEC);
+        ENTRY_CODEC = RegistryFileCodec.create(DynamicRegistriesME.SKIN_MATERIAL, CODEC);
         ENTRY_PACKET_CODEC = PacketCodecs.registryEntry(DynamicRegistriesME.SKIN_MATERIAL, PACKET_CODEC);
     }
 }

@@ -34,11 +34,11 @@ public class WargEyesFeatureRenderer extends MEFeatureRenderer<WargEntity, WargE
 
     @Override
     public void render(PoseStack matrices, MultiBufferSource vertexConsumers, int light, WargEntityRenderState state, float limbAngle, float limbDistance) {
-        RenderUtil.renderCutoutTexture(this.getContextModel(), matrices, vertexConsumers,
+        RenderUtil.renderCutoutTexture(this.getParentModel(), matrices, vertexConsumers,
                 LOCATION_BY_VARIANT.get(state.eyeVariant), light, OverlayTexture.DEFAULT_UV);
 
         if(state.haveEmissiveEyes) {
-            RenderUtil.renderEmissiveTexture(this.getContextModel(), matrices, vertexConsumers,
+            RenderUtil.renderEmissiveTexture(this.getParentModel(), matrices, vertexConsumers,
                     EMISSIVE_TEXTURE, light, OverlayTexture.DEFAULT_UV);
         }
     }

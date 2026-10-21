@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.level.pathfinder.PathNodeType;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageSource;
@@ -80,13 +80,13 @@ public class PheasantEntity extends Animal {
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(VARIANT, 0);
+        this.entityData.define(VARIANT, 0);
     }
 
     public static AttributeSupplier.Builder createPheasantAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MAX_HEALTH, 5.0)
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.4);
+                .add(Attributes.MAX_HEALTH, 5.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.4);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class PheasantEntity extends Animal {
     @Override
     public void readCustomDataFromNbt(CompoundTag nbt) {
         super.readCustomDataFromNbt(nbt);
-        this.dataTracker.set(VARIANT, nbt.getInt("Variant"));
+        this.entityData.set(VARIANT, nbt.getInt("Variant"));
     }
 
     @Override
@@ -164,11 +164,11 @@ public class PheasantEntity extends Animal {
     }
 
     private int getTypeVariant() {
-        return this.dataTracker.get(VARIANT);
+        return this.entityData.get(VARIANT);
     }
 
     private void setVariant(PheasantVariant variant) {
-        this.dataTracker.set(VARIANT, variant.getId() & 255);
+        this.entityData.set(VARIANT, variant.getId() & 255);
     }
 
 }

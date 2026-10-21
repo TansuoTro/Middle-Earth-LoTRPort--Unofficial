@@ -1,6 +1,6 @@
 package net.jukoz.me.block.special;
 
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -22,7 +22,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.seat.SeatEntity;
@@ -30,13 +30,14 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import com.mojang.math.Axis;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class SeatBlock extends Block {
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final BooleanProperty OCCUPIED = BlockStateProperties.OCCUPIED;
 
-    public SeatBlock(Settings settings) {
+    public SeatBlock(BlockBehaviour.Properties settings) {
         super(settings);
         setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(WATERLOGGED, false).with(OCCUPIED, false));
     }
@@ -56,24 +57,24 @@ public class SeatBlock extends Block {
         seat.setInvisible(true);
         seat.setInvulnerable(true);
 
-        if(world.isClient) {
+        if(world.isClientSide) {
             return InteractionResult.CONSUME;
-        } else if(player.isSneaking() || player.isSpectator() || player.hasVehicle()) {
+        } else if(player.isShiftKeyDown() || player.isSpectator() || player.isPassenger()) {
             return InteractionResult.FAIL;
-        } else if (player.shouldCancelInteraction()) {
+        } else if (player.isSecondaryUseActive()) {
             return InteractionResult.SUCCESS;
-        } else if (world.getBlockState(pos.up()).isOpaque()){
-            player.sendMessage(Component.translatable("alert.%s.seat.space_not_empty".formatted(MiddleEarth.MOD_ID)), true);
+        } else if (world.getBlockState(pos.above()).isOpaque()){
+            player.sendSystemMessage(Component.translatable("alert.%s.seat.space_not_empty".formatted(MiddleEarth.MOD_ID)), true);
             return InteractionResult.SUCCESS;
         }else if (state.get(OCCUPIED)){
-        player.sendMessage(Component.translatable("alert.%s.seat.occupied".formatted(MiddleEarth.MOD_ID)), true);
+        player.sendSystemMessage(Component.translatable("alert.%s.seat.occupied".formatted(MiddleEarth.MOD_ID)), true);
             return InteractionResult.SUCCESS;
         } else {
             if(world.spawnEntity(seat)) {
                 player.startRiding(seat, true);
                 player.setYaw(yaw);
                 player.setHeadYaw(yaw);
-                world.setBlockState(pos, state.with(OCCUPIED, true));
+                world.setBlock(pos, state.setValue(OCCUPIED, true));
                 return InteractionResult.SUCCESS;
             } else {
                 return InteractionResult.CONSUME;
@@ -87,7 +88,7 @@ public class SeatBlock extends Block {
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return this.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
+        return this.defaultBlockState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalDirection().getOpposite()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
     }
 
     @Override
@@ -106,7 +107,7 @@ public class SeatBlock extends Block {
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+        return state.setValue(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override

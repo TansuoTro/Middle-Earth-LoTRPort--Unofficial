@@ -18,26 +18,27 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import com.mojang.math.Axis;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class DwarvenGroundBookBlock extends Block {
     public static final EnumProperty<Direction> HORIZONTAL_FACING = HorizontalDirectionalBlock.FACING;
-    public static final BooleanProperty OPEN = BooleanProperty.of("open");
+    public static final BooleanProperty OPEN = BooleanProperty.create("open");
 
-    public DwarvenGroundBookBlock(Settings settings) {
+    public DwarvenGroundBookBlock(BlockBehaviour.Properties settings) {
         super(settings);
         setDefaultState(getDefaultState().with(HORIZONTAL_FACING, Direction.NORTH).with(OPEN, false));
     }
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if(!world.isClient && player.getAbilities().allowModifyWorld){
-            world.setBlockState(pos, state.cycle(OPEN), 2 | 3);
+        if(!world.isClientSide && player.getAbilities().allowModifyWorld){
+            world.setBlock(pos, state.cycle(OPEN), 2 | 3);
         }
         return InteractionResult.SUCCESS;
     }
@@ -48,12 +49,12 @@ public class DwarvenGroundBookBlock extends Block {
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return this.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(OPEN, false);
+        return this.defaultBlockState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalDirection().getOpposite()).with(OPEN, false);
     }
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(HORIZONTAL_FACING, rotation.rotate(state.get(HORIZONTAL_FACING)));
+        return state.setValue(HORIZONTAL_FACING, rotation.rotate(state.get(HORIZONTAL_FACING)));
     }
 
     @Override
@@ -76,15 +77,15 @@ public class DwarvenGroundBookBlock extends Block {
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         if(state.get(OPEN)){
             return switch(state.get(BlockStateProperties.HORIZONTAL_FACING)) {
-                case WEST, EAST -> Block.createCuboidShape(2, 0, 0, 14, 5, 16);
-                case SOUTH, NORTH -> Block.createCuboidShape(0, 0, 2, 16, 5, 14);
-                default -> Shapes.cuboid(1,1,1,1,1,1);
+                case WEST, EAST -> Block.box(2, 0, 0, 14, 5, 16);
+                case SOUTH, NORTH -> Block.box(0, 0, 2, 16, 5, 14);
+                default -> Shapes.addBox(1,1,1,1,1,1);
             };
         }else {
             return switch(state.get(BlockStateProperties.HORIZONTAL_FACING)) {
-                case WEST, EAST -> Block.createCuboidShape(2, 0, 3, 14, 5, 13);
-                case SOUTH, NORTH -> Block.createCuboidShape(3, 0, 2, 13, 5, 14);
-                default -> Shapes.cuboid(1,1,1,1,1,1);
+                case WEST, EAST -> Block.box(2, 0, 3, 14, 5, 13);
+                case SOUTH, NORTH -> Block.box(3, 0, 2, 13, 5, 14);
+                default -> Shapes.addBox(1,1,1,1,1,1);
             };
         }
 

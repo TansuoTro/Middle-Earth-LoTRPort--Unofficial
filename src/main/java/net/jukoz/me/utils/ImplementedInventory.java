@@ -32,7 +32,7 @@ public interface ImplementedInventory extends Inventory {
      * Creates a new inventory with the specified size.
      */
     static ImplementedInventory ofSize(int size) {
-        return of(NonNullList.ofSize(size, ItemStack.EMPTY));
+        return of(NonNullList.withSize(size, ItemStack.EMPTY));
     }
 
     /**

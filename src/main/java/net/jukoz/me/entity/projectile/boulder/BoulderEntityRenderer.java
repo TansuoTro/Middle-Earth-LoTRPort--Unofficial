@@ -1,15 +1,14 @@
 package net.jukoz.me.entity.projectile.boulder;
 
 import net.jukoz.me.MiddleEarth;
-import net.minecraft.world.level.block.BlockRenderType;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.entity.layers.RenderLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.item.ItemDisplayContext;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.entity.Entity;
@@ -42,17 +41,17 @@ public class BoulderEntityRenderer extends EntityRenderer<BoulderEntity> {
         if(entity.getOwner() == null) {
             return;
         }
-        BlockState blockState = Blocks.STONE.getDefaultState();
+        BlockState blockState = Blocks.STONE.defaultBlockState();
         if (blockState.getRenderType() != RenderShape.MODEL) {
             return;
         }
-        Level world = entity.getWorld();
-        if (blockState == world.getBlockState(entity.getBlockPos()) || blockState.getRenderType() == RenderShape.INVISIBLE) {
+        Level world = entity.level();
+        if (blockState == world.getBlockState(entity.blockPosition()) || blockState.getRenderType() == RenderShape.INVISIBLE) {
             return;
         }
         matrices.push();
         matrices.multiply(Axis.POSITIVE_Z.rotationDegrees(Mth.lerp(tickDelta, entity.prevPitch, entity.getPitch()) + 90.0F));
-        BlockPos blockPos = BlockPos.ofFloored(entity.getX(), entity.getBoundingBox().maxY, entity.getZ());
+        BlockPos blockPos = BlockPos.containing(entity.getX(), entity.getBoundingBox().maxY, entity.getZ());
         matrices.translate(-0.5, 0.0, -0.5);
 
         this.blockRenderManager.getModelRenderer().render(world, this.blockRenderManager.getModel(blockState), blockState, blockPos, matrices, vertexConsumers.getBuffer(ItemBlockRenderTypes.getMovingBlockLayer(blockState)), false, RandomSource.create(), blockState.getRenderingSeed(entity.getOwner().getBlockPos()), OverlayTexture.DEFAULT_UV);

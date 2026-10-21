@@ -14,7 +14,7 @@ import net.jukoz.me.world.biomes.surface.ModBiomeSource;
 import net.jukoz.me.world.chunkgen.map.MiddleEarthHeightMap;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.core.RegistryEntryLookup;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.core.Holder;
@@ -22,7 +22,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
-import net.minecraft.util.RandomSourceSeed;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
@@ -72,7 +72,7 @@ public class MiddleEarthChunkGenerator extends ChunkGenerator {
     private static float maxNoise = -10000;
     HolderGetter<Biome> biomeRegistry;
     public static final Codec<MiddleEarthChunkGenerator> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(RegistryOps.getEntryLookupCodec(Registries.BIOME))
+            instance.group(RegistryOps.retrieveGetter(Registries.BIOME))
                     .apply(instance, instance.stable(MiddleEarthChunkGenerator::new)));
 
     public MiddleEarthChunkGenerator(HolderGetter<Biome> biomeRegistry) {
@@ -391,46 +391,46 @@ public class MiddleEarthChunkGenerator extends ChunkGenerator {
                 float height = MiddleEarthHeightMap.getHeight(posX, posZ);
                 float caveBlendNoise = (float) ((2 * CAVE_NOISE * BlendedNoise.noise((double) posX / 24,  (double) posZ / 24)) - CAVE_NOISE);
 
-                chunk.setBlockState(chunk.getPos().getBlockPos(x, bottomY, z), Blocks.BEDROCK.getDefaultState(), false);
+                chunk.setBlock(chunk.getPos().getBlockPos(x, bottomY, z), Blocks.BEDROCK.defaultBlockState(), false);
                 for(int y = bottomY + 1; y <= LAVA_HEIGHT; y++) {
-                    chunk.setBlockState(chunk.getPos().getBlockPos(x, y, z), Blocks.LAVA.getDefaultState(), false);
+                    chunk.setBlock(chunk.getPos().getBlockPos(x, y, z), Blocks.LAVA.defaultBlockState(), false);
                 }
 
                 for(int y = bottomY + 1; y < EPMOSTO_LEVEL + caveBlendNoise; y++) {
-                    trySetBlock(chunk, chunk.getPos().getBlockPos(x, y, z), StoneBlockSets.IZHERABAN_SET.base().getDefaultState());
+                    trySetBlock(chunk, chunk.getPos().getBlockPos(x, y, z), StoneBlockSets.IZHERABAN_SET.base().defaultBlockState());
                 }
-                if(Math.random() < 0.5f) chunk.setBlockState(chunk.getPos().getBlockPos(x, chunk.getBottomY() + 1, z),
-                        Blocks.BEDROCK.getDefaultState(), false);
+                if(Math.random() < 0.5f) chunk.setBlock(chunk.getPos().getBlockPos(x, chunk.getBottomY() + 1, z),
+                        Blocks.BEDROCK.defaultBlockState(), false);
 
                 for(int y = EPMOSTO_LEVEL + (int) caveBlendNoise; y < DIFTOMIN_LEVEL + caveBlendNoise; y++) {
-                    trySetBlock(chunk, chunk.getPos().getBlockPos(x, y, z), StoneBlockSets.ZIGILABAN_SET.base().getDefaultState());
+                    trySetBlock(chunk, chunk.getPos().getBlockPos(x, y, z), StoneBlockSets.ZIGILABAN_SET.base().defaultBlockState());
                 }
                 for(int y = DIFTOMIN_LEVEL + (int) caveBlendNoise; y < DEEPSLATE_LEVEL + caveBlendNoise; y++) {
-                    trySetBlock(chunk, chunk.getPos().getBlockPos(x, y, z), Blocks.DEEPSLATE.getDefaultState());
+                    trySetBlock(chunk, chunk.getPos().getBlockPos(x, y, z), Blocks.DEEPSLATE.defaultBlockState());
                 }
                 float dirtHeight = HEIGHT + height - 1;
                 for(int y = DEEPSLATE_LEVEL + (int) caveBlendNoise; y < (dirtHeight / 2); y++) {
-                    trySetBlock(chunk, chunk.getPos().getBlockPos(x, y, z), meBiome.stoneBlock.getDefaultState());
+                    trySetBlock(chunk, chunk.getPos().getBlockPos(x, y, z), meBiome.stoneBlock.defaultBlockState());
                 }
                 for(int y = (int) (dirtHeight / 2); y < dirtHeight; y++) {
-                    trySetBlock(chunk, chunk.getPos().getBlockPos(x, y, z), meBiome.upperStoneBlock.getDefaultState());
+                    trySetBlock(chunk, chunk.getPos().getBlockPos(x, y, z), meBiome.upperStoneBlock.defaultBlockState());
                 }
 
-                chunk.setBlockState(chunk.getPos().getBlockPos(x, (int) (HEIGHT + height - 1), z), meBiome.stoneBlock.getDefaultState(), false);
+                chunk.setBlock(chunk.getPos().getBlockPos(x, (int) (HEIGHT + height - 1), z), meBiome.stoneBlock.defaultBlockState(), false);
                 for(int y = (int) (HEIGHT + height); y < DIRT_HEIGHT + height; y++) {
-                    chunk.setBlockState(chunk.getPos().getBlockPos(x, y, z), meBiome.underSurfaceBlock.getDefaultState(), false);
+                    chunk.setBlock(chunk.getPos().getBlockPos(x, y, z), meBiome.underSurfaceBlock.defaultBlockState(), false);
                 }
 
-                BlockState surfaceBlock = meBiome.surfaceBlock.getDefaultState();
+                BlockState surfaceBlock = meBiome.surfaceBlock.defaultBlockState();
 
                 if(DIRT_HEIGHT + height < WATER_HEIGHT && meBiome.surfaceBlock == Blocks.GRASS_BLOCK) {
-                    surfaceBlock = Blocks.DIRT.getDefaultState();
+                    surfaceBlock = Blocks.DIRT.defaultBlockState();
                 }
 
-                chunk.setBlockState(chunk.getPos().getBlockPos(x, (int) (DIRT_HEIGHT + height), z), surfaceBlock, false);
+                chunk.setBlock(chunk.getPos().getBlockPos(x, (int) (DIRT_HEIGHT + height), z), surfaceBlock, false);
 
                 for(int y = (int) (DIRT_HEIGHT + height + 1); y <= WATER_HEIGHT; y++) {
-                    chunk.setBlockState(chunk.getPos().getBlockPos(x, y, z), Blocks.WATER.getDefaultState(), false);
+                    chunk.setBlock(chunk.getPos().getBlockPos(x, y, z), Blocks.WATER.defaultBlockState(), false);
                 }
             }
         }
@@ -450,7 +450,7 @@ public class MiddleEarthChunkGenerator extends ChunkGenerator {
         float miniNoise = (float) SimplexNoise.noise((float) blockPos.getX() / 40, (float) blockPos.getY() / 30, (float) blockPos.getZ() / 40);
 
         if(noise < 0.4f && noise3 < 0.75f && miniNoise < 0.8f) { //
-            chunk.setBlockState(blockPos, blockState, false);
+            chunk.setBlock(blockPos, blockState, false);
         }
     }
     
@@ -461,10 +461,10 @@ public class MiddleEarthChunkGenerator extends ChunkGenerator {
 
     @Override
     public void populateEntities(WorldGenRegion region) {
-        ChunkPos chunkPos = region.getCenterPos();
+        ChunkPos chunkPos = region.center();
         Holder<Biome> registryEntry = region.getBiome(chunkPos.getStartPos().withY(region.getTopY() - 1));
         WorldgenRandom chunkRandom = new WorldgenRandom(new LegacyRandomSource(RandomSupport.getSeed()));
-        chunkRandom.setPopulationSeed(region.getSeed(), chunkPos.getStartX(), chunkPos.getStartZ());
+        chunkRandom.setPopulationSeed(region.getSeed(), chunkPos.getStartX(), chunkPos.getMinBlockZ());
         NaturalSpawner.populateEntities(region, registryEntry, chunkPos, chunkRandom);
     }
 
@@ -500,7 +500,7 @@ public class MiddleEarthChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public int getHeight(int x, int z, Heightmap.Type heightmap, LevelHeightAccessor world, RandomState noiseConfig) {
+    public int getHeight(int x, int z, Heightmap.Types heightmap, LevelHeightAccessor world, RandomState noiseConfig) {
         float worldHeight = 1 + DIRT_HEIGHT + MiddleEarthHeightMap.getHeight(x, z);
         return (int)worldHeight;
     }

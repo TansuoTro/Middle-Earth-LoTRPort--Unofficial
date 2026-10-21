@@ -67,12 +67,12 @@ public class BarrowWightEntity extends Monster {
     }
     public static AttributeSupplier.Builder setAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, MOVEMENT_SPEED)
-                .add(Attributes.GENERIC_MAX_HEALTH, MAX_HEALTH)
-                .add(Attributes.GENERIC_KNOCKBACK_RESISTANCE, KNOCKBACK_RESISTANCE)
+                .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
+                .add(Attributes.MAX_HEALTH, MAX_HEALTH)
+                .add(Attributes.KNOCKBACK_RESISTANCE, KNOCKBACK_RESISTANCE)
                 .add(Attributes.GENERIC_ATTACK_SPEED, 0.85)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 28.0)
-                .add(Attributes.GENERIC_ATTACK_DAMAGE, ATTACK_DAMAGE)
+                .add(Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE)
                 .add(Attributes.GENERIC_ATTACK_KNOCKBACK, ATTACK_KNOCKBACK);
     }
 
@@ -103,23 +103,23 @@ public class BarrowWightEntity extends Monster {
 
     protected void initDataTracker() {
         super.initDataTracker();
-        this.getDataTracker().startTracking(CAN_SCREAM, true);
-        this.getDataTracker().startTracking(SCREAMING_TIME, 0);
+        this.getEntityData().define(CAN_SCREAM, true);
+        this.getEntityData().define(SCREAMING_TIME, 0);
 
     }
 
     public boolean canScream() {
-        return this.getDataTracker().get(CAN_SCREAM);
+        return this.getEntityData().get(CAN_SCREAM);
     }
     public Integer getScreamingActionTime() {
-        return this.getDataTracker().get(SCREAMING_TIME);
+        return this.getEntityData().get(SCREAMING_TIME);
     }
 
     public void setCanScream(boolean canScream) {
         if(!canScream) {
             this.lastScreamTime = SCREAM_DELAY;
         }
-        this.dataTracker.set(CAN_SCREAM, canScream);
+        this.entityData.set(CAN_SCREAM, canScream);
     }
 
     private void setScreamedTime(int time) {
@@ -127,12 +127,12 @@ public class BarrowWightEntity extends Monster {
     }
 
     public void setScreamingActionTime(int screamingTime) {
-        this.dataTracker.set(SCREAMING_TIME, screamingTime);
+        this.entityData.set(SCREAMING_TIME, screamingTime);
     }
 
     @Override
     public void tick() {
-        if (!this.getWorld().isClient && this.isAlive() && !this.isAiDisabled()) {
+        if (!this.level().isClientSide && this.isAlive() && !this.isNoAi()) {
             LivingEntity target = getTarget();
 
             int screamingTime = this.getScreamingActionTime();
@@ -222,8 +222,8 @@ public class BarrowWightEntity extends Monster {
         super.dropEquipment(source, lootingMultiplier, allowDrops);
         Entity entity = source.getAttacker();
         if (entity instanceof Creeper creeperEntity) {
-            if (creeperEntity.shouldDropHead()) {
-                creeperEntity.onHeadDropped();
+            if (creeperEntity.canDropMobsSkull()) {
+                creeperEntity.increaseDroppedSkulls();
                 this.dropItem(Items.SKELETON_SKULL);
             }
         }

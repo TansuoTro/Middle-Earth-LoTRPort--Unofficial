@@ -10,18 +10,19 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelAccess;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class ShortIciclesBlock extends Block {
-    protected static final VoxelShape SHAPE = Block.createCuboidShape(2.0, 10.0, 2.0, 14.0, 16.0, 14.0);;
+    protected static final VoxelShape SHAPE = Block.box(2.0, 10.0, 2.0, 14.0, 16.0, 14.0);;
 
-    public ShortIciclesBlock(Settings settings) {
+    public ShortIciclesBlock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
     public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
-        BlockPos blockPos = pos.up();
+        BlockPos blockPos = pos.above();
         BlockState blockState = world.getBlockState(blockPos);
         return blockState.isSideSolidFullSquare(world, blockPos, Direction.DOWN);
     }
@@ -33,7 +34,7 @@ public class ShortIciclesBlock extends Block {
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (direction == Direction.UP && !this.canPlaceAt(state, world, pos)) {
-            return Blocks.AIR.getDefaultState();
+            return Blocks.AIR.defaultBlockState();
         } else {
             return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
         }

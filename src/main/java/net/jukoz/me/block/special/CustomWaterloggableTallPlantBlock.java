@@ -16,8 +16,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccess;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
@@ -33,12 +33,12 @@ public class CustomWaterloggableTallPlantBlock extends DoublePlantBlock implemen
     public CustomWaterloggableTallPlantBlock(Settings settings, boolean random) {
         super(settings);
         this.randomBoneMeal = random;
-        this.setDefaultState((BlockState)((BlockState)this.stateManager.getDefaultState()).with(HALF, DoubleBlockHalf.LOWER).with(WATERLOGGED, false));
+        this.setDefaultState((BlockState)((BlockState)this.stateManager.defaultBlockState()).with(HALF, DoubleBlockHalf.LOWER).with(WATERLOGGED, false));
     }
 
     public void placeAt(LevelAccessor world, BlockPos pos, boolean waterlogged, int flags) {
-        world.setBlockState(pos, this.getDefaultState().with(HALF, DoubleBlockHalf.LOWER).with(WATERLOGGED, waterlogged), flags);
-        world.setBlockState(pos.up(), this.getDefaultState().with(HALF, DoubleBlockHalf.UPPER).with(WATERLOGGED, false), flags);
+        world.setBlock(pos, this.defaultBlockState().with(HALF, DoubleBlockHalf.LOWER).with(WATERLOGGED, waterlogged), flags);
+        world.setBlock(pos.above(), this.defaultBlockState().with(HALF, DoubleBlockHalf.UPPER).with(WATERLOGGED, false), flags);
     }
 
     @Override
@@ -48,22 +48,22 @@ public class CustomWaterloggableTallPlantBlock extends DoublePlantBlock implemen
         }
 
         DoubleBlockHalf doubleBlockHalf = (DoubleBlockHalf)state.get(HALF);
-        if (direction.getAxis() == Direction.Axis.Y && doubleBlockHalf == DoubleBlockHalf.LOWER == (direction == Direction.UP) && (!neighborState.isOf(this) || neighborState.get(HALF) == doubleBlockHalf)) {
-            return Blocks.AIR.getDefaultState();
+        if (direction.getAxis() == Direction.Axis.Y && doubleBlockHalf == DoubleBlockHalf.LOWER == (direction == Direction.UP) && (!neighborState.is(this) || neighborState.get(HALF) == doubleBlockHalf)) {
+            return Blocks.AIR.defaultBlockState();
         } else {
-            return doubleBlockHalf == DoubleBlockHalf.LOWER && direction == Direction.DOWN && !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+            return doubleBlockHalf == DoubleBlockHalf.LOWER && direction == Direction.DOWN && !state.canPlaceAt(world, pos) ? Blocks.AIR.defaultBlockState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
         }
     }
 
     @Override
     public void neighborUpdate(BlockState state, Level world, BlockPos pos, Block sourceBlock, BlockPos fromPos, boolean notify) {
-        if (!world.isClient && state.get(HALF) == DoubleBlockHalf.UPPER && (
-                world.getBlockState(pos.up()).getFluidState().isOf(Fluids.WATER)
-                        || world.getBlockState(pos.north()).getFluidState().isOf(Fluids.WATER)
-                        || world.getBlockState(pos.south()).getFluidState().isOf(Fluids.WATER)
-                        || world.getBlockState(pos.east()).getFluidState().isOf(Fluids.WATER)
-                        || world.getBlockState(pos.west()).getFluidState().isOf(Fluids.WATER))) {
-            this.breakUpperFromWater(world, pos, Blocks.AIR.getDefaultState());
+        if (!world.isClientSide && state.get(HALF) == DoubleBlockHalf.UPPER && (
+                world.getBlockState(pos.above()).getFluidState().is(Fluids.WATER)
+                        || world.getBlockState(pos.north()).getFluidState().is(Fluids.WATER)
+                        || world.getBlockState(pos.south()).getFluidState().is(Fluids.WATER)
+                        || world.getBlockState(pos.east()).getFluidState().is(Fluids.WATER)
+                        || world.getBlockState(pos.west()).getFluidState().is(Fluids.WATER))) {
+            this.breakUpperFromWater(world, pos, Blocks.AIR.defaultBlockState());
             return;
         }
         super.neighborUpdate(state, world, pos, sourceBlock, fromPos, notify);
@@ -74,11 +74,11 @@ public class CustomWaterloggableTallPlantBlock extends DoublePlantBlock implemen
         BlockPos blockPos = ctx.getBlockPos();
         BlockState blockState = ctx.getWorld().getBlockState(ctx.getBlockPos());
         Level world = ctx.getWorld();
-        if(blockPos.getY() < world.getTopY() - 2 && world.getBlockState(blockPos.up()).canReplace(ctx)){
-            if(blockState.isOf(Blocks.WATER)){
-                return this.getDefaultState().with(WATERLOGGED, true);
+        if(blockPos.getY() < world.getTopY() - 2 && world.getBlockState(blockPos.above()).canReplace(ctx)){
+            if(blockState.is(Blocks.WATER)){
+                return this.defaultBlockState().with(WATERLOGGED, true);
             } else{
-                return this.getDefaultState();
+                return this.defaultBlockState();
             }
         } else {
             return null;
@@ -114,12 +114,12 @@ public class CustomWaterloggableTallPlantBlock extends DoublePlantBlock implemen
 
     @Override
     public boolean tryFillWithFluid(LevelAccessor world, BlockPos pos, BlockState state, FluidState fluidState) {
-        if (!fluidState.isOf(Fluids.WATER)) {
+        if (!fluidState.is(Fluids.WATER)) {
             return false;
         }
 
         if (state.get(HALF) == DoubleBlockHalf.UPPER) {
-            this.breakUpperFromWater(world, pos, Blocks.WATER.getDefaultState());
+            this.breakUpperFromWater(world, pos, Blocks.WATER.defaultBlockState());
             return true;
         }
         return SimpleWaterloggedBlock.super.tryFillWithFluid(world, pos, state, fluidState);
@@ -127,7 +127,7 @@ public class CustomWaterloggableTallPlantBlock extends DoublePlantBlock implemen
 
     @Override
     public void onPlaced(Level world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
-        world.setBlockState(pos.up(), state.with(HALF, DoubleBlockHalf.UPPER).with(WATERLOGGED, false), 3);
+        world.setBlock(pos.above(), state.setValue(HALF, DoubleBlockHalf.UPPER).with(WATERLOGGED, false), 3);
     }
 
     @Override
@@ -152,21 +152,21 @@ public class CustomWaterloggableTallPlantBlock extends DoublePlantBlock implemen
 
     private void breakUpperFromWater(LevelAccessor world, BlockPos upperPos, BlockState upperReplacementState) {
         BlockState upperState = world.getBlockState(upperPos);
-        if (!upperState.isOf(this) || upperState.get(HALF) != DoubleBlockHalf.UPPER) {
+        if (!upperState.is(this) || upperState.get(HALF) != DoubleBlockHalf.UPPER) {
             return;
         }
 
-        if (world instanceof Level actualWorld && !actualWorld.isClient) {
+        if (world instanceof Level actualWorld && !actualWorld.isClientSide) {
             dropStacks(upperState, actualWorld, upperPos);
         }
 
-        BlockPos lowerPos = upperPos.down();
+        BlockPos lowerPos = upperPos.below();
         BlockState lowerState = world.getBlockState(lowerPos);
-        if (lowerState.isOf(this) && lowerState.get(HALF) == DoubleBlockHalf.LOWER) {
-            BlockState lowerReplacementState = lowerState.get(WATERLOGGED) ? Blocks.WATER.getDefaultState() : Blocks.AIR.getDefaultState();
-            world.setBlockState(lowerPos, lowerReplacementState, 3);
+        if (lowerState.is(this) && lowerState.get(HALF) == DoubleBlockHalf.LOWER) {
+            BlockState lowerReplacementState = lowerState.get(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState();
+            world.setBlock(lowerPos, lowerReplacementState, 3);
         }
 
-        world.setBlockState(upperPos, upperReplacementState, 3);
+        world.setBlock(upperPos, upperReplacementState, 3);
     }
 }

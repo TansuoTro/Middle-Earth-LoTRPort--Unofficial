@@ -20,7 +20,7 @@ import net.jukoz.me.entity.spider.larva.ShelobiteLarvaModel;
 import net.jukoz.me.entity.spider.scuttler.ShelobiteScuttlerModel;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.EntityModelLayer;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.jukoz.me.entity.spider.spawn.SpawnOfShelobModel;
 import java.util.Map;
 import net.minecraft.client.model.geom.ModelLayerLocation;

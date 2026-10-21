@@ -15,7 +15,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 import java.util.Iterator;
@@ -31,13 +31,13 @@ public class CustomFarmlandBlock extends FarmBlock {
 
     @Override
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return !this.getDefaultState().canPlaceAt(ctx.getWorld(), ctx.getBlockPos()) ? target.getDefaultState() : super.getPlacementState(ctx);
+        return !this.defaultBlockState().canPlaceAt(ctx.getWorld(), ctx.getBlockPos()) ? target.defaultBlockState() : super.getPlacementState(ctx);
     }
 
     public static void setToDirt(@Nullable Entity entity, BlockState state, Level world, BlockPos pos, Block target) {
-        BlockState blockState = pushEntitiesUpBeforeBlockChange(state, target.getDefaultState(), world, pos);
-        world.setBlockState(pos, blockState);
-        world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(entity, blockState));
+        BlockState blockState = pushEntitiesUpBeforeBlockChange(state, target.defaultBlockState(), world, pos);
+        world.setBlock(pos, blockState);
+        world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(entity, blockState));
     }
 
     public void scheduledTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
@@ -49,29 +49,29 @@ public class CustomFarmlandBlock extends FarmBlock {
 
     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         int i = (Integer)state.get(MOISTURE);
-        if (!isWaterNearby(world, pos) && !world.hasRain(pos.up())) {
+        if (!isWaterNearby(world, pos) && !world.hasRain(pos.above())) {
             if (i > 0) {
-                world.setBlockState(pos, (BlockState)state.with(MOISTURE, i - 1), 2);
+                world.setBlock(pos, (BlockState)state.setValue(MOISTURE, i - 1), 2);
             } else if (!hasCrop(world, pos)) {
                 setToDirt((Entity)null, state, world, pos, target);
             }
         } else if (i < 7) {
-            world.setBlockState(pos, (BlockState)state.with(MOISTURE, 7), 2);
+            world.setBlock(pos, (BlockState)state.setValue(MOISTURE, 7), 2);
         }
 
     }
 
     public void onLandedUpon(Level world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
         if (world instanceof ServerLevel serverWorld) {
-            if ((double)world.random.nextFloat() < fallDistance - 0.5 && entity instanceof LivingEntity && (entity instanceof Player || serverWorld.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING)) && entity.getWidth() * entity.getWidth() * entity.getHeight() > 0.512F) {
+            if ((double)world.random.nextFloat() < fallDistance - 0.5 && entity instanceof LivingEntity && (entity instanceof Player || serverWorld.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) && entity.getWidth() * entity.getWidth() * entity.getHeight() > 0.512F) {
                 setToDirt((Entity)null, state, world, pos, target);
             }
         }
-        entity.handleFallDamage(fallDistance, 1.0F, entity.getDamageSources().fall());
+        entity.handleFallDamage(fallDistance, 1.0F, entity.damageSources().fall());
     }
 
     private static boolean hasCrop(BlockGetter world, BlockPos pos) {
-        return world.getBlockState(pos.up()).isIn(BlockTags.MAINTAINS_FARMLAND);
+        return world.getBlockState(pos.above()).is(BlockTags.MAINTAINS_FARMLAND);
     }
 
     private static boolean isWaterNearby(LevelReader world, BlockPos pos) {
@@ -84,7 +84,7 @@ public class CustomFarmlandBlock extends FarmBlock {
             }
 
             blockPos = (BlockPos)var2.next();
-        } while(!world.getFluidState(blockPos).isIn(FluidTags.WATER));
+        } while(!world.getFluidState(blockPos).is(FluidTags.WATER));
 
         return true;
     }

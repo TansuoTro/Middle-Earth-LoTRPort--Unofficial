@@ -72,10 +72,10 @@ public class BiomeEventData {
 
     public ContextualizedBiomeData findNpcData(Level world, NpcEntity entity) {
         List<WildSpawnEventData> weightedData = new ArrayList<>();
-        RegistryAccess manager = world.getRegistryManager();
+        RegistryAccess manager = world.registryAccess();
 
         for(WildSpawnEventData data : getWildSpawnEventDatas()){
-            if(SpawnEventDataUtil.isConsideredForSpawning(data, Registries.ENTITY_TYPE.getId(EntitiesME.NPC), world, entity.getBlockPos()))
+            if(SpawnEventDataUtil.isConsideredForSpawning(data, Registries.ENTITY_TYPE.getId(EntitiesME.NPC), world, entity.blockPosition()))
             {
                 int weightAmount = data.getWeight(1);
                 for(int i = 0; i < weightAmount; i ++){

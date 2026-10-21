@@ -10,11 +10,12 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class CushionBlock extends SeatBlock {
-    protected static final VoxelShape SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 9.0, 16.0);
+    protected static final VoxelShape SHAPE = Block.box(0.0, 0.0, 0.0, 16.0, 9.0, 16.0);
 
-    public CushionBlock(Settings settings) {
+    public CushionBlock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
@@ -27,7 +28,7 @@ public class CushionBlock extends SeatBlock {
     }
 
     public void onEntityLand(BlockGetter world, Entity entity) {
-        if (entity.bypassesLandingEffects()) {
+        if (entity.isSuppressingBounce()) {
             super.onEntityLand(world, entity);
         } else {
             this.bounceEntity(entity);

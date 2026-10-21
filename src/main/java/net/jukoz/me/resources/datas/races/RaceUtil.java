@@ -9,21 +9,21 @@ import net.jukoz.me.resources.persistent_datas.PlayerDataService;
 public class RaceUtil {
 
     public static void updateRace(Player player, Race race, boolean shouldHeal){
-        Race previousRace = PlayerDataService.getPlayerRace(player, player.getWorld());
+        Race previousRace = PlayerDataService.getPlayerRace(player, player.level());
         boolean havePreviousRace =  previousRace != null;
         boolean raceExists = race != null;
 
         // [RESET]
         if(havePreviousRace){
             previousRace.reverseAttributes(player);
-            PlayerDataService.setRace(player, player.getWorld(), null);
+            PlayerDataService.setRace(player, player.level(), null);
         }
 
         reset(player);
 
         // [SET]
         if(raceExists){
-            PlayerDataService.setRace(player, player.getWorld(), race.getId());
+            PlayerDataService.setRace(player, player.level(), race.getId());
         }
 
         if(shouldHeal)
@@ -31,7 +31,7 @@ public class RaceUtil {
     }
 
     public static RaceType getRaceType(Player player){
-        Race race = PlayerDataService.getPlayerRace(player, player.getWorld());
+        Race race = PlayerDataService.getPlayerRace(player, player.level());
         if(race != null)
             return race.getRaceType();
         else
@@ -39,7 +39,7 @@ public class RaceUtil {
     }
 
     public static void initializeRace(ServerPlayer player) {
-        Race race = PlayerDataService.getPlayerRace(player, player.getWorld());
+        Race race = PlayerDataService.getPlayerRace(player, player.level());
         updateRace(player, race, false);
     }
 

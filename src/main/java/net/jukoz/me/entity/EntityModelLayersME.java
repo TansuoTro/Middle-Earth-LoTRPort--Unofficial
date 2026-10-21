@@ -8,7 +8,7 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.SkullModelBase;
 import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
-import net.minecraft.client.model.EntityModelLayer;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.special.bellows.BellowsBlockEntityRenderer;

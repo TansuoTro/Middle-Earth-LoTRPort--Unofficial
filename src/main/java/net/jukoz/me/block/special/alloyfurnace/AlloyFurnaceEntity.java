@@ -43,9 +43,9 @@ public class AlloyFurnaceEntity extends BlockEntity implements MenuProvider, Wor
     public static final int FUEL_SLOT = 0;
     public static final int OUTPUT_SLOT = 5;
     private final NonNullList<ItemStack> inventory =
-            NonNullList.ofSize(6, ItemStack.EMPTY);
+            NonNullList.withSize(6, ItemStack.EMPTY);
     protected final ContainerData propertyDelegate;
-    protected final Map<Item, Integer> fuelTimeMap = AbstractFurnaceBlockEntity.createFuelTimeMap();
+    protected final Map<Item, Integer> fuelTimeMap = AbstractFurnaceBlockEntity.getFuel();
     private int progress = 0;
     private int fuelTime = 0;
     private int maxFuelTime = 0;
@@ -109,7 +109,7 @@ public class AlloyFurnaceEntity extends BlockEntity implements MenuProvider, Wor
     }
 
     public ItemStack getRenderStack() {
-        return this.getStack(OUTPUT_SLOT);
+        return this.getItem(OUTPUT_SLOT);
     }
     public void setInventory(NonNullList<ItemStack> inventory) {
         for (int i = 0; i < inventory.size(); i++) {
@@ -119,7 +119,7 @@ public class AlloyFurnaceEntity extends BlockEntity implements MenuProvider, Wor
 
     @Override
     public void markDirty() {
-        if(world != null && !world.isClient()) {
+        if(world != null && !world.isClientSide()) {
             FriendlyByteBuf data = PacketByteBufs.create();
             data.writeInt(inventory.size());
             for(int i = 0; i < inventory.size(); i++) {
@@ -197,8 +197,8 @@ public class AlloyFurnaceEntity extends BlockEntity implements MenuProvider, Wor
     @Override
     public void setStack(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
     }
 
@@ -213,7 +213,7 @@ public class AlloyFurnaceEntity extends BlockEntity implements MenuProvider, Wor
     }
 
     public static void tick(Level world, BlockPos blockPos, BlockState blockState, AlloyFurnaceEntity entity) {
-        if(world.isClient()) return;
+        if(world.isClientSide()) return;
         entity.fuelTime = Math.max(0, entity.fuelTime - 1);
         boolean progress = false;
         if(hasRecipe(entity)) {
@@ -232,18 +232,18 @@ public class AlloyFurnaceEntity extends BlockEntity implements MenuProvider, Wor
             markDirty(world, blockPos, blockState);
         }
         boolean isCooking = entity.fuelTime > 0;
-        blockState = blockState.with(AbstractFurnaceBlock.LIT, isCooking);
-        world.setBlockState(blockPos, blockState, Block.NOTIFY_ALL);
+        blockState = blockState.setValue(AbstractFurnaceBlock.LIT, isCooking);
+        world.setBlock(blockPos, blockState, (Block.UPDATE_NEIGHBORS | Block.UPDATE_CLIENTS));
     }
 
     private static void craftItem(AlloyFurnaceEntity entity) {
         SimpleContainer inventory1 = new SimpleContainer(entity.size());
         for (int i = 0; i < entity.size(); i++) {
-            inventory1.setStack(i, entity.getStack(i));
+            inventory1.setStack(i, entity.getItem(i));
         }
 
-        Optional<AlloyRecipe> match = entity.getWorld().getRecipeManager()
-                .getFirstMatch(AlloyRecipe.Type.INSTANCE, inventory1, entity.getWorld());
+        Optional<AlloyRecipe> match = entity.level().getRecipeManager()
+                .getFirstMatch(AlloyRecipe.Type.INSTANCE, inventory1, entity.level());
         if(match.isEmpty()) throw new RuntimeException("Somehow... you crafted an item without recipe?!");
 
         if(hasRecipe(entity)) {
@@ -251,7 +251,7 @@ public class AlloyFurnaceEntity extends BlockEntity implements MenuProvider, Wor
                 entity.removeStack(i, 1);
             }
             entity.setStack(OUTPUT_SLOT, new ItemStack(match.get().output.getRegistryEntry(),
-                    entity.getStack(OUTPUT_SLOT).getCount() + match.get().output.getCount()));
+                    entity.getItem(OUTPUT_SLOT).getCount() + match.get().output.getCount()));
             entity.markDirty();
         }
     }
@@ -259,11 +259,11 @@ public class AlloyFurnaceEntity extends BlockEntity implements MenuProvider, Wor
     private static boolean hasRecipe(AlloyFurnaceEntity entity) {
         SimpleContainer inventory1 = new SimpleContainer(entity.size());
         for (int i = 0; i < entity.size(); i++) {
-            inventory1.setStack(i, entity.getStack(i));
+            inventory1.setStack(i, entity.getItem(i));
         }
 
-        Optional<AlloyRecipe> match = entity.getWorld().getRecipeManager()
-                .getFirstMatch(AlloyRecipe.Type.INSTANCE, inventory1, entity.getWorld());
+        Optional<AlloyRecipe> match = entity.level().getRecipeManager()
+                .getFirstMatch(AlloyRecipe.Type.INSTANCE, inventory1, entity.level());
         if(match.isEmpty()) return false;
 
         return canInsertAmountIntoOutput(inventory1, match.get().output.getCount())
@@ -274,10 +274,10 @@ public class AlloyFurnaceEntity extends BlockEntity implements MenuProvider, Wor
 
         SimpleContainer inventory1 = new SimpleContainer(entity.size());
         for (int i = 0; i < entity.size(); i++) {
-            inventory1.setStack(i, entity.getStack(i));
+            inventory1.setStack(i, entity.getItem(i));
         }
 
-        Item fuelItem = inventory1.getStack(FUEL_SLOT).getItem();
+        Item fuelItem = inventory1.getItem(FUEL_SLOT).getItem();
         if(this.fuelTime > 0) return true;
         else {
             if(isFuel(fuelItem)) {
@@ -292,15 +292,15 @@ public class AlloyFurnaceEntity extends BlockEntity implements MenuProvider, Wor
         maxFuelTime = fuelTime;
         if(fuelItem == Items.LAVA_BUCKET) {
             entity.removeStack(FUEL_SLOT);
-            entity.setStack(FUEL_SLOT, Items.BUCKET.getDefaultStack());
+            entity.setStack(FUEL_SLOT, Items.BUCKET.getDefaultInstance());
         }
-        else entity.getStack(FUEL_SLOT).decrement(1);
+        else entity.getItem(FUEL_SLOT).decrement(1);
     }
 
     private static boolean canInsertAmountIntoOutput(SimpleContainer inventory1, int count) {
-        return inventory1.getStack(OUTPUT_SLOT).getMaxCount() > inventory1.getStack(OUTPUT_SLOT).getCount() + (count- 1);
+        return inventory1.getItem(OUTPUT_SLOT).getMaxCount() > inventory1.getItem(OUTPUT_SLOT).getCount() + (count- 1);
     }
     private static boolean canInsertRecipeIntoOutput(SimpleContainer inventory1, Item item) {
-        return inventory1.getStack(OUTPUT_SLOT).getItem() == item || inventory1.getStack(OUTPUT_SLOT).isEmpty();
+        return inventory1.getItem(OUTPUT_SLOT).getItem() == item || inventory1.getItem(OUTPUT_SLOT).isEmpty();
     }
 }

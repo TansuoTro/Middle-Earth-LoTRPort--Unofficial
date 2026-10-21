@@ -51,7 +51,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.ai.brain.MemoryModulesME;
 import net.jukoz.me.entity.beasts.AbstractBeastEntity;
@@ -95,10 +95,10 @@ public class CaveTrollEntity extends AbstractBeastEntity {
 
     public CaveTrollEntity(EntityType<? extends AbstractBeastEntity> entityType, Level world) {
         super(entityType, world);
-        if(scavengeLootTable == null && !world.isClient()) {
+        if(scavengeLootTable == null && !world.isClientSide()) {
             if(world instanceof ServerLevel serverWorld) {
 
-                LootTable lootTable = serverWorld.getServer().getLootManager().getLootTable(new ResourceLocation(MiddleEarth.MOD_ID, "gameplay/cave_troll_scavenging"));
+                LootTable lootTable = serverWorld.getServer().getLootData().getLootTable(new ResourceLocation(MiddleEarth.MOD_ID, "gameplay/cave_troll_scavenging"));
 
                 if(lootTable != null) {
                     scavengeLootTable = lootTable;
@@ -115,24 +115,24 @@ public class CaveTrollEntity extends AbstractBeastEntity {
 
     public static AttributeSupplier.Builder setAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.1f)
-                .add(Attributes.GENERIC_MAX_HEALTH, 120.0)
-                .add(Attributes.GENERIC_KNOCKBACK_RESISTANCE, 0.8)
+                .add(Attributes.MOVEMENT_SPEED, 0.1f)
+                .add(Attributes.MAX_HEALTH, 120.0)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.8)
                 .add(Attributes.GENERIC_ATTACK_SPEED, 0.65)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 28.0)
-                .add(Attributes.GENERIC_ATTACK_DAMAGE, 10.0)
+                .add(Attributes.ATTACK_DAMAGE, 10.0)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 15.0);
     }
 
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(SCAVENGING, false);
-        this.dataTracker.startTracking(ROARING, false);
-        this.dataTracker.startTracking(SLEEPING, false);
-        this.dataTracker.startTracking(SMASHING, false);
-        this.dataTracker.startTracking(ENRAGED, false);
-        this.dataTracker.startTracking(VARIANT, 0);
+        this.entityData.define(SCAVENGING, false);
+        this.entityData.define(ROARING, false);
+        this.entityData.define(SLEEPING, false);
+        this.entityData.define(SMASHING, false);
+        this.entityData.define(ENRAGED, false);
+        this.entityData.define(VARIANT, 0);
     }
 
     @Override
@@ -146,7 +146,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
     public void readCustomDataFromNbt(CompoundTag nbt) {
         super.readCustomDataFromNbt(nbt);
         ReadView view = new ReadView(nbt);
-        this.dataTracker.set(VARIANT, view.getInt("Variant", 0));
+        this.entityData.set(VARIANT, view.getInt("Variant", 0));
     }
 
     @Nullable
@@ -162,18 +162,18 @@ public class CaveTrollEntity extends AbstractBeastEntity {
     }
 
     private int getTypeVariant() {
-        return this.dataTracker.get(VARIANT);
+        return this.entityData.get(VARIANT);
     }
 
     private void setVariant(CaveTrollVariant variant) {
-        this.dataTracker.set(VARIANT, variant.getId() & 255);
+        this.entityData.set(VARIANT, variant.getId() & 255);
     }
 
     @Override
     protected void mobTick() {
-        ProfilerFiller profiler = this.getWorld().getProfiler();
+        ProfilerFiller profiler = this.level().getProfiler();
         profiler.push("caveTrollBrain");
-        this.getBrain().tick((ServerLevel) this.getWorld(), this);
+        this.getBrain().tick((ServerLevel) this.level(), this);
         profiler.swap("caveTrollActivityUpdate");
         CaveTrollBrain.updateActivities(this);
         profiler.pop();
@@ -191,7 +191,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
 
         if(rand < 0.15 || (rand < 0.3 && this.getTameness() <= 0) || player.isCreative()) { // Tame success, chance is twice as high if the troll is feral
             this.tameBeast(player);
-            this.getWorld().sendEntityStatus(this, EntityEvent.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
+            this.level().sendEntityStatus(this, EntityEvent.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
 
             this.chargeTimeout = 0;
         }
@@ -200,15 +200,15 @@ public class CaveTrollEntity extends AbstractBeastEntity {
             this.setEnraged(true);
             this.getBrain().remember(MemoryModuleType.ATTACK_TARGET, player);
             this.addStatusEffect(new MobEffectInstance(MobEffects.STRENGTH, 1200));
-            this.getWorld().sendEntityStatus(this, EntityEvent.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES);
+            this.level().sendEntityStatus(this, EntityEvent.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES);
         }
     }
 
     @Override
     public InteractionResult interactMob(Player player, InteractionHand hand) {
-        ItemStack itemStack = player.getStackInHand(hand);
+        ItemStack itemStack = player.getItemInHand(hand);
 
-        if(!this.getWorld().isClient()) { // Server side
+        if(!this.level().isClientSide()) { // Server side
             for(RaceType race : this.getCompatibleRaces()) { // Check for race
                 if(PlayerUtil.isOfRace(player, race) || player.isCreative()) {
 
@@ -217,7 +217,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
                         if (!player.getAbilities().creativeMode) itemStack.decrement(1);
                         return InteractionResult.SUCCESS;
                     }
-                    else if(player.isSneaking() && itemStack.isEmpty() && isOwner(player) && !this.getMainHandStack().isEmpty()) {  // Take weapon away from troll
+                    else if(player.isShiftKeyDown() && itemStack.isEmpty() && isOwner(player) && !this.getMainHandStack().isEmpty()) {  // Take weapon away from troll
                         player.giveItemStack(this.getMainHandStack().copyAndEmpty());
                         return InteractionResult.SUCCESS;
                     }
@@ -251,7 +251,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
     }
 
     public boolean isTrollWeapon(ItemStack itemStack) {
-        return itemStack.isIn(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "troll_weapons")));
+        return itemStack.is(TagKey.create(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "troll_weapons")));
     }
 
     @Override
@@ -274,15 +274,15 @@ public class CaveTrollEntity extends AbstractBeastEntity {
 
     @Override
     public void tameBeast(LivingEntity livingEntity) {
-        if(!this.getWorld().isClient()) {
+        if(!this.level().isClientSide()) {
             this.setTame(true);
             this.setTameness(75);
             this.stopSleeping();
             this.getBrain().remember(MemoryModulesME.TAME, true);
-            this.getBrain().forget(MemoryModulesME.DIG_FOR_FOOD_COOLDOWN);
-            this.getBrain().forget(MemoryModulesME.FOOD_EATEN_COUNT);
-            this.getBrain().forget(MemoryModuleType.NEAREST_ATTACKABLE);
-            this.getBrain().forget(MemoryModuleType.ATTACK_TARGET);
+            this.getBrain().erase(MemoryModulesME.DIG_FOR_FOOD_COOLDOWN);
+            this.getBrain().erase(MemoryModulesME.FOOD_EATEN_COUNT);
+            this.getBrain().erase(MemoryModuleType.NEAREST_ATTACKABLE);
+            this.getBrain().erase(MemoryModuleType.ATTACK_TARGET);
             this.setOwnerUuid(livingEntity.getUuid());
         }
 
@@ -290,7 +290,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
 
     @Override
     public void tickMovement() {
-        if(this.getWorld().isClient) {
+        if(this.level().isClientSide) {
             setupAnimationStates();
         }
         else {
@@ -320,13 +320,13 @@ public class CaveTrollEntity extends AbstractBeastEntity {
         if(this.isSitting()) {
             return false;
         }
-        return this.isSaddled() ? getPassengerList().size() < 3 : getPassengerList().isEmpty();
+        return this.isSaddled() ? getPassengers().size() < 3 : getPassengers().isEmpty();
     }
 
     @Override
     protected float getSaddledSpeed(Player controllingPlayer) {
         if(!this.isSitting()) {
-            return controllingPlayer.isSprinting() ? ((float)this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED) * 1.25f) : ((float)this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED) * 0.2f);
+            return controllingPlayer.isSprinting() ? ((float)this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 1.25f) : ((float)this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 0.2f);
         }
 
         return super.getSaddledSpeed(controllingPlayer);
@@ -335,16 +335,16 @@ public class CaveTrollEntity extends AbstractBeastEntity {
     @Override
     protected float getNpcSaddledSpeed(NpcEntity controllingNpc) {
         if(!this.isSitting()) {
-            return controllingNpc.isSprinting() ? ((float)this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED) * 1.25f) : ((float)this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED) * 0.2f);
+            return controllingNpc.isSprinting() ? ((float)this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 1.25f) : ((float)this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 0.2f);
         }
 
         return super.getNpcSaddledSpeed(controllingNpc);
     }
 
     @Override
-    protected void updatePassengerPosition(Entity passenger, Entity.PositionUpdater positionUpdater)  {
+    protected void updatePassengerPosition(Entity passenger, Entity.MoveFunction positionUpdater)  {
         super.updatePassengerPosition(passenger, positionUpdater);
-        List<Entity> passengerList = this.getPassengerList();
+        List<Entity> passengerList = this.getPassengers();
         boolean saddled = this.isSaddled();
         boolean sprinting = this.isCharging();
 
@@ -375,7 +375,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
                 front += 0.5;
             }
 
-            if(this.getWorld().isClient() && this.smashingAnimationState.isRunning()) {
+            if(this.level().isClientSide() && this.smashingAnimationState.isRunning()) {
                 float time = (this.smashingAnimationState.getTimeRunning() / 2000.0F) * 2 * Mth.PI; // Goes from 0 to 2Pi over the duration of the animation
                 if(this.smashingAnimationState.getTimeRunning() < 1000) {
                     front -= Mth.sin(time) * 0.3;
@@ -387,8 +387,8 @@ public class CaveTrollEntity extends AbstractBeastEntity {
 
             }
 
-            double x = Mth.cos((float)Math.toRadians(this.getBodyYaw())) * side - Mth.sin((float)Math.toRadians(this.getBodyYaw())) * front;
-            double z = Mth.sin((float)Math.toRadians(this.getBodyYaw())) * side + Mth.cos((float)Math.toRadians(this.getBodyYaw())) * front;
+            double x = Mth.cos((float)Math.toRadians(this.getVisualRotationYInDegrees())) * side - Mth.sin((float)Math.toRadians(this.getVisualRotationYInDegrees())) * front;
+            double z = Mth.sin((float)Math.toRadians(this.getVisualRotationYInDegrees())) * side + Mth.cos((float)Math.toRadians(this.getVisualRotationYInDegrees())) * front;
 
             passenger.setPos(passenger.getX() + x, passenger.getY() + y, passenger.getZ() + z);
         }
@@ -411,7 +411,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
 
             y = sprinting ? y + 0.15 : y; // Add offset if sprinting
 
-            if(this.getWorld().isClient()) {
+            if(this.level().isClientSide()) {
                 float time = (this.smashingAnimationState.getTimeRunning() / 2000.0F) * 2 * Mth.PI; // Goes from 0 to 2Pi over the duration of the animation
                 if(this.smashingAnimationState.getTimeRunning() < 1000) {
                     front -= Mth.sin(time) * 0.3;
@@ -423,8 +423,8 @@ public class CaveTrollEntity extends AbstractBeastEntity {
 
             }
 
-            double x = Mth.cos((float)Math.toRadians(this.getBodyYaw())) * side - Mth.sin((float)Math.toRadians(this.getBodyYaw())) * front;
-            double z = Mth.sin((float)Math.toRadians(this.getBodyYaw())) * side + Mth.cos((float)Math.toRadians(this.getBodyYaw())) * front;
+            double x = Mth.cos((float)Math.toRadians(this.getVisualRotationYInDegrees())) * side - Mth.sin((float)Math.toRadians(this.getVisualRotationYInDegrees())) * front;
+            double z = Mth.sin((float)Math.toRadians(this.getVisualRotationYInDegrees())) * side + Mth.cos((float)Math.toRadians(this.getVisualRotationYInDegrees())) * front;
 
             passenger.setPos(passenger.getX() + x, passenger.getY() + y, passenger.getZ() + z);
         }
@@ -506,12 +506,12 @@ public class CaveTrollEntity extends AbstractBeastEntity {
 
     @Override
     public void chargeAttack() {
-        List<Entity> entities = this.getWorld().getOtherEntities(this, this.getBoundingBox().expand(0.2f, 0.0, 0.2f));
+        List<Entity> entities = this.level().getEntities(this, this.getBoundingBox().expand(0.2f, 0.0, 0.2f));
         Vec3 direction = Vec3.ZERO;
         LivingEntity target = this.getTarget();
-        int difficulty = this.hasControllingPassenger() ? this.getWorld().getDifficulty().getId() : 0;
+        int difficulty = this.hasControllingPassenger() ? this.level().getDifficulty().getId() : 0;
 
-        if(!this.isTame() && !this.getWorld().isClient) { // Charge Attack for wild Troll
+        if(!this.isTame() && !this.level().isClientSide) { // Charge Attack for wild Troll
             if(target != null) { // Has attack target memory
                 direction = this.getPos().relativize(target.getPos()); // Vector from Troll to target entity
             }
@@ -519,19 +519,19 @@ public class CaveTrollEntity extends AbstractBeastEntity {
             this.setYaw((float) Math.toDegrees(Math.atan2(-direction.x, direction.z))); // Turning the troll into the right direction
             this.setChargeVelocity(direction);
         }
-        else if (this.getWorld().isClient && this.hasControllingPassenger()) { // Charge Attack for tamed Troll
+        else if (this.level().isClientSide && this.hasControllingPassenger()) { // Charge Attack for tamed Troll
             this.setChargeVelocity(this.getRotationVector());
         }
 
         for(Entity entity : entities) { // Check through all nearby entities
-            if(entity != this.getOwner() && !this.getPassengerList().contains(entity)) { // Exclude passengers and owner
+            if(entity != this.getOwner() && !this.getPassengers().contains(entity)) { // Exclude passengers and owner
                 if(getWorld() instanceof ServerLevel serverWorld) {
-                    entity.damage(entity.getDamageSources().mobAttack(this), 10.0f + difficulty * 2);
+                    entity.damage(entity.damageSources().mobAttack(this), 10.0f + difficulty * 2);
                 }
 
             }
         }
-        this.getWorld().addParticle(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), 1, 0.1, 1);
+        this.level().addParticle(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), 1, 0.1, 1);
     }
 
     public void smashAttack(float strength) { // Strength goes from 0 to 100
@@ -540,19 +540,19 @@ public class CaveTrollEntity extends AbstractBeastEntity {
 
         double weaponDamage = 0;
         for (Map.Entry<Attribute, AttributeModifier> entry : this.getMainHandStack().getAttributeModifiers(EquipmentSlot.MAINHAND).entries()) {
-            if (entry.getKey() == Attributes.GENERIC_ATTACK_DAMAGE) {
+            if (entry.getKey() == Attributes.ATTACK_DAMAGE) {
                 weaponDamage = entry.getValue().getValue();
             }
         }
 
-        List<Entity> entities = this.getWorld().getOtherEntities(this, box);
-        Level world = this.getWorld();
+        List<Entity> entities = this.level().getEntities(this, box);
+        Level world = this.level();
         int difficulty = this.hasControllingPassenger() ? world.getDifficulty().getId() : 0;
 
         if(world instanceof ServerLevel serverWorld) {
             for(Entity entity : entities) {
                 if(this.isValidTarget(entity)) {
-                    entity.damage(this.getDamageSources().mobAttack(this),  (float)weaponDamage + (strength / 12.5f) + (difficulty * 2));
+                    entity.damage(this.damageSources().mobAttack(this),  (float)weaponDamage + (strength / 12.5f) + (difficulty * 2));
                 }
             }
 
@@ -599,7 +599,7 @@ public class CaveTrollEntity extends AbstractBeastEntity {
     }
 
     public void startSleeping() {
-        if (this.hasVehicle()) {
+        if (this.isPassenger()) {
             this.stopRiding();
         }
 
@@ -607,8 +607,8 @@ public class CaveTrollEntity extends AbstractBeastEntity {
         this.setVelocity(Vec3.ZERO);
         this.velocityDirty = true;
 
-        this.brain.forget(MemoryModuleType.WALK_TARGET);
-        this.brain.forget(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
+        this.brain.erase(MemoryModuleType.WALK_TARGET);
+        this.brain.erase(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
     }
 
     public void stopSleeping() {
@@ -616,59 +616,59 @@ public class CaveTrollEntity extends AbstractBeastEntity {
     }
 
     public boolean isSleeping() {
-        return this.dataTracker.get(SLEEPING);
+        return this.entityData.get(SLEEPING);
     }
 
     public void setSleeping(boolean isSleeping) {
-        this.dataTracker.set(SLEEPING, isSleeping);
+        this.entityData.set(SLEEPING, isSleeping);
     }
 
     public boolean isEnraged() {
-        return this.dataTracker.get(ENRAGED);
+        return this.entityData.get(ENRAGED);
     }
 
     public void setEnraged(boolean isEnraged) {
-        this.dataTracker.set(ENRAGED, isEnraged);
+        this.entityData.set(ENRAGED, isEnraged);
     }
 
     public boolean isSmashing() {
-        return this.dataTracker.get(SMASHING);
+        return this.entityData.get(SMASHING);
     }
 
     public void setSmashing(boolean isSmashing) {
-        this.dataTracker.set(SMASHING, isSmashing);
+        this.entityData.set(SMASHING, isSmashing);
     }
 
     @Override
     public void setSitting(boolean sitting) {
-        if(!this.getWorld().isClient()) {
+        if(!this.level().isClientSide()) {
             if(sitting) {
                 this.getBrain().remember(MemoryModulesME.SITTING, true);
-                this.getBrain().forget(MemoryModuleType.WALK_TARGET);
+                this.getBrain().erase(MemoryModuleType.WALK_TARGET);
             }
             else {
-                this.getBrain().forget(MemoryModulesME.SITTING);
+                this.getBrain().erase(MemoryModulesME.SITTING);
             }
 
-            this.removeAllPassengers();
+            this.ejectPassengers();
         }
 
         super.setSitting(sitting);
     }
 
     public boolean isScavenging() {
-        return this.dataTracker.get(SCAVENGING);
+        return this.entityData.get(SCAVENGING);
     }
 
     public void setScavenging(boolean isDigging) {
-        this.dataTracker.set(SCAVENGING, isDigging);
+        this.entityData.set(SCAVENGING, isDigging);
     }
     public boolean isRoaring() {
-        return this.dataTracker.get(ROARING);
+        return this.entityData.get(ROARING);
     }
 
     public void setRoaring(boolean isRoaring) {
-        this.dataTracker.set(ROARING, isRoaring);
+        this.entityData.set(ROARING, isRoaring);
     }
 
     @Nullable
@@ -696,17 +696,17 @@ public class CaveTrollEntity extends AbstractBeastEntity {
 
     @Override
     public boolean isCommandItem(ItemStack stack) {
-        return stack.isIn(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "bones")));
+        return stack.is(TagKey.create(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "bones")));
     }
 
     @Override
     public boolean isFoodItem(ItemStack itemStack) {
-        return itemStack.isIn(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "troll_food")));
+        return itemStack.is(TagKey.create(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "troll_food")));
     }
 
     @Override
     public boolean isBondingItem(ItemStack itemStack) {
-        return itemStack.isIn(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "chains")));
+        return itemStack.is(TagKey.create(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "chains")));
     }
 
     public static boolean shouldTarget(LivingEntity target) {

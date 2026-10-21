@@ -20,7 +20,7 @@ public class StructureNestScreenHandler  extends AbstractContainerMenu {
 
     public StructureNestScreenHandler(int syncId, Inventory playerInventory, StructureNestScreenData structureNestScreenData) {
         super(ModScreenHandlers.STRUCTURE_NEST_SCREEN_HANDLER, syncId);
-        this.world = playerInventory.player.getWorld();
+        this.world = playerInventory.player.level();
         this.data = structureNestScreenData;
         this.blockEntity = (StructureNestBlockEntity) this.world.getBlockEntity(data.getPos());
     }

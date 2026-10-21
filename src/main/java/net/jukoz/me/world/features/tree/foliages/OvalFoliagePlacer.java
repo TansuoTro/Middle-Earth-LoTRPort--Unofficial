@@ -12,7 +12,7 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelSimulatedReader;
 import net.minecraft.world.level.levelgen.feature.TreeFeature;
-import net.minecraft.world.level.levelgen.feature.TreeFeatureConfig;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class OvalFoliagePlacer extends FoliagePlacer {
     @Override
     protected void generate(LevelSimulatedReader world, BlockPlacer placer, RandomSource random, TreeConfiguration config, int trunkHeight,
                             TreeNode treeNode, int foliageHeight, int radius, int offset) {
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
         int bounds = radius + 1;
         for(int x = -bounds; x <= bounds; ++x) {
             for(int z = -bounds; z <= bounds; ++z) {
@@ -84,7 +84,7 @@ public class OvalFoliagePlacer extends FoliagePlacer {
             }
 
             if (leavesBlock.contains(BlockStateProperties.WATERLOGGED)) {
-                leavesBlock = leavesBlock.with(BlockStateProperties.WATERLOGGED, world.testFluidState(pos, (fluidState) -> fluidState.isEqualAndStill(Fluids.WATER)));
+                leavesBlock = leavesBlock.setValue(BlockStateProperties.WATERLOGGED, world.testFluidState(pos, (fluidState) -> fluidState.isEqualAndStill(Fluids.WATER)));
             }
 
             placer.placeBlock(pos, leavesBlock);

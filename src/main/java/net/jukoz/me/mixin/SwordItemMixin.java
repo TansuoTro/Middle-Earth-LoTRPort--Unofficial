@@ -18,7 +18,7 @@ public class SwordItemMixin {
 
     @Inject(method = "getMiningSpeedMultiplier", at = @At(value = "HEAD"), cancellable = true)
     public void getMiningSpeedMultiplier(ItemStack stack, BlockState state, CallbackInfoReturnable<Float> cir) {
-        if (state.isIn(TagKey.of(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "cobwebs")))) {
+        if (state.is(TagKey.create(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "cobwebs")))) {
             cir.setReturnValue(15.0F);
         }
     }

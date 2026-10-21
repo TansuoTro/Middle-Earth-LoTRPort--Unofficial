@@ -5,7 +5,7 @@ import net.jukoz.me.block.registration.StoneBlockSets;
 import net.jukoz.me.world.features.columns.ColumnsFeatureConfig;
 import net.jukoz.me.world.gen.ModFeatures;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -23,15 +23,15 @@ public class ModMiscConfiguredFeatures {
 
     public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> featureRegisterable) {
         ConfiguredFeature.register(featureRegisterable, LAVA_MAGMA_POOL, Feature.LAKE,
-                new LakeFeature.Config(BlockStateProvider.of(Blocks.LAVA.getDefaultState()), BlockStateProvider.of(Blocks.MAGMA_BLOCK.getDefaultState())));
+                new LakeFeature.Configuration(BlockStateProvider.of(Blocks.LAVA.defaultBlockState()), BlockStateProvider.of(Blocks.MAGMA_BLOCK.defaultBlockState())));
 
         ConfiguredFeature.register(featureRegisterable, SMALL_PUMICE_COLUMNS, ModFeatures.COLUMNS,
-                new ColumnsFeatureConfig(ConstantInt.create(1), UniformInt.create(1, 4), StoneBlockSets.PUMICE_SET.baseBlocks.base().getDefaultState()));
+                new ColumnsFeatureConfig(ConstantInt.create(1), UniformInt.create(1, 4), StoneBlockSets.PUMICE_SET.baseBlocks.base().defaultBlockState()));
         ConfiguredFeature.register(featureRegisterable, LARGE_PUMICE_COLUMNS, ModFeatures.COLUMNS,
-                new ColumnsFeatureConfig(UniformInt.create(2, 3), UniformInt.create(4, 7), StoneBlockSets.PUMICE_SET.baseBlocks.base().getDefaultState()));
+                new ColumnsFeatureConfig(UniformInt.create(2, 3), UniformInt.create(4, 7), StoneBlockSets.PUMICE_SET.baseBlocks.base().defaultBlockState()));
     }
 
     public static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {
-        return ResourceKey.of(Registries.CONFIGURED_FEATURE, new ResourceLocation(MiddleEarth.MOD_ID, name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(MiddleEarth.MOD_ID, name));
     }
 }

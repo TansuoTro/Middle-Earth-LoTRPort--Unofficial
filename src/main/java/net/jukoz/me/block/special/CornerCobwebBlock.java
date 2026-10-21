@@ -19,18 +19,19 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccess;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import org.jetbrains.annotations.Nullable;
 import com.mojang.math.Axis;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class CornerCobwebBlock extends WebBlock {
     public static final BooleanProperty HANGING;
     private static final DirectionProperty FACING;
 
-    public CornerCobwebBlock(Settings settings) {
+    public CornerCobwebBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(this.getDefaultState().with(HANGING, false).with(FACING, Direction.EAST));
+        this.setDefaultState(this.defaultBlockState().with(HANGING, false).with(FACING, Direction.EAST));
     }
     @Override
     protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
@@ -42,9 +43,9 @@ public class CornerCobwebBlock extends WebBlock {
     public BlockState getPlacementState(BlockPlaceContext ctx) {
         Direction direction = ctx.getSide();
         BlockPos blockPos = ctx.getBlockPos();
-        return this.getDefaultState()
-                .with(FACING, ctx.getHorizontalPlayerFacing())
-                .with(HANGING, !(direction != Direction.DOWN && (direction == Direction.UP || !(ctx.getHitPos().y - (double)blockPos.getY() > 0.5))));
+        return this.defaultBlockState()
+                .with(FACING, ctx.getHorizontalDirection())
+                .with(HANGING, !(direction != Direction.DOWN && (direction == Direction.UP || !(ctx.getClickLocation().y - (double)blockPos.getY() > 0.5))));
     }
 
     @Override
@@ -57,12 +58,12 @@ public class CornerCobwebBlock extends WebBlock {
     }
 
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
-        return !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+        return !state.canPlaceAt(world, pos) ? Blocks.AIR.defaultBlockState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+        return state.setValue(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override

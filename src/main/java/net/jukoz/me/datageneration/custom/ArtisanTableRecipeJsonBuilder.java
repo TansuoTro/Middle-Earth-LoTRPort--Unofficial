@@ -18,7 +18,7 @@ import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemConvertible;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -158,8 +158,8 @@ public class ArtisanTableRecipeJsonBuilder {
     private void writeRecipeJson(JsonObject json) {
         json.addProperty("category", this.tab);
         json.addProperty("disposition", this.dispositionType == null
-                ? DispositionType.NEUTRAL.toString().toLowerCase()
-                : this.dispositionType.toString().toLowerCase());
+                ? DispositionType.NEUTRAL.toString().lowercaseVariant()
+                : this.dispositionType.toString().lowercaseVariant());
         json.addProperty("xp", this.xp);
         json.add("output", itemStackJson(this.output));
         JsonArray ingredients = new JsonArray();

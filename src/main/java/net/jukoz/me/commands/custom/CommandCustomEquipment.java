@@ -28,8 +28,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
 import java.util.Objects;
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.argument;
+import static net.minecraft.commands.Commands.literal;
 
 public class CommandCustomEquipment {
     private static final String EQUIPMENT = "equipment";
@@ -38,7 +38,7 @@ public class CommandCustomEquipment {
     private static final String BACK_ATTACHMENT_VALUE = "back_attachment_value";
     private static final String HELMENT_ATTACHMENT_VALUE = "helmet_attachment_value";
 
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandRegistryAccess, Commands.RegistrationEnvironment registrationEnvironment) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandRegistryAccess, Commands.CommandSelection registrationEnvironment) {
 
         dispatcher.register(literal(ModCommands.BASE_COMMAND)
                 .requires(source -> source.hasPermissionLevel(2))

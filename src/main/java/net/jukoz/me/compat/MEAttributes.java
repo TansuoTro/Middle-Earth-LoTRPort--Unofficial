@@ -20,7 +20,7 @@ public final class MEAttributes {
     public static double weaponAttackDamage(ItemStack stack) {
         double damage = 0.0;
         for (AttributeModifier modifier : stack.getAttributeModifiers(EquipmentSlot.MAINHAND)
-                .get(Attributes.GENERIC_ATTACK_DAMAGE)) {
+                .get(Attributes.ATTACK_DAMAGE)) {
             damage += modifier.getValue();
         }
         return damage;

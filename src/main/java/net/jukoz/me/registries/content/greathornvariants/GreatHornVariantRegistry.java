@@ -33,11 +33,11 @@ public class GreatHornVariantRegistry {
 
         register(context, registryEntryLookup, WARM, new GreatHornVariant(
                 GreatHornVariantRegistryHelper.createAssetInfos("warm"),
-                GreatHornVariantRegistryHelper.createSpawnConditions(context, TagKey.of(Registries.BIOME, MiddleEarth.of("spawns_warm_variant_great_horn")), 0)));
+                GreatHornVariantRegistryHelper.createSpawnConditions(context, TagKey.create(Registries.BIOME, MiddleEarth.of("spawns_warm_variant_great_horn")), 0)));
 
         register(context, registryEntryLookup, COLD, new GreatHornVariant(
                 GreatHornVariantRegistryHelper.createAssetInfos("cold"),
-                GreatHornVariantRegistryHelper.createSpawnConditions(context, TagKey.of(Registries.BIOME, MiddleEarth.of("spawns_cold_variant_great_horn")), 1)));
+                GreatHornVariantRegistryHelper.createSpawnConditions(context, TagKey.create(Registries.BIOME, MiddleEarth.of("spawns_cold_variant_great_horn")), 1)));
     }
 
     private static void register(BootstapContext<GreatHornVariant> context, HolderGetter<GreatHornVariant> registryEntryLookup, ResourceKey<GreatHornVariant> registryKey, GreatHornVariant element){

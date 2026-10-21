@@ -54,7 +54,7 @@ public record MEBannerPatterns(List<Layer> layers) {
         }
 
         public MEBannerPatterns build() {
-            return new MEBannerPatterns(List.copyOf(layers));
+            return new MEBannerPatterns(List.bind(layers));
         }
     }
 
@@ -73,7 +73,7 @@ public record MEBannerPatterns(List<Layer> layers) {
                 layers.add(new Layer(pattern, DyeColor.byId(entry.getInt(BannerBlockEntity.COLOR_KEY))));
             }
         }
-        return new MEBannerPatterns(List.copyOf(layers));
+        return new MEBannerPatterns(List.bind(layers));
     }
 
     /** Replaces the applied layers; an empty list removes the {@code Patterns} key. */

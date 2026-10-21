@@ -3,7 +3,7 @@ package net.jukoz.me.api.entity.ai.brain.task;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityPose;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -46,13 +46,13 @@ public class FleeFromEntityTask<E extends PathfinderMob> extends Behavior<E> {
 
     protected void run(ServerLevel serverWorld, E pathAwareEntity, long l) {
         pathAwareEntity.getBrain().remember(MemoryModuleType.IS_PANICKING, true);
-        pathAwareEntity.getBrain().forget(MemoryModuleType.WALK_TARGET);
+        pathAwareEntity.getBrain().erase(MemoryModuleType.WALK_TARGET);
         pathAwareEntity.setPose(Pose.STANDING);
     }
 
     protected void finishRunning(ServerLevel serverWorld, E pathAwareEntity, long l) {
         Brain<?> brain = pathAwareEntity.getBrain();
-        brain.forget(MemoryModuleType.IS_PANICKING);
+        brain.erase(MemoryModuleType.IS_PANICKING);
         pathAwareEntity.setPose(Pose.STANDING);
     }
 
@@ -73,7 +73,7 @@ public class FleeFromEntityTask<E extends PathfinderMob> extends Behavior<E> {
     @Nullable
     private Vec3 findTarget(E entity, ServerLevel world) {
         List<? extends Entity> fleeEntities = new ArrayList<>();
-        Vec3 direction = entity.getPos();
+        Vec3 direction = entity.position();
 
         for(Class<? extends Entity> mob : entities) {
             if(!(fleeEntities = world.getEntitiesByClass(mob, entity.getBoundingBox().expand(distance), EntitySelector.EXCEPT_CREATIVE_OR_SPECTATOR)).isEmpty()) {

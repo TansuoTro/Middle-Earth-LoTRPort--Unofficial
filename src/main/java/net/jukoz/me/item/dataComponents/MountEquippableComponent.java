@@ -6,7 +6,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 
-/** The body-equipment properties that 1.20.1 does not store on Item.Settings. */
+/** The body-equipment properties that 1.20.1 does not store on Item.Properties. */
 public record MountEquippableComponent(ResourceLocation entityType, int armor, float toughness,
                                        float knockbackResistance, ResourceLocation equipSound) {
     public static final Codec<MountEquippableComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(

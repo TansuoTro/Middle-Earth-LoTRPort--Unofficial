@@ -24,24 +24,25 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.Explosion;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class FireOfOrthancBlock extends Block {
-    public static final VoxelShape OUTLINE_SHAPE = Block.createCuboidShape(2, 0, 2, 14, 12, 14);
+    public static final VoxelShape OUTLINE_SHAPE = Block.box(2, 0, 2, 14, 12, 14);
 
-    public FireOfOrthancBlock(Settings settings) {
+    public FireOfOrthancBlock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        ItemStack stack = player.getStackInHand(hand);
-        if (!stack.isOf(DecorativeItemsME.TORCH_OF_ORTHANC)) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (!stack.is(DecorativeItemsME.TORCH_OF_ORTHANC)) {
             return super.onUse(state, world, pos, player, hand, hit);
         } else {
             explode(world, pos, player);
-            world.setBlockState(pos, Blocks.AIR.getDefaultState(), 11);
+            world.setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
             Item item = stack.getItem();
             if (!player.isCreative()) {
-                if (stack.isOf(Items.FLINT_AND_STEEL)) {
+                if (stack.is(Items.FLINT_AND_STEEL)) {
                     stack.damage(1, player, (p) -> p.sendEquipmentBreakStatus(hand == InteractionHand.MAIN_HAND ? net.minecraft.world.entity.EquipmentSlot.MAINHAND : net.minecraft.world.entity.EquipmentSlot.OFFHAND));
                 } else {
                     stack.decrement(1);
@@ -53,7 +54,7 @@ public class FireOfOrthancBlock extends Block {
     }
 
     public void explode(Level world, BlockPos pos, @Nullable LivingEntity igniter) {
-        if (!world.isClient) {
+        if (!world.isClientSide) {
             FireOfOrthancEntity fireOfOrthancEntity = new FireOfOrthancEntity(world, (double) pos.getX() + 0.5, pos.getY(), (double) pos.getZ() + 0.5, igniter, true);
             world.spawnEntity(fireOfOrthancEntity);
             world.emitGameEvent(igniter, GameEvent.PRIME_FUSE, pos);
@@ -63,8 +64,8 @@ public class FireOfOrthancBlock extends Block {
     }
 
     public void onDestroyedByExplosion(Level world, BlockPos pos, Explosion explosion) {
-        if (!world.isClient) {
-            FireOfOrthancEntity fireOfOrthancEntity = new FireOfOrthancEntity(world, (double)pos.getX() + 0.5, pos.getY(), (double)pos.getZ() + 0.5, explosion.getCausingEntity(), false);
+        if (!world.isClientSide) {
+            FireOfOrthancEntity fireOfOrthancEntity = new FireOfOrthancEntity(world, (double)pos.getX() + 0.5, pos.getY(), (double)pos.getZ() + 0.5, explosion.getIndirectSourceEntity(), false);
             int i = fireOfOrthancEntity.getFuse();
             fireOfOrthancEntity.setFuse((short)(world.random.nextInt(i / 2) + i / 2));
             world.spawnEntity(fireOfOrthancEntity);

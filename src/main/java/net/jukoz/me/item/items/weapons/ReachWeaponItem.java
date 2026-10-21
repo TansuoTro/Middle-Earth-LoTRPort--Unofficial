@@ -30,7 +30,7 @@ public class ReachWeaponItem extends Item {
     private final Tier material;
     private final Multimap<Attribute, AttributeModifier> attributeModifiers;
 
-    public ReachWeaponItem(Tier toolMaterial, WeaponTypesME type, Item.Settings settings) {
+    public ReachWeaponItem(Tier toolMaterial, WeaponTypesME type, Item.Properties settings) {
         super(ItemSettingsME.createWeaponSettings(toolMaterial, settings, type)
                 .component(MEComponents.WEAPON_TYPE_DATA, new WeaponTypeDataComponent(type.name)));
         this.type = type;

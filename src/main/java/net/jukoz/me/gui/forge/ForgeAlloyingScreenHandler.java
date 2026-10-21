@@ -28,7 +28,7 @@ public class ForgeAlloyingScreenHandler extends AbstractContainerMenu {
         super(ModScreenHandlers.FORGE_ALLOYING_SCREEN_HANDLER, syncId);
         this.inventory = inventory;
         this.propertyDelegate = delegate;
-        this.world = playerInventory.player.getWorld();
+        this.world = playerInventory.player.level();
         this.pos = BlockPos.ORIGIN;
         int maxItemStack = 64;
         checkSize(inventory, 6);
@@ -56,7 +56,7 @@ public class ForgeAlloyingScreenHandler extends AbstractContainerMenu {
         Slot invSlot = this.slots.get(slot);
 
         if(invSlot.hasStack()) {
-            ItemStack originalStack = invSlot.getStack();
+            ItemStack originalStack = invSlot.getItem();
             if(slot < this.inventory.size()) {
                 if(!this.insertItem(originalStack, this.inventory.size(), this.slots.size(), true)) {
                     return ItemStack.EMPTY;

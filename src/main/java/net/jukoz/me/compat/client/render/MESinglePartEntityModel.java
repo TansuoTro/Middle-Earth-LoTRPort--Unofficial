@@ -38,7 +38,7 @@ public abstract class MESinglePartEntityModel<S extends EntityRenderStateCompat>
     @Override
     public final void setAngles(LivingEntity entity, float limbSwing, float limbSwingAmount,
                                 float ageInTicks, float netHeadYaw, float headPitch) {
-        this.getPart().traverse().forEach(ModelPart::resetTransform);
+        this.getPart().getAllParts().forEach(ModelPart::resetTransform);
         S state = MEEntityRenderContext.get();
         if (state != null) {
             setAngles(state);

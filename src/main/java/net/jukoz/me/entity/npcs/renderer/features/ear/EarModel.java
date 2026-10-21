@@ -33,14 +33,14 @@ public class EarModel extends HierarchicalModel<NpcEntity> {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition root = modelData.getRoot();
 
-        PartDefinition ears = root.addChild("ears", CubeListBuilder.create(), PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition ears = root.addOrReplaceChild("ears", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        ears.addChild("ear_right",
-                CubeListBuilder.create().uv(0, 6).cuboid(3.5F, -8.0F, 2F, 7.0F, 6.0F, 0.0F, CubeDeformation.NONE),
+        ears.addOrReplaceChild("ear_right",
+                CubeListBuilder.create().texOffs(0, 6).addBox(3.5F, -8.0F, 2F, 7.0F, 6.0F, 0.0F, CubeDeformation.NONE),
                 PartPose.NONE);
 
-        ears.addChild("ear_left",
-                CubeListBuilder.create().uv(0, 6).cuboid(3.5F, -8.0F, -2F, 7.0F, 6.0F, 0.0F, CubeDeformation.NONE),
+        ears.addOrReplaceChild("ear_left",
+                CubeListBuilder.create().texOffs(0, 6).addBox(3.5F, -8.0F, -2F, 7.0F, 6.0F, 0.0F, CubeDeformation.NONE),
                 PartPose.NONE);
 
         return LayerDefinition.of(modelData, 16, 16);
@@ -51,17 +51,17 @@ public class EarModel extends HierarchicalModel<NpcEntity> {
         // Taken from HumanoidModel.class
         float f = state.leaningPitch;
         boolean bl = state.isGliding;
-        this.ears.pitch = state.pitch * 0.017453292F;
-        this.ears.yaw = state.relativeHeadYaw * 0.017453292F;
+        this.ears.xRot = state.xRot * 0.017453292F;
+        this.ears.yRot = state.relativeHeadYaw * 0.017453292F;
 
         if (bl) {
-            this.ears.pitch = -0.7853982F;
+            this.ears.xRot = -0.7853982F;
         } else if (f > 0.0F) {
-            this.ears.pitch = net.jukoz.me.compat.MEAngles.lerpAngleRadians(f, this.ears.pitch, -0.7853982F);
+            this.ears.xRot = net.jukoz.me.compat.MEAngles.lerpAngleRadians(f, this.ears.xRot, -0.7853982F);
         }
 
-        this.planeFlatLeft.yaw = (float)Math.toRadians(-20);
-        this.planeFlatRight.yaw = (float)Math.toRadians(-160);
+        this.planeFlatLeft.yRot = (float)Math.toRadians(-20);
+        this.planeFlatRight.yRot = (float)Math.toRadians(-160);
     }
 
     @Override

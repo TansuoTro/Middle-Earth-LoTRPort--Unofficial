@@ -16,7 +16,7 @@ public class TextBlockWidget extends ModWidget {
     private int startX, startY;
     private TextAlignment textAlignment;
     private boolean isJustified = false;
-    private Font textRenderer;
+    private Font font;
     private final int spaceWidth;
     private final boolean hasNoSpace;
 
@@ -29,8 +29,8 @@ public class TextBlockWidget extends ModWidget {
         this.width = width;
         this.height = height;
         this.textAlignment = TextAlignment.LEFT;
-        this.textRenderer = this.client.textRenderer;
-        this.spaceWidth = this.textRenderer.getWidth(" ");
+        this.font = this.client.font;
+        this.spaceWidth = this.font.getWidth(" ");
 
         // some languages don't use space to split words,
         // the old method would have judged the description text as a whole big word
@@ -94,7 +94,7 @@ public class TextBlockWidget extends ModWidget {
                     }
                 }
                 wordsPerLine.add(currentLineWords);
-                currentHeight += textRenderer.fontHeight;
+                currentHeight += font.fontHeight;
             }
             if (!textWords.isEmpty()) {
                 if (isManipulated) // If the text has content and was manipulated, create new text from leftovers
@@ -119,12 +119,12 @@ public class TextBlockWidget extends ModWidget {
     public void draw(GuiGraphics context, boolean showTextLimit){
         int currentHeight = 0;
         for(List<Word> words : wordsPerLine){
-            if (showTextLimit && !words.isEmpty() && currentHeight + textRenderer.fontHeight > height){
+            if (showTextLimit && !words.isEmpty() && currentHeight + font.fontHeight > height){
                 drawTextLimitLine(context, currentHeight);
             } else {
                 drawTextLine(context, words, currentHeight, false);
             }
-            currentHeight += textRenderer.fontHeight;
+            currentHeight += font.fontHeight;
         }
     }
 
@@ -140,28 +140,28 @@ public class TextBlockWidget extends ModWidget {
 
     private void drawTextLimitLine(GuiGraphics context, int currentStart) {
         Component text = Component.of("...");
-        context.drawText(textRenderer, text,
-                startX + (width / 2) - (textRenderer.getWidth(text) / 2), startY + currentStart, CommonColors.RED, false);
+        context.drawText(font, text,
+                startX + (width / 2) - (font.getWidth(text) / 2), startY + currentStart, CommonColors.RED, false);
     }
 
     private void drawTextLine(GuiGraphics context, List<Word> currentLine, int currentStart, boolean isEnd) {
         if (isJustified && !isEnd) {
             Component text = getJustifiedTextFromList(currentLine);
             Component lastWordText = Component.literal(currentLine.get(currentLine.size()-1).content);
-            context.drawText(textRenderer, text,
+            context.drawText(font, text,
                     startX, startY + currentStart, CommonColors.BLACK, false);
-            context.drawText(textRenderer, lastWordText,
-                    startX + width - textRenderer.getWidth(lastWordText), startY + currentStart, CommonColors.BLACK, false);
+            context.drawText(font, lastWordText,
+                    startX + width - font.getWidth(lastWordText), startY + currentStart, CommonColors.BLACK, false);
         } else {
             Component text = getTextFromList(currentLine);
             // draw alignment
             int x = switch (textAlignment) {
                 case LEFT -> startX;
-                case CENTER -> startX + (width / 2) - (textRenderer.getWidth(text) / 2);
-                case RIGHT -> startX + (width - textRenderer.getWidth(text));
+                case CENTER -> startX + (width / 2) - (font.getWidth(text) / 2);
+                case RIGHT -> startX + (width - font.getWidth(text));
             };
 
-            context.drawText(textRenderer, text,
+            context.drawText(font, text,
                     x, startY + currentStart, CommonColors.BLACK, false);
         }
     }
@@ -220,11 +220,11 @@ public class TextBlockWidget extends ModWidget {
         if (hasNoSpace) {
             for (char character : textToSplit.getString().toCharArray()) {
                 String word = String.valueOf(character);
-                words.add(new Word(word, textRenderer.getWidth(word)));
+                words.add(new Word(word, font.getWidth(word)));
             }
         } else {
             for (String splittedWord : textToSplit.getString().split(" ")){
-                words.add(new Word(splittedWord, textRenderer.getWidth(splittedWord)));
+                words.add(new Word(splittedWord, font.getWidth(splittedWord)));
             }
         }
         return words;

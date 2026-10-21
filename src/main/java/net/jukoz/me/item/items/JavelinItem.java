@@ -33,11 +33,11 @@ public class JavelinItem extends TieredItem implements Vanishable {
     private final float attackDamage;
     private final Multimap<Attribute, AttributeModifier> attributeModifiers;
 
-    public JavelinItem(Tier toolMaterial, int attackDamage, float attackSpeed, Item.Settings settings) {
+    public JavelinItem(Tier toolMaterial, int attackDamage, float attackSpeed, Item.Properties settings) {
         super(toolMaterial, settings);
         this.attackDamage = (float)attackDamage + toolMaterial.getAttackDamage();
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.GENERIC_ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Weapon modifier", (double)this.attackDamage, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Weapon modifier", (double)this.attackDamage, AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.GENERIC_ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER_ID, "Weapon modifier", (double)attackSpeed, AttributeModifier.Operation.ADDITION));
         this.attributeModifiers = builder.build();
     }
@@ -51,10 +51,10 @@ public class JavelinItem extends TieredItem implements Vanishable {
     }
 
     public float getMiningSpeedMultiplier(ItemStack stack, BlockState state) {
-        if (state.isOf(Blocks.COBWEB)) {
+        if (state.is(Blocks.COBWEB)) {
             return 15.0F;
         } else {
-            return state.isIn(BlockTags.SWORD_EFFICIENT) ? 1.5F : 1.0F;
+            return state.is(BlockTags.SWORD_EFFICIENT) ? 1.5F : 1.0F;
         }
     }
 
@@ -66,7 +66,7 @@ public class JavelinItem extends TieredItem implements Vanishable {
     }
 
     public boolean postMine(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity miner) {
-        if (state.getHardness(world, pos) != 0.0F) {
+        if (state.defaultDestroyTime(world, pos) != 0.0F) {
             stack.damage(2, miner, (e) -> {
                 e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);
             });
@@ -76,7 +76,7 @@ public class JavelinItem extends TieredItem implements Vanishable {
     }
 
     public boolean isSuitableFor(BlockState state) {
-        return state.isOf(Blocks.COBWEB);
+        return state.is(Blocks.COBWEB);
     }
 
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
@@ -84,9 +84,9 @@ public class JavelinItem extends TieredItem implements Vanishable {
     }
 
     public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
-        ItemStack itemStack = user.getStackInHand(hand);
+        ItemStack itemStack = user.getItemInHand(hand);
         user.setCurrentHand(hand);
-        return InteractionResultHolder.success(itemStack, world.isClient());
+        return InteractionResultHolder.success(itemStack, world.isClientSide());
     }
 
     @Override
@@ -112,7 +112,7 @@ public class JavelinItem extends TieredItem implements Vanishable {
         if(i > STRENGTH_CHARGE_TIME) i = STRENGTH_CHARGE_TIME;
         float percentage = (float) i / STRENGTH_CHARGE_TIME;
 
-        if (!world.isClient) {
+        if (!world.isClientSide) {
             SpearEntity spearEntity = new SpearEntity(world, this, user, getAttackDamage() * percentage);
             spearEntity.setVelocity(playerEntity, playerEntity.getPitch(), playerEntity.getYaw(), 0.0f, BASE_STRENGTH + (CHARGE_STRENGTH * percentage), 1.0f);
 

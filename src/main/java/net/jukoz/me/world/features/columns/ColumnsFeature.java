@@ -9,7 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import org.jetbrains.annotations.Nullable;
@@ -40,7 +40,7 @@ public class ColumnsFeature extends Feature<ColumnsFeatureConfig> {
 
             while(var12.hasNext()) {
                 BlockPos blockPos2 = (BlockPos)var12.next();
-                int m = j - blockPos2.getManhattanDistance(blockPos);
+                int m = j - blockPos2.distanceManhattan(blockPos);
                 if (m >= 0) {
                     bl2 |= this.placeColumn(structureWorldAccess, i, blockPos2, m, ColumnsFeatureConfig.getReach().get(random), context.getConfig().getBlockState());
                 }
@@ -63,19 +63,19 @@ public class ColumnsFeature extends Feature<ColumnsFeatureConfig> {
                 }
 
                 BlockPos blockPos = (BlockPos)var7.next();
-                i = blockPos.getManhattanDistance(pos);
+                i = blockPos.distanceManhattan(pos);
                 blockPos2 = isAirOrLavaOcean(world, seaLevel, blockPos) ? moveDownToGround(world, seaLevel, blockPos.mutableCopy(), i) : moveUpToAir(world, blockPos.mutableCopy(), i);
             } while(blockPos2 == null);
 
             int j = height - i / 2;
 
-            for(BlockPos.Mutable mutable = blockPos2.mutableCopy(); j >= 0; --j) {
+            for(BlockPos.MutableBlockPos mutable = blockPos2.mutableCopy(); j >= 0; --j) {
                 if (isAirOrLavaOcean(world, seaLevel, mutable)) {
-                    this.setBlockState(world, mutable, blockState);
+                    this.setBlock(world, mutable, blockState);
                     mutable.move(Direction.UP);
                     bl = true;
                 } else {
-                    if (!world.getBlockState(mutable).isOf(blockState.getBlock())) {
+                    if (!world.getBlockState(mutable).is(blockState.getBlock())) {
                         break;
                     }
 
@@ -86,7 +86,7 @@ public class ColumnsFeature extends Feature<ColumnsFeatureConfig> {
     }
 
     @Nullable
-    private static BlockPos moveDownToGround(LevelAccessor world, int seaLevel, BlockPos.Mutable mutablePos, int distance) {
+    private static BlockPos moveDownToGround(LevelAccessor world, int seaLevel, BlockPos.MutableBlockPos mutablePos, int distance) {
         while(mutablePos.getY() > world.getBottomY() + 1 && distance > 0) {
             --distance;
             if (canPlaceAt(world, seaLevel, mutablePos)) {
@@ -99,7 +99,7 @@ public class ColumnsFeature extends Feature<ColumnsFeatureConfig> {
         return null;
     }
 
-    private static boolean canPlaceAt(LevelAccessor world, int seaLevel, BlockPos.Mutable mutablePos) {
+    private static boolean canPlaceAt(LevelAccessor world, int seaLevel, BlockPos.MutableBlockPos mutablePos) {
         if (!isAirOrLavaOcean(world, seaLevel, mutablePos)) {
             return false;
         } else {
@@ -110,7 +110,7 @@ public class ColumnsFeature extends Feature<ColumnsFeatureConfig> {
     }
 
     @Nullable
-    private static BlockPos moveUpToAir(LevelAccessor world, BlockPos.Mutable mutablePos, int distance) {
+    private static BlockPos moveUpToAir(LevelAccessor world, BlockPos.MutableBlockPos mutablePos, int distance) {
         while(mutablePos.getY() < world.getTopY() && distance > 0) {
             --distance;
             BlockState blockState = world.getBlockState(mutablePos);
@@ -130,7 +130,7 @@ public class ColumnsFeature extends Feature<ColumnsFeatureConfig> {
 
     private static boolean isAirOrLavaOcean(LevelAccessor world, int seaLevel, BlockPos pos) {
         BlockState blockState = world.getBlockState(pos);
-        return blockState.isAir() || blockState.isOf(Blocks.LAVA) && pos.getY() <= seaLevel;
+        return blockState.isAir() || blockState.is(Blocks.LAVA) && pos.getY() <= seaLevel;
     }
 
     static {

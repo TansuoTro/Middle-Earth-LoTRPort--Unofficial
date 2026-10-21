@@ -34,20 +34,20 @@ public class ModDimensions {
     public static final ResourceLocation OW_DIMENSION_ID = new ResourceLocation("overworld");
 
     public static final ResourceKey<LevelStem> ME_DIMENSION_KEY =
-            ResourceKey.of(Registries.DIMENSION, ME_DIMENSION_ID);
+            ResourceKey.create(Registries.DIMENSION, ME_DIMENSION_ID);
 
     public static ResourceKey<Level> ME_WORLD_KEY =
-            ResourceKey.of(Registries.WORLD, ME_DIMENSION_KEY.getValue());
+            ResourceKey.create(Registries.WORLD, ME_DIMENSION_KEY.getValue());
 
     public static final ResourceKey<LevelStem> OW_DIMENSION_KEY =
-            ResourceKey.of(Registries.DIMENSION, OW_DIMENSION_ID);
+            ResourceKey.create(Registries.DIMENSION, OW_DIMENSION_ID);
 
     public static ResourceKey<Level> OW_WORLD_KEY =
-            ResourceKey.of(Registries.WORLD, OW_DIMENSION_KEY.getValue());
+            ResourceKey.create(Registries.WORLD, OW_DIMENSION_KEY.getValue());
 
     public static void register() {
         Registry.register(Registries.CHUNK_GENERATOR, ME_DIMENSION_ID, MiddleEarthChunkGenerator.CODEC);
-        ME_WORLD_KEY = ResourceKey.of(Registries.WORLD, ME_DIMENSION_ID);
+        ME_WORLD_KEY = ResourceKey.create(Registries.WORLD, ME_DIMENSION_ID);
 
         LoggerUtil.getInstance().logDebugMsg("Registering ModDimensions for " + MiddleEarth.MOD_ID);
     }
@@ -67,7 +67,7 @@ public class ModDimensions {
     }
 
     public static void teleportPlayerToMe(Player player, Vec3 coordinates, boolean setSpawnPoint, boolean welcomeNeeded) {
-        if (player.getWorld().isClient() || !(player instanceof ServerPlayer serverPlayer)) return;
+        if (player.level().isClientSide() || !(player instanceof ServerPlayer serverPlayer)) return;
 
         ServerLevel serverWorld = serverPlayer.getServer().getWorld(ME_WORLD_KEY);
         if (serverWorld == null) return;
@@ -78,7 +78,7 @@ public class ModDimensions {
 
         if (setSpawnPoint) {
             serverPlayer.setSpawnPoint(ME_WORLD_KEY,
-                    BlockPos.ofFloored(coordinates.x, coordinates.y, coordinates.z), serverPlayer.getYaw(), true, true);
+                    BlockPos.containing(coordinates.x, coordinates.y, coordinates.z), serverPlayer.getYaw(), true, true);
         }
         if (welcomeNeeded) {
             FactionUtil.sendOnFactionJoinMessage(player);
@@ -90,13 +90,13 @@ public class ModDimensions {
     }
 
     public static boolean teleportPlayerToOverworld(Player player) {
-        if (player.getWorld().isClient() || !(player instanceof ServerPlayer serverPlayer)) return false;
+        if (player.level().isClientSide() || !(player instanceof ServerPlayer serverPlayer)) return false;
 
-        ServerLevel overworld = serverPlayer.getServer().getOverworld();
+        ServerLevel overworld = serverPlayer.getServer().overworld();
         if (overworld == null) return false;
 
-        PlayerDataService.OriginAggregate origin = PlayerDataService.getOriginAggregate(player, player.getWorld());
-        BlockPos coordinate = origin == null ? overworld.getSpawnPos() : origin.origin();
+        PlayerDataService.OriginAggregate origin = PlayerDataService.getOriginAggregate(player, player.level());
+        BlockPos coordinate = origin == null ? overworld.getSharedSpawnPos() : origin.origin();
 
         serverPlayer.teleport(overworld, coordinate.getX() + 0.5, coordinate.getY(), coordinate.getZ() + 0.5,
                 serverPlayer.getYaw(), serverPlayer.getPitch());

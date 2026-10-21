@@ -44,7 +44,7 @@ public class FactionDataComponent implements net.jukoz.me.compat.TooltipAppender
     @Override
     public void appendTooltip(net.minecraft.world.item.ItemStack stack, net.minecraft.world.item.TooltipFlag context,
                               java.util.List<net.minecraft.network.chat.Component> tooltip, net.minecraft.world.level.Level world) {
-        Faction faction = world == null ? null : world.getRegistryManager()
+        Faction faction = world == null ? null : world.registryAccess()
                 .getOptional(net.jukoz.me.registries.DynamicRegistriesME.FACTION)
                 .map(registry -> registry.get(factionId)).orElse(null);
         Faction parent = faction == null ? null : faction.getParentFaction(world);
@@ -59,7 +59,7 @@ public class FactionDataComponent implements net.jukoz.me.compat.TooltipAppender
     private static void appendFaction(java.util.List<net.minecraft.network.chat.Component> tooltip, ResourceLocation id, boolean sub) {
         tooltip.add(net.minecraft.network.chat.Component.translatable(sub ? "tooltip.me.sub_faction" : "tooltip.me.faction")
                 .formatted(sub ? net.minecraft.util.ChatFormatting.GRAY : net.minecraft.util.ChatFormatting.GOLD)
-                .append(net.minecraft.network.chat.Component.translatable(id.toTranslationKey("faction"))
+                .append(net.minecraft.network.chat.Component.translatable(id.toLanguageKey("faction"))
                         .formatted(net.minecraft.util.ChatFormatting.WHITE)));
     }
 

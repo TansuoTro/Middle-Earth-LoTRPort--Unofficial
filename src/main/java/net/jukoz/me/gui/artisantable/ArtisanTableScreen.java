@@ -58,45 +58,45 @@ public class ArtisanTableScreen extends AbstractContainerScreen<ArtisanTableScre
         handler.setContentsChangedListener(this::onInventoryChange);
 
         int index = 0;
-        categories.add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.LEFT, index, getTabTranslation("weapons"), WeaponItemsME.GONDORIAN_NOBLE_LONGSWORD.getDefaultStack()));
+        categories.add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.LEFT, index, getTabTranslation("weapons"), WeaponItemsME.GONDORIAN_NOBLE_LONGSWORD.getDefaultInstance()));
         tabs.put(index, new ArrayList<>());
-        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 0, getTabTranslation("sword"), WeaponItemsME.STEEL_SWORD.getDefaultStack(), ArtisanTableInputsShape.SWORD));
-        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 1, getTabTranslation("axe"), ToolItemsME.STEEL_AXE.getDefaultStack(), ArtisanTableInputsShape.AXE));
-        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 2, getTabTranslation("spear"), WeaponItemsME.STEEL_SPEAR.getDefaultStack(), ArtisanTableInputsShape.SPEAR));
-        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 3, getTabTranslation("bow"), WeaponItemsME.GONDORIAN_BOW.getDefaultStack(), ArtisanTableInputsShape.BOW));
-        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 4, getTabTranslation("crossbow"), Items.CROSSBOW.getDefaultStack(), ArtisanTableInputsShape.CROSSBOW));
+        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 0, getTabTranslation("sword"), WeaponItemsME.STEEL_SWORD.getDefaultInstance(), ArtisanTableInputsShape.SWORD));
+        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 1, getTabTranslation("axe"), ToolItemsME.STEEL_AXE.getDefaultInstance(), ArtisanTableInputsShape.AXE));
+        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 2, getTabTranslation("spear"), WeaponItemsME.STEEL_SPEAR.getDefaultInstance(), ArtisanTableInputsShape.SPEAR));
+        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 3, getTabTranslation("bow"), WeaponItemsME.GONDORIAN_BOW.getDefaultInstance(), ArtisanTableInputsShape.BOW));
+        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 4, getTabTranslation("crossbow"), Items.CROSSBOW.getDefaultInstance(), ArtisanTableInputsShape.CROSSBOW));
         index++;
 
-        categories.add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.LEFT, index, getTabTranslation("tools"), ToolItemsME.MITHRIL_PICKAXE.getDefaultStack()));
+        categories.add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.LEFT, index, getTabTranslation("tools"), ToolItemsME.MITHRIL_PICKAXE.getDefaultInstance()));
         tabs.put(index, new ArrayList<>());
-        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 0, getTabTranslation("pickaxe"), ToolItemsME.STEEL_PICKAXE.getDefaultStack(), ArtisanTableInputsShape.PICKAXE));
-        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 1, getTabTranslation("shovel"), ToolItemsME.STEEL_SHOVEL.getDefaultStack(), ArtisanTableInputsShape.SHOVEL));
-        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 2, getTabTranslation("hoe"), ToolItemsME.STEEL_HOE.getDefaultStack(), ArtisanTableInputsShape.HOE));
-        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 3, getTabTranslation("chisel"), ToolItemsME.STEEL_CHISEL.getDefaultStack(), ArtisanTableInputsShape.CHISEL));
+        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 0, getTabTranslation("pickaxe"), ToolItemsME.STEEL_PICKAXE.getDefaultInstance(), ArtisanTableInputsShape.PICKAXE));
+        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 1, getTabTranslation("shovel"), ToolItemsME.STEEL_SHOVEL.getDefaultInstance(), ArtisanTableInputsShape.SHOVEL));
+        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 2, getTabTranslation("hoe"), ToolItemsME.STEEL_HOE.getDefaultInstance(), ArtisanTableInputsShape.HOE));
+        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 3, getTabTranslation("chisel"), ToolItemsME.STEEL_CHISEL.getDefaultInstance(), ArtisanTableInputsShape.CHISEL));
         index++;
 
-        categories.add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.LEFT, index, getTabTranslation("armors"), EquipmentItemsME.GONDORIAN_FOUNTAIN_GUARD_CHESTPLATE.getDefaultStack()));
+        categories.add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.LEFT, index, getTabTranslation("armors"), EquipmentItemsME.GONDORIAN_FOUNTAIN_GUARD_CHESTPLATE.getDefaultInstance()));
         tabs.put(index, new ArrayList<>());
-        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 0, getTabTranslation("helmet"), EquipmentItemsME.RAVENHILL_WATCHWARDEN_HELMET.getDefaultStack(), ArtisanTableInputsShape.HELMET));
-        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 1, getTabTranslation("chestplate"), EquipmentItemsME.RAVENHILL_WATCHWARDEN_CHESTPLATE.getDefaultStack(), ArtisanTableInputsShape.CHESTPLATE));
-        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 2, getTabTranslation("leggings"), EquipmentItemsME.RAVENHILL_WATCHWARDEN_LEGGINGS.getDefaultStack(), ArtisanTableInputsShape.LEGGINGS));
-        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 3, getTabTranslation("boots"), EquipmentItemsME.RAVENHILL_WATCHWARDEN_BOOTS.getDefaultStack(), ArtisanTableInputsShape.BOOTS));
-        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 4, getTabTranslation("mount_armor"), EquipmentItemsME.ROHIRRIC_HORSE_ARMOR.getDefaultStack(), ArtisanTableInputsShape.MOUNT_ARMOR));
+        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 0, getTabTranslation("helmet"), EquipmentItemsME.RAVENHILL_WATCHWARDEN_HELMET.getDefaultInstance(), ArtisanTableInputsShape.HELMET));
+        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 1, getTabTranslation("chestplate"), EquipmentItemsME.RAVENHILL_WATCHWARDEN_CHESTPLATE.getDefaultInstance(), ArtisanTableInputsShape.CHESTPLATE));
+        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 2, getTabTranslation("leggings"), EquipmentItemsME.RAVENHILL_WATCHWARDEN_LEGGINGS.getDefaultInstance(), ArtisanTableInputsShape.LEGGINGS));
+        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 3, getTabTranslation("boots"), EquipmentItemsME.RAVENHILL_WATCHWARDEN_BOOTS.getDefaultInstance(), ArtisanTableInputsShape.BOOTS));
+        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 4, getTabTranslation("mount_armor"), EquipmentItemsME.ROHIRRIC_HORSE_ARMOR.getDefaultInstance(), ArtisanTableInputsShape.MOUNT_ARMOR));
         index++;
 
-        categories.add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.LEFT, index, getTabTranslation("shields"), Items.SHIELD.getDefaultStack()));
+        categories.add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.LEFT, index, getTabTranslation("shields"), Items.SHIELD.getDefaultInstance()));
         tabs.put(index, new ArrayList<>());
-        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 0, getTabTranslation("light_shield"), WeaponItemsME.GUNDABAD_WOODEN_SHIELD.getDefaultStack(), ArtisanTableInputsShape.LIGHT_SHIELD));
-        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 1, getTabTranslation("medium_shield"), WeaponItemsME.ROUND_SHIELD.getDefaultStack(), ArtisanTableInputsShape.MEDIUM_SHIELD));
-        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 2, getTabTranslation("heavy_shield"), WeaponItemsME.URUK_HAI_WHITE_HAND_SHIELD.getDefaultStack(), ArtisanTableInputsShape.HEAVY_SHIELD));
+        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 0, getTabTranslation("light_shield"), WeaponItemsME.GUNDABAD_WOODEN_SHIELD.getDefaultInstance(), ArtisanTableInputsShape.LIGHT_SHIELD));
+        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 1, getTabTranslation("medium_shield"), WeaponItemsME.ROUND_SHIELD.getDefaultInstance(), ArtisanTableInputsShape.MEDIUM_SHIELD));
+        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 2, getTabTranslation("heavy_shield"), WeaponItemsME.URUK_HAI_WHITE_HAND_SHIELD.getDefaultInstance(), ArtisanTableInputsShape.HEAVY_SHIELD));
         index++;
 
-        categories.add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.LEFT, index, getTabTranslation("misc"), EquipmentItemsME.STRAW_HAT.getDefaultStack()));
+        categories.add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.LEFT, index, getTabTranslation("misc"), EquipmentItemsME.STRAW_HAT.getDefaultInstance()));
         tabs.put(index, new ArrayList<>());
-        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 0, getTabTranslation("hat"), EquipmentItemsME.STRAW_HAT.getDefaultStack(), ArtisanTableInputsShape.HAT));
-        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 1, getTabTranslation("helmet_attachment"), EquipmentItemsME.HOOD.getDefaultStack(), ArtisanTableInputsShape.HELMET_ATTACHMENT));
-        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 2, getTabTranslation("back_attachment"), EquipmentItemsME.CAPE.getDefaultStack(), ArtisanTableInputsShape.BACK_ATTACHMENT));
-        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 3, getTabTranslation("pipe"), ToolItemsME.CLAY_PIPE.getDefaultStack(), ArtisanTableInputsShape.PIPE));
+        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 0, getTabTranslation("hat"), EquipmentItemsME.STRAW_HAT.getDefaultInstance(), ArtisanTableInputsShape.HAT));
+        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 1, getTabTranslation("helmet_attachment"), EquipmentItemsME.HOOD.getDefaultInstance(), ArtisanTableInputsShape.HELMET_ATTACHMENT));
+        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 2, getTabTranslation("back_attachment"), EquipmentItemsME.CAPE.getDefaultInstance(), ArtisanTableInputsShape.BACK_ATTACHMENT));
+        tabs.get(index).add(new ArtisanTableTab(this.client, this, ArtisanTableTabType.ABOVE, 3, getTabTranslation("pipe"), ToolItemsME.CLAY_PIPE.getDefaultInstance(), ArtisanTableInputsShape.PIPE));
         index++;
 
         selectedCategory = categories.get(0);
@@ -106,7 +106,7 @@ public class ArtisanTableScreen extends AbstractContainerScreen<ArtisanTableScre
     @Override
     protected void init() {
         super.init();
-        titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2;
+        titleX = (backgroundWidth - font.getWidth(title)) / 2;
         titleY -= 1;
 
         (this.handler).addListener(this);
@@ -118,7 +118,7 @@ public class ArtisanTableScreen extends AbstractContainerScreen<ArtisanTableScre
         this.armorStand.bodyYaw = 210.0f;
         this.armorStand.setPitch(25.0f);
         this.armorStand.headYaw = this.armorStand.getYaw();
-        this.equipArmorStand((this.handler).getSlot(9).getStack());
+        this.equipArmorStand((this.handler).getSlot(9).getItem());
     }
 
     @Override
@@ -140,8 +140,8 @@ public class ArtisanTableScreen extends AbstractContainerScreen<ArtisanTableScre
     protected void handledScreenTick() {
         super.handledScreenTick();
         ResultContainer resultInventory = this.handler.output;
-        if (resultInventory != null && !resultInventory.getStack(0).isEmpty()) {
-            equipArmorStand(resultInventory.getStack(0));
+        if (resultInventory != null && !resultInventory.getItem(0).isEmpty()) {
+            equipArmorStand(resultInventory.getItem(0));
         }
     }
 
@@ -162,9 +162,9 @@ public class ArtisanTableScreen extends AbstractContainerScreen<ArtisanTableScre
     protected void drawBackground(GuiGraphics context, float delta, int mouseX, int mouseY) {
         int i = this.x;
         int j = this.y;
-        context.drawTexture(TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight);
         int k = (int) (41.0F * this.scrollAmount);
-        context.drawTexture(TEXTURE, i + 143, j + 15 + k, 232 + (this.shouldScroll() ? 0 : 12), 0, 12, 15);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, i + 143, j + 15 + k, 232 + (this.shouldScroll() ? 0 : 12), 0, 12, 15);
 
         int l = this.x + 76;
         int m = this.y + 14;
@@ -174,17 +174,17 @@ public class ArtisanTableScreen extends AbstractContainerScreen<ArtisanTableScre
         for (int w = 0; w < 3; w++) {
             for (int z = 0; z < 3; z++) {
                 if (handler.getSlot(w * 3 + z).isEnabled()) {
-                    context.drawTexture(TEXTURE, x + SLOT_OFFSET_X + SLOT_SCALE * z, y + SLOT_OFFSET_Y + SLOT_SCALE * w, 232, 15, SLOT_SCALE, SLOT_SCALE);
+                    net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, x + SLOT_OFFSET_X + SLOT_SCALE * z, y + SLOT_OFFSET_Y + SLOT_SCALE * w, 232, 15, SLOT_SCALE, SLOT_SCALE);
                     InputType inputType = shape.getInputType(z, w);
                     if (!handler.getSlot(w * 3 + z).hasStack()) {
                         switch (inputType) {
-                            case HANDLE -> context.drawTexture(TEXTURE, x + SPRITE_OFFSET_X + SLOT_SCALE * z, y + SPRITE_OFFSET_Y + SLOT_SCALE * w, 232, 87, 16, 16);
-                            case HILT -> context.drawTexture(TEXTURE, x + SPRITE_OFFSET_X + SLOT_SCALE * z, y + SPRITE_OFFSET_Y + SLOT_SCALE * w, 232, 103, 16, 16);
-                            case BLADE -> context.drawTexture(TEXTURE, x + SPRITE_OFFSET_X + SLOT_SCALE * z, y + SPRITE_OFFSET_Y + SLOT_SCALE * w, 232, 119, 16, 16);
-                            case AXE -> context.drawTexture(TEXTURE, x + SPRITE_OFFSET_X + SLOT_SCALE * z, y + SPRITE_OFFSET_Y + SLOT_SCALE * w, 232, 135, 16, 16);
-                            case PICKAXE -> context.drawTexture(TEXTURE, x + SPRITE_OFFSET_X + SLOT_SCALE * z, y + SPRITE_OFFSET_Y + SLOT_SCALE * w, 232, 151, 16, 16);
-                            case SHOVEL -> context.drawTexture(TEXTURE, x + SPRITE_OFFSET_X + SLOT_SCALE * z, y + SPRITE_OFFSET_Y + SLOT_SCALE * w, 232, 167, 16, 16);
-                            case HOE -> context.drawTexture(TEXTURE, x + SPRITE_OFFSET_X + SLOT_SCALE * z, y + SPRITE_OFFSET_Y + SLOT_SCALE * w, 232, 183, 16, 16);
+                            case HANDLE -> net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, x + SPRITE_OFFSET_X + SLOT_SCALE * z, y + SPRITE_OFFSET_Y + SLOT_SCALE * w, 232, 87, 16, 16);
+                            case HILT -> net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, x + SPRITE_OFFSET_X + SLOT_SCALE * z, y + SPRITE_OFFSET_Y + SLOT_SCALE * w, 232, 103, 16, 16);
+                            case BLADE -> net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, x + SPRITE_OFFSET_X + SLOT_SCALE * z, y + SPRITE_OFFSET_Y + SLOT_SCALE * w, 232, 119, 16, 16);
+                            case AXE -> net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, x + SPRITE_OFFSET_X + SLOT_SCALE * z, y + SPRITE_OFFSET_Y + SLOT_SCALE * w, 232, 135, 16, 16);
+                            case PICKAXE -> net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, x + SPRITE_OFFSET_X + SLOT_SCALE * z, y + SPRITE_OFFSET_Y + SLOT_SCALE * w, 232, 151, 16, 16);
+                            case SHOVEL -> net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, x + SPRITE_OFFSET_X + SLOT_SCALE * z, y + SPRITE_OFFSET_Y + SLOT_SCALE * w, 232, 167, 16, 16);
+                            case HOE -> net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, x + SPRITE_OFFSET_X + SLOT_SCALE * z, y + SPRITE_OFFSET_Y + SLOT_SCALE * w, 232, 183, 16, 16);
                         }
                     }
                 }
@@ -213,11 +213,11 @@ public class ArtisanTableScreen extends AbstractContainerScreen<ArtisanTableScre
 
         for (ArtisanTableTab category : this.categories) {
             if (category.isClickOnTab(x, y + 3, mouseX, mouseY)) continue;
-            context.drawTooltip(this.textRenderer, category.getTitle(), mouseX, mouseY);
+            context.drawTooltip(this.font, category.getTitle(), mouseX, mouseY);
         }
         for (ArtisanTableTab tab : this.tabs.get(selectedCategory.getIndex())) {
             if (tab.isClickOnTab(x + 3, y, mouseX, mouseY)) continue;
-            context.drawTooltip(this.textRenderer, tab.getTitle(), mouseX, mouseY);
+            context.drawTooltip(this.font, tab.getTitle(), mouseX, mouseY);
         }
         drawMouseoverTooltip(context, mouseX, mouseY);
     }
@@ -235,7 +235,7 @@ public class ArtisanTableScreen extends AbstractContainerScreen<ArtisanTableScre
                 int n = i + m % 4 * 16;
                 int o = j + m / 4 * 18 + 2;
                 if (x >= n && x < n + 16 && y >= o && y < o + 18) {
-                    context.drawItemTooltip(this.textRenderer, list.get(l), x, y);
+                    context.drawItemTooltip(this.font, list.get(l), x, y);
                 }
             }
         }
@@ -254,7 +254,7 @@ public class ArtisanTableScreen extends AbstractContainerScreen<ArtisanTableScre
                 n += 36;
             }
 
-            context.drawTexture(TEXTURE, k, m - 1, 0, n, 16, 18);
+            net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, k, m - 1, 0, n, 16, 18);
         }
     }
 

@@ -20,40 +20,40 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class HeldItemRendererMixin {
 
     @Inject(at = @At("HEAD"), method = "getHandRenderType", cancellable = true)
-    private static void getHandRenderType(LocalPlayer player, CallbackInfoReturnable<ItemInHandRenderer.HandRenderType> cir) {
+    private static void getHandRenderType(LocalPlayer player, CallbackInfoReturnable<ItemInHandRenderer.HandRenderSelection> cir) {
         ItemStack itemStack = player.getMainHandStack();
         ItemStack itemStack2 = player.getOffHandStack();
-        InteractionHand hand = player.getActiveHand();
+        InteractionHand hand = player.getUsedItemHand();
         boolean bl = itemStack.getItem() instanceof CustomCrossbowWeaponItem || itemStack2.getItem() instanceof CustomCrossbowWeaponItem
-                || itemStack.isOf(Items.CROSSBOW) || itemStack2.isOf(Items.CROSSBOW)
-                || itemStack.isOf(Items.BOW) || itemStack2.isOf(Items.BOW);
+                || itemStack.is(Items.CROSSBOW) || itemStack2.is(Items.CROSSBOW)
+                || itemStack.is(Items.BOW) || itemStack2.is(Items.BOW);
         if (!bl) {
-            cir.setReturnValue(ItemInHandRenderer.HandRenderType.RENDER_BOTH_HANDS);
+            cir.setReturnValue(ItemInHandRenderer.HandRenderSelection.RENDER_BOTH_HANDS);
         } else if (player.isUsingItem()){
-            cir.setReturnValue(ItemInHandRenderer.HandRenderType.shouldOnlyRender(hand));
+            cir.setReturnValue(ItemInHandRenderer.HandRenderSelection.shouldOnlyRender(hand));
         } else {
-            cir.setReturnValue(isChargedCrossbow(itemStack) ? ItemInHandRenderer.HandRenderType.RENDER_MAIN_HAND_ONLY : ItemInHandRenderer.HandRenderType.RENDER_BOTH_HANDS);
+            cir.setReturnValue(isChargedCrossbow(itemStack) ? ItemInHandRenderer.HandRenderSelection.RENDER_MAIN_HAND_ONLY : ItemInHandRenderer.HandRenderSelection.RENDER_BOTH_HANDS);
         }
     }
 
     @Inject(at = @At("HEAD"), method = "getUsingItemHandRenderType", cancellable = true)
-    private static void getUsingItemHandRenderType(LocalPlayer player, CallbackInfoReturnable<ItemInHandRenderer.HandRenderType> cir) {
-        ItemStack itemStack = player.getActiveItem();
-        InteractionHand hand = player.getActiveHand();
-        if (!itemStack.isOf(Items.BOW) && !(itemStack.getItem() instanceof CustomCrossbowWeaponItem) && !itemStack.isOf(Items.CROSSBOW)) {
-            cir.setReturnValue(hand == InteractionHand.MAIN_HAND && isChargedCrossbow(player.getOffHandStack()) ? ItemInHandRenderer.HandRenderType.RENDER_MAIN_HAND_ONLY : ItemInHandRenderer.HandRenderType.RENDER_BOTH_HANDS);
+    private static void getUsingItemHandRenderType(LocalPlayer player, CallbackInfoReturnable<ItemInHandRenderer.HandRenderSelection> cir) {
+        ItemStack itemStack = player.getUseItem();
+        InteractionHand hand = player.getUsedItemHand();
+        if (!itemStack.is(Items.BOW) && !(itemStack.getItem() instanceof CustomCrossbowWeaponItem) && !itemStack.is(Items.CROSSBOW)) {
+            cir.setReturnValue(hand == InteractionHand.MAIN_HAND && isChargedCrossbow(player.getOffHandStack()) ? ItemInHandRenderer.HandRenderSelection.RENDER_MAIN_HAND_ONLY : ItemInHandRenderer.HandRenderSelection.RENDER_BOTH_HANDS);
         } else {
-            cir.setReturnValue(ItemInHandRenderer.HandRenderType.shouldOnlyRender(hand));
+            cir.setReturnValue(ItemInHandRenderer.HandRenderSelection.shouldOnlyRender(hand));
         }
     }
 
     @Unique
     private static boolean isChargedCrossbow(ItemStack stack) {
-        return (stack.getItem() instanceof CustomCrossbowWeaponItem || stack.isOf(Items.CROSSBOW)) && CrossbowItem.isCharged(stack);
+        return (stack.getItem() instanceof CustomCrossbowWeaponItem || stack.is(Items.CROSSBOW)) && CrossbowItem.isCharged(stack);
     }
 
     @WrapOperation(method = "renderFirstPersonItem", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z", ordinal = 0))
+            target = "Lnet/minecraft/item/ItemStack;is(Lnet/minecraft/item/Item;)Z", ordinal = 0))
     private boolean renderFirstPersonItem(ItemStack instance, Item item, Operation<Boolean> original) {
         return original.call(instance, item) || instance.getItem() instanceof CustomCrossbowWeaponItem;
     }

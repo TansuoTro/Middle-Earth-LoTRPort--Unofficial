@@ -8,13 +8,14 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class PineconeItem extends PebbleItem {
     public static final float DAMAGE = 2f;
     private static final float BASE_STRENGTH = 0.6f;
     private static final float CHARGE_STRENGTH = 0.9f;
     private static final int STRENGTH_CHARGE_TIME = 20; // 1s charge for full strength
-    public PineconeItem(Settings settings) {
+    public PineconeItem(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
@@ -31,7 +32,7 @@ public class PineconeItem extends PebbleItem {
         if(i > STRENGTH_CHARGE_TIME) i = STRENGTH_CHARGE_TIME;
         float percentage = (float) i / STRENGTH_CHARGE_TIME;
 
-        if (!world.isClient) {
+        if (!world.isClientSide) {
             PineconeEntity pineconeEntity = new PineconeEntity(world, user, DAMAGE * percentage);
             pineconeEntity.setVelocity(playerEntity, playerEntity.getPitch(), playerEntity.getYaw(), 0.0f, BASE_STRENGTH + (CHARGE_STRENGTH * percentage), 1.0f);
 

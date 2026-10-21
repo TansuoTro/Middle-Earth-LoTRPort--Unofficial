@@ -17,6 +17,6 @@ public class PanicFireGoal extends FleeSunGoal {
         if (!this.mob.isOnFire()) {
             return false;
         }
-        return this.targetShadedPos();
+        return this.setWantedPos();
     }
 }

@@ -20,7 +20,7 @@ public class ReachWeaponItem extends SwordItem {
     private final Tier material;
 
     public ReachWeaponItem(Tier toolMaterial, int attackDamage, float attackSpeed, float rangeDistance, Settings settings) {
-        super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getDurability()));
+        super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getUses()));
         this.rangeDistance = rangeDistance;
         this.faction = null;
         this.subFaction = null;
@@ -28,7 +28,7 @@ public class ReachWeaponItem extends SwordItem {
     }
 
     public ReachWeaponItem(Tier toolMaterial, int attackDamage, float attackSpeed, float rangeDistance, MutableComponent faction, Settings settings) {
-        super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getDurability()));
+        super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getUses()));
         this.rangeDistance = rangeDistance;
         this.faction = faction;
         this.subFaction = null;
@@ -36,7 +36,7 @@ public class ReachWeaponItem extends SwordItem {
     }
 
     public ReachWeaponItem(Tier toolMaterial, int attackDamage, float attackSpeed, float rangeDistance, MutableComponent faction, MutableComponent subFaction, Settings settings) {
-        super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getDurability()));
+        super(toolMaterial, attackDamage, attackSpeed, settings.maxDamage(toolMaterial.getUses()));
         this.rangeDistance = rangeDistance;
         this.faction = faction;
         this.subFaction = subFaction;

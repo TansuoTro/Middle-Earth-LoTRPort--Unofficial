@@ -15,10 +15,10 @@ public class AxeItemMixin {
             method = "shouldCancelStripAttempt(Lnet/minecraft/item/UseOnContext;)Z",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+                    target = "Lnet/minecraft/item/ItemStack;is(Lnet/minecraft/item/Item;)Z"
             )
     )
     private static boolean shield_api$shouldCancelStripAttempt(ItemStack instance, Item item) {
-        return instance.isOf(Items.SHIELD) || instance.getItem() instanceof CustomShieldItem;
+        return instance.is(Items.SHIELD) || instance.getItem() instanceof CustomShieldItem;
     }
 }

@@ -87,9 +87,8 @@ import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.GrassColor;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
-import net.minecraft.client.model.EntityModelLayer;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.Item;
@@ -100,6 +99,8 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.MultifaceBlock;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 
 @Mod.EventBusSubscriber(modid = MiddleEarth.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MiddleEarthClient {
@@ -121,85 +122,85 @@ public class MiddleEarthClient {
     public void onInitializeClient() {
 
         ModEntityModels.getModels();
-        EntityRendererRegistry.register(ModEntities.BARROW_WIGHT, BarrowWightEntityRenderer::new);
+        EntityRenderers.register(ModEntities.BARROW_WIGHT, BarrowWightEntityRenderer::new);
         // Entities
-        EntityRendererRegistry.register(ModEntities.CAVE_TROLL, CaveTrollRenderer::new);
+        EntityRenderers.register(ModEntities.CAVE_TROLL, CaveTrollRenderer::new);
 
-        EntityRendererRegistry.register(ModEntities.HOBBIT_CIVILIAN, ShireHobbitRenderer::new);
-        EntityRendererRegistry.register(ModEntities.HOBBIT_BOUNDER, ShireHobbitRenderer::new);
-        EntityRendererRegistry.register(ModEntities.HOBBIT_SHIRRIFF, ShireHobbitRenderer::new);
+        EntityRenderers.register(ModEntities.HOBBIT_CIVILIAN, ShireHobbitRenderer::new);
+        EntityRenderers.register(ModEntities.HOBBIT_BOUNDER, ShireHobbitRenderer::new);
+        EntityRenderers.register(ModEntities.HOBBIT_SHIRRIFF, ShireHobbitRenderer::new);
 
-        EntityRendererRegistry.register(ModEntities.GONDORIAN_MILITIA, GondorHumanRenderer::new);
-        EntityRendererRegistry.register(ModEntities.GONDORIAN_SOLDIER, GondorHumanRenderer::new);
-        EntityRendererRegistry.register(ModEntities.GONDORIAN_KNIGHT, GondorHumanRenderer::new);
-        EntityRendererRegistry.register(ModEntities.GONDORIAN_VETERAN, GondorHumanRenderer::new);
-        EntityRendererRegistry.register(ModEntities.GONDORIAN_LEADER, GondorHumanRenderer::new);
+        EntityRenderers.register(ModEntities.GONDORIAN_MILITIA, GondorHumanRenderer::new);
+        EntityRenderers.register(ModEntities.GONDORIAN_SOLDIER, GondorHumanRenderer::new);
+        EntityRenderers.register(ModEntities.GONDORIAN_KNIGHT, GondorHumanRenderer::new);
+        EntityRenderers.register(ModEntities.GONDORIAN_VETERAN, GondorHumanRenderer::new);
+        EntityRenderers.register(ModEntities.GONDORIAN_LEADER, GondorHumanRenderer::new);
 
-        EntityRendererRegistry.register(ModEntities.ROHIRRIM_MILITIA, RohanHumanRenderer::new);
-        EntityRendererRegistry.register(ModEntities.ROHIRRIM_SOLDIER, RohanHumanRenderer::new);
-        EntityRendererRegistry.register(ModEntities.ROHIRRIM_KNIGHT, RohanHumanRenderer::new);
-        EntityRendererRegistry.register(ModEntities.ROHIRRIM_VETERAN, RohanHumanRenderer::new);
-        EntityRendererRegistry.register(ModEntities.ROHIRRIM_LEADER, RohanHumanRenderer::new);
+        EntityRenderers.register(ModEntities.ROHIRRIM_MILITIA, RohanHumanRenderer::new);
+        EntityRenderers.register(ModEntities.ROHIRRIM_SOLDIER, RohanHumanRenderer::new);
+        EntityRenderers.register(ModEntities.ROHIRRIM_KNIGHT, RohanHumanRenderer::new);
+        EntityRenderers.register(ModEntities.ROHIRRIM_VETERAN, RohanHumanRenderer::new);
+        EntityRenderers.register(ModEntities.ROHIRRIM_LEADER, RohanHumanRenderer::new);
 
-        EntityRendererRegistry.register(ModEntities.LONGBEARD_MILITIA, LongbeardDwarfRenderer::new);
-        EntityRendererRegistry.register(ModEntities.LONGBEARD_SOLDIER, LongbeardDwarfRenderer::new);
-        EntityRendererRegistry.register(ModEntities.LONGBEARD_ELITE, LongbeardDwarfRenderer::new);
-        EntityRendererRegistry.register(ModEntities.LONGBEARD_VETERAN, LongbeardDwarfRenderer::new);
-        EntityRendererRegistry.register(ModEntities.LONGBEARD_LEADER, LongbeardDwarfRenderer::new);
+        EntityRenderers.register(ModEntities.LONGBEARD_MILITIA, LongbeardDwarfRenderer::new);
+        EntityRenderers.register(ModEntities.LONGBEARD_SOLDIER, LongbeardDwarfRenderer::new);
+        EntityRenderers.register(ModEntities.LONGBEARD_ELITE, LongbeardDwarfRenderer::new);
+        EntityRenderers.register(ModEntities.LONGBEARD_VETERAN, LongbeardDwarfRenderer::new);
+        EntityRenderers.register(ModEntities.LONGBEARD_LEADER, LongbeardDwarfRenderer::new);
 
-        EntityRendererRegistry.register(ModEntities.LORIEN_MILITIA, GaladhrimElfRenderer::new);
-        EntityRendererRegistry.register(ModEntities.LORIEN_SOLDIER, GaladhrimElfRenderer::new);
-        EntityRendererRegistry.register(ModEntities.LORIEN_KNIGHT, GaladhrimElfRenderer::new);
-        EntityRendererRegistry.register(ModEntities.LORIEN_VETERAN, GaladhrimElfRenderer::new);
-        EntityRendererRegistry.register(ModEntities.LORIEN_LEADER, GaladhrimElfRenderer::new);
+        EntityRenderers.register(ModEntities.LORIEN_MILITIA, GaladhrimElfRenderer::new);
+        EntityRenderers.register(ModEntities.LORIEN_SOLDIER, GaladhrimElfRenderer::new);
+        EntityRenderers.register(ModEntities.LORIEN_KNIGHT, GaladhrimElfRenderer::new);
+        EntityRenderers.register(ModEntities.LORIEN_VETERAN, GaladhrimElfRenderer::new);
+        EntityRenderers.register(ModEntities.LORIEN_LEADER, GaladhrimElfRenderer::new);
         
-        EntityRendererRegistry.register(ModEntities.MORDOR_ORC_SNAGA, MordorOrcRenderer::new);
-        EntityRendererRegistry.register(ModEntities.MORDOR_ORC_SOLDIER, MordorOrcRenderer::new);
-        EntityRendererRegistry.register(ModEntities.MORDOR_BLACK_URUK_SOLDIER, MordorBlackUrukRenderer::new);
-        EntityRendererRegistry.register(ModEntities.MORDOR_BLACK_URUK_VETERAN, MordorBlackUrukRenderer::new);
-        EntityRendererRegistry.register(ModEntities.MORDOR_BLACK_URUK_LEADER, MordorBlackUrukRenderer::new);
+        EntityRenderers.register(ModEntities.MORDOR_ORC_SNAGA, MordorOrcRenderer::new);
+        EntityRenderers.register(ModEntities.MORDOR_ORC_SOLDIER, MordorOrcRenderer::new);
+        EntityRenderers.register(ModEntities.MORDOR_BLACK_URUK_SOLDIER, MordorBlackUrukRenderer::new);
+        EntityRenderers.register(ModEntities.MORDOR_BLACK_URUK_VETERAN, MordorBlackUrukRenderer::new);
+        EntityRenderers.register(ModEntities.MORDOR_BLACK_URUK_LEADER, MordorBlackUrukRenderer::new);
 
-        EntityRendererRegistry.register(ModEntities.MISTY_GOBLIN_SNAGA, MistyGoblinRenderer::new);
-        EntityRendererRegistry.register(ModEntities.MISTY_GOBLIN_WARRIOR, MistyGoblinRenderer::new);
-        EntityRendererRegistry.register(ModEntities.MISTY_HOBGOBLIN_SOLDIER, MistyHobgoblinRenderer::new);
-        EntityRendererRegistry.register(ModEntities.MISTY_HOBGOBLIN_VETERAN, MistyHobgoblinRenderer::new);
-        EntityRendererRegistry.register(ModEntities.MISTY_HOBGOBLIN_LEADER, MistyHobgoblinRenderer::new);
+        EntityRenderers.register(ModEntities.MISTY_GOBLIN_SNAGA, MistyGoblinRenderer::new);
+        EntityRenderers.register(ModEntities.MISTY_GOBLIN_WARRIOR, MistyGoblinRenderer::new);
+        EntityRenderers.register(ModEntities.MISTY_HOBGOBLIN_SOLDIER, MistyHobgoblinRenderer::new);
+        EntityRenderers.register(ModEntities.MISTY_HOBGOBLIN_VETERAN, MistyHobgoblinRenderer::new);
+        EntityRenderers.register(ModEntities.MISTY_HOBGOBLIN_LEADER, MistyHobgoblinRenderer::new);
 
-        EntityRendererRegistry.register(ModEntities.STONE_TROLL, StoneTrollRenderer::new);
-        EntityRendererRegistry.register(ModEntities.PETRIFIED_TROLL, PetrifiedTrollRenderer::new);
+        EntityRenderers.register(ModEntities.STONE_TROLL, StoneTrollRenderer::new);
+        EntityRenderers.register(ModEntities.PETRIFIED_TROLL, PetrifiedTrollRenderer::new);
 
-        EntityRendererRegistry.register(ModEntities.NAZGUL, NazgulRenderer::new);
+        EntityRenderers.register(ModEntities.NAZGUL, NazgulRenderer::new);
 
-        EntityRendererRegistry.register(ModEntities.MIRKWOOD_SPIDER, MirkwoodSpiderRenderer::new);
+        EntityRenderers.register(ModEntities.MIRKWOOD_SPIDER, MirkwoodSpiderRenderer::new);
         // Donor entities. The 1.16 tree registered a renderer per faction-specific NPC type, and
         // the 1.21 tree replaced all of them with a single NPC type, so the entities that survive
         // in the port had no client-side registration at all.
-        EntityRendererRegistry.register(EntitiesME.NPC, NpcEntityRenderer::new);
-        EntityRendererRegistry.register(EntitiesME.GREAT_HORN, GreatHornRenderer::new);
-        EntityRendererRegistry.register(EntitiesME.WARG, WargRenderer::new);
-        EntityRendererRegistry.register(EntitiesME.BROADHOOF_GOAT, BroadhoofGoatRenderer::new);
-        EntityRendererRegistry.register(EntitiesME.SHELOBITE_LARVA, ShelobiteLarvaRenderer::new);
-        EntityRendererRegistry.register(EntitiesME.SHELOBITE_SCUTTLER, ShelobiteScuttlerRenderer::new);
-        EntityRendererRegistry.register(EntitiesME.SPAWN_OF_SHELOB, SpawnOfShelobRenderer::new);
-        EntityRendererRegistry.register(ModEntities.SNOW_TROLL, SnowTrollRenderer::new);
-        //EntityRendererRegistry.register(ModEntities.BALROG, BalrogRenderer::new);
+        EntityRenderers.register(EntitiesME.NPC, NpcEntityRenderer::new);
+        EntityRenderers.register(EntitiesME.GREAT_HORN, GreatHornRenderer::new);
+        EntityRenderers.register(EntitiesME.WARG, WargRenderer::new);
+        EntityRenderers.register(EntitiesME.BROADHOOF_GOAT, BroadhoofGoatRenderer::new);
+        EntityRenderers.register(EntitiesME.SHELOBITE_LARVA, ShelobiteLarvaRenderer::new);
+        EntityRenderers.register(EntitiesME.SHELOBITE_SCUTTLER, ShelobiteScuttlerRenderer::new);
+        EntityRenderers.register(EntitiesME.SPAWN_OF_SHELOB, SpawnOfShelobRenderer::new);
+        EntityRenderers.register(ModEntities.SNOW_TROLL, SnowTrollRenderer::new);
+        //EntityRenderers.register(ModEntities.BALROG, BalrogRenderer::new);
 
-        EntityRendererRegistry.register(ModEntities.BANDIT_MILITIA, BanditHumanRenderer::new);
-        EntityRendererRegistry.register(ModEntities.BANDIT_SOLDIER, BanditHumanRenderer::new);
-        EntityRendererRegistry.register(ModEntities.BANDIT_CHIEFTAIN, BanditHumanRenderer::new);
+        EntityRenderers.register(ModEntities.BANDIT_MILITIA, BanditHumanRenderer::new);
+        EntityRenderers.register(ModEntities.BANDIT_SOLDIER, BanditHumanRenderer::new);
+        EntityRenderers.register(ModEntities.BANDIT_CHIEFTAIN, BanditHumanRenderer::new);
 
         // Items
         ModelLoadingRegistry.INSTANCE.registerModelProvider(((manager, out) -> new VariantsModelProvider().provideExtraModels(manager, out)));
-        EntityRendererRegistry.register(ModEntities.PEBBLE, ThrownItemRenderer::new);
-        EntityRendererRegistry.register(ModEntities.PINECONE, ThrownItemRenderer::new);
-        EntityRendererRegistry.register(ModEntities.LIT_PINECONE, ThrownItemRenderer::new);
-        EntityRendererRegistry.register(ModEntities.SPEAR, JavelinEntityRenderer::new);
-        EntityRendererRegistry.register(ModEntities.BOULDER, BoulderEntityRenderer::new);
-        EntityRendererRegistry.register(EntitiesME.FIRE_OF_ORTHANC, FireOfOrthancEntityRenderer::new);
-        EntityRendererRegistry.register(EntitiesME.SMOKE_RING_PROJECTILE, SmokeRingProjectileRenderer::new);
-        EntityRendererRegistry.register(EntitiesME.WEB, ThrownItemRenderer::new);
-        EntityRendererRegistry.register(EntitiesME.SEAT_ENTITY, SeatRenderer::new);
-        EntityRendererRegistry.register(EntitiesME.REINFORCED_BARREL, BarrelEntityRenderer::new);
+        EntityRenderers.register(ModEntities.PEBBLE, ThrownItemRenderer::new);
+        EntityRenderers.register(ModEntities.PINECONE, ThrownItemRenderer::new);
+        EntityRenderers.register(ModEntities.LIT_PINECONE, ThrownItemRenderer::new);
+        EntityRenderers.register(ModEntities.SPEAR, JavelinEntityRenderer::new);
+        EntityRenderers.register(ModEntities.BOULDER, BoulderEntityRenderer::new);
+        EntityRenderers.register(EntitiesME.FIRE_OF_ORTHANC, FireOfOrthancEntityRenderer::new);
+        EntityRenderers.register(EntitiesME.SMOKE_RING_PROJECTILE, SmokeRingProjectileRenderer::new);
+        EntityRenderers.register(EntitiesME.WEB, ThrownItemRenderer::new);
+        EntityRenderers.register(EntitiesME.SEAT_ENTITY, SeatRenderer::new);
+        EntityRenderers.register(EntitiesME.REINFORCED_BARREL, BarrelEntityRenderer::new);
 
         registerDyeableItem(ModEquipmentItems.TUNIC_CLOAK);
         registerDyeableItem(ModEquipmentItems.CLOAK);
@@ -207,13 +208,13 @@ public class MiddleEarthClient {
         registerDyeableItem(ModEquipmentItems.GAMBESON);
 
         // Animals
-        EntityRendererRegistry.register(ModEntities.CRAB, CrabRenderer::new);
-        EntityRendererRegistry.register(ModEntities.GOOSE, GooseRenderer::new);
-        EntityRendererRegistry.register(ModEntities.DUCK, DuckRenderer::new);
-        EntityRendererRegistry.register(ModEntities.SWAN, SwanRenderer::new);
-        EntityRendererRegistry.register(ModEntities.PHEASANT, PheasantRenderer::new);
-        EntityRendererRegistry.register(ModEntities.SNAIL, SnailRenderer::new);
-        EntityRendererRegistry.register(ModEntities.DEER, DeerRenderer::new);
+        EntityRenderers.register(ModEntities.CRAB, CrabRenderer::new);
+        EntityRenderers.register(ModEntities.GOOSE, GooseRenderer::new);
+        EntityRenderers.register(ModEntities.DUCK, DuckRenderer::new);
+        EntityRenderers.register(ModEntities.SWAN, SwanRenderer::new);
+        EntityRenderers.register(ModEntities.PHEASANT, PheasantRenderer::new);
+        EntityRenderers.register(ModEntities.SNAIL, SnailRenderer::new);
+        EntityRenderers.register(ModEntities.DEER, DeerRenderer::new);
 
         ModModelPredicateProvider.registerAllPredicates();
 
@@ -225,7 +226,7 @@ public class MiddleEarthClient {
         MenuScreens.register(ModScreenHandlers.TREATED_ANVIL_SCREEN_HANDLER, ShapingAnvilScreen::new);
         MenuScreens.register(ModScreenHandlers.STRUCTURE_MANAGER_SCREEN_HANDLER, StructureManagerScreen::new);
         MenuScreens.register(ModScreenHandlers.STRUCTURE_NEST_SCREEN_HANDLER, StructureNestScreen::new);
-        BlockEntityRendererRegistry.register(ModBlockEntities.ALLOY_FURNACE, AlloyFurnaceEntityRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.ALLOY_FURNACE, AlloyFurnaceEntityRenderer::new);
 
         ModNetworks.registerS2CPackets();
         net.jukoz.me.network.ModClientNetworkHandler.register(new net.jukoz.me.network.connections.ConnectionToServer());
@@ -275,12 +276,12 @@ public class MiddleEarthClient {
                 for (com.google.gson.JsonElement e : layers.getAsJsonArray("cutout")) {
                     net.minecraft.resources.ResourceLocation id = new net.minecraft.resources.ResourceLocation(e.getAsString());
                     if (net.minecraft.core.registries.Registries.BLOCK.containsId(id))
-                        BlockRenderLayerMap.INSTANCE.putBlock(net.minecraft.core.registries.Registries.BLOCK.get(id), RenderLayer.getCutout());
+                        BlockRenderLayerMap.INSTANCE.putBlock(net.minecraft.core.registries.Registries.BLOCK.get(id), RenderType.cutout());
                 }
                 for (com.google.gson.JsonElement e : layers.getAsJsonArray("cutout_mipped")) {
                     net.minecraft.resources.ResourceLocation id = new net.minecraft.resources.ResourceLocation(e.getAsString());
                     if (net.minecraft.core.registries.Registries.BLOCK.containsId(id))
-                        BlockRenderLayerMap.INSTANCE.putBlock(net.minecraft.core.registries.Registries.BLOCK.get(id), RenderLayer.getCutoutMipped());
+                        BlockRenderLayerMap.INSTANCE.putBlock(net.minecraft.core.registries.Registries.BLOCK.get(id), RenderType.cutoutMipped());
                 }
             }
         } catch (Throwable t) {
@@ -295,9 +296,9 @@ public class MiddleEarthClient {
                     || block instanceof net.minecraft.world.level.block.MultifaceBlock
                     || block instanceof net.minecraft.world.level.block.AmethystClusterBlock
                     || block instanceof net.minecraft.world.level.block.HangingRootsBlock) {
-                BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout());
+                BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutout());
             } else if (block instanceof net.minecraft.world.level.block.LeavesBlock) {
-                BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutoutMipped());
+                BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutoutMipped());
             }
         }
         // Dirt/soil blocks with a tinted grass "overlay" layer (grassy_dirt/chalksoil/loam/peat/
@@ -307,39 +308,39 @@ public class MiddleEarthClient {
             if (!net.minecraft.core.registries.Registries.BLOCK.getId(block).getNamespace().equals(MiddleEarth.MOD_ID)) continue;
             String path = net.minecraft.core.registries.Registries.BLOCK.getId(block).getPath();
             if (path.startsWith("grassy_") || path.endsWith("_grass_block") || path.startsWith("pebbled_grass")) {
-                BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutoutMipped());
+                BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutoutMipped());
             }
         }
-        BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.MORDOR_LICHEN, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.MORGUL_IVY, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.HANGING_COBWEB, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.CORNER_COBWEB, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.MIRKWOOD_SPIDER_EGG, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.MORDOR_LICHEN, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.MORGUL_IVY, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.HANGING_COBWEB, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.CORNER_COBWEB, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.MIRKWOOD_SPIDER_EGG, RenderType.cutout());
 
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.BROWN_GRASS, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.GREEN_SHRUB, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.MALLOS, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.TAN_SHRUB, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.STRAWBERRY_BUSH, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.TOUGH_BERRY_BUSH, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.YELLOW_FLOWER, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.GREEN_JEWEL_CORNFLOWER, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.MIRKWOOD_ROOTS, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.MIRKWOOD_HANGING_ROOTS, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.BROWN_GRASS, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.GREEN_SHRUB, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.MALLOS, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.TAN_SHRUB, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.STRAWBERRY_BUSH, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.TOUGH_BERRY_BUSH, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.YELLOW_FLOWER, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.GREEN_JEWEL_CORNFLOWER, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.MIRKWOOD_ROOTS, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.MIRKWOOD_HANGING_ROOTS, RenderType.cutout());
 
-        BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.DRY_GRASS, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.DYING_GRASS, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.GRASS_TUFT, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.HEATHER, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.HEATHER_BUSH, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.RED_HEATHER, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.WHEATGRASS, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.WILD_GRASS, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.WILDERGRASS, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.BEACH_GRASS, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.COASTAL_PANIC_GRASS, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.HOROKAKA, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.GIANT_HOROKAKA, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.DRY_GRASS, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.DYING_GRASS, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.GRASS_TUFT, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.HEATHER, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.HEATHER_BUSH, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.RED_HEATHER, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.WHEATGRASS, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.WILD_GRASS, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.WILDERGRASS, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.BEACH_GRASS, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.COASTAL_PANIC_GRASS, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.HOROKAKA, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.GIANT_HOROKAKA, RenderType.cutout());
 
         ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> {
             if (view == null || pos == null) {
@@ -349,128 +350,128 @@ public class MiddleEarthClient {
         }, ModNatureBlocks.WILD_GRASS, ModNatureBlocks.GRASS_TUFT, ModNatureBlocks.WHEATGRASS);
 
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
-            BlockState blockState = ((BlockItem)stack.getItem()).getBlock().getDefaultState();
+            BlockState blockState = ((BlockItem)stack.getItem()).getBlock().defaultBlockState();
             return FoliageColor.getDefaultColor();
         }, ModNatureBlocks.WILD_GRASS, ModNatureBlocks.GRASS_TUFT, ModNatureBlocks.WHEATGRASS);
 
         for(Block block : SimpleDoubleBlockModel.doubleBlocks){
-            BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout());
+            BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutout());
         }
 
         for(Block block : SimpleFlowerBedModel.flowerBeds){
-            BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout());
+            BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutout());
         }
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.MIRKWOOD_SAPLING, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.WHITE_MUSHROOM, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.WHITE_MUSHROOM_TILLER, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.MOSS, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.FOREST_MOSS, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.CORRUPTED_MOSS, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.MIRKWOOD_SAPLING, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.WHITE_MUSHROOM, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.WHITE_MUSHROOM_TILLER, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.MOSS, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.FOREST_MOSS, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.CORRUPTED_MOSS, RenderType.cutout());
 
         for (Block block : Crops.crops){
-            BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout());
+            BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutout());
         }
 
         for(Block block : TintableCrossModel.notTintedBlocks) {
-            if(block != null) BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout());
+            if(block != null) BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutout());
         }
         for(Block block : TintableCrossModel.tintedBlocks) {
-            BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout());
+            BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutout());
         }
 
-        BlockRenderLayerMap.INSTANCE.putBlock(MushroomBlockSets.DARK_MUSHROOM.trapdoor(), RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(MushroomBlockSets.GRAY_MUSHROOM.trapdoor(), RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(MushroomBlockSets.MUSHROOM.trapdoor(), RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.WILLOW_SET.trapdoor(), RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.PALM_SET.trapdoor(), RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.MIRKWOOD_SET.trapdoor(), RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.MALLORN_SET.trapdoor(), RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.WHITE_LEBETHRON_SET.trapdoor(), RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.BLACK_LEBETHRON_SET.trapdoor(), RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.BEECH_SET.trapdoor(), RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(MushroomBlockSets.DARK_MUSHROOM.trapdoor(), RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(MushroomBlockSets.GRAY_MUSHROOM.trapdoor(), RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(MushroomBlockSets.MUSHROOM.trapdoor(), RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.WILLOW_SET.trapdoor(), RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.PALM_SET.trapdoor(), RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.MIRKWOOD_SET.trapdoor(), RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.MALLORN_SET.trapdoor(), RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.WHITE_LEBETHRON_SET.trapdoor(), RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.BLACK_LEBETHRON_SET.trapdoor(), RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.BEECH_SET.trapdoor(), RenderType.cutout());
 
-        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.BEECH_SET.door(), RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.MALLORN_SET.door(), RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.PALM_SET.door(), RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.WILLOW_SET.door(), RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(MushroomBlockSets.GRAY_MUSHROOM.door(), RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(MushroomBlockSets.DARK_MUSHROOM.door(), RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(MushroomBlockSets.MUSHROOM.door(), RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.BEECH_SET.door(), RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.MALLORN_SET.door(), RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.PALM_SET.door(), RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(WoodBlockSets.WILLOW_SET.door(), RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(MushroomBlockSets.GRAY_MUSHROOM.door(), RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(MushroomBlockSets.DARK_MUSHROOM.door(), RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(MushroomBlockSets.MUSHROOM.door(), RenderType.cutout());
         
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.QUARTZ_CLUSTER, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SMALL_QUARTZ_BUD, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.MEDIUM_QUARTZ_BUD, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.LARGE_QUARTZ_BUD, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.RED_AGATE_CLUSTER, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SMALL_RED_AGATE_BUD, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.MEDIUM_RED_AGATE_BUD, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.LARGE_RED_AGATE_BUD, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.CITRINE_CLUSTER, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SMALL_CITRINE_BUD, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.MEDIUM_CITRINE_BUD, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.LARGE_CITRINE_BUD, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.GLOWSTONE_CLUSTER, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SMALL_GLOWSTONE_BUD, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.MEDIUM_GLOWSTONE_BUD, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.LARGE_GLOWSTONE_BUD, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.QUARTZ_CLUSTER, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SMALL_QUARTZ_BUD, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.MEDIUM_QUARTZ_BUD, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.LARGE_QUARTZ_BUD, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.RED_AGATE_CLUSTER, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SMALL_RED_AGATE_BUD, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.MEDIUM_RED_AGATE_BUD, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.LARGE_RED_AGATE_BUD, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.CITRINE_CLUSTER, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SMALL_CITRINE_BUD, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.MEDIUM_CITRINE_BUD, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.LARGE_CITRINE_BUD, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.GLOWSTONE_CLUSTER, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SMALL_GLOWSTONE_BUD, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.MEDIUM_GLOWSTONE_BUD, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.LARGE_GLOWSTONE_BUD, RenderType.cutout());
 
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.DWARVEN_LANTERN, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.WALL_DWARVEN_LANTERN, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.SILVER_LANTERN, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.DWARVEN_LANTERN, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.WALL_DWARVEN_LANTERN, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.SILVER_LANTERN, RenderType.cutout());
 
-        BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.SILVERS_BARS, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.SILVERS_BARS, RenderType.cutout());
 
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.WILD_CARROT, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.WILD_POTATO, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.WILD_BEETROOT, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.WILD_CARROT, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.WILD_POTATO, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.WILD_BEETROOT, RenderType.cutout());
 
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.WOOD_FRAMED_WINDOW, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.WOOD_FRAMED_WINDOW_PANE, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.WHITE_DAUB_HOBBIT_WINDOW, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.WHITE_DAUB_HOBBIT_WINDOW_PANE, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.YELLOW_DAUB_HOBBIT_WINDOW, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.YELLOW_DAUB_HOBBIT_WINDOW_PANE, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.WOOD_FRAMED_WINDOW, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.WOOD_FRAMED_WINDOW_PANE, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.WHITE_DAUB_HOBBIT_WINDOW, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.WHITE_DAUB_HOBBIT_WINDOW_PANE, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.YELLOW_DAUB_HOBBIT_WINDOW, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.YELLOW_DAUB_HOBBIT_WINDOW_PANE, RenderType.translucent());
 
-        BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.EPMOSTO_CARVED_WINDOW, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.EPMOSTO_CARVED_WINDOW_PANE, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.EPMOSTO_CARVED_WINDOW, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.EPMOSTO_CARVED_WINDOW_PANE, RenderType.translucent());
 
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.LEAD_GLASS, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.BLUE_STAINED_LEAD_GLASS, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.BLACK_STAINED_LEAD_GLASS, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.BROWN_STAINED_LEAD_GLASS, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.CYAN_STAINED_LEAD_GLASS, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.GRAY_STAINED_LEAD_GLASS, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.GREEN_STAINED_LEAD_GLASS, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.LIGHT_BLUE_STAINED_LEAD_GLASS, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.LIGHT_GRAY_STAINED_LEAD_GLASS, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.LIME_STAINED_LEAD_GLASS, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.MAGENTA_STAINED_LEAD_GLASS, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.ORANGE_STAINED_LEAD_GLASS, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.PINK_STAINED_LEAD_GLASS, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.PURPLE_STAINED_LEAD_GLASS, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.RED_STAINED_LEAD_GLASS, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.WHITE_STAINED_LEAD_GLASS, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.YELLOW_STAINED_LEAD_GLASS, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.LEAD_GLASS, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.BLUE_STAINED_LEAD_GLASS, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.BLACK_STAINED_LEAD_GLASS, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.BROWN_STAINED_LEAD_GLASS, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.CYAN_STAINED_LEAD_GLASS, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.GRAY_STAINED_LEAD_GLASS, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.GREEN_STAINED_LEAD_GLASS, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.LIGHT_BLUE_STAINED_LEAD_GLASS, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.LIGHT_GRAY_STAINED_LEAD_GLASS, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.LIME_STAINED_LEAD_GLASS, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.MAGENTA_STAINED_LEAD_GLASS, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.ORANGE_STAINED_LEAD_GLASS, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.PINK_STAINED_LEAD_GLASS, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.PURPLE_STAINED_LEAD_GLASS, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.RED_STAINED_LEAD_GLASS, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.WHITE_STAINED_LEAD_GLASS, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.YELLOW_STAINED_LEAD_GLASS, RenderType.translucent());
         
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.LEAD_GLASS_PANE, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.BLUE_STAINED_LEAD_GLASS_PANE, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.BLACK_STAINED_LEAD_GLASS_PANE, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.BROWN_STAINED_LEAD_GLASS_PANE, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.CYAN_STAINED_LEAD_GLASS_PANE, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.GRAY_STAINED_LEAD_GLASS_PANE, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.GREEN_STAINED_LEAD_GLASS_PANE, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.LIGHT_BLUE_STAINED_LEAD_GLASS_PANE, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.LIGHT_GRAY_STAINED_LEAD_GLASS_PANE, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.LIME_STAINED_LEAD_GLASS_PANE, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.MAGENTA_STAINED_LEAD_GLASS_PANE, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.ORANGE_STAINED_LEAD_GLASS_PANE, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.PINK_STAINED_LEAD_GLASS_PANE, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.PURPLE_STAINED_LEAD_GLASS_PANE, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.RED_STAINED_LEAD_GLASS_PANE, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.WHITE_STAINED_LEAD_GLASS_PANE, RenderLayer.getTranslucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.YELLOW_STAINED_LEAD_GLASS_PANE, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.LEAD_GLASS_PANE, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.BLUE_STAINED_LEAD_GLASS_PANE, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.BLACK_STAINED_LEAD_GLASS_PANE, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.BROWN_STAINED_LEAD_GLASS_PANE, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.CYAN_STAINED_LEAD_GLASS_PANE, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.GRAY_STAINED_LEAD_GLASS_PANE, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.GREEN_STAINED_LEAD_GLASS_PANE, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.LIGHT_BLUE_STAINED_LEAD_GLASS_PANE, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.LIGHT_GRAY_STAINED_LEAD_GLASS_PANE, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.LIME_STAINED_LEAD_GLASS_PANE, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.MAGENTA_STAINED_LEAD_GLASS_PANE, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.ORANGE_STAINED_LEAD_GLASS_PANE, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.PINK_STAINED_LEAD_GLASS_PANE, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.PURPLE_STAINED_LEAD_GLASS_PANE, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.RED_STAINED_LEAD_GLASS_PANE, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.WHITE_STAINED_LEAD_GLASS_PANE, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModDecorativeBlocks.YELLOW_STAINED_LEAD_GLASS_PANE, RenderType.translucent());
 
-        BlockRenderLayerMap.INSTANCE.putBlock(ModResourceItems.REEDS, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModResourceItems.REEDS, RenderType.cutout());
     }
 
     private void registerDyeableItem(Item item) {

@@ -31,7 +31,7 @@ public abstract class CropBlockMixin {
 
     @Inject(at = @At("TAIL"), method = "canPlantOnTop", cancellable = true)
     private void canPlantOnTop(BlockState floor, BlockGetter world, BlockPos pos, CallbackInfoReturnable<Boolean> cir, @Local BlockState blockState) {
-        if (floor.isIn(BlockTagsME.FARMLANDS) || floor.isIn(TagKey.of(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "farmlands")))){
+        if (floor.is(BlockTagsME.FARMLANDS) || floor.is(TagKey.create(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "farmlands")))){
             cir.setReturnValue(true);
         }
     }

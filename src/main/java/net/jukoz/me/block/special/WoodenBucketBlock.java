@@ -1,6 +1,6 @@
 package net.jukoz.me.block.special;
 
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
@@ -24,7 +24,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.level.block.Block;
@@ -33,15 +33,16 @@ import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import com.mojang.math.Axis;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class WoodenBucketBlock extends Block implements SimpleWaterloggedBlock {
     private static final EnumProperty<Direction> HORIZONTAL_FACING= BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty HANGING = BlockStateProperties.HANGING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public WoodenBucketBlock(Settings settings) {
+    public WoodenBucketBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(this.getDefaultState().with(HORIZONTAL_FACING, Direction.NORTH).with(HANGING, false).with(WATERLOGGED, false));
+        this.setDefaultState(this.defaultBlockState().with(HORIZONTAL_FACING, Direction.NORTH).with(HANGING, false).with(WATERLOGGED, false));
     }
 
     @Override
@@ -51,7 +52,7 @@ public class WoodenBucketBlock extends Block implements SimpleWaterloggedBlock {
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(HORIZONTAL_FACING, rotation.rotate(state.get(HORIZONTAL_FACING)));
+        return state.setValue(HORIZONTAL_FACING, rotation.rotate(state.get(HORIZONTAL_FACING)));
     }
 
     @Override
@@ -72,8 +73,8 @@ public class WoodenBucketBlock extends Block implements SimpleWaterloggedBlock {
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (player.getStackInHand(player.getActiveHand()).isEmpty() && !player.isCreative()){
-            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+        if (player.getItemInHand(player.getUsedItemHand()).isEmpty() && !player.isCreative()){
+            world.setBlock(pos, Blocks.AIR.defaultBlockState());
             player.equipStack(EquipmentSlot.MAINHAND,  new ItemStack(ModDecorativeBlocks.WOODEN_BUCKET.asItem()));
             world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_CHICKEN_EGG, SoundSource.BLOCKS, 0.5f, world.random.nextFloat() * 0.1f - 1.0f);
             return InteractionResult.PASS;
@@ -84,13 +85,13 @@ public class WoodenBucketBlock extends Block implements SimpleWaterloggedBlock {
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        Direction[] var3 = ctx.getPlacementDirections();
+        Direction[] var3 = ctx.getNearestLookingDirections();
         int var4 = var3.length;
 
         for(int var5 = 0; var5 < var4; ++var5) {
             Direction direction = var3[var5];
             if (direction.getAxis() == Direction.Axis.Y) {
-                return this.getDefaultState().with(HANGING, direction == Direction.UP).with(HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
+                return this.defaultBlockState().with(HANGING, direction == Direction.UP).with(HORIZONTAL_FACING, ctx.getHorizontalDirection()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
             }
         }
 
@@ -105,9 +106,9 @@ public class WoodenBucketBlock extends Block implements SimpleWaterloggedBlock {
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         if(state.get(HANGING)){
-            return Block.createCuboidShape(4, 0, 4, 12, 16, 12);
+            return Block.box(4, 0, 4, 12, 16, 12);
         } else {
-            return Block.createCuboidShape(4, 0, 4, 12, 10, 12);
+            return Block.box(4, 0, 4, 12, 10, 12);
         }
     }
 
@@ -121,6 +122,6 @@ public class WoodenBucketBlock extends Block implements SimpleWaterloggedBlock {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
 
-        return attachedDirection(state).getOpposite() == direction && !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+        return attachedDirection(state).getOpposite() == direction && !state.canPlaceAt(world, pos) ? Blocks.AIR.defaultBlockState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 }

@@ -4,7 +4,6 @@ import net.jukoz.me.entity.beasts.warg.WargEntity;
 import net.jukoz.me.compat.client.render.MEFeatureRenderer;
 import net.jukoz.me.item.MEComponents;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.jukoz.me.compat.client.render.equipment.EquipmentRenderer;
 import net.jukoz.me.compat.client.render.LoadedEntityModelsCompat;
@@ -20,6 +19,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.item.EquipmentItemsME;
 import net.jukoz.me.item.dataComponents.MountArmorAddonComponent;
+import net.minecraft.client.renderer.RenderType;
 
 public class WargArmorBackSkullFeatureRenderer extends MEFeatureRenderer<WargEntity, WargEntityRenderState, WargModel> {
     private final WargArmorTopAddonsModel model;
@@ -35,8 +35,8 @@ public class WargArmorBackSkullFeatureRenderer extends MEFeatureRenderer<WargEnt
 
         MountArmorAddonComponent component = MEComponents.get(itemStack, MEComponents.MOUNT_ARMOR_DATA);
 
-        if(component != null && component.topArmorAddon() && itemStack.isOf(EquipmentItemsME.WARG_GUNDABAD_PLATE_ARMOR)) {
-            VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(new ResourceLocation(MiddleEarth.MOD_ID, "textures/entities/warg/feature/warg_armor_addons.png")), true, itemStack.hasGlint());
+        if(component != null && component.topArmorAddon() && itemStack.is(EquipmentItemsME.WARG_GUNDABAD_PLATE_ARMOR)) {
+            VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderType.armorCutoutNoCull(new ResourceLocation(MiddleEarth.MOD_ID, "textures/entities/warg/feature/warg_armor_addons.png")), true, itemStack.hasGlint());
 
             model.setAngles(state);
             model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);

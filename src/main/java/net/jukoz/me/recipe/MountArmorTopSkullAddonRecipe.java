@@ -11,7 +11,7 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.RegistryWrapper;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.level.Level;
 import net.jukoz.me.utils.ItemTagsME;
 
@@ -27,21 +27,21 @@ public class MountArmorTopSkullAddonRecipe extends CustomRecipe {
         ItemStack itemStackSkull= ItemStack.EMPTY;
 
         for(int i = 0; i < input.size(); ++i) {
-            ItemStack itemStack2 = input.getStack(i);
+            ItemStack itemStack2 = input.getItem(i);
             if (!itemStack2.isEmpty()) {
-                if (itemStack2.isOf(EquipmentItemsME.WARG_MORDOR_PLATE_ARMOR) || itemStack2.isOf(EquipmentItemsME.WARG_GUNDABAD_PLATE_ARMOR)) {
+                if (itemStack2.is(EquipmentItemsME.WARG_MORDOR_PLATE_ARMOR) || itemStack2.is(EquipmentItemsME.WARG_GUNDABAD_PLATE_ARMOR)) {
                     if (!itemStackArmor.isEmpty()) {
                         return false;
                     }
                     itemStackArmor = itemStack2;
                 }
-                else if (itemStack2.isOf(Items.STICK)) {
+                else if (itemStack2.is(Items.STICK)) {
                     if (!itemStackStick.isEmpty()) {
                         return false;
                     }
                     itemStackStick = itemStack2;
                 }
-                else if (itemStack2.isOf(Items.SKELETON_SKULL)) {
+                else if (itemStack2.is(Items.SKELETON_SKULL)) {
                     if (!itemStackSkull.isEmpty()) {
                         return false;
                     }
@@ -60,9 +60,9 @@ public class MountArmorTopSkullAddonRecipe extends CustomRecipe {
         ItemStack itemStack = ItemStack.EMPTY;
 
         for(int i = 0; i < input.size(); ++i) {
-            ItemStack itemStack2 = input.getStack(i);
+            ItemStack itemStack2 = input.getItem(i);
             if (!itemStack2.isEmpty()) {
-                if (itemStack2.isIn(ItemTagsME.WARG_ARMORS)) {
+                if (itemStack2.is(ItemTagsME.WARG_ARMORS)) {
                     if (!itemStack.isEmpty()) {
                         return ItemStack.EMPTY;
                     }

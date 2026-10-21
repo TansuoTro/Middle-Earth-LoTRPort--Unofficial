@@ -1,9 +1,9 @@
 package net.jukoz.me.registries.content.npctypes;
 
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryEntryLookup;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
@@ -26,7 +26,7 @@ public class NpcRegistry {
 
     public static final HashMap<EntityCategories, AttributePool> COMMON_NPC_ATTRIBUTES = new HashMap<>(){{
         put(EntityCategories.SHARED, new AttributePool().addElement(
-            AttributePoolElement.create(Attributes.GENERIC_MOVEMENT_SPEED, 0.25, 0.35)
+            AttributePoolElement.create(Attributes.MOVEMENT_SPEED, 0.25, 0.35)
         ));
     }};
 
@@ -193,7 +193,7 @@ public class NpcRegistry {
     private static void register(BootstrapContext<NpcType> context, HolderGetter<NpcType> registryEntryLookup, ResourceKey<NpcType> registryKey, NpcType element){
         DynamicRegistriesME.register(context, registryEntryLookup, registryKey, element);
         // [LANG datagen]
-        TranslationEntries.npcTypeEntries.add(registryKey.getValue().getPath());
+        TranslationEntries.npcTypeEntries.add(registryKey.location().getPath());
         TranslationEntries.spawnEggEntries.add(element.getId());
     }
 

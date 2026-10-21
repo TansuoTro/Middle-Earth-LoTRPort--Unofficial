@@ -28,7 +28,7 @@ public abstract class MinecraftClientMixin {
     @Inject(method = "setWorld", at = @At("HEAD"))
     private void resetGlintInNether(ClientLevel world, CallbackInfo ci) {
         if (ModClientConfigs.DISABLE_GLINT && world != null && ModDimensions.isInMiddleEarth(world)) {
-            this.options.getGlintStrength().setValue(0.0);
+            this.options.glintStrength().setValue(0.0);
         }
     }
 }

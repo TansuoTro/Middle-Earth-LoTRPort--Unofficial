@@ -44,9 +44,9 @@ public class ModOreFeature extends Feature<ModOreFeatureConfig> {
 
         for(int s = n; s <= n + q; ++s) {
             for(int t = p; t <= p + q; ++t) {
-                if (o <= structureWorldAccess.getTopY(Heightmap.Type.OCEAN_FLOOR_WG, s, t)) {
+                if (o <= structureWorldAccess.getTopY(Heightmap.Types.OCEAN_FLOOR_WG, s, t)) {
                     boolean result = this.generateVeinPart(structureWorldAccess, random, modOreFeatureConfig, d, e, h, j, l, m, n, o, p, q, r);
-                    structureWorldAccess.setBlockState(context.getOrigin(), context.getConfig().blockState, 2);
+                    structureWorldAccess.setBlock(context.getOrigin(), context.getConfig().blockState, 2);
                     return result;
                 }
             }
@@ -58,7 +58,7 @@ public class ModOreFeature extends Feature<ModOreFeatureConfig> {
     protected boolean generateVeinPart(WorldGenLevel world, RandomSource random, ModOreFeatureConfig config, double startX, double endX, double startZ, double endZ, double startY, double endY, int x, int y, int z, int horizontalSize, int verticalSize) {
         int i = 0;
         BitSet bitSet = new BitSet(horizontalSize * verticalSize * horizontalSize);
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
         int j = config.size;
         double[] ds = new double[j * 4];
 
@@ -125,12 +125,12 @@ public class ModOreFeature extends Feature<ModOreFeatureConfig> {
                                 if (u * u + w * w < 1.0) {
                                     for(int aa = p; aa <= s; ++aa) {
                                         double ab = ((double)aa + 0.5 - h) / d;
-                                        if (u * u + w * w + ab * ab < 1.0 && !world.isOutOfHeightLimit(v)) {
+                                        if (u * u + w * w + ab * ab < 1.0 && !world.isOutsideBuildHeight(v)) {
                                             int ac = t - x + (v - y) * horizontalSize + (aa - z) * horizontalSize * verticalSize;
                                             if (!bitSet.get(ac)) {
                                                 bitSet.set(ac);
                                                 mutable.set(t, v, aa);
-                                                if (world.isValidForSetBlock(mutable)) {
+                                                if (world.ensureCanWrite(mutable)) {
                                                     LevelChunkSection chunkSection = chunkSectionCache.getSection(mutable);
                                                     if (chunkSection != null) {
                                                         int ad = SectionPos.getLocalCoord(t);
@@ -143,7 +143,7 @@ public class ModOreFeature extends Feature<ModOreFeatureConfig> {
                                                             ModOreFeatureConfig.Target target = (ModOreFeatureConfig.Target)var57.next();
                                                             Objects.requireNonNull(chunkSectionCache);
                                                             if (shouldPlace(blockState, chunkSectionCache::getBlockState, random, config, target, mutable)) {
-                                                                chunkSection.setBlockState(ad, ae, af, target.state, false);
+                                                                chunkSection.setBlock(ad, ae, af, target.state, false);
                                                                 ++i;
                                                                 break;
                                                             }
@@ -173,7 +173,7 @@ public class ModOreFeature extends Feature<ModOreFeatureConfig> {
         return i > 0;
     }
 
-    public static boolean shouldPlace(BlockState state, Function<BlockPos, BlockState> posToState, RandomSource random, ModOreFeatureConfig config, ModOreFeatureConfig.Target target, BlockPos.Mutable pos) {
+    public static boolean shouldPlace(BlockState state, Function<BlockPos, BlockState> posToState, RandomSource random, ModOreFeatureConfig config, ModOreFeatureConfig.Target target, BlockPos.MutableBlockPos pos) {
         if (!target.target.test(state, random)) {
             return false;
         } else if (shouldNotDiscard(random, config.discardOnAirChance)) {

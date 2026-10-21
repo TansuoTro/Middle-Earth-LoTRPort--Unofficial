@@ -30,10 +30,10 @@ public class StructureManagerScreen extends AbstractContainerScreen<StructureMan
     public SearchBarWidget searchBarWidget;
     public Component runtimeDataText;
     public ResourceLocation dataIdentifier;
-    public ButtonWidget toInitializeToggleButton;
-    public ButtonWidget isEnabledToggleButton;
-    public ButtonWidget showAllButton;
-    public ButtonWidget respawnAllButton;
+    public Button toInitializeToggleButton;
+    public Button isEnabledToggleButton;
+    public Button showAllButton;
+    public Button respawnAllButton;
 
     public ArrayList<ResourceLocation> identifiers;
 
@@ -42,10 +42,10 @@ public class StructureManagerScreen extends AbstractContainerScreen<StructureMan
     public StructureManagerScreen(StructureManagerScreenHandler handler, Inventory playerInventory, Component title) {
         super(handler, playerInventory, title);
 
-        Level world = playerInventory.player.getWorld();
+        Level world = playerInventory.player.level();
 
         this.identifiers = new ArrayList<>();
-        for(ResourceKey<StructureManagerData> data : world.getRegistryManager().getOptional(DynamicRegistriesME.STRUCTURE_MANAGER_DATA).get().getKeys()){
+        for(ResourceKey<StructureManagerData> data : world.registryAccess().getOptional(DynamicRegistriesME.STRUCTURE_MANAGER_DATA).get().getKeys()){
             this.identifiers.add(data.getValue());
         }
 
@@ -58,7 +58,7 @@ public class StructureManagerScreen extends AbstractContainerScreen<StructureMan
 
         List<SearchBarResult> results = new ArrayList<>();
         for(ResourceLocation identifier : this.identifiers){
-            results.add(new SearchBarResult(Component.translatable(identifier.toTranslationKey("structure_manager_data")), identifier, SearchBarResultType.NORMAL, button -> selectIdentifier(identifier)));
+            results.add(new SearchBarResult(Component.translatable(identifier.toLanguageKey("structure_manager_data")), identifier, SearchBarResultType.NORMAL, button -> selectIdentifier(identifier)));
         }
 
         this.searchBarWidget = new SearchBarWidget(9, results, x -> updateScreenInformation(), 170);
@@ -66,19 +66,19 @@ public class StructureManagerScreen extends AbstractContainerScreen<StructureMan
         this.searchBarWidget.getAllButtons().forEach(this::addDrawableChild);
         addDrawableChild(this.searchBarWidget.getScreenClickButton());
 
-        toInitializeToggleButton = ButtonWidget.builder(Component.of("toInitializeToggleButton"),x -> toggleToInitialize()).build();
+        toInitializeToggleButton = Button.builder(Component.of("toInitializeToggleButton"),x -> toggleToInitialize()).build();
         net.jukoz.me.compat.client.gui.MEGui.setSize(toInitializeToggleButton, 15, 15);
         addDrawableChild(toInitializeToggleButton);
 
-        isEnabledToggleButton = ButtonWidget.builder(Component.of("isEnabledToggleButton"),x -> toggleEnable()).build();
+        isEnabledToggleButton = Button.builder(Component.of("isEnabledToggleButton"),x -> toggleEnable()).build();
         net.jukoz.me.compat.client.gui.MEGui.setSize(isEnabledToggleButton, 15, 15);
         addDrawableChild(isEnabledToggleButton);
 
-        showAllButton = ButtonWidget.builder(Component.of("showAll"),x -> handler.triggerGlowOnAllEntities()).build();
+        showAllButton = Button.builder(Component.of("showAll"),x -> handler.triggerGlowOnAllEntities()).build();
         net.jukoz.me.compat.client.gui.MEGui.setSize(showAllButton, 104, 20);
         addDrawableChild(showAllButton);
 
-        respawnAllButton = ButtonWidget.builder(Component.of("showAll"),x -> handler.triggerRespawnAllEntities()).build();
+        respawnAllButton = Button.builder(Component.of("showAll"),x -> handler.triggerRespawnAllEntities()).build();
         net.jukoz.me.compat.client.gui.MEGui.setSize(respawnAllButton, 104, 20);
         addDrawableChild(respawnAllButton);
     }
@@ -102,7 +102,7 @@ public class StructureManagerScreen extends AbstractContainerScreen<StructureMan
         int startY = 70;
 
         int managerSearchBarWidgetStartY = startY;
-        managerSearchBarWidgetStartY += this.searchBarWidget.drawSearchBar(context, centerX - 5 - this.searchBarWidget.searchBarToggleButton.getWidth(), managerSearchBarWidgetStartY, textRenderer);
+        managerSearchBarWidgetStartY += this.searchBarWidget.drawSearchBar(context, centerX - 5 - this.searchBarWidget.searchBarToggleButton.getWidth(), managerSearchBarWidgetStartY, font);
         this.searchBarWidget.setEndY(startY + 500);
 
         if(this.searchBarWidget.searchIsToggled()) {
@@ -111,10 +111,10 @@ public class StructureManagerScreen extends AbstractContainerScreen<StructureMan
 
         Component selectedIdText = (dataIdentifier == null)
                 ? Component.translatable("N/A")
-                : Component.translatable(dataIdentifier.toTranslationKey("structure_manager_data"));
+                : Component.translatable(dataIdentifier.toLanguageKey("structure_manager_data"));
         this.runtimeDataText = Component.translatable("ui.middle-earth.structure_manager.label_selected_id", selectedIdText).formatted(ChatFormatting.BOLD).formatted(ChatFormatting.WHITE);
 
-        context.drawText(this.textRenderer, this.runtimeDataText, centerX + 5, startY + 5, TEXT_COLOR, false);
+        context.drawText(this.font, this.runtimeDataText, centerX + 5, startY + 5, TEXT_COLOR, false);
 
         startY += 20;
         toInitializeToggleButton.setPosition(centerX + 5, startY);
@@ -139,9 +139,9 @@ public class StructureManagerScreen extends AbstractContainerScreen<StructureMan
             respawnAllButton.active = true;
         }
 
-        context.drawTexture(TEXTURE, toInitializeToggleButton.getX(), toInitializeToggleButton.getY(), 1, toInitializeToggleButtonUvY, toInitializeToggleButton.getWidth(), toInitializeToggleButton.getHeight(), 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, toInitializeToggleButton.getX(), toInitializeToggleButton.getY(), 1, toInitializeToggleButtonUvY, toInitializeToggleButton.getWidth(), toInitializeToggleButton.getHeight(), 256, 256);
         if(toInitializeToggleButton.isMouseOver(mouseX, mouseY))
-            context.drawTooltip(this.textRenderer, Component.of("[SET TO TRUE] Before saving a structure."), toInitializeToggleButton.getX(), toInitializeToggleButton.getY());
+            context.drawTooltip(this.font, Component.of("[SET TO TRUE] Before saving a structure."), toInitializeToggleButton.getX(), toInitializeToggleButton.getY());
 
         isEnabledToggleButton.setPosition(centerX + 25, startY);
         boolean isEnabledToggleButtonFocused = isEnabledToggleButton.isMouseOver(mouseX, mouseY) || isEnabledToggleButton.isFocused();
@@ -150,23 +150,23 @@ public class StructureManagerScreen extends AbstractContainerScreen<StructureMan
             isEnabledToggleButtonUvY = isEnabledToggleButtonFocused ? 52 : 35;
         else if(isEnabledToggleButtonFocused)
             isEnabledToggleButtonUvY = 18;
-        context.drawTexture(TEXTURE, isEnabledToggleButton.getX(), isEnabledToggleButton.getY(), 18, isEnabledToggleButtonUvY, isEnabledToggleButton.getWidth(), isEnabledToggleButton.getHeight(), 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, isEnabledToggleButton.getX(), isEnabledToggleButton.getY(), 18, isEnabledToggleButtonUvY, isEnabledToggleButton.getWidth(), isEnabledToggleButton.getHeight(), 256, 256);
         if(isEnabledToggleButton.isMouseOver(mouseX, mouseY))
-            context.drawTooltip(this.textRenderer, Component.of("[SET TO FALSE] Before saving a structure."), isEnabledToggleButton.getX(), isEnabledToggleButton.getY());
+            context.drawTooltip(this.font, Component.of("[SET TO FALSE] Before saving a structure."), isEnabledToggleButton.getX(), isEnabledToggleButton.getY());
 
         startY += 15;
         showAllButton.setPosition(centerX + 5, startY);
-        context.drawTexture(TEXTURE, showAllButton.getX(), showAllButton.getY(), 35, showAllButton.isMouseOver(mouseX, mouseY) ? 23 : 1, showAllButton.getWidth(), showAllButton.getHeight(), 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, showAllButton.getX(), showAllButton.getY(), 35, showAllButton.isMouseOver(mouseX, mouseY) ? 23 : 1, showAllButton.getWidth(), showAllButton.getHeight(), 256, 256);
         Component showAllText = Component.translatable("Show all");
-        int showAllStartX = showAllButton.getX() + (showAllButton.getWidth() / 2) - (textRenderer.getWidth(showAllText) / 2);
-        context.drawText(textRenderer, showAllText,showAllStartX,showAllButton.getY() + 6, Color.BLACK.getRGB(), false);
+        int showAllStartX = showAllButton.getX() + (showAllButton.getWidth() / 2) - (font.getWidth(showAllText) / 2);
+        context.drawText(font, showAllText,showAllStartX,showAllButton.getY() + 6, Color.BLACK.getRGB(), false);
 
         startY += showAllButton.getHeight() + 4;
         respawnAllButton.setPosition(centerX + 5, startY);
-        context.drawTexture(TEXTURE, respawnAllButton.getX(), respawnAllButton.getY(), 35, respawnAllButton.isMouseOver(mouseX, mouseY) ? 23 : 1, respawnAllButton.getWidth(), respawnAllButton.getHeight(), 256, 256);
+        net.jukoz.me.compat.mcforge.GuiCompat.drawTexture(context, TEXTURE, respawnAllButton.getX(), respawnAllButton.getY(), 35, respawnAllButton.isMouseOver(mouseX, mouseY) ? 23 : 1, respawnAllButton.getWidth(), respawnAllButton.getHeight(), 256, 256);
         Component respawnAllText = Component.translatable("Respawn all");
-        int respawnAllStartX = respawnAllButton.getX() + (respawnAllButton.getWidth() / 2) - (textRenderer.getWidth(respawnAllText) / 2);
-        context.drawText(textRenderer, respawnAllText, respawnAllStartX,respawnAllButton.getY() + 6, Color.BLACK.getRGB(), false);
+        int respawnAllStartX = respawnAllButton.getX() + (respawnAllButton.getWidth() / 2) - (font.getWidth(respawnAllText) / 2);
+        context.drawText(font, respawnAllText, respawnAllStartX,respawnAllButton.getY() + 6, Color.BLACK.getRGB(), false);
     }
 
     @Override

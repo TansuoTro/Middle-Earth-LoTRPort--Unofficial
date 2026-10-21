@@ -17,11 +17,11 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccess;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.jukoz.me.utils.BlockTagsME;
 import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
@@ -37,19 +37,19 @@ import net.minecraft.world.phys.shapes.Shapes;
  * pieces are implemented here.
  */
 public class CurtainsBlock extends MultifaceBlock implements SimpleWaterloggedBlock {
-    public static final BooleanProperty TIP = BooleanProperty.of("tip");
+    public static final BooleanProperty TIP = BooleanProperty.create("tip");
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private static final Map<Direction, VoxelShape> FACING_SHAPES = Map.of(
-            Direction.NORTH, Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 3.0, 3.0),
-            Direction.SOUTH, Block.createCuboidShape(0.0, 0.0, 13.0, 16.0, 3.0, 16.0),
-            Direction.WEST, Block.createCuboidShape(0.0, 0.0, 0.0, 3.0, 3.0, 16.0),
-            Direction.EAST, Block.createCuboidShape(13.0, 0.0, 0.0, 16.0, 3.0, 16.0));
+            Direction.NORTH, Block.box(0.0, 0.0, 0.0, 16.0, 3.0, 3.0),
+            Direction.SOUTH, Block.box(0.0, 0.0, 13.0, 16.0, 3.0, 16.0),
+            Direction.WEST, Block.box(0.0, 0.0, 0.0, 3.0, 3.0, 16.0),
+            Direction.EAST, Block.box(13.0, 0.0, 0.0, 16.0, 3.0, 16.0));
 
     private final Function<BlockState, VoxelShape> shapeFunction;
     private final MultifaceSpreader grower = new MultifaceSpreader(this);
 
-    public CurtainsBlock(BlockBehaviour.Settings settings) {
+    public CurtainsBlock(BlockBehaviour.Properties settings) {
         super(settings);
         shapeFunction = createShapeFunction();
     }
@@ -65,11 +65,11 @@ public class CurtainsBlock extends MultifaceBlock implements SimpleWaterloggedBl
         Level world = ctx.getWorld();
         BlockPos blockPos = ctx.getBlockPos();
         BlockState blockState = world.getBlockState(blockPos);
-        BlockState returnState = (BlockState) Arrays.stream(ctx.getPlacementDirections()).map((direction) -> {
+        BlockState returnState = (BlockState) Arrays.stream(ctx.getNearestLookingDirections()).map((direction) -> {
             return this.withDirection(blockState, world, blockPos, direction);
         }).filter(Objects::nonNull).findFirst().orElse((BlockState) null);
-        if (returnState != null) returnState = returnState.with(TIP,
-                !world.getBlockState(blockPos.down()).isIn(BlockTagsME.CURTAINS));
+        if (returnState != null) returnState = returnState.setValue(TIP,
+                !world.getBlockState(blockPos.below()).is(BlockTagsME.CURTAINS));
         return returnState;
     }
 
@@ -91,35 +91,35 @@ public class CurtainsBlock extends MultifaceBlock implements SimpleWaterloggedBl
     @Override
     public boolean canReplace(BlockState state, BlockPlaceContext context) {
         boolean sneaking = false;
-        if (context.getPlayer() != null) sneaking = context.getPlayer().isSneaking();
+        if (context.getPlayer() != null) sneaking = context.getPlayer().isShiftKeyDown();
         boolean placeVertically = false;
         if (context.getSide() == Direction.UP) {
-            if (!context.getStack().isOf(this.asItem())) {
+            if (!context.getItem().is(this.asItem())) {
                 placeVertically = true;
             } else {
-                BlockState neighbor = context.getWorld().getBlockState(context.getBlockPos().up());
-                if (context.getStack().isOf(neighbor.getBlock().asItem()) || neighbor.isAir()) {
+                BlockState neighbor = context.getWorld().getBlockState(context.getBlockPos().above());
+                if (context.getItem().is(neighbor.getBlock().asItem()) || neighbor.isAir()) {
                     placeVertically = true;
                 }
             }
         } else if (context.getSide() == Direction.DOWN) {
-            if (!context.getStack().isOf(this.asItem())) {
+            if (!context.getItem().is(this.asItem())) {
                 placeVertically = true;
             } else {
-                BlockState neighbor = context.getWorld().getBlockState(context.getBlockPos().down());
-                if (context.getStack().isOf(neighbor.getBlock().asItem()) || neighbor.isAir()) {
+                BlockState neighbor = context.getWorld().getBlockState(context.getBlockPos().below());
+                if (context.getItem().is(neighbor.getBlock().asItem()) || neighbor.isAir()) {
                     placeVertically = true;
                 }
             }
         }
         if (sneaking) placeVertically = !placeVertically;
-        return isNotFullBlock(state) && !placeVertically && context.getStack().isOf(this.asItem());
+        return isNotFullBlock(state) && !placeVertically && context.getItem().is(this.asItem());
     }
 
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         BlockState updated = super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
-        return updated.with(TIP, !world.getBlockState(pos.down()).isIn(BlockTagsME.CURTAINS));
+        return updated.setValue(TIP, !world.getBlockState(pos.below()).is(BlockTagsME.CURTAINS));
     }
 
     @Override

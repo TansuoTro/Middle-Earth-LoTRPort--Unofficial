@@ -31,7 +31,7 @@ public class BoulderEntity extends ThrowableProjectile {
 
     protected void onEntityHit(EntityHitResult entityHitResult) {
         super.onEntityHit(entityHitResult);
-        if (this.getWorld().isClient) {
+        if (this.level().isClientSide) {
             return;
         }
         Entity entity = entityHitResult.getEntity();
@@ -39,7 +39,7 @@ public class BoulderEntity extends ThrowableProjectile {
         if(this.getOwner() != null)  {
             Entity entity2 = this.getOwner();
             if (entity2 instanceof LivingEntity && entity2 != null) {
-                entity.damage(this.getDamageSources().mobProjectile(this, (LivingEntity) entity2), 10.0f);
+                entity.damage(this.damageSources().mobProjectile(this, (LivingEntity) entity2), 10.0f);
                 this.applyDamageEffects((LivingEntity)entity2, entity);
             }
         }
@@ -47,8 +47,8 @@ public class BoulderEntity extends ThrowableProjectile {
 
     protected void onCollision(HitResult hitResult) {
         super.onCollision(hitResult);
-        if (!this.getWorld().isClient) {
-            this.getWorld().createExplosion((Entity)this, this.getX(), this.getY(), this.getZ(), 0.5f, false, Level.ExplosionSourceType.MOB);
+        if (!this.level().isClientSide) {
+            this.level().createExplosion((Entity)this, this.getX(), this.getY(), this.getZ(), 0.5f, false, Level.ExplosionInteraction.MOB);
             this.discard();
         }
     }

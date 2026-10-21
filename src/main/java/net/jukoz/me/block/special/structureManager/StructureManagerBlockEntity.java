@@ -87,7 +87,7 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
         this.structureManagerIdentifier = structureManagerId;
         this.enabled = isActive;
         this.toInitialize = toInitialize;
-        updateListeners();
+        sendBlockUpdated();
     }
 
     @Override
@@ -158,7 +158,7 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
     public void respawnAllEntities() {
         if(structureNestList == null)
             return;
-        if(world == null || world.isClient)
+        if(world == null || world.isClientSide)
             return;
         for(var nest : structureNestList.getManagers()){
             nest.forceRespawn(managerData, (ServerLevel) world, pos);
@@ -171,7 +171,7 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
 
         SpawnNestNodeData data = managerData.getNpcSpawnNest(nestId);
         if (data == null || this.structureNestList == null) return false;
-        if (this.structureNestList.getManagers().stream().anyMatch(nest -> nest.getOriginPos().equals(nestPos))) return true;
+        if (this.structureNestList.getManagers().stream().contains(nest -> nest.getOriginPos().equals(nestPos))) return true;
         SpawnNestManager manager = new SpawnNestManager(data, nestPos, spawnRadius);
         this.structureNestList.addNest(manager);
         markDirty();
@@ -179,9 +179,9 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
     }
 
     public static void triggerDeathSignal(BlockPos pos, LivingEntity entity) {
-        if(entity.getWorld().isClient)
+        if(entity.level().isClientSide)
             return;
-        if(entity.getWorld().getBlockEntity(pos) instanceof StructureManagerBlockEntity blockEntity
+        if(entity.level().getBlockEntity(pos) instanceof StructureManagerBlockEntity blockEntity
                 && !blockEntity.isRemoved() && blockEntity.structureNestList != null){
             blockEntity.structureNestList.computeDeath(entity);
             blockEntity.world.markDirty(pos);
@@ -189,13 +189,13 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
     }
 
     private void tickEvent(Level world, BlockPos blockPos, BlockState blockState) {
-        if (world.isClient) return;
-        if(!world.isClient && worldWasSet){
+        if (world.isClientSide) return;
+        if(!world.isClientSide && worldWasSet){
             tryToInitializeManager(world);
             this.worldWasSet = false;
         }
 
-        if (!world.isClient && !this.registered) {
+        if (!world.isClientSide && !this.registered) {
             StructureManagerService.register(this);
             this.registered = true;
         }
@@ -227,7 +227,7 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
     }
 
     private void tryToInitializeManager(Level world){
-        if(world.isClient)
+        if(world.isClientSide)
             return;
         if(!toInitialize || enabled)
             return;
@@ -247,22 +247,22 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
 
     public void setInitializationState(boolean toInitialize) {
         this.toInitialize = toInitialize;
-        updateListeners();
+        sendBlockUpdated();
     }
 
     public void setActiveState(boolean activate) {
         this.enabled = activate;
-        updateListeners();
+        sendBlockUpdated();
     }
 
     public void setStructureManagerId(ResourceLocation identifier) {
         this.structureManagerIdentifier = identifier;
-        updateListeners();
+        sendBlockUpdated();
     }
 
-    private void updateListeners() {
+    private void sendBlockUpdated() {
         this.markDirty();
-        this.world.updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), Block.NOTIFY_ALL);
+        this.world.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), (Block.UPDATE_NEIGHBORS | Block.UPDATE_CLIENTS));
     }
 
     public void fetchBeds(){

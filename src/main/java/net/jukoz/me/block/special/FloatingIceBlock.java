@@ -15,13 +15,14 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccess;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class FloatingIceBlock extends Block {
-    protected static final VoxelShape SHAPE = Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 1.5, 15.0);
+    protected static final VoxelShape SHAPE = Block.box(1.0, 0.0, 1.0, 15.0, 1.5, 15.0);
 
-    public FloatingIceBlock(Settings settings) {
+    public FloatingIceBlock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
@@ -39,14 +40,14 @@ public class FloatingIceBlock extends Block {
 
     @Override
     public boolean canPlaceAt(BlockState state, LevelReader world, BlockPos pos) {
-        FluidState fluidState = world.getFluidState(pos.down());
+        FluidState fluidState = world.getFluidState(pos.below());
         FluidState fluidState2 = world.getFluidState(pos);
         return fluidState.getFluid() == Fluids.WATER && fluidState2.getFluid() == Fluids.EMPTY;
     }
 
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
-        return !this.canPlaceAt(state, world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+        return !this.canPlaceAt(state, world, pos) ? Blocks.AIR.defaultBlockState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 
     }
 }

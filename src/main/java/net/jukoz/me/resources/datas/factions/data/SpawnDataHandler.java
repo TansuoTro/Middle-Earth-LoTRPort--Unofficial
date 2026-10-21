@@ -58,7 +58,7 @@ public class SpawnDataHandler {
     public static String getTranslatableKey(ResourceLocation id){
         if(id == null)
             return null;
-        return "spawn.".concat(id.toTranslationKey());
+        return "spawn.".concat(id.toLanguageKey());
     }
 
     public List<SpawnData> getSpawnList(){

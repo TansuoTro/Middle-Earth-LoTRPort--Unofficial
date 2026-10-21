@@ -4,7 +4,7 @@ import net.jukoz.me.entity.beasts.AbstractBeastEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.level.pathfinder.PathNode;
+import net.minecraft.world.level.pathfinder.Node;
 
 public class ChargeAttackGoal extends Goal {
     private AbstractBeastEntity mob;
@@ -25,7 +25,7 @@ public class ChargeAttackGoal extends Goal {
         return this.mob.getChargeTimeout() == 0 &&
                 (mob.getTarget() != null) &&
                 this.mob.getRandom().nextInt(ChargeAttackGoal.toGoalTicks(40)) == 0 &&
-                this.mob.squaredDistanceTo(mob.getTarget()) >= 30 &&
+                this.mob.distanceTo(mob.getTarget()) >= 30 &&
                 canNavigateToEntity(this.mob.getTarget()) &&
                 this.mob.canCharge();
     }

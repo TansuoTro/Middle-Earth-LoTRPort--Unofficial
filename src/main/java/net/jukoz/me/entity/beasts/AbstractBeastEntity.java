@@ -77,12 +77,12 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
 
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(CHARGING, false);
-        this.dataTracker.startTracking(SITTING, false);
-        this.dataTracker.startTracking(CHEST, false);
-        this.dataTracker.startTracking(RUNNING, false);
-        this.dataTracker.startTracking(FIGHTING, false);
-        this.dataTracker.startTracking(TAMENESS, 75);
+        this.entityData.define(CHARGING, false);
+        this.entityData.define(SITTING, false);
+        this.entityData.define(CHEST, false);
+        this.entityData.define(RUNNING, false);
+        this.entityData.define(FIGHTING, false);
+        this.entityData.define(TAMENESS, 75);
     }
 
     @Override
@@ -102,7 +102,7 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
     @Override
     public void writeCustomDataToNbt(CompoundTag nbt) {
         super.writeCustomDataToNbt(nbt);
-        if (!this.items.getStack(1).isEmpty()) nbt.put("ArmorItem", this.items.getStack(1).writeNbt(new CompoundTag()));
+        if (!this.items.getItem(1).isEmpty()) nbt.put("ArmorItem", this.items.getItem(1).writeNbt(new CompoundTag()));
         nbt.putBoolean("Sitting", this.isSitting());
         nbt.putBoolean("ChestedBeast", this.hasChest());
         nbt.putInt("Tameness", this.getTameness());
@@ -110,7 +110,7 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
             ListTag nbtList = new ListTag();
 
             for (int i = 0; i < this.items.size(); i++) {
-                ItemStack itemStack = this.items.getStack(i);
+                ItemStack itemStack = this.items.getItem(i);
                 if (!itemStack.isEmpty()) {
                     CompoundTag nbtCompound = new CompoundTag();
                     nbtCompound.putByte("Slot", (byte) i);
@@ -129,7 +129,7 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
         this.setSitting(nbt.getBoolean("Sitting"));
         this.setHasChest(nbt.getBoolean("ChestedBeast"));
         this.setTameness(nbt.getInt("Tameness"));
-        this.onChestedStatusChanged();
+        this.createInventory();
         if (this.hasChest()) {
             ListTag nbtList = nbt.getList("Items", 10);
 
@@ -174,7 +174,7 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
     }
 
     public final boolean cannotFollowOwner() {
-        return this.isSitting() || this.hasVehicle() || this.isLeashed() || this.getOwner() != null && this.getOwner().isSpectator();
+        return this.isSitting() || this.isPassenger() || this.isLeashed() || this.getOwner() != null && this.getOwner().isSpectator();
     }
 
     public boolean shouldAttackWhenMounted() {
@@ -182,7 +182,7 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
     }
 
     public boolean canCharge() {
-        return !this.isSitting() && !this.hasPassengers();
+        return !this.isSitting() && !this.isVehicle();
     }
 
     @Override
@@ -195,7 +195,7 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
     }
 
     protected boolean isClientWorld() {
-        return this.getWorld().isClient();
+        return this.level().isClientSide();
     }
 
     public boolean isOwner(LivingEntity entity) {
@@ -209,14 +209,14 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
      */
     public boolean isValidTarget(Entity entity) {
         return entity instanceof LivingEntity livingEntity &&                           // Entity is LivingEntity
-                !this.getPassengerList().contains(livingEntity) &&                      // Is not a passenger
+                !this.getPassengers().contains(livingEntity) &&                      // Is not a passenger
                 !(this.getOwner() != null && this.getOwner().equals(livingEntity)) &&   // Is not its owner
                 !(livingEntity instanceof Player player && player.isCreative());  // Is not a creative player
     }
 
     @Override
     public boolean isInvulnerableTo(DamageSource source) {
-        if (source.isOf(DamageTypes.IN_WALL) && this.hasPassengers() && getControllingPassenger() instanceof NpcEntity) {
+        if (source.is(DamageTypes.IN_WALL) && this.isVehicle() && getControllingPassenger() instanceof NpcEntity) {
             return true;
         }
         return super.isInvulnerableTo(source);
@@ -226,42 +226,42 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
     // region SynchedEntityData
 
     public int getTameness() {
-        return this.dataTracker.get(TAMENESS);
+        return this.entityData.get(TAMENESS);
     }
     public void setTameness(int tameness) {
-        this.dataTracker.set(TAMENESS, tameness);
+        this.entityData.set(TAMENESS, tameness);
     }
 
     public boolean hasChest() {
-        return this.dataTracker.get(CHEST);
+        return this.entityData.get(CHEST);
     }
 
     public void setHasChest(boolean hasChest) {
-        this.dataTracker.set(CHEST, hasChest);
+        this.entityData.set(CHEST, hasChest);
     }
 
     public boolean isRunning() {
-        return this.dataTracker.get(RUNNING);
+        return this.entityData.get(RUNNING);
     }
 
     public void setRunning(boolean running) {
-        this.dataTracker.set(RUNNING, running);
+        this.entityData.set(RUNNING, running);
     }
 
     public boolean isCharging() {
-        return this.dataTracker.get(CHARGING);
+        return this.entityData.get(CHARGING);
     }
 
     public void setCharging(boolean charging) {
-        this.dataTracker.set(CHARGING, charging);
+        this.entityData.set(CHARGING, charging);
     }
 
     public boolean isSitting() {
-        return this.dataTracker.get(SITTING);
+        return this.entityData.get(SITTING);
     }
 
     public void setSitting(boolean sitting) {
-        this.dataTracker.set(SITTING, sitting);
+        this.entityData.set(SITTING, sitting);
     }
 
     public boolean isFighting() {
@@ -316,7 +316,7 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
     }
 
     protected float getAttackDamage() {
-        return (float)this.getAttributeValue(Attributes.GENERIC_ATTACK_DAMAGE);
+        return (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
     }
 
     // endregion
@@ -344,14 +344,14 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
                 if (stack.isEmpty()) {
                     if (AbstractBeastEntity.this.hasChest()) {
                         AbstractBeastEntity.this.setHasChest(false);
-                        AbstractBeastEntity.this.onChestedStatusChanged();
+                        AbstractBeastEntity.this.createInventory();
                     }
 
                     return true;
-                } else if (stack.isOf(Items.CHEST)) {
+                } else if (stack.is(Items.CHEST)) {
                     if (!AbstractBeastEntity.this.hasChest()) {
                         AbstractBeastEntity.this.setHasChest(true);
-                        AbstractBeastEntity.this.onChestedStatusChanged();
+                        AbstractBeastEntity.this.createInventory();
                     }
 
                     return true;
@@ -372,7 +372,7 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
         if (!player.isCreative()) {
             chest.decrement(1);
         }
-        this.onChestedStatusChanged();
+        this.createInventory();
     }
 
     protected void playAddChestSound() {
@@ -389,7 +389,7 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
         this.setSitting(false);
 
         if(this.getBrain() != null) {
-            this.getBrain().forget(MemoryModulesME.TAME);
+            this.getBrain().erase(MemoryModulesME.TAME);
         }
     }
 
@@ -423,12 +423,12 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
     public void tryBonding(Player player) {
         if(random.nextDouble() <= 0.1d || player.isCreative()) {
             this.tameBeast(player);
-            this.getWorld().sendEntityStatus(this, EntityEvent.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
+            this.level().sendEntityStatus(this, EntityEvent.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
 
             this.chargeTimeout = 0;
         }
         else {
-            this.getWorld().sendEntityStatus(this, EntityEvent.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES);
+            this.level().sendEntityStatus(this, EntityEvent.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES);
         }
     }
 
@@ -447,10 +447,10 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
 
     @Override
     public InteractionResult interactMob(Player player, InteractionHand hand) {
-        ItemStack itemStack = player.getStackInHand(hand);
+        ItemStack itemStack = player.getItemInHand(hand);
 
-        if(isBondingItem(player.getStackInHand(hand)) && !this.isTame() && this.isTamable(player)) {
-            if(!this.getWorld().isClient()) {
+        if(isBondingItem(player.getItemInHand(hand)) && !this.isTame() && this.isTamable(player)) {
+            if(!this.level().isClientSide()) {
                 this.tryBonding(player);
                 this.eat(player, hand, itemStack);
             }
@@ -458,21 +458,21 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
         }
 
         if(this.isTame()) {
-            if (this.isHorseArmor(itemStack) && this.items.getStack(1).isEmpty() && player == getOwner()) {
-                if (!getWorld().isClient) {
+            if (this.isHorseArmor(itemStack) && this.items.getItem(1).isEmpty() && player == getOwner()) {
+                if (!getWorld().isClientSide) {
                     ItemStack armor = itemStack.copy();
                     armor.setCount(1);
                     this.items.setStack(1, armor);
                     if (!player.getAbilities().creativeMode) itemStack.decrement(1);
                 }
-                return InteractionResult.success(getWorld().isClient);
+                return InteractionResult.success(getWorld().isClientSide);
             }
             if(isFoodItem(itemStack) && getOwner() == player) {
                 int tamenessIncrease;
 
-                FoodProperties component = itemStack.getItem().getFoodComponent();
+                FoodProperties component = itemStack.getItem().getFoodProperties();
                 if(component != null) {
-                    tamenessIncrease = component.getHunger();
+                    tamenessIncrease = component.getNutrition();
                 }
                 else {
                     tamenessIncrease = 4;
@@ -493,12 +493,12 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
                 return InteractionResult.SUCCESS;
             }
 
-            if (!this.hasChest() && itemStack.isOf(Items.CHEST) && canCarryChest()) {
+            if (!this.hasChest() && itemStack.is(Items.CHEST) && canCarryChest()) {
                 this.addChest(player, itemStack);
                 return InteractionResult.SUCCESS;
             }
 
-            if(!(isCommandItem(itemStack) || isBreedingItem(itemStack) || itemStack.isOf(Items.CHEST)) && this.isMountable()) {
+            if(!(isCommandItem(itemStack) || isBreedingItem(itemStack) || itemStack.is(Items.CHEST)) && this.isMountable()) {
                 return super.interactMob(player, hand);
             }
         }
@@ -513,7 +513,7 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
 
     @Override
     protected void putPlayerOnBack(Player player) {
-        ItemStack item = player.getStackInHand(InteractionHand.MAIN_HAND);
+        ItemStack item = player.getItemInHand(InteractionHand.MAIN_HAND);
         if(this.canAddPassenger(player) && item.isEmpty()) {
             super.putPlayerOnBack(player);
         }
@@ -521,11 +521,11 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
 
     @Override
     public boolean damage(DamageSource source, float amount) {
-        if(!source.equals(getDamageSources().drown()) && !source.equals(getDamageSources().lava())
-                && !source.equals(getDamageSources().cramming()) && !source.equals(getDamageSources().magic())) {
+        if(!source.equals(damageSources().drown()) && !source.equals(damageSources().lava())
+                && !source.equals(damageSources().cramming()) && !source.equals(damageSources().magic())) {
             amount *= (1 - RESISTANCE);
         }
-        return !this.getWorld().isClient() && super.damage(source, amount);
+        return !this.level().isClientSide() && super.damage(source, amount);
     }
 
     public void chargeAttack() {
@@ -549,7 +549,7 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
     }
 
     protected float getNpcSaddledSpeed(NpcEntity controllingNpc) {
-        return this.isSitting() ? 0 : (float)this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED);
+        return this.isSitting() ? 0 : (float)this.getAttributeValue(Attributes.MOVEMENT_SPEED);
     }
 
     // endregion
@@ -582,20 +582,20 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
 
         if(this.hasControllingPassenger() && !this.shouldAttackWhenMounted()) {
             this.setAttacker(null);
-            this.setAttacking(false);
+            this.setAggressive(false);
             this.setTarget(null);
         }
 
-        if (this.getWorld().isClient) {
+        if (this.level().isClientSide) {
             setupAnimationStates();
         }
 
         if (!this.isClientWorld() && isTame() && this.getOwner() != null) {
-            if(this.getWorld().getTimeOfDay() == 6500) { // Tameness always decreases shortly after noon
-                List<? extends Player> players = this.getWorld().getPlayers();
+            if(this.level().getTimeOfDay() == 6500) { // Tameness always decreases shortly after noon
+                List<? extends Player> players = this.level().getPlayers();
                 if(this.getOwner() != null && players.contains(this.getOwner())) { // Check if owner is online
                     // Get amount of other beasts using the Tameness mechanic in a 25 block radius. The tameness decreases exponentially faster for each of them.
-                    int affectingBeasts = this.getWorld().getEntitiesByClass(AbstractBeastEntity.class, this.getBoundingBox().expand(25), (entity) -> usesTameness() && getOwner() == this.getOwner()).size();
+                    int affectingBeasts = this.level().getEntitiesByClass(AbstractBeastEntity.class, this.getBoundingBox().expand(25), (entity) -> usesTameness() && getOwner() == this.getOwner()).size();
 
                     // The number of entities includes itself, therefore the smallest value to decrease is at 10
                     this.setTameness(this.getTameness() - (int)(5 * Math.pow(2, affectingBeasts)));
@@ -617,8 +617,8 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
 
         if (this.getControllingPassenger() instanceof NpcEntity npc && this.isAlive()) {
             Vec3 movementInput = new Vec3(this.sidewaysSpeed, this.upwardSpeed, this.forwardSpeed);
-            if (this.canMoveVoluntarily()) {
-                this.setMovementSpeed(this.getNpcSaddledSpeed(npc));
+            if (this.isEffectiveAi()) {
+                this.setSpeed(this.getNpcSaddledSpeed(npc));
                 this.travel(movementInput);
             } else {
                 this.setVelocity(Vec3.ZERO);
@@ -672,7 +672,7 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
 
     @Override
     public net.minecraft.world.level.EntityGetter method_48926() {
-        return this.getWorld();
+        return this.level();
     }
 
     @Override
@@ -699,15 +699,15 @@ public abstract class AbstractBeastEntity extends AbstractHorse {
     @Override
     protected void updateSaddle() {
         super.updateSaddle();
-        if (this.items == null || this.items.size() < 2 || getWorld().isClient) return;
-        ItemStack armor = this.items.getStack(1);
+        if (this.items == null || this.items.size() < 2 || getWorld().isClientSide) return;
+        ItemStack armor = this.items.getItem(1);
         var equipment = net.jukoz.me.item.MEComponents.get(armor, net.jukoz.me.item.MEComponents.MOUNT_EQUIPPABLE);
         boolean allowed = equipment != null && equipment.allows(this);
         equipStack(EquipmentSlot.CHEST, allowed ? armor.copy() : ItemStack.EMPTY);
         setEquipmentDropChance(EquipmentSlot.CHEST, 0.0F);
-        me$mountArmorBonus(Attributes.GENERIC_ARMOR, "armor", allowed ? equipment.armor() : 0);
-        me$mountArmorBonus(Attributes.GENERIC_ARMOR_TOUGHNESS, "toughness", allowed ? equipment.toughness() : 0);
-        me$mountArmorBonus(Attributes.GENERIC_KNOCKBACK_RESISTANCE, "knockback", allowed ? equipment.knockbackResistance() : 0);
+        me$mountArmorBonus(Attributes.ARMOR, "armor", allowed ? equipment.armor() : 0);
+        me$mountArmorBonus(Attributes.ARMOR_TOUGHNESS, "toughness", allowed ? equipment.toughness() : 0);
+        me$mountArmorBonus(Attributes.KNOCKBACK_RESISTANCE, "knockback", allowed ? equipment.knockbackResistance() : 0);
     }
 
     private void me$mountArmorBonus(Attribute attribute, String name, double amount) {

@@ -17,6 +17,6 @@ public class ModBannerPatternTags {
     public static final TagKey<BannerPattern> MISTY_ORCS_PEAKS_PATTERN_ITEM = of("misty_orcs_peaks");
 
     private static TagKey<BannerPattern> of(String name) {
-        return TagKey.of(Registries.BANNER_PATTERN, new ResourceLocation("pattern_item/" + name));
+        return TagKey.create(Registries.BANNER_PATTERN, new ResourceLocation("pattern_item/" + name));
     }
 }

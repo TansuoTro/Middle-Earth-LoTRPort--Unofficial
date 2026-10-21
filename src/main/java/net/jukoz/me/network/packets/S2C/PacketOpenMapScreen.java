@@ -24,7 +24,7 @@ public class PacketOpenMapScreen extends ServerToClientPacket<PacketOpenMapScree
     @OnlyIn(Dist.CLIENT)
     public void process(ClientPacketContext context) {
         Player player = context.player();
-        MapScreenController controller = new MapScreenController(player.getWorld(), player);
+        MapScreenController controller = new MapScreenController(player.level(), player);
         controller.open(canTeleport);
     }
 

@@ -9,7 +9,7 @@ import net.jukoz.me.datageneration.content.tags.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.core.RegistryWrapper;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.tags.TagKey;
 import net.minecraft.resources.ResourceLocation;
 import java.util.concurrent.CompletableFuture;
@@ -17,31 +17,31 @@ import net.minecraft.core.HolderLookup;
 
 public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
-    public BlockTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.WrapperLookup> registriesFuture) {
+    public BlockTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 
     @Override
-    protected void configure(HolderLookup.WrapperLookup arg) {
-        var mineablePickaxe = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "mineable/pickaxe")));
-        var mineableAxe = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "mineable/axe")));
-        var mineableShovel = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "mineable/shovel")));
-        var mineableHoe = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "mineable/hoe")));
-        var swordEfficient = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "sword_efficient")));
+    protected void configure(HolderLookup.Provider arg) {
+        var mineablePickaxe = tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "mineable/pickaxe")));
+        var mineableAxe = tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "mineable/axe")));
+        var mineableShovel = tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "mineable/shovel")));
+        var mineableHoe = tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "mineable/hoe")));
+        var swordEfficient = tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "sword_efficient")));
 
-        var needsStoneTools = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "needs_stone_tool")));
-        var needsIronTools = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "needs_iron_tool")));
-        var needsDiamondTools = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "needs_diamond_tool")));
-        var needsNetheriteTools = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("fabric", "needs_tool_level_4")));
+        var needsStoneTools = tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "needs_stone_tool")));
+        var needsIronTools = tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "needs_iron_tool")));
+        var needsDiamondTools = tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "needs_diamond_tool")));
+        var needsNetheriteTools = tag(TagKey.create(Registries.BLOCK, new ResourceLocation("fabric", "needs_tool_level_4")));
 
-        var baseStoneOverworld = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "base_stone_overworld")));
+        var baseStoneOverworld = tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "base_stone_overworld")));
 
-        var seat = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "seat")));
-        var table = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "table")));
+        var seat = tag(TagKey.create(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "seat")));
+        var table = tag(TagKey.create(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "table")));
 
-        var leaves = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "leaves")));
+        var leaves = tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "leaves")));
 
-        var cobwebs = getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("me", "cobwebs")));
+        var cobwebs = tag(TagKey.create(Registries.BLOCK, new ResourceLocation("me", "cobwebs")));
 
         mineableAxe.add(notNullBlocks(MineableAxe.blocks));
         mineablePickaxe.add(notNullBlocks(MineablePickaxe.blocks));
@@ -51,61 +51,61 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         swordEfficient.add(notNullBlocks(LeavesSets.blocks));
 
-        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "saplings"))).add(notNullBlocks(Saplings.saplings));
-        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "doors"))).add(notNullBlocks(Doors.doors));
-        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "trapdoors"))).add(notNullBlocks(Trapdoors.trapdoors));
-        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "buttons"))).add(notNullBlocks(Buttons.buttons));
-        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "fences"))).add(notNullBlocks(Fences.fences));
-        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "wooden_fences"))).add(notNullBlocks(Fences.fences));
-        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "fence_gates"))).add(notNullBlocks(FenceGates.fenceGates));
-        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "logs"))).add(notNullBlocks(Logs.logs));
-        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "pressure_plates"))).add(notNullBlocks(PressurePlates.pressurePlates));
-        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "walls"))).add(notNullBlocks(Walls.walls));
-        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "planks"))).add(notNullBlocks(Planks.planks));
-        getOrCreateTagBuilder(TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "crops"))).add(notNullBlocks(Crops.crops));
+        tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "saplings"))).add(notNullBlocks(Saplings.saplings));
+        tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "doors"))).add(notNullBlocks(Doors.doors));
+        tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "trapdoors"))).add(notNullBlocks(Trapdoors.trapdoors));
+        tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "buttons"))).add(notNullBlocks(Buttons.buttons));
+        tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "fences"))).add(notNullBlocks(Fences.fences));
+        tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "wooden_fences"))).add(notNullBlocks(Fences.fences));
+        tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "fence_gates"))).add(notNullBlocks(FenceGates.fenceGates));
+        tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "logs"))).add(notNullBlocks(Logs.logs));
+        tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "pressure_plates"))).add(notNullBlocks(PressurePlates.pressurePlates));
+        tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "walls"))).add(notNullBlocks(Walls.walls));
+        tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "planks"))).add(notNullBlocks(Planks.planks));
+        tag(TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "crops"))).add(notNullBlocks(Crops.crops));
 
         //Ores
-        TagKey<Block> iron_ores = TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "iron_ores"));
-        TagKey<Block> gold_ores = TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "gold_ores"));
-        TagKey<Block> copper_ores = TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "copper_ores"));
-        TagKey<Block> coal_ores = TagKey.of(Registries.BLOCK, new ResourceLocation("minecraft", "coal_ores"));
+        TagKey<Block> iron_ores = TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "iron_ores"));
+        TagKey<Block> gold_ores = TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "gold_ores"));
+        TagKey<Block> copper_ores = TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "copper_ores"));
+        TagKey<Block> coal_ores = TagKey.create(Registries.BLOCK, new ResourceLocation("minecraft", "coal_ores"));
 
-        TagKey<Block> tin_ores = TagKey.of(Registries.BLOCK, new ResourceLocation("me", "tin_ores"));
-        TagKey<Block> lead_ores = TagKey.of(Registries.BLOCK, new ResourceLocation("me", "lead_ores"));
-        TagKey<Block> silver_ores = TagKey.of(Registries.BLOCK, new ResourceLocation("me", "silver_ores"));
-        TagKey<Block> mithril_ores = TagKey.of(Registries.BLOCK, new ResourceLocation("me", "mithril_ores"));
+        TagKey<Block> tin_ores = TagKey.create(Registries.BLOCK, new ResourceLocation("me", "tin_ores"));
+        TagKey<Block> lead_ores = TagKey.create(Registries.BLOCK, new ResourceLocation("me", "lead_ores"));
+        TagKey<Block> silver_ores = TagKey.create(Registries.BLOCK, new ResourceLocation("me", "silver_ores"));
+        TagKey<Block> mithril_ores = TagKey.create(Registries.BLOCK, new ResourceLocation("me", "mithril_ores"));
 
         for (OreRockSets.OreRockSet set : OreRockSets.sets) {
             if(set.coal_ore() != null) {
-                getOrCreateTagBuilder(coal_ores)
+                tag(coal_ores)
                         .add(set.coal_ore());
             }
             if(set.copper_ore() != null) {
-                getOrCreateTagBuilder(copper_ores)
+                tag(copper_ores)
                         .add(set.copper_ore());
             }
             if(set.tin_ore() != null) {
-                getOrCreateTagBuilder(tin_ores)
+                tag(tin_ores)
                         .add(set.tin_ore());
             }
             if(set.lead_ore() != null) {
-                getOrCreateTagBuilder(lead_ores)
+                tag(lead_ores)
                         .add(set.lead_ore());
             }
             if(set.silver_ore() != null) {
-                getOrCreateTagBuilder(silver_ores)
+                tag(silver_ores)
                         .add(set.silver_ore());
             }
             if(set.gold_ore() != null) {
-                getOrCreateTagBuilder(gold_ores)
+                tag(gold_ores)
                         .add(set.gold_ore());
             }
             if(set.iron_ore() != null) {
-                getOrCreateTagBuilder(iron_ores)
+                tag(iron_ores)
                         .add(set.iron_ore());
             }
             if(set.mithril_ore() != null) {
-                getOrCreateTagBuilder(mithril_ores)
+                tag(mithril_ores)
                         .add(set.mithril_ore());
             }
         }

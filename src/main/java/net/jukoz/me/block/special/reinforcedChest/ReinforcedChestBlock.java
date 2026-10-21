@@ -13,10 +13,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class ReinforcedChestBlock extends ChestBlock {
 
-    public ReinforcedChestBlock(Settings settings) {
+    public ReinforcedChestBlock(BlockBehaviour.Properties settings) {
         super(settings, () -> ModBlockEntities.REINFORCED_CHEST);
     }
 
@@ -27,13 +28,13 @@ public class ReinforcedChestBlock extends ChestBlock {
 
     @Override
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        Direction direction = ctx.getHorizontalPlayerFacing();
+        Direction direction = ctx.getHorizontalDirection();
         FluidState fluidstate = ctx.getWorld().getFluidState(ctx.getBlockPos());
-        return this.getDefaultState().with(FACING, direction).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
+        return this.defaultBlockState().with(FACING, direction).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
     }
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 16.0);
+        return Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0);
     }
 }

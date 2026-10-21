@@ -1,6 +1,6 @@
 package net.jukoz.me.block.registration;
 
-import net.minecraft.world.level.block.NoteBlockInstrument;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.item.ItemStack;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.utils.BlockSetRegistration;
@@ -16,11 +16,11 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.MapColor;
 
 public class StoneBlockSets {
-    public static final float STONE_HARDNESS = Blocks.STONE.getHardness(); //1.5f
-    public static final float STONE_BLAST_RESISTANCE = Blocks.STONE.getBlastResistance(); //6.0f
+    public static final float STONE_HARDNESS = Blocks.STONE.defaultDestroyTime(); //1.5f
+    public static final float STONE_BLAST_RESISTANCE = Blocks.STONE.getExplosionResistance(); //6.0f
 
-    public static final float DEEPSLATE_HARDNESS = Blocks.DEEPSLATE.getHardness();
-    public static final float DEEPSLATE_BLAST_RESISTANCE = Blocks.DEEPSLATE.getBlastResistance();
+    public static final float DEEPSLATE_HARDNESS = Blocks.DEEPSLATE.defaultDestroyTime();
+    public static final float DEEPSLATE_BLAST_RESISTANCE = Blocks.DEEPSLATE.getExplosionResistance();
 
     public static final float NURGON_HARDNESS = 5.0F;
     public static final float NURGON_BLAST_RESISTANCE = 7.0F;

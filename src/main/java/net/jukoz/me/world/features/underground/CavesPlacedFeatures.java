@@ -3,8 +3,8 @@ package net.jukoz.me.world.features.underground;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.world.chunkgen.MiddleEarthChunkGenerator;
 import net.jukoz.me.world.features.tree.MushroomTreeConfiguredFeatures;
-import net.minecraft.data.worldgen.BootstrapContext;
-import net.minecraft.core.RegistryEntryLookup;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Holder;
@@ -173,10 +173,10 @@ public class CavesPlacedFeatures {
     // endregion
     public static final ResourceKey<PlacedFeature> SPRING_LAVA = registerKey("spring_lava");
 
-    static final HeightRangePlacement mushroomsRange = HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-40), VerticalAnchor.fixed(32));
-    static final HeightRangePlacement lushRange = HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-4), VerticalAnchor.fixed(80));
-    static final HeightRangePlacement nurgonRange = HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.MEDGON_LEVEL), VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL));
-    static final HeightRangePlacement medgonRange = HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-64), VerticalAnchor.fixed(MiddleEarthChunkGenerator.MEDGON_LEVEL));
+    static final HeightRangePlacement mushroomsRange = HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-40), VerticalAnchor.absolute(32));
+    static final HeightRangePlacement lushRange = HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-4), VerticalAnchor.absolute(80));
+    static final HeightRangePlacement nurgonRange = HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.MEDGON_LEVEL), VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL));
+    static final HeightRangePlacement medgonRange = HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(MiddleEarthChunkGenerator.MEDGON_LEVEL));
 
     public static void bootstrap(BootstrapContext<PlacedFeature> featureRegisterable) {
         HolderGetter<ConfiguredFeature<?, ?>> registryEntryLookup = featureRegisterable.getRegistryLookup(Registries.CONFIGURED_FEATURE);
@@ -299,115 +299,115 @@ public class CavesPlacedFeatures {
         Holder.Reference<ConfiguredFeature<?, ?>> springLava = registryEntryLookup.getOrThrow(CavesConfiguredFeatures.SPRING_LAVA);
 
         PlacementUtils.register(featureRegisterable, AMETHYST_GEODE, amethystGeode, RarityFilter.of(48), InSquarePlacement.of(),
-                HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(6), VerticalAnchor.fixed(30)), BiomeFilter.of());
+                HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(6), VerticalAnchor.absolute(30)), BiomeFilter.biome());
         PlacementUtils.register(featureRegisterable, CITRINE_GEODE, citrineGeode, RarityFilter.of(48), InSquarePlacement.of(),
-                HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(-16), VerticalAnchor.fixed(24)), BiomeFilter.of());
+                HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(-16), VerticalAnchor.absolute(24)), BiomeFilter.biome());
         PlacementUtils.register(featureRegisterable, GLOWSTONE_GEODE, glowstoneGeode, RarityFilter.of(24), InSquarePlacement.of(),
-                HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(-16), VerticalAnchor.fixed(24)), BiomeFilter.of());
+                HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(-16), VerticalAnchor.absolute(24)), BiomeFilter.biome());
         PlacementUtils.register(featureRegisterable, RED_AGATE_GEODE, redAgateGeode, RarityFilter.of(48), InSquarePlacement.of(),
-                HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(-32), VerticalAnchor.fixed(0)), BiomeFilter.of());
+                HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(-32), VerticalAnchor.absolute(0)), BiomeFilter.biome());
         PlacementUtils.register(featureRegisterable, QUARTZ_GEODE, quartzGeode, RarityFilter.of(20), InSquarePlacement.of(),
-                HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(6), VerticalAnchor.fixed(30)), BiomeFilter.of());
+                HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(6), VerticalAnchor.absolute(30)), BiomeFilter.biome());
 
-        PlacementUtils.register(featureRegisterable, ORE_DOLOMITE, oreDolomite, modifiersWithCount(4, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(300))));
-        PlacementUtils.register(featureRegisterable, ORE_OLD_DOLOMITE, oreOldDolomite, modifiersWithCount(24, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(300))));
-        PlacementUtils.register(featureRegisterable, ORE_DOLOMITE_ABUNDANT, oreDolomite, modifiersWithCount(25, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(300))));
-        PlacementUtils.register(featureRegisterable, ORE_MAGMA, oreMagma, modifiersWithCount(11, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-128), VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL))));
-        PlacementUtils.register(featureRegisterable, ORE_MAGMA_ABUNDANT, oreMagma, modifiersWithCount(14, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-128), VerticalAnchor.fixed(120))));
-        PlacementUtils.register(featureRegisterable, ORE_OBSIDIAN, oreObsidian, modifiersWithCount(7, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-92), VerticalAnchor.fixed(MiddleEarthChunkGenerator.MEDGON_LEVEL))));
-        PlacementUtils.register(featureRegisterable, ORE_DIRT, oreDirt, modifiersWithCount(6, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(120))));
-        PlacementUtils.register(featureRegisterable, ORE_MUD, oreMud, modifiersWithCount(15, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(120))));
-        PlacementUtils.register(featureRegisterable, ORE_ASH, oreAsh, modifiersWithCount(21, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-48), VerticalAnchor.fixed(250))));
-        PlacementUtils.register(featureRegisterable, ORE_ASHEN_DIRT, oreAshenDirt, modifiersWithCount(7, HeightRangePlacement.uniform(VerticalAnchor.fixed(0), VerticalAnchor.fixed(160))));
-        PlacementUtils.register(featureRegisterable, ORE_DRY_DIRT, oreDryDirt, modifiersWithCount(12, HeightRangePlacement.uniform(VerticalAnchor.fixed(8), VerticalAnchor.fixed(100))));
-        PlacementUtils.register(featureRegisterable, ORE_BLUE_ICE, oreBlueIce, modifiersWithCount(7, HeightRangePlacement.uniform(VerticalAnchor.fixed(8), VerticalAnchor.fixed(100))));
-        PlacementUtils.register(featureRegisterable, ORE_PACKED_ICE, orePackedIce, modifiersWithCount(13, HeightRangePlacement.uniform(VerticalAnchor.fixed(8), VerticalAnchor.fixed(100))));
-        PlacementUtils.register(featureRegisterable, ORE_GABBRO, oreGabbro, modifiersWithCount(23, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(300))));
-        PlacementUtils.register(featureRegisterable, ORE_GALONN, oreGalonn, modifiersWithCount(21, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(300))));
-        PlacementUtils.register(featureRegisterable, ORE_OLD_GALONN, oreOldGalonn, modifiersWithCount(24, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(300))));
-        PlacementUtils.register(featureRegisterable, ORE_GNEISS, oreGneiss, modifiersWithCount(23, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(300))));
-        PlacementUtils.register(featureRegisterable, ORE_GREEN_TUFF, oreGreenTuff, modifiersWithCount(45, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(300))));
-        PlacementUtils.register(featureRegisterable, ORE_GILDED_GREEN_TUFF, oreGildedGreenTuff, modifiersWithCount(18, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(300))));
-        PlacementUtils.register(featureRegisterable, ORE_GOLD_GREEN_TUFF, oreGoldGreenTuff, modifiersWithCount(34, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(300))));
-        PlacementUtils.register(featureRegisterable, ORE_IZHER_ABAN, oreIzherAban, modifiersWithCount(21, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(300))));
-        PlacementUtils.register(featureRegisterable, ORE_ZIGIL_ABAN, oreZigilAban, modifiersWithCount(37, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(300))));
-        PlacementUtils.register(featureRegisterable, ORE_OLD_IZHER_ABAN, oreOldIzherAban, modifiersWithCount(24, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(300))));
-        PlacementUtils.register(featureRegisterable, ORE_LIMESTONE, oreLimestone, modifiersWithCount(4, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(300))));
-        PlacementUtils.register(featureRegisterable, ORE_OLD_LIMESTONE, oreOldLimestone, modifiersWithCount(24, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(300))));
-        PlacementUtils.register(featureRegisterable, ORE_LIMESTONE_ABUNDANT, oreLimestone, modifiersWithCount(23, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(300))));
-        PlacementUtils.register(featureRegisterable, ORE_SAND, oreSand, modifiersWithCount(7, HeightRangePlacement.uniform(VerticalAnchor.fixed(0), VerticalAnchor.fixed(100))));
-        PlacementUtils.register(featureRegisterable, ORE_SANDSTONE, oreSandstone, modifiersWithCount(14, HeightRangePlacement.uniform(VerticalAnchor.fixed(0), VerticalAnchor.fixed(100))));
-        PlacementUtils.register(featureRegisterable, ORE_SCHIST, oreSchist, modifiersWithCount(23, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(300))));
-        PlacementUtils.register(featureRegisterable, ORE_SNOW, oreSnow, modifiersWithCount(18, HeightRangePlacement.uniform(VerticalAnchor.fixed(0), VerticalAnchor.fixed(100))));
-        PlacementUtils.register(featureRegisterable, ORE_TERRACOTTA, oreTerracotta, modifiersWithCount(17, HeightRangePlacement.uniform(VerticalAnchor.fixed(0), VerticalAnchor.fixed(100))));
-        PlacementUtils.register(featureRegisterable, ORE_TUFF, oreTuff, modifiersWithCount(7, HeightRangePlacement.uniform(VerticalAnchor.fixed(-32), VerticalAnchor.fixed(0))));
-        PlacementUtils.register(featureRegisterable, ORE_BASALT, oreBasalt, modifiersWithCount(7, HeightRangePlacement.uniform(VerticalAnchor.fixed(-32), VerticalAnchor.fixed(0))));
-        PlacementUtils.register(featureRegisterable, ORE_BLACKSTONE, oreBlackstone, modifiersWithCount(7, HeightRangePlacement.uniform(VerticalAnchor.fixed(-64), VerticalAnchor.fixed(-32))));
+        PlacementUtils.register(featureRegisterable, ORE_DOLOMITE, oreDolomite, modifiersWithCount(4, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(300))));
+        PlacementUtils.register(featureRegisterable, ORE_OLD_DOLOMITE, oreOldDolomite, modifiersWithCount(24, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(300))));
+        PlacementUtils.register(featureRegisterable, ORE_DOLOMITE_ABUNDANT, oreDolomite, modifiersWithCount(25, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(300))));
+        PlacementUtils.register(featureRegisterable, ORE_MAGMA, oreMagma, modifiersWithCount(11, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-128), VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL))));
+        PlacementUtils.register(featureRegisterable, ORE_MAGMA_ABUNDANT, oreMagma, modifiersWithCount(14, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-128), VerticalAnchor.absolute(120))));
+        PlacementUtils.register(featureRegisterable, ORE_OBSIDIAN, oreObsidian, modifiersWithCount(7, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-92), VerticalAnchor.absolute(MiddleEarthChunkGenerator.MEDGON_LEVEL))));
+        PlacementUtils.register(featureRegisterable, ORE_DIRT, oreDirt, modifiersWithCount(6, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(120))));
+        PlacementUtils.register(featureRegisterable, ORE_MUD, oreMud, modifiersWithCount(15, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(120))));
+        PlacementUtils.register(featureRegisterable, ORE_ASH, oreAsh, modifiersWithCount(21, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-48), VerticalAnchor.absolute(250))));
+        PlacementUtils.register(featureRegisterable, ORE_ASHEN_DIRT, oreAshenDirt, modifiersWithCount(7, HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(160))));
+        PlacementUtils.register(featureRegisterable, ORE_DRY_DIRT, oreDryDirt, modifiersWithCount(12, HeightRangePlacement.uniform(VerticalAnchor.absolute(8), VerticalAnchor.absolute(100))));
+        PlacementUtils.register(featureRegisterable, ORE_BLUE_ICE, oreBlueIce, modifiersWithCount(7, HeightRangePlacement.uniform(VerticalAnchor.absolute(8), VerticalAnchor.absolute(100))));
+        PlacementUtils.register(featureRegisterable, ORE_PACKED_ICE, orePackedIce, modifiersWithCount(13, HeightRangePlacement.uniform(VerticalAnchor.absolute(8), VerticalAnchor.absolute(100))));
+        PlacementUtils.register(featureRegisterable, ORE_GABBRO, oreGabbro, modifiersWithCount(23, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(300))));
+        PlacementUtils.register(featureRegisterable, ORE_GALONN, oreGalonn, modifiersWithCount(21, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(300))));
+        PlacementUtils.register(featureRegisterable, ORE_OLD_GALONN, oreOldGalonn, modifiersWithCount(24, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(300))));
+        PlacementUtils.register(featureRegisterable, ORE_GNEISS, oreGneiss, modifiersWithCount(23, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(300))));
+        PlacementUtils.register(featureRegisterable, ORE_GREEN_TUFF, oreGreenTuff, modifiersWithCount(45, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(300))));
+        PlacementUtils.register(featureRegisterable, ORE_GILDED_GREEN_TUFF, oreGildedGreenTuff, modifiersWithCount(18, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(300))));
+        PlacementUtils.register(featureRegisterable, ORE_GOLD_GREEN_TUFF, oreGoldGreenTuff, modifiersWithCount(34, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(300))));
+        PlacementUtils.register(featureRegisterable, ORE_IZHER_ABAN, oreIzherAban, modifiersWithCount(21, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(300))));
+        PlacementUtils.register(featureRegisterable, ORE_ZIGIL_ABAN, oreZigilAban, modifiersWithCount(37, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(300))));
+        PlacementUtils.register(featureRegisterable, ORE_OLD_IZHER_ABAN, oreOldIzherAban, modifiersWithCount(24, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(300))));
+        PlacementUtils.register(featureRegisterable, ORE_LIMESTONE, oreLimestone, modifiersWithCount(4, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(300))));
+        PlacementUtils.register(featureRegisterable, ORE_OLD_LIMESTONE, oreOldLimestone, modifiersWithCount(24, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(300))));
+        PlacementUtils.register(featureRegisterable, ORE_LIMESTONE_ABUNDANT, oreLimestone, modifiersWithCount(23, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(300))));
+        PlacementUtils.register(featureRegisterable, ORE_SAND, oreSand, modifiersWithCount(7, HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(100))));
+        PlacementUtils.register(featureRegisterable, ORE_SANDSTONE, oreSandstone, modifiersWithCount(14, HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(100))));
+        PlacementUtils.register(featureRegisterable, ORE_SCHIST, oreSchist, modifiersWithCount(23, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(300))));
+        PlacementUtils.register(featureRegisterable, ORE_SNOW, oreSnow, modifiersWithCount(18, HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(100))));
+        PlacementUtils.register(featureRegisterable, ORE_TERRACOTTA, oreTerracotta, modifiersWithCount(17, HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(100))));
+        PlacementUtils.register(featureRegisterable, ORE_TUFF, oreTuff, modifiersWithCount(7, HeightRangePlacement.uniform(VerticalAnchor.absolute(-32), VerticalAnchor.absolute(0))));
+        PlacementUtils.register(featureRegisterable, ORE_BASALT, oreBasalt, modifiersWithCount(7, HeightRangePlacement.uniform(VerticalAnchor.absolute(-32), VerticalAnchor.absolute(0))));
+        PlacementUtils.register(featureRegisterable, ORE_BLACKSTONE, oreBlackstone, modifiersWithCount(7, HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(-32))));
 
-        PlacementUtils.register(featureRegisterable, DOLOMITE_CLUSTER, dolomiteCluster, CountPlacement.of(UniformInt.create(48, 96)), InSquarePlacement.of(), PlacementUtils.BOTTOM_TO_120_RANGE, BiomeFilter.of());
-        PlacementUtils.register(featureRegisterable, LARGE_DOLOMITE, largeDolomite, CountPlacement.of(UniformInt.create(10, 48)), InSquarePlacement.of(), PlacementUtils.BOTTOM_TO_120_RANGE, BiomeFilter.of());
+        PlacementUtils.register(featureRegisterable, DOLOMITE_CLUSTER, dolomiteCluster, CountPlacement.of(UniformInt.create(48, 96)), InSquarePlacement.of(), PlacementUtils.BOTTOM_TO_120_RANGE, BiomeFilter.biome());
+        PlacementUtils.register(featureRegisterable, LARGE_DOLOMITE, largeDolomite, CountPlacement.of(UniformInt.create(10, 48)), InSquarePlacement.of(), PlacementUtils.BOTTOM_TO_120_RANGE, BiomeFilter.biome());
         PlacementUtils.register(featureRegisterable, POINTED_DOLOMITE, pointedDolomite, CountPlacement.of(UniformInt.create(192, 256)), InSquarePlacement.of(), PlacementUtils.BOTTOM_TO_120_RANGE,
-                CountPlacement.of(UniformInt.create(1, 5)), RandomOffsetPlacement.of(ClampedNormalInt.of(0.0F, 3.0F, -10, 10), ClampedNormalInt.of(0.0F, 0.6F, -2, 2)), BiomeFilter.of());
+                CountPlacement.of(UniformInt.create(1, 5)), RandomOffsetPlacement.of(ClampedNormalInt.of(0.0F, 3.0F, -10, 10), ClampedNormalInt.of(0.0F, 0.6F, -2, 2)), BiomeFilter.biome());
 
-        PlacementUtils.register(featureRegisterable, GALONN_CLUSTER, galonnCluster, CountPlacement.of(UniformInt.create(48, 96)), InSquarePlacement.of(), PlacementUtils.BOTTOM_TO_120_RANGE, BiomeFilter.of());
-        PlacementUtils.register(featureRegisterable, LARGE_GALONN, largeGalonn, CountPlacement.of(UniformInt.create(10, 48)), InSquarePlacement.of(), PlacementUtils.BOTTOM_TO_120_RANGE, BiomeFilter.of());
+        PlacementUtils.register(featureRegisterable, GALONN_CLUSTER, galonnCluster, CountPlacement.of(UniformInt.create(48, 96)), InSquarePlacement.of(), PlacementUtils.BOTTOM_TO_120_RANGE, BiomeFilter.biome());
+        PlacementUtils.register(featureRegisterable, LARGE_GALONN, largeGalonn, CountPlacement.of(UniformInt.create(10, 48)), InSquarePlacement.of(), PlacementUtils.BOTTOM_TO_120_RANGE, BiomeFilter.biome());
         PlacementUtils.register(featureRegisterable, POINTED_GALONN, pointedGalonn, CountPlacement.of(UniformInt.create(192, 256)), InSquarePlacement.of(), PlacementUtils.BOTTOM_TO_120_RANGE,
-                CountPlacement.of(UniformInt.create(1, 5)), RandomOffsetPlacement.of(ClampedNormalInt.of(0.0F, 3.0F, -10, 10), ClampedNormalInt.of(0.0F, 0.6F, -2, 2)), BiomeFilter.of());
+                CountPlacement.of(UniformInt.create(1, 5)), RandomOffsetPlacement.of(ClampedNormalInt.of(0.0F, 3.0F, -10, 10), ClampedNormalInt.of(0.0F, 0.6F, -2, 2)), BiomeFilter.biome());
 
-        PlacementUtils.register(featureRegisterable, IZHER_ABAN_CLUSTER, izherAbanCluster, CountPlacement.of(UniformInt.create(48, 96)), InSquarePlacement.of(), PlacementUtils.BOTTOM_TO_120_RANGE, BiomeFilter.of());
-        PlacementUtils.register(featureRegisterable, LARGE_IZHER_ABAN, largeIzherAban, CountPlacement.of(UniformInt.create(10, 48)), InSquarePlacement.of(), PlacementUtils.BOTTOM_TO_120_RANGE, BiomeFilter.of());
+        PlacementUtils.register(featureRegisterable, IZHER_ABAN_CLUSTER, izherAbanCluster, CountPlacement.of(UniformInt.create(48, 96)), InSquarePlacement.of(), PlacementUtils.BOTTOM_TO_120_RANGE, BiomeFilter.biome());
+        PlacementUtils.register(featureRegisterable, LARGE_IZHER_ABAN, largeIzherAban, CountPlacement.of(UniformInt.create(10, 48)), InSquarePlacement.of(), PlacementUtils.BOTTOM_TO_120_RANGE, BiomeFilter.biome());
         PlacementUtils.register(featureRegisterable, POINTED_IZHER_ABAN, pointedIzherAban, CountPlacement.of(UniformInt.create(192, 256)), InSquarePlacement.of(), PlacementUtils.BOTTOM_TO_120_RANGE,
-                CountPlacement.of(UniformInt.create(1, 5)), RandomOffsetPlacement.of(ClampedNormalInt.of(0.0F, 3.0F, -10, 10), ClampedNormalInt.of(0.0F, 0.6F, -2, 2)), BiomeFilter.of());
+                CountPlacement.of(UniformInt.create(1, 5)), RandomOffsetPlacement.of(ClampedNormalInt.of(0.0F, 3.0F, -10, 10), ClampedNormalInt.of(0.0F, 0.6F, -2, 2)), BiomeFilter.biome());
 
-        PlacementUtils.register(featureRegisterable, LIMESTONE_CLUSTER, limestoneCluster, CountPlacement.of(UniformInt.create(48, 96)), InSquarePlacement.of(), PlacementUtils.BOTTOM_TO_120_RANGE, BiomeFilter.of());
-        PlacementUtils.register(featureRegisterable, LARGE_LIMESTONE, largeLimestone, CountPlacement.of(UniformInt.create(10, 48)), InSquarePlacement.of(), PlacementUtils.BOTTOM_TO_120_RANGE, BiomeFilter.of());
+        PlacementUtils.register(featureRegisterable, LIMESTONE_CLUSTER, limestoneCluster, CountPlacement.of(UniformInt.create(48, 96)), InSquarePlacement.of(), PlacementUtils.BOTTOM_TO_120_RANGE, BiomeFilter.biome());
+        PlacementUtils.register(featureRegisterable, LARGE_LIMESTONE, largeLimestone, CountPlacement.of(UniformInt.create(10, 48)), InSquarePlacement.of(), PlacementUtils.BOTTOM_TO_120_RANGE, BiomeFilter.biome());
         PlacementUtils.register(featureRegisterable, POINTED_LIMESTONE, pointedLimestone, CountPlacement.of(UniformInt.create(192, 256)), InSquarePlacement.of(), PlacementUtils.BOTTOM_TO_120_RANGE,
-                CountPlacement.of(UniformInt.create(1, 5)), RandomOffsetPlacement.of(ClampedNormalInt.of(0.0F, 3.0F, -10, 10), ClampedNormalInt.of(0.0F, 0.6F, -2, 2)), BiomeFilter.of());
+                CountPlacement.of(UniformInt.create(1, 5)), RandomOffsetPlacement.of(ClampedNormalInt.of(0.0F, 3.0F, -10, 10), ClampedNormalInt.of(0.0F, 0.6F, -2, 2)), BiomeFilter.biome());
 
-        PlacementUtils.register(featureRegisterable, POOL_MUD, poolMud, modifiersWithCount(9, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(120))));
+        PlacementUtils.register(featureRegisterable, POOL_MUD, poolMud, modifiersWithCount(9, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(120))));
         PlacementUtils.register(featureRegisterable, DISK_MYCELIUM, diskMycelium, modifiersWithCount(40, mushroomsRange));
 
-        PlacementUtils.register(featureRegisterable, DELTA, delta, modifiersWithCount(5, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-128), VerticalAnchor.fixed(MiddleEarthChunkGenerator.DEEPSLATE_LEVEL))));
+        PlacementUtils.register(featureRegisterable, DELTA, delta, modifiersWithCount(5, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-128), VerticalAnchor.absolute(MiddleEarthChunkGenerator.DEEPSLATE_LEVEL))));
         PlacementUtils.register(featureRegisterable, PILLAR_BASALT, pillarBasalt, modifiersWithCount(2, nurgonRange));
         PlacementUtils.register(featureRegisterable, PILLAR_BLACKSTONE, pillarBlackstone, modifiersWithCount(2, medgonRange));
-        PlacementUtils.register(featureRegisterable, PILLAR_PACKED_ICE, pillarPackedIce, modifiersWithCount(3,  HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(64))));
-        PlacementUtils.register(featureRegisterable, PILLAR_SMOOTH_SANDSTONE, pillarSmoothSandstone, modifiersWithCount(3, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(64))));
+        PlacementUtils.register(featureRegisterable, PILLAR_PACKED_ICE, pillarPackedIce, modifiersWithCount(3,  HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(64))));
+        PlacementUtils.register(featureRegisterable, PILLAR_SMOOTH_SANDSTONE, pillarSmoothSandstone, modifiersWithCount(3, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(64))));
 
-        PlacementUtils.register(featureRegisterable, ORE_COAL_UPPER, coalOre, modifiersWithCount(14, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(60), VerticalAnchor.fixed(300))));
-        PlacementUtils.register(featureRegisterable, ORE_COAL, coalOre, modifiersWithCount(16, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(100))));
-        PlacementUtils.register(featureRegisterable, ORE_COPPER_UPPER, copperOre, modifiersWithCount(10, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(80), VerticalAnchor.fixed(300))));
-        PlacementUtils.register(featureRegisterable, ORE_COPPER, copperOre, modifiersWithCount(12, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(120))));
-        PlacementUtils.register(featureRegisterable, ORE_TIN, tinOre, modifiersWithCount(10, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-20), VerticalAnchor.fixed(80))));
-        PlacementUtils.register(featureRegisterable, ORE_LAPIS, lapisOre, modifiersWithCount(1, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(MiddleEarthChunkGenerator.DEEPSLATE_LEVEL))));
-        PlacementUtils.register(featureRegisterable, ORE_LAPIS_ABUNDANT, lapisOre, modifiersWithCount(2, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(MiddleEarthChunkGenerator.DEEPSLATE_LEVEL))));
-        PlacementUtils.register(featureRegisterable, ORE_LEAD, leadOre, modifiersWithCount(9, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-48), VerticalAnchor.fixed(16))));
-        PlacementUtils.register(featureRegisterable, ORE_QUARTZITE, quartziteOre, modifiersWithCount(2, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.fixed(60))));
-        PlacementUtils.register(featureRegisterable, ORE_IRON, ironOre, modifiersWithCount(12, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-128), VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL + 12))));
-        PlacementUtils.register(featureRegisterable, ORE_SILVER, silverOre, modifiersWithCount(3, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-64), VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL))));
-        PlacementUtils.register(featureRegisterable, ORE_JADE, jadeOre, modifiersWithCount(1, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-40), VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL))));
+        PlacementUtils.register(featureRegisterable, ORE_COAL_UPPER, coalOre, modifiersWithCount(14, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(60), VerticalAnchor.absolute(300))));
+        PlacementUtils.register(featureRegisterable, ORE_COAL, coalOre, modifiersWithCount(16, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(100))));
+        PlacementUtils.register(featureRegisterable, ORE_COPPER_UPPER, copperOre, modifiersWithCount(10, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(80), VerticalAnchor.absolute(300))));
+        PlacementUtils.register(featureRegisterable, ORE_COPPER, copperOre, modifiersWithCount(12, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(120))));
+        PlacementUtils.register(featureRegisterable, ORE_TIN, tinOre, modifiersWithCount(10, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-20), VerticalAnchor.absolute(80))));
+        PlacementUtils.register(featureRegisterable, ORE_LAPIS, lapisOre, modifiersWithCount(1, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(MiddleEarthChunkGenerator.DEEPSLATE_LEVEL))));
+        PlacementUtils.register(featureRegisterable, ORE_LAPIS_ABUNDANT, lapisOre, modifiersWithCount(2, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(MiddleEarthChunkGenerator.DEEPSLATE_LEVEL))));
+        PlacementUtils.register(featureRegisterable, ORE_LEAD, leadOre, modifiersWithCount(9, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-48), VerticalAnchor.absolute(16))));
+        PlacementUtils.register(featureRegisterable, ORE_QUARTZITE, quartziteOre, modifiersWithCount(2, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL), VerticalAnchor.absolute(60))));
+        PlacementUtils.register(featureRegisterable, ORE_IRON, ironOre, modifiersWithCount(12, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-128), VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL + 12))));
+        PlacementUtils.register(featureRegisterable, ORE_SILVER, silverOre, modifiersWithCount(3, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL))));
+        PlacementUtils.register(featureRegisterable, ORE_JADE, jadeOre, modifiersWithCount(1, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-40), VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL))));
         PlacementUtils.register(featureRegisterable, ORE_GOLD, goldOre, List.of(PlacementUtils.createCountExtraModifier(2, 0.5f, 1), InSquarePlacement.of(),
-                HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-48), VerticalAnchor.fixed(-16)), BiomeFilter.of()));
+                HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-48), VerticalAnchor.absolute(-16)), BiomeFilter.biome()));
         PlacementUtils.register(featureRegisterable, ORE_GOLD_RARE, goldOre, List.of(PlacementUtils.createCountExtraModifier(1, 0.1f, 1), InSquarePlacement.of(),
-                HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-48), VerticalAnchor.fixed(-16)), BiomeFilter.of()));
-        PlacementUtils.register(featureRegisterable, ORE_EMERALD, emeraldOre, modifiersWithCount(2, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-61), VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL))));
-        PlacementUtils.register(featureRegisterable, ORE_RUBY, rubyOre, modifiersWithCount(2, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-61), VerticalAnchor.fixed(MiddleEarthChunkGenerator.MEDGON_LEVEL))));
-        PlacementUtils.register(featureRegisterable, ORE_SAPPHIRE, sapphireOre, modifiersWithCount(2, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-49), VerticalAnchor.fixed(-11))));
-        PlacementUtils.register(featureRegisterable, ORE_ADAMANT, adamantOre, modifiersWithCount(2, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-61), VerticalAnchor.fixed(-42))));
-        PlacementUtils.register(featureRegisterable, ORE_MITHRIL, mithrilOre, modifiersWithRarity(1, HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-62), VerticalAnchor.fixed(MAX_MITHRIL_HEIGHT))));
+                HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-48), VerticalAnchor.absolute(-16)), BiomeFilter.biome()));
+        PlacementUtils.register(featureRegisterable, ORE_EMERALD, emeraldOre, modifiersWithCount(2, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-61), VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL))));
+        PlacementUtils.register(featureRegisterable, ORE_RUBY, rubyOre, modifiersWithCount(2, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-61), VerticalAnchor.absolute(MiddleEarthChunkGenerator.MEDGON_LEVEL))));
+        PlacementUtils.register(featureRegisterable, ORE_SAPPHIRE, sapphireOre, modifiersWithCount(2, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-49), VerticalAnchor.absolute(-11))));
+        PlacementUtils.register(featureRegisterable, ORE_ADAMANT, adamantOre, modifiersWithCount(2, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-61), VerticalAnchor.absolute(-42))));
+        PlacementUtils.register(featureRegisterable, ORE_MITHRIL, mithrilOre, modifiersWithRarity(1, HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-62), VerticalAnchor.absolute(MAX_MITHRIL_HEIGHT))));
 
         // region MUSHROOMS
         PlacementUtils.register(featureRegisterable, TREE_BROWN_BOLETTE, brownBoletteTree, List.of(RarityFilter.of(1), InSquarePlacement.of(),
-                CountOnEveryLayerPlacement.of(2), BiomeFilter.of()));
+                CountOnEveryLayerPlacement.of(2), BiomeFilter.biome()));
 
         PlacementUtils.register(featureRegisterable, PATCH_CAVE_AMANITA, caveAmanita, modifiersWithCount(1, mushroomsRange));
         PlacementUtils.register(featureRegisterable, PATCH_CAVE_AMANITA_TILLER, caveAmanitaTiller, modifiersWithCount(1, mushroomsRange ));
         PlacementUtils.register(featureRegisterable, TREE_CAVE_AMANITA, caveAmanitaTree, List.of(RarityFilter.of(1), InSquarePlacement.of(),
-                CountOnEveryLayerPlacement.of(2), BiomeFilter.of()));
+                CountOnEveryLayerPlacement.of(2), BiomeFilter.biome()));
 
         PlacementUtils.register(featureRegisterable, PATCH_DEEP_FIRECAP, deepFirecap, modifiersWithCount(1, mushroomsRange ));
         PlacementUtils.register(featureRegisterable, PATCH_DEEP_FIRECAP_TILLER, deepFirecapTiller, modifiersWithCount(1, mushroomsRange ));
         PlacementUtils.register(featureRegisterable, TREE_DEEP_FIRECAP, deepFirecapTree, List.of(RarityFilter.of(1), InSquarePlacement.of(),
-                CountOnEveryLayerPlacement.of(1), BiomeFilter.of()));
+                CountOnEveryLayerPlacement.of(1), BiomeFilter.biome()));
 
         PlacementUtils.register(featureRegisterable, PATCH_GHOSTSHROOM, ghostshrooms, modifiersWithCount(1, mushroomsRange ));
         PlacementUtils.register(featureRegisterable, PATCH_GHOSTSHROOM_TILLER, ghostshroomsTiller, modifiersWithCount(1, mushroomsRange ));
@@ -415,7 +415,7 @@ public class CavesPlacedFeatures {
         PlacementUtils.register(featureRegisterable, PATCH_SKY_FIRECAP, skyFirecap, modifiersWithCount(1, mushroomsRange ));
         PlacementUtils.register(featureRegisterable, PATCH_SKY_FIRECAP_TILLER, skyFirecapTiller, modifiersWithCount(1, mushroomsRange ));
         PlacementUtils.register(featureRegisterable, TREE_SKY_FIRECAP, skyFirecapTree, List.of(RarityFilter.of(1), InSquarePlacement.of(),
-                CountOnEveryLayerPlacement.of(1), BiomeFilter.of()));
+                CountOnEveryLayerPlacement.of(1), BiomeFilter.biome()));
 
         PlacementUtils.register(featureRegisterable, PATCH_TUBESHROOMS, tubeshroom, modifiersWithCount(1, mushroomsRange ));
         PlacementUtils.register(featureRegisterable, PATCH_TALL_TUBESHROOMS, tallTubeshroom, modifiersWithCount(1, mushroomsRange ));
@@ -427,40 +427,40 @@ public class CavesPlacedFeatures {
         PlacementUtils.register(featureRegisterable, PATCH_YELLOW_AMANITA, yellowAmanita, modifiersWithCount(1, mushroomsRange ));
         PlacementUtils.register(featureRegisterable, PATCH_YELLOW_AMANITA_TILLER, yellowAmanitaTiller, modifiersWithCount(1, mushroomsRange ));
         PlacementUtils.register(featureRegisterable, TREE_YELLOW_AMANITA, yellowAmanitaTree, List.of(RarityFilter.of(1), InSquarePlacement.of(),
-                CountOnEveryLayerPlacement.of(2), BiomeFilter.of()));
+                CountOnEveryLayerPlacement.of(2), BiomeFilter.biome()));
 
-        PlacementUtils.register(featureRegisterable, GLOWWORM_WEBBING, glowwormWebbing, CountPlacement.of(47), InSquarePlacement.of(), HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-48), VerticalAnchor.fixed(48)),
+        PlacementUtils.register(featureRegisterable, GLOWWORM_WEBBING, glowwormWebbing, CountPlacement.of(47), InSquarePlacement.of(), HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-48), VerticalAnchor.absolute(48)),
                 EnvironmentScanPlacement.of(Direction.UP, BlockPredicate.hasSturdyFace(Direction.DOWN), BlockPredicate.IS_AIR, 12), RandomOffsetPlacement.vertically(ConstantInt.create(-1)),
-                BiomeFilter.of());
+                BiomeFilter.biome());
         // endregion
 
-        PlacementUtils.register(featureRegisterable, DROOPING_ICICLES, droopingIcicles, CountPlacement.of(37), InSquarePlacement.of(), HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-48), VerticalAnchor.fixed(64)),
+        PlacementUtils.register(featureRegisterable, DROOPING_ICICLES, droopingIcicles, CountPlacement.of(37), InSquarePlacement.of(), HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-48), VerticalAnchor.absolute(64)),
                 EnvironmentScanPlacement.of(Direction.UP, BlockPredicate.hasSturdyFace(Direction.DOWN), BlockPredicate.IS_AIR, 12), RandomOffsetPlacement.vertically(ConstantInt.create(-1)),
-                BiomeFilter.of());
-        PlacementUtils.register(featureRegisterable, SHORT_ICICLES, shortIcicles, CountPlacement.of(49), InSquarePlacement.of(), HeightRangePlacement.trapezoid(VerticalAnchor.fixed(-48), VerticalAnchor.fixed(64)),
+                BiomeFilter.biome());
+        PlacementUtils.register(featureRegisterable, SHORT_ICICLES, shortIcicles, CountPlacement.of(49), InSquarePlacement.of(), HeightRangePlacement.trapezoid(VerticalAnchor.absolute(-48), VerticalAnchor.absolute(64)),
                 EnvironmentScanPlacement.of(Direction.UP, BlockPredicate.hasSturdyFace(Direction.DOWN), BlockPredicate.IS_AIR, 12), RandomOffsetPlacement.vertically(ConstantInt.create(-1)),
-                BiomeFilter.of());
+                BiomeFilter.biome());
         PlacementUtils.register(featureRegisterable, STICKY_ICE, stickyIce, CountPlacement.of(UniformInt.create(204, 250)), PlacementUtils.BOTTOM_TO_120_RANGE,
-                InSquarePlacement.of(), SurfaceRelativeThresholdFilter.of(Heightmap.Type.OCEAN_FLOOR_WG, Integer.MIN_VALUE, -13), BiomeFilter.of());
+                InSquarePlacement.of(), SurfaceRelativeThresholdFilter.of(Heightmap.Types.OCEAN_FLOOR_WG, Integer.MIN_VALUE, -13), BiomeFilter.biome());
         PlacementUtils.register(featureRegisterable, STICKY_SNOW, stickySnow, CountPlacement.of(UniformInt.create(204, 250)), PlacementUtils.BOTTOM_TO_120_RANGE,
-                InSquarePlacement.of(), SurfaceRelativeThresholdFilter.of(Heightmap.Type.OCEAN_FLOOR_WG, Integer.MIN_VALUE, -13), BiomeFilter.of());
+                InSquarePlacement.of(), SurfaceRelativeThresholdFilter.of(Heightmap.Types.OCEAN_FLOOR_WG, Integer.MIN_VALUE, -13), BiomeFilter.biome());
 
-        PlacementUtils.register(featureRegisterable, CAVE_VINES, caveVine, CountPlacement.of(188), InSquarePlacement.of(), lushRange, EnvironmentScanPlacement.of(Direction.UP, BlockPredicate.hasSturdyFace(Direction.DOWN), BlockPredicate.IS_AIR, 12), RandomOffsetPlacement.vertically(ConstantInt.create(-1)), BiomeFilter.of());
-        PlacementUtils.register(featureRegisterable, LUSH_CAVES_VEGETATION, mossPatch, CountPlacement.of(125), InSquarePlacement.of(), lushRange, EnvironmentScanPlacement.of(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.IS_AIR, 12), RandomOffsetPlacement.vertically(ConstantInt.create(1)), BiomeFilter.of());
-        PlacementUtils.register(featureRegisterable, LUSH_CAVES_CLAY, lushCavesClay, CountPlacement.of(62), InSquarePlacement.of(), lushRange, EnvironmentScanPlacement.of(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.IS_AIR, 12), RandomOffsetPlacement.vertically(ConstantInt.create(1)), BiomeFilter.of());
-        PlacementUtils.register(featureRegisterable, LUSH_CAVES_CEILING_VEGETATION, mossPatchCeiling, CountPlacement.of(125), InSquarePlacement.of(), lushRange, EnvironmentScanPlacement.of(Direction.UP, BlockPredicate.solid(), BlockPredicate.IS_AIR, 12), RandomOffsetPlacement.vertically(ConstantInt.create(-1)), BiomeFilter.of());
-        PlacementUtils.register(featureRegisterable, SPORE_BLOSSOM, sporeBlossom, CountPlacement.of(25), InSquarePlacement.of(), lushRange, EnvironmentScanPlacement.of(Direction.UP, BlockPredicate.solid(), BlockPredicate.IS_AIR, 12), RandomOffsetPlacement.vertically(ConstantInt.create(-1)), BiomeFilter.of());
-        PlacementUtils.register(featureRegisterable, CLASSIC_VINES_CAVE, vines, CountPlacement.of(256), InSquarePlacement.of(), lushRange, BiomeFilter.of());
+        PlacementUtils.register(featureRegisterable, CAVE_VINES, caveVine, CountPlacement.of(188), InSquarePlacement.of(), lushRange, EnvironmentScanPlacement.of(Direction.UP, BlockPredicate.hasSturdyFace(Direction.DOWN), BlockPredicate.IS_AIR, 12), RandomOffsetPlacement.vertically(ConstantInt.create(-1)), BiomeFilter.biome());
+        PlacementUtils.register(featureRegisterable, LUSH_CAVES_VEGETATION, mossPatch, CountPlacement.of(125), InSquarePlacement.of(), lushRange, EnvironmentScanPlacement.of(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.IS_AIR, 12), RandomOffsetPlacement.vertically(ConstantInt.create(1)), BiomeFilter.biome());
+        PlacementUtils.register(featureRegisterable, LUSH_CAVES_CLAY, lushCavesClay, CountPlacement.of(62), InSquarePlacement.of(), lushRange, EnvironmentScanPlacement.of(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.IS_AIR, 12), RandomOffsetPlacement.vertically(ConstantInt.create(1)), BiomeFilter.biome());
+        PlacementUtils.register(featureRegisterable, LUSH_CAVES_CEILING_VEGETATION, mossPatchCeiling, CountPlacement.of(125), InSquarePlacement.of(), lushRange, EnvironmentScanPlacement.of(Direction.UP, BlockPredicate.solid(), BlockPredicate.IS_AIR, 12), RandomOffsetPlacement.vertically(ConstantInt.create(-1)), BiomeFilter.biome());
+        PlacementUtils.register(featureRegisterable, SPORE_BLOSSOM, sporeBlossom, CountPlacement.of(25), InSquarePlacement.of(), lushRange, EnvironmentScanPlacement.of(Direction.UP, BlockPredicate.solid(), BlockPredicate.IS_AIR, 12), RandomOffsetPlacement.vertically(ConstantInt.create(-1)), BiomeFilter.biome());
+        PlacementUtils.register(featureRegisterable, CLASSIC_VINES_CAVE, vines, CountPlacement.of(256), InSquarePlacement.of(), lushRange, BiomeFilter.biome());
 
-        PlacementUtils.register(featureRegisterable, SPRING_LAVA, springLava, modifiersWithCount(20, HeightRangePlacement.trapezoid(VerticalAnchor.getBottom(), VerticalAnchor.fixed(MiddleEarthChunkGenerator.NURGON_LEVEL)) ));
+        PlacementUtils.register(featureRegisterable, SPRING_LAVA, springLava, modifiersWithCount(20, HeightRangePlacement.trapezoid(VerticalAnchor.getBottom(), VerticalAnchor.absolute(MiddleEarthChunkGenerator.NURGON_LEVEL)) ));
     }
 
     public static ResourceKey<PlacedFeature> registerKey(String name) {
-        return ResourceKey.of(Registries.PLACED_FEATURE, new ResourceLocation(MiddleEarth.MOD_ID, name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(MiddleEarth.MOD_ID, name));
     }
 
     private static List<PlacementModifier> modifiers(PlacementModifier countModifier, PlacementModifier heightModifier) {
-        return List.of(countModifier, InSquarePlacement.of(), heightModifier, BiomeFilter.of());
+        return List.of(countModifier, InSquarePlacement.of(), heightModifier, BiomeFilter.biome());
     }
 
     private static List<PlacementModifier> modifiersWithCount(int count, PlacementModifier heightModifier) {

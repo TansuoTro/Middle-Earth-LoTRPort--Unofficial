@@ -12,12 +12,11 @@ import net.jukoz.me.utils.IntToRGB;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.model.HumanoidArmorModel;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.EntityModelLayers;
+import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -28,6 +27,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
 import java.awt.*;
 import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.RenderType;
 
 public class ModArmorRenderer implements ArmorRenderer {
     private  ResourceLocation ARMOR_LAYER_0;
@@ -70,11 +70,11 @@ public class ModArmorRenderer implements ArmorRenderer {
     @Override
     public void render(PoseStack matrices, MultiBufferSource vertexConsumers, ItemStack stack, LivingEntity entity, EquipmentSlot slot, int light, HumanoidModel<LivingEntity> contextModel) {
         if (innerArmorModel == null) {
-            innerArmorModel = new InnerArmorModel<>(Minecraft.getInstance().getEntityModelLoader().getModelPart(MiddleEarthClient.INNER_ARMOR_MODEL_LAYER));
-            armorModel = new HumanoidArmorModel<>(Minecraft.getInstance().getEntityModelLoader().getModelPart(ModelLayers.PLAYER_OUTER_ARMOR));
-            legArmorModel = new HumanoidArmorModel<>(Minecraft.getInstance().getEntityModelLoader().getModelPart(ModelLayers.PLAYER_INNER_ARMOR));
-            capeModel = new CloakCapeModel<>(Minecraft.getInstance().getEntityModelLoader().getModelPart(MiddleEarthClient.CAPE_MODEL_LAYER));
-            hoodModel = new CloakHoodModel<>(Minecraft.getInstance().getEntityModelLoader().getModelPart(MiddleEarthClient.HOOD_MODEL_LAYER));
+            innerArmorModel = new InnerArmorModel<>(Minecraft.getInstance().getEntityModels().getModelPart(MiddleEarthClient.INNER_ARMOR_MODEL_LAYER));
+            armorModel = new HumanoidArmorModel<>(Minecraft.getInstance().getEntityModels().getModelPart(ModelLayers.PLAYER_OUTER_ARMOR));
+            legArmorModel = new HumanoidArmorModel<>(Minecraft.getInstance().getEntityModels().getModelPart(ModelLayers.PLAYER_INNER_ARMOR));
+            capeModel = new CloakCapeModel<>(Minecraft.getInstance().getEntityModels().getModelPart(MiddleEarthClient.CAPE_MODEL_LAYER));
+            hoodModel = new CloakHoodModel<>(Minecraft.getInstance().getEntityModels().getModelPart(MiddleEarthClient.HOOD_MODEL_LAYER));
         }
 
         if (slot == EquipmentSlot.HEAD) {
@@ -89,7 +89,7 @@ public class ModArmorRenderer implements ArmorRenderer {
                 contextModel.copyBipedStateTo(helmetModel);
                 helmetModel.setVisible(false);
                 helmetModel.head.visible = true;
-                helmetModel.setAngles(entity, entity.limbAnimator.getPos(), entity.limbAnimator.getSpeed(),(float)entity.age + Minecraft.getInstance().getTickDelta(), contextModel.head.yaw, contextModel.head.pitch);
+                helmetModel.setAngles(entity, entity.limbAnimator.getPos(), entity.limbAnimator.getSpeed(),(float)entity.age + Minecraft.getInstance().getFrameTime(), contextModel.head.yRot, contextModel.head.xRot);
                 renderArmor(matrices, vertexConsumers, light, stack, helmetModel, helmetModel.HELMET_ADDON_TEXTURE, this.dyeable);
             }
             if(hasHood){
@@ -134,7 +134,7 @@ public class ModArmorRenderer implements ArmorRenderer {
                 capeModel.body.visible = true;
                 capeModel.rightArm.visible = true;
                 capeModel.leftArm.visible = true;
-                capeModel.setAngles(entity, entity.limbAnimator.getPos(),entity.limbAnimator.getSpeed(),(float)entity.age + Minecraft.getInstance().getTickDelta(), contextModel.head.yaw, contextModel.head.roll);
+                capeModel.setAngles(entity, entity.limbAnimator.getPos(),entity.limbAnimator.getSpeed(),(float)entity.age + Minecraft.getInstance().getFrameTime(), contextModel.head.yRot, contextModel.head.roll);
                 renderArmor(matrices, vertexConsumers, light, stack, capeModel, ARMOR_LAYER_CAPE, this.dyeable);
             }
         } else if (slot == EquipmentSlot.LEGS) {
@@ -171,7 +171,7 @@ public class ModArmorRenderer implements ArmorRenderer {
     }
 
     static void renderDyeable(PoseStack matrices, MultiBufferSource vertexConsumers, int light, ItemStack stack, Model model, ResourceLocation texture) {
-        VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(texture), false, stack.hasGlint());
+        VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderType.armorCutoutNoCull(texture), false, stack.hasGlint());
         Color rgb = IntToRGB.ex(((DyeableLeatherItem)stack.getItem()).getColor(stack));
         model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, rgb.getRed()/255f, rgb.getGreen()/255f, rgb.getBlue()/255f, 1.0F);
     }

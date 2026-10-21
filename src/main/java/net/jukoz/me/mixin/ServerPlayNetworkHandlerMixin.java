@@ -20,9 +20,9 @@ public class ServerPlayNetworkHandlerMixin {
     @Shadow public ServerPlayer player;
 
     @Inject(method = "onPlayerAction", at = @At(value = "INVOKE", shift = At.Shift.BEFORE, ordinal = 0,
-            target = "Lnet/minecraft/server/network/ServerPlayer;getStackInHand(Lnet/minecraft/util/InteractionHand;)Lnet/minecraft/item/ItemStack;"), cancellable = true)
+            target = "Lnet/minecraft/server/network/ServerPlayer;getItemInHand(Lnet/minecraft/util/InteractionHand;)Lnet/minecraft/item/ItemStack;"), cancellable = true)
     public void onPlayerAction(ServerboundPlayerActionPacket packet, CallbackInfo ci) {
-        ItemStack stackMainHand = this.player.getStackInHand(InteractionHand.MAIN_HAND);
+        ItemStack stackMainHand = this.player.getItemInHand(InteractionHand.MAIN_HAND);
         if(stackMainHand != null){
             if ((stackMainHand.getItem() instanceof ReachWeaponItem && (((ReachWeaponItem) stackMainHand.getItem()).type.twoHanded))
                     || (stackMainHand.getItem() instanceof CustomSiegeShieldItem)

@@ -25,36 +25,36 @@ public class CustomHelmetModel extends MEBipedEntityModel<LivingEntity, BipedEnt
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
 
-        PartDefinition head = modelPartData.addChild(PartNames.HEAD, CubeListBuilder.create()
-                .uv(0, 0).cuboid(-4.0F, -8.2F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.55F)),
-                PartPose.pivot(0.0F, -23.0F, 0.0F));
-        head.addChild(PartNames.HAT, CubeListBuilder.create()
-                .uv(32, 0).cuboid(-4.0F, -8.2F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.9F)),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition head = modelPartData.addOrReplaceChild(PartNames.HEAD, CubeListBuilder.create()
+                .texOffs(0, 0).addBox(-4.0F, -8.2F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.55F)),
+                PartPose.offset(0.0F, -23.0F, 0.0F));
+        head.addOrReplaceChild(PartNames.HAT, CubeListBuilder.create()
+                .texOffs(32, 0).addBox(-4.0F, -8.2F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.9F)),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition body = modelPartData.addChild(PartNames.BODY, CubeListBuilder.create(),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition body = modelPartData.addOrReplaceChild(PartNames.BODY, CubeListBuilder.create(),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        body.addChild("chestHeadExtension",  CubeListBuilder.create()
-                .uv(16, 32).cuboid(-4.0F, -1.0F, -2.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.82F)),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        body.addOrReplaceChild("chestHeadExtension",  CubeListBuilder.create()
+                .texOffs(16, 32).addBox(-4.0F, -1.0F, -2.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.82F)),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition rightArm = modelPartData.addChild(PartNames.RIGHT_ARM, CubeListBuilder.create(),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
-        rightArm.addChild("rightArmHeadExtension",  CubeListBuilder.create()
-                .uv(32, 48).cuboid(-3.0F, -3.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.92F)),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition rightArm = modelPartData.addOrReplaceChild(PartNames.RIGHT_ARM, CubeListBuilder.create(),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
+        rightArm.addOrReplaceChild("rightArmHeadExtension",  CubeListBuilder.create()
+                .texOffs(32, 48).addBox(-3.0F, -3.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.92F)),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition leftArm = modelPartData.addChild(PartNames.LEFT_ARM, CubeListBuilder.create(),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
-        leftArm.addChild("leftArmHeadExtension",  CubeListBuilder.create()
-                .uv(48, 48).mirrored().cuboid(-1.0F, -3.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.92F)).mirrored(false),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition leftArm = modelPartData.addOrReplaceChild(PartNames.LEFT_ARM, CubeListBuilder.create(),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
+        leftArm.addOrReplaceChild("leftArmHeadExtension",  CubeListBuilder.create()
+                .texOffs(48, 48).mirror().addBox(-1.0F, -3.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.92F)).mirror(false),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        modelPartData.addChild(PartNames.RIGHT_LEG, CubeListBuilder.create(),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
-        modelPartData.addChild(PartNames.LEFT_LEG, CubeListBuilder.create(),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.RIGHT_LEG, CubeListBuilder.create(),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData.addOrReplaceChild(PartNames.LEFT_LEG, CubeListBuilder.create(),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.of(modelData, 64, 64);
     }

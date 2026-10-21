@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.WeatheringCopperFullBlock;
 import net.minecraft.world.level.block.WeatheringCopperSlabBlock;
 import net.minecraft.world.level.block.WeatheringCopperStairBlock;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class RoofBlockSets {
 
@@ -76,10 +77,10 @@ public class RoofBlockSets {
     public static RoofBlockSet WHITE_CLAY_TILING = registerClaySet("white_clay_tiling", Blocks.WHITE_TERRACOTTA);
     public static RoofBlockSet YELLOW_CLAY_TILING = registerClaySet("yellow_clay_tiling", Blocks.YELLOW_TERRACOTTA);
 
-    public static RoofBlockSet THATCH = registerThatchSet("thatch", WeatheringCopper.OxidationLevel.UNAFFECTED);
-    public static RoofBlockSet WEATHERED_THATCH = registerThatchSet("weathered_thatch", WeatheringCopper.OxidationLevel.EXPOSED);
-    public static RoofBlockSet AGED_THATCH = registerThatchSet("aged_thatch", WeatheringCopper.OxidationLevel.WEATHERED);
-    public static RoofBlockSet OLD_THATCH = registerThatchSet("old_thatch", WeatheringCopper.OxidationLevel.OXIDIZED);
+    public static RoofBlockSet THATCH = registerThatchSet("thatch", WeatheringCopper.WeatherState.UNAFFECTED);
+    public static RoofBlockSet WEATHERED_THATCH = registerThatchSet("weathered_thatch", WeatheringCopper.WeatherState.EXPOSED);
+    public static RoofBlockSet AGED_THATCH = registerThatchSet("aged_thatch", WeatheringCopper.WeatherState.WEATHERED);
+    public static RoofBlockSet OLD_THATCH = registerThatchSet("old_thatch", WeatheringCopper.WeatherState.OXIDIZED);
 
     public static RoofBlockSet WAXED_THATCH = registerWaxedThatchSet("waxed_thatch");
     public static RoofBlockSet WAXED_WEATHERED_THATCH = registerWaxedThatchSet("waxed_weathered_thatch");
@@ -162,28 +163,28 @@ public class RoofBlockSets {
         Block block = existingBlock(name);
         if (block == null) {
             block = ModBlocks.registerWoodBlock(name,
-                    new Block(BlockBehaviour.Settings.copy(origin == null ? Blocks.OAK_PLANKS : origin)), origin == null);
+                    new Block(BlockBehaviour.Properties.copy(origin == null ? Blocks.OAK_PLANKS : origin)), origin == null);
         }
 
         Block slab = existingBlock(name + "_slab");
         if (slab == null) {
-            slab = ModBlocks.registerWoodBlock(name + "_slab", new SlabBlock(FabricBlockSettings.copyOf(block)), true);
+            slab = ModBlocks.registerWoodBlock(name + "_slab", new SlabBlock(FabricBlockSettings.bind(block)), true);
         }
 
         Block verticalSlab = existingBlock(name + "_vertical_slab");
         if (verticalSlab == null) {
-            verticalSlab = ModBlocks.registerWoodBlock(name + "_vertical_slab", new VerticalSlabBlock(BlockBehaviour.Settings.copy(block)), true);
+            verticalSlab = ModBlocks.registerWoodBlock(name + "_vertical_slab", new VerticalSlabBlock(BlockBehaviour.Properties.copy(block)), true);
         }
 
         Block stairs = existingBlock(name + "_stairs");
         if (stairs == null) {
-            stairs = ModBlocks.registerWoodBlock(name + "_stairs", new StairBlock(block.getDefaultState(),
-                    FabricBlockSettings.copyOf(block)), true);
+            stairs = ModBlocks.registerWoodBlock(name + "_stairs", new StairBlock(block.defaultBlockState(),
+                    FabricBlockSettings.bind(block)), true);
         }
 
         Block wall = existingBlock(name + "_wall");
         if (wall == null) {
-            wall = ModBlocks.registerWoodBlock(name + "_wall", new WallBlock(BlockBehaviour.Settings.copy(block)), true);
+            wall = ModBlocks.registerWoodBlock(name + "_wall", new WallBlock(BlockBehaviour.Properties.copy(block)), true);
         }
 
         FlammableBlockRegistry.getDefaultInstance().add(block, 5, 20);
@@ -206,58 +207,58 @@ public class RoofBlockSets {
         Block block = existingBlock(name);
         if (block == null) {
             block = ModBlocks.registerStoneBlock(name,
-                    new Block(BlockBehaviour.Settings.copy(origin == null ? Blocks.TERRACOTTA : origin).requiresTool()), true);
+                    new Block(BlockBehaviour.Properties.copy(origin == null ? Blocks.TERRACOTTA : origin).requiresCorrectToolForDrops()), true);
         }
 
         Block slab = existingBlock(name + "_slab");
         if (slab == null) {
-            slab = ModBlocks.registerStoneBlock(name + "_slab", new SlabBlock(FabricBlockSettings.copyOf(block).requiresTool()), true);
+            slab = ModBlocks.registerStoneBlock(name + "_slab", new SlabBlock(FabricBlockSettings.bind(block).requiresCorrectToolForDrops()), true);
         }
 
         Block verticalSlab = existingBlock(name + "_vertical_slab");
         if (verticalSlab == null) {
-            verticalSlab = ModBlocks.registerStoneBlock(name + "_vertical_slab", new VerticalSlabBlock(BlockBehaviour.Settings.copy(block).requiresTool()), true);
+            verticalSlab = ModBlocks.registerStoneBlock(name + "_vertical_slab", new VerticalSlabBlock(BlockBehaviour.Properties.copy(block).requiresCorrectToolForDrops()), true);
         }
 
         Block stairs = existingBlock(name + "_stairs");
         if (stairs == null) {
-            stairs = ModBlocks.registerStoneBlock(name + "_stairs", new StairBlock(block.getDefaultState(),
-                    FabricBlockSettings.copyOf(block).requiresTool()), true);
+            stairs = ModBlocks.registerStoneBlock(name + "_stairs", new StairBlock(block.defaultBlockState(),
+                    FabricBlockSettings.bind(block).requiresCorrectToolForDrops()), true);
         }
 
         Block wall = existingBlock(name + "_wall");
         if (wall == null) {
-            wall = ModBlocks.registerStoneBlock(name + "_wall", new WallBlock(BlockBehaviour.Settings.copy(block).requiresTool()), true);
+            wall = ModBlocks.registerStoneBlock(name + "_wall", new WallBlock(BlockBehaviour.Properties.copy(block).requiresCorrectToolForDrops()), true);
         }
 
         return new RoofBlockSet(block, slab, verticalSlab, stairs, wall, origin);
     }
 
-    private static RoofBlockSet registerThatchSet(String name, WeatheringCopper.OxidationLevel level) {
+    private static RoofBlockSet registerThatchSet(String name, WeatheringCopper.WeatherState level) {
         Block block = existingBlock(name);
         if (block == null) {
-            block = ModBlocks.registerMiscBlock(name, new WeatheringCopperFullBlock(level, BlockBehaviour.Settings.copy(Blocks.HAY_BLOCK)), true);
+            block = ModBlocks.registerMiscBlock(name, new WeatheringCopperFullBlock(level, BlockBehaviour.Properties.copy(Blocks.HAY_BLOCK)), true);
         }
 
         Block slab = existingBlock(name + "_slab");
         if (slab == null) {
-            slab = ModBlocks.registerMiscBlock(name + "_slab", new WeatheringCopperSlabBlock(level, FabricBlockSettings.copyOf(block)), true);
+            slab = ModBlocks.registerMiscBlock(name + "_slab", new WeatheringCopperSlabBlock(level, FabricBlockSettings.bind(block)), true);
         }
 
         Block verticalSlab = existingBlock(name + "_vertical_slab");
         if (verticalSlab == null) {
-            verticalSlab = ModBlocks.registerMiscBlock(name + "_vertical_slab", new OxidizableVerticalSlabBlock(level, BlockBehaviour.Settings.copy(block)), true);
+            verticalSlab = ModBlocks.registerMiscBlock(name + "_vertical_slab", new OxidizableVerticalSlabBlock(level, BlockBehaviour.Properties.copy(block)), true);
         }
 
         Block stairs = existingBlock(name + "_stairs");
         if (stairs == null) {
-            stairs = ModBlocks.registerMiscBlock(name + "_stairs", new WeatheringCopperStairBlock(level, block.getDefaultState(),
-                    FabricBlockSettings.copyOf(block)), true);
+            stairs = ModBlocks.registerMiscBlock(name + "_stairs", new WeatheringCopperStairBlock(level, block.defaultBlockState(),
+                    FabricBlockSettings.bind(block)), true);
         }
 
         Block wall = existingBlock(name + "_wall");
         if (wall == null) {
-            wall = ModBlocks.registerMiscBlock(name + "_wall", new OxidizableWallBlock(level, BlockBehaviour.Settings.copy(block)), true);
+            wall = ModBlocks.registerMiscBlock(name + "_wall", new OxidizableWallBlock(level, BlockBehaviour.Properties.copy(block)), true);
         }
 
         FlammableBlockRegistry.getDefaultInstance().add(block, 5, 60);
@@ -272,28 +273,28 @@ public class RoofBlockSets {
     private static RoofBlockSet registerWaxedThatchSet(String name) {
         Block block = existingBlock(name);
         if (block == null) {
-            block = ModBlocks.registerMiscBlock(name, new Block(BlockBehaviour.Settings.copy(Blocks.HAY_BLOCK)), true);
+            block = ModBlocks.registerMiscBlock(name, new Block(BlockBehaviour.Properties.copy(Blocks.HAY_BLOCK)), true);
         }
 
         Block slab = existingBlock(name + "_slab");
         if (slab == null) {
-            slab = ModBlocks.registerMiscBlock(name + "_slab", new SlabBlock(FabricBlockSettings.copyOf(block)), true);
+            slab = ModBlocks.registerMiscBlock(name + "_slab", new SlabBlock(FabricBlockSettings.bind(block)), true);
         }
 
         Block verticalSlab = existingBlock(name + "_vertical_slab");
         if (verticalSlab == null) {
-            verticalSlab = ModBlocks.registerMiscBlock(name + "_vertical_slab", new VerticalSlabBlock(BlockBehaviour.Settings.copy(block)), true);
+            verticalSlab = ModBlocks.registerMiscBlock(name + "_vertical_slab", new VerticalSlabBlock(BlockBehaviour.Properties.copy(block)), true);
         }
 
         Block stairs = existingBlock(name + "_stairs");
         if (stairs == null) {
-            stairs = ModBlocks.registerMiscBlock(name + "_stairs", new StairBlock(block.getDefaultState(),
-                    FabricBlockSettings.copyOf(block)), true);
+            stairs = ModBlocks.registerMiscBlock(name + "_stairs", new StairBlock(block.defaultBlockState(),
+                    FabricBlockSettings.bind(block)), true);
         }
 
         Block wall = existingBlock(name + "_wall");
         if (wall == null) {
-            wall = ModBlocks.registerMiscBlock(name + "_wall", new WallBlock(BlockBehaviour.Settings.copy(block)), true);
+            wall = ModBlocks.registerMiscBlock(name + "_wall", new WallBlock(BlockBehaviour.Properties.copy(block)), true);
         }
 
         FlammableBlockRegistry.getDefaultInstance().add(block, 5, 60);

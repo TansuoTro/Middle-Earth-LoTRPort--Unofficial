@@ -43,7 +43,7 @@ public class PheasantStartledGoal extends Goal {
         if (vec3d == null) {
             return false;
         }
-        if (this.player.squaredDistanceTo(vec3d.x, vec3d.y, vec3d.z) < this.player.squaredDistanceTo(this.pheasant)) {
+        if (this.player.distanceTo(vec3d.x, vec3d.y, vec3d.z) < this.player.distanceTo(this.pheasant)) {
             return false;
         }
 
@@ -52,10 +52,10 @@ public class PheasantStartledGoal extends Goal {
             return false;
         }
 
-        boolean wearingCloak =  player.getEquippedStack(EquipmentSlot.CHEST).isIn(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "cloaks")))
-                && player.getEquippedStack(EquipmentSlot.HEAD).isIn(TagKey.of(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "cloaks")));
+        boolean wearingCloak =  player.getEquippedStack(EquipmentSlot.CHEST).is(TagKey.create(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "cloaks")))
+                && player.getEquippedStack(EquipmentSlot.HEAD).is(TagKey.create(Registries.ITEM, new ResourceLocation(MiddleEarth.MOD_ID, "cloaks")));
 
-        return !(player == null || wearingCloak || player.isSneaking() || !pheasant.isOnGround());
+        return !(player == null || wearingCloak || player.isShiftKeyDown() || !pheasant.isOnGround());
     }
 
     @Override

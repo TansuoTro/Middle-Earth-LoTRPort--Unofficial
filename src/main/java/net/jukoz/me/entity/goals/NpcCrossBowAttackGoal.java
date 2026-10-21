@@ -19,7 +19,7 @@ import java.util.List;
 import net.minecraft.world.entity.ai.control.Control;
 
 public class NpcCrossBowAttackGoal<T extends NpcEntity & RangedAttackMob & CrossbowAttackMob> extends Goal {
-    public static final UniformInt COOLDOWN_RANGE = TimeUtil.betweenSeconds(1, 2);
+    public static final UniformInt COOLDOWN_RANGE = TimeUtil.rangeOfSeconds(1, 2);
     private static int USING_ITEM_FLAG = 1;
     private final T actor;
     private Stage stage = Stage.UNCHARGED;
@@ -34,7 +34,7 @@ public class NpcCrossBowAttackGoal<T extends NpcEntity & RangedAttackMob & Cross
         this.actor = actor;
         this.speed = speed;
         this.squaredRange = range * range;
-        this.setControls(EnumSet.of(Goal.Control.MOVE, Goal.Control.LOOK));
+        this.setControls(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
     @Override
@@ -44,7 +44,7 @@ public class NpcCrossBowAttackGoal<T extends NpcEntity & RangedAttackMob & Cross
 
     private boolean isEntityHoldingCrossbow() {
         ItemStack itemStack = actor.getMainHandStack();
-        return (itemStack.isOf(Items.CROSSBOW) || itemStack.isIn(ItemTagsME.CROSSBOW));
+        return (itemStack.is(Items.CROSSBOW) || itemStack.is(ItemTagsME.CROSSBOW));
     }
 
     @Override
@@ -65,13 +65,13 @@ public class NpcCrossBowAttackGoal<T extends NpcEntity & RangedAttackMob & Cross
     @Override
     public void stop() {
         super.stop();
-        this.actor.setAttacking(false);
+        this.actor.setAggressive(false);
         this.actor.setTarget(null);
         this.seeingTargetTicker = 0;
         if (this.actor.isUsingItem()) {
-            this.actor.clearActiveItem();
+            this.actor.stopUsingItem();
             this.actor.setCharging(false);
-            MECrossbow.clear(this.actor.getActiveItem());
+            MECrossbow.clear(this.actor.getUseItem());
         }
     }
 
@@ -84,7 +84,7 @@ public class NpcCrossBowAttackGoal<T extends NpcEntity & RangedAttackMob & Cross
     public void tick() {
         LivingEntity livingEntity = this.actor.getTarget();
         if (livingEntity != null) {
-            boolean canSee = this.actor.getVisibilityCache().canSee(livingEntity);
+            boolean canSee = this.actor.getSensing().canSee(livingEntity);
 
             boolean canSeeTargetTicker = this.seeingTargetTicker > 0;
             if (canSee != canSeeTargetTicker) {
@@ -97,7 +97,7 @@ public class NpcCrossBowAttackGoal<T extends NpcEntity & RangedAttackMob & Cross
                 this.seeingTargetTicker--;
             }
 
-            double distance = this.actor.squaredDistanceTo(livingEntity);
+            double distance = this.actor.distanceTo(livingEntity);
             boolean inRange = (distance > this.squaredRange || this.seeingTargetTicker < 5) && this.chargedTicksLeft == 0;
             if (inRange) {
                 this.cooldown--;
@@ -120,9 +120,9 @@ public class NpcCrossBowAttackGoal<T extends NpcEntity & RangedAttackMob & Cross
             } else if (this.stage == Stage.CHARGING) {
                 useTicks++;
                 this.actor.setCharging(true);
-                ItemStack itemStack = this.actor.getActiveItem();
+                ItemStack itemStack = this.actor.getUseItem();
                 this.actor.setNpcFlag(USING_ITEM_FLAG, true);
-                if (useTicks >= CrossbowItem.getPullTime(itemStack)) {
+                if (useTicks >= CrossbowItem.getChargeDuration(itemStack)) {
                     this.actor.stopUsingItem();
                     this.stage = Stage.CHARGED;
                     this.chargedTicksLeft = 30 + this.actor.getRandom().nextInt(15);

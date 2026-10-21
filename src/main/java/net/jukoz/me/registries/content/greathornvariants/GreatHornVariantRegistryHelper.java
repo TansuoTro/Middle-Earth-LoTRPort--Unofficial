@@ -2,9 +2,9 @@ package net.jukoz.me.registries.content.greathornvariants;
 
 import net.jukoz.me.compat.spawn.BiomeSpawnCondition;
 import net.jukoz.me.compat.spawn.SpawnConditionSelectors;
-import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.core.HolderList;
+import net.minecraft.core.HolderSet;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 import net.jukoz.me.MiddleEarth;

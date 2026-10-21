@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.BiomeKeys;
+import net.minecraft.world.level.biome.Biomes;
 import net.jukoz.me.registries.content.biomevents.BiomeEventRegistry;
 import net.jukoz.me.registries.content.biomevents.BiomeEventRegistryUtil;
 import net.minecraft.world.level.biome.Biomes;
@@ -308,7 +308,7 @@ public class MEBiomeKeys extends Biomes {
     private static ResourceKey<Biome> register(String name) {
         TranslationEntries.biomeEntries.add(name);
         ResourceLocation biomeId = MiddleEarth.of(name);
-        ResourceKey<Biome> biome = ResourceKey.of(Registries.BIOME, biomeId);
+        ResourceKey<Biome> biome = ResourceKey.create(Registries.BIOME, biomeId);
         BiomeEventRegistryUtil.addBiomeEntry(biome);
         return biome;
     }

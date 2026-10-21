@@ -23,13 +23,13 @@ public class ShearItemMixin {
 
     @Inject(method = "getMiningSpeedMultiplier", at = @At(value = "HEAD"), cancellable = true)
     public void getMiningSpeedMultiplier(ItemStack stack, BlockState state, CallbackInfoReturnable<Float> cir) {
-        if (state.isIn(TagKey.of(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "cobwebs")))) {
+        if (state.is(TagKey.create(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "cobwebs")))) {
             cir.setReturnValue(15.0F);
         }
     }
 
     @Inject(method = "isSuitableFor", at = @At(value = "HEAD"), cancellable = true)
     public void isSuitableFor(BlockState state, CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(state.isIn(TagKey.of(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "cobwebs"))) || state.isOf(Blocks.REDSTONE_WIRE) || state.isOf(Blocks.TRIPWIRE));
+        cir.setReturnValue(state.is(TagKey.create(Registries.BLOCK, new ResourceLocation(MiddleEarth.MOD_ID, "cobwebs"))) || state.is(Blocks.REDSTONE_WIRE) || state.is(Blocks.TRIPWIRE));
     }
 }

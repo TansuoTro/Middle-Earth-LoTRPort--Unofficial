@@ -17,7 +17,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
@@ -33,16 +33,17 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class WoodPileBlock  extends BaseEntityBlock implements EntityBlock {
 
-    public static final IntegerProperty STAGE = IntegerProperty.of("stage", 0, 2);
+    public static final IntegerProperty STAGE = IntegerProperty.create("stage", 0, 2);
     public static final DirectionProperty HORIZONTAL_FACING = BlockStateProperties.HORIZONTAL_FACING;
     private static final VoxelShape STAGE_0, STAGE_1, STAGE_2;
 
-    public WoodPileBlock(Settings settings) {
+    public WoodPileBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState((this.stateManager.getDefaultState()).with(HORIZONTAL_FACING, Direction.NORTH).with(STAGE, 0));
+        this.setDefaultState((this.stateManager.defaultBlockState()).with(HORIZONTAL_FACING, Direction.NORTH).with(STAGE, 0));
     }
 
     @Override
@@ -57,7 +58,7 @@ public class WoodPileBlock  extends BaseEntityBlock implements EntityBlock {
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return this.getDefaultState().with(HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(STAGE, 0);
+        return this.defaultBlockState().with(HORIZONTAL_FACING, ctx.getHorizontalDirection().getOpposite()).with(STAGE, 0);
     }
 
     @Override
@@ -73,16 +74,16 @@ public class WoodPileBlock  extends BaseEntityBlock implements EntityBlock {
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (world.isClient) {
+        if (world.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
             if(player.isCreative()){
-                world.setBlockState(pos, state.cycle(STAGE));
+                world.setBlock(pos, state.cycle(STAGE));
             } else {
                 if (addStackRightClick(world, pos, player, hand)) {
-                    MenuProvider screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+                    MenuProvider screenHandlerFactory = state.getMenuProvider(world, pos);
                     if (screenHandlerFactory != null) {
-                        player.openHandledScreen(screenHandlerFactory);
+                        player.openMenu(screenHandlerFactory);
                     }
                 }
             }
@@ -93,11 +94,11 @@ public class WoodPileBlock  extends BaseEntityBlock implements EntityBlock {
     public boolean addStackRightClick(Level world, BlockPos pos, Player player, InteractionHand hand){
         Inventory blockEntity = (Inventory) world.getBlockEntity(pos);
 
-        if (!player.getStackInHand(hand).isEmpty() && player.getStackInHand(hand).isIn(ItemTags.LOGS)) {
+        if (!player.getItemInHand(hand).isEmpty() && player.getItemInHand(hand).is(ItemTags.LOGS)) {
             for(int i = 0;i <= 8; i++){
-                if (blockEntity.getStack(i).isEmpty()) {
-                    blockEntity.setStack(i, player.getStackInHand(hand).copy());
-                    player.getStackInHand(hand).setCount(0);
+                if (blockEntity.getItem(i).isEmpty()) {
+                    blockEntity.setStack(i, player.getItemInHand(hand).copy());
+                    player.getItemInHand(hand).setCount(0);
                 }
             }
         } else {
@@ -113,7 +114,7 @@ public class WoodPileBlock  extends BaseEntityBlock implements EntityBlock {
     }
 
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(HORIZONTAL_FACING, rotation.rotate(state.get(HORIZONTAL_FACING)));
+        return state.setValue(HORIZONTAL_FACING, rotation.rotate(state.get(HORIZONTAL_FACING)));
     }
 
     public BlockState mirror(BlockState state, Mirror mirror) {
@@ -131,12 +132,12 @@ public class WoodPileBlock  extends BaseEntityBlock implements EntityBlock {
 
     static {
         STAGE_0 = Shapes.union(
-                Block.createCuboidShape(0, 0, 0, 16, 4, 16));
+                Block.box(0, 0, 0, 16, 4, 16));
 
         STAGE_1 = Shapes.union(
-                Block.createCuboidShape(0, 0, 0, 16, 7, 16));
+                Block.box(0, 0, 0, 16, 7, 16));
 
         STAGE_2 = Shapes.union(
-                Block.createCuboidShape(0, 0, 0, 16, 9, 16));
+                Block.box(0, 0, 0, 16, 9, 16));
     }
 }

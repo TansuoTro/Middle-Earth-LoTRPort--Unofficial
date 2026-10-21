@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public class StructureManagerDataLookup {
     public static Optional<StructureManagerData> getStructureManagerData(Level world, ResourceLocation id) {
-        return world.getRegistryManager().get(DynamicRegistriesME.STRUCTURE_MANAGER_DATA).getOrEmpty(id);
+        return world.registryAccess().get(DynamicRegistriesME.STRUCTURE_MANAGER_DATA).getOrEmpty(id);
     }
 }

@@ -14,13 +14,14 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class GildedSmallBrazierBlock extends AbstractToggleableFireBlock {
 
-    protected static final VoxelShape SHAPE = Block.createCuboidShape(3, 0, 3, 13, 15, 13);
+    protected static final VoxelShape SHAPE = Block.box(3, 0, 3, 13, 15, 13);
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-    public GildedSmallBrazierBlock(Settings settings) {
+    public GildedSmallBrazierBlock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
@@ -31,7 +32,7 @@ public class GildedSmallBrazierBlock extends AbstractToggleableFireBlock {
     @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-        if (world.isClient) {
+        if (world.isClientSide) {
             if (state.get(LIT)) {
                 return AbstractToggleableFireBlock.checkType(type, ModBlockEntities.GILDED_SMALL_BRAZIER, GildedSmallBrazierBlockEntity::clientTick);
             }

@@ -1,8 +1,8 @@
 package net.jukoz.me.registries;
 
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.data.worldgen.BootstrapContext;
-import net.minecraft.core.RegistryEntryLookup;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
@@ -32,9 +32,9 @@ public class StructureManagerDataRegistryME {
     }
 
     private static StructureManagerData register(BootstrapContext<StructureManagerData> context, HolderGetter<StructureManagerData> registryEntryLookup, StructureManagerData structureManagerData) {
-        ResourceKey<StructureManagerData> registryKey = ResourceKey.of(DynamicRegistriesME.STRUCTURE_MANAGER_DATA, structureManagerData.getId());
-        String name = registryKey.getValue().getPath();
-        ResourceKey<StructureManagerData> structureDataKey = ResourceKey.of(DynamicRegistriesME.STRUCTURE_MANAGER_DATA, new ResourceLocation(MiddleEarth.MOD_ID,name));
+        ResourceKey<StructureManagerData> registryKey = ResourceKey.create(DynamicRegistriesME.STRUCTURE_MANAGER_DATA, structureManagerData.getId());
+        String name = registryKey.location().getPath();
+        ResourceKey<StructureManagerData> structureDataKey = ResourceKey.create(DynamicRegistriesME.STRUCTURE_MANAGER_DATA, new ResourceLocation(MiddleEarth.MOD_ID,name));
 
         Optional<Holder.Reference<StructureManagerData>> optionalStructureDataReference = registryEntryLookup.getOptional(registryKey);
         optionalStructureDataReference.ifPresent(biomeReference -> context.register(structureDataKey, structureManagerData));

@@ -18,8 +18,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccess;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
@@ -27,22 +27,23 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class RocksBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
-    public static final IntegerProperty STAGE = IntegerProperty.of("stage", 0, 3);
+    public static final IntegerProperty STAGE = IntegerProperty.create("stage", 0, 3);
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public RocksBlock(Settings settings) {
+    public RocksBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState((this.stateManager.getDefaultState()).with(FACING, Direction.NORTH).with(STAGE, 0).with(WATERLOGGED, false));
+        this.setDefaultState((this.stateManager.defaultBlockState()).with(FACING, Direction.NORTH).with(STAGE, 0).with(WATERLOGGED, false));
     }
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (!world.isClient && player.getAbilities().allowModifyWorld) {
-            if (player.getMainHandStack().isOf(this.asItem()) && state.get(STAGE) < 3){
-                world.setBlockState(pos, state.cycle(STAGE));
+        if (!world.isClientSide && player.getAbilities().allowModifyWorld) {
+            if (player.getMainHandStack().is(this.asItem()) && state.get(STAGE) < 3){
+                world.setBlock(pos, state.cycle(STAGE));
                 if(!player.isCreative()){
                     player.getMainHandStack().decrement(1);
                 }
@@ -63,7 +64,7 @@ public class RocksBlock extends HorizontalDirectionalBlock implements SimpleWate
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return this.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER).with(STAGE, 0);
+        return this.defaultBlockState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalDirection().getOpposite()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER).with(STAGE, 0);
     }
 
     @Override
@@ -83,10 +84,10 @@ public class RocksBlock extends HorizontalDirectionalBlock implements SimpleWate
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return switch (state.get(STAGE)) {
-            case 3 -> Block.createCuboidShape(0, 0, 0, 16, 10, 16);
-            case 2 -> Block.createCuboidShape(0, 0, 0, 16, 8, 16);
-            case 1 -> Block.createCuboidShape(0, 0, 0, 16, 4, 16);
-            default -> Block.createCuboidShape(0, 0, 0, 16, 3, 16);
+            case 3 -> Block.box(0, 0, 0, 16, 10, 16);
+            case 2 -> Block.box(0, 0, 0, 16, 8, 16);
+            case 1 -> Block.box(0, 0, 0, 16, 4, 16);
+            default -> Block.box(0, 0, 0, 16, 3, 16);
         };
     }
 }

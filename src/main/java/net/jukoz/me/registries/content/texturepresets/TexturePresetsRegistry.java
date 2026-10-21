@@ -1,8 +1,8 @@
 package net.jukoz.me.registries.content.texturepresets;
 
-import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryEntryLookup;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.registries.DynamicRegistriesME;
@@ -140,7 +140,7 @@ public class TexturePresetsRegistry {
     }
 
     private static ResourceKey<TexturePresetDataPool> of(String... names) {
-        return ResourceKey.of(DynamicRegistriesME.TEXTURE_PRESETS, MiddleEarth.of(names));
+        return ResourceKey.create(DynamicRegistriesME.TEXTURE_PRESETS, MiddleEarth.of(names));
     }
 
     private static ResourceKey<TexturePresetDataPool> of(ResourceKey<Faction> base, String... names) {
@@ -150,7 +150,7 @@ public class TexturePresetsRegistry {
         aggregateNames.addAll(Arrays.stream(names).toList());
 
         String[] stringArray = aggregateNames.toArray(new String[0]);
-        return ResourceKey.of(DynamicRegistriesME.TEXTURE_PRESETS, MiddleEarth.of(stringArray));
+        return ResourceKey.create(DynamicRegistriesME.TEXTURE_PRESETS, MiddleEarth.of(stringArray));
     }
 
     public record RegisterableNpcTextureData (ResourceKey<TexturePresetDataPool> npcTextureDataRegistryKey, TexturePresetDataPool content){ }

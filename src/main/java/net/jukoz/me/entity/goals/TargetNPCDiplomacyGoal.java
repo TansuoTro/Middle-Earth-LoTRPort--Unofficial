@@ -18,12 +18,12 @@ public class TargetNPCDiplomacyGoal extends NearestAttackableTargetGoal<NpcEntit
 
     @Override
     public boolean canStart() {
-        if (mob.getWorld().getDifficulty() == Difficulty.PEACEFUL) {
+        if (mob.level().getDifficulty() == Difficulty.PEACEFUL) {
             return false;
         } else {
             if(mob.getTarget() instanceof NpcEntity npcEntity) {
                 try {
-                    Faction currentFaction = FactionLookup.getFactionById(mob.getWorld(), mob.getFactionIdentifier());
+                    Faction currentFaction = FactionLookup.getFactionById(mob.level(), mob.getFactionIdentifier());
                     if(!currentFaction.isHostileToward(npcEntity.getFactionIdentifier())) return false;
                 } catch (Exception e) {
                     e.printStackTrace();

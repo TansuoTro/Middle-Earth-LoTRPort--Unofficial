@@ -20,28 +20,29 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class VaultBlock extends BaseEntityBlock {
     public enum Phase implements StringRepresentable {
         INACTIVE, ACTIVE, UNLOCKING, EJECTING;
-        public String asString() { return name().toLowerCase(java.util.Locale.ROOT); }
+        public String asString() { return name().lowercaseVariant(java.util.Locale.ROOT); }
     }
-    public static final EnumProperty<Phase> PHASE = EnumProperty.of("vault_state", Phase.class);
+    public static final EnumProperty<Phase> PHASE = EnumProperty.create("vault_state", Phase.class);
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 
-    public VaultBlock(Settings settings) {
+    public VaultBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        setDefaultState(stateManager.getDefaultState().with(PHASE, Phase.INACTIVE)
+        setDefaultState(stateManager.defaultBlockState().with(PHASE, Phase.INACTIVE)
                 .with(FACING, Direction.NORTH).with(TrialSpawnerBlock.OMINOUS, false));
     }
     @Override protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) { builder.add(PHASE, FACING, TrialSpawnerBlock.OMINOUS); }
     @Override public RenderShape getRenderType(BlockState state) { return RenderShape.MODEL; }
     @Override public BlockEntity createBlockEntity(BlockPos pos, BlockState state) { return new VaultBlockEntity(pos, state); }
-    @Override public BlockState getPlacementState(BlockPlaceContext context) { return getDefaultState().with(FACING, context.getHorizontalPlayerFacing().getOpposite()); }
-    @Override public BlockState rotate(BlockState state, Rotation rotation) { return state.with(FACING, rotation.rotate(state.get(FACING))); }
+    @Override public BlockState getPlacementState(BlockPlaceContext context) { return getDefaultState().with(FACING, context.getHorizontalDirection().getOpposite()); }
+    @Override public BlockState rotate(BlockState state, Rotation rotation) { return state.setValue(FACING, rotation.rotate(state.get(FACING))); }
     @Override public BlockState mirror(BlockState state, Mirror mirror) { return state.rotate(mirror.getRotation(state.get(FACING))); }
     @Override public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (world.isClient) return InteractionResult.SUCCESS;
+        if (world.isClientSide) return InteractionResult.SUCCESS;
         return world.getBlockEntity(pos) instanceof VaultBlockEntity vault && vault.unlock(player, hand)
                 ? InteractionResult.CONSUME : InteractionResult.PASS;
     }

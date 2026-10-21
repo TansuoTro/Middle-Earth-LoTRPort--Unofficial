@@ -12,18 +12,19 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class ChimneyBlock extends AbstractToggleableFireBlock {
 
-    protected static final VoxelShape SHAPE = Shapes.combineAndSimplify(Block.createCuboidShape(0, 0, 0, 16, 4, 16), Block.createCuboidShape(3, 4, 3, 13, 16, 13), BooleanOp.OR);
+    protected static final VoxelShape SHAPE = Shapes.combineAndSimplify(Block.box(0, 0, 0, 16, 4, 16), Block.box(3, 4, 3, 13, 16, 13), BooleanOp.OR);
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-    public ChimneyBlock(Settings settings) {
+    public ChimneyBlock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
@@ -34,7 +35,7 @@ public class ChimneyBlock extends AbstractToggleableFireBlock {
     @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-        if (world.isClient) {
+        if (world.isClientSide) {
             if (state.get(LIT)) {
                 return AbstractToggleableFireBlock.checkType(type, ModBlockEntities.CHIMNEY, ChimneyBlockEntity::clientTick);
             }

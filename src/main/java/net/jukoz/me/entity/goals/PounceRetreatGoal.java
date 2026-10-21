@@ -36,7 +36,7 @@ public class PounceRetreatGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        if (this.spider.hasPassengers()) {
+        if (this.spider.isVehicle()) {
             return false;
         }
         this.target = this.spider.getTarget();

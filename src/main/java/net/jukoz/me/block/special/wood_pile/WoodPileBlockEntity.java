@@ -33,7 +33,7 @@ import static net.jukoz.me.block.special.wood_pile.WoodPileBlock.STAGE;
 public class WoodPileBlockEntity extends BlockEntity implements MenuProvider, ImplementedInventory {
 
     private static final String ID = "wood_pile";
-    private final NonNullList<ItemStack> inventory = NonNullList.ofSize(9, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(9, ItemStack.EMPTY);
 
     public WoodPileBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.WOOD_PILE, pos, state);
@@ -74,21 +74,21 @@ public class WoodPileBlockEntity extends BlockEntity implements MenuProvider, Im
     @Override
     public void setStack(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
         if(this.hasAmount(5)){
-            this.getWorld().setBlockState(this.getPos(), ModDecorativeBlocks.WOOD_PILE.getDefaultState()
+            this.getLevel().setBlock(this.getBlockPos(), ModDecorativeBlocks.WOOD_PILE.defaultBlockState()
                     .with(STAGE, 2)
-                    .with(BlockStateProperties.HORIZONTAL_FACING, this.getWorld().getBlockState(this.getPos()).get(BlockStateProperties.HORIZONTAL_FACING)));
+                    .with(BlockStateProperties.HORIZONTAL_FACING, this.getLevel().getBlockState(this.getBlockPos()).get(BlockStateProperties.HORIZONTAL_FACING)));
         }  else if (this.isEmpty()){
-            this.getWorld().setBlockState(this.getPos(), ModDecorativeBlocks.WOOD_PILE.getDefaultState()
+            this.getLevel().setBlock(this.getBlockPos(), ModDecorativeBlocks.WOOD_PILE.defaultBlockState()
                     .with(STAGE, 0)
-                    .with(BlockStateProperties.HORIZONTAL_FACING, this.getWorld().getBlockState(this.getPos()).get(BlockStateProperties.HORIZONTAL_FACING)));
+                    .with(BlockStateProperties.HORIZONTAL_FACING, this.getLevel().getBlockState(this.getBlockPos()).get(BlockStateProperties.HORIZONTAL_FACING)));
         } else if (!this.hasAmount(5) && !isEmpty()){
-            this.getWorld().setBlockState(this.getPos(), ModDecorativeBlocks.WOOD_PILE.getDefaultState()
+            this.getLevel().setBlock(this.getBlockPos(), ModDecorativeBlocks.WOOD_PILE.defaultBlockState()
                     .with(STAGE, 1)
-                    .with(BlockStateProperties.HORIZONTAL_FACING, this.getWorld().getBlockState(this.getPos()).get(BlockStateProperties.HORIZONTAL_FACING)));
+                    .with(BlockStateProperties.HORIZONTAL_FACING, this.getLevel().getBlockState(this.getBlockPos()).get(BlockStateProperties.HORIZONTAL_FACING)));
         }
     }
     @Override
@@ -114,7 +114,7 @@ public class WoodPileBlockEntity extends BlockEntity implements MenuProvider, Im
 
     @Override
     public void markDirty() {
-        if(world != null && !world.isClient()) {
+        if(world != null && !world.isClientSide()) {
             FriendlyByteBuf data = PacketByteBufs.create();
             data.writeInt(inventory.size());
             for(int i = 0; i < inventory.size(); i++) {

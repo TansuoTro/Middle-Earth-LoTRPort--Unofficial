@@ -13,7 +13,7 @@ import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.LargeDripstoneFeature;
 import net.minecraft.world.level.levelgen.Column;
@@ -36,11 +36,11 @@ public class PillarFeature extends Feature<PillarFeatureConfig> {
         if (!canGenerate(structureWorldAccess, blockPos)) {
             return false;
         }
-        Optional<CaveSurface> optional = CaveSurface.create(structureWorldAccess, blockPos, largeDripstoneFeatureConfig.floorToCeilingSearchRange, DripstoneUtils::canGenerate, DripstoneUtils::canReplaceOrLava);
-        if (!optional.isPresent() || !(optional.get() instanceof CaveSurface.Bounded)) {
+        Optional<Column> optional = Column.create(structureWorldAccess, blockPos, largeDripstoneFeatureConfig.floorToCeilingSearchRange, DripstoneUtils::canGenerate, DripstoneUtils::canReplaceOrLava);
+        if (!optional.isPresent() || !(optional.get() instanceof Column.Bounded)) {
             return false;
         }
-        CaveSurface.Bounded bounded = (CaveSurface.Bounded)optional.get();
+        Column.Bounded bounded = (Column.Bounded)optional.get();
         if (bounded.getHeight() < 4) {
             return false;
         }
@@ -100,10 +100,10 @@ public class PillarFeature extends Feature<PillarFeatureConfig> {
 
         boolean canGenerate(WorldGenLevel world, WindModifier wind) {
             while (this.scale > 1) {
-                BlockPos.Mutable mutable = this.pos.mutableCopy();
+                BlockPos.MutableBlockPos mutable = this.pos.mutableCopy();
                 int i = Math.min(10, this.getBaseScale());
                 for (int j = 0; j < i; ++j) {
-                    if (world.getBlockState(mutable).isOf(Blocks.LAVA)) {
+                    if (world.getBlockState(mutable).is(Blocks.LAVA)) {
                         return false;
                     }
                     if (canGenerateBase(world, wind.modify(mutable), this.scale)) {
@@ -130,15 +130,15 @@ public class PillarFeature extends Feature<PillarFeatureConfig> {
                     if ((double)random.nextFloat() < 0.2) {
                         k = (int)((float)k * Mth.nextBetween(random, 0.8f, 1.0f));
                     }
-                    BlockPos.Mutable mutable = this.pos.add(i, 0, j).mutableCopy();
+                    BlockPos.MutableBlockPos mutable = this.pos.add(i, 0, j).mutableCopy();
                     boolean bl = false;
-                    int l = this.isStalagmite ? world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, mutable.getX(), mutable.getZ()) : Integer.MAX_VALUE;
+                    int l = this.isStalagmite ? world.getTopY(Heightmap.Types.WORLD_SURFACE_WG, mutable.getX(), mutable.getZ()) : Integer.MAX_VALUE;
                     for (int m = 0; m < k && mutable.getY() < l; ++m) {
                         BlockPos blockPos = wind.modify(mutable);
                         if (canGenerateOrLava(world, blockPos)) {
                             bl = true;
-                            world.setBlockState(blockPos, blockState, Block.NOTIFY_LISTENERS);
-                        } else if (bl && world.getBlockState(blockPos).isIn(BlockTags.BASE_STONE_OVERWORLD)) continue block1;
+                            world.setBlock(blockPos, blockState, Block.UPDATE_CLIENTS);
+                        } else if (bl && world.getBlockState(blockPos).is(BlockTags.BASE_STONE_OVERWORLD)) continue block1;
                         mutable.move(this.isStalagmite ? Direction.UP : Direction.DOWN);
                     }
                 }

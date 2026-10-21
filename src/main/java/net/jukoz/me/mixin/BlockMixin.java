@@ -4,7 +4,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.entity.EntitiesME;
 import net.minecraft.world.level.block.Block;
@@ -44,9 +44,9 @@ public abstract class BlockMixin {
                     float distance = (float) pos.getSquaredDistance(explosionPos);
                     if(distance < access.me$getPower() / DISCARD_DISTANCE) return;
 
-                    FallingBlockEntity fallingBlockEntity = FallingBlockEntity.spawnFromBlock(world, pos, block.getDefaultState());
+                    FallingBlockEntity fallingBlockEntity = FallingBlockEntity.spawnFromBlock(world, pos, block.defaultBlockState());
                     fallingBlockEntity.dropItem = false;
-                    fallingBlockEntity.setDestroyedOnLanding();
+                    fallingBlockEntity.disableDrop();
                     Vec3 velocity = pos.toCenterPos().subtract(explosionPos).normalize();
                     float factor = FORCE / distance;
                     velocity.multiply(factor);

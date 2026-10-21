@@ -20,12 +20,12 @@ public class MordorBNChestplateModel extends HaltChestplateModel {
     public static LayerDefinition getTexturedModelData() {
         MeshDefinition modelData = getModelData();
 
-        PartDefinition body = modelData.getRoot().addChild(PartNames.BODY, CubeListBuilder.create(),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        PartDefinition body = modelData.getRoot().addOrReplaceChild(PartNames.BODY, CubeListBuilder.create(),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        body.addChild("chest_addon", CubeListBuilder.create()
-                .uv(0, 41).cuboid(-4.5F, -1.0F, -2.3F, 9.0F, 12.0F, 4.0F, new CubeDeformation(0.51F)),
-                PartPose.pivot(0.0F, 0.0F, 0.0F));
+        body.addOrReplaceChild("chest_addon", CubeListBuilder.create()
+                .texOffs(0, 41).addBox(-4.5F, -1.0F, -2.3F, 9.0F, 12.0F, 4.0F, new CubeDeformation(0.51F)),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.of(modelData, 64, 64);
     }

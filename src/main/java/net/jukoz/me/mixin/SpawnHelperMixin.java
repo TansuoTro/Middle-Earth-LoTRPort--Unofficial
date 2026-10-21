@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class SpawnHelperMixin {
 
     @Inject(method = "canSpawn", at = @At("HEAD"), cancellable = true)
-    private static void canSpawnMixin(ServerLevel world, MobCategory group, StructureManager structureAccessor, ChunkGenerator chunkGenerator, MobSpawnSettings.SpawnEntry spawnEntry, BlockPos.Mutable pos, double squaredDistance, CallbackInfoReturnable<Boolean> cir) {
+    private static void canSpawnMixin(ServerLevel world, MobCategory group, StructureManager structureAccessor, ChunkGenerator chunkGenerator, MobSpawnSettings.SpawnerData spawnEntry, BlockPos.MutableBlockPos pos, double squaredDistance, CallbackInfoReturnable<Boolean> cir) {
         EntityType<?> type = spawnEntry.type;
         // Only checks if in the MEM dimension (TODO : make it more datadrivne)
         if (world.getRegistryKey().equals(ModDimensions.ME_DIMENSION_KEY) && !SpawnUtil.canCreatureSpawn(type, world, MobSpawnType.NATURAL, pos, world.getRandom())) {

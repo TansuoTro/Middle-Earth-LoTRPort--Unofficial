@@ -18,11 +18,11 @@ public enum BlockAuthor implements StringRepresentable {
     ANGMARZKU(5, "Angmarzku")
     ;
 
-    private static final IntFunction<BlockAuthor> BY_ID = ByIdMap.createIdToValueFunction(BlockAuthor::getId, BlockAuthor.values(), ByIdMap.OutOfBoundsHandling.ZERO);;
+    private static final IntFunction<BlockAuthor> BY_ID = ByIdMap.continuous(BlockAuthor::getId, BlockAuthor.values(), ByIdMap.OutOfBoundsStrategy.ZERO);;
     private final int id;
     private final String authorName;
 
-    public static final Codec<BlockAuthor> CODEC = StringRepresentable.createCodec(BlockAuthor::values);
+    public static final Codec<BlockAuthor> CODEC = StringRepresentable.fromEnum(BlockAuthor::values);
     public static final PacketCodec<net.minecraft.network.FriendlyByteBuf, BlockAuthor> PACKET_CODEC = PacketCodecs.indexed(BY_ID, BlockAuthor::getId);
 
     BlockAuthor(int id, String authorName) {

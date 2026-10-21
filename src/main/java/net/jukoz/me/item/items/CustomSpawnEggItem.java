@@ -12,7 +12,6 @@ import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUsageContext;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -34,6 +33,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import net.minecraft.world.level.material.Fluid;
 
 public class CustomSpawnEggItem extends Item {
     private static final Map<EntityType<? extends Mob>, CustomSpawnEggItem> SPAWN_EGGS = Maps.newIdentityHashMap();
@@ -50,7 +50,7 @@ public class CustomSpawnEggItem extends Item {
         if (!(world instanceof ServerLevel)) {
             return InteractionResult.SUCCESS;
         }
-        ItemStack itemStack = context.getStack();
+        ItemStack itemStack = context.getItem();
         BlockPos blockPos = context.getBlockPos();
         Direction direction = context.getSide();
         BlockState blockState = world.getBlockState(blockPos);
@@ -65,8 +65,8 @@ public class CustomSpawnEggItem extends Item {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
-        ItemStack itemStack = user.getStackInHand(hand);
-        BlockHitResult blockHitResult = SpawnEggItem.raycast(world, user, ClipContext.FluidHandling.SOURCE_ONLY);
+        ItemStack itemStack = user.getItemInHand(hand);
+        BlockHitResult blockHitResult = SpawnEggItem.raycast(world, user, ClipContext.Fluid.SOURCE_ONLY);
         if (blockHitResult.getType() != HitResult.Type.BLOCK) {
             return InteractionResultHolder.pass(itemStack);
         }
@@ -133,7 +133,7 @@ public class CustomSpawnEggItem extends Item {
             return Optional.empty();
         }
         mobEntity.refreshPositionAndAngles(pos.getX(), pos.getY(), pos.getZ(), 0.0f, 0.0f);
-        world.spawnEntityAndPassengers(mobEntity);
+        world.addFreshEntityWithPassengers(mobEntity);
         if (stack.hasCustomName()) {
             mobEntity.setCustomName(stack.getName());
         }

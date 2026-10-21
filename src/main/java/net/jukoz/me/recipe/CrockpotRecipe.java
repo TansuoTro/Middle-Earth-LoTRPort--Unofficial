@@ -43,17 +43,17 @@ public class CrockpotRecipe implements Recipe<MultipleStackRecipeInput> {
 
     @Override
     public boolean matches(MultipleStackRecipeInput input, Level world) {
-        if(world.isClient()) return false;
+        if(world.isClientSide()) return false;
         int i = 0;
         for (int j = 0; j < input.size(); j++) {
-            ItemStack itemStack = input.getStack(j);
+            ItemStack itemStack = input.getItem(j);
             if (itemStack.isEmpty()) continue;
             i++;
         }
         if(i != this.inputs.size()) return false;
 
         for (int j = 0; j < inputs.size(); j++) {
-            if(!inputs.get(j).test(input.getStack(j))) return false;
+            if(!inputs.get(j).test(input.getItem(j))) return false;
         }
         return true;
     }
@@ -101,8 +101,8 @@ public class CrockpotRecipe implements Recipe<MultipleStackRecipeInput> {
         @Override
         public CrockpotRecipe read(ResourceLocation id, JsonObject json) {
             int ingredientsAmount = GsonHelper.getInt(json, "ingredients_amount");
-            JsonArray ingredients = GsonHelper.getArray(json, "ingredients");
-            NonNullList<Ingredient> inputs = NonNullList.ofSize(ingredients.size(), Ingredient.EMPTY);
+            JsonArray ingredients = GsonHelper.getAsJsonArray(json, "ingredients");
+            NonNullList<Ingredient> inputs = NonNullList.withSize(ingredients.size(), Ingredient.EMPTY);
             for (int i = 0; i < ingredients.size(); i++) {
                 Ingredient ingredient = Ingredient.fromJson(ingredients.get(i), true);
                 if (ingredient.isEmpty()) continue;
@@ -116,11 +116,11 @@ public class CrockpotRecipe implements Recipe<MultipleStackRecipeInput> {
         @Override
         public CrockpotRecipe read(ResourceLocation id, FriendlyByteBuf buf) {
             int ingredientsAmount = buf.readInt();
-            NonNullList<Ingredient> inputs = NonNullList.ofSize(buf.readInt(), Ingredient.EMPTY);
+            NonNullList<Ingredient> inputs = NonNullList.withSize(buf.readInt(), Ingredient.EMPTY);
             for (int i = 0; i < inputs.size(); i++) {
                 inputs.set(i, Ingredient.fromPacket(buf));
             }
-            ItemStack output = buf.readItemStack();
+            ItemStack output = buf.readItem();
 
             return new CrockpotRecipe(id, ingredientsAmount, inputs, output);
         }

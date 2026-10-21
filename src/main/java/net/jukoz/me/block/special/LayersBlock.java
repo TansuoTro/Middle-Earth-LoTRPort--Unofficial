@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
@@ -23,7 +23,7 @@ public class LayersBlock extends SnowLayerBlock implements SimpleWaterloggedBloc
 
     public LayersBlock(Settings settings, Block fullBlockIn) {
         super(settings);
-        this.setDefaultState((BlockState)((BlockState)this.stateManager.getDefaultState()).with(LAYERS, 1).with(WATERLOGGED, false));
+        this.setDefaultState((BlockState)((BlockState)this.stateManager.defaultBlockState()).with(LAYERS, 1).with(WATERLOGGED, false));
 
         fullBlock = fullBlockIn;
     }
@@ -31,19 +31,19 @@ public class LayersBlock extends SnowLayerBlock implements SimpleWaterloggedBloc
     @Override
     public BlockState getPlacementState(BlockPlaceContext ctx) {
         BlockState blockState = ctx.getWorld().getBlockState(ctx.getBlockPos());
-        if (blockState.isOf(this)) {
+        if (blockState.is(this)) {
             int i = (Integer)blockState.get(LAYERS);
             if(i == 7){
-                return fullBlock.getDefaultState();
+                return fullBlock.defaultBlockState();
             } else {
                 if (blockState.get(WATERLOGGED)){
-                    return (BlockState)blockState.with(LAYERS, Math.min(8, i + 1)).with(WATERLOGGED, true);
+                    return (BlockState)blockState.setValue(LAYERS, Math.min(8, i + 1)).with(WATERLOGGED, true);
                 } else {
-                    return (BlockState)blockState.with(LAYERS, Math.min(8, i + 1));
+                    return (BlockState)blockState.setValue(LAYERS, Math.min(8, i + 1));
                 }
             }
         } else {
-            if(blockState.isOf(Blocks.WATER)){
+            if(blockState.is(Blocks.WATER)){
                 return super.getPlacementState(ctx).with(WATERLOGGED, true);
             } else {
                 return super.getPlacementState(ctx);

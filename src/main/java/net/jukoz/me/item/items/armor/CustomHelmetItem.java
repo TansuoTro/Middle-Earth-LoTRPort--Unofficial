@@ -18,12 +18,12 @@ public class CustomHelmetItem extends ArmorItem {
     public static void toggleHoodState(ServerPlayer player, ItemStack stack){
         HelmetAttachmentDataComponent hoodDataComponent = MEComponents.get(stack, MEComponents.HELMET_ATTACHMENT_DATA);
         if (hoodDataComponent != null){
-            if (hoodDataComponent.down() && hoodDataComponent.getHelmetAttachment().getConstantState() == null) {
+            if (hoodDataComponent.below() && hoodDataComponent.getHelmetAttachment().getConstantState() == null) {
                 MEComponents.set(stack, MEComponents.HELMET_ATTACHMENT_DATA, new HelmetAttachmentDataComponent(false, hoodDataComponent.helmetAttachment(), hoodDataComponent.helmetAttachmentColor()));
-                player.sendMessage(Component.translatable("alert." + MiddleEarth.MOD_ID + ".hood_up"), true);
-            } else if (!hoodDataComponent.down() && hoodDataComponent.getHelmetAttachment().getConstantState() == null){
+                player.sendSystemMessage(Component.translatable("alert." + MiddleEarth.MOD_ID + ".hood_up"), true);
+            } else if (!hoodDataComponent.below() && hoodDataComponent.getHelmetAttachment().getConstantState() == null){
                 MEComponents.set(stack, MEComponents.HELMET_ATTACHMENT_DATA, new HelmetAttachmentDataComponent(true, hoodDataComponent.helmetAttachment(), hoodDataComponent.helmetAttachmentColor()));
-                player.sendMessage(Component.translatable("alert." + MiddleEarth.MOD_ID + ".hood_down"), true);
+                player.sendSystemMessage(Component.translatable("alert." + MiddleEarth.MOD_ID + ".hood_down"), true);
             }
         }
     }

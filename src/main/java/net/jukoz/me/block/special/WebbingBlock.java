@@ -20,14 +20,15 @@ import net.minecraft.world.level.block.MultifaceBlock;
 import net.minecraft.world.level.block.MultifaceSpreader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class WebbingBlock extends MultifaceBlock {
     public static final BooleanProperty PERSISTENT = BlockStateProperties.PERSISTENT;
     private final MultifaceSpreader grower = new MultifaceSpreader(this);
 
-    public WebbingBlock(Settings settings) {
+    public WebbingBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(this.getDefaultState().with(PERSISTENT, true));
+        this.setDefaultState(this.defaultBlockState().with(PERSISTENT, true));
     }
 
     @Override
@@ -54,9 +55,9 @@ public class WebbingBlock extends MultifaceBlock {
 
     @Override
     public void neighborUpdate(BlockState state, Level world, BlockPos pos, Block sourceBlock, BlockPos fromPos, boolean notify) {
-        if (!world.isClient) {
+        if (!world.isClientSide) {
             for (Direction direction : Direction.values()) {
-                if (world.getFluidState(pos.offset(direction)).isIn(net.minecraft.tags.FluidTags.WATER)) {
+                if (world.getFluidState(pos.offset(direction)).is(net.minecraft.tags.FluidTags.WATER)) {
                     world.breakBlock(pos, true);
                     return;
                 }

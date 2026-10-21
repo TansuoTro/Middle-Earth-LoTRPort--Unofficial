@@ -59,7 +59,7 @@ public class SmokeRingProjectileEntity extends Projectile {
 
     @Override
     protected void initDataTracker() {
-        this.dataTracker.startTracking(FAILED, false);
+        this.entityData.define(FAILED, false);
     }
 
     @Override
@@ -109,11 +109,11 @@ public class SmokeRingProjectileEntity extends Projectile {
         Vec3 start = this.getPos();
         Vec3 end = this.getPos().add(this.getVelocity());
 
-        EntityHitResult hit = ProjectileUtil.getEntityCollision(this.getWorld(),
+        EntityHitResult hit = ProjectileUtil.getEntityCollision(this.level(),
                 this,
                 start,
                 end,
-                this.getBoundingBox().stretch(this.getVelocity()).expand(ENTITY_BOX_EXPANSION),
+                this.getBoundingBox().getMovementArea(this.getVelocity()).expand(ENTITY_BOX_EXPANSION),
                 this::canHit,
                 ENTITY_COLLISION_MARGIN);
 
@@ -127,7 +127,7 @@ public class SmokeRingProjectileEntity extends Projectile {
     }
 
     private boolean checkFanBlockCollision() {
-        return ModCollisionUtils.checkBlockFanCollision(this.getWorld(),
+        return ModCollisionUtils.checkBlockFanCollision(this.level(),
                 this.getBoundingBox(),
                 this.getVelocity(),
                 this,
@@ -135,11 +135,11 @@ public class SmokeRingProjectileEntity extends Projectile {
     }
 
     public void setFailed(boolean failed) {
-        this.dataTracker.set(FAILED, failed);
+        this.entityData.set(FAILED, failed);
     }
 
     public boolean isFailed() {
-        return this.dataTracker.get(FAILED);
+        return this.entityData.get(FAILED);
     }
 
     public int getMaxLifespanTicks() {

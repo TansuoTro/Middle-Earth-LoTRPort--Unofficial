@@ -48,7 +48,7 @@ public class StoneTrollEntity extends TrollEntity {
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(PETRIFYING, PETRIFYING_DURATION);
+        this.entityData.define(PETRIFYING, PETRIFYING_DURATION);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class StoneTrollEntity extends TrollEntity {
 
     @Override
     protected void updatePassengerPosition(Entity passenger, PositionUpdater positionUpdater) {
-        int i = this.getPassengerList().indexOf(passenger);
+        int i = this.getPassengers().indexOf(passenger);
         if (i < 0) {
             return;
         }
@@ -73,13 +73,13 @@ public class StoneTrollEntity extends TrollEntity {
     }
 
     public void setPetrifying(int petrifying) {
-        this.dataTracker.set(PETRIFYING, petrifying);
+        this.entityData.set(PETRIFYING, petrifying);
     }
     public int getPetrifying() {
-        return this.dataTracker.get(PETRIFYING);
+        return this.entityData.get(PETRIFYING);
     }
     public boolean isPetrified() {
-        return this.dataTracker.get(PETRIFYING) == -1;
+        return this.entityData.get(PETRIFYING) == -1;
     }
 
     @Override
@@ -102,18 +102,18 @@ public class StoneTrollEntity extends TrollEntity {
 
     @Override
     protected boolean isAffectedByDaylight() {
-        if (this.getWorld().isDay() && !this.getWorld().isClient()) {
-            float f = this.getBrightnessAtEyes();
-            BlockPos blockPos = BlockPos.ofFloored(this.getX(), this.getEyeY(), this.getZ());
-            return f > 0.5f && this.getWorld().isSkyVisible(blockPos);
+        if (this.level().isDay() && !this.level().isClientSide()) {
+            float f = this.getLightLevelDependentMagicValue();
+            BlockPos blockPos = BlockPos.containing(this.getX(), this.getEyeY(), this.getZ());
+            return f > 0.5f && this.level().canSeeSky(blockPos);
         }
         return false;
     }
 
     @Override
     public void tickMovement() {
-        if (this.isAlive() && !this.getWorld().isClient() && this.getPetrifying() != -1 && this.getWorld().getBiome(this.getBlockPos()).getKey().isPresent()) {
-            ResourceKey<Biome> biomeKey = this.getWorld().getBiome(this.getBlockPos()).getKey().get();
+        if (this.isAlive() && !this.level().isClientSide() && this.getPetrifying() != -1 && this.level().getBiome(this.getBlockPos()).getKey().isPresent()) {
+            ResourceKey<Biome> biomeKey = this.level().getBiome(this.getBlockPos()).getKey().get();
 
             boolean inDaylight = this.isAffectedByDaylight() && this.getEquippedStack(EquipmentSlot.CHEST).isEmpty() && !darkBiomes.contains(biomeKey);
 
@@ -130,15 +130,15 @@ public class StoneTrollEntity extends TrollEntity {
                 this.setPetrifying(PETRIFYING_DURATION);
             }
         }
-        if(getPetrifying() != -1 && getPetrifying() < PETRIFYING_DURATION && this.getWorld().isClient() && this.age % 3 == 0) {
-            this.getWorld().addParticle(ParticleTypes.LARGE_SMOKE, this.getX() + ((random.nextFloat() * 2f) - 1f), this.getY() + 1d + random.nextFloat(), this.getZ() + ((random.nextFloat() * 2f) - 1f), random.nextFloat() / 8.0f, 0.2f, random.nextFloat() / 8.0f);
+        if(getPetrifying() != -1 && getPetrifying() < PETRIFYING_DURATION && this.level().isClientSide() && this.age % 3 == 0) {
+            this.level().addParticle(ParticleTypes.LARGE_SMOKE, this.getX() + ((random.nextFloat() * 2f) - 1f), this.getY() + 1d + random.nextFloat(), this.getZ() + ((random.nextFloat() * 2f) - 1f), random.nextFloat() / 8.0f, 0.2f, random.nextFloat() / 8.0f);
         }
 
         super.tickMovement();
     }
 
     public void turnToStone() {
-        this.setAiDisabled(true);
+        this.setNoAi(true);
         this.convertTo(ModEntities.PETRIFIED_TROLL, true);
     }
 
@@ -151,7 +151,7 @@ public class StoneTrollEntity extends TrollEntity {
     @Override
     public void readCustomDataFromNbt(CompoundTag nbt) {
         super.readCustomDataFromNbt(nbt);
-        this.dataTracker.set(PETRIFYING, nbt.getInt("Petrifying"));
+        this.entityData.set(PETRIFYING, nbt.getInt("Petrifying"));
     }
 
     @Override

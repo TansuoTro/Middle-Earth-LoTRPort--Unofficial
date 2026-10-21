@@ -50,14 +50,14 @@ public class VaultBlockEntity extends BlockEntity {
     public boolean unlock(Player player, InteractionHand hand) {
         if (!(world instanceof ServerLevel server) || player.isSpectator() || rewarded.contains(player.getUuid())) return false;
         ItemStack key = ItemStack.fromNbt(config.getCompound("key_item"));
-        ItemStack held = player.getStackInHand(hand);
-        if (key.isEmpty() || !held.isOf(key.getItem()) || held.getCount() < key.getCount()) return false;
+        ItemStack held = player.getItemInHand(hand);
+        if (key.isEmpty() || !held.is(key.getItem()) || held.getCount() < key.getCount()) return false;
         ResourceLocation tableId = ResourceLocation.tryParse(config.getString("loot_table"));
         if (tableId == null) return false;
         var parameters = new LootParams.Builder(server)
                 .add(LootContextParams.ORIGIN, Vec3.ofCenter(pos))
                 .add(LootContextParams.THIS_ENTITY, player).luck(player.getLuck()).build(LootContextParamSets.CHEST);
-        var loot = server.getServer().getLootManager().getLootTable(tableId).generateLoot(parameters);
+        var loot = server.getServer().getLootData().getLootTable(tableId).generateLoot(parameters);
         if (loot.isEmpty()) return false;
         rewarded.add(player.getUuid());
         if (!player.isCreative()) held.decrement(key.getCount());
@@ -66,7 +66,7 @@ public class VaultBlockEntity extends BlockEntity {
         for (ItemStack stack : loot) {
             if (!player.getInventory().insertStack(stack)) player.dropItem(stack, false);
         }
-        server.setBlockState(pos, getCachedState().with(VaultBlock.PHASE, VaultBlock.Phase.ACTIVE), Block.NOTIFY_ALL);
+        server.setBlock(pos, getBlockState().with(VaultBlock.PHASE, VaultBlock.Phase.ACTIVE), (Block.UPDATE_NEIGHBORS | Block.UPDATE_CLIENTS));
         server.playSound(null, pos, SoundEvents.BLOCK_CHEST_OPEN, SoundSource.BLOCKS, 1.0f, 0.8f);
         return true;
     }

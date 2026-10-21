@@ -83,7 +83,7 @@ public class SpawnData {
     }
 
     public MutableComponent getFullName(){
-        return Component.translatable("spawn." + identifier.toTranslationKey());
+        return Component.translatable("spawn." + identifier.toLanguageKey());
     }
 
     private String getIdentifierValue() {

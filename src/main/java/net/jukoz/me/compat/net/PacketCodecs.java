@@ -54,10 +54,10 @@ public final class PacketCodecs {
         RegistryAccess explicit = REGISTRIES.get();
         if (explicit != null) return explicit;
         MinecraftServer activeServer = server;
-        if (activeServer != null && activeServer.isOnThread()) return activeServer.getRegistryManager();
+        if (activeServer != null && activeServer.isSameThread()) return activeServer.registryAccess();
         RegistryAccess client = clientRegistries.get();
         if (client != null) return client;
-        return activeServer == null ? null : activeServer.getRegistryManager();
+        return activeServer == null ? null : activeServer.registryAccess();
     }
 
     public static final PacketCodec<FriendlyByteBuf, net.minecraft.resources.ResourceLocation> IDENTIFIER =
@@ -166,7 +166,7 @@ public final class PacketCodecs {
             buf.writeBoolean(true);
             ResourceLocation id = value.getKey().map(ResourceKey::getValue).orElse(null);
             if (id == null && element == null) {
-                throw new IllegalArgumentException("Inline registry entry requires a codec: " + registryKey.getValue());
+                throw new IllegalArgumentException("Inline registry entry requires a codec: " + registryKey.location());
             }
             buf.writeIdentifier(id == null ? new ResourceLocation("unknown", "unknown") : id);
             if (element != null) {
@@ -176,14 +176,14 @@ public final class PacketCodecs {
             if (!buf.readBoolean()) {
                 return null;
             }
-            ResourceLocation id = buf.readIdentifier();
+            ResourceLocation id = buf.readResourceLocation();
             T inline = element == null ? null : element.decode(buf);
             RegistryAccess manager = registries();
             Holder<T> resolved = manager == null ? null : manager.getOptional(registryKey)
-                    .flatMap(registry -> registry.getEntry(ResourceKey.of(registryKey, id))).orElse(null);
+                    .flatMap(registry -> registry.getEntry(ResourceKey.create(registryKey, id))).orElse(null);
             if (resolved != null) return resolved;
             if (inline != null) return Holder.of(inline);
-            throw new io.netty.handler.codec.DecoderException("Unknown registry entry " + registryKey.getValue()
+            throw new io.netty.handler.codec.DecoderException("Unknown registry entry " + registryKey.location()
                     + "/" + id + (manager == null ? " (no registry context)" : ""));
         });
     }

@@ -24,6 +24,6 @@ public class ItemStackTooltipMixin {
     private void me$componentTooltips(Player player, TooltipFlag context,
                                       CallbackInfoReturnable<List<Component>> cir) {
         MEComponents.appendTooltips((ItemStack) (Object) this, context, cir.getReturnValue(),
-                player == null ? null : player.getWorld());
+                player == null ? null : player.level());
     }
 }

@@ -25,7 +25,7 @@ import net.jukoz.me.world.features.underground.CavesConfiguredFeatures;
 import net.jukoz.me.world.features.underground.CavesPlacedFeatures;
 import net.jukoz.me.world.features.vegetation.ModVegetationConfiguredFeatures;
 import net.jukoz.me.world.features.vegetation.ModVegetationPlacedFeatures;
-import net.minecraft.core.RegistryBuilder;
+import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 
 public class DataGeneration implements DataGeneratorEntrypoint {

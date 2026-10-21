@@ -3,7 +3,7 @@ package net.jukoz.me.world.features.tree;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Holder;
@@ -632,11 +632,11 @@ public class ModTreePlacedFeatures {
     }
 
     public static ResourceKey<PlacedFeature> registerKey(String name) {
-        return ResourceKey.of(Registries.PLACED_FEATURE, new ResourceLocation(MiddleEarth.MOD_ID, name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(MiddleEarth.MOD_ID, name));
     }
 
     private static void register(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, Holder<ConfiguredFeature<?, ?>> configuration,
                                  List<PlacementModifier> modifiers) {
-        context.register(key, new PlacedFeature(configuration, List.copyOf(modifiers)));
+        context.register(key, new PlacedFeature(configuration, List.bind(modifiers)));
     }
 }

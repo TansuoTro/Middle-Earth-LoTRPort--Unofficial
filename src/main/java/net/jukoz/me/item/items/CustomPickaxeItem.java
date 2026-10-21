@@ -24,7 +24,7 @@ public class CustomPickaxeItem extends PickaxeItem {
     private final double extraAttackDamage;
     private final Tier material;
 
-    public CustomPickaxeItem(Tier material, float attackDamage, float attackSpeed, Item.Settings settings) {
+    public CustomPickaxeItem(Tier material, float attackDamage, float attackSpeed, Item.Properties settings) {
         super(material, (int) attackDamage, attackSpeed, settings);
         this.extraAttackDamage = attackDamage - (int) attackDamage;
         this.material = material;
@@ -50,7 +50,7 @@ public class CustomPickaxeItem extends PickaxeItem {
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         for (Map.Entry<Attribute, AttributeModifier> entry : super.getAttributeModifiers(slot).entries()) {
             AttributeModifier modifier = entry.getValue();
-            if (entry.getKey() == Attributes.GENERIC_ATTACK_DAMAGE) {
+            if (entry.getKey() == Attributes.ATTACK_DAMAGE) {
                 builder.put(entry.getKey(), new AttributeModifier(modifier.getId(), modifier.getName(),
                         modifier.getValue() + this.extraAttackDamage, modifier.getOperation()));
             } else {

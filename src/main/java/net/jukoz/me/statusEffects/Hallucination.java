@@ -26,7 +26,7 @@ public class Hallucination extends MobEffect {
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
         if(entity instanceof Player){
-            Map<MobEffect, MobEffectInstance> map = entity.getActiveStatusEffects();
+            Map<MobEffect, MobEffectInstance> map = entity.getActiveEffectsMap();
             int ticksLeft = map.get(this).getDuration();
             if(ticksLeft != -1 && ticksLeft < HallucinationData.STOPPING_TICK)
                 HallucinationData.addHallucination((IEntityDataSaver) entity, -2);

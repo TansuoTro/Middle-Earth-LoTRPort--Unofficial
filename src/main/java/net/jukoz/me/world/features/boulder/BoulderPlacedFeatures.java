@@ -1,8 +1,8 @@
 package net.jukoz.me.world.features.boulder;
 
 import net.jukoz.me.MiddleEarth;
-import net.minecraft.data.worldgen.BootstrapContext;
-import net.minecraft.core.RegistryEntryLookup;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Holder;
@@ -12,6 +12,7 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 public class BoulderPlacedFeatures {
     public static final ResourceKey<PlacedFeature> ANDESITE_BOULDER = registerKey("andesite_boulder");
@@ -118,137 +119,137 @@ public class BoulderPlacedFeatures {
         PlacementModifier veryRare = PlacedFeature.createCountExtraModifier(0, 0.005f, 1);
 
         PlacedFeature.register(featureRegisterable, ANDESITE_BOULDER, andesite, uncommon,
-                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, CALCITE_BOULDER, calcite, uncommon,
-                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, DIORITE_BOULDER, diorite, uncommon,
-                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, GRANITE_BOULDER, granite, uncommon,
-                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, LIMESTONE_BOULDER, limestone, uncommon,
-                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, MIRKWOOD_ROOTS_BOULDER, mirkwoodRoots, common,
-                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, STONE_BOULDER, stone, uncommon,
-                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, SANDSTONE_BOULDER, sandStone, uncommon,
-                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, MOSSY_BOULDER, mossy, uncommon,
-                InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
 
         PlacedFeature.register(featureRegisterable, SMALL_BOULDER_ANDESITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.SMALL_BOULDER_ANDESITE), 
-                sparse, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                sparse, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, MEDIUM_BOULDER_ANDESITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.MEDIUM_BOULDER_ANDESITE),
-                rare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                rare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, BIG_BOULDER_ANDESITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.BIG_BOULDER_ANDESITE),
-                veryRare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                veryRare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, SMALL_BOULDER_ASHEN_STONE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.SMALL_BOULDER_ASHEN_STONE),
-                sparse, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                sparse, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, MEDIUM_BOULDER_ASHEN_STONE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.MEDIUM_BOULDER_ASHEN_STONE),
-                rare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                rare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, BIG_BOULDER_ASHEN_STONE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.BIG_BOULDER_ASHEN_STONE),
-                veryRare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                veryRare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, SMALL_BOULDER_BASALT, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.SMALL_BOULDER_BASALT),
-                sparse, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                sparse, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, MEDIUM_BOULDER_BASALT, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.MEDIUM_BOULDER_BASALT),
-                rare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                rare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, BIG_BOULDER_BASALT, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.BIG_BOULDER_BASALT),
-                veryRare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                veryRare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, SMALL_BOULDER_BLUE_TUFF, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.SMALL_BOULDER_BLUE_TUFF),
-                uncommon, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                uncommon, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, MEDIUM_BOULDER_BLUE_TUFF, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.MEDIUM_BOULDER_BLUE_TUFF),
-                scarce, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                scarce, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, BIG_BOULDER_BLUE_TUFF, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.BIG_BOULDER_BLUE_TUFF),
-                veryRare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                veryRare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, SMALL_BOULDER_CALCITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.SMALL_BOULDER_CALCITE),
-                scarce, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                scarce, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, MEDIUM_BOULDER_CALCITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.MEDIUM_BOULDER_CALCITE),
-                rare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                rare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, BIG_BOULDER_CALCITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.BIG_BOULDER_CALCITE),
-                veryRare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                veryRare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, SMALL_BOULDER_DIORITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.SMALL_BOULDER_DIORITE),
-                sparse, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                sparse, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, MEDIUM_BOULDER_DIORITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.MEDIUM_BOULDER_DIORITE),
-                rare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                rare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, BIG_BOULDER_DIORITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.BIG_BOULDER_DIORITE),
-                veryRare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                veryRare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, SMALL_BOULDER_DOLOMITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.SMALL_BOULDER_DOLOMITE),
-                sparse, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                sparse, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, MEDIUM_BOULDER_DOLOMITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.MEDIUM_BOULDER_DOLOMITE),
-                rare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                rare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, BIG_BOULDER_DOLOMITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.BIG_BOULDER_DOLOMITE),
-                veryRare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                veryRare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, SMALL_BOULDER_SMOOTH_DOLOMITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.SMALL_BOULDER_SMOOTH_DOLOMITE),
-                sparse, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                sparse, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, MEDIUM_BOULDER_SMOOTH_DOLOMITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.MEDIUM_BOULDER_SMOOTH_DOLOMITE),
-                rare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                rare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, BIG_BOULDER_SMOOTH_DOLOMITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.BIG_BOULDER_SMOOTH_DOLOMITE),
-                veryRare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                veryRare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, SMALL_BOULDER_GALONN, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.SMALL_BOULDER_GALONN),
-                sparse, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                sparse, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, MEDIUM_BOULDER_GALONN, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.MEDIUM_BOULDER_GALONN),
-                rare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                rare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, BIG_BOULDER_GALONN, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.BIG_BOULDER_GALONN),
-                veryRare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                veryRare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, SMALL_BOULDER_GNEISS, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.SMALL_BOULDER_GNEISS),
-                sparse, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                sparse, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, MEDIUM_BOULDER_GNEISS, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.MEDIUM_BOULDER_GNEISS),
-                rare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                rare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, BIG_BOULDER_GNEISS, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.BIG_BOULDER_GNEISS),
-                veryRare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                veryRare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, SMALL_BOULDER_GRANITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.SMALL_BOULDER_GRANITE),
-                sparse, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                sparse, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, MEDIUM_BOULDER_GRANITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.MEDIUM_BOULDER_GRANITE),
-                rare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                rare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, BIG_BOULDER_GRANITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.BIG_BOULDER_GRANITE),
-                veryRare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                veryRare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, SMALL_BOULDER_HEMATITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.SMALL_BOULDER_HEMATITE),
-                sparse, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                sparse, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, MEDIUM_BOULDER_HEMATITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.MEDIUM_BOULDER_HEMATITE),
-                rare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                rare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, BIG_BOULDER_HEMATITE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.BIG_BOULDER_HEMATITE),
-                veryRare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                veryRare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, SMALL_BOULDER_IRONSTONE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.SMALL_BOULDER_IRONSTONE),
-                sparse, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                sparse, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, MEDIUM_BOULDER_IRONSTONE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.MEDIUM_BOULDER_IRONSTONE),
-                rare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                rare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, BIG_BOULDER_IRONSTONE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.BIG_BOULDER_IRONSTONE),
-                veryRare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                veryRare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, SMALL_BOULDER_LIMESTONE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.SMALL_BOULDER_LIMESTONE),
-                sparse, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                sparse, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, MEDIUM_BOULDER_LIMESTONE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.MEDIUM_BOULDER_LIMESTONE),
-                rare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                rare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, BIG_BOULDER_LIMESTONE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.BIG_BOULDER_LIMESTONE),
-                veryRare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                veryRare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, SMALL_BOULDER_MOSSY_STONE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.SMALL_BOULDER_MOSSY_STONE),
-                sparse, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                sparse, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, MEDIUM_BOULDER_MOSSY_STONE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.MEDIUM_BOULDER_MOSSY_STONE),
-                rare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                rare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, BIG_BOULDER_MOSSY_STONE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.BIG_BOULDER_MOSSY_STONE),
-                veryRare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                veryRare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, SMALL_BOULDER_SANDSTONE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.SMALL_BOULDER_SANDSTONE),
-                sparse, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                sparse, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, MEDIUM_BOULDER_SANDSTONE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.MEDIUM_BOULDER_SANDSTONE),
-                rare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                rare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, BIG_BOULDER_SANDSTONE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.BIG_BOULDER_SANDSTONE),
-                veryRare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                veryRare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, SMALL_BOULDER_STONE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.SMALL_BOULDER_STONE),
-                sparse, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                sparse, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, MEDIUM_BOULDER_STONE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.MEDIUM_BOULDER_STONE),
-                rare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                rare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, BIG_BOULDER_STONE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.BIG_BOULDER_STONE),
-                veryRare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                veryRare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, SMALL_BOULDER_SLATE, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.SMALL_BOULDER_SLATE),
-                uncommon, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                uncommon, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, SMALL_BOULDER_GABBRO, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.SMALL_BOULDER_GABBRO),
-                sparse, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                sparse, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, MEDIUM_BOULDER_GABBRO, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.MEDIUM_BOULDER_GABBRO),
-                rare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                rare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
         PlacedFeature.register(featureRegisterable, BIG_BOULDER_GABBRO, registryEntryLookup.getOrThrow(BoulderConfiguredFeatures.BIG_BOULDER_GABBRO),
-                veryRare, InSquarePlacement.of(), PlacedFeature.WORLD_SURFACE_WG_HEIGHTMAP, PlacementModifier.of());
+                veryRare, InSquarePlacement.of(), Heightmap.Types.WORLD_SURFACE_WG, PlacementModifier.of());
     }
 
     public static ResourceKey<PlacedFeature> registerKey(String name) {
-        return ResourceKey.of(Registries.PLACED_FEATURE, new ResourceLocation(MiddleEarth.MOD_ID, name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(MiddleEarth.MOD_ID, name));
     }
 }

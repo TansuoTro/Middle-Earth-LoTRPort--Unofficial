@@ -1,10 +1,10 @@
 package net.jukoz.me.block.special;
 
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
@@ -34,12 +34,13 @@ import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import com.mojang.math.Axis;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class WateringCanBlock extends Block implements SimpleWaterloggedBlock {
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public WateringCanBlock(Settings settings) {
+    public WateringCanBlock(BlockBehaviour.Properties settings) {
         super(settings);
         setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(WATERLOGGED, false));
     }
@@ -50,7 +51,7 @@ public class WateringCanBlock extends Block implements SimpleWaterloggedBlock {
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return this.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
+        return this.defaultBlockState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalDirection().getOpposite()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
     }
 
     @Override
@@ -65,7 +66,7 @@ public class WateringCanBlock extends Block implements SimpleWaterloggedBlock {
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (player.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty() && !player.isCreative()){
-            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+            world.setBlock(pos, Blocks.AIR.defaultBlockState());
             player.equipStack(EquipmentSlot.MAINHAND,  new ItemStack(ModDecorativeBlocks.WATERING_CAN.asItem()));
             world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_CHICKEN_EGG, SoundSource.BLOCKS, 0.5f, world.random.nextFloat() * 0.1f - 1.0f);
             return InteractionResult.PASS;
@@ -81,7 +82,7 @@ public class WateringCanBlock extends Block implements SimpleWaterloggedBlock {
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+        return state.setValue(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override
@@ -102,6 +103,6 @@ public class WateringCanBlock extends Block implements SimpleWaterloggedBlock {
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return Block.createCuboidShape(3, 0, 3, 13, 14, 13);
+        return Block.box(3, 0, 3, 13, 14, 13);
     }
 }

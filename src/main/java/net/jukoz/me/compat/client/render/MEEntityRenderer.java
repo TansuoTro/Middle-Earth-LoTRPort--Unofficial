@@ -3,7 +3,7 @@ package net.jukoz.me.compat.client.render;
 import net.jukoz.me.compat.client.render.state.EntityRenderStateCompat;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.resources.ResourceLocation;
@@ -30,8 +30,8 @@ public abstract class MEEntityRenderer<T extends Entity, S extends EntityRenderS
     /** Fills the shared entity fields; donor subclasses call this via {@code super}. */
     public void updateRenderState(T entity, S state, float tickDelta) {
         state.age = entity.age + tickDelta;
-        state.yaw = entity.getYaw(tickDelta);
-        state.pitch = entity.getPitch(tickDelta);
+        state.yRot = entity.getYaw(tickDelta);
+        state.xRot = entity.getPitch(tickDelta);
         state.invisible = entity.isInvisible();
         state.customName = entity.getCustomName();
     }

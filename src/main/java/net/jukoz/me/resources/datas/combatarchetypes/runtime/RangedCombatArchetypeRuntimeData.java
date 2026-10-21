@@ -34,7 +34,7 @@ public class RangedCombatArchetypeRuntimeData extends CombatArchetypeRuntimeData
     }
 
     public boolean canShoot(NpcEntity entity){
-        if(entity.getLastAttackTime() > 5)
+        if(entity.getLastHurtMobTimestamp() > 5)
             return this.currentAmmoCount > 0;
         return false;
     }

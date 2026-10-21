@@ -12,7 +12,7 @@ import net.jukoz.me.entity.uruks.mordor.MordorBlackUrukEntity;
 import net.jukoz.me.item.ModEquipmentItems;
 import net.jukoz.me.item.ModToolItems;
 import net.jukoz.me.item.ModWeaponItems;
-import net.minecraft.world.entity.EntityData;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MobSpawnType;
@@ -61,35 +61,35 @@ public class LongbeardDwarfEntity extends NpcEntity {
 
     public static AttributeSupplier.Builder setSoldierAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25f)
-                .add(Attributes.GENERIC_MAX_HEALTH, 22.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.25f)
+                .add(Attributes.MAX_HEALTH, 22.0)
                 .add(Attributes.GENERIC_ATTACK_SPEED, 2.0)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 32.0)
-                .add(Attributes.GENERIC_ATTACK_DAMAGE, 2.0);
+                .add(Attributes.ATTACK_DAMAGE, 2.0);
     }
     public static AttributeSupplier.Builder setKnightAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25f)
-                .add(Attributes.GENERIC_MAX_HEALTH, 24.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.25f)
+                .add(Attributes.MAX_HEALTH, 24.0)
                 .add(Attributes.GENERIC_ATTACK_SPEED, 2.0)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 32.0)
-                .add(Attributes.GENERIC_ATTACK_DAMAGE, 2.5);
+                .add(Attributes.ATTACK_DAMAGE, 2.5);
     }
     public static AttributeSupplier.Builder setVeteranAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25f)
-                .add(Attributes.GENERIC_MAX_HEALTH, 26.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.25f)
+                .add(Attributes.MAX_HEALTH, 26.0)
                 .add(Attributes.GENERIC_ATTACK_SPEED, 2.0)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 32.0)
-                .add(Attributes.GENERIC_ATTACK_DAMAGE, 3.0);
+                .add(Attributes.ATTACK_DAMAGE, 3.0);
     }
     public static AttributeSupplier.Builder setLeaderAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.GENERIC_MOVEMENT_SPEED, 0.25f)
-                .add(Attributes.GENERIC_MAX_HEALTH, 28.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.25f)
+                .add(Attributes.MAX_HEALTH, 28.0)
                 .add(Attributes.GENERIC_ATTACK_SPEED, 2.0)
                 .add(Attributes.GENERIC_FOLLOW_RANGE, 32.0)
-                .add(Attributes.GENERIC_ATTACK_DAMAGE, 3.5);
+                .add(Attributes.ATTACK_DAMAGE, 3.5);
     }
 
     @Override

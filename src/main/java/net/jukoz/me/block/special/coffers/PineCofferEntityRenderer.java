@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.Sheets;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererFactory;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.ChestRenderer;
 import net.minecraft.client.resources.model.Material;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -48,27 +48,27 @@ public class PineCofferEntityRenderer<T extends ChestBlockEntity> extends ChestR
     public static LayerDefinition getTexturedModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
-        PartDefinition lid = modelPartData.addChild("lid", CubeListBuilder.create().uv(0, 23)
-                .cuboid(-8.0F, -2.0F, -14.0F, 16.0F, 2.0F, 15.0F, new CubeDeformation(0.0F)),
-                PartPose.pivot(0.0F, 10.0F, 7.0F));
+        PartDefinition lid = modelPartData.addOrReplaceChild("lid", CubeListBuilder.create().texOffs(0, 23)
+                .addBox(-8.0F, -2.0F, -14.0F, 16.0F, 2.0F, 15.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(0.0F, 10.0F, 7.0F));
 
-        PartDefinition bottom = modelPartData.addChild("bottom", CubeListBuilder.create().uv(48, 29).
+        PartDefinition bottom = modelPartData.addOrReplaceChild("bottom", CubeListBuilder.create().texOffs(48, 29).
                 cuboid(7.0F, -4.0F, -6.0F, 1.0F, 4.0F, 3.0F, new CubeDeformation(0.0F))
-                .uv(3, 29).cuboid(7.0F, -4.0F, 4.0F, 1.0F, 4.0F, 3.0F, new CubeDeformation(0.0F))
-                .uv(3, 45).cuboid(-8.0F, -4.0F, 4.0F, 1.0F, 4.0F, 3.0F, new CubeDeformation(0.0F))
-                .uv(47, 45).cuboid(-8.0F, -4.0F, -6.0F, 1.0F, 4.0F, 3.0F, new CubeDeformation(0.0F))
-                .uv(0, 41).cuboid(-8.0F, -14.0F, -6.0F, 16.0F, 10.0F, 13.0F, new CubeDeformation(0.0F))
-                .uv(14, 5).cuboid(8.0F, -4.0F, -3.0F, 0.0F, 4.0F, 7.0F, new CubeDeformation(0.0F))
-                .uv(30, 5).cuboid(-8.0F, -4.0F, -3.0F, 0.0F, 4.0F, 7.0F, new CubeDeformation(0.0F)),
-                PartPose.pivot(0.0F, 24.0F, 0.0F));
+                .texOffs(3, 29).addBox(7.0F, -4.0F, 4.0F, 1.0F, 4.0F, 3.0F, new CubeDeformation(0.0F))
+                .texOffs(3, 45).addBox(-8.0F, -4.0F, 4.0F, 1.0F, 4.0F, 3.0F, new CubeDeformation(0.0F))
+                .texOffs(47, 45).addBox(-8.0F, -4.0F, -6.0F, 1.0F, 4.0F, 3.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 41).addBox(-8.0F, -14.0F, -6.0F, 16.0F, 10.0F, 13.0F, new CubeDeformation(0.0F))
+                .texOffs(14, 5).addBox(8.0F, -4.0F, -3.0F, 0.0F, 4.0F, 7.0F, new CubeDeformation(0.0F))
+                .texOffs(30, 5).addBox(-8.0F, -4.0F, -3.0F, 0.0F, 4.0F, 7.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(0.0F, 24.0F, 0.0F));
 
-        PartDefinition cube_r1 = bottom.addChild("cube_r1", CubeListBuilder.create().uv(14, 0)
-                .mirrored().cuboid(0.0F, 0.0F, -4.0F, 0.0F, 4.0F, 7.0F, new CubeDeformation(0.0F))
-                .mirrored(false), PartPose.of(-8.0F, -12.0F, 1.0F, 0.0F, 0.0F, 0.3491F));
+        PartDefinition cube_r1 = bottom.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(14, 0)
+                .mirror().addBox(0.0F, 0.0F, -4.0F, 0.0F, 4.0F, 7.0F, new CubeDeformation(0.0F))
+                .mirror(false), PartPose.offsetAndRotation(-8.0F, -12.0F, 1.0F, 0.0F, 0.0F, 0.3491F));
 
-        PartDefinition cube_r2 = bottom.addChild("cube_r2", CubeListBuilder.create().uv(14, 0)
-                .cuboid(0.0F, 0.0F, -4.0F, 0.0F, 4.0F, 7.0F, new CubeDeformation(0.0F)),
-                PartPose.of(8.0F, -12.0F, 1.0F, 0.0F, 0.0F, -0.3491F));
+        PartDefinition cube_r2 = bottom.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(14, 0)
+                .addBox(0.0F, 0.0F, -4.0F, 0.0F, 4.0F, 7.0F, new CubeDeformation(0.0F)),
+                PartPose.offsetAndRotation(8.0F, -12.0F, 1.0F, 0.0F, 0.0F, -0.3491F));
 
         return LayerDefinition.of(modelData, 64, 64);
     }
@@ -78,25 +78,25 @@ public class PineCofferEntityRenderer<T extends ChestBlockEntity> extends ChestR
         Material spriteIdentifier = new Material(Sheets.CHEST_ATLAS_TEXTURE, MiddleEarth.ofPath( "model", "pine_coffer"));
         VertexConsumer vertexConsumer = spriteIdentifier.getVertexConsumer(vertexConsumers, RenderLayer::getEntityCutout);
 
-        Level world = entity.getWorld();
-        BlockState blockState = world != null ? entity.getCachedState() : Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.SOUTH);
+        Level world = entity.level();
+        BlockState blockState = world != null ? entity.getBlockState() : Blocks.CHEST.defaultBlockState().with(ChestBlock.FACING, Direction.SOUTH);
         Block block = blockState.getBlock();
 
         PineCofferBlock chest = (PineCofferBlock)block;
 
-        DoubleBlockCombiner.PropertySource<? extends ChestBlockEntity> properties;
-        properties = chest.getBlockEntitySource(blockState, world, entity.getPos(), true);
+        DoubleBlockCombiner.NeighborCombineResult<? extends ChestBlockEntity> properties;
+        properties = chest.getBlockEntitySource(blockState, world, entity.position(), true);
         float g = properties.apply(ReinforcedChestBlock.getAnimationProgressRetriever(entity)).get(tickProgress);
         g = 1.0F - g;
         g = 1.0F - g * g * g;
 
         matrices.push();
-        float rotation = blockState.get(ChestBlock.FACING).asRotation();
+        float rotation = blockState.get(ChestBlock.FACING).toYRot();
         matrices.translate(0.5D, 1.5D, 0.5D);
         matrices.multiply(Axis.POSITIVE_X.rotationDegrees(180));
         matrices.multiply(Axis.POSITIVE_Y.rotationDegrees(rotation - 180));
 
-        lid.pitch = g * -1.5707964f;
+        lid.xRot = g * -1.5707964f;
         lid.render(matrices, vertexConsumer, light, overlay);
         bottom.render(matrices, vertexConsumer, light, overlay);
 

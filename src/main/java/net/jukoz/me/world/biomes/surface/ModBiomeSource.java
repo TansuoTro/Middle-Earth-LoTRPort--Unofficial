@@ -46,7 +46,7 @@ public class ModBiomeSource extends BiomeSource {
     }
 
     @Override
-    public Holder<Biome> getBiome(int x, int y, int z, Climate.MultiNoiseSampler noise) {
+    public Holder<Biome> getBiome(int x, int y, int z, Climate.Sampler noise) {
         int i = QuartPos.toBlock(x);
         int j = QuartPos.toBlock(y);
         int k = QuartPos.toBlock(z);

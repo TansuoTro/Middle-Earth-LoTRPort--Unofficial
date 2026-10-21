@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -15,10 +15,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.jukoz.me.MiddleEarth;
 import org.joml.Matrix4f;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import org.joml.Quaternionf;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.RenderType;
 
 @OnlyIn(Dist.CLIENT)
 public class SmokeRingProjectileRenderer extends MEEntityRenderer<SmokeRingProjectileEntity, SmokeRingProjectileRenderState> {
@@ -51,13 +51,13 @@ public class SmokeRingProjectileRenderer extends MEEntityRenderer<SmokeRingProje
         int frame = firstFrame + Math.min((int) (state.age / state.maxLifespan * frameCount), frameCount - 1);
         TextureAtlasSprite sprite = frames[frame];
 
-        Matrix4f matrix = matrices.peek().getPositionMatrix();
-        VertexConsumer vc = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(sprite.getAtlasId()));
+        Matrix4f matrix = matrices.peek().pose();
+        VertexConsumer vc = vertexConsumers.getBuffer(RenderType.entityTranslucent(sprite.atlasLocation()));
 
-        float minU = sprite.getMinU();
+        float minU = sprite.getU0();
         float maxU = sprite.getMaxU();
-        float minV = sprite.getMinV();
-        float maxV = sprite.getMaxV();
+        float minV = sprite.getV0();
+        float maxV = sprite.getV1();
 
         int overlay = net.minecraft.client.renderer.texture.OverlayTexture.DEFAULT_UV;
 

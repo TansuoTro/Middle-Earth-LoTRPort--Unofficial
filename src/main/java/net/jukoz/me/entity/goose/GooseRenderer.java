@@ -4,9 +4,9 @@ import com.google.common.collect.Maps;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.model.EntityModelLayer;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.resources.ResourceLocation;
@@ -21,11 +21,11 @@ public class GooseRenderer extends MobRenderer<GooseEntity, GooseModel<GooseEnti
 
     public GooseRenderer(EntityRendererProvider.Context context) {
         this(context, 0.35F, ModEntityModelLayers.GOOSE);
-        this.addFeature(new GooseHeldItemFeatureRenderer(this, context.getHeldItemRenderer()));
+        this.addFeature(new GooseHeldItemFeatureRenderer(this, context.getItemInHandRenderer()));
     }
 
     protected GooseRenderer(EntityRendererProvider.Context ctx, float shadowRadius, ModelLayerLocation layer) {
-        super(ctx, new GooseModel(ctx.getPart(layer)), shadowRadius);
+        super(ctx, new GooseModel(ctx.bakeLayer(layer)), shadowRadius);
     }
 
     protected float getLyingAngle(GooseEntity gooseEntity) {

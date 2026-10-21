@@ -38,9 +38,9 @@ public class CaveTrollRoarTask extends Behavior<CaveTrollEntity> {
     protected void run(ServerLevel world, CaveTrollEntity troll, long time) {
         this.startTime = time;
         troll.setRoaring(true);
-        troll.getBrain().forget(MemoryModuleType.WALK_TARGET);
+        troll.getBrain().erase(MemoryModuleType.WALK_TARGET);
 
-        List<Entity> entities = world.getOtherEntities(troll, troll.getBoundingBox().expand(15, 15, 15)); // Get nearby entities
+        List<Entity> entities = world.getEntities(troll, troll.getBoundingBox().expand(15, 15, 15)); // Get nearby entities
         for(Entity entity : entities) { // Run through all entities
             if(troll.isValidTarget(entity)) { // Apply bad effects if entity is valid target
                 ((LivingEntity)entity).addStatusEffect(new MobEffectInstance(MobEffects.WEAKNESS, 200), troll);

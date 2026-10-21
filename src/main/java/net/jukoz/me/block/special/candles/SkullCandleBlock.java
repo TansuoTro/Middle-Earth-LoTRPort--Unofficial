@@ -29,8 +29,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccess;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
@@ -45,19 +45,20 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import com.mojang.math.Axis;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class SkullCandleBlock extends Block {
     public static final EnumProperty<Direction> HORIZONTAL_FACING = HorizontalDirectionalBlock.FACING;
-    public static final IntegerProperty CANDLES = IntegerProperty.of("candles", 1, 3);
+    public static final IntegerProperty CANDLES = IntegerProperty.create("candles", 1, 3);
     public static final BooleanProperty LIT;
     private static final Int2ObjectMap CANDLES_TO_PARTICLE_OFFSETS;
 
     public static final ToIntFunction<BlockState> STATE_TO_LUMINANCE;
     private static final VoxelShape SHAPE;
 
-    public SkullCandleBlock(Settings settings) {
+    public SkullCandleBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState(this.getDefaultState().with(LIT, false).with(CANDLES, 1)
+        this.setDefaultState(this.defaultBlockState().with(LIT, false).with(CANDLES, 1)
                 .with(HORIZONTAL_FACING, Direction.NORTH));
     }
 
@@ -68,13 +69,13 @@ public class SkullCandleBlock extends Block {
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        Direction[] var3 = ctx.getPlacementDirections();
+        Direction[] var3 = ctx.getNearestLookingDirections();
         int var4 = var3.length;
 
         for(int var5 = 0; var5 < var4; ++var5) {
             Direction direction = var3[var5];
             if (direction.getAxis() == Direction.Axis.Y) {
-                BlockState blockState = this.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+                BlockState blockState = this.defaultBlockState().with(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalDirection().getOpposite());
                 if (blockState.canPlaceAt(ctx.getWorld(), ctx.getBlockPos())) {
                     return blockState;
                 }
@@ -86,7 +87,7 @@ public class SkullCandleBlock extends Block {
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         return !state.canPlaceAt(world, pos) ?
-                Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+                Blocks.AIR.defaultBlockState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
     @Override
@@ -96,19 +97,19 @@ public class SkullCandleBlock extends Block {
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        ItemStack stack = player.getStackInHand(hand);
-        if(stack.isIn(ItemTags.CANDLES) && state.get(CANDLES) < 3) {
+        ItemStack stack = player.getItemInHand(hand);
+        if(stack.is(ItemTags.CANDLES) && state.get(CANDLES) < 3) {
             if (!player.isCreative()) stack.decrement(1);
-            world.setBlockState(pos, state.cycle(CANDLES));
+            world.setBlock(pos, state.cycle(CANDLES));
             return InteractionResult.CONSUME;
         }
-        if (!world.isClient && player.getAbilities().allowModifyWorld) {
+        if (!world.isClientSide && player.getAbilities().allowModifyWorld) {
             if(player.isCreative()){
-                world.setBlockState(pos, state.cycle(LIT));
+                world.setBlock(pos, state.cycle(LIT));
             } else {
-                if (state.get(LIT) && stack.isIn(ItemTags.SHOVELS)) {
+                if (state.get(LIT) && stack.is(ItemTags.SHOVELS)) {
                     extinguish(null, state, world, pos);
-                } else if (!state.get(LIT) && stack.isOf(Items.FLINT_AND_STEEL) || stack.isOf(Items.TORCH)) {
+                } else if (!state.get(LIT) && stack.is(Items.FLINT_AND_STEEL) || stack.is(Items.TORCH)) {
                     setLit(world, state, pos, true);
                 }
             }
@@ -119,7 +120,7 @@ public class SkullCandleBlock extends Block {
     public void randomDisplayTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
         if (state.get(LIT)) {
             this.getParticleOffsets(state).forEach((offset) -> {
-                int quarter = state.get(HORIZONTAL_FACING).getHorizontal();
+                int quarter = state.get(HORIZONTAL_FACING).get2DDataValue();
                 Vec3 rotatedOffset = offset.add(-0.5, -0.5, -0.5).rotateY(quarter * -90 * ((float)Math.PI / 180)).add(0.5, 0.5, 0.5);
                 spawnCandleParticles(world, rotatedOffset.add(pos.getX(), pos.getY(), pos.getZ()), random);
             });
@@ -139,7 +140,7 @@ public class SkullCandleBlock extends Block {
     }
 
     protected static void setLit(LevelAccessor world, BlockState state, BlockPos pos, boolean lit) {
-        world.setBlockState(pos, state.with(LIT, lit), 2 | 3);
+        world.setBlock(pos, state.setValue(LIT, lit), 2 | 3);
         if(lit){
             world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.5F, 1.0F);
         }
@@ -154,12 +155,12 @@ public class SkullCandleBlock extends Block {
 
     @Override
     public FluidState getFluidState(BlockState state) {
-        return Fluids.EMPTY.getDefaultState();
+        return Fluids.EMPTY.defaultBlockState();
     }
 
     public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
-        if (!world.isClient && projectile.isOnFire() && !state.get(LIT)) {
-            world.setBlockState(hit.getBlockPos(), state.with(LIT, true), STATE_TO_LUMINANCE.applyAsInt(state));
+        if (!world.isClientSide && projectile.isOnFire() && !state.get(LIT)) {
+            world.setBlock(hit.getBlockPos(), state.setValue(LIT, true), STATE_TO_LUMINANCE.applyAsInt(state));
         }
     }
 
@@ -174,7 +175,7 @@ public class SkullCandleBlock extends Block {
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(HORIZONTAL_FACING, rotation.rotate(state.get(HORIZONTAL_FACING)));
+        return state.setValue(HORIZONTAL_FACING, rotation.rotate(state.get(HORIZONTAL_FACING)));
     }
 
     @Override
@@ -202,6 +203,6 @@ public class SkullCandleBlock extends Block {
             int2ObjectOpenHashMap.put(3, List.of((new Vec3(7.0, 16.0, 9.0)).multiply(0.0625), (new Vec3(8.0, 15.0, 6.0)).multiply(0.0625),
                     (new Vec3(10, 14.0, 10.0)).multiply(0.0625), (new Vec3(2.0, 8.0, 4.0)).multiply(0.0625), (new Vec3(13.0, 6.0, 13.0)).multiply(0.0625)));
         });
-        SHAPE = Block.createCuboidShape(4, 0, 4, 12, 8, 12);
+        SHAPE = Block.box(4, 0, 4, 12, 8, 12);
     }
 }

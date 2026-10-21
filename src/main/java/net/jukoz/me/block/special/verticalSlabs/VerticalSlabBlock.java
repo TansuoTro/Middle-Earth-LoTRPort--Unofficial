@@ -1,6 +1,6 @@
 package net.jukoz.me.block.special.verticalSlabs;
 
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
@@ -17,9 +17,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
@@ -28,16 +28,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import com.mojang.math.Axis;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class VerticalSlabBlock extends Block implements SimpleWaterloggedBlock {
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    public static final BooleanProperty DOUBLE = BooleanProperty.of("double");
-    public static final EnumProperty<VerticalSlabShape> SHAPE = EnumProperty.of("shape", VerticalSlabShape.class);
+    public static final BooleanProperty DOUBLE = BooleanProperty.create("double");
+    public static final EnumProperty<VerticalSlabShape> SHAPE = EnumProperty.create("shape", VerticalSlabShape.class);
 
-    public VerticalSlabBlock(Settings settings) {
+    public VerticalSlabBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.setDefaultState((BlockState)((BlockState)((BlockState)((BlockState)((BlockState)this.stateManager.getDefaultState()).with(FACING, Direction.NORTH).with(WATERLOGGED, false).with(DOUBLE, false).with(SHAPE, VerticalSlabShape.STRAIGHT)))));
+        this.setDefaultState((BlockState)((BlockState)((BlockState)((BlockState)((BlockState)this.stateManager.defaultBlockState()).with(FACING, Direction.NORTH).with(WATERLOGGED, false).with(DOUBLE, false).with(SHAPE, VerticalSlabShape.STRAIGHT)))));
     }
 
     protected void appendProperties(StateDefinition.Builder<Block, BlockState> builder) {
@@ -58,11 +59,11 @@ public class VerticalSlabBlock extends Block implements SimpleWaterloggedBlock {
     public BlockState getPlacementState(BlockPlaceContext ctx) {
         BlockPos blockPos = ctx.getBlockPos();
         BlockState blockState = ctx.getWorld().getBlockState(blockPos);
-        if (blockState.isOf(this)) {
-            return (blockState.with(DOUBLE, true)).with(WATERLOGGED, false);
+        if (blockState.is(this)) {
+            return (blockState.setValue(DOUBLE, true)).with(WATERLOGGED, false);
         } else {
             FluidState fluidState = ctx.getWorld().getFluidState(blockPos);
-            BlockState blockState2 = (BlockState)((BlockState)((BlockState)this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite())).with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER));
+            BlockState blockState2 = (BlockState)((BlockState)((BlockState)this.defaultBlockState().with(FACING, ctx.getHorizontalDirection().getOpposite())).with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER));
             return (BlockState)blockState2.with(SHAPE, getVerticalSlabShape(blockState2, ctx.getWorld(), blockPos));
         }
     }
@@ -73,17 +74,17 @@ public class VerticalSlabBlock extends Block implements SimpleWaterloggedBlock {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
 
-        return direction.getAxis().isHorizontal() ? (BlockState)state.with(SHAPE, getVerticalSlabShape(state, world, pos)) : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+        return direction.getAxis().isHorizontal() ? (BlockState)state.setValue(SHAPE, getVerticalSlabShape(state, world, pos)) : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 
     }
 
     @Override
     public boolean canReplace(BlockState state, BlockPlaceContext context) {
-        ItemStack itemStack = context.getStack();
-        if (state.get(DOUBLE) || !itemStack.isOf(this.asItem())) {
+        ItemStack itemStack = context.getItem();
+        if (state.get(DOUBLE) || !itemStack.is(this.asItem())) {
             return false;
         }
-        if (context.canReplaceExisting()) {
+        if (context.replacingClickedOnBlock()) {
             return context.getSide() == state.get(FACING);
         }
         return true;
@@ -97,47 +98,47 @@ public class VerticalSlabBlock extends Block implements SimpleWaterloggedBlock {
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         if(state.get(DOUBLE)){
-            return Shapes.cuboid(0, 0, 0.0, 1, 1, 1);
+            return Shapes.addBox(0, 0, 0.0, 1, 1, 1);
         } else {
             if(state.get(SHAPE) == VerticalSlabShape.STRAIGHT){
                 return switch(state.get(BlockStateProperties.HORIZONTAL_FACING)) {
-                    case WEST -> Shapes.cuboid(0.5, 0, 0, 1, 1, 1);
-                    case EAST -> Shapes.cuboid(0, 0, 0, 0.5, 1, 1);
-                    case SOUTH -> Shapes.cuboid(0, 0, 0, 1, 1, 0.5);
-                    case NORTH -> Shapes.cuboid(0, 0, 0.5, 1, 1, 1);
-                    default -> Shapes.cuboid(1,1,1,1,1,1);
+                    case WEST -> Shapes.addBox(0.5, 0, 0, 1, 1, 1);
+                    case EAST -> Shapes.addBox(0, 0, 0, 0.5, 1, 1);
+                    case SOUTH -> Shapes.addBox(0, 0, 0, 1, 1, 0.5);
+                    case NORTH -> Shapes.addBox(0, 0, 0.5, 1, 1, 1);
+                    default -> Shapes.addBox(1,1,1,1,1,1);
                 };
             } else if (state.get(SHAPE) == VerticalSlabShape.OUTER_LEFT) {
                 return switch (state.get(BlockStateProperties.HORIZONTAL_FACING)) {
-                    case WEST -> Block.createCuboidShape(8, 0, 0, 16, 16, 8);
-                    case EAST -> Block.createCuboidShape(0, 0, 8, 8, 16, 16);
-                    case SOUTH -> Block.createCuboidShape(0, 0, 0, 8, 16, 8);
-                    case NORTH -> Block.createCuboidShape(8, 0, 8, 16, 16, 16);
-                    default -> Shapes.cuboid(1, 1, 1, 1, 1, 1);
+                    case WEST -> Block.box(8, 0, 0, 16, 16, 8);
+                    case EAST -> Block.box(0, 0, 8, 8, 16, 16);
+                    case SOUTH -> Block.box(0, 0, 0, 8, 16, 8);
+                    case NORTH -> Block.box(8, 0, 8, 16, 16, 16);
+                    default -> Shapes.addBox(1, 1, 1, 1, 1, 1);
                 };
             }else if (state.get(SHAPE) == VerticalSlabShape.OUTER_RIGHT) {
                 return switch (state.get(BlockStateProperties.HORIZONTAL_FACING)) {
-                    case WEST -> Block.createCuboidShape(8, 0, 8, 16, 16, 16);
-                    case EAST -> Block.createCuboidShape(0, 0, 0, 8, 16, 8);
-                    case SOUTH -> Block.createCuboidShape(8, 0, 0, 16, 16, 8);
-                    case NORTH -> Block.createCuboidShape(0, 0, 8, 8, 16, 16);
-                    default -> Shapes.cuboid(1, 1, 1, 1, 1, 1);
+                    case WEST -> Block.box(8, 0, 8, 16, 16, 16);
+                    case EAST -> Block.box(0, 0, 0, 8, 16, 8);
+                    case SOUTH -> Block.box(8, 0, 0, 16, 16, 8);
+                    case NORTH -> Block.box(0, 0, 8, 8, 16, 16);
+                    default -> Shapes.addBox(1, 1, 1, 1, 1, 1);
                 };
             }else if (state.get(SHAPE) == VerticalSlabShape.INNER_LEFT) { //good
                 return switch (state.get(BlockStateProperties.HORIZONTAL_FACING)) {
-                    case WEST -> Shapes.combineAndSimplify(Block.createCuboidShape(8, 0, 0, 16, 16, 16), Block.createCuboidShape(0, 0, 0, 8, 16, 8), BooleanOp.OR);
-                    case EAST -> Shapes.combineAndSimplify(Block.createCuboidShape(0, 0, 0, 8, 16, 16), Block.createCuboidShape(8, 0, 8, 16, 16, 16), BooleanOp.OR);
-                    case SOUTH -> Shapes.combineAndSimplify(Block.createCuboidShape(0, 0, 0, 16, 16, 8), Block.createCuboidShape(0, 0, 8, 8, 16, 16), BooleanOp.OR);
-                    case NORTH -> Shapes.combineAndSimplify(Block.createCuboidShape(0, 0, 8, 16, 16, 16), Block.createCuboidShape(8, 0, 0, 16, 16, 8), BooleanOp.OR);
-                    default -> Shapes.cuboid(1, 1, 1, 1, 1, 1);
+                    case WEST -> Shapes.combineAndSimplify(Block.box(8, 0, 0, 16, 16, 16), Block.box(0, 0, 0, 8, 16, 8), BooleanOp.OR);
+                    case EAST -> Shapes.combineAndSimplify(Block.box(0, 0, 0, 8, 16, 16), Block.box(8, 0, 8, 16, 16, 16), BooleanOp.OR);
+                    case SOUTH -> Shapes.combineAndSimplify(Block.box(0, 0, 0, 16, 16, 8), Block.box(0, 0, 8, 8, 16, 16), BooleanOp.OR);
+                    case NORTH -> Shapes.combineAndSimplify(Block.box(0, 0, 8, 16, 16, 16), Block.box(8, 0, 0, 16, 16, 8), BooleanOp.OR);
+                    default -> Shapes.addBox(1, 1, 1, 1, 1, 1);
                 };
             } else {
                 return switch (state.get(BlockStateProperties.HORIZONTAL_FACING)) { //good
-                    case WEST -> Shapes.combineAndSimplify(Block.createCuboidShape(0, 0, 8, 16, 16, 16), Block.createCuboidShape(8, 0, 0, 16, 16, 8), BooleanOp.OR);
-                    case EAST -> Shapes.combineAndSimplify(Block.createCuboidShape(0, 0, 0, 16, 16, 8), Block.createCuboidShape(0, 0, 8, 8, 16, 16), BooleanOp.OR);
-                    case SOUTH ->Shapes.combineAndSimplify(Block.createCuboidShape(8, 0, 0, 16, 16, 16), Block.createCuboidShape(0, 0, 0, 8, 16, 8), BooleanOp.OR);
-                    case NORTH -> Shapes.combineAndSimplify(Block.createCuboidShape(0, 0, 0, 8, 16, 16), Block.createCuboidShape(8, 0, 8, 16, 16, 16), BooleanOp.OR);
-                    default -> Shapes.cuboid(1, 1, 1, 1, 1, 1);
+                    case WEST -> Shapes.combineAndSimplify(Block.box(0, 0, 8, 16, 16, 16), Block.box(8, 0, 0, 16, 16, 8), BooleanOp.OR);
+                    case EAST -> Shapes.combineAndSimplify(Block.box(0, 0, 0, 16, 16, 8), Block.box(0, 0, 8, 8, 16, 16), BooleanOp.OR);
+                    case SOUTH ->Shapes.combineAndSimplify(Block.box(8, 0, 0, 16, 16, 16), Block.box(0, 0, 0, 8, 16, 8), BooleanOp.OR);
+                    case NORTH -> Shapes.combineAndSimplify(Block.box(0, 0, 0, 8, 16, 16), Block.box(8, 0, 8, 16, 16, 16), BooleanOp.OR);
+                    default -> Shapes.addBox(1, 1, 1, 1, 1, 1);
                 };
             }
         }
@@ -194,7 +195,7 @@ public class VerticalSlabBlock extends Block implements SimpleWaterloggedBlock {
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+        return state.setValue(FACING, rotation.rotate(state.get(FACING)));
     }
 
     public static boolean isVerticalSlab(BlockState state) {
@@ -212,7 +213,7 @@ public class VerticalSlabBlock extends Block implements SimpleWaterloggedBlock {
         if (isVerticalSlab(blockState) ) {
             Direction direction2 = (Direction)blockState.get(FACING);
             if (direction2.getAxis() != ((Direction)state.get(FACING)).getAxis() && isDifferentOrientation(state, world, pos, direction2.getOpposite())) {
-                if (direction2 == direction.rotateYCounterclockwise()) {
+                if (direction2 == direction.getCounterClockWise()) {
                     return VerticalSlabShape.INNER_LEFT;
                 }
 
@@ -224,7 +225,7 @@ public class VerticalSlabBlock extends Block implements SimpleWaterloggedBlock {
         if (isVerticalSlab(blockState2)) {
             Direction direction3 = (Direction)blockState2.get(FACING);
             if (direction3.getAxis() != ((Direction)state.get(FACING)).getAxis() && isDifferentOrientation(state, world, pos, direction3)) {
-                if (direction3 == direction.rotateYCounterclockwise()) {
+                if (direction3 == direction.getCounterClockWise()) {
                     return VerticalSlabShape.OUTER_LEFT;
                 }
 

@@ -10,6 +10,6 @@ public class EntityTypeTagsME {
     public static TagKey<EntityType<?>> UNGOLIENI = of("ungolieni");
 
     private static TagKey<EntityType<?>> of(String id) {
-        return TagKey.of(Registries.ENTITY_TYPE, new ResourceLocation(MiddleEarth.MOD_ID, id));
+        return TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(MiddleEarth.MOD_ID, id));
     }
 }

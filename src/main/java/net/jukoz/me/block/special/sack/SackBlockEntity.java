@@ -42,8 +42,8 @@ public class SackBlockEntity extends RandomizableContainerBlockEntity implements
 
     public SackBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.SACK, pos, state);
-        this.inventory = NonNullList.ofSize(size(), ItemStack.EMPTY);
-        this.setInvStackList(NonNullList.ofSize(this.size(), ItemStack.EMPTY));
+        this.inventory = NonNullList.withSize(size(), ItemStack.EMPTY);
+        this.setInvStackList(NonNullList.withSize(this.size(), ItemStack.EMPTY));
         this.stateManager = new ContainerOpenersCounter() {
             protected void onContainerOpen(Level world, BlockPos pos, BlockState state) {
                 SackBlockEntity.this.setOpen(state, true);
@@ -79,12 +79,12 @@ public class SackBlockEntity extends RandomizableContainerBlockEntity implements
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable(MiddleEarth.of("sack").toTranslationKey("screen"));
+        return Component.translatable(MiddleEarth.of("sack").toLanguageKey("screen"));
     }
 
     @Override
     protected Component getContainerName() {
-        return Component.translatable(MiddleEarth.of("sack").toTranslationKey("screen"));
+        return Component.translatable(MiddleEarth.of("sack").toLanguageKey("screen"));
     }
 
     public void readNbt(CompoundTag nbt) {
@@ -103,7 +103,7 @@ public class SackBlockEntity extends RandomizableContainerBlockEntity implements
     }
 
     public void readInventoryNbt(ReadView readView) {
-        this.inventory = NonNullList.ofSize(this.size(), ItemStack.EMPTY);
+        this.inventory = NonNullList.withSize(this.size(), ItemStack.EMPTY);
         if (!this.deserializeLootTable(readView.nbt())) {
             ContainerHelper.readNbt(readView.nbt(), this.inventory);
         }
@@ -115,19 +115,19 @@ public class SackBlockEntity extends RandomizableContainerBlockEntity implements
 
     public void onOpen(Player player) {
         if (!this.removed && !player.isSpectator()) {
-            this.stateManager.openContainer(player, this.getWorld(), this.getPos(), this.getCachedState());
+            this.stateManager.openContainer(player, this.level(), this.getPos(), this.getBlockState());
         }
     }
 
     public void onClose(Player player) {
         if (!this.removed && !player.isSpectator()) {
-            this.stateManager.closeContainer(player, this.getWorld(), this.getPos(), this.getCachedState());
+            this.stateManager.closeContainer(player, this.level(), this.getPos(), this.getBlockState());
         }
     }
 
     public void tick() {
         if (!this.removed) {
-            this.stateManager.updateViewerCount(this.getWorld(), this.getPos(), this.getCachedState());
+            this.stateManager.recheckOpeners(this.level(), this.getPos(), this.getBlockState());
         }
     }
 
@@ -149,7 +149,7 @@ public class SackBlockEntity extends RandomizableContainerBlockEntity implements
     public void markDirty() {
         super.markDirty();
         if (world != null) {
-            world.updateListeners(pos, getCachedState(), getCachedState(), 3);
+            world.sendBlockUpdated(pos, getBlockState(), getBlockState(), 3);
         }
     }
 
@@ -166,7 +166,7 @@ public class SackBlockEntity extends RandomizableContainerBlockEntity implements
     }
 
     void setOpen(BlockState state, boolean open) {
-        this.world.setBlockState(this.getPos(), (BlockState)state.with(BarrelBlock.OPEN, open), Block.NOTIFY_ALL);
+        this.world.setBlock(this.getPos(), (BlockState)state.setValue(BarrelBlock.OPEN, open), (Block.UPDATE_NEIGHBORS | Block.UPDATE_CLIENTS));
     }
 
     @Override

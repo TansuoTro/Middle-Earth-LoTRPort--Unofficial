@@ -23,7 +23,7 @@ public class StructureManagerScreenHandler extends AbstractContainerMenu {
     // Client side Constructor
     public StructureManagerScreenHandler(int syncId, Inventory playerInventory, StructureManagerScreenData structureManagerScreenData) {
         super(ModScreenHandlers.STRUCTURE_MANAGER_SCREEN_HANDLER, syncId);
-        this.world = playerInventory.player.getWorld();
+        this.world = playerInventory.player.level();
         this.data = structureManagerScreenData;
         this.blockEntity = (StructureManagerBlockEntity) this.world.getBlockEntity(data.getPos());
     }

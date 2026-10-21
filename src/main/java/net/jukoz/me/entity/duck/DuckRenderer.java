@@ -4,9 +4,9 @@ import com.google.common.collect.Maps;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.model.ModEntityModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.model.EntityModelLayer;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.resources.ResourceLocation;
@@ -24,7 +24,7 @@ public class DuckRenderer extends MobRenderer<DuckEntity, DuckModel<DuckEntity>>
     }
 
     protected DuckRenderer(EntityRendererProvider.Context ctx, float shadowRadius, ModelLayerLocation layer) {
-        super(ctx, new DuckModel(ctx.getPart(layer)), shadowRadius);
+        super(ctx, new DuckModel(ctx.bakeLayer(layer)), shadowRadius);
     }
 
     protected float getLyingAngle(DuckEntity duckEntity) {

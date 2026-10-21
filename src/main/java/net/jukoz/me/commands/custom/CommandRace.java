@@ -24,8 +24,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.argument;
+import static net.minecraft.commands.Commands.literal;
 
 public class CommandRace {
     public static String RACE_BASE_COMMAND = "race";
@@ -35,7 +35,7 @@ public class CommandRace {
     private static final String PLAYER = "player";
     private static final String RACE_ID = "race_id";
     private static final int RACE_COLOR = ModColors.WARNING.color;
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandRegistryAccess, Commands.RegistrationEnvironment registrationEnvironment) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandRegistryAccess, Commands.CommandSelection registrationEnvironment) {
         // [GET]
         CommandUtils.simpleCommand(dispatcher, RACE_BASE_COMMAND, literal(GET)
             .executes(CommandRace::getRace), PLAYER, literal(GET)
@@ -67,25 +67,25 @@ public class CommandRace {
     }
 
     private static int getRace(CommandContext<CommandSourceStack> context) {
-        if(context.getSource().isExecutedByPlayer()) {
+        if(context.getSource().isPlayer()) {
             ServerPlayer playerSource = context.getSource().getPlayer();
             if(playerSource != null){
-                Race playerRace = PlayerDataService.getPlayerRace(playerSource, playerSource.getWorld());
+                Race playerRace = PlayerDataService.getPlayerRace(playerSource, playerSource.level());
                 if(playerRace != null){
                     MutableComponent sourceText = Component.translatable("command.%s.race.get.success".formatted(MiddleEarth.MOD_ID),
                             METext.withColor( playerRace.getFullName().copyContentOnly(), RACE_COLOR));
-                    playerSource.sendMessage(METext.withColor(sourceText, ModColors.SUCCESS.color));
+                    playerSource.sendSystemMessage(METext.withColor(sourceText, ModColors.SUCCESS.color));
                     return 0;
                 }
                 MutableComponent sourceText = Component.translatable("command.%s.race.get.fail".formatted(MiddleEarth.MOD_ID));
-                playerSource.sendMessage(METext.withColor(sourceText, ModColors.WARNING.color));
+                playerSource.sendSystemMessage(METext.withColor(sourceText, ModColors.WARNING.color));
             }
         }
         return 0;
     }
 
     private static int getTargetRace(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-        if(context.getSource().isExecutedByPlayer()) {
+        if(context.getSource().isPlayer()) {
             ServerPlayer targetPlayer = EntityArgument.getPlayer(context, PLAYER);
             ServerPlayer source = context.getSource().getPlayer();
             if(source != null){
@@ -110,7 +110,7 @@ public class CommandRace {
     }
 
     private static int setRace(CommandContext<CommandSourceStack> context) {
-        if(context.getSource().isExecutedByPlayer()) {
+        if(context.getSource().isPlayer()) {
             ResourceLocation raceId = ResourceLocationArgument.getIdentifier(context, RACE_ID);
             ServerPlayer source = context.getSource().getPlayer();
 
@@ -146,7 +146,7 @@ public class CommandRace {
                     RaceUtil.updateRace(targetPlayer, race, true);
                     MutableComponent targetText = Component.translatable("command.%s.race.set.success".formatted(MiddleEarth.MOD_ID),
                             METext.withColor( race.getFullName().copyContentOnly(), RACE_COLOR));
-                    targetPlayer.sendMessage(METext.withColor(targetText, ModColors.SUCCESS.color));
+                    targetPlayer.sendSystemMessage(METext.withColor(targetText, ModColors.SUCCESS.color));
 
                     if(source != null){
                         MutableComponent sourceText = Component.translatable("command.%s.race.set.target.success".formatted(MiddleEarth.MOD_ID), targetPlayer.getName(),
@@ -164,7 +164,7 @@ public class CommandRace {
     }
 
     private static int resetRace(CommandContext<CommandSourceStack> context) {
-        if(context.getSource().isExecutedByPlayer()) {
+        if(context.getSource().isPlayer()) {
             ServerPlayer source = context.getSource().getPlayer();
 
             if(source != null) {
@@ -194,10 +194,10 @@ public class CommandRace {
 
             if(source != null && targetPlayer != null) {
                 MutableComponent sourceText = Component.translatable("command.%s.race.reset.target.success".formatted(MiddleEarth.MOD_ID), targetPlayer.getName());
-                targetPlayer.sendMessage(METext.withColor(sourceText, ModColors.SUCCESS.color));
+                targetPlayer.sendSystemMessage(METext.withColor(sourceText, ModColors.SUCCESS.color));
             }
             MutableComponent targetText = Component.translatable("command.%s.race.reset.success".formatted(MiddleEarth.MOD_ID));
-            targetPlayer.sendMessage(METext.withColor(targetText, ModColors.SUCCESS.color));
+            targetPlayer.sendSystemMessage(METext.withColor(targetText, ModColors.SUCCESS.color));
             return 0;
         }
         MutableComponent sourceText = Component.translatable("command.%s.race.reset.target.fail".formatted(MiddleEarth.MOD_ID), targetPlayer.getName());

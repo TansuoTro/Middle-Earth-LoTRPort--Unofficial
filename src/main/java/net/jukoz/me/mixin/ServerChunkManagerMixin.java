@@ -10,7 +10,7 @@ public class ServerChunkManagerMixin {
     @Shadow private ServerLevel world;
     @Inject(method = "tickChunks", locals = LocalCapture.CAPTURE_FAILHARD, at= @At(value = "INVOKE", shift = At.Shift.AFTER,
             target = "Lnet/minecraft/util/Util;shuffle(Ljava/util/List;Lnet/minecraft/util/math/random/RandomSource;)V"))
-    public void tickChunks(CallbackInfo ci, long l, long m, ProfilerFiller profiler, List list, int i, NaturalSpawner.Info info, boolean bl) {
+    public void tickChunks(CallbackInfo ci, long l, long m, ProfilerFiller profiler, List list, int i, NaturalSpawner.SpawnState info, boolean bl) {
         System.out.println("Can mob spawn: " + bl);
         boolean inMiddleEarth = ModDimensions.isInMiddleEarth(this.world);
         System.out.println("Is in Middle-earth: " + inMiddleEarth);

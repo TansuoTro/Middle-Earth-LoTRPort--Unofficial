@@ -10,22 +10,23 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class HotChickenFoodItem extends Item {
-    public HotChickenFoodItem(Settings settings) {
+    public HotChickenFoodItem(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
     @Override
     public ItemStack finishUsing(ItemStack stack, Level world, LivingEntity user) {
-        if(world.isClient) return super.finishUsing(stack, world, user);
+        if(world.isClientSide) return super.finishUsing(stack, world, user);
 
         if(user instanceof Player playerEntity) {
             if (!stack.isEmpty() && MEComponents.get(stack, MEComponents.TEMPERATURE_DATA) != null) {
                 int temperature = MEComponents.get(stack, MEComponents.TEMPERATURE_DATA).temperature();
                 float percentage = 1;
-                if(stack.getItem().getFoodComponent() != null) {
-                    percentage = 15 + (float)stack.getItem().getFoodComponent().getHunger() / 13;
+                if(stack.getItem().getFoodProperties() != null) {
+                    percentage = 15 + (float)stack.getItem().getFoodProperties().getNutrition() / 13;
                 }
                 playerEntity.setFireTicks((int) (temperature * percentage));
             }

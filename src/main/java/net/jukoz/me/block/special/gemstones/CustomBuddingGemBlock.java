@@ -31,19 +31,19 @@ public class CustomBuddingGemBlock extends BuddingAmethystBlock {
             BlockPos blockPos = pos.offset(direction);
             BlockState blockState = world.getBlockState(blockPos);
             Block block = null;
-            if (canGrowIn(blockState)) {
+            if (canClusterGrowAtState(blockState)) {
                 block = clusters.get(0);
-            } else if (blockState.isOf(clusters.get(0)) && blockState.get(AmethystClusterBlock.FACING) == direction) {
+            } else if (blockState.is(clusters.get(0)) && blockState.get(AmethystClusterBlock.FACING) == direction) {
                 block = clusters.get(1);
-            } else if (blockState.isOf(clusters.get(1)) && blockState.get(AmethystClusterBlock.FACING) == direction) {
+            } else if (blockState.is(clusters.get(1)) && blockState.get(AmethystClusterBlock.FACING) == direction) {
                 block = clusters.get(2);
-            } else if (blockState.isOf(clusters.get(2)) && blockState.get(AmethystClusterBlock.FACING) == direction) {
+            } else if (blockState.is(clusters.get(2)) && blockState.get(AmethystClusterBlock.FACING) == direction) {
                 block = clusters.get(3);
             }
 
             if (block != null) {
-                BlockState blockState2 = (BlockState)((BlockState)block.getDefaultState().with(AmethystClusterBlock.FACING, direction)).with(AmethystClusterBlock.WATERLOGGED, blockState.getFluidState().getFluid() == Fluids.WATER);
-                world.setBlockState(blockPos, blockState2);
+                BlockState blockState2 = (BlockState)((BlockState)block.defaultBlockState().with(AmethystClusterBlock.FACING, direction)).with(AmethystClusterBlock.WATERLOGGED, blockState.getFluidState().getFluid() == Fluids.WATER);
+                world.setBlock(blockPos, blockState2);
             }
 
         }

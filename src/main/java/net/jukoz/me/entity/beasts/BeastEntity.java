@@ -69,8 +69,8 @@ public class BeastEntity extends AbstractChestedHorse {
 
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(CHARGING, false);
-        this.dataTracker.startTracking(SITTING, false);
+        this.entityData.define(CHARGING, false);
+        this.entityData.define(SITTING, false);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class BeastEntity extends AbstractChestedHorse {
 
             @Override
             public ItemStack get() {
-                return BeastEntity.this.items.getStack(slot);
+                return BeastEntity.this.items.getItem(slot);
             }
 
             @Override
@@ -128,7 +128,7 @@ public class BeastEntity extends AbstractChestedHorse {
         if (this.hasChest()) {
             ListTag nbtList = new ListTag();
             for(int i = 2; i < this.items.size(); ++i) {
-                ItemStack itemStack = this.items.getStack(i);
+                ItemStack itemStack = this.items.getItem(i);
                 if (!itemStack.isEmpty()) {
                     CompoundTag nbtCompound = new CompoundTag();
                     nbtCompound.putByte("Slot", (byte)i);
@@ -138,8 +138,8 @@ public class BeastEntity extends AbstractChestedHorse {
             }
             nbt.put("Items", nbtList);
         }
-        if (!this.items.getStack(1).isEmpty()) {
-            nbt.put("ArmorItem", this.items.getStack(1).writeNbt(new CompoundTag()));
+        if (!this.items.getItem(1).isEmpty()) {
+            nbt.put("ArmorItem", this.items.getItem(1).writeNbt(new CompoundTag()));
         }
     }
 
@@ -147,7 +147,7 @@ public class BeastEntity extends AbstractChestedHorse {
     public void readCustomDataFromNbt(CompoundTag nbt) {
         super.readCustomDataFromNbt(nbt);
         this.setHasChest(nbt.getBoolean("ChestedBeast"));
-        this.onChestedStatusChanged();
+        this.createInventory();
         if (this.hasChest()) {
             ListTag nbtList = nbt.getList("Items", 10);
 
@@ -175,7 +175,7 @@ public class BeastEntity extends AbstractChestedHorse {
     }
     @Override
     protected float getJumpVelocity() {
-        return 0.5f * this.getJumpVelocityMultiplier() + this.getJumpBoostVelocityModifier();
+        return 0.5f * this.getBlockJumpFactor() + this.getJumpBoostPower();
     }
 
     @Override
@@ -215,11 +215,11 @@ public class BeastEntity extends AbstractChestedHorse {
     }
 
     public boolean isSitting() {
-        return this.dataTracker.get(SITTING);
+        return this.entityData.get(SITTING);
     }
 
     public void setSitting(boolean sitting) {
-        this.dataTracker.set(SITTING, sitting);
+        this.entityData.set(SITTING, sitting);
     }
 
     public boolean isCommandItem(ItemStack stack) {
@@ -227,11 +227,11 @@ public class BeastEntity extends AbstractChestedHorse {
     }
 
     public void setCharging(boolean charging) {
-        this.dataTracker.set(CHARGING, charging);
+        this.entityData.set(CHARGING, charging);
     }
 
     public boolean isCharging() {
-        return this.dataTracker.get(CHARGING);
+        return this.entityData.get(CHARGING);
     }
 
     public int getChargeTimeout() {
@@ -249,7 +249,7 @@ public class BeastEntity extends AbstractChestedHorse {
     }
 
     private float getAttackDamage() {
-        return (float)this.getAttributeValue(Attributes.GENERIC_ATTACK_DAMAGE);
+        return (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
     }
 
     // Equipable =======================================================================================================
@@ -257,7 +257,7 @@ public class BeastEntity extends AbstractChestedHorse {
     protected void dropInventory() {
         super.dropInventory();
         if (this.hasChest()) {
-            if (!this.getWorld().isClient) {
+            if (!this.level().isClientSide) {
                 this.dropItem(Blocks.CHEST);
             }
 
@@ -281,7 +281,7 @@ public class BeastEntity extends AbstractChestedHorse {
         int i = mappedIndex - 400;
         if (i >= 0 && i < 2 && i < this.items.size()) {
             if (i == 0) {
-                return this.createInventoryStackReference(i, stack -> stack.isEmpty() || stack.isOf(Items.SADDLE));
+                return this.createInventoryStackReference(i, stack -> stack.isEmpty() || stack.is(Items.SADDLE));
             }
             if (i == 1) {
                 if (!this.hasArmorSlot()) {
@@ -310,7 +310,7 @@ public class BeastEntity extends AbstractChestedHorse {
         if (!player.getAbilities().creativeMode) {
             chest.decrement(1);
         }
-        this.onChestedStatusChanged();
+        this.createInventory();
     }
 
     protected void playAddChestSound() {
@@ -333,12 +333,12 @@ public class BeastEntity extends AbstractChestedHorse {
 
     private void setArmorTypeFromStack(ItemStack stack) {
         this.equipArmor(stack);
-        if (!this.getWorld().isClient) {
-            this.getAttributeInstance(Attributes.GENERIC_ARMOR).removeModifier(BEAST_ARMOR_BONUS_ID);
+        if (!this.level().isClientSide) {
+            this.getAttributeInstance(Attributes.ARMOR).removeModifier(BEAST_ARMOR_BONUS_ID);
             if (this.isHorseArmor(stack)) {
-                int i = ((TrollArmorItem)stack.getItem()).getBonus();
+                int i = ((TrollArmorItem)stack.getItem()).getProtection();
                 if (i != 0) {
-                    this.getAttributeInstance(Attributes.GENERIC_ARMOR).addTemporaryModifier(new AttributeModifier(BEAST_ARMOR_BONUS_ID, "Beast armor bonus", (double)i, AttributeModifier.Operation.ADDITION));
+                    this.getAttributeInstance(Attributes.ARMOR).addTemporaryModifier(new AttributeModifier(BEAST_ARMOR_BONUS_ID, "Beast armor bonus", (double)i, AttributeModifier.Operation.ADDITION));
                 }
             }
         }
@@ -346,9 +346,9 @@ public class BeastEntity extends AbstractChestedHorse {
 
     @Override
     protected void updateSaddle() {
-        if (!this.getWorld().isClient) {
+        if (!this.level().isClientSide) {
             super.updateSaddle();
-            this.setArmorTypeFromStack(this.items.getStack(1));
+            this.setArmorTypeFromStack(this.items.getItem(1));
             this.setEquipmentDropChance(EquipmentSlot.CHEST, 0.0F);
         }
     }
@@ -388,45 +388,45 @@ public class BeastEntity extends AbstractChestedHorse {
                 this.setTame(true);
                 CriteriaTriggers.TAME_ANIMAL.trigger((ServerPlayer)player, this);
             }
-            this.getWorld().sendEntityStatus(this, EntityEvent.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
+            this.level().sendEntityStatus(this, EntityEvent.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
 
             this.chargeTimeout = 0;
         }
         else {
-            this.getWorld().sendEntityStatus(this, EntityEvent.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES);
+            this.level().sendEntityStatus(this, EntityEvent.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES);
         }
     }
 
     public InteractionResult interactMob(Player player, InteractionHand hand) {
-        boolean bl = !this.isBaby() && this.isTame() && player.shouldCancelInteraction();
+        boolean bl = !this.isBaby() && this.isTame() && player.isSecondaryUseActive();
 
-        if(this.isTame() && isCommandItem(player.getStackInHand(hand)) && player.getUuid() == this.getOwnerUuid()) {
+        if(this.isTame() && isCommandItem(player.getItemInHand(hand)) && player.getUuid() == this.getOwnerUuid()) {
             this.setSitting(!isSitting());
         }
 
-        if(this.isTame() && !isCommandItem(player.getStackInHand(hand))) {
+        if(this.isTame() && !isCommandItem(player.getItemInHand(hand))) {
             super.interactMob(player, hand);
         }
 
-        if(player.getStackInHand(hand).isOf(getBondingItem()) && !this.isTame() && !this.getWorld().isClient) {
+        if(player.getItemInHand(hand).is(getBondingItem()) && !this.isTame() && !this.level().isClientSide) {
             this.tryBonding(player);
         }
 
-        if (!this.hasPassengers() && !bl) {
-            ItemStack itemStack = player.getStackInHand(hand);
+        if (!this.isVehicle() && !bl) {
+            ItemStack itemStack = player.getItemInHand(hand);
             if (!itemStack.isEmpty()) {
-                if (!this.hasChest() && itemStack.isOf(Items.CHEST)) {
+                if (!this.hasChest() && itemStack.is(Items.CHEST)) {
                     this.addChest(player, itemStack);
-                    return InteractionResult.success(this.getWorld().isClient);
+                    return InteractionResult.success(this.level().isClientSide);
                 }
-                if (this.hasArmorSlot() && this.isHorseArmor(itemStack) && !this.hasArmorInSlot()) {
+                if (this.hasArmorSlot() && this.isHorseArmor(itemStack) && !this.isWearingArmor()) {
                     this.equipHorseArmor(player, itemStack);
-                    return InteractionResult.success(this.getWorld().isClient);
+                    return InteractionResult.success(this.level().isClientSide);
                 }
             }
         }
 
-        return InteractionResult.success(this.getWorld().isClient);
+        return InteractionResult.success(this.level().isClientSide);
     }
 
     public Item getBondingItem() {
@@ -435,8 +435,8 @@ public class BeastEntity extends AbstractChestedHorse {
 
     @Override
     public boolean damage(DamageSource source, float amount) {
-        if(!source.equals(getDamageSources().drown()) && !source.equals(getDamageSources().lava())
-                && !source.equals(getDamageSources().cramming()) && !source.equals(getDamageSources().magic())) {
+        if(!source.equals(damageSources().drown()) && !source.equals(damageSources().lava())
+                && !source.equals(damageSources().cramming()) && !source.equals(damageSources().magic())) {
             amount *= (1 - RESISTANCE);
         }
         return super.damage(source, amount);
@@ -448,15 +448,15 @@ public class BeastEntity extends AbstractChestedHorse {
     @Override
     public boolean tryAttack(Entity target) {
         this.attackTicksLeft = ATTACK_COOLDOWN;
-        this.getWorld().sendEntityStatus(this, EntityEvent.PLAY_ATTACK_SOUND);
+        this.level().sendEntityStatus(this, EntityEvent.PLAY_ATTACK_SOUND);
         float f = this.getAttackDamage();
         float g = (int)f > 0 ? f / 2.0f + (float)this.random.nextInt((int)f) : f;
-        boolean bl = target.damage(this.getDamageSources().mobAttack(this), g);
+        boolean bl = target.damage(this.damageSources().mobAttack(this), g);
         if (bl) {
             double d;
             if (target instanceof LivingEntity) {
                 LivingEntity livingEntity = (LivingEntity)target;
-                d = livingEntity.getAttributeValue(Attributes.GENERIC_KNOCKBACK_RESISTANCE);
+                d = livingEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
             } else {
                 d = 0.0;
             }
@@ -494,7 +494,7 @@ public class BeastEntity extends AbstractChestedHorse {
             --this.chargeTimeout;
         }
 
-        if (this.getWorld().isClient) {
+        if (this.level().isClientSide) {
             setupAnimationStates();
         }
     }
@@ -527,8 +527,8 @@ public class BeastEntity extends AbstractChestedHorse {
     }
 
     public Player getPlayerByUuid(UUID uuid) {
-        for (int i = 0; i < this.getWorld().getPlayers().size(); ++i) {
-            Player playerEntity = this.getWorld().getPlayers().get(i);
+        for (int i = 0; i < this.level().getPlayers().size(); ++i) {
+            Player playerEntity = this.level().getPlayers().get(i);
             if (!uuid.equals(playerEntity.getUuid())) continue;
             return playerEntity;
         }

@@ -38,12 +38,12 @@ public class ServerPlayerEntityMixin extends Player {
     @Shadow public ServerPlayerGameMode interactionManager;
 
     public ServerPlayerEntityMixin(MinecraftServer server, ServerLevel world, GameProfile profile) {
-        super(world, world.getSpawnPos(), 0.0F, profile);
+        super(world, world.getSharedSpawnPos(), 0.0F, profile);
     }
 
     @Inject(method = "getTeleportTarget", at = @At("RETURN"), cancellable = true)
     private void me$getTeleportTarget(ServerLevel targetWorld, CallbackInfoReturnable<PortalInfo> cir) {
-        if (!ModDimensions.isInMiddleEarth(this.getWorld())) {
+        if (!ModDimensions.isInMiddleEarth(this.level())) {
             return;
         }
         if (tryToOverrideSpawn(cir)) {
@@ -56,13 +56,13 @@ public class ServerPlayerEntityMixin extends Player {
     private void resetSpawn(CallbackInfoReturnable<PortalInfo> cir) {
         if (this.getServer() == null) return;
 
-        PlayerList manager = this.getServer().getPlayerManager();
+        PlayerList manager = this.getServer().getPlayerList();
         ServerPlayer foundPlayer = manager.getPlayer(this.getUuid());
         if (foundPlayer == null) return;
-        foundPlayer.setSpawnPoint(Level.OVERWORLD, foundPlayer.getServer().getOverworld().getSpawnPos(),
-                foundPlayer.getServer().getOverworld().getSpawnAngle(), true, false);
+        foundPlayer.setSpawnPoint(Level.OVERWORLD, foundPlayer.getServer().overworld().getSharedSpawnPos(),
+                foundPlayer.getServer().overworld().getSpawnAngle(), true, false);
 
-        cir.setReturnValue(new PortalInfo(this.server.getOverworld().getSpawnPos().toCenterPos(), Vec3.ZERO, 0, 0));
+        cir.setReturnValue(new PortalInfo(this.server.overworld().getSharedSpawnPos().toCenterPos(), Vec3.ZERO, 0, 0));
     }
 
     @Unique
@@ -70,12 +70,12 @@ public class ServerPlayerEntityMixin extends Player {
         MinecraftServer server = this.getServer();
 
         if (server == null) return false;
-        PlayerList manager = server.getPlayerManager();
+        PlayerList manager = server.getPlayerList();
         ServerPlayer foundPlayer = manager.getPlayer(this.getUuid());
 
         if (foundPlayer == null) return false;
         SpawnData data = PlayerDataService.getPlayerSpawnData(foundPlayer, getWorld());
-        if (ModDimensions.isInMiddleEarth(this.getWorld()) && data != null && data.getIdentifier() != null) {
+        if (ModDimensions.isInMiddleEarth(this.level()) && data != null && data.getIdentifier() != null) {
             BlockPos spawnCoordinates = data.getWorldCoordinateBlockPos();
             if (spawnCoordinates != null) {
                 ServerLevel MEWorld = this.server.getWorld(ModDimensions.ME_WORLD_KEY);
@@ -90,10 +90,10 @@ public class ServerPlayerEntityMixin extends Player {
                 }
             }
         }
-        foundPlayer.setSpawnPoint(Level.OVERWORLD, server.getOverworld().getSpawnPos(),
-                server.getOverworld().getSpawnAngle(), true, false);
+        foundPlayer.setSpawnPoint(Level.OVERWORLD, server.overworld().getSharedSpawnPos(),
+                server.overworld().getSpawnAngle(), true, false);
 
-        cir.setReturnValue(new PortalInfo(server.getOverworld().getSpawnPos().toCenterPos(), Vec3.ZERO, 0, 0));
+        cir.setReturnValue(new PortalInfo(server.overworld().getSharedSpawnPos().toCenterPos(), Vec3.ZERO, 0, 0));
         return false;
     }
 
@@ -111,7 +111,7 @@ public class ServerPlayerEntityMixin extends Player {
     public void tick(CallbackInfo ci) {
         PlayerMovementData.addAFKTime((IEntityDataSaver) this,1);
         if(isCreative() || isSpectator()) {
-            if(hasStatusEffect(ModStatusEffects.ENSHROUDED) && getStatusEffect(ModStatusEffects.ENSHROUDED).isInfinite()){
+            if(hasStatusEffect(ModStatusEffects.ENSHROUDED) && getMobEffect(ModStatusEffects.ENSHROUDED).isInfinite()){
                 setStatusEffect(new MobEffectInstance(ModStatusEffects.ENSHROUDED, 40), this);
                 setStatusEffect(new MobEffectInstance(MobEffects.DARKNESS, 40), this);
                 setStatusEffect(new MobEffectInstance(MobEffects.WEAKNESS, 40), this);
@@ -130,7 +130,7 @@ public class ServerPlayerEntityMixin extends Player {
 
             double delversFearStrenght = getAttributeValue(EntityAttributesME.DELVERS_FEAR_STRENGTH);
 
-            if(delversFearStrenght > 0.0 && currentLightLevel < 3 && !getWorld().isSkyVisible(getBlockPos())) {
+            if(delversFearStrenght > 0.0 && currentLightLevel < 3 && !getWorld().canSeeSky(getBlockPos())) {
                 data.addToDelversFearCountInSeconds();
 
                 if(data.getDelversFearCountInSeconds() > delversFearStrenght){
@@ -139,7 +139,7 @@ public class ServerPlayerEntityMixin extends Player {
                     addStatusEffect(new MobEffectInstance(MobEffects.WEAKNESS, -1));
                 }
             } else {
-                if(hasStatusEffect(ModStatusEffects.ENSHROUDED) && getStatusEffect(ModStatusEffects.ENSHROUDED).isInfinite()){
+                if(hasStatusEffect(ModStatusEffects.ENSHROUDED) && getMobEffect(ModStatusEffects.ENSHROUDED).isInfinite()){
                     setStatusEffect(new MobEffectInstance(ModStatusEffects.ENSHROUDED, 40), this);
                     setStatusEffect(new MobEffectInstance(MobEffects.DARKNESS, 40), this);
                     setStatusEffect(new MobEffectInstance(MobEffects.WEAKNESS, 40), this);

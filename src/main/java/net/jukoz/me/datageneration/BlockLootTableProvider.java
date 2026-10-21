@@ -43,7 +43,7 @@ import net.minecraft.world.level.storage.loot.IntRange;
 
 public class BlockLootTableProvider extends FabricBlockLootTableProvider {
     protected static final LootItemCondition.Builder WITH_SILK_TOUCH = MatchTool.builder(ItemPredicate.Builder.create()
-            .enchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.IntRange.atLeast(1))));
+            .enchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1))));
     protected static final LootItemCondition.Builder WITH_SHEARS = MatchTool.builder(ItemPredicate.Builder.create().items(Items.SHEARS));
     private static final LootItemCondition.Builder WITH_SILK_TOUCH_OR_SHEARS = WITH_SHEARS.or(WITH_SILK_TOUCH);
     private static final LootItemCondition.Builder WITHOUT_SILK_TOUCH_NOR_SHEARS = WITH_SILK_TOUCH_OR_SHEARS.invert();
@@ -98,70 +98,70 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
             }else if(Registries.BLOCK.getId(block).getPath().equals("blue_tuff")){
                 cobbleDrops(block, StoneBlockSets.BLUE_TUFF_SET.cobblestoneBlocks.base());
             }else if(Registries.BLOCK.getId(block).getPath().contains("_door")){
-                addDrop(block, doorDrops(block));
+                dropSelf(block, createDoorTable(block));
             }else if(Registries.BLOCK.getId(block).getPath().contains("vertical_slab")){
-                addDrop(block, verticalSlabDrops(block));
+                dropSelf(block, verticalSlabDrops(block));
             }else if(Registries.BLOCK.getId(block).getPath().contains("slab")){
-                addDrop(block, slabDrops(block));
+                dropSelf(block, slabDrops(block));
             } else {
-                addDrop(block);
+                dropSelf(block);
             }
         }
 
         for (LeavesDrops.LeavesDrop drop : LeavesDrops.blocks) {
             if(drop.toString().contains("pine")){
-                addDrop(drop.block(), this.leavesDrops(drop.block(), drop.drop(), SAPLING_DROP_CHANCE)
+                dropSelf(drop.block(), this.leavesDrops(drop.block(), drop.drop(), SAPLING_DROP_CHANCE)
                         .pool(LootPool.builder()
-                                .rolls(ConstantValue.create(1.0F)).conditionally(WITHOUT_SILK_TOUCH_NOR_SHEARS)
+                                .rolls(ConstantValue.create(1.0F)).when(WITHOUT_SILK_TOUCH_NOR_SHEARS)
                                 .with(((LootPoolSingletonContainer.Builder)this.addSurvivesExplosionCondition(drop.drop(), LootItem.builder(ModResourceItems.PINECONE)))
-                                        .conditionally(BonusLevelTableCondition.builder(Enchantments.FORTUNE, new float[]{0.005F, 0.0055555557F, 0.00625F, 0.008333334F, 0.025F})))));
+                                        .when(BonusLevelTableCondition.builder(Enchantments.FORTUNE, new float[]{0.005F, 0.0055555557F, 0.00625F, 0.008333334F, 0.025F})))));
 
             } else {
-                addDrop(drop.block(), this.leavesDrops(drop.block(), drop.drop(), SAPLING_DROP_CHANCE));
+                dropSelf(drop.block(), this.leavesDrops(drop.block(), drop.drop(), SAPLING_DROP_CHANCE));
             }
         }
         for (CropDrops.CropDrop cd : CropDrops.crops) {
-            addDrop(cd.crop_block, cropDrops(cd.crop_block, cd.fruit, cd.seeds, cd.builder));
+            dropSelf(cd.crop_block, cropDrops(cd.crop_block, cd.fruit, cd.seeds, cd.builder));
         }
         for (CropDrops.CropDrop cd : CropDrops.wild_crops) {
-            addDrop(cd.crop_block,
+            dropSelf(cd.crop_block,
                     LootTable.builder().pool(LootPool.builder().rolls(ConstantValue.create(1.0F))
                             .with(LootItem.builder(cd.seeds)
-                                    .conditionally(LootItemRandomChanceCondition.builder(0.125f)))
+                                    .when(LootItemRandomChanceCondition.builder(0.125f)))
                             .with(LootItem.builder(cd.fruit))));
         }
 
         for(Block block : TintableCrossModel.grassLikeBlocks) {
-            addDrop(block, grassDrops(block));
+            dropSelf(block, createGrassDrops(block));
         }
         for(Block block : TintableCrossModel.tintedBlocks) {
-            addDrop(block, grassDrops(block));
+            dropSelf(block, createGrassDrops(block));
         }
 
         for (OreRockSets.OreRockSet set : OreRockSets.sets) {
             if (set.coal_ore() != null) {
-                addDrop(set.coal_ore(), oreDrops(set.coal_ore(), Items.COAL));
+                dropSelf(set.coal_ore(), oreDrops(set.coal_ore(), Items.COAL));
             }
             if (set.copper_ore() != null) {
-                addDrop(set.copper_ore(),copperOreDrops(set.copper_ore()));
+                dropSelf(set.copper_ore(),copperOreDrops(set.copper_ore()));
             }
             if (set.tin_ore() != null) {
-                addDrop(set.tin_ore(),oreDrops(set.tin_ore(), ModResourceItems.RAW_TIN));
+                dropSelf(set.tin_ore(),oreDrops(set.tin_ore(), ModResourceItems.RAW_TIN));
             }
             if (set.lead_ore() != null) {
-                addDrop(set.lead_ore(),oreDrops(set.lead_ore(), ModResourceItems.RAW_LEAD));
+                dropSelf(set.lead_ore(),oreDrops(set.lead_ore(), ModResourceItems.RAW_LEAD));
             }
             if (set.silver_ore() != null) {
-                addDrop(set.silver_ore(),oreDrops(set.silver_ore(), ModResourceItems.RAW_SILVER));
+                dropSelf(set.silver_ore(),oreDrops(set.silver_ore(), ModResourceItems.RAW_SILVER));
             }
             if (set.gold_ore() != null) {
-                addDrop(set.gold_ore(),oreDrops(set.gold_ore(), Items.RAW_GOLD));
+                dropSelf(set.gold_ore(),oreDrops(set.gold_ore(), Items.RAW_GOLD));
             }
             if (set.iron_ore() != null) {
-                addDrop(set.iron_ore(),oreDrops(set.iron_ore(), Items.RAW_IRON));
+                dropSelf(set.iron_ore(),oreDrops(set.iron_ore(), Items.RAW_IRON));
             }
             if (set.mithril_ore() != null) {
-                addDrop(set.mithril_ore(),oreDrops(set.mithril_ore(), ModResourceItems.RAW_MITHRIL));
+                dropSelf(set.mithril_ore(),oreDrops(set.mithril_ore(), ModResourceItems.RAW_MITHRIL));
             }
         }
 
@@ -194,31 +194,31 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
     }
 
     public void cobbleDrops(Block stoneBlock, Block cobbledBlock){
-        addDrop(stoneBlock, BlockLootSubProvider.dropsWithSilkTouch(stoneBlock,
+        dropSelf(stoneBlock, BlockLootSubProvider.dropsWithSilkTouch(stoneBlock,
                 this.applyExplosionDecay(cobbledBlock, LootItem.builder(cobbledBlock))));
     }
 
     public LootTable.Builder leavesDrops(Block leaves, Block drop, float ... chance) {
         return BlockLootSubProvider.dropsWithSilkTouchOrShears(leaves, ((LootPoolSingletonContainer.Builder)this.addSurvivesExplosionCondition(leaves, LootItem.builder(drop)))
-                .conditionally(BonusLevelTableCondition.builder(Enchantments.FORTUNE, chance))).pool(LootPool.builder().rolls(ConstantValue.create(1.0f))
-                .conditionally(WITHOUT_SILK_TOUCH_NOR_SHEARS).with((LootPoolEntry.Builder<?>)((LootPoolSingletonContainer.Builder)this.applyExplosionDecay(leaves, LootItem.builder(Items.STICK)
+                .when(BonusLevelTableCondition.builder(Enchantments.FORTUNE, chance))).pool(LootPool.builder().rolls(ConstantValue.create(1.0f))
+                .when(WITHOUT_SILK_TOUCH_NOR_SHEARS).with((LootPoolEntryContainer.Builder<?>)((LootPoolSingletonContainer.Builder)this.applyExplosionDecay(leaves, LootItem.builder(Items.STICK)
                         .apply(SetItemCountFunction.builder(UniformGenerator.create(1.0f, 2.0f)))))
-                .conditionally(BonusLevelTableCondition.builder(Enchantments.FORTUNE, LEAVES_STICK_DROP_CHANCE))));
+                .when(BonusLevelTableCondition.builder(Enchantments.FORTUNE, LEAVES_STICK_DROP_CHANCE))));
     }
 
     public LootTable.Builder slabDrops(Block drop) {
         return LootTable.builder().pool(
                 LootPool.builder().rolls(ConstantValue.create(1.0F))
-                        .with(this.applyExplosionDecay(drop, LootItem.builder(drop).apply(SetItemCountFunction.builder(ConstantValue.create(2.0F)).conditionally(LootItemBlockStatePropertyCondition.builder(drop).properties(StatePropertiesPredicate.Builder.create().exactMatch(SlabBlock.TYPE, SlabType.DOUBLE)))))));
+                        .with(this.applyExplosionDecay(drop, LootItem.builder(drop).apply(SetItemCountFunction.builder(ConstantValue.create(2.0F)).when(LootItemBlockStatePropertyCondition.builder(drop).properties(StatePropertiesPredicate.Builder.create().exactMatch(SlabBlock.TYPE, SlabType.DOUBLE)))))));
     }
 
     public LootTable.Builder verticalSlabDrops(Block drop) {
         return LootTable.builder().pool(
                 LootPool.builder().rolls(ConstantValue.create(1.0F))
-                        .with(this.applyExplosionDecay(drop, LootItem.builder(drop).apply(SetItemCountFunction.builder(ConstantValue.create(2.0F)).conditionally(LootItemBlockStatePropertyCondition.builder(drop).properties(StatePropertiesPredicate.Builder.create().exactMatch(VerticalSlabBlock.DOUBLE, true)))))));
+                        .with(this.applyExplosionDecay(drop, LootItem.builder(drop).apply(SetItemCountFunction.builder(ConstantValue.create(2.0F)).when(LootItemBlockStatePropertyCondition.builder(drop).properties(StatePropertiesPredicate.Builder.create().exactMatch(VerticalSlabBlock.DOUBLE, true)))))));
     }
 
     public void largeDoorDrop(Block doorblock) {
-        addDrop(doorblock, LootTable.builder().pool(this.addSurvivesExplosionCondition(doorblock, LootPool.builder().rolls(ConstantValue.create(1.0F)).with(LootItem.builder(doorblock).conditionally(LootItemBlockStatePropertyCondition.builder(doorblock).properties(StatePropertiesPredicate.Builder.create().exactMatch(LargeDoorBlock.PART, 0)))))));
+        dropSelf(doorblock, LootTable.builder().pool(this.addSurvivesExplosionCondition(doorblock, LootPool.builder().rolls(ConstantValue.create(1.0F)).with(LootItem.builder(doorblock).when(LootItemBlockStatePropertyCondition.builder(doorblock).properties(StatePropertiesPredicate.Builder.create().exactMatch(LargeDoorBlock.PART, 0)))))));
     }
 }

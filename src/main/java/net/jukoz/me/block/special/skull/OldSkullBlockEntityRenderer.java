@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.WallSkullBlock;
 import net.minecraft.client.model.*;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererFactory;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.model.SkullModelBase;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.Material;
@@ -53,26 +53,26 @@ public class OldSkullBlockEntityRenderer implements BlockEntityRenderer<OldSkull
     public static LayerDefinition getTexturedModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
-        PartDefinition skull = modelPartData.addChild("skull", CubeListBuilder.create().uv(0, 0)
-                .cuboid(-12.0F, -8.0F, 4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.pivot(8.0F, 24.0F, -8.0F));
+        PartDefinition skull = modelPartData.addOrReplaceChild("skull", CubeListBuilder.create().texOffs(0, 0)
+                .addBox(-12.0F, -8.0F, 4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(8.0F, 24.0F, -8.0F));
         return LayerDefinition.of(modelData, 64, 64);
     }
 
     public void render(OldSkullBlockEntity skullBlockEntity, float f, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, int j) {
-        BlockState blockState = skullBlockEntity.getCachedState();
+        BlockState blockState = skullBlockEntity.getBlockState();
         boolean bl = blockState.getBlock() instanceof WallSkullBlock;
         Direction direction = bl ? blockState.get(WallSkullBlock.FACING) : null;
         int k = bl ? RotationSegment.fromDirection(direction.getOpposite()) : (Integer)blockState.get(SkullBlock.ROTATION);
         float h = RotationSegment.toDegrees(k);
 
-        VertexConsumer vertexConsumer = getSpriteIdentifier().getVertexConsumer(vertexConsumerProvider, RenderLayer::getEntityCutout);
+        VertexConsumer vertexConsumer = getSpriteIdentifier().getVertexConsumer(vertexConsumerProvider, RenderType::getEntityCutout);
 
-        RenderLayer renderLayer = getRenderLayer();
+        RenderType renderLayer = getRenderLayer();
         renderSkull(direction, h, 0, matrixStack, vertexConsumer, i, skull, renderLayer);
     }
 
     public static void renderSkull(@Nullable Direction direction, float yaw, float animationProgress, PoseStack matrices,
-                                   VertexConsumer vertexConsumers, int light, ModelPart model, RenderLayer renderLayer) {
+                                   VertexConsumer vertexConsumers, int light, ModelPart model, RenderType renderLayer) {
         matrices.push();
         if (direction == null) {
             matrices.translate(0.5F, 0.0F, 0.5F);
@@ -88,8 +88,8 @@ public class OldSkullBlockEntityRenderer implements BlockEntityRenderer<OldSkull
         matrices.pop();
     }
 
-    public static RenderLayer getRenderLayer() {
-        return RenderLayer.getEntityCutoutNoCullZOffset(new ResourceLocation(MiddleEarth.MOD_ID, "model/old_skull"));
+    public static RenderType getRenderLayer() {
+        return RenderType.getEntityCutoutNoCullZOffset(new ResourceLocation(MiddleEarth.MOD_ID, "model/old_skull"));
     }
 
     private Material getSpriteIdentifier(){

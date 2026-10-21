@@ -1,9 +1,9 @@
 package net.jukoz.me.block.special;
 
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.LevelReader;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,11 +28,12 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class ChaliceBlock extends Block {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public ChaliceBlock(Settings settings) {
+    public ChaliceBlock(BlockBehaviour.Properties settings) {
         super(settings);
         setDefaultState(getDefaultState().with(WATERLOGGED, false));
     }
@@ -43,7 +44,7 @@ public class ChaliceBlock extends Block {
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return this.getDefaultState().with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
+        return this.defaultBlockState().with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
     }
 
     @Override
@@ -57,8 +58,8 @@ public class ChaliceBlock extends Block {
 
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (player.getStackInHand(player.getActiveHand()).isEmpty() && !player.isCreative()){
-            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+        if (player.getItemInHand(player.getUsedItemHand()).isEmpty() && !player.isCreative()){
+            world.setBlock(pos, Blocks.AIR.defaultBlockState());
             player.equipStack(EquipmentSlot.MAINHAND,  new ItemStack(ModDecorativeBlocks.GOLDEN_CHALICE.asItem()));
             world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_CHICKEN_EGG, SoundSource.BLOCKS, 0.5f, world.random.nextFloat() * 0.1f - 1.0f);
             return InteractionResult.PASS;
@@ -74,7 +75,7 @@ public class ChaliceBlock extends Block {
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return Block.createCuboidShape(3, 0, 3, 13, 16, 13);
+        return Block.box(3, 0, 3, 13, 16, 13);
     }
 
 }

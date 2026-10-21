@@ -1,6 +1,6 @@
 package net.jukoz.me.registries;
 
-import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -234,17 +234,17 @@ public class CharacterMaterialsRegistryME {
     }
 
     private static void register(BootstrapContext<CharacterTextureMaterial> registry, ResourceKey<CharacterTextureMaterial> key, CharacterMaterialTypes type) {
-        CharacterTextureMaterial pattern = new CharacterTextureMaterial(key.getValue(), type);
+        CharacterTextureMaterial pattern = new CharacterTextureMaterial(key.location(), type);
         register(registry, key, pattern, getKey(type));
     }
     private static void register(BootstrapContext<CharacterTextureMaterial> registerable, ResourceKey<CharacterTextureMaterial> registryKey, CharacterTextureMaterial content, ResourceKey<Registry<CharacterTextureMaterial>> registryRegistryKey) {
-        String name = registryKey.getValue().getPath();
-        ResourceKey<CharacterTextureMaterial> key = ResourceKey.of(registryRegistryKey,new ResourceLocation(MiddleEarth.MOD_ID,name));
+        String name = registryKey.location().getPath();
+        ResourceKey<CharacterTextureMaterial> key = ResourceKey.create(registryRegistryKey,new ResourceLocation(MiddleEarth.MOD_ID,name));
         registerable.register(key, content);
     }
 
     private static ResourceKey<CharacterTextureMaterial> of(String idPath, CharacterMaterialTypes type) {
-        return ResourceKey.of(getKey(type), MiddleEarth.of(idPath));
+        return ResourceKey.create(getKey(type), MiddleEarth.of(idPath));
     }
 
     public static ResourceKey<Registry<CharacterTextureMaterial>> getKey(CharacterMaterialTypes type){

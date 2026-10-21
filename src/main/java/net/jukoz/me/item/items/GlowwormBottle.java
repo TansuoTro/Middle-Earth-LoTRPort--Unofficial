@@ -7,7 +7,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUsage;
+import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -18,10 +18,11 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class GlowwormBottle extends Item {
 
-    public GlowwormBottle(Settings settings) {
+    public GlowwormBottle(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
@@ -32,7 +33,7 @@ public class GlowwormBottle extends Item {
             serverPlayerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
         }
 
-        if (!world.isClient) {
+        if (!world.isClientSide) {
             user.addStatusEffect(new MobEffectInstance(MobEffects.GLOWING, 200));
             user.addStatusEffect(new MobEffectInstance(MobEffects.POISON, 40));
         }

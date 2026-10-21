@@ -14,16 +14,17 @@ import net.jukoz.me.entity.EntitiesME;
 import net.jukoz.me.entity.spider.larva.ShelobiteLarvaEntity;
 import java.util.Random;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public abstract class AbstractShelobiteLarvaEgg extends Block {
-    public AbstractShelobiteLarvaEgg(Settings settings) {
+    public AbstractShelobiteLarvaEgg(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
     public static void breakEgg(Level world, BlockPos pos, BlockState state) {
         world.playSound((Player)null, pos, SoundEvents.ENTITY_TURTLE_EGG_BREAK, SoundSource.BLOCKS, 0.7F, 0.9F + world.random.nextFloat() * 0.2F);
-        world.emitGameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Emitter.of(state));
-        world.syncWorldEvent(2001, pos, Block.getRawIdFromState(state));
+        world.emitGameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(state));
+        world.levelEvent(2001, pos, Block.getRawIdFromState(state));
         RandomSource random = new RandomSource();
         int amountOfSpider = random.nextInt(1, 4);
         for(int i = 0; i < amountOfSpider; i++)
@@ -36,7 +37,7 @@ public abstract class AbstractShelobiteLarvaEgg extends Block {
         entity.age = 0;
         entity.refreshPositionAndAngles(pos, 0, 0);
         if(world instanceof ServerLevelAccessor serverWorldAccess) {
-            entity.initialize(serverWorldAccess, serverWorldAccess.getLocalDifficulty(pos), MobSpawnType.NATURAL, null, null);
+            entity.initialize(serverWorldAccess, serverWorldAccess.getEffectiveDifficulty(pos), MobSpawnType.NATURAL, null, null);
         }
         world.spawnEntity(entity);
     }

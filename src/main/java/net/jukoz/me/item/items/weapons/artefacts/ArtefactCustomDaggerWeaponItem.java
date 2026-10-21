@@ -15,7 +15,7 @@ import net.jukoz.me.item.items.weapons.CustomDaggerWeaponItem;
 
 public class ArtefactCustomDaggerWeaponItem extends CustomDaggerWeaponItem {
 
-    public ArtefactCustomDaggerWeaponItem(Tier toolMaterial, Item.Settings settings) {
+    public ArtefactCustomDaggerWeaponItem(Tier toolMaterial, Item.Properties settings) {
         super(toolMaterial, settings);
     }
 
@@ -44,7 +44,7 @@ public class ArtefactCustomDaggerWeaponItem extends CustomDaggerWeaponItem {
 
     @Override
     public boolean postMine(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity miner) {
-        if (!world.isClient && state.getHardness(world, pos) != 0.0F) {
+        if (!world.isClientSide && state.defaultDestroyTime(world, pos) != 0.0F) {
             if (stack.getDamage() == stack.getMaxDamage() - 1) {
                 BluntWeapon.blunt(stack);
             }

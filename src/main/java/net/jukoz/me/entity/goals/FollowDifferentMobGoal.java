@@ -7,7 +7,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
-import net.minecraft.world.level.pathfinder.PathNodeType;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.EntitySelector;
 import org.jetbrains.annotations.Nullable;
@@ -38,7 +38,7 @@ public class FollowDifferentMobGoal<T extends Mob> extends Goal {
         this.navigation = follower.getNavigation();
         this.minDistance = minDistance;
         this.maxDistance = maxDistance;
-        this.setControls(EnumSet.of(Goal.Control.MOVE, Goal.Control.LOOK));
+        this.setControls(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         if (!(follower.getNavigation() instanceof GroundPathNavigation) && !(follower.getNavigation() instanceof FlyingPathNavigation)) {
             throw new IllegalArgumentException("Unsupported follower type for FollowMobGoal");
         }
@@ -46,7 +46,7 @@ public class FollowDifferentMobGoal<T extends Mob> extends Goal {
 
     @Override
     public boolean canStart() {
-        List<T> list = this.mob.getWorld().getEntitiesByClass(this.followedClass, this.mob.getBoundingBox().expand(this.maxDistance), EntitySelector.VALID_ENTITY);
+        List<T> list = this.mob.level().getEntitiesByClass(this.followedClass, this.mob.getBoundingBox().expand(this.maxDistance), EntitySelector.VALID_ENTITY);
         if (!list.isEmpty()) {
             for (Mob mobEntity : list) {
                 if (!mobEntity.isInvisible()) {
@@ -61,7 +61,7 @@ public class FollowDifferentMobGoal<T extends Mob> extends Goal {
 
     @Override
     public boolean shouldContinue() {
-        return this.target != null && !this.navigation.isIdle() && this.mob.squaredDistanceTo(this.target) > (this.minDistance/2) * (this.minDistance/2);
+        return this.target != null && !this.navigation.isIdle() && this.mob.distanceTo(this.target) > (this.minDistance/2) * (this.minDistance/2);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class FollowDifferentMobGoal<T extends Mob> extends Goal {
     @Override
     public void tick() {
         if (this.target != null && !this.mob.isLeashed()) {
-            this.mob.getLookControl().lookAt(this.target, 10.0F, this.mob.getMaxLookPitchChange());
+            this.mob.getLookControl().lookAt(this.target, 10.0F, this.mob.getMaxHeadXRot());
             if (--this.updateCountdownTicks <= 0) {
                 this.updateCountdownTicks = this.getTickCount(10);
                 double d = this.mob.getX() - this.target.getX();
@@ -94,7 +94,7 @@ public class FollowDifferentMobGoal<T extends Mob> extends Goal {
                     this.navigation.stop();
                     LookControl lookControl = this.target.getLookControl();
                     if (g <= this.minDistance
-                            || lookControl.getLookX() == this.mob.getX() && lookControl.getLookY() == this.mob.getY() && lookControl.getLookZ() == this.mob.getZ()) {
+                            || lookControl.getWantedX() == this.mob.getX() && lookControl.getWantedY() == this.mob.getY() && lookControl.getWantedZ() == this.mob.getZ()) {
                         double h = this.target.getX() - this.mob.getX();
                         double i = this.target.getZ() - this.mob.getZ();
                         this.navigation.startMovingTo(this.mob.getX() - h, this.mob.getY(), this.mob.getZ() - i, this.speed);

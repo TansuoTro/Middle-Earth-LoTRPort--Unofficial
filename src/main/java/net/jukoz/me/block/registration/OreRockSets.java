@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.util.valueproviders.UniformInt;
 import java.util.Arrays;
 import java.util.List;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class OreRockSets {
     public static final float STONE_STRENGTH = 2.0f;
@@ -105,73 +106,73 @@ public class OreRockSets {
         if(ores.contains(ORES.COAL_ORE)){
             coal_ore = ModNatureBlocks.registerBlock(
                     rockName + "coal_ore", (settings) -> new DropExperienceBlock(settings, UniformInt.create(0, 2)),
-                    BlockBehaviour.Settings.copy(Blocks.COAL_ORE).strength(STONE_STRENGTH * strength_mult, 3*strength_mult).requiresTool(), true);
+                    BlockBehaviour.Properties.copy(Blocks.COAL_ORE).strength(STONE_STRENGTH * strength_mult, 3*strength_mult).requiresCorrectToolForDrops(), true);
         }
 
         if(ores.contains(ORES.COPPER_ORE)) {
             copper_ore = ModNatureBlocks.registerBlock(
-                    rockName + "copper_ore", Block::new, BlockBehaviour.Settings.copy(Blocks.COPPER_ORE).strength(
-                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresTool(), true);
+                    rockName + "copper_ore", Block::new, BlockBehaviour.Properties.copy(Blocks.COPPER_ORE).strength(
+                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresCorrectToolForDrops(), true);
         }
 
         if(ores.contains(ORES.TIN_ORE)) {
             tin_ore = ModNatureBlocks.registerBlock(
-                    rockName + "tin_ore", Block::new, BlockBehaviour.Settings.copy(Blocks.IRON_ORE).strength(
-                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresTool(), true);
+                    rockName + "tin_ore", Block::new, BlockBehaviour.Properties.copy(Blocks.IRON_ORE).strength(
+                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresCorrectToolForDrops(), true);
         }
 
         if(ores.contains(ORES.LEAD_ORE)) {
             lead_ore = ModNatureBlocks.registerBlock(
-                    rockName + "lead_ore", Block::new, BlockBehaviour.Settings.copy(Blocks.IRON_ORE).strength(
-                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresTool(), true);
+                    rockName + "lead_ore", Block::new, BlockBehaviour.Properties.copy(Blocks.IRON_ORE).strength(
+                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresCorrectToolForDrops(), true);
         }
 
         if(ores.contains(ORES.SILVER_ORE)) {
             silver_ore = ModNatureBlocks.registerBlock(
-                    rockName + "silver_ore", Block::new, BlockBehaviour.Settings.copy(Blocks.GOLD_ORE).strength(
-                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresTool(), true);
+                    rockName + "silver_ore", Block::new, BlockBehaviour.Properties.copy(Blocks.GOLD_ORE).strength(
+                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresCorrectToolForDrops(), true);
         }
 
         if(ores.contains(ORES.GOLD_ORE)) {
             gold_ore = ModNatureBlocks.registerBlock(
-                    rockName + "gold_ore", Block::new, BlockBehaviour.Settings.copy(Blocks.GOLD_ORE).strength(
-                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresTool(), true);
+                    rockName + "gold_ore", Block::new, BlockBehaviour.Properties.copy(Blocks.GOLD_ORE).strength(
+                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresCorrectToolForDrops(), true);
         }
 
         if(ores.contains(ORES.IRON_ORE)) {
             iron_ore = ModNatureBlocks.registerBlock(
-                    rockName + "iron_ore", Block::new, BlockBehaviour.Settings.copy(Blocks.IRON_ORE).strength(
-                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresTool(), true);
+                    rockName + "iron_ore", Block::new, BlockBehaviour.Properties.copy(Blocks.IRON_ORE).strength(
+                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresCorrectToolForDrops(), true);
         }
 
         if(ores.contains(ORES.EMERALD_ORE)) {
             emerald_ore = ModNatureBlocks.registerBlock(
-                    rockName + "emerald_ore", Block::new, BlockBehaviour.Settings.copy(Blocks.EMERALD_ORE).strength(
-                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresTool(), true);
+                    rockName + "emerald_ore", Block::new, BlockBehaviour.Properties.copy(Blocks.EMERALD_ORE).strength(
+                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresCorrectToolForDrops(), true);
         }
 
         if(ores.contains(ORES.RUBY_ORE)) {
             ruby_ore = ModNatureBlocks.registerBlock(
-                    rockName + "ruby_ore", Block::new, BlockBehaviour.Settings.copy(Blocks.EMERALD_ORE).strength(
-                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresTool(), true);
+                    rockName + "ruby_ore", Block::new, BlockBehaviour.Properties.copy(Blocks.EMERALD_ORE).strength(
+                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresCorrectToolForDrops(), true);
         }
 
         if(ores.contains(ORES.SAPPHIRE_ORE)) {
             sapphire_ore = ModNatureBlocks.registerBlock(
-                    rockName + "sapphire_ore", Block::new, BlockBehaviour.Settings.copy(Blocks.EMERALD_ORE).strength(
-                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresTool(), true);
+                    rockName + "sapphire_ore", Block::new, BlockBehaviour.Properties.copy(Blocks.EMERALD_ORE).strength(
+                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresCorrectToolForDrops(), true);
         }
 
         if(ores.contains(ORES.ADAMANT_ORE)) {
             adamant_ore = ModNatureBlocks.registerBlock(
-                    rockName + "adamant_ore", Block::new, BlockBehaviour.Settings.copy(Blocks.DIAMOND_ORE).strength(
-                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresTool(), true);
+                    rockName + "adamant_ore", Block::new, BlockBehaviour.Properties.copy(Blocks.DIAMOND_ORE).strength(
+                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresCorrectToolForDrops(), true);
         }
 
         if(ores.contains(ORES.MITHRIL_ORE)) {
             mithril_ore = ModNatureBlocks.registerBlock(
-                    rockName + "mithril_ore", Block::new, BlockBehaviour.Settings.copy(Blocks.DIAMOND_ORE).strength(
-                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresTool(), true);
+                    rockName + "mithril_ore", Block::new, BlockBehaviour.Properties.copy(Blocks.DIAMOND_ORE).strength(
+                            STONE_STRENGTH * strength_mult, 3*strength_mult).requiresCorrectToolForDrops(), true);
         }
 
         return new OreRockSet(coal_ore, copper_ore, tin_ore, lead_ore, silver_ore, gold_ore, iron_ore, mithril_ore,

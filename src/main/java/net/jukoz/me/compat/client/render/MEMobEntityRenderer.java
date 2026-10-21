@@ -4,7 +4,7 @@ import net.jukoz.me.compat.client.render.state.LivingEntityRenderStateCompat;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRendererFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.model.EntityModel;
@@ -35,13 +35,13 @@ public abstract class MEMobEntityRenderer<T extends Mob, S extends LivingEntityR
         state.limbSwingAnimationProgress = entity.limbAnimator.getPos(tickDelta);
         state.limbSwingAmplitude = entity.limbAnimator.getSpeed(tickDelta);
         state.age = entity.age + tickDelta;
-        state.bodyYaw = entity.getBodyYaw();
-        state.relativeHeadYaw = entity.getHeadYaw() - entity.getBodyYaw();
+        state.bodyYaw = entity.getVisualRotationYInDegrees();
+        state.relativeHeadYaw = entity.getYHeadRot() - entity.getVisualRotationYInDegrees();
         state.relativeHeadPitch = entity.getPitch();
         state.hurtTime = entity.hurtTime > 0 ? entity.hurtTime - tickDelta : 0.0F;
         state.hurt = entity.hurtTime > 0;
         state.isGliding = entity.isFallFlying();
-        state.hasVehicle = entity.hasVehicle();
+        state.hasVehicle = entity.isPassenger();
         if (state instanceof net.jukoz.me.compat.client.render.state.BipedEntityRenderStateCompat biped) {
             biped.baseScale = net.jukoz.me.entity.EntityAttributesME.scale(entity);
         }

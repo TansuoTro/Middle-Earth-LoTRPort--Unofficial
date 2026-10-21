@@ -13,9 +13,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelAccess;
+import net.minecraft.world.level.LevelAccessor;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
@@ -24,12 +24,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import com.mojang.math.Axis;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class WoodChairBlock extends SeatBlock implements SimpleWaterloggedBlock {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public WoodChairBlock(Settings settings) {
+    public WoodChairBlock(BlockBehaviour.Properties settings) {
         super(settings);
 
         setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(WATERLOGGED, false));
@@ -41,7 +42,7 @@ public class WoodChairBlock extends SeatBlock implements SimpleWaterloggedBlock 
 
     @Nullable
     public BlockState getPlacementState(BlockPlaceContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
+        return this.defaultBlockState().with(FACING, ctx.getHorizontalDirection().getOpposite()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
     }
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
@@ -60,16 +61,16 @@ public class WoodChairBlock extends SeatBlock implements SimpleWaterloggedBlock 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return switch (state.get(FACING)) {
-            default -> Shapes.combineAndSimplify(Block.createCuboidShape(2, 0, 4, 14, 9, 16), Block.createCuboidShape(2, 9, 13, 14, 16, 16), BooleanOp.OR);
-            case SOUTH -> Shapes.combineAndSimplify(Block.createCuboidShape(2, 0, 0, 14, 9, 12), Block.createCuboidShape(2, 9, 0, 14, 16, 3), BooleanOp.OR);
-            case EAST -> Shapes.combineAndSimplify(Block.createCuboidShape(0, 0, 2, 12, 9, 14), Block.createCuboidShape(0, 9, 2, 3, 16, 14), BooleanOp.OR);
-            case WEST -> Shapes.combineAndSimplify(Block.createCuboidShape(4, 0, 2, 16, 9, 14), Block.createCuboidShape(13, 9, 2, 16, 16, 14), BooleanOp.OR);
+            default -> Shapes.combineAndSimplify(Block.box(2, 0, 4, 14, 9, 16), Block.box(2, 9, 13, 14, 16, 16), BooleanOp.OR);
+            case SOUTH -> Shapes.combineAndSimplify(Block.box(2, 0, 0, 14, 9, 12), Block.box(2, 9, 0, 14, 16, 3), BooleanOp.OR);
+            case EAST -> Shapes.combineAndSimplify(Block.box(0, 0, 2, 12, 9, 14), Block.box(0, 9, 2, 3, 16, 14), BooleanOp.OR);
+            case WEST -> Shapes.combineAndSimplify(Block.box(4, 0, 2, 16, 9, 14), Block.box(13, 9, 2, 16, 16, 14), BooleanOp.OR);
         };
     }
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+        return state.setValue(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override

@@ -10,7 +10,7 @@ public class NpcEntityInitializerUtil {
     public static boolean characterIdentifierExist(Level world, ResourceLocation typeId){
         if(typeId == null)
             return false;
-        RegistryAccess registryManager = world.getRegistryManager();
+        RegistryAccess registryManager = world.registryAccess();
         NpcType type =  registryManager.get(DynamicRegistriesME.NPC_TYPE).get(typeId);
         return type != null;
     }

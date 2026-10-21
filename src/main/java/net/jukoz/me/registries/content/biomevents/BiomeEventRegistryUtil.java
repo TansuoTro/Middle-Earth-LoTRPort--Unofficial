@@ -46,17 +46,17 @@ public class BiomeEventRegistryUtil {
     }
 
     public static ResourceKey<BiomeEventData> of(ResourceKey<Biome> key){
-        return DynamicRegistriesME.of(BIOME_EVENT_KEY, key.getValue());
+        return DynamicRegistriesME.of(BIOME_EVENT_KEY, key.location());
     }
 
     public static void register(BootstapContext<BiomeEventData> context, HolderGetter<BiomeEventData> registryEntryLookup, ResourceKey<BiomeEventData> registryKey, BiomeEventData element){
         DynamicRegistriesME.register(context, registryEntryLookup, registryKey, element);
-        BiomeEventRegistryUtil.removeBiomeEntry(registryKey.getValue());
+        BiomeEventRegistryUtil.removeBiomeEntry(registryKey.location());
         // [LANG datagen]
         // None
     }
 
     public static ResourceKey<Structure> register(String name) {
-        return ResourceKey.of(Registries.STRUCTURE, new ResourceLocation(MiddleEarth.MOD_ID, name));
+        return ResourceKey.create(Registries.STRUCTURE, new ResourceLocation(MiddleEarth.MOD_ID, name));
     }
 }
