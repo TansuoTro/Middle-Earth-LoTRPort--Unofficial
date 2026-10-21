@@ -18,7 +18,7 @@ import net.minecraft.item.GoatHornItem;
 import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.recipe.Ingredient;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.InstrumentTags;

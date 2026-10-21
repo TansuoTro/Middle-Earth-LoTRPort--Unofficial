@@ -5,11 +5,12 @@ import net.minecraft.block.*;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class GlowWormBottomBlock extends AbstractPlantStemBlock {
     protected static final VoxelShape SHAPE = Block.createCuboidShape(4.0, 9.0, 4.0, 12.0, 16.0, 12.0);
 
-    public GlowWormBottomBlock(AbstractBlock.Settings settings) {
+    public GlowWormBottomBlock(BlockBehaviour.Settings settings) {
         super(settings, Direction.DOWN, SHAPE, false, 0.05);
     }
 

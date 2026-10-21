@@ -3,7 +3,7 @@ package net.jukoz.me.gui.artisantable;
 import com.google.common.collect.Maps;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraft.advancement.Advancement;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screens.advancements.AdvancementWidget;

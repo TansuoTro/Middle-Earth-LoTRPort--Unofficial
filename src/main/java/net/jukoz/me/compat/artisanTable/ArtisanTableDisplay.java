@@ -22,7 +22,7 @@ public class ArtisanTableDisplay extends BasicDisplay {
     private static List<EntryIngredient> getInputs(ArtisanRecipe recipe) {
         if (recipe == null) return Collections.emptyList();
         List<EntryIngredient> list = new ArrayList<>();
-        for (net.minecraft.recipe.Ingredient ingredient : recipe.getIngredients()) {
+        for (net.minecraft.world.item.crafting.Ingredient ingredient : recipe.getIngredients()) {
             list.add(EntryIngredients.ofIngredient(ingredient));
         }
         return list;

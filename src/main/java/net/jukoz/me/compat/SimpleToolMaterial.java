@@ -1,5 +1,5 @@
 package net.jukoz.me.compat;import net.minecraft.item.ToolMaterial;
-import net.minecraft.recipe.Ingredient;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;/**
  * The 1.21.2 ToolMaterial record, in 1.20.1 terms.

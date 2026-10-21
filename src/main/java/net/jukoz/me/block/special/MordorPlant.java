@@ -10,11 +10,12 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelView;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class MordorPlant extends PlantBlock implements Fertilizable {
     protected static final VoxelShape SHAPE = Block.createCuboidShape(2.0, 0.0, 2.0, 14.0, 13.0, 14.0);
 
-    public MordorPlant(AbstractBlock.Settings settings) {
+    public MordorPlant(BlockBehaviour.Settings settings) {
         super(settings);
     }
 

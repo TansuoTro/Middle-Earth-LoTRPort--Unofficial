@@ -33,7 +33,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.recipe.Ingredient;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;

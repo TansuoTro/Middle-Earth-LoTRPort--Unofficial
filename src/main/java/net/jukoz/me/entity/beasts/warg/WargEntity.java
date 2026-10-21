@@ -90,7 +90,7 @@ public class WargEntity extends AbstractBeastEntity {
         this.goalSelector.add(3, new MeleeAttackGoal(this, 2, false));
         this.goalSelector.add(4, new ChargeAttackGoal(this, this.getDisposition(), maxChargeCooldown()));
         this.goalSelector.add(5, new AnimalMateGoal(this, 1.5));
-        this.goalSelector.add(6, new TemptGoal(this, 0.9, net.minecraft.recipe.Ingredient.fromTag(TagKey.of(Registries.ITEM, ResourceLocation.of(MiddleEarth.MOD_ID, "warg_food"))), false));
+        this.goalSelector.add(6, new TemptGoal(this, 0.9, net.minecraft.world.item.crafting.Ingredient.fromTag(TagKey.of(Registries.ITEM, ResourceLocation.of(MiddleEarth.MOD_ID, "warg_food"))), false));
         this.goalSelector.add(7, new WanderAroundFarGoal(this, 0.5));
         this.goalSelector.add(8, new LookAtEntityGoal(this, Player.class, 6.0f));
         this.goalSelector.add(9, new LookAroundGoal(this));

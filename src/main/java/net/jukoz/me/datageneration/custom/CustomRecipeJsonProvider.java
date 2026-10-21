@@ -3,7 +3,7 @@ package net.jukoz.me.datageneration.custom;
 import java.util.function.Consumer;
 
 import com.google.gson.JsonObject;
-import net.minecraft.advancement.Advancement;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.resources.ResourceLocation;

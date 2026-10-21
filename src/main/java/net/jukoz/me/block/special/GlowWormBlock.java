@@ -15,11 +15,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class GlowWormBlock extends AbstractPlantBlock {
     public static final VoxelShape SHAPE = Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 16.0, 15.0);
 
-    public GlowWormBlock(AbstractBlock.Settings settings) {
+    public GlowWormBlock(BlockBehaviour.Settings settings) {
         super(settings, Direction.DOWN, SHAPE, false);
     }
 

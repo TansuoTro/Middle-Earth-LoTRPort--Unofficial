@@ -40,6 +40,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class PointedIzherabanBlock extends Block implements Waterloggable {
     public static final EnumProperty<Direction> VERTICAL_DIRECTION;
@@ -57,7 +58,7 @@ public class PointedIzherabanBlock extends Block implements Waterloggable {
 
 
 
-    public PointedIzherabanBlock(AbstractBlock.Settings settings) {
+    public PointedIzherabanBlock(BlockBehaviour.Settings settings) {
         super(settings);
         this.setDefaultState((BlockState)((BlockState)((BlockState)((BlockState)this.stateManager.getDefaultState()).with(VERTICAL_DIRECTION, Direction.UP)).with(THICKNESS, Thickness.TIP)).with(WATERLOGGED, false));
     }

@@ -16,7 +16,7 @@ import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.recipe.book.RecipeCategory;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;

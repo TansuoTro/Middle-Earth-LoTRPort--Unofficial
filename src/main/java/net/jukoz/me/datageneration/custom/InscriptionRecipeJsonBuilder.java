@@ -10,15 +10,15 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.recipe.inscription.InscriptionRecipe;
-import net.minecraft.advancement.Advancement;
-import net.minecraft.advancement.AdvancementRewards;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancement.CriterionMerger;
 import net.minecraft.advancement.criterion.CriterionConditions;
 import net.minecraft.advancement.criterion.RecipeUnlockedCriterion;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.Item;
-import net.minecraft.recipe.book.RecipeCategory;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.TagKey;
@@ -35,7 +35,7 @@ public class InscriptionRecipeJsonBuilder {
     public Holder<Enchantment> enchant;
     public int level;
     private final List<String> inputWords = new ArrayList<>();
-    private net.minecraft.recipe.Ingredient chiselInput;
+    private net.minecraft.world.item.crafting.Ingredient chiselInput;
     private int levelCost;
     private final Map<String, CriterionConditions> criteria = new LinkedHashMap<>();
 
@@ -55,11 +55,11 @@ public class InscriptionRecipeJsonBuilder {
     }
 
     public InscriptionRecipeJsonBuilder chisel(TagKey<Item> tag) {
-        this.chiselInput = net.minecraft.recipe.Ingredient.fromTag(tag);
+        this.chiselInput = net.minecraft.world.item.crafting.Ingredient.fromTag(tag);
         return this;
     }
 
-    public InscriptionRecipeJsonBuilder chisel(net.minecraft.recipe.Ingredient chisel) {
+    public InscriptionRecipeJsonBuilder chisel(net.minecraft.world.item.crafting.Ingredient chisel) {
         this.chiselInput = chisel;
         return this;
     }

@@ -155,7 +155,7 @@ public class PlayableNpcPreviewWidget extends ModWidget{
         int entityY = y + 85;
         // 1.20.1 has no render-state pipeline; render the live entity through the
         // vanilla inventory-preview helper instead.
-        net.minecraft.client.gui.screen.ingame.InventoryScreen.drawEntity(
+        net.minecraft.client.gui.screens.inventory.InventoryScreen.drawEntity(
                 context, x, entityY - 100, 35, currentAngle, 0.0F, this.entity);
 
         int horizontalMargin = MINIMAL_MARGIN + 1;

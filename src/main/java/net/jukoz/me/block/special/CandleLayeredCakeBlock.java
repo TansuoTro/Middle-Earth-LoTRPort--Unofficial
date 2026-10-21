@@ -27,6 +27,7 @@ import net.jukoz.me.block.registration.ModBlocks;
 
 import java.util.List;
 import java.util.Map;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class CandleLayeredCakeBlock extends AbstractCandleBlock {
     public static final BooleanProperty LIT;
@@ -37,7 +38,7 @@ public class CandleLayeredCakeBlock extends AbstractCandleBlock {
 
 
 
-    public CandleLayeredCakeBlock(Block candle, AbstractBlock.Settings settings) {
+    public CandleLayeredCakeBlock(Block candle, BlockBehaviour.Settings settings) {
         super(settings);
         this.setDefaultState((BlockState)((BlockState)this.stateManager.getDefaultState()).with(LIT, false));
         if (candle instanceof CandleBlock candleBlock) {

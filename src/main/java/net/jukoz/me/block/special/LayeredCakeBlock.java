@@ -25,6 +25,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccess;
 import net.minecraft.world.level.LevelView;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class LayeredCakeBlock extends Block {
     public static final int MAX_BITES = 8;
@@ -34,7 +35,7 @@ public class LayeredCakeBlock extends Block {
 
 
 
-    public LayeredCakeBlock(AbstractBlock.Settings settings) {
+    public LayeredCakeBlock(BlockBehaviour.Settings settings) {
         super(settings);
         this.setDefaultState((this.stateManager.getDefaultState()));
     }

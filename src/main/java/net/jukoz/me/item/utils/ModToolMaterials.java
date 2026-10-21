@@ -5,7 +5,7 @@ import net.jukoz.me.block.registration.StoneBlockSets;
 import net.jukoz.me.item.ModResourceItems;
 import net.minecraft.world.item.Items;
 import net.minecraft.item.ToolMaterial;
-import net.minecraft.recipe.Ingredient;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.util.Lazy;
 
 import java.util.function.Supplier;

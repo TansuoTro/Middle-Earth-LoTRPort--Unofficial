@@ -14,7 +14,7 @@ import net.minecraft.entity.ai.brain.MemoryModuleState;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.recipe.Ingredient;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.minecraft.util.RandomSource;
 

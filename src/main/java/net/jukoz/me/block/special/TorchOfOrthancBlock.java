@@ -20,12 +20,13 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class TorchOfOrthancBlock extends TorchBlock {
     protected static final VoxelShape SHAPE = Block.createCuboidShape(5.0, 0.0, 5.0, 11.0, 18.0, 11.0);
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-    public TorchOfOrthancBlock(AbstractBlock.Settings settings, DefaultParticleType particleEffect) {
+    public TorchOfOrthancBlock(BlockBehaviour.Settings settings, DefaultParticleType particleEffect) {
         super(settings, particleEffect);
         this.setDefaultState((((this.stateManager.getDefaultState().with(LIT, true)))));
     }
