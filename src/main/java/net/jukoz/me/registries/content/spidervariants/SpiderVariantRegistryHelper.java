@@ -11,15 +11,20 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.spider.SpiderVariant;
 
 public class SpiderVariantRegistryHelper {
-    private static final String TEXTURE_PATH = "entities/spiders/";
+    // Entity renderer texture ids are full asset paths (vanilla convention): the identifier is
+    // resolved as assets/<ns>/<path> by SimpleTexture, so it must include the "textures/" folder
+    // and the ".png" extension. Without them the client logs "Failed to load texture" and every
+    // shelobite/spawn-of-shelob renders with the missing-texture checkerboard.
+    private static final String TEXTURE_PATH = "textures/entities/spiders/";
+    private static final String TEXTURE_EXTENSION = ".png";
     private static final String ENTITY_NAME = "_shelobite_";
 
 
     public static SpiderVariant.SpiderAssetInfo createAssetInfos(String textureName){
         return new SpiderVariant.SpiderAssetInfo(
-            new SpiderVariant.AssetInfo(MiddleEarth.of(TEXTURE_PATH + textureName + ENTITY_NAME + "larva")),
-            new SpiderVariant.AssetInfo(MiddleEarth.of(TEXTURE_PATH + textureName + ENTITY_NAME + "scuttler")),
-            new SpiderVariant.AssetInfo(MiddleEarth.of(TEXTURE_PATH + textureName + "_spawn_of_shelob")));
+            new SpiderVariant.AssetInfo(MiddleEarth.of(TEXTURE_PATH + textureName + ENTITY_NAME + "larva" + TEXTURE_EXTENSION)),
+            new SpiderVariant.AssetInfo(MiddleEarth.of(TEXTURE_PATH + textureName + ENTITY_NAME + "scuttler" + TEXTURE_EXTENSION)),
+            new SpiderVariant.AssetInfo(MiddleEarth.of(TEXTURE_PATH + textureName + "_spawn_of_shelob" + TEXTURE_EXTENSION)));
     }
 
     public static SpawnConditionSelectors createSpawnConditions(Registerable<SpiderVariant> registry, TagKey<Biome> biomeTag, int priority) {

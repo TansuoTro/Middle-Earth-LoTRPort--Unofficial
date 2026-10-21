@@ -11,12 +11,15 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.beasts.great_horn.GreatHornVariant;
 
 public class GreatHornVariantRegistryHelper {
-    private static final String TEXTURE_PATH = "entities/great_horn/";
+    // Full asset path, see SpiderVariantRegistryHelper: entity texture ids must carry the
+    // "textures/" folder and the ".png" extension or SimpleTexture cannot resolve them.
+    private static final String TEXTURE_PATH = "textures/entities/great_horn/";
+    private static final String TEXTURE_EXTENSION = ".png";
     private static final String ENTITY_NAME = "_great_horn";
 
     public static GreatHornVariant.GreatHornAssetInfo createAssetInfos(String textureName){
         return new GreatHornVariant.GreatHornAssetInfo(
-                new GreatHornVariant.AssetInfo(MiddleEarth.of(TEXTURE_PATH + textureName + ENTITY_NAME)));
+                new GreatHornVariant.AssetInfo(MiddleEarth.of(TEXTURE_PATH + textureName + ENTITY_NAME + TEXTURE_EXTENSION)));
     }
 
     public static SpawnConditionSelectors createSpawnConditions(Registerable<GreatHornVariant> registry, TagKey<Biome> biomeTag, int priority) {
