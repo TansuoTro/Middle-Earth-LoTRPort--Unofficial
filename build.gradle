@@ -33,13 +33,6 @@ legacyForge {
     }
 }
 
-// The REI plugin sources (Fabric-only API) are excluded until the JEI port lands (milestone M7).
-sourceSets.main.java.exclude 'net/jukoz/me/compat/ModREIClientPlugin.java'
-sourceSets.main.java.exclude 'net/jukoz/me/compat/REIClientPluginME.java'
-sourceSets.main.java.exclude 'net/jukoz/me/compat/REICommonPluginME.java'
-sourceSets.main.java.exclude 'net/jukoz/me/compat/alloyFurnace/**'
-sourceSets.main.java.exclude 'net/jukoz/me/compat/artisanTable/**'
-sourceSets.main.java.exclude 'net/jukoz/me/compat/forge/**'
 // Datagen providers compile against FFAPI's fabric-data-generation-api-v1 (Fabric API surface).
 
 
@@ -78,10 +71,16 @@ repositories {
         name = "Sinytra"
         url = "https://maven.su5ed.dev/releases"
     }
+    maven {
+        name = "BlameJared"
+        url = "https://maven.blamejared.com"
+    }
 }
 
 // Forgified Fabric API: the Fabric API surface, implemented for Forge. Used as the
 // compile-time API; see FORGE_PORT.md for the runtime (shim) story.
 dependencies {
     compileOnly group: "dev.su5ed.sinytra.fabric-api", name: "fabric-api", version: "0.92.6+1.11.15+1.20.1"
+    // Recipe viewer: the old REI plugin is replaced by a JEI one (milestone M7).
+    modCompileOnly "mezz.jei:jei-1.20.1-forge:15.20.0.101"
 }

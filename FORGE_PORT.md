@@ -169,3 +169,23 @@ IForgeMenuType（AstralSorcery worktrees）。
     ME_FORGE_ROOT='H:/MinecraftMods/MiddleEarth-1.20.1-forge/src/main/java' python me_rename_yarn2official.py
 
 工作树：`H:/MinecraftMods/MiddleEarth-1.20.1-forge`（`port/forge-1.20.1`），与 Fabric 主工作树隔离，互不影响。
+## 10. M7：REI → JEI（2026-10-22）
+
+- 删除 REI 三插件文件 + `compat/{alloyFurnace,artisanTable,forge}` 共 9 个文件（Fabric-only API，Forge 侧本就编译不过）。
+- 新增 `net/jukoz/me/compat/jei/`：`ModJEIPlugin`（`@JeiPlugin`）+ `ArtisanTableCategory` / `AlloyFurnaceCategory` / `ForgeAlloyingCategory`。
+  - recipe type：`me:artisan_table` / `me:alloy_furnace` / `me:forge`，直接取 `RecipeManager#getAllRecipesFor`，不再需要 Display 中间层。
+  - 版式沿用 `textures/gui/*_rei.png`（256×256 sheet，背景取 (0,0) 175×82），槽位坐标与 REI 版一一对应。
+  - `forge` 分类额外在 `draw()` 画液面（源图 (218,14) / (211,76) 两块，576 mB 满槽），`createRecipeExtras` 里放金属名（`trim_material.me.<metal>`）。
+  - 催化剂：`artisan_table` → 工匠台；`alloy_furnace` + `forge` → 锻造台（`MEBlocksLegacy.ALLOY_FURNACE == ModDecorativeBlocks.FORGE`，同一方块两种配方）。
+  - 点击区域：`ArtisanTableScreen` / `ForgeAlloyingScreen` 的 (75,30,20,30)。
+- 依赖：`maven.blamejared.com` + `modCompileOnly "mezz.jei:jei-1.20.1-forge:15.20.0.101"`（只编译期；M8 跑客户端时再加 `modRuntimeOnly` 同一个 jar）。
+- 语言键沿用已有：`container.me.artisan_table`、`item.me.alloy_furnace`、`screen.me.forge`（REI 版用的 `container.artisan_table` / `screen.me.alloy_furnace` 在 lang 里根本不存在，REI 上显示的是原始 key）。
+
+### M7 顺带发现的映射 bug（未修，留给轴①）
+
+- yarn 的 `net.minecraft.inventory.Inventory`（= mojmap `Container`）被批量改名成了 `net.minecraft.world.entity.player.Inventory`（玩家背包，是个 class）：
+  `MultipleStackRecipeInput implements Inventory` → `error: interface expected here` + 连带 ~20 个 `is not within bounds of type-variable C`；
+  `ArtisanRecipe implements Recipe<Inventory>` 虽然能编译（玩家背包确实 implements Container），但 `matches()` 收到的容器是错的。
+  修法：这两个文件的 `Inventory` 改回 `net.minecraft.world.Container`（`PlayerInventory`/`Inventory` 只在真正玩家背包的地方保留）。
+- 因此 JEI 插件取配方不走 `RecipeManager#getAllRecipesFor`（它的 `C extends Container` 推断会被上面这个坏类型卡住），
+  改成 `getRecipes()` 全表按 `Recipe#getType()` 过滤。
