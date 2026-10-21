@@ -36,7 +36,6 @@ import net.jukoz.me.entity.spider.spawn.SpawnOfShelobEntity;
 import net.jukoz.me.item.ResourceItemsME;
 import net.jukoz.me.registries.RegistryAliasesME;
 
-import java.lang.reflect.Method;
 import java.util.function.Supplier;
 public class EntitiesME {
     // Npc
@@ -148,17 +147,12 @@ public class EntitiesME {
         registerSpawnRestriction(NPC, onGroundLocation, heightmapType, NpcEntity::canSpawn);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
     private static <T extends MobEntity> void registerSpawnRestriction(EntityType<T> type, SpawnRestriction.Location location, Heightmap.Type heightmap,
                                                                        SpawnRestriction.SpawnPredicate<T> predicate) {
-        try {
-            Method method = SpawnRestriction.class.getDeclaredMethod("register", EntityType.class,
-                    SpawnRestriction.Location.class, Heightmap.Type.class, SpawnRestriction.SpawnPredicate.class);
-            method.setAccessible(true);
-            method.invoke(null, type, location, heightmap, predicate);
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Failed to register spawn restriction for " + type, e);
-        }
+        // Direct call (no reflection): Connector remaps SpawnRestriction.register to the Forge
+        // SpawnPlacements method. A reflective lookup by the literal string "register" cannot be
+        // remapped and fails on Forge, where the method is SRG-named and private.
+        SpawnRestriction.register(type, location, heightmap, predicate);
     }
 
     static {

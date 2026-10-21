@@ -12,6 +12,7 @@ import net.jukoz.me.MiddleEarth;
  */
 public class AtlasesME {
     public static final Identifier CHARACTER_TEXTURES = MiddleEarth.of("character_textures");
+    public static final Identifier SPRITES = MiddleEarth.of("sprites");
 
     public static final Identifier SKIN_PREFIX = MiddleEarth.ofPath("character", "skins");
     public static final Identifier HAIR_PREFIX = MiddleEarth.ofPath("character", "hairs");
@@ -26,6 +27,12 @@ public class AtlasesME {
 
     @Environment(EnvType.CLIENT)
     public static SpriteAtlasTexture getAtlasFromPath(Identifier atlasPath){
+        if (atlasPath.equals(getAtlasPath(CHARACTER_TEXTURES))) {
+            return net.jukoz.me.client.CharacterAtlasME.getAtlas();
+        }
+        if (atlasPath.equals(getAtlasPath(SPRITES))) {
+            return net.jukoz.me.client.SpritesAtlasME.getAtlas();
+        }
         MinecraftClient client = MinecraftClient.getInstance();
         return client.getBakedModelManager().getAtlas(atlasPath);
     }

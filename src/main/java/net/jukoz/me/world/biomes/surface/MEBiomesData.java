@@ -115,8 +115,10 @@ public class MEBiomesData {
     }
 
     public static MEBiome getBiomeByKey(RegistryKey<Biome> key) {
-        MEBiome biome = byKey.get(key);
-        if (biome == null) throw new IllegalArgumentException("No terrain metadata for " + key.getValue());
-        return biome;
+        // Cave biomes (me:*_cave) carry no surface terrain metadata: the biome source returns
+        // them at the world top when a mountain's surface sits above the build limit. Returning
+        // null lets callers fall back to the map's surface biome instead of aborting chunk gen
+        // with "No terrain metadata for me:mountain_cave".
+        return byKey.get(key);
     }
 }

@@ -105,6 +105,15 @@ public class MiddleEarthClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        // Custom atlases (character features + projectile sprites). These must be created AFTER the
+        // OpenGL context exists: the SpriteAtlasTexture constructor calls glGetInteger for the max
+        // texture size. Connector runs onInitializeClient inside Minecraft.<init>, i.e. before GL init,
+        // so creating them here crashes natively. Defer to CLIENT_STARTED (post GL init), which also
+        // works on plain Fabric.
+        net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
+            net.jukoz.me.client.CharacterAtlasME.init();
+            net.jukoz.me.client.SpritesAtlasME.init();
+        });
 
         ModEntityModels.getModels();
         EntityRendererRegistry.register(ModEntities.BARROW_WIGHT, BarrowWightEntityRenderer::new);

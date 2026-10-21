@@ -46,6 +46,9 @@ public class EntityAttributesME {
 
     public static void register() {
         MiddleEarth.LOGGER.logDebugMsg("Registering Mod attributes");
+    }
+
+    public static void registerPlayerDefaults() {
         net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry.register(
                 net.minecraft.entity.EntityType.PLAYER,
                 addDefaults(net.minecraft.entity.player.PlayerEntity.createPlayerAttributes()));

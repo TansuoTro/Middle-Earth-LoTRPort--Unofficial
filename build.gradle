@@ -88,6 +88,11 @@ loom {
 
 sourceSets.main.resources.srcDirs += ['src/main/generated']
 
+tasks.withType(Jar).configureEach {
+    // the mod jar carries >65535 assets/classes
+    zip64 = true
+}
+
 tasks.withType(JavaCompile).configureEach {
     options.release = 17
     options.encoding = 'UTF-8'

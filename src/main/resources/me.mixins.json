@@ -18,8 +18,6 @@
     "LivingAttributeCompatMixin",
     "EntityAttributeCompatMixin",
     "PlayerAttributeCompatMixin",
-    "ServerReachCompatMixin",
-    "ServerBlockReachCompatMixin",
     "PigEntityMixin",
     "PlayerEntityMixin",
     "PlayerMixin",
@@ -31,7 +29,6 @@
   "client": [
     "IntegratedServerLoaderMixin",
     "client.AnimationStateAccessor",
-    "client.BakedModelManagerMixin",
     "client.BipedEntityModelMixin",
     "client.PlayerEntityRendererMixin",
     "client.AbstractClientPlayerEntityMixin",

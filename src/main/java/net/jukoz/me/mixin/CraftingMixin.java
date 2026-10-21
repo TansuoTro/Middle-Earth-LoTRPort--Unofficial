@@ -30,16 +30,18 @@ public class CraftingMixin {
             cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
     private static void updateResultCancel(ScreenHandler handler, ServerWorld world, PlayerEntity player,
                                            RecipeInputInventory craftingInventory, CraftingResultInventory resultInventory,
-                                           @Nullable CraftingRecipe recipe, CallbackInfo ci, RecipeInputInventory craftingRecipeInput,
-                                           ServerPlayerEntity serverPlayerEntity, ItemStack itemStack){
+                                           @Nullable CraftingRecipe recipe, CallbackInfo ci){
         if (world.isClient){
             return;
         }
-        if (!ModServerConfigs.ENABLE_GOLDEN_FOOD_RECIPES && ModDimensions.isInMiddleEarth(world)
-                && (itemStack.isOf(Items.GOLDEN_APPLE) || itemStack.isOf(Items.GOLDEN_CARROT))){
-            itemStack = new ItemStack(Items.AIR);
+        if (ModServerConfigs.ENABLE_GOLDEN_FOOD_RECIPES || !ModDimensions.isInMiddleEarth(world)){
+            return;
         }
-        resultInventory.setStack(0, itemStack);
+        if (recipe != null){
+            ItemStack crafted = recipe.craft(craftingInventory, world.getRegistryManager());
+            resultInventory.setStack(0, crafted.isOf(Items.GOLDEN_APPLE) || crafted.isOf(Items.GOLDEN_CARROT)
+                    ? new ItemStack(Items.AIR) : crafted);
+        }
         ci.cancel();
     }
 }

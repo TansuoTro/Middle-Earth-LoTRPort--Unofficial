@@ -52,6 +52,8 @@ public class DynamicRegistriesME extends net.jukoz.me.api.registries.DynamicRegi
 
     public static void register() {
         net.jukoz.me.entity.EntityAttributesME.register();
+        net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STARTING.register(
+                server -> net.jukoz.me.entity.EntityAttributesME.registerPlayerDefaults());
         net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STARTED.register(
                 net.jukoz.me.compat.net.PacketCodecs::setServer);
         net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STOPPED.register(

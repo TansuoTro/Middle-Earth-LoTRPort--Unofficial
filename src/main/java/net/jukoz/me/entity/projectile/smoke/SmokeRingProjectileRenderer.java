@@ -14,15 +14,17 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.jukoz.me.MiddleEarth;
+import net.jukoz.me.client.SpritesAtlasME;
+import net.jukoz.me.registries.AtlasesME;
 import org.joml.Matrix4f;
 import net.minecraft.client.render.RenderLayer;
 import org.joml.Quaternionf;
 
 @Environment(EnvType.CLIENT)
 public class SmokeRingProjectileRenderer extends MEEntityRenderer<SmokeRingProjectileEntity, SmokeRingProjectileRenderState> {
-    private final Sprite[] frames;
+    private final Identifier[] frameIds;
 
-    private static final Identifier SPRITES_ATLAS_ID = new Identifier(MiddleEarth.MOD_ID, "sprites");
+    private static final Identifier SPRITES_ATLAS_ID = AtlasesME.getAtlasPath(AtlasesME.SPRITES);
     private static final String SPRITE_PATH_PREFIX = "sprites/smoke_ring/big_smoke_ring_";
     private static final int FRAME_COUNT = 12;
     private static final int FAILED_FIRST_FRAME = 7;
@@ -31,7 +33,7 @@ public class SmokeRingProjectileRenderer extends MEEntityRenderer<SmokeRingProje
 
     public SmokeRingProjectileRenderer(EntityRendererFactory.Context context) {
         super(context);
-        frames = loadFrames();
+        frameIds = loadFrameIds();
     }
 
     @Override
@@ -45,9 +47,9 @@ public class SmokeRingProjectileRenderer extends MEEntityRenderer<SmokeRingProje
         matrices.multiply(state.orientationQuat);
 
         int firstFrame = state.failed ? FAILED_FIRST_FRAME : 0;
-        int frameCount = state.failed ? FAILED_FRAME_COUNT : frames.length;
+        int frameCount = state.failed ? FAILED_FRAME_COUNT : frameIds.length;
         int frame = firstFrame + Math.min((int) (state.age / state.maxLifespan * frameCount), frameCount - 1);
-        Sprite sprite = frames[frame];
+        Sprite sprite = SpritesAtlasME.getSprite(frameIds[frame]);
 
 
         Matrix4f matrix = matrices.peek().getPositionMatrix();
@@ -86,16 +88,12 @@ public class SmokeRingProjectileRenderer extends MEEntityRenderer<SmokeRingProje
         this.updateOrientationQuaternion(entity, state, tickDelta);
     }
 
-    private Sprite[] loadFrames() {
-        SpriteAtlasTexture atlas = (SpriteAtlasTexture) MinecraftClient.getInstance().getTextureManager().getTexture(
-                SPRITES_ATLAS_ID);
-
-        Sprite[] sprites = new Sprite[FRAME_COUNT];
+    private Identifier[] loadFrameIds() {
+        Identifier[] ids = new Identifier[FRAME_COUNT];
         for (int i = 0; i < FRAME_COUNT; i++) {
-            Identifier spriteId = new Identifier(MiddleEarth.MOD_ID, SPRITE_PATH_PREFIX + i);
-            sprites[i] = atlas.getSprite(spriteId);
+            ids[i] = new Identifier(MiddleEarth.MOD_ID, SPRITE_PATH_PREFIX + i);
         }
-        return sprites;
+        return ids;
     }
 
     private void drawQuad(

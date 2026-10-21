@@ -373,6 +373,12 @@ public class MiddleEarthChunkGenerator extends ChunkGenerator {
                     RegistryEntry<Biome> biome = region.getBiome(new BlockPos(posX, chunk.getTopY(), posZ));
                     meBiome = MEBiomesData.getBiomeByKey(biome);
                     if(meBiome == null) {
+                        // The biome at the world top is a cave biome: a tall mountain's surface
+                        // sits above the build limit, so ModBiomeSource reports the cave variant.
+                        // Use the raw surface biome from the map to get the correct blocks.
+                        meBiome = middleEarthMapRuntime.getBiome(posX, posZ);
+                    }
+                    if(meBiome == null) {
                         meBiome = MEBiomesData.defaultBiome;
                     }
                 } else {

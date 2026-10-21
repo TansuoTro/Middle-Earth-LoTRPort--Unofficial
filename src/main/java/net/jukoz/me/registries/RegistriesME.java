@@ -10,6 +10,7 @@ import net.minecraft.item.HoeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.Registry;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -31,12 +32,34 @@ import net.jukoz.me.item.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RegistriesME {
 
     public static final HashMap<String, String> specialAliases = new HashMap<>();
+
+    private static java.lang.reflect.Method ADD_ALIAS_METHOD;
+    private static boolean ADD_ALIAS_RESOLVED;
+
+    private static void addRegistryAlias(Registry registry, Identifier oldId, Identifier newId) {
+        if (!ADD_ALIAS_RESOLVED) {
+            ADD_ALIAS_RESOLVED = true;
+            try {
+                ADD_ALIAS_METHOD = registry.getClass().getMethod("addAlias", Identifier.class, Identifier.class);
+            } catch (NoSuchMethodException e) {
+                ADD_ALIAS_METHOD = null;
+                MiddleEarth.LOGGER.logWarn("Registry.addAlias unavailable on this platform; legacy id aliases will be skipped.");
+            }
+        }
+        if (ADD_ALIAS_METHOD == null) return;
+        try {
+            ADD_ALIAS_METHOD.invoke(registry, oldId, newId);
+        } catch (Exception t) {
+            MiddleEarth.LOGGER.logError("Failed to register legacy alias " + oldId + " -> " + newId, t);
+        }
+    }
 
     public static void registerRegistryAliases() {
         // me:gonluin is now a real block, so the legacy khagalaban->gonluin rewrite would
@@ -81,12 +104,12 @@ public class RegistriesME {
                     for (Map.Entry<String, String> map : specialAliases.entrySet()) {
                         name = name.replaceAll(map.getKey(), map.getValue());
                     }
-                    alias.registry().addAlias(new Identifier(MiddleEarth.OLD_MOD_ID, name), new Identifier(MiddleEarth.MOD_ID, alias.name()));
+                    addRegistryAlias(alias.registry(), new Identifier(MiddleEarth.OLD_MOD_ID, name), new Identifier(MiddleEarth.MOD_ID, alias.name()));
                     myWriter.write(alias.registry().getKey().getValue().getPath() + ": " + new Identifier(MiddleEarth.OLD_MOD_ID, name) + " -> " + new Identifier(MiddleEarth.MOD_ID, alias.name()) + "\r\n");
                 }
 
                 for (RegistryAliasesME.ManualAlias alias: RegistryAliasesME.manualAliases) {
-                    alias.registry().addAlias(new Identifier(MiddleEarth.OLD_MOD_ID, alias.oldName()), new Identifier(MiddleEarth.MOD_ID, alias.newName()));
+                    addRegistryAlias(alias.registry(), new Identifier(MiddleEarth.OLD_MOD_ID, alias.oldName()), new Identifier(MiddleEarth.MOD_ID, alias.newName()));
                     myWriter.write(alias.registry().getKey().getValue().getPath() + ": " + new Identifier(MiddleEarth.OLD_MOD_ID, alias.oldName()) + " -> " + new Identifier(MiddleEarth.MOD_ID, alias.newName()) + "\r\n");
                 }
 
@@ -101,11 +124,11 @@ public class RegistriesME {
                 for (Map.Entry<String, String> map : specialAliases.entrySet()) {
                     name = name.replaceAll(map.getKey(), map.getValue());
                 }
-                alias.registry().addAlias(new Identifier(MiddleEarth.OLD_MOD_ID, name), new Identifier(MiddleEarth.MOD_ID, alias.name()));
+                addRegistryAlias(alias.registry(), new Identifier(MiddleEarth.OLD_MOD_ID, name), new Identifier(MiddleEarth.MOD_ID, alias.name()));
             }
 
             for (RegistryAliasesME.ManualAlias alias: RegistryAliasesME.manualAliases) {
-                alias.registry().addAlias(new Identifier(MiddleEarth.OLD_MOD_ID, alias.oldName()), new Identifier(MiddleEarth.MOD_ID, alias.newName()));
+                addRegistryAlias(alias.registry(), new Identifier(MiddleEarth.OLD_MOD_ID, alias.oldName()), new Identifier(MiddleEarth.MOD_ID, alias.newName()));
             }
         }
     }
