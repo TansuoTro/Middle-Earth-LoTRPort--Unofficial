@@ -62,8 +62,14 @@ public abstract class MEMobEntityRenderer<T extends MobEntity, S extends LivingE
         return (T) state.entity;
     }
 
+    /**
+     * Donor signature is {@code (state, matrices, bodyYaw, animationProgress)}; 1.20.1's is
+     * {@code (entity, matrices, animationProgress, bodyYaw, tickDelta)}. Passing them straight
+     * through put tickDelta into the body-yaw slot, so the 180-bodyYaw rotation vanished and every
+     * state-pipeline mob faced the same direction.
+     */
     protected void setupTransforms(S state, MatrixStack matrices, float bodyYaw, float animationProgress) {
-        super.setupTransforms(entityOf(state), matrices, bodyYaw, state.tickDelta, animationProgress);
+        super.setupTransforms(entityOf(state), matrices, animationProgress, bodyYaw, state.tickDelta);
     }
 
     protected void scale(S state, MatrixStack matrices) {
@@ -89,12 +95,24 @@ public abstract class MEMobEntityRenderer<T extends MobEntity, S extends LivingE
         VertexConsumer vertices = vertexConsumers.getBuffer(model.getLayer(texture));
         @SuppressWarnings("unchecked")
         T entity = (T) state.entity;
+        // 1.20.1's LivingEntityRenderer.render applies the model-space transform chain before it
+        // touches the model: setupTransforms (body yaw, sleep/death rotation), the (-1,-1,1) flip
+        // that maps model space (Y down) into world space, the entity scale and the 1.501 pivot.
+        // The donor render(S state, ...) is only the model+feature pass, so all of it has to happen
+        // here; without it every mob drawn through this base renders upside down and mirrored,
+        // i.e. the Dinnerbone easter-egg look.
+        matrices.push();
+        this.setupTransforms(state, matrices, state.bodyYaw, state.age);
+        matrices.scale(-1.0F, -1.0F, 1.0F);
+        this.scale(state, matrices);
+        matrices.translate(0.0F, -1.501F, 0.0F);
         model.setAngles(entity, state.limbSwingAnimationProgress, state.limbSwingAmplitude,
                 state.age, state.relativeHeadYaw, state.relativeHeadPitch);
         model.render(matrices, vertices, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
         for (FeatureRenderer<T, M> feature : this.features) {
             feature.render(matrices, vertexConsumers, light, entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
         }
+        matrices.pop();
     }
 
     @Override

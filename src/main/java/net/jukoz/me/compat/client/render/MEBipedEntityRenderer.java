@@ -55,12 +55,20 @@ public abstract class MEBipedEntityRenderer<T extends MobEntity, S extends Biped
         VertexConsumer vertices = vertexConsumers.getBuffer(this.model.getLayer(texture));
         @SuppressWarnings("unchecked")
         T entity = (T) state.entity;
+        // Same model-space chain 1.20.1's LivingEntityRenderer.render applies (see
+        // MEMobEntityRenderer#render): body yaw, the (-1,-1,1) flip, entity scale, 1.501 pivot.
+        matrices.push();
+        super.setupTransforms(entity, matrices, state.age, state.bodyYaw, state.tickDelta);
+        matrices.scale(-1.0F, -1.0F, 1.0F);
+        super.scale(entity, matrices, state.tickDelta);
+        matrices.translate(0.0F, -1.501F, 0.0F);
         this.model.setAngles(entity, state.limbSwingAnimationProgress, state.limbSwingAmplitude,
                 state.age, state.relativeHeadYaw, state.relativeHeadPitch);
         this.model.render(matrices, vertices, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
         for (FeatureRenderer<T, M> feature : this.features) {
             feature.render(matrices, vertexConsumers, light, entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
         }
+        matrices.pop();
     }
 
     @Override
