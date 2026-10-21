@@ -23,10 +23,41 @@ public class MEBiomesData {
     public static List<RegistryKey<Biome>> oasisBiomes = MapBasedBiomePool.oasisBiomes;
     public static MEBiome defaultBiome, frozenPond, oasis, pond, wastePond, mirkwoodSwamp;
 
+    /** Colours found in a map tile but absent from the palette (tile/palette version drift). */
+    private static final Map<Integer, MEBiome> unknownColorCache = new HashMap<>();
+    private static final Set<Integer> loggedUnknown = new HashSet<>();
+    private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger("MEBiomesData");
+
     public static MEBiome getBiomeByColor(Integer rgb) {
-        MEBiome biome = byColor.get(rgb | 0xff000000);
-        if (biome == null) throw new IllegalArgumentException("Unmapped biome map color: #" + Integer.toHexString(rgb & 0xffffff));
-        return biome;
+        int key = rgb | 0xff000000;
+        MEBiome biome = byColor.get(key);
+        if (biome != null) return biome;
+        biome = unknownColorCache.get(key);
+        if (biome != null) return biome;
+        // A single unknown tile colour used to abort /locate and worldgen with an exception.
+        // Fall back to the closest palette colour so generation keeps going.
+        MEBiome nearest = nearestBiome(rgb & 0xffffff);
+        if (loggedUnknown.add(key)) {
+            LOGGER.warn("Unmapped biome map colour #{}, using nearest palette colour", String.format("%06x", rgb & 0xffffff));
+        }
+        unknownColorCache.put(key, nearest);
+        return nearest;
+    }
+
+    private static MEBiome nearestBiome(int rgb) {
+        int tr = (rgb >> 16) & 255, tg = (rgb >> 8) & 255, tb = rgb & 255;
+        int best = Integer.MAX_VALUE;
+        MEBiome bestBiome = defaultBiome;
+        for (Map.Entry<Integer, MEBiome> entry : byColor.entrySet()) {
+            int c = entry.getKey();
+            int dr = ((c >> 16) & 255) - tr, dg = ((c >> 8) & 255) - tg, db = (c & 255) - tb;
+            int distance = dr * dr + dg * dg + db * db;
+            if (distance < best) {
+                best = distance;
+                bestBiome = entry.getValue();
+            }
+        }
+        return bestBiome != null ? bestBiome : defaultBiome;
     }
 
     public static MEBiome getBiomeById(Short id) { return biomes.get(id); }
