@@ -3,6 +3,7 @@
   "minVersion": "0.8",
   "package": "net.jukoz.me.mixin",
   "compatibilityLevel": "JAVA_17",
+  "refmap": "me.refmap.json",
   "mixins": [
     "BannerPatternRegisterMixin",
     "ChunkRegionMixin",
@@ -15,11 +16,6 @@
     "ItemStackAttributeMixin",
     "ItemStackDurabilityMixin",
     "ItemStackUnbreakableMixin",
-    "LivingAttributeCompatMixin",
-    "EntityAttributeCompatMixin",
-    "PlayerAttributeCompatMixin",
-    "ServerReachCompatMixin",
-    "ServerBlockReachCompatMixin",
     "PigEntityMixin",
     "PlayerEntityMixin",
     "PlayerMixin",
@@ -41,7 +37,6 @@
     "client.ItemRendererMixin",
     "client.ItemStackTooltipMixin",
     "client.MouseMixin",
-    "client.KeyboardInputAttributeMixin",
     "client.ClickableWidgetMixin"
   ],
   "server": [],

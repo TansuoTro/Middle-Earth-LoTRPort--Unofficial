@@ -1,6 +1,6 @@
 package net.jukoz.me;
 
-import net.fabricmc.api.ModInitializer;
+import net.minecraftforge.fml.common.Mod;
 import net.jukoz.me.api.utils.IdentifierUtil;
 import net.jukoz.me.api.utils.ModLogger;
 import net.minecraft.resources.ResourceLocation;
@@ -34,7 +34,8 @@ import net.jukoz.me.world.biomes.MEBiomeKeys;
 import net.jukoz.me.world.biomes.surface.MEBiomesData;
 import net.jukoz.me.world.dimension.ModDimensions;
 
-public class MiddleEarth implements ModInitializer {
+@Mod(MiddleEarth.MOD_ID)
+public class MiddleEarth {
 	public static final String MOD_ID = "me";
 
     /**
@@ -53,8 +54,8 @@ public class MiddleEarth implements ModInitializer {
 	public static final ModLogger LOGGER = new ModLogger(MOD_ID, IS_DEBUG);
 
 	private LoggerUtil loggerUtil;
-	@Override
-	public void onInitialize() {
+
+	public MiddleEarth() {
 		new FileUtils(getClass().getClassLoader());
 		loggerUtil = LoggerUtil.getInstance();
 

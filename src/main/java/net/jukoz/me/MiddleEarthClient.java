@@ -1,6 +1,9 @@
 package net.jukoz.me;
 
-import net.fabricmc.api.ClientModInitializer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
@@ -92,7 +95,8 @@ import net.minecraft.item.DyeableItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.resources.ResourceLocation;
 
-public class MiddleEarthClient implements ClientModInitializer {
+@Mod.EventBusSubscriber(modid = MiddleEarth.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+public class MiddleEarthClient {
 
     public static final EntityModelLayer INNER_ARMOR_MODEL_LAYER = new EntityModelLayer(new ResourceLocation(MiddleEarth.MOD_ID, "armor"), "layer_0");
     public static final EntityModelLayer HELMET_ADDON_MODEL_LAYER = new EntityModelLayer(new ResourceLocation(MiddleEarth.MOD_ID, "armor"), "helmet_addon");
@@ -103,7 +107,11 @@ public class MiddleEarthClient implements ClientModInitializer {
     public static final EntityModelLayer ROUND_SHIELD_LAYER = new EntityModelLayer(new ResourceLocation(MiddleEarth.MOD_ID, "round_shield"), "main");
     public static final EntityModelLayer HELD_BANNER_LAYER = new EntityModelLayer(new ResourceLocation(MiddleEarth.MOD_ID, "held_banner"), "main");
 
-    @Override
+    @SubscribeEvent
+    public static void onClientSetup(FMLClientSetupEvent event) {
+        new MiddleEarthClient().onInitializeClient();
+    }
+
     public void onInitializeClient() {
 
         ModEntityModels.getModels();

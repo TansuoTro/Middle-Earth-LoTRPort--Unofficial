@@ -1,99 +1,56 @@
 plugins {
-    id 'fabric-loom' version "${loom_version}"
+    id 'net.neoforged.moddev.legacyforge' version '2.0.77'
     id 'maven-publish'
+}
+
+// Mixin refmap + config registration (the legacyforge plugin applies the Sponge mixin plugin).
+mixin {
+    add sourceSets.main, "me.refmap.json"
+    config "me.mixins.json"
 }
 
 version = project.mod_version
 group = project.maven_group
-
 base {
     archivesName = project.archives_base_name
 }
 
-repositories {
-    maven { url = 'https://maven.shedaniel.me/' }
-    maven { url = 'https://maven.terraformersmc.com/releases/' }
-    mavenCentral()
-}
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+legacyForge {
+    version = "1.20.1-47.4.20"
+    accessTransformers = ["src/main/resources/META-INF/accesstransformer.cfg"]
 
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"
-    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
-
-    // Rosetta remote debug bridge: compiles and runs Java inside the dev server on the
-    // server thread, over a local TCP control plane. Dev-only, never shipped.
-    modRuntimeOnly files('libs/rosetta_remote_debug_bridge-1.0.0-fabric.jar')
-
-    // 0.4.1 declares `depends: minecraft >=1.21.6` in its fabric.mod.json, so Fabric
-    // Loader refuses to start it on 1.20.1. 0.3.3 has no minecraft version constraint
-    // and the same Permissions API. Both POMs import a 1.21.x Fabric API BOM as a strict
-    // platform; exclude it so the 1.20.1 Fabric API isn't dragged up (which would leak
-    // 1.21 injected interfaces into the remapped jar).
-    modImplementation("me.lucko:fabric-permissions-api:0.3.3") {
-        exclude group: 'net.fabricmc.fabric-api', module: 'fabric-api-bom'
+    runs {
+        client { client() }
+        server { server() }
+        data { data() }
     }
-
-    testImplementation platform('org.junit:junit-bom:5.10.2')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-}
-
-test {
-    useJUnitPlatform()
-    testLogging {
-        events 'passed', 'failed', 'skipped'
+    mods {
+        "me" {
+            sourceSet sourceSets.main
+        }
     }
 }
+
+// The REI plugin sources (Fabric-only API) are excluded until the JEI port lands (milestone M7).
+sourceSets.main.java.exclude 'net/jukoz/me/compat/ModREIClientPlugin.java'
+sourceSets.main.java.exclude 'net/jukoz/me/compat/REIClientPluginME.java'
+sourceSets.main.java.exclude 'net/jukoz/me/compat/REICommonPluginME.java'
+sourceSets.main.java.exclude 'net/jukoz/me/compat/alloyFurnace/**'
+sourceSets.main.java.exclude 'net/jukoz/me/compat/artisanTable/**'
+sourceSets.main.java.exclude 'net/jukoz/me/compat/forge/**'
 
 processResources {
-    // src/main/resources is listed before src/main/generated, so EXCLUDE lets the handful of
-    // hand-written datapack files (e.g. data/me/loot_tables/blocks/maple_leaves.json) win over
-    // the datagen output instead of failing the build on a duplicate entry.
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     inputs.property 'version', project.version
-    filesMatching('fabric.mod.json') {
-        expand(version: project.version)
+    filesMatching('META-INF/mods.toml') {
+        expand version: project.version,
+                mod_id: project.mod_id,
+                mod_name: project.mod_name,
+                mod_license: project.mod_license,
+                mod_authors: project.mod_authors,
+                mod_description: project.mod_description
     }
-}
-
-loom {
-    accessWidenerPath = file("src/main/resources/me.accesswidener")
-    runs {
-        client {
-            // The bridge only listens once a world is joined, so automated client runs
-            // quick-play straight into one.
-            if (project.hasProperty('quickPlay')) {
-                programArgs '--quickPlaySingleplayer', project.property('quickPlay')
-            }
-            vmArg '-Drosetta.remote.port=48797'
-        }
-        server {
-            vmArg '-Drosetta.remote.port=48798'
-        }
-        datagenClient {
-            inherit client
-            name 'Data Generation'
-            vmArg '-Dfabric-api.datagen'
-            vmArg "-Dfabric-api.datagen.output-dir=${file('src/main/generated')}"
-            vmArg "-Dfabric-api.datagen.modid=${modid}"
-            runDir 'build/datagen'
-        }
-    }
-}
-
-sourceSets.main.resources.srcDirs += ['src/main/generated']
-
-tasks.withType(JavaCompile).configureEach {
-    options.release = 17
-    options.encoding = 'UTF-8'
-    // During the 1.21 -> 1.20.1 port the tree is deliberately red; javac's default
-    // 100-error cap hides almost all of the worklist, so raise it.
-    options.compilerArgs += ['-Xmaxerrs', '60000']
 }
 
 java {
@@ -102,24 +59,13 @@ java {
     withSourcesJar()
 }
 
-jar {
-    from('LICENSE') {
-        rename { "${it}_${project.archives_base_name}" }
-    }
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 17
+    // Keep the whole error list visible while the port is red.
+    options.compilerArgs += ['-Xmaxerrs', '60000']
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
-    repositories {}
+repositories {
+    mavenCentral()
 }
-
-// FabricDynamicRegistryProvider writes mod dynamic registries to data/<modid>/<registry>/ and
-// that doubled level is CORRECT, not a bug: for a Fabric-registered dynamic registry the loader
-// scans data/<registry namespace>/<registry path>/ with the registry namespace folded into the
-// starting path (see RegistryLoaderMixin#prependDirectoryWithNamespace), so me:spider_variants
-// must stay at data/me/me/spider_variants/. Flattening it to data/me/spider_variants/ leaves the
-// registry empty at runtime and every shelobite crash-loads the server tick.
