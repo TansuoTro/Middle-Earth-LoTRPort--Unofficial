@@ -49,6 +49,10 @@ import net.jukoz.me.entity.spider.scuttler.ShelobiteScuttlerRenderer;
 import net.jukoz.me.entity.spider.spawn.SpawnOfShelobRenderer;
 import net.jukoz.me.entity.projectile.boulder.BoulderEntityRenderer;
 import net.jukoz.me.entity.projectile.spear.JavelinEntityRenderer;
+import net.jukoz.me.block.special.fire_of_orthanc.FireOfOrthancEntityRenderer;
+import net.jukoz.me.entity.projectile.smoke.SmokeRingProjectileRenderer;
+import net.jukoz.me.entity.seat.SeatRenderer;
+import net.jukoz.me.entity.barrel.BarrelEntityRenderer;
 import net.jukoz.me.entity.snail.SnailRenderer;
 import net.jukoz.me.entity.spider.MirkwoodSpiderRenderer;
 import net.jukoz.me.entity.swan.SwanRenderer;
@@ -173,6 +177,11 @@ public class MiddleEarthClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.LIT_PINECONE, FlyingItemEntityRenderer::new);
         EntityRendererRegistry.register(ModEntities.SPEAR, JavelinEntityRenderer::new);
         EntityRendererRegistry.register(ModEntities.BOULDER, BoulderEntityRenderer::new);
+        EntityRendererRegistry.register(EntitiesME.FIRE_OF_ORTHANC, FireOfOrthancEntityRenderer::new);
+        EntityRendererRegistry.register(EntitiesME.SMOKE_RING_PROJECTILE, SmokeRingProjectileRenderer::new);
+        EntityRendererRegistry.register(EntitiesME.WEB, FlyingItemEntityRenderer::new);
+        EntityRendererRegistry.register(EntitiesME.SEAT_ENTITY, SeatRenderer::new);
+        EntityRendererRegistry.register(EntitiesME.REINFORCED_BARREL, BarrelEntityRenderer::new);
 
         registerDyeableItem(ModEquipmentItems.TUNIC_CLOAK);
         registerDyeableItem(ModEquipmentItems.CLOAK);
@@ -232,6 +241,20 @@ public class MiddleEarthClient implements ClientModInitializer {
     }
 
     private void initializeRenderLayerMap() {
+        // 1.20.1 has no data-driven model render_type, and the donor (1.21.8) relied on it. Any
+        // plant / cluster / multiface / hanging-root / leaf block that is not explicitly listed
+        // below would otherwise render SOLID, turning its transparent pixels black.
+        for (net.minecraft.block.Block block : net.minecraft.registry.Registries.BLOCK) {
+            if (!net.minecraft.registry.Registries.BLOCK.getId(block).getNamespace().equals(MiddleEarth.MOD_ID)) continue;
+            if (block instanceof net.minecraft.block.PlantBlock
+                    || block instanceof net.minecraft.block.MultifaceGrowthBlock
+                    || block instanceof net.minecraft.block.AmethystClusterBlock
+                    || block instanceof net.minecraft.block.HangingRootsBlock) {
+                BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout());
+            } else if (block instanceof net.minecraft.block.LeavesBlock) {
+                BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutoutMipped());
+            }
+        }
         BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.MORDOR_LICHEN, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.MORGUL_IVY, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.HANGING_COBWEB, RenderLayer.getCutout());
