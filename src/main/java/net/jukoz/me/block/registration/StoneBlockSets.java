@@ -9,7 +9,7 @@ import net.jukoz.me.block.utils.setBuilders.StoneBlockSetBuilder;
 import net.jukoz.me.block.utils.StoneBlockTypes;
 import net.minecraft.block.*;
 import net.minecraft.sound.BlockSoundGroup;
-import net.jukoz.me.item.utils.ItemGroupsME;
+import net.jukoz.me.item.utils.ModItemGroups;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -516,7 +516,7 @@ public class StoneBlockSets {
 
     private static StoneBlockSetBuilder registerStoneSet(StoneBlockSetBuilder set) {
 
-        List<ItemStack> itemGroup = ItemGroupsME.STONE_BLOCKS_CONTENTS;
+        List<ItemStack> itemGroup = ModItemGroups.STONE_BLOCKS_CONTENTS;
 
         set.existingList.forEach((stoneBlockTypes) -> {
             switch (stoneBlockTypes){

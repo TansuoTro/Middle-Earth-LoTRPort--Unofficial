@@ -40,7 +40,7 @@ import net.jukoz.me.block.special.torches.MEWallTorchBlock;
 import net.jukoz.me.block.special.torches.OrcSconceBlock;
 import net.jukoz.me.block.special.wood_pile.WoodPileBlock;
 import net.jukoz.me.datageneration.content.TranslationEntries;
-import net.jukoz.me.item.utils.ItemGroupsME;
+import net.jukoz.me.item.utils.ModItemGroups;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.Instrument;
 import net.minecraft.particle.ParticleTypes;
@@ -780,7 +780,7 @@ public class ModDecorativeBlocks {
     public static Block registerBlockWithItem(String name, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings) {
         Block block = (Block)factory.apply(settings);
         ModBlocks.registerBlockItem(name, block);
-        ItemGroupsME.DECORATIVES_BLOCKS_CONTENT.add(block.asItem().getDefaultStack());
+        ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(block.asItem().getDefaultStack());
         TranslationEntries.blockEntries.add(block);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.BLOCK, name));
         return Registry.register(Registries.BLOCK, ModBlocks.keyOfBlock(name), block);

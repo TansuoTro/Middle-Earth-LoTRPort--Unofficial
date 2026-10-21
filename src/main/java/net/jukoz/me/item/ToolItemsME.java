@@ -16,7 +16,7 @@ import net.jukoz.me.item.items.CustomHoeItem;
 import net.jukoz.me.item.items.PipeItem;
 import net.jukoz.me.item.items.SmithingHammerItem;
 import net.jukoz.me.item.items.weapons.CustomAxeWeaponItem;
-import net.jukoz.me.item.utils.ItemGroupsME;
+import net.jukoz.me.item.utils.ModItemGroups;
 import net.jukoz.me.item.utils.ToolMaterialsME;
 import net.jukoz.me.registries.RegistryAliasesME;
 
@@ -159,7 +159,7 @@ public class ToolItemsME {
     
     private static Item registerItemHandheld(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
         Item item = (Item)factory.apply(settings);
-        ItemGroupsME.TOOLS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.TOOLS_CONTENTS.add(item.getDefaultStack());
         SimpleHandheldItemModel.items.add(item);
         return registerItem(item, name);
     }
@@ -172,7 +172,7 @@ public class ToolItemsME {
 
     private static Item registerItemDualModel(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
         Item item = (Item)factory.apply(settings);
-        ItemGroupsME.TOOLS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.TOOLS_CONTENTS.add(item.getDefaultStack());
         SimpleBigItemModel.items.add(item);
         return registerItem(item, name);
     }
@@ -180,7 +180,7 @@ public class ToolItemsME {
     public static Item registerItem2dGUI3dPerson(String name, Function<Item.Settings, Item> factory, Item.Settings settings){
         Item item = (Item)factory.apply(settings);
         SimpleBigItemModel.genericItems.add(item);
-        ItemGroupsME.TOOLS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.TOOLS_CONTENTS.add(item.getDefaultStack());
         return registerItem(item, name);
     }
 

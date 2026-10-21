@@ -4,7 +4,7 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.jukoz.me.datageneration.content.TranslationEntries;
-import net.jukoz.me.item.utils.ItemGroupsME;
+import net.jukoz.me.item.utils.ModItemGroups;
 import net.minecraft.item.Item;
 import net.minecraft.item.PlaceableOnWaterItem;
 import net.minecraft.registry.Registries;
@@ -41,7 +41,7 @@ public class NatureBlockItemsME {
 
     private static Item registerItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
         Item item = (Item)factory.apply(settings);
-        ItemGroupsME.NATURE_BLOCKS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.NATURE_BLOCKS_CONTENTS.add(item.getDefaultStack());
         TranslationEntries.itemEntries.add(item);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ITEM, name));
         return Registry.register(Registries.ITEM, new Identifier(MiddleEarth.MOD_ID, name), item);

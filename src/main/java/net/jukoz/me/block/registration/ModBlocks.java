@@ -17,7 +17,7 @@ import net.jukoz.me.block.special.pointedBlocks.PointedLimestoneBlock;
 import net.jukoz.me.block.special.verticalSlabs.VerticalSlabBlock;
 import net.jukoz.me.datageneration.content.TranslationEntries;
 import net.jukoz.me.datageneration.content.loot_tables.BlockDrops;
-import net.jukoz.me.item.utils.ItemGroupsME;
+import net.jukoz.me.item.utils.ModItemGroups;
 import net.minecraft.block.*;
 import net.minecraft.world.BlockView;
 import net.minecraft.util.math.BlockPos;
@@ -814,33 +814,33 @@ public class ModBlocks {
     }
 
     public static Block registerStoneBlock(String name, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings, boolean drop) {
-        return registerBlock(name, factory, settings, drop, ItemGroupsME.STONE_BLOCKS_CONTENTS);
+        return registerBlock(name, factory, settings, drop, ModItemGroups.STONE_BLOCKS_CONTENTS);
     }
 
     public static Block registerWoodBlock(String name, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings, boolean drop) {
-        return registerBlock(name, factory, settings, drop, ItemGroupsME.WOOD_BLOCKS_CONTENTS);
+        return registerBlock(name, factory, settings, drop, ModItemGroups.WOOD_BLOCKS_CONTENTS);
     }
 
     public static Block registerMiscBlock(String name, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings, boolean drop) {
-        return registerBlock(name, factory, settings, drop, ItemGroupsME.MISC_BLOCKS_CONTENTS);
+        return registerBlock(name, factory, settings, drop, ModItemGroups.MISC_BLOCKS_CONTENTS);
     }
 
     // Legacy (String, Block, boolean) overloads used by tree-local set classes (MushroomBlockSets,
     // RoofBlockSets) that pre-build blocks with their own settings; the factory ignores the passed settings.
     public static Block registerBlock(String name, Block block, boolean drop) {
-        return registerBlock(name, (settings) -> block, AbstractBlock.Settings.create(), drop, ItemGroupsME.MISC_BLOCKS_CONTENTS);
+        return registerBlock(name, (settings) -> block, AbstractBlock.Settings.create(), drop, ModItemGroups.MISC_BLOCKS_CONTENTS);
     }
 
     public static Block registerStoneBlock(String name, Block block, boolean drop) {
-        return registerBlock(name, (settings) -> block, AbstractBlock.Settings.create(), drop, ItemGroupsME.STONE_BLOCKS_CONTENTS);
+        return registerBlock(name, (settings) -> block, AbstractBlock.Settings.create(), drop, ModItemGroups.STONE_BLOCKS_CONTENTS);
     }
 
     public static Block registerWoodBlock(String name, Block block, boolean drop) {
-        return registerBlock(name, (settings) -> block, AbstractBlock.Settings.create(), drop, ItemGroupsME.WOOD_BLOCKS_CONTENTS);
+        return registerBlock(name, (settings) -> block, AbstractBlock.Settings.create(), drop, ModItemGroups.WOOD_BLOCKS_CONTENTS);
     }
 
     public static Block registerMiscBlock(String name, Block block, boolean drop) {
-        return registerBlock(name, (settings) -> block, AbstractBlock.Settings.create(), drop, ItemGroupsME.MISC_BLOCKS_CONTENTS);
+        return registerBlock(name, (settings) -> block, AbstractBlock.Settings.create(), drop, ModItemGroups.MISC_BLOCKS_CONTENTS);
     }
 
     static void registerBlockItem(String name, Block block) {

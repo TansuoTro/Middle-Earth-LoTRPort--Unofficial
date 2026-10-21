@@ -12,7 +12,7 @@ import net.jukoz.me.item.items.weapons.ranged.LitPineconeItem;
 import net.jukoz.me.item.items.weapons.ranged.PebbleItem;
 import net.jukoz.me.item.items.weapons.ranged.PineconeItem;
 import net.jukoz.me.item.utils.BannerPatternTagsME;
-import net.jukoz.me.item.utils.ItemGroupsME;
+import net.jukoz.me.item.utils.ModItemGroups;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -142,7 +142,7 @@ public class ResourceItemsME {
     public static final Item STRAW = registerItem("straw",
             Item::new, new MESettings());
     public static final Block REEDS = ModBlocks.registerBlock("reeds",
-            (settings) -> new CustomWaterloggableTallPlantBlock(settings, false), AbstractBlock.Settings.copy(Blocks.TALL_GRASS).breakInstantly(), false, ItemGroupsME.RESOURCES_CONTENTS);
+            (settings) -> new CustomWaterloggableTallPlantBlock(settings, false), AbstractBlock.Settings.copy(Blocks.TALL_GRASS).breakInstantly(), false, ModItemGroups.RESOURCES_CONTENTS);
     public static final Item SWAN_FEATHER = registerItem("swan_feather",
             Item::new, new MESettings());
 
@@ -307,7 +307,7 @@ public class ResourceItemsME {
                         net.minecraft.registry.RegistryKeys.BANNER_PATTERN,
                         new Identifier(meSettings.bannerPatternTag())), settings)
                 : factory.apply(settings);
-        ItemGroupsME.RESOURCES_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.RESOURCES_CONTENTS.add(item.getDefaultStack());
         TranslationEntries.itemEntries.add(item);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ITEM, name));
         return Registry.register(Registries.ITEM, new Identifier(MiddleEarth.MOD_ID, name), item);

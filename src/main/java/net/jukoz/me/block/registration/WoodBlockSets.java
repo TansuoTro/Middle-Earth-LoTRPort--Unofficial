@@ -17,7 +17,7 @@ import net.jukoz.me.block.utils.BlockSetRegistration;
 import net.jukoz.me.block.utils.WoodBlockTypes;
 import net.jukoz.me.block.utils.setBuilders.WoodBlockSetBuilder;
 import net.jukoz.me.datageneration.content.tags.ModdedStrippedLogs;
-import net.jukoz.me.item.utils.ItemGroupsME;
+import net.jukoz.me.item.utils.ModItemGroups;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -465,21 +465,21 @@ public class WoodBlockSets {
             .addToSet(WoodBlockTypes.SHINGLE_BLOCKS));
 
     private static WoodBlockSetBuilder registerWoodSet(WoodBlockSetBuilder set) {
-        List<ItemStack> itemGroup = ItemGroupsME.WOOD_BLOCKS_CONTENTS;
+        List<ItemStack> itemGroup = ModItemGroups.WOOD_BLOCKS_CONTENTS;
 
         set.existingList.forEach((woodStoneTypes) -> {
             switch (woodStoneTypes) {
                 case LOG_BLOCKS -> {
                     set.logBlocks = BlockSetRegistration.createWoodSet(woodStoneTypes.getPrefix() + set.setName + woodStoneTypes.getSuffix(), set.hardness, set.blastResistance, set.mapColor, set.instrument, set.soundGroup, itemGroup);
-                    ItemGroupsME.NATURE_BLOCKS_CONTENTS.add(set.logBlocks.log().asItem().getDefaultStack());
+                    ModItemGroups.NATURE_BLOCKS_CONTENTS.add(set.logBlocks.log().asItem().getDefaultStack());
                 }
                 case MUSHROOM_STEM_BLOCKS -> {
                     set.mushroomStemBlocks = BlockSetRegistration.createMushroomStemSet(woodStoneTypes.getPrefix() + set.setName + woodStoneTypes.getSuffix(), set.hardness, set.blastResistance, set.mapColor, set.instrument, set.soundGroup, itemGroup);
-                    ItemGroupsME.NATURE_BLOCKS_CONTENTS.add(set.mushroomStemBlocks.stem().asItem().getDefaultStack());
+                    ModItemGroups.NATURE_BLOCKS_CONTENTS.add(set.mushroomStemBlocks.stem().asItem().getDefaultStack());
                 }
                 case NETHER_STEM_BLOCKS -> {
                     set.logBlocks = BlockSetRegistration.createStemSet(woodStoneTypes.getPrefix() + set.setName + woodStoneTypes.getSuffix(), set.hardness, set.blastResistance, set.mapColor, set.instrument, set.soundGroup, itemGroup);
-                    ItemGroupsME.NATURE_BLOCKS_CONTENTS.add(set.logBlocks.log().asItem().getDefaultStack());
+                    ModItemGroups.NATURE_BLOCKS_CONTENTS.add(set.logBlocks.log().asItem().getDefaultStack());
                 }
                 case STRIPPED_LOG_BLOCKS -> {
                     set.strippedLogBlocks = BlockSetRegistration.createWoodSet(woodStoneTypes.getPrefix() + set.setName + woodStoneTypes.getSuffix(), set.hardness, set.blastResistance, set.mapColor, set.instrument, set.soundGroup, itemGroup);
@@ -499,11 +499,11 @@ public class WoodBlockSets {
                         set.redstoneBlocks = BlockSetRegistration.createWoodRedstoneSet(woodStoneTypes.getPrefix() + set.setName + woodStoneTypes.getSuffix(), set.hardness, set.blastResistance, set.mapColor, set.soundGroup, set.planksBlocks.base(), itemGroup);
                 case FURNITURE_BLOCKS -> {
                     set.furnitureBlocks = BlockSetRegistration.createWoodFurnitureSet(woodStoneTypes.getPrefix() + set.setName + woodStoneTypes.getSuffix(), set.hardness, set.blastResistance, set.mapColor, set.soundGroup, set.planksBlocks.base(), itemGroup);
-                    ItemGroupsME.DECORATIVES_BLOCKS_CONTENT.add(set.furnitureBlocks.stool().asItem().getDefaultStack());
-                    ItemGroupsME.DECORATIVES_BLOCKS_CONTENT.add(set.furnitureBlocks.bench().asItem().getDefaultStack());
-                    ItemGroupsME.DECORATIVES_BLOCKS_CONTENT.add(set.furnitureBlocks.table().asItem().getDefaultStack());
-                    ItemGroupsME.DECORATIVES_BLOCKS_CONTENT.add(set.furnitureBlocks.chair().asItem().getDefaultStack());
-                    ItemGroupsME.DECORATIVES_BLOCKS_CONTENT.add(set.furnitureBlocks.ladder().asItem().getDefaultStack());
+                    ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(set.furnitureBlocks.stool().asItem().getDefaultStack());
+                    ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(set.furnitureBlocks.bench().asItem().getDefaultStack());
+                    ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(set.furnitureBlocks.table().asItem().getDefaultStack());
+                    ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(set.furnitureBlocks.chair().asItem().getDefaultStack());
+                    ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(set.furnitureBlocks.ladder().asItem().getDefaultStack());
                 }
                 case ROOFING_BLOCKS ->
                         set.roofingBlocks = BlockSetRegistration.createRegularSet(woodStoneTypes.getPrefix() + set.setName + woodStoneTypes.getSuffix(), set.hardness, set.blastResistance, set.mapColor, set.instrument, set.soundGroup, false, itemGroup, false);

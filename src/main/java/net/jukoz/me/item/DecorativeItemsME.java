@@ -14,7 +14,7 @@ import net.jukoz.me.item.items.DoorBlockItem;
 import net.jukoz.me.item.items.ReinforcedScaffoldingItem;
 import net.jukoz.me.item.items.WateringCanItem;
 import net.jukoz.me.item.items.weapons.utils.ArtefactUtils;
-import net.jukoz.me.item.utils.ItemGroupsME;
+import net.jukoz.me.item.utils.ModItemGroups;
 import net.jukoz.me.item.items.VerticallyAttachableBlockItemME;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -242,7 +242,7 @@ public class DecorativeItemsME {
 
     private static Item registerItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
         Item item = (Item)factory.apply(settings);
-        ItemGroupsME.DECORATIVES_BLOCKS_CONTENT.add(item.getDefaultStack());
+        ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(item.getDefaultStack());
         TranslationEntries.itemEntries.add(item);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ITEM, name));
         return Registry.register(Registries.ITEM, new Identifier(MiddleEarth.MOD_ID, name), item);

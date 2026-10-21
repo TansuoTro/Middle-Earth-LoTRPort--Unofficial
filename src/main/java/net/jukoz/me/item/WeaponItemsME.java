@@ -27,7 +27,7 @@ import net.jukoz.me.item.items.weapons.ranged.CustomBowWeaponItem;
 import net.jukoz.me.item.items.weapons.ranged.CustomCrossbowWeaponItem;
 import net.jukoz.me.item.items.weapons.ranged.CustomLongbowWeaponItem;
 import net.jukoz.me.item.items.weapons.utils.ArtefactUtils;
-import net.jukoz.me.item.utils.ItemGroupsME;
+import net.jukoz.me.item.utils.ModItemGroups;
 import net.jukoz.me.item.utils.RangedWeaponTypesME;
 import net.jukoz.me.item.utils.ShieldTypesME;
 import net.jukoz.me.item.utils.ToolMaterialsME;
@@ -1065,7 +1065,7 @@ public class WeaponItemsME {
 
     private static Item registerItemWithModel(String name, Function<Item.Settings, Item> factory, Item.Settings settings, boolean isDualModel) {
         Item item = (Item)factory.apply(settings);
-        ItemGroupsME.WEAPONS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.WEAPONS_CONTENTS.add(item.getDefaultStack());
         if(isDualModel) {
             SimpleBigItemModel.items.add(item);
         } else if(item instanceof CustomDaggerWeaponItem) {
@@ -1078,13 +1078,13 @@ public class WeaponItemsME {
 
     private static Item registerItemNoModel(String name, Function<Item.Settings, Item> factory) {
         Item item = (Item)factory.apply(new MESettings());
-        ItemGroupsME.WEAPONS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.WEAPONS_CONTENTS.add(item.getDefaultStack());
         return registerItem(item, name);
     }
 
     private static Item registerItemWithSpearModel(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
         Item item = (Item)factory.apply(settings);
-        ItemGroupsME.WEAPONS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.WEAPONS_CONTENTS.add(item.getDefaultStack());
         spears.add(item);
         SimpleSpearModel.items.add(item);
         return registerItem(item, name);
@@ -1092,7 +1092,7 @@ public class WeaponItemsME {
 
     private static Item registerBowItem(String name, Function<Item.Settings, Item> factory, MESettings settings) {
         Item item = (Item)factory.apply(settings.enchantable(2));
-        ItemGroupsME.WEAPONS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.WEAPONS_CONTENTS.add(item.getDefaultStack());
         SimpleBowItemModel.items.add(item);
         Bows.bows.add(item);
         return registerItem(item, name);
@@ -1100,7 +1100,7 @@ public class WeaponItemsME {
 
     private static Item registerBigBowItem(String name, Function<Item.Settings, Item> factory, MESettings settings) {
         Item item = (Item)factory.apply(settings.enchantable(2));
-        ItemGroupsME.WEAPONS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.WEAPONS_CONTENTS.add(item.getDefaultStack());
         SimpleBigItemModel.bigBows.add(item);
         Bows.bows.add(item);
         // Every big bow ships _pulling_0..2 textures, so it also needs the three draw-stage
@@ -1114,7 +1114,7 @@ public class WeaponItemsME {
                 .enchantable(1)
 
                 );
-        ItemGroupsME.WEAPONS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.WEAPONS_CONTENTS.add(item.getDefaultStack());
         SimpleCrossbowItemModel.items.add(item);
         Crossbows.crossbows.add(item);
         return registerItem(item, name);
@@ -1122,20 +1122,20 @@ public class WeaponItemsME {
 
     private static Item registerArtefact(String name, Function<Item.Settings, Item> factory, Item.Settings settings, boolean isDualModel) {
         Item item = (Item)factory.apply(settings);
-        ItemGroupsME.WEAPONS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.WEAPONS_CONTENTS.add(item.getDefaultStack());
         SimpleArtefactModels.artefacts.add(new SimpleArtefactModels.Artefact(item, isDualModel));
         return registerItem(item, name);
     }
 
     private static Item registerBannerShield(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
         Item item = (Item)factory.apply(settings);
-        ItemGroupsME.WEAPONS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.WEAPONS_CONTENTS.add(item.getDefaultStack());
         return registerItem(item, name);
     }
 
     private static Item registerShield(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
         Item item = (Item)factory.apply(settings);
-        ItemGroupsME.WEAPONS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.WEAPONS_CONTENTS.add(item.getDefaultStack());
         shields.add(item);
         return registerItem(item, name);
     }

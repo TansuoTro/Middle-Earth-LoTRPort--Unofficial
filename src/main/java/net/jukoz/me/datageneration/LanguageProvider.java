@@ -127,7 +127,25 @@ public class LanguageProvider extends FabricLanguageProvider {
             createTranslation(translationBuilder, "inscription", inscription);
         });
 
-        TranslationEntries.manualEntries.forEach(translationBuilder::add);
+        TranslationEntries.manualEntries.forEach((key, value) -> addKey(translationBuilder, key, value));
+
+        // Fallback: any me: block/item whose helper never registered a TranslationEntries entry
+        // (faction weapons, spawn eggs, crops, alloy furnace, ...) still needs a display name.
+        for (Block block : Registries.BLOCK) {
+            var id = Registries.BLOCK.getId(block);
+            if (!MiddleEarth.MOD_ID.equals(id.getNamespace())) continue;
+            addKey(translationBuilder, "block." + id.getNamespace() + "." + id.getPath(), generateName(id.getPath()));
+            var blockItem = block.asItem();
+            if (blockItem != null && blockItem != net.minecraft.item.Items.AIR) {
+                var itemId = Registries.ITEM.getId(blockItem);
+                addKey(translationBuilder, "item." + itemId.getNamespace() + "." + itemId.getPath(), generateName(itemId.getPath()));
+            }
+        }
+        for (net.minecraft.item.Item item : Registries.ITEM) {
+            var id = Registries.ITEM.getId(item);
+            if (!MiddleEarth.MOD_ID.equals(id.getNamespace())) continue;
+            addKey(translationBuilder, "item." + id.getNamespace() + "." + id.getPath(), generateName(id.getPath()));
+        }
 
         createBannerTranslation(translationBuilder, "item", "round_shield");
         createBannerTranslation(translationBuilder, "item", "heater_shield");
@@ -198,6 +216,7 @@ public class LanguageProvider extends FabricLanguageProvider {
         String[] splitName = registryName.split("[_.]");
 
         for (int i = 0; i < splitName.length; i++) {
+            if (splitName[i].isEmpty()) continue;
             char[] characters = splitName[i].toCharArray();
             characters[0] = Character.toUpperCase(characters[0]);
             splitName[i] = new String(characters);

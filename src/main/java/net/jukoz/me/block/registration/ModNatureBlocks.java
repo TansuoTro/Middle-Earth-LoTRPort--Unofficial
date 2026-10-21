@@ -20,7 +20,7 @@ import net.jukoz.me.block.special.shelobiteeggs.ShelobiteLarvaEggHangingBlock;
 import net.jukoz.me.datageneration.content.TranslationEntries;
 import net.jukoz.me.datageneration.content.models.TintableCrossModel;
 import net.jukoz.me.datageneration.content.tags.Saplings;
-import net.jukoz.me.item.utils.ItemGroupsME;
+import net.jukoz.me.item.utils.ModItemGroups;
 import net.jukoz.me.registries.RegistryAliasesME;
 import net.jukoz.me.world.features.tree.ModTreeConfiguredFeatures;
 import net.jukoz.me.world.features.tree.MushroomTreeConfiguredFeatures;
@@ -679,7 +679,7 @@ public class ModNatureBlocks {
                new BlockItem(block, new MESettings()));
         Item.BLOCK_ITEMS.put(block, item);
 
-        ItemGroupsME.NATURE_BLOCKS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.NATURE_BLOCKS_CONTENTS.add(item.getDefaultStack());
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ITEM, name));
     }
 

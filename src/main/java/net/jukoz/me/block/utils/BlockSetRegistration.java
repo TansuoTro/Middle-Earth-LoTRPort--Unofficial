@@ -13,7 +13,7 @@ import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.block.special.*;
 import net.jukoz.me.block.special.verticalSlabs.TransparentVerticalSlab;
 import net.jukoz.me.block.special.verticalSlabs.VerticalSlabBlock;
-import net.jukoz.me.item.utils.ItemGroupsME;
+import net.jukoz.me.item.utils.ModItemGroups;
 
 import java.util.List;
 import java.util.Objects;
@@ -346,9 +346,9 @@ public class BlockSetRegistration {
         Block chair = getVanillaOrCreateNew(name + "_chair", StoneChairBlock::new,
                 AbstractBlock.Settings.copy(base).nonOpaque(), group);
 
-        ItemGroupsME.DECORATIVES_BLOCKS_CONTENT.add(stool.asItem().getDefaultStack());
-        ItemGroupsME.DECORATIVES_BLOCKS_CONTENT.add(table.asItem().getDefaultStack());
-        ItemGroupsME.DECORATIVES_BLOCKS_CONTENT.add(chair.asItem().getDefaultStack());
+        ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(stool.asItem().getDefaultStack());
+        ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(table.asItem().getDefaultStack());
+        ModItemGroups.DECORATIVES_BLOCKS_CONTENT.add(chair.asItem().getDefaultStack());
 
         return new BlockRecordTypes.BaseStoneSet(base, slab, verticalSlab, stairs, wall, pressurePlate, button, trapdoor, stool, table, chair, rocks);
     }

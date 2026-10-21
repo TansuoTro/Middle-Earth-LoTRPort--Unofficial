@@ -12,7 +12,7 @@ import net.jukoz.me.block.registration.ModBlocks;
 import net.jukoz.me.datageneration.content.TranslationEntries;
 import net.jukoz.me.datageneration.content.models.SimpleItemModel;
 import net.jukoz.me.entity.EntitiesME;
-import net.jukoz.me.item.utils.ItemGroupsME;
+import net.jukoz.me.item.utils.ModItemGroups;
 import net.jukoz.me.registries.RegistryAliasesME;
 
 import java.util.function.Function;
@@ -60,7 +60,7 @@ public class EggItemsME {
 
     private static Item registerItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
         Item item = (Item)factory.apply(settings);
-        ItemGroupsME.SPAWN_EGGS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.SPAWN_EGGS_CONTENTS.add(item.getDefaultStack());
         SimpleItemModel.items.add(item);
         TranslationEntries.itemEntries.add(item);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ITEM, name));
@@ -68,7 +68,7 @@ public class EggItemsME {
     }
     private static Item registerSpecialEgg(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
         Item item = (Item)factory.apply(settings);
-        ItemGroupsME.SPAWN_EGGS_CONTENTS.add(item.getDefaultStack());
+        ModItemGroups.SPAWN_EGGS_CONTENTS.add(item.getDefaultStack());
         TranslationEntries.itemEntries.add(item);
         RegistryAliasesME.aliases.add(new RegistryAliasesME.Alias(Registries.ITEM, name));
         return Registry.register(Registries.ITEM, new Identifier(MiddleEarth.MOD_ID, name), item);
