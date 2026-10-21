@@ -24,6 +24,7 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.DiskConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class OreConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> ANDESITE_ORE = registerKey("andesite_ore");

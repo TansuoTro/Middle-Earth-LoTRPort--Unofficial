@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class TexturePresetsRegistry {
     private static final ResourceKey<Registry<TexturePresetDataPool>> NPC_TEXTURE_DATA_KEY = DynamicRegistriesME.TEXTURE_PRESETS;

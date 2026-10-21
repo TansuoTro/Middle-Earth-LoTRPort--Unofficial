@@ -12,6 +12,7 @@ import net.jukoz.me.registries.content.factions.pools.*;
 import net.jukoz.me.resources.datas.factions.Faction;
 import net.jukoz.me.resources.datas.factions.data.SpawnDataHandler;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class FactionRegistry {
     private static final ResourceKey<Registry<Faction>> FACTION_KEY = DynamicRegistriesME.FACTION;

@@ -2,12 +2,11 @@ package net.jukoz.me.api.registries;
 
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Registry;
-import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import java.util.Optional;
-import net.minecraft.core.HolderGetter;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class DynamicRegistries {
 

@@ -28,6 +28,7 @@ import net.minecraft.world.level.levelgen.placement.RandomOffsetPlacement;
 import net.minecraft.world.level.levelgen.placement.RarityFilter;
 import net.minecraft.world.level.levelgen.placement.SurfaceRelativeThresholdFilter;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class ModVegetationPlacedFeatures {
     public static final ResourceKey<PlacedFeature> WATER_DELTA = registerKey("water_delta");

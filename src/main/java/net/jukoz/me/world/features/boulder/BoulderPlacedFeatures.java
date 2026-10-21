@@ -13,6 +13,7 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class BoulderPlacedFeatures {
     public static final ResourceKey<PlacedFeature> ANDESITE_BOULDER = registerKey("andesite_boulder");

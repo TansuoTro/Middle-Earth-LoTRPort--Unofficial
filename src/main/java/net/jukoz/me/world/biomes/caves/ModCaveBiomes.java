@@ -27,6 +27,7 @@ import net.minecraft.data.worldgen.placement.OrePlacements;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class ModCaveBiomes {
     public static final int defaultSky = 7907327;

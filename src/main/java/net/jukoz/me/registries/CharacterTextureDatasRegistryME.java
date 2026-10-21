@@ -8,6 +8,7 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.resources.datas.texture_presets.TexturePresetDataPool;
 import java.util.*;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class CharacterTextureDatasRegistryME {
     /* [MORDOR] */

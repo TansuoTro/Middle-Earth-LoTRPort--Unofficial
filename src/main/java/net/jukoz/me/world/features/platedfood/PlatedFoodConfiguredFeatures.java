@@ -10,6 +10,7 @@ import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.world.features.chain.ChainFeatureConfig;
 import net.jukoz.me.world.gen.ModFeatures;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class PlatedFoodConfiguredFeatures {
     // NOTE keep it here just in case

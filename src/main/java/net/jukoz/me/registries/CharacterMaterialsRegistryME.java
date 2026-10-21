@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.resources.datas.common.CharacterMaterialTypes;
 import net.jukoz.me.resources.datas.texture_presets.CharacterTextureMaterial;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 /**
  * Middle-earth mod npc texture materials registry<br>

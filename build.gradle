@@ -66,11 +66,13 @@ tasks.withType(JavaCompile).configureEach {
     options.release = 17
     // Keep the whole error list visible while the port is red.
     options.fork = true
-    options.forkOptions.memoryMaximumSize = '3g'
+    options.forkOptions.memoryMaximumSize = '6g'
     options.compilerArgs += ['-Xmaxerrs', '60000']
 }
 
 repositories {
+    // Official-mapped Forgified Fabric API jars produced by build/agents/ffapi_local_repo3.py
+    maven { url = uri("local-repo") }
     mavenCentral()
     maven {
         name = "Sinytra"

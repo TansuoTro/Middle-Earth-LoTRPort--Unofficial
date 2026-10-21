@@ -16,6 +16,7 @@ import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class ModTreePlacedFeatures {
     public static final ResourceKey<PlacedFeature> ACACIA_PLACED_TREE_KEY = registerKey("acacia_tree");

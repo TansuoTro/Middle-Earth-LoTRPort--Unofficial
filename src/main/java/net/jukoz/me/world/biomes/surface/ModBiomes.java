@@ -28,6 +28,7 @@ import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class ModBiomes {
     private static List<ResourceKey<PlacedFeature>> surfaceStructures = new ArrayList<>();;

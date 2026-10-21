@@ -9,6 +9,7 @@ import net.jukoz.me.datageneration.content.TranslationEntries;
 import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.resources.datas.races.Race;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class RaceRegistry {
     private static final ResourceKey<Registry<Race>> RACE_KEY = DynamicRegistriesME.RACE;

@@ -8,6 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.jukoz.me.datageneration.content.TranslationEntries;
 import net.minecraft.core.Registry;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class BannerPatternsME {
     private static final java.util.List<ResourceKey<BannerPattern>> ALL = new java.util.ArrayList<>();

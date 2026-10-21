@@ -14,6 +14,7 @@ import net.minecraft.world.item.Items;
 import net.jukoz.me.MiddleEarth;
 import java.util.Map;
 import net.minecraft.world.item.armortrim.TrimMaterial;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class SmithingTrimMaterialsME {
 

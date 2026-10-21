@@ -10,6 +10,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.beasts.great_horn.GreatHornVariant;
 import net.minecraft.core.HolderSet;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class GreatHornVariantRegistryHelper {
     private static final String TEXTURE_PATH = "entities/great_horn/";

@@ -14,6 +14,7 @@ import net.minecraft.world.level.levelgen.placement.CountOnEveryLayerPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class ModMiscPlacedFeatures {
 

@@ -10,6 +10,7 @@ import net.jukoz.me.block.registration.ModDecorativeBlocks;
 import net.jukoz.me.world.gen.ModFeatures;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class ChainConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> ROPE_LADDER_DOWN = registerKey("rope_ladder_down");

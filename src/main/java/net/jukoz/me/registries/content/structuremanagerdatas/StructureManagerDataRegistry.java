@@ -9,6 +9,7 @@ import net.jukoz.me.datageneration.content.TranslationEntries;
 import net.jukoz.me.registries.DynamicRegistriesME;
 import net.jukoz.me.resources.datas.structure_manager_datas.StructureManagerData;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class StructureManagerDataRegistry {
     private static final ResourceKey<Registry<StructureManagerData>> STRUCTURE_MANAGER_DATA_KEY = DynamicRegistriesME.STRUCTURE_MANAGER_DATA;

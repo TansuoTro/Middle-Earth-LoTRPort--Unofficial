@@ -24,6 +24,7 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.RarityFilter;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class OrePlacedFeatures {
     public static final ResourceKey<PlacedFeature> ANDESITE_ORE = registerKey("andesite_ore");

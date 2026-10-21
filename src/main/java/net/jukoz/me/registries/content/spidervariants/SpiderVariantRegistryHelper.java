@@ -10,6 +10,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.entity.spider.SpiderVariant;
 import net.minecraft.core.HolderSet;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class SpiderVariantRegistryHelper {
     private static final String TEXTURE_PATH = "entities/spiders/";

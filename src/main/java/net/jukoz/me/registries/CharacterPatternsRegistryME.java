@@ -11,6 +11,7 @@ import net.jukoz.me.resources.datas.common.CharacterPatternTypes;
 import net.jukoz.me.resources.datas.texture_presets.CharacterTexturePattern;
 import java.util.Optional;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 /**
  * Middle-earth mod npc texture patterns registry<br>

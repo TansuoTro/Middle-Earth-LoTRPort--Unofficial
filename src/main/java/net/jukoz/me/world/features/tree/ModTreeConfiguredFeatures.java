@@ -36,6 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class ModTreeConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> ASPEN_TREE_KEY = registerKey("aspen_tree");

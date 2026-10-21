@@ -17,6 +17,7 @@ import net.jukoz.me.resources.datas.structure_manager_datas.StructureSpawnNestPo
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 public class StructureManagerDataRegistryME {
     public final static StructureManagerData GONDOR_GENERIC_NESTS;
