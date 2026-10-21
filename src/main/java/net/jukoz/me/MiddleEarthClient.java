@@ -241,6 +241,28 @@ public class MiddleEarthClient implements ClientModInitializer {
     }
 
     private void initializeRenderLayerMap() {
+        // Data-driven cutout layers (1.20.1 has no model render_type). Generated from the block
+        // models by build/transparent_blocks.py from the actual PNG alpha, so every block whose
+        // textures contain real transparency (flowers, grass overlays, glass, windows, ladders,
+        // fire, ...) renders cutout instead of SOLID - SOLID paints transparent pixels black.
+        try (java.io.InputStream in = MiddleEarthClient.class.getResourceAsStream("/assets/me/render_layers.json")) {
+            if (in != null) {
+                com.google.gson.JsonObject layers = com.google.gson.JsonParser.parseReader(
+                        new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8)).getAsJsonObject();
+                for (com.google.gson.JsonElement e : layers.getAsJsonArray("cutout")) {
+                    net.minecraft.util.Identifier id = new net.minecraft.util.Identifier(e.getAsString());
+                    if (net.minecraft.registry.Registries.BLOCK.containsId(id))
+                        BlockRenderLayerMap.INSTANCE.putBlock(net.minecraft.registry.Registries.BLOCK.get(id), RenderLayer.getCutout());
+                }
+                for (com.google.gson.JsonElement e : layers.getAsJsonArray("cutout_mipped")) {
+                    net.minecraft.util.Identifier id = new net.minecraft.util.Identifier(e.getAsString());
+                    if (net.minecraft.registry.Registries.BLOCK.containsId(id))
+                        BlockRenderLayerMap.INSTANCE.putBlock(net.minecraft.registry.Registries.BLOCK.get(id), RenderLayer.getCutoutMipped());
+                }
+            }
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
         // 1.20.1 has no data-driven model render_type, and the donor (1.21.8) relied on it. Any
         // plant / cluster / multiface / hanging-root / leaf block that is not explicitly listed
         // below would otherwise render SOLID, turning its transparent pixels black.
