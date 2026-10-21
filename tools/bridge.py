@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Minimal Rosetta bridge client for the Middle-earth dev server."""
-import io, json, os, socket, sys
+import argparse, io, json, os, pathlib, socket, sys
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 
 def call(cmd, args, port=48798, gamedir='run', timeout=120):
@@ -17,8 +17,22 @@ def call(cmd, args, port=48798, gamedir='run', timeout=120):
         return {'raw': line}
 
 if __name__ == '__main__':
-    cmd = sys.argv[1]
-    if cmd == 'console':
-        print(json.dumps(call('console', {'command': sys.argv[2]}), ensure_ascii=False)[:2000])
-    elif cmd == 'exec':
-        print(json.dumps(call('exec', {'code': open(sys.argv[2], encoding='utf-8').read()}), ensure_ascii=False)[:4000])
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('command', choices=['ping', 'console', 'exec'])
+    parser.add_argument('input', nargs='?')
+    parser.add_argument('--port', type=int, default=48798)
+    parser.add_argument('--gamedir', default='run')
+    parser.add_argument('--timeout', type=float, default=120)
+    parser.add_argument('--output', type=pathlib.Path)
+    options = parser.parse_args()
+    if options.command != 'ping' and options.input is None:
+        parser.error('console and exec require an input')
+    args = ({'command': options.input} if options.command == 'console' else
+            {'code': pathlib.Path(options.input).read_text(encoding='utf-8')} if options.command == 'exec' else {})
+    reply = call(options.command, args, options.port, options.gamedir, options.timeout)
+    output = json.dumps(reply, ensure_ascii=False, indent=2)
+    if options.output:
+        options.output.parent.mkdir(parents=True, exist_ok=True)
+        options.output.write_text(output + '\n', encoding='utf-8')
+    print(output)
+    sys.exit(0 if reply.get('ok') else 1)
