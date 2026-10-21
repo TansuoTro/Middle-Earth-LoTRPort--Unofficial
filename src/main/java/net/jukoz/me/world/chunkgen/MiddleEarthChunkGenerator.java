@@ -460,6 +460,16 @@ public class MiddleEarthChunkGenerator extends ChunkGenerator {
     }
 
     @Override
+    public net.minecraft.world.gen.chunk.placement.StructurePlacementCalculator createStructurePlacementCalculator(
+            net.minecraft.registry.RegistryWrapper<net.minecraft.structure.StructureSet> structureSetRegistry,
+            NoiseConfig noiseConfig, long seed) {
+        // The base ChunkGenerator returns StructurePlacementCalculator.EMPTY, which silently
+        // disables every structure set (and makes /locate structure throw). A custom generator
+        // has to build the real calculator from its biome source.
+        return net.minecraft.world.gen.chunk.placement.StructurePlacementCalculator.create(
+                noiseConfig, seed, this.getBiomeSource(), structureSetRegistry);
+    }
+
     public int getWorldHeight() {
         return 384;
     }

@@ -255,6 +255,16 @@ public class MiddleEarthClient implements ClientModInitializer {
                 BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutoutMipped());
             }
         }
+        // Dirt/soil blocks with a tinted grass "overlay" layer (grassy_dirt/chalksoil/loam/peat/
+        // silt + *_grass_block + pebbled_grass). Their overlay is ~50% transparent, so a SOLID
+        // layer paints the empty half black.
+        for (net.minecraft.block.Block block : net.minecraft.registry.Registries.BLOCK) {
+            if (!net.minecraft.registry.Registries.BLOCK.getId(block).getNamespace().equals(MiddleEarth.MOD_ID)) continue;
+            String path = net.minecraft.registry.Registries.BLOCK.getId(block).getPath();
+            if (path.startsWith("grassy_") || path.endsWith("_grass_block") || path.startsWith("pebbled_grass")) {
+                BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutoutMipped());
+            }
+        }
         BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.MORDOR_LICHEN, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModNatureBlocks.MORGUL_IVY, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(net.jukoz.me.compat.MEBlocksLegacy.HANGING_COBWEB, RenderLayer.getCutout());
