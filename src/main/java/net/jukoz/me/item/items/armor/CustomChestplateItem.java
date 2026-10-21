@@ -5,13 +5,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ArmorItem;
+import net.minecraft.item.DyeableItem;
 import net.minecraft.server.world.ServerWorld;
 import net.jukoz.me.item.dataComponents.BackAttachmentDataComponent;
 import net.jukoz.me.item.utils.armor.ExtendedArmorMaterial;
 import net.jukoz.me.item.utils.armor.backAttachments.BackAttachmentsME;
 import org.jetbrains.annotations.Nullable;
 
-public class CustomChestplateItem extends ArmorItem {
+public class CustomChestplateItem extends ArmorItem implements DyeableItem {
 
     public CustomChestplateItem(ExtendedArmorMaterial material, Settings settings) {
         super(material.material(), ArmorItem.Type.CHESTPLATE, settings.maxCount(1));

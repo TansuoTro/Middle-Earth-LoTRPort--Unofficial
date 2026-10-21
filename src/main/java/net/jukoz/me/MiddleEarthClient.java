@@ -397,6 +397,7 @@ public class MiddleEarthClient implements ClientModInitializer {
     }
 
     private void registerDyeableItem(Item item) {
+        if (!(item instanceof DyeableItem)) return;
         ColorProviderRegistry.ITEM.register((stack, layer) -> layer == 0 ? ((DyeableItem)stack.getItem()).getColor(stack) : 0xFFFFFF, item);
     }
 }
