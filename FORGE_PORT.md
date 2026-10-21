@@ -129,3 +129,43 @@ Rosetta 桥运行验证（对齐 fabric port 的验证清单）。
 SimpleChannel（SignPicture-Rebornified 47.4.20、HideAndSeek、ImprovedMobs）、
 DataPackRegistryEvent（FaceMohist Forge 1.20.1 源码）、
 IForgeMenuType（AstralSorcery worktrees）。
+
+## 9. 进度（2026-10-21 第一轮推进）
+
+分支 `port/forge-1.20.1` 已**重置到当前 Fabric 内容**再转换（原来的 WIP 基于很旧的 `a7d20cb`，落后约 100 个提交）：
+
+| 提交 | 内容 |
+|---|---|
+| `8dd308a` | 在当前 port 上重跑 yarn→official 映射（1534 文件，改 1345）+ `@OnlyIn`（81 文件） |
+| `17e7b99` | **M1 骨架**：MDG legacyforge 2.0.77 / Forge 47.4.20、`META-INF/mods.toml`、`me.mixins.json` 加 refmap、`accesstransformer.cfg`、`@Mod` 入口（`MiddleEarth` 构造函数 + `MiddleEarthClient` 的 `FMLClientSetupEvent`/`Bus.MOD`）；删除 `fabric.mod.json`/`me.accesswidener` |
+| `5271ea1` | 映射表扩到当前树（228 条）+ 批量把 `AbstractBlock` 残留改成 `BlockBehaviour`（1013 处 = 0） |
+
+旧 WIP 保留在分支 `forge-wip-20261020`（`654530d`）。
+
+### 编译基线（首次 Forge 编译）
+
+`./gradlew compileJava` → **26,140 errors / 100 warnings**（第一轮 26,288）。错误分布：
+
+| 类型 | 数量 | 说明 |
+|---|---|---|
+| cannot find symbol | ~21,400 | 绝大多数是下面缺包/方法差异的级联 |
+| package … does not exist | 3,869 | 映射表只覆盖 228 个类；其余仍是 yarn 包名 |
+| method does not override/implement | 809 | 方法签名差异（mappings 轴②） |
+| Fabric API imports | 156 | `net.fabricmc.*`（轴②） |
+
+缺包 Top：`net.minecraft.block`(126)、`net.minecraft.item`(89)、`net.minecraft.client.render.entity.model`(71)、`net.minecraft.entity.attribute`(70)、`net.minecraft.sound`(69)、`net.minecraft.entity`(68)、`net.minecraft.screen`(67)、`net.minecraft.entity.effect`(63)、`net.minecraft.entity.data`(56)、`net.minecraft.util.math`(55)、`net.minecraft.state.property`(53)…
+
+### 下一步（按性价比）
+
+1. **扩映射表**：对每个仍在用的 `net.minecraft.*` FQN，用 `nf_tree` 的同路径 import 对照补表（`me_forge_mapping.py` → `_build_table.py` → `_overlay.py`，脚本已支持 `ME_FORGE_ROOT` 指向任意工作树）；再跑 `me_rename_yarn2official.py`。这一步能一次性消掉大部分 3,869 缺包 + 级联。
+2. **方法签名差异**（809）：按错误签名批量改（参考 fabric port 时期 `build/agents/fix*.py`）。
+3. **Fabric API → Forge**（156 文件）：按 §5 分区表替换；先从网络 hub（`ModNetworks`）和注册 builder 起。
+4. 收尾后再进 M2–M8。
+
+### 工具变更
+
+`me_rename_yarn2official.py` / `me_env_to_onlyin.py` 的 `ROOT` 改为 `os.environ.get("ME_FORGE_ROOT", <默认主工作树>)`，可在任意 worktree 上跑：
+
+    ME_FORGE_ROOT='H:/MinecraftMods/MiddleEarth-1.20.1-forge/src/main/java' python me_rename_yarn2official.py
+
+工作树：`H:/MinecraftMods/MiddleEarth-1.20.1-forge`（`port/forge-1.20.1`），与 Fabric 主工作树隔离，互不影响。
