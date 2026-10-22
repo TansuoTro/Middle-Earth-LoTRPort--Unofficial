@@ -33,6 +33,28 @@ public class RecipeProvider extends net.minecraft.data.server.recipe.RecipeProvi
         super(dataOutput);
     }
 
+    /**
+     * Vanilla's stonecutter helpers are static and save the recipe under {@code new Identifier(name)},
+     * i.e. in the {@code minecraft} namespace, so every stonecutting recipe this mod emits landed in
+     * {@code data/minecraft/recipes} under a {@code minecraft:..._stonecutting} id and the game never
+     * saw it as a Middle-earth recipe. Hiding the parent helpers with namespace-aware versions fixes
+     * all ~4400 wall/stairs/slab/vertical-slab stonecutter recipes at once.
+     */
+    public static void offerStonecuttingRecipe(Consumer<RecipeJsonProvider> exporter, RecipeCategory category,
+                                               net.minecraft.item.ItemConvertible output, net.minecraft.item.ItemConvertible input) {
+        offerStonecuttingRecipe(exporter, category, output, input, 1);
+    }
+
+    public static void offerStonecuttingRecipe(Consumer<RecipeJsonProvider> exporter, RecipeCategory category,
+                                               net.minecraft.item.ItemConvertible output, net.minecraft.item.ItemConvertible input, int count) {
+        String outputPath = Registries.ITEM.getId(output.asItem()).getPath();
+        String inputPath = Registries.ITEM.getId(input.asItem()).getPath();
+        net.minecraft.data.server.recipe.SingleItemRecipeJsonBuilder
+                .createStonecutting(Ingredient.ofItems(input), category, output, count)
+                .criterion("has_" + inputPath, conditionsFromItem(input))
+                .offerTo(exporter, new Identifier(MiddleEarth.MOD_ID, outputPath + "_from_" + inputPath + "_stonecutting"));
+    }
+
     @Override
     public void generate(Consumer<RecipeJsonProvider> exporter) {
         // Port-only set classes emit the same recipe id twice; drop repeats instead of aborting the run.

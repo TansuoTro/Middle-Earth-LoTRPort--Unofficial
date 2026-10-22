@@ -1,7 +1,0 @@
-{
-  "parent": "me:item/template_pane_inventory",
-  "textures": {
-    "pane": "me:block/cyan_stained_lead_glass",
-    "edge": "me:block/lead_glass_pane_top"
-  }
-}

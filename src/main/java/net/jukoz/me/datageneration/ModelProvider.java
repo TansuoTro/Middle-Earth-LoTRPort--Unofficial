@@ -245,7 +245,10 @@ public class ModelProvider extends FabricModelProvider {
             return blockId.withPath("block/" + path + "_bottom");
         }
         if (block instanceof PaneBlock) {
-            return blockId.withPath("block/" + path + "_post");
+            // The textured 3D inventory model is uploaded at item/<name>_inventory by
+            // registerPaneModel / registerLeadGlassPane; point the item icon at it instead of at
+            // the 2x2-sliver *_post block model.
+            return blockId.withPath("item/" + path + "_inventory");
         }
         if (block.getStateManager().getProperty("layers") != null) {
             return blockId.withPath("block/" + path + "_height2");
@@ -271,6 +274,21 @@ public class ModelProvider extends FabricModelProvider {
             return best;
         }
         return handWrittenBlockStateModel(path);
+    }
+
+    /**
+     * Uploads the 3D inventory model for a pane block item. Vanilla's {asterisk}_pane_post model only
+     * carries the up/down faces of a 2x16x2 column, so parenting a pane item icon to it bakes down to
+     * a 2x2 texel sliver and the icon looks blank in the GUI even though the placed block is fine.
+     * Parent instead to item/template_pane_inventory (column + one pane panel) with the pane's own
+     * pane/edge textures.
+     */
+    private static Identifier uploadPaneInventoryModel(BlockStateModelGenerator gen, Block pane, TextureMap textureMap) {
+        Identifier itemModel = ModelIds.getItemModelId(pane.asItem());
+        Identifier inventory = new net.minecraft.util.Identifier(itemModel.getNamespace(), itemModel.getPath() + "_inventory");
+        return new Model(java.util.Optional.of(new net.minecraft.util.Identifier(MiddleEarth.MOD_ID, "item/template_pane_inventory")),
+                java.util.Optional.empty(), TextureKey.PANE, TextureKey.EDGE)
+                .upload(inventory, textureMap, gen.modelCollector);
     }
 
     private static void logSkipped(RuntimeException e) {
@@ -1551,7 +1569,7 @@ public class ModelProvider extends FabricModelProvider {
                 .with(When.create().set(Properties.EAST, false), BlockStateVariant.create().put(VariantSettings.MODEL, noSideAlt))
                 .with(When.create().set(Properties.SOUTH, false), BlockStateVariant.create().put(VariantSettings.MODEL, noSideAlt).put(VariantSettings.Y, VariantSettings.Rotation.R90))
                 .with(When.create().set(Properties.WEST, false), BlockStateVariant.create().put(VariantSettings.MODEL, noSide).put(VariantSettings.Y, VariantSettings.Rotation.R270)));
-        Models.GENERATED.upload(ModelIds.getItemModelId(pane.asItem()), TextureMap.layer0(pane), blockStateModelGenerator.modelCollector);
+        uploadPaneInventoryModel(blockStateModelGenerator, pane, textureMap);
     }
 
     /** 1.20.1 port of the donor's registerPointedBlock. Vanilla's
@@ -1869,8 +1887,7 @@ public class ModelProvider extends FabricModelProvider {
         Identifier identifier3 = Models.TEMPLATE_GLASS_PANE_SIDE_ALT.upload(glassPane, textureMap, blockStateModelGenerator.modelCollector);
         Identifier identifier4 = Models.TEMPLATE_GLASS_PANE_NOSIDE.upload(glassPane, textureMap, blockStateModelGenerator.modelCollector);
         Identifier identifier5 = Models.TEMPLATE_GLASS_PANE_NOSIDE_ALT.upload(glassPane, textureMap, blockStateModelGenerator.modelCollector);
-        Item item = glassPane.asItem();
-        Models.GENERATED.upload(ModelIds.getItemModelId(item), TextureMap.layer0(glass), blockStateModelGenerator.modelCollector);
+        uploadPaneInventoryModel(blockStateModelGenerator, glassPane, textureMap);
         blockStateModelGenerator.blockStateCollector.accept(MultipartBlockStateSupplier.create(glassPane).with(BlockStateVariant.create().put(VariantSettings.MODEL, identifier)).with(When.create().set(Properties.NORTH, true), BlockStateVariant.create().put(VariantSettings.MODEL, identifier2)).with(When.create().set(Properties.EAST, true), BlockStateVariant.create().put(VariantSettings.MODEL, identifier2).put(VariantSettings.Y, VariantSettings.Rotation.R90)).with(When.create().set(Properties.SOUTH, true), BlockStateVariant.create().put(VariantSettings.MODEL, identifier3)).with(When.create().set(Properties.WEST, true), BlockStateVariant.create().put(VariantSettings.MODEL, identifier3).put(VariantSettings.Y, VariantSettings.Rotation.R90)).with(When.create().set(Properties.NORTH, false), BlockStateVariant.create().put(VariantSettings.MODEL, identifier4)).with(When.create().set(Properties.EAST, false), BlockStateVariant.create().put(VariantSettings.MODEL, identifier5)).with(When.create().set(Properties.SOUTH, false), BlockStateVariant.create().put(VariantSettings.MODEL, identifier5).put(VariantSettings.Y, VariantSettings.Rotation.R90)).with(When.create().set(Properties.WEST, false), BlockStateVariant.create().put(VariantSettings.MODEL, identifier4).put(VariantSettings.Y, VariantSettings.Rotation.R270)));
     }
 

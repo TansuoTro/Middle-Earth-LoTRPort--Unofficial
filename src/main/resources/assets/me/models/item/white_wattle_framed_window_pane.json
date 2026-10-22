@@ -1,7 +1,0 @@
-{
-  "parent": "me:item/template_pane_inventory",
-  "textures": {
-    "pane": "me:block/white_wattle_framed_window",
-    "edge": "me:block/lead_glass_pane_top"
-  }
-}
