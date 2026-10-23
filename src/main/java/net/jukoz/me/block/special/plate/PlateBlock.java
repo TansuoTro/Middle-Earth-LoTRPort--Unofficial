@@ -55,8 +55,7 @@ public class PlateBlock extends BaseEntityBlock {
     @Override
     public void onPlaced(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
         super.onPlaced(world, pos, state, placer, itemStack);
-        PlateBlockEntity plateBlockEntity = (PlateBlockEntity) world.getBlockEntity(pos);
-        if(plateBlockEntity != null && world instanceof ServerLevel serverWorld) {
+        if(world.getBlockEntity(pos) instanceof PlateBlockEntity plateBlockEntity && world instanceof ServerLevel serverWorld) {
             MELootTable.Loot loot = MELootTable.get(itemStack);
             if(loot != null) {
                 plateBlockEntity.setLootTable(loot.table(), loot.seed());
@@ -67,8 +66,7 @@ public class PlateBlock extends BaseEntityBlock {
     @Override
     public void onBlockAdded(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean notify) {
         super.onBlockAdded(state, world, pos, oldState, notify);
-        PlateBlockEntity plateBlockEntity = (PlateBlockEntity) world.getBlockEntity(pos);
-        if(plateBlockEntity != null && world instanceof ServerLevel serverWorld) {
+        if(world instanceof ServerLevel serverWorld && world.getBlockEntity(pos) instanceof PlateBlockEntity) {
             serverWorld.scheduleRecheck(pos, this, 1, TickPriority.NORMAL);
         }
     }
@@ -76,17 +74,17 @@ public class PlateBlock extends BaseEntityBlock {
     @Override
     public void scheduledTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         super.scheduledTick(state, world, pos, random);
-        PlateBlockEntity plateBlockEntity = (PlateBlockEntity) world.getBlockEntity(pos);
-        if(plateBlockEntity != null && plateBlockEntity.isBlockPlaced()) {
-            plateBlockEntity.generateItem(world);
+        if(world.getBlockEntity(pos) instanceof PlateBlockEntity plateBlockEntity) {
+            if(plateBlockEntity.isBlockPlaced()) {
+                plateBlockEntity.generateItem(world);
+            }
+            plateBlockEntity.setBlockPlaced();
         }
-        plateBlockEntity.setBlockPlaced();
     }
 
     @Override
     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-        PlateBlockEntity plateBlockEntity = (PlateBlockEntity) world.getBlockEntity(pos);
-        if(plateBlockEntity != null && plateBlockEntity.isBlockPlaced()) {
+        if(world.getBlockEntity(pos) instanceof PlateBlockEntity plateBlockEntity && plateBlockEntity.isBlockPlaced()) {
             plateBlockEntity.generateItem(world);
         }
         super.randomTick(state, world, pos, random);

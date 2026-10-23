@@ -118,8 +118,12 @@ public class CurtainsBlock extends MultifaceBlock implements SimpleWaterloggedBl
 
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
-        BlockState updated = super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
-        return updated.setValue(TIP, !world.getBlockState(pos.below()).is(BlockTagsME.CURTAINS));
+        // Same as the donor: do not delegate to MultifaceBlock, which drops the block to air for
+        // vertical neighbours (canGrowWithDirection only allows horizontals).
+        if (state.getValue(WATERLOGGED)) {
+            world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
+        }
+        return state.setValue(TIP, !world.getBlockState(pos.below()).is(BlockTagsME.CURTAINS));
     }
 
     @Override

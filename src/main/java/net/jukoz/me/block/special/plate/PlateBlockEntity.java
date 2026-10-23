@@ -110,7 +110,13 @@ public class PlateBlockEntity extends BlockEntity implements ContainerSingleItem
 
     @Override
     public ItemStack removeStack(int slot, int amount) {
-        return this.removeStack(slot);
+        ItemStack stack = this.getItem();
+        if (stack.isEmpty() || amount <= 0) {
+            return ItemStack.EMPTY;
+        }
+        ItemStack taken = stack.split(amount);
+        this.setStack(stack);
+        return taken;
     }
 
     @Override
