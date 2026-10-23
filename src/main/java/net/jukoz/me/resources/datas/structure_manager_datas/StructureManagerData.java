@@ -43,6 +43,8 @@ public class StructureManagerData {
     }
 
     public SpawnNestNodeData getNpcSpawnNest(Identifier idToCompare) {
+        if(this.spawnNestNodeData.isEmpty())
+            return null;
         for (var nest : spawnNestNodeData){
             if(nest.getId().equals(idToCompare))
                 return nest;

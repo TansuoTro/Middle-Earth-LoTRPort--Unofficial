@@ -243,6 +243,19 @@ public class StructureManagerBlockEntity extends BlockEntity implements Extended
             return;
         };
 
+        // Drop saved subscriptions that no longer exist in this pool. Structure templates
+        // exported from older worlds carried stale nest ids (e.g. me:rohan_village_nests.farmer
+        // inside shire villages); respawn/fetchBeds would mis-resolve them every tick.
+        Set<Identifier> validNestIds = new HashSet<>();
+        for (SpawnNestNodeData def : managerData.getNpcSpawnNest())
+            validNestIds.add(def.getId());
+        int before = structureNestList.getManagers().size();
+        structureNestList.getManagers().removeIf(nest -> !validNestIds.contains(nest.getId()));
+        if (structureNestList.getManagers().size() != before) {
+            MiddleEarth.LOGGER.logDebugMsg("StructureManager :: dropped %d stale nest subscriptions for %s".formatted(before - structureNestList.getManagers().size(), structureManagerIdentifier));
+            this.markDirty();
+        }
+
         this.toInitialize = false;
         this.enabled = true;
     }
