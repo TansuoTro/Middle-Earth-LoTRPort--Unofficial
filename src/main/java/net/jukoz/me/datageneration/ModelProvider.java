@@ -11,6 +11,7 @@ import net.jukoz.me.block.registration.ModNatureBlocks;
 import net.jukoz.me.block.MushroomBlockSets;
 import net.jukoz.me.block.special.crop.*;
 import net.jukoz.me.block.special.verticalSlabs.VerticalSlabBlock;
+import net.jukoz.me.block.special.verticalSlabs.VerticalSlabShape;
 import net.jukoz.me.datageneration.content.CustomItemModels;
 import net.jukoz.me.datageneration.content.MEModels;
 import net.jukoz.me.datageneration.content.models.*;
@@ -1425,10 +1426,10 @@ public class ModelProvider extends FabricModelProvider {
         if (vanillaOriginId.getPath().startsWith("waxed_")) {
             fullBlockId = vanillaOriginId.withPath("block/" + vanillaOriginId.getPath().substring("waxed_".length()));
         }
-        Identifier variantId = MEModels.VERTICAL_SLAB.upload(block,
+        VerticalSlabModels models = uploadVerticalSlabModels(block,
                 TextureMap.of(TextureKey.ALL,new Identifier("minecraft","block/" + slabPath)),
-                blockStateModelGenerator.modelCollector);
-        registerVerticalSlab(blockStateModelGenerator, block, fullBlockId, variantId);
+                blockStateModelGenerator);
+        registerVerticalSlab(blockStateModelGenerator, block, fullBlockId, models);
     }
 
     public void registerVerticalSlabModelBlockStates(BlockStateModelGenerator blockStateModelGenerator, Block block, Block origin, String slabPath){
@@ -1442,10 +1443,10 @@ public class ModelProvider extends FabricModelProvider {
             fullBlockId = originId.withPath("block/" + unwaxed);
             slabPath = unwaxed;
         }
-        Identifier variantId = MEModels.VERTICAL_SLAB.upload(block,
+        VerticalSlabModels models = uploadVerticalSlabModels(block,
                 TextureMap.of(TextureKey.ALL, new Identifier(MiddleEarth.MOD_ID, "block/" + slabPath)),
-                blockStateModelGenerator.modelCollector);
-        registerVerticalSlab(blockStateModelGenerator, block, fullBlockId, variantId);
+                blockStateModelGenerator);
+        registerVerticalSlab(blockStateModelGenerator, block, fullBlockId, models);
     }
 
     public void registerColumnVerticalSlabModelBlockStates(BlockStateModelGenerator blockStateModelGenerator, Block block, Block origin,
@@ -1453,47 +1454,78 @@ public class ModelProvider extends FabricModelProvider {
         Identifier fullBlockId = ModelIds.getBlockModelId(origin);
         Identifier sideTexture = new Identifier(modId, "block/" + sideTexturePath);
 
-        Identifier variantId = MEModels.VERTICAL_COLUMN_SLAB.upload(block, (new TextureMap())
-                        .put(TextureKey.TOP, new Identifier(modId, "block/" + topTexturePath))
-                        .put(TextureKey.BOTTOM, new Identifier(modId, "block/" + bottomTexturePath))
-                        .put(TextureKey.SIDE, sideTexture)
-                        .put(TextureKey.PARTICLE, sideTexture),
-                blockStateModelGenerator.modelCollector);
+        TextureMap textures = (new TextureMap())
+                .put(TextureKey.TOP, new Identifier(modId, "block/" + topTexturePath))
+                .put(TextureKey.BOTTOM, new Identifier(modId, "block/" + bottomTexturePath))
+                .put(TextureKey.SIDE, sideTexture)
+                .put(TextureKey.PARTICLE, sideTexture);
+        VerticalSlabModels models = new VerticalSlabModels(
+                MEModels.VERTICAL_COLUMN_SLAB.upload(block, textures, blockStateModelGenerator.modelCollector),
+                MEModels.VERTICAL_COLUMN_SLAB_INNER.upload(block, textures, blockStateModelGenerator.modelCollector),
+                MEModels.VERTICAL_COLUMN_SLAB_OUTER.upload(block, textures, blockStateModelGenerator.modelCollector));
 
-        registerVerticalSlab(blockStateModelGenerator, block, fullBlockId, variantId);
+        registerVerticalSlab(blockStateModelGenerator, block, fullBlockId, models);
     }
 
-    private void registerVerticalSlab(BlockStateModelGenerator blockStateModelGenerator, Block block, Identifier full, Identifier variant) {
-        // Two VerticalSlabBlock classes exist in the port (block.special and block.special.verticalSlabs)
-        // and Property equality is identity-based, so a block built with the other class fails the
-        // variant validation below even though the state names look identical.
+    private record VerticalSlabModels(Identifier regular, Identifier inner, Identifier outer) {}
+
+    private VerticalSlabModels uploadVerticalSlabModels(Block block, TextureMap textures,
+                                                       BlockStateModelGenerator generator) {
+        return new VerticalSlabModels(
+                MEModels.VERTICAL_SLAB.upload(block, textures, generator.modelCollector),
+                MEModels.VERTICAL_SLAB_INNER.upload(block, textures, generator.modelCollector),
+                MEModels.VERTICAL_SLAB_OUTER.upload(block, textures, generator.modelCollector));
+    }
+
+    private void registerVerticalSlab(BlockStateModelGenerator blockStateModelGenerator, Block block, Identifier full, VerticalSlabModels models) {
         try {
-            registerVerticalSlabUnchecked(blockStateModelGenerator, block, full, variant);
+            registerVerticalSlabUnchecked(blockStateModelGenerator, block, full, models);
         } catch (IllegalStateException e) {
             System.out.println("[datagen] skipping vertical slab model for " + block);
         }
     }
 
-    private void registerVerticalSlabUnchecked(BlockStateModelGenerator blockStateModelGenerator, Block block, Identifier full, Identifier variant) {
-        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block)
-                .coordinate(BlockStateVariantMap.create(Properties.HORIZONTAL_FACING, VerticalSlabBlock.DOUBLE)
-                        .register(Direction.NORTH, false, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, variant).put(VariantSettings.UVLOCK, true))
-                        .register(Direction.EAST, false, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, variant).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-                        .register(Direction.SOUTH, false, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, variant).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R180))
-                        .register(Direction.WEST, false, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, variant).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R270))
-                        .register(Direction.NORTH, true, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, full).put(VariantSettings.UVLOCK, true))
-                        .register(Direction.EAST, true, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, full).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-                        .register(Direction.SOUTH, true, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, full).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R180))
-                        .register(Direction.WEST, true, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, full).put(VariantSettings.UVLOCK, true).put(VariantSettings.Y, VariantSettings.Rotation.R270))
-                ));
+    private void registerVerticalSlabUnchecked(BlockStateModelGenerator blockStateModelGenerator, Block block, Identifier full, VerticalSlabModels models) {
+        // The block has a SHAPE property (straight / inner_left / inner_right / outer_left /
+        // outer_right) that swaps in the corner models. Registering only (facing, double) left
+        // every corner state on the straight model, so two slabs meeting at a corner showed a
+        // notch with the neighbouring block's interior faces culled behind it - i.e. a see-through
+        // hole. The rotation offsets mirror the donor's BlockModelProvider.
+        BlockStateVariant fullVariant = BlockStateVariant.create()
+                .put(VariantSettings.MODEL, full).put(VariantSettings.UVLOCK, true);
+        var map = BlockStateVariantMap.create(Properties.HORIZONTAL_FACING, VerticalSlabBlock.DOUBLE, VerticalSlabBlock.SHAPE);
+        for (Direction facing : Direction.Type.HORIZONTAL) {
+            for (VerticalSlabShape shape : VerticalSlabShape.values()) {
+                map.register(facing, false, shape, slabVariant(models, shape, facing));
+                map.register(facing, true, shape, fullVariant);
+            }
+        }
+        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block).coordinate(map));
+    }
+
+    private static BlockStateVariant slabVariant(VerticalSlabModels models, VerticalSlabShape shape, Direction facing) {
+        Identifier model = switch (shape) {
+            case INNER_LEFT, INNER_RIGHT -> models.inner();
+            case OUTER_LEFT, OUTER_RIGHT -> models.outer();
+            default -> models.regular();
+        };
+        // The *_right corner models are authored a quarter turn away from the straight one.
+        boolean shifted = shape == VerticalSlabShape.INNER_RIGHT || shape == VerticalSlabShape.OUTER_RIGHT;
+        int step = ((switch (facing) {
+            case NORTH -> 0;
+            case EAST -> 1;
+            case SOUTH -> 2;
+            default -> 3;
+        }) + (shifted ? 1 : 0)) % 4;
+        BlockStateVariant variant = BlockStateVariant.create()
+                .put(VariantSettings.MODEL, model).put(VariantSettings.UVLOCK, true);
+        switch (step) {
+            case 1 -> variant.put(VariantSettings.Y, VariantSettings.Rotation.R90);
+            case 2 -> variant.put(VariantSettings.Y, VariantSettings.Rotation.R180);
+            case 3 -> variant.put(VariantSettings.Y, VariantSettings.Rotation.R270);
+            default -> { }
+        }
+        return variant;
     }
 
     public void registerWoodStoolModelBlockStates(BlockStateModelGenerator blockStateModelGenerator, Block block, Identifier logTexture, Identifier plankTexture){

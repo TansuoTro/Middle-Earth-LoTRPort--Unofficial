@@ -739,7 +739,6 @@
             4
           ],
           "texture": "#4",
-          "cullface": "south",
           "tintindex": 0
         },
         "east": {
@@ -789,7 +788,6 @@
             3
           ],
           "texture": "#4",
-          "cullface": "south",
           "tintindex": 0
         }
       }
