@@ -27,7 +27,7 @@ public class CharacterAtlasME {
             client.getTextureManager().registerTexture(location, atlas);
             // Registered after the initial resource reload (CLIENT_STARTED), so stitch it here
             // from assets/me/atlases/character_textures.json.
-            AtlasesME.stitchAndUpload(atlas, client, "character atlas");
+            AtlasesME.stitchAndUpload(atlas, AtlasesME.CHARACTER_TEXTURES, client, "character atlas");
         }
     }
 

@@ -48,11 +48,13 @@ public class AtlasesME {
      * through {@code SpriteLoader} and then hands the result to {@code upload}.
      */
     @Environment(EnvType.CLIENT)
-    public static void stitchAndUpload(SpriteAtlasTexture atlas, MinecraftClient client, String name) {
+    public static void stitchAndUpload(SpriteAtlasTexture atlas, Identifier atlasInfo, MinecraftClient client, String name) {
         try {
             SpriteLoader loader = SpriteLoader.fromAtlas(atlas);
+            // The identifier here is the atlas *definition* (assets/<ns>/atlases/<path>.json),
+            // not the atlas texture id - AtlasLoader appends "atlases/" and ".json" itself.
             SpriteLoader.StitchResult result = loader
-                    .load(client.getResourceManager(), atlas.getId(), 0, Util.getMainWorkerExecutor())
+                    .load(client.getResourceManager(), atlasInfo, 0, Util.getMainWorkerExecutor())
                     .join();
             atlas.upload(result);
             atlas.applyTextureFilter(result);

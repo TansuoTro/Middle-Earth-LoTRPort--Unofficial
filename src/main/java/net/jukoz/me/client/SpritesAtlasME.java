@@ -24,7 +24,7 @@ public class SpritesAtlasME {
             client.getTextureManager().registerTexture(location, atlas);
             // Registered after the initial resource reload (CLIENT_STARTED), so stitch it here
             // from assets/me/atlases/sprites.json.
-            AtlasesME.stitchAndUpload(atlas, client, "sprites atlas");
+            AtlasesME.stitchAndUpload(atlas, AtlasesME.SPRITES, client, "sprites atlas");
         }
     }
 
