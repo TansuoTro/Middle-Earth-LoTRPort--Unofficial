@@ -4,7 +4,9 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.SpriteAtlasTexture;
+import net.minecraft.client.texture.SpriteLoader;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 import net.jukoz.me.MiddleEarth;
 
 /**
@@ -35,6 +37,28 @@ public class AtlasesME {
         }
         MinecraftClient client = MinecraftClient.getInstance();
         return client.getBakedModelManager().getAtlas(atlasPath);
+    }
+
+    /**
+     * Stitches and uploads a hand-created atlas.
+     *
+     * <p>1.20.1's {@code SpriteAtlasTexture#load(ResourceManager)} is an empty method - it only
+     * exists for the (removed) self-loading path. Calling it leaves the sprite map empty, so
+     * every {@code getSprite} returns null and the model silently draws nothing. Vanilla stitches
+     * through {@code SpriteLoader} and then hands the result to {@code upload}.
+     */
+    @Environment(EnvType.CLIENT)
+    public static void stitchAndUpload(SpriteAtlasTexture atlas, MinecraftClient client, String name) {
+        try {
+            SpriteLoader loader = SpriteLoader.fromAtlas(atlas);
+            SpriteLoader.StitchResult result = loader
+                    .load(client.getResourceManager(), atlas.getId(), 0, Util.getMainWorkerExecutor())
+                    .join();
+            atlas.upload(result);
+            atlas.applyTextureFilter(result);
+        } catch (Exception e) {
+            MiddleEarth.LOGGER.logError("Failed to load %s".formatted(name), e);
+        }
     }
 
 }

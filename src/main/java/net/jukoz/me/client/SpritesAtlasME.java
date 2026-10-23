@@ -6,12 +6,11 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.util.Identifier;
-import net.jukoz.me.MiddleEarth;
 import net.jukoz.me.registries.AtlasesME;
 
 /**
  * Custom sprite atlas for projectile animations (smoke rings). Same approach as CharacterAtlasME:
- * a directly-created SpriteAtlasTexture whose reload reads assets/me/atlases/sprites.json.
+ * a directly-created SpriteAtlasTexture stitched by hand from assets/me/atlases/sprites.json.
  */
 @Environment(EnvType.CLIENT)
 public class SpritesAtlasME {
@@ -23,13 +22,9 @@ public class SpritesAtlasME {
             Identifier location = AtlasesME.getAtlasPath(AtlasesME.SPRITES);
             atlas = new SpriteAtlasTexture(location);
             client.getTextureManager().registerTexture(location, atlas);
-            // Registered after the initial resource reload (CLIENT_STARTED), so load it explicitly
-            // to populate sprites from assets/me/atlases/sprites.json.
-            try {
-                atlas.load(client.getResourceManager());
-            } catch (Exception e) {
-                MiddleEarth.LOGGER.logError("Failed to load sprites atlas", e);
-            }
+            // Registered after the initial resource reload (CLIENT_STARTED), so stitch it here
+            // from assets/me/atlases/sprites.json.
+            AtlasesME.stitchAndUpload(atlas, client, "sprites atlas");
         }
     }
 
